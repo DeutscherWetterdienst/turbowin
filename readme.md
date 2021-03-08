@@ -11,7 +11,9 @@
 
   TurboWin+ earlier versions
   - [coming]
-  
+  - [TurboWin+ V4.0.0 Windows 64 bit (138 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_4_0_jpms_hl.exe)
+  - [TurboWin+ V4.0.0 Windows 32 bit (125 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_4_0.exe)
+
 
   TurboWin (End-of-support has been followed by TurboWin+)
   - [TurboWin V5.6 (Windows XP/Vista/7/8.1/10) (513 Mb)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TW56.zip)
