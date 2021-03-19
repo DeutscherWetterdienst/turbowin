@@ -1,4 +1,4 @@
-**download binaries:**
+**download binaries/executables:**
 
   _TurboWin+ GA (General-Availability)_
   - [TurboWin+ V4.1.1 Windows 64 bit (143 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_hl.exe)
