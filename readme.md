@@ -8,7 +8,7 @@
 
 
   _TurboWin+ beta (not for operational use)_
-  - [TurboWin+ V4.2 beta Windows 64 bit (149 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_beta.exe)
+  - [TurboWin+ V4.2 beta Windows 64 bit (145 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_beta.exe)
 
   _TurboWin+ earlier versions_
   - [TurboWin+ V4.0.0 Windows 64 bit (138 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_0_hl.exe)
