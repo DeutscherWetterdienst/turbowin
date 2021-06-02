@@ -22,3 +22,5 @@
 **Issues list labels explanation:** https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/blob/master/TurboWin-Gitlab-Labels_examples.pdf
 
 **TurboWin+ User guide:** http://sot.jcommops.org/vos/resources.html
+
+** Contact: turbowin'at'knmi'dot'nl
