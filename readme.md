@@ -5,7 +5,7 @@
   - [TurboWin+ V4.2 Windows 32 bit (132 Mb; Java JRE 8 or higher required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+.exe)**
   - [TurboWin+ V4.2 Linux 64 bit (143 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TurboWin+_JPMS.tar.xz)
   - [TurboWin+ V3.3.0 Linux 32 bit (117 Mb; Java JRE 7 or higher required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TurboWin+.zip)
-      <br>  ** During installation: if the destination location (folder) already exists, delete first this folder or select a different folder.
+      <br>  ** During installation: if the destination location (folder) already exists, delete this folder first or select a different folder.
 
   _TurboWin+ beta (not for operational use)_
   - [TurboWin+ V4.2 beta Windows 64 bit (145 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_beta.exe)
