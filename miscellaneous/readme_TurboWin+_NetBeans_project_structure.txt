@@ -39,7 +39,7 @@ after packaging with installer (GA releases for community) or via turbowin_launc
    - Pyinstaller: http://www.pyinstaller.org/
     
 3] For final version packaging 
-   - make sure help files will be installed in help dir below TurboWin+ bin dir    // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files (e.g. on client pc after install: C:\Program Files (x86)\TurboWin+\bin\help)
+   - make sure help files will be installed in help dir below TurboWin+ bin dir// https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files (e.g. on client pc after install: C:\Program Files (x86)\TurboWin+\bin\help)
    - place file TurboWin+_install.ico in root when packaging                   // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/blob/master/miscellaneous/install_ico/TurboWin+_install.ico
 
 
