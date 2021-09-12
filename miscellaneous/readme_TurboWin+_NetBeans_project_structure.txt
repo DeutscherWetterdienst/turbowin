@@ -38,15 +38,16 @@ after packaging with installer (GA releases for community) or via turbowin_launc
    - Python IDE (e.g. https://github.com/thonny/thonny/wiki/Windows)
    - Pyinstaller: http://www.pyinstaller.org/
 
-4] Insert the appropriate values for the following variables [myemailsettings.java] (not necessary for EUCAWS): 
+3] Insert the appropriate values for the following variables [myemailsettings.java] (not necessary for EUCAWS): 
    characterEncoding, encryptionKey, cipherTransformation and aesEncryptionAlgorithem 
     
-3] For final version packaging 
-   - make sure help files will be installed in help dir below TurboWin+ bin dir// https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files (e.g. on client pc after install: C:\Program Files (x86)\TurboWin+\bin\help)
+4] For final version packaging 
+   - make sure help files will be installed in help dir below TurboWin+ bin dir// https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files* (e.g. on client pc after install: C:\Program Files (x86)\TurboWin+\bin\help)
+   * version 4.3 or higher, older versions help files from previous help file system
    - place file TurboWin+_install.ico in root when packaging                   // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/blob/master/miscellaneous/install_ico/TurboWin+_install.ico
 
 
 
 
 
-last updated: 4-August-2021
+last updated: 12-September-2021
