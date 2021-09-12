@@ -43,7 +43,7 @@ NOTES
     
 4] For final version packaging 
    - make sure help files will be installed in help dir below TurboWin+ bin dir// https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files* (e.g. on client pc after install: C:\Program Files (x86)\TurboWin+\bin\help)
-      * TurboWin+ version 4.3 or higher, older TurboWin+ versions help files from previous help file system
+         * TurboWin+ version 4.3 or higher, older TurboWin+ versions help files from previous help file system
    - place file TurboWin+_install.ico in root when packaging                   // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/blob/master/miscellaneous/install_ico/TurboWin+_install.ico
 
 
