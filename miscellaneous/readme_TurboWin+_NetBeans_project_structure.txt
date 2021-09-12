@@ -33,7 +33,7 @@ NOTES
    after packaging with installer (GA releases for community) or via turbowin_launcher.bat (for developer) this error wil not pop up
 
 2] Source code python email module: email_tbw.py                               // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/blob/master/src_python/email_tbw.py
-   For compiling and updating of this email module is required:
+   For updating and (re)compiling of this email module is required:
    - Python 3.8 or higher: https://www.python.org/ (NB Python 32bit version for convenience to be compatible if observers pc is Windows 32bit)
    - Python IDE (e.g. https://github.com/thonny/thonny/wiki/Windows)
    - Pyinstaller: http://www.pyinstaller.org/
