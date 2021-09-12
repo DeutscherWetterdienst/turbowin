@@ -39,7 +39,7 @@ after packaging with installer (GA releases for community) or via turbowin_launc
    - Pyinstaller: http://www.pyinstaller.org/
 
 4] Insert the appropriate values for the following variables [myemailsettings.java] (not necessary for EUCAWS): 
-    characterEncoding characterEncodingencryptionKey, characterEncoding, cipherTransformation and aesEncryptionAlgorithem 
+   characterEncoding, encryptionKey, cipherTransformation and aesEncryptionAlgorithem 
     
 3] For final version packaging 
    - make sure help files will be installed in help dir below TurboWin+ bin dir// https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files (e.g. on client pc after install: C:\Program Files (x86)\TurboWin+\bin\help)
