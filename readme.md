@@ -25,4 +25,6 @@
 
 **TurboWin+ User guide:** http://sot.jcommops.org/vos/resources.html
 
+**EUCAWS SMD output simulation program:** https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/blob/master/SMDoutput_V4.exe
+
 **Contact:** turbowin'at'knmi'dot'nl
