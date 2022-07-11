@@ -24,7 +24,7 @@
   _TurboWin (End-of-support has been followed by TurboWin+)_
   - [TurboWin V5.6 (Windows XP/Vista/7/8.1/10) (513 Mb)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TW56.zip)
 
-  _EUCAWS SMD output simulation program_
+  _EUCAWS SMD output simulation program (Meteo France)_
   - [SMDoutput_V4](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/SMDoutput_V4.exe)
 
 
