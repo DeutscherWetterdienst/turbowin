@@ -13,7 +13,7 @@
  - [TurboWin+ V4.4 RC2 Windows 64 bit (44 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_4_RC2_hl.exe)
 
   _TurboWin+ earlier versions_
-  - [TurboWin+ V4.3 Windows 64 bit (44 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_3_hl.exe)*
+  - [TurboWin+ V4.3 Windows 64 bit (44 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_3_hl.exe)
   - [TurboWin+ V4.3 Windows 32 bit (27 Mb; Java JRE 8 or higher required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_4_3_hl.exe)
   - [TurboWin+ V4.2 Windows 64 bit (145 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_hl.exe)**
   - [TurboWin+ V4.2 Windows 32 bit (132 Mb; Java JRE 8 or higher required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+.exe)**
