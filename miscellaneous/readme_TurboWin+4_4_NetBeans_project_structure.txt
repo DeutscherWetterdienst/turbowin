@@ -23,8 +23,8 @@ C:\NetBeansProjects\turbowin_jws\                                              /
                                 \src\turbowin                                  // contents, all files in: https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/src_version_x_x
                                 \test                                          //
                                 \backup\software\jserialcomm                   // contents, jSerialComm-x.x.x.jar (https://fazecast.github.io/jSerialComm/ and https://gitlab.com/-/ide/project/KNMI-OSS/turbowin/turbowin/tree/master/-/miscellaneous/libraries/)
-                                \backup\software\jakarta_activation            // contents, file jakarta.activation-2.0.1.jar (https://gitlab.com/-/ide/project/KNMI-OSS/turbowin/turbowin/tree/master/-/miscellaneous/libraries/)
-                                \backup\software\jakarta_mail                  // contents, file jakarta.mail-2.0.1.jar (https://gitlab.com/-/ide/project/KNMI-OSS/turbowin/turbowin/tree/master/-/miscellaneous/libraries/)
+                                \backup\software\jakarta_activation            // contents, file jakarta.activation-x.x.x.jar (https://gitlab.com/-/ide/project/KNMI-OSS/turbowin/turbowin/tree/master/-/miscellaneous/libraries/)
+                                \backup\software\jakarta_mail                  // contents, file jakarta.mail-x.x.x.jar (https://gitlab.com/-/ide/project/KNMI-OSS/turbowin/turbowin/tree/master/-/miscellaneous/libraries/)
 
 
 
