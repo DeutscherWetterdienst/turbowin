@@ -11,7 +11,7 @@
   _TurboWin+ RC (Release Candidate; not for operational use; beta)_
   - none
 
-  _TurboWin+ alpha (not for operational use; alpha)_
+  _TurboWin+ alpha (specific tests; not for operational use; alpha)_
   - none
  
   _TurboWin+ earlier versions_
