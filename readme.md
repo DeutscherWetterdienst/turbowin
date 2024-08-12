@@ -12,7 +12,7 @@
   - none
 
   _TurboWin+ alpha (specific tests; not for operational use; alpha)_
-  - none
+  - [TurboWin+ V4.6 Windows 64 bit (47 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_6_alpha_hl.exe)
  
   _TurboWin+ earlier versions_
    - [TurboWin+ V4.4 Windows 64 bit (44 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_4_hl.exe)
