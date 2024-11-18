@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'idea'
+}
+
+group = 'turbowin'
+version = '4.5'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.fazecast:jSerialComm:2.11.0'
+    implementation 'com.sun.activation:jakarta.activation:2.0.1'
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'org.netbeans.external:AbsoluteLayout:RELEASE230'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.assertj:assertj-swing-junit:3.17.1'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'turbowin.main'
+        )
+    }
+}
+
+application {
+    mainClass.set('turbowin.main')
+}
+
+task printVersion {
+    doLast {
+        println project.version
+    }
+}
