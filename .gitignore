@@ -1,1 +1,23 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.netbeans/
+
+# macOS
 .DS_Store
+
+# TurboWin+
+configuration.txt
