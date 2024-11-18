@@ -1,0 +1,14 @@
+# Glossary
+- **AMVER**: Automated Mutual-Assistance Vessel Rescue System
+- **APR**: Automated Pressure Reports
+- **APTR**: Automated Pressure & Temperature Reports
+- **AWS**: Automatic Weather Station
+- **AWSR**: Automatic Weather Station Reports
+- **E-SURFMAR**: European Surface Marine Observations program
+- **EUMETNET**: Conference of European National Meteorological Services
+- **GOS**: Global Observing System
+- **GPS**: Global Positioning System
+- **KNMI**: Royal Netherlands Meteorological Institute
+- **NMEA**: National Marine Electronics Association
+- **VOS**: Voluntary Observing Ships
+- **WMO**: World Meteorological Organization

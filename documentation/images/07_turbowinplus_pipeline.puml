@@ -1,0 +1,109 @@
+@startuml
+skinparam rectangle {
+    BackgroundColor<<Build Stage>> LightBlue
+    BackgroundColor<<Package Stage>> LightGreen
+    BackgroundColor<<Artifacts>> LightYellow
+    BackgroundColor<<Optional Signing>> LightGray
+}
+
+title GitLab CI Pipeline for TurboWinPlus
+
+:Code change pushed to repository;
+
+partition "Build Stage" <<Build Stage>> {
+    fork
+        :build;
+        note right
+            On Debian Bookworm (amd64):
+            - Install OpenJDK
+            - Run Gradle build
+        end note
+        -> turbowin-4.5.jar;
+    fork again
+        :test;
+        note right
+            On Debian Bookworm (amd64):
+            - Install testing dependencies
+            - Set up virtual display
+            - Run tests with screen capture
+            - Trim screen capture
+        end note
+        -> screen_capture.webm;
+    end fork
+}
+
+partition "Package Stage" <<Package Stage>> {
+    fork
+        :package_linux_amd64;
+        note right
+            On Debian Bookworm (amd64):
+            - Install packaging dependencies
+            - Convert icons
+            - Package for Linux amd64
+        end note
+        -> turbowinplus_4.5-1_amd64.deb
+        turbowinplus-4.5-1.x86_64.rpm;
+    fork again
+        :package_linux_i386;
+        note right
+            On Debian Bookworm (i386):
+            - Install packaging dependencies
+            - Convert icons
+            - Package for Linux i386
+        end note
+        -> turbowinplus_4.5-1_i386.deb
+        turbowinplus-4.5-1.i386.rpm;
+    fork again
+        :package_windows;
+        note right
+            On Windows Server 2022 (64-bit):
+            - Download JDK (32-bit and 64-bit) and WiX
+            - Package for Windows x86 and x64
+        end note
+        -> TurboWinPlus-4.5_64-bit.exe
+        TurboWinPlus-4.5_32-bit.exe;
+    end fork
+}
+
+partition "Artifacts" <<Artifacts>> {
+    :Collect Artifacts;
+    note right
+        Generated artifacts:
+        - turbowin-4.5.jar
+        - screen_capture.webm
+        - turbowinplus_4.5-1_amd64.deb
+        - turbowinplus-4.5-1.x86_64.rpm
+        - turbowinplus_4.5-1_i386.deb
+        - turbowinplus-4.5-1.i386.rpm
+        - TurboWinPlus-4.5_64-bit.exe
+        - TurboWinPlus-4.5_32-bit.exe
+    end note
+}
+
+partition "Optional Signing" <<Optional Signing>> {
+    if (Sign Installers and Packages?) then (Yes)
+        :Sign Installers and Packages;
+        note right
+            - Sign Windows executables
+            - Sign JAR files
+            - Sign DEB packages
+            - Sign RPM packages
+        end note
+        :Signed Artifacts;
+        note right
+            Signed artifacts:
+            - turbowin-4.5.jar
+            - turbowinplus_4.5-1_amd64.deb
+            - turbowinplus-4.5-1.x86_64.rpm
+            - turbowinplus_4.5-1_i386.deb
+            - turbowinplus-4.5-1.i386.rpm
+            - TurboWinPlus-4.5_64-bit.exe
+            - TurboWinPlus-4.5_32-bit.exe
+        end note
+    else (No)
+        :Skip Signing;
+    endif
+}
+
+:Release of packages;
+@enduml

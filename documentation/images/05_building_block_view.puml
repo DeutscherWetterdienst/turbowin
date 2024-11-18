@@ -1,0 +1,34 @@
+@startuml
+skinparam componentStyle rectangle
+
+component "Vaisala PTB330/\nPTB220/HMP155" as Vaisala
+component "Mintaka Duo/\nStar/StarX" as Mintaka
+component "EUCAWS" as EUCAWS
+component "OMC-140 AWS" as OMC
+component "GPS Interface" as GPS
+
+component "TurboWin+" as TurboWin {
+  component "User Interface" as UI
+  component "Quality Control" as QC
+  component "Data Storage" as Storage
+}
+
+component "Human observations" as Observations
+component "Email Server" as Email
+component "HTTP Server" as HTTP
+
+Vaisala --> UI : Sensor Data
+Mintaka --> UI : Sensor Data
+EUCAWS --> UI : Sensor Data
+OMC --> UI : Sensor Data
+GPS --> UI : Location Data
+
+Observations --> UI : Entered Data
+
+UI --> QC
+QC --> Storage
+QC --> EUCAWS : Obervations
+QC --> Email
+QC --> HTTP
+
+@enduml
