@@ -1,0 +1,157 @@
+variables:
+  APP_NAME: 'TurboWinPlus'
+  LICENSE_FILE: 'LICENSE'
+  VENDOR: 'KNMI'
+  ICON_PATH_LINUX: 'src/main/resources/turbowin/install_ico/TurboWin+_install_3_256x256x32.png'
+  ICON_PATH_WINDOWS: 'src/main/resources/turbowin/install_ico/TurboWin+_install.ico'
+  JDK_WINDOWS_VERSION: '17.0.13+11'
+  WIX_BINARIES_WINDOWS_URL: 'https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip'
+
+stages:
+  - build
+  - package
+
+build:
+  stage: build
+  image: debian:bookworm
+  script:
+    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes openjdk-17-jdk
+    - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
+    - echo "App version is $APP_VERSION"
+    - echo "APP_VERSION=4.5" > app_version.env
+    - ./gradlew build -x test --stacktrace --info
+  artifacts:
+    paths:
+      - build/libs/*
+    reports:
+      dotenv: app_version.env
+    when: always
+    expire_in: 1 hour
+
+test:
+  stage: build
+  image: debian:bookworm
+  script:
+    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes openjdk-17-jdk xvfb libxtst6 libxi6 openbox ffmpeg
+    - Xvfb :99 -screen 0 1280x1024x24 &
+    - export DISPLAY=:99
+    - openbox &
+    - ffmpeg -y -f x11grab -r 60 -i $DISPLAY -codec:v libvpx-vp9 -b:v 2M -pix_fmt yuv420p screen_capture.webm & echo $! > ffmpeg_pid
+    - ./gradlew test --stacktrace --info
+    - sleep 1
+    - kill -SIGINT $(cat ffmpeg_pid)
+    - wait $(cat ffmpeg_pid) || true
+    - rm ffmpeg_pid
+    - start_time=$(ffmpeg -i screen_capture.webm -vf "select='gt(scene,0.1)',showinfo" -vsync vfr -f null - 2>&1 | grep "pts_time" | head -n 1| grep -o "pts_time:[0-9.]*" | sed 's/pts_time://')
+    - |
+      if [ -n "$start_time" ]; then
+        ffmpeg -ss "$start_time" -i screen_capture.webm -c copy screen_capture_cut.webm
+        mv screen_capture_cut.webm screen_capture.webm
+      else
+        echo "No scene change detected. Skipping trim."
+      fi
+  retry: 2
+  artifacts:
+    paths:
+      - screen_capture.webm
+    when: always
+    expire_in: 1 hour
+
+.package_linux_template:
+  stage: package
+  needs:
+    - job: build
+  dependencies:
+    - build
+  script:
+    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes fakeroot icoutils binutils openjdk-17-jdk rpm
+    - icotool -x --width=256 --height=256 -o src/main/resources/turbowin/install_ico/ ${ICON_PATH_WINDOWS}
+    - jpackage --type deb --input build/libs --dest build/jpackage --name ${APP_NAME} --main-jar turbowin-${APP_VERSION}.jar --app-version ${APP_VERSION} --license-file ${LICENSE_FILE} --vendor ${VENDOR} --icon ${ICON_PATH_LINUX}
+    - jpackage --type rpm --input build/libs --dest build/jpackage --name ${APP_NAME} --main-jar turbowin-${APP_VERSION}.jar --app-version ${APP_VERSION} --license-file ${LICENSE_FILE} --vendor ${VENDOR} --icon ${ICON_PATH_LINUX}
+  artifacts:
+    paths:
+      - build/jpackage/*
+    expire_in: 1 hour
+
+package_linux_amd64:
+  image: debian:bookworm
+  extends: .package_linux_template
+
+package_linux_i386:
+  image: i386/debian:bookworm
+  extends: .package_linux_template
+
+package_windows:
+  stage: package
+  needs:
+    - job: build
+  dependencies:
+    - build
+  tags:
+    - saas-windows-medium-amd64
+  before_script:
+    - |
+      $env:JDK_X64_WINDOWS_URL = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$($env:JDK_WINDOWS_VERSION)/OpenJDK17U-jdk_x64_windows_hotspot_$($env:JDK_WINDOWS_VERSION -replace '\+', '_').zip"
+      $env:JDK_X86_WINDOWS_URL = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$($env:JDK_WINDOWS_VERSION)/OpenJDK17U-jdk_x86-32_windows_hotspot_$($env:JDK_WINDOWS_VERSION -replace '\+', '_').zip"
+      echo "JDK_X64_WINDOWS_URL: $env:JDK_X64_WINDOWS_URL"
+      echo "JDK_X86_WINDOWS_URL: $env:JDK_X86_WINDOWS_URL"
+      echo "WIX_BINARIES_WINDOWS_URL: $env:WIX_BINARIES_WINDOWS_URL"
+  script:
+    - curl.exe --location --output jdk_x64_windows.zip $env:JDK_X64_WINDOWS_URL
+    - curl.exe --location --output jdk_x86_windows.zip $env:JDK_X86_WINDOWS_URL
+    - curl.exe --location --output wix-binaries.zip $env:WIX_BINARIES_WINDOWS_URL
+    - Get-Item jdk_x64_windows.zip | Select-Object Name, Length
+    - Get-Item jdk_x86_windows.zip | Select-Object Name, Length
+    - Get-Item wix-binaries.zip | Select-Object Name, Length
+    - Expand-Archive -Path jdk_x64_windows.zip -DestinationPath jdk_x64_windows
+    - Expand-Archive -Path jdk_x86_windows.zip -DestinationPath jdk_x86_windows
+    - Expand-Archive -Path wix-binaries.zip -DestinationPath wix-binaries
+    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin" -Recurse
+    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin" -Recurse
+    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/light.exe" -help'
+    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/light.exe" -help'
+    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/candle.exe" -help'
+    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/candle.exe" -help'
+    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/java.exe" --version'
+    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/java.exe" --version'
+    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" --version'
+    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" --version'
+    - mkdir build/jpackage
+    - |
+      & "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" `
+        --type exe `
+        --input build/libs `
+        --dest build/jpackage64 `
+        --name $env:APP_NAME `
+        --main-jar turbowin-$env:APP_VERSION.jar `
+        --app-version $env:APP_VERSION `
+        --license-file $env:LICENSE_FILE `
+        --vendor $env:VENDOR `
+        --icon $env:ICON_PATH_WINDOWS `
+        --win-upgrade-uuid "73902787-F60E-40DE-B64B-CA593EE0A5E0" `
+        --win-menu `
+        --win-menu-group $env:APP_NAME `
+        --win-shortcut `
+        --win-dir-chooser
+    - Move-Item "build/jpackage64/$($env:APP_NAME)-$($env:APP_VERSION).exe" "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION)_64-bit.exe"
+    - |
+      & "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" `
+        --type exe `
+        --input build/libs `
+        --dest build/jpackage32 `
+        --name $env:APP_NAME `
+        --main-jar turbowin-$env:APP_VERSION.jar `
+        --app-version $env:APP_VERSION `
+        --license-file $env:LICENSE_FILE `
+        --vendor $env:VENDOR `
+        --icon $env:ICON_PATH_WINDOWS `
+        --win-upgrade-uuid "B0DE492B-BE59-47FC-996F-22AAD6CEC71D" `
+        --win-menu `
+        --win-menu-group $env:APP_NAME `
+        --win-shortcut `
+        --win-dir-chooser
+    - Move-Item "build/jpackage32/$($env:APP_NAME)-$($env:APP_VERSION).exe" "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION)_32-bit.exe"
+  artifacts:
+    paths:
+      - build/jpackage/*
+    expire_in: 1 hour
