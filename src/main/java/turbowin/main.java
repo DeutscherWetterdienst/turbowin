@@ -14698,6 +14698,8 @@ private void initComponents2()
    /* status field (NB can be over written with different Themes) */
    jTextField4.setBackground(new java.awt.Color(204, 255, 255));   // Cyan 
    
+   jTextField4.setName("fm13_field");
+
    /* create pop-up menu (right mouse button) */
    //create_popup_menu();
    // NB moved to lees_configuratie_regels() [main.java] and read_muffin() [main.java]

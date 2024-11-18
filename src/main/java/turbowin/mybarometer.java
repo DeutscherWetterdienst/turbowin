@@ -278,6 +278,10 @@ final public class mybarometer extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
+      jTextField1.setName("barometer_reading");
+      jTextField2.setName("deepest_draft");
+      jTextField3.setName("instrument_correction");
+
       // // FOR ACTUAL SITUATION: see main.java
       // global var: RS232_connection_mode: 0 = no instrument; serial connection or WiFi (default) 
       //        (instrument type)      1 = barometer PTB220 serial

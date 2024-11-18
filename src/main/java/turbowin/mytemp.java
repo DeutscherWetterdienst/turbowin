@@ -478,6 +478,11 @@ final public class mytemp extends javax.swing.JFrame {
 /***********************************************************************************************/
 private void initComponents2()
 {
+   jTextField1.setName("air_temp");
+   jTextField2.setName("wet_bulb_temp");
+   jTextField3.setName("sea_water_temp");
+   jTextField4.setName("rel_humidity");
+
    // FOR ACTUAL SITUATION: see main.java
    // global var: RS232_connection_mode: 0 = no instrument; serial connection or WiFi (default) 
    //        (instrument type)      1 = barometer PTB220 serial

@@ -569,6 +569,11 @@ final public class myposition extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
+      jTextField1.setName("lat_degree");
+      jTextField2.setName("lat_minute");
+      jTextField3.setName("lon_degree");
+      jTextField4.setName("lon_minute");
+
       // global var: RS232_connection_mode: 0 = no instrument; serial connection or WiFi (default) 
       //             (instrument type)      1 = barometer PTB220 serial
       //                                    2 = barometer PTB330 serial

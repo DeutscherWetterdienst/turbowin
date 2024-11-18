@@ -195,6 +195,11 @@ final public class mydatetime extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
+      jList1.setName("year");
+      jList2.setName("month");
+      jList3.setName("day");
+      jList4.setName("hour");
+
       if (main.offline_mode == true)
       {
          jButton3.setText("Help");

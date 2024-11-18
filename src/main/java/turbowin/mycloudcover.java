@@ -618,6 +618,10 @@ final public class mycloudcover extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
+      jPanel1.setName("low");
+      jPanel2.setName("cl");
+      jPanel3.setName("total");
+
       // hide Back/Stop buttons if not in next_screen_mode
       if (main.in_next_sequence == false)
       {

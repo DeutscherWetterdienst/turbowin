@@ -607,6 +607,9 @@ final public class mywaves extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
+      jTextField1.setName("wave_1");
+      jTextField2.setName("wave_2");
+
       // hide Back/Stop buttons if not in next_screen_mode
       if (main.in_next_sequence == false)
       {

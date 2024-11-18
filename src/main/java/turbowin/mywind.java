@@ -342,6 +342,14 @@ final public class mywind extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
+      jTextField1.setName("wind_1");
+      jTextField2.setName("wind_2");
+      jTextField3.setName("wind_3");
+      jTextField4.setName("wind_4");
+      jTextField5.setName("wind_5");
+      jTextField6.setName("wind_6");
+      jTextField7.setName("wind_7");
+
       // hide Back/Stop buttons if not in next_screen_mode
       if (main.in_next_sequence == false)
       {

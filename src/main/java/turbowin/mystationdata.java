@@ -32,6 +32,7 @@ final public class mystationdata extends javax.swing.JFrame {
     /** Creates new form mystationdata */
     public mystationdata() {
         initComponents();
+        initComponents2();
         initStationComponents();
         setLocation(main.x_pos_main_frame, main.y_pos_main_frame);
     }
@@ -1474,6 +1475,16 @@ final public class mystationdata extends javax.swing.JFrame {
           dispose();
        } // if (doorgaan == true)
     }//GEN-LAST:event_OK_button_actionPerformed
+
+   private void initComponents2() {
+      jTextField1.setName("ship_name");
+      jTextField2.setName("imo_number");
+      jTextField5.setName("barometer_height");
+      jTextField6.setName("keel_distance");
+      jTextField7.setName("max_height_deck_cargo");
+      jTextField8.setName("difference_sll_wl");
+      jTextField10.setName("station_id");
+   }
 
     
     

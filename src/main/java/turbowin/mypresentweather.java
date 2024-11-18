@@ -34,6 +34,10 @@ final public class mypresentweather extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initComponents2()
    {
+      jList1.setName("present_weather_list_1");
+      jList2.setName("present_weather_list_2");
+      jList3.setName("present_weather_list_3");
+
       // hide Back/Stop buttons if not in next_screen_mode
       if (main.in_next_sequence == false)
       {
