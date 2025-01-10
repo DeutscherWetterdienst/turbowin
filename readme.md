@@ -9,7 +9,7 @@
       <br>  * Windows 11 by default.
 
   _TurboWin+ RC (Release Candidate; not for operational use; beta)_
-  - [TurboWin+ V4.6 Windows 64 bit (45 Mb; no Java required)] (https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_6_beta_hl.exe)
+  - [TurboWin+ V4.6 Windows 64 bit (54 Mb; no Java required)] (https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_6_beta_hl.exe)
  
   _TurboWin+ earlier versions_
    - [TurboWin+ V4.4 Windows 64 bit (44 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_4_hl.exe)
