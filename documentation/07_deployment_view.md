@@ -33,7 +33,7 @@ The pipeline uses predefined variables to parameterize the build and packaging s
 - **build**
 
     - **Purpose**: Compiles the application code.
-    - **Image**: `debian:bookworm` (64-bit)
+    - **Image**: `debian` (64-bit)
     - **Script**:
         - Updates the package manager and installs OpenJDK.
         - Extracts the version number and stores it for later jobs
@@ -45,7 +45,7 @@ The pipeline uses predefined variables to parameterize the build and packaging s
 - **test**
 
     - **Purpose**: Runs automated tests with screen capture.
-    - **Image**: `debian:bookworm` (64-bit)
+    - **Image**: `debian` (64-bit)
     - **Script**:
         - Installs necessary packages for GUI testing and screen capture.
         - Sets up a virtual display environment using Xvfb.
@@ -62,7 +62,7 @@ The pipeline uses predefined variables to parameterize the build and packaging s
 - **package_linux_amd64**
 
     - **Purpose**: Packages the application for Linux amd64 architecture.
-    - **Image**: `debian:bookworm` (64-bit)
+    - **Image**: `debian` (64-bit)
     - **Extends**: `.package_linux_template`
     - **Script**:
         - Converts Windows icon to PNG format using `icotool`.
@@ -76,7 +76,7 @@ The pipeline uses predefined variables to parameterize the build and packaging s
 - **package_linux_i386**
 
     - **Purpose**: Packages the application for Linux i386 architecture.
-    - **Image**: `i386/debian:bookworm` (32-bit)
+    - **Image**: `i386/debian` (32-bit)
     - **Extends**: `.package_linux_template`
     - **Script**: Same as `package_linux_amd64`.
     - **Artifacts**:

@@ -14,7 +14,7 @@ partition "Build Stage" <<Build Stage>> {
     fork
         :build;
         note right
-            On Debian Bookworm (amd64):
+            On Debian (amd64):
             - Install OpenJDK
             - Run Gradle build
         end note
@@ -22,11 +22,10 @@ partition "Build Stage" <<Build Stage>> {
     fork again
         :test;
         note right
-            On Debian Bookworm (amd64):
+            On Debian (amd64):
             - Install testing dependencies
             - Set up virtual display
             - Run tests with screen capture
-            - Trim screen capture
         end note
         -> screen_capture.webm;
     end fork
@@ -36,7 +35,7 @@ partition "Package Stage" <<Package Stage>> {
     fork
         :package_linux_amd64;
         note right
-            On Debian Bookworm (amd64):
+            On Debian (amd64):
             - Install packaging dependencies
             - Convert icons
             - Package for Linux amd64
@@ -46,7 +45,7 @@ partition "Package Stage" <<Package Stage>> {
     fork again
         :package_linux_i386;
         note right
-            On Debian Bookworm (i386):
+            On Debian (i386):
             - Install packaging dependencies
             - Convert icons
             - Package for Linux i386

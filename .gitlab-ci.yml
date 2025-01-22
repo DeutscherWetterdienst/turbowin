@@ -4,7 +4,7 @@ variables:
   VENDOR: 'KNMI'
   ICON_PATH_LINUX: 'src/main/resources/turbowin/install_ico/TurboWin+_install_3_256x256x32.png'
   ICON_PATH_WINDOWS: 'src/main/resources/turbowin/install_ico/TurboWin+_install.ico'
-  JDK_WINDOWS_VERSION: '17.0.13+11'
+  JDK_WINDOWS_VERSION: '17.0.14+10'
   WIX_BINARIES_WINDOWS_URL: 'https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip'
 
 stages:
@@ -42,14 +42,6 @@ test:
     - kill -SIGINT $(cat ffmpeg_pid)
     - wait $(cat ffmpeg_pid) || true
     - rm ffmpeg_pid
-    - start_time=$(ffmpeg -i screen_capture.webm -vf "select='gt(scene,0.1)',showinfo" -vsync vfr -f null - 2>&1 | grep "pts_time" | head -n 1| grep -o "pts_time:[0-9.]*" | sed 's/pts_time://')
-    - |
-      if [ -n "$start_time" ]; then
-        ffmpeg -ss "$start_time" -i screen_capture.webm -c copy screen_capture_cut.webm
-        mv screen_capture_cut.webm screen_capture.webm
-      else
-        echo "No scene change detected. Skipping trim."
-      fi
   retry: 2
   artifacts:
     paths:
@@ -91,8 +83,8 @@ package_windows:
     - saas-windows-medium-amd64
   before_script:
     - |
-      $env:JDK_X64_WINDOWS_URL = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$($env:JDK_WINDOWS_VERSION)/OpenJDK17U-jdk_x64_windows_hotspot_$($env:JDK_WINDOWS_VERSION -replace '\+', '_').zip"
-      $env:JDK_X86_WINDOWS_URL = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-$($env:JDK_WINDOWS_VERSION)/OpenJDK17U-jdk_x86-32_windows_hotspot_$($env:JDK_WINDOWS_VERSION -replace '\+', '_').zip"
+      $env:JDK_X64_WINDOWS_URL = "https://download.bell-sw.com/java/$($env:JDK_WINDOWS_VERSION)/bellsoft-jdk$($env:JDK_WINDOWS_VERSION)-windows-amd64.zip"
+      $env:JDK_X86_WINDOWS_URL = "https://download.bell-sw.com/java/$($env:JDK_WINDOWS_VERSION)/bellsoft-jdk$($env:JDK_WINDOWS_VERSION)-windows-i586.zip"
       echo "JDK_X64_WINDOWS_URL: $env:JDK_X64_WINDOWS_URL"
       echo "JDK_X86_WINDOWS_URL: $env:JDK_X86_WINDOWS_URL"
       echo "WIX_BINARIES_WINDOWS_URL: $env:WIX_BINARIES_WINDOWS_URL"
@@ -106,19 +98,22 @@ package_windows:
     - Expand-Archive -Path jdk_x64_windows.zip -DestinationPath jdk_x64_windows
     - Expand-Archive -Path jdk_x86_windows.zip -DestinationPath jdk_x86_windows
     - Expand-Archive -Path wix-binaries.zip -DestinationPath wix-binaries
-    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin" -Recurse
-    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin" -Recurse
-    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/light.exe" -help'
-    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/light.exe" -help'
-    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/candle.exe" -help'
-    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/candle.exe" -help'
-    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/java.exe" --version'
-    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/java.exe" --version'
-    - '& "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" --version'
-    - '& "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" --version'
+    - $env:VersionWithoutBuild = $env:JDK_WINDOWS_VERSION -split '\+' | Select-Object -First 1
+    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin" -Recurse
+    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin" -Recurse
+    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/light.exe" -help'
+    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/light.exe" -help'
+    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/candle.exe" -help'
+    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/candle.exe" -help'
+    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/java.exe" --version'
+    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/java.exe" --version'
+    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/jlink.exe" --version'
+    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/jlink.exe" --version'
+    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" --version'
+    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" --version'
     - mkdir build/jpackage
     - |
-      & "jdk_x64_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" `
+      & "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" `
         --type exe `
         --input build/libs `
         --dest build/jpackage64 `
@@ -135,7 +130,7 @@ package_windows:
         --win-dir-chooser
     - Move-Item "build/jpackage64/$($env:APP_NAME)-$($env:APP_VERSION).exe" "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION)_64-bit.exe"
     - |
-      & "jdk_x86_windows/jdk-$($env:JDK_WINDOWS_VERSION)/bin/jpackage.exe" `
+      & "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" `
         --type exe `
         --input build/libs `
         --dest build/jpackage32 `
