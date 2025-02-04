@@ -2,42 +2,44 @@ variables:
   APP_NAME: 'TurboWinPlus'
   LICENSE_FILE: 'LICENSE'
   VENDOR: 'KNMI'
+  MODULE_NAME_MAIN_CLASS: 'turbowin/turbowin.main'
   ICON_PATH_LINUX: 'src/main/resources/turbowin/install_ico/TurboWin+_install_3_256x256x32.png'
   ICON_PATH_WINDOWS: 'src/main/resources/turbowin/install_ico/TurboWin+_install.ico'
-  JDK_WINDOWS_VERSION: '17.0.14+10'
+  JDK_WINDOWS_VERSION: '21.0.5+11'
   WIX_BINARIES_WINDOWS_URL: 'https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip'
 
 stages:
   - build
-  - package
 
-build:
+jar:
   stage: build
-  image: debian:bookworm
+  when: manual
+  image: eclipse-temurin:21-jdk-noble
   script:
-    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes openjdk-17-jdk
+    - echo ${JAVA_HOME}
+    - ls -lh ${JAVA_HOME}
     - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
     - echo "App version is $APP_VERSION"
-    - echo "APP_VERSION=4.5" > app_version.env
     - ./gradlew build -x test --stacktrace --info
+    - ./gradlew --stop
   artifacts:
     paths:
       - build/libs/*
-    reports:
-      dotenv: app_version.env
-    when: always
     expire_in: 1 hour
 
 test:
   stage: build
-  image: debian:bookworm
+  image: eclipse-temurin:21-jdk-noble
   script:
-    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes openjdk-17-jdk xvfb libxtst6 libxi6 openbox ffmpeg
+    - echo ${JAVA_HOME}
+    - ls -lh ${JAVA_HOME}
+    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes xvfb libxtst6 libxi6 openbox ffmpeg
     - Xvfb :99 -screen 0 1280x1024x24 &
     - export DISPLAY=:99
     - openbox &
     - ffmpeg -y -f x11grab -r 60 -i $DISPLAY -codec:v libvpx-vp9 -b:v 2M -pix_fmt yuv420p screen_capture.webm & echo $! > ffmpeg_pid
     - ./gradlew test --stacktrace --info
+    - ./gradlew --stop
     - sleep 1
     - kill -SIGINT $(cat ffmpeg_pid)
     - wait $(cat ffmpeg_pid) || true
@@ -49,76 +51,84 @@ test:
     when: always
     expire_in: 1 hour
 
-.package_linux_template:
-  stage: package
-  needs:
-    - job: build
-  dependencies:
-    - build
+linux:
+  stage: build
+  image: eclipse-temurin:21-jdk-noble
   script:
-    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes fakeroot icoutils binutils openjdk-17-jdk rpm
+    - echo ${JAVA_HOME}
+    - ls -lh ${JAVA_HOME}
+    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes fakeroot icoutils binutils rpm
+    - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
+    - echo "App version is $APP_VERSION"
     - icotool -x --width=256 --height=256 -o src/main/resources/turbowin/install_ico/ ${ICON_PATH_WINDOWS}
-    - jpackage --type deb --input build/libs --dest build/jpackage --name ${APP_NAME} --main-jar turbowin-${APP_VERSION}.jar --app-version ${APP_VERSION} --license-file ${LICENSE_FILE} --vendor ${VENDOR} --icon ${ICON_PATH_LINUX}
-    - jpackage --type rpm --input build/libs --dest build/jpackage --name ${APP_NAME} --main-jar turbowin-${APP_VERSION}.jar --app-version ${APP_VERSION} --license-file ${LICENSE_FILE} --vendor ${VENDOR} --icon ${ICON_PATH_LINUX}
+    - ./gradlew jlink --stacktrace --info
+    - ./gradlew --stop
+    - |
+      jpackage \
+      --verbose \
+      --type deb \
+      --runtime-image build/image \
+      --module ${MODULE_NAME_MAIN_CLASS} \
+      --dest build/jpackage \
+      --name ${APP_NAME} \
+      --app-version ${APP_VERSION} \
+      --license-file ${LICENSE_FILE} \
+      --vendor ${VENDOR} \
+      --icon ${ICON_PATH_LINUX}
+    - |
+      jpackage \
+      --verbose \
+      --type rpm \
+      --runtime-image build/image \
+      --module ${MODULE_NAME_MAIN_CLASS} \
+      --dest build/jpackage \
+      --name ${APP_NAME} \
+      --app-version ${APP_VERSION} \
+      --license-file ${LICENSE_FILE} \
+      --vendor ${VENDOR} \
+      --icon ${ICON_PATH_LINUX}
   artifacts:
     paths:
       - build/jpackage/*
     expire_in: 1 hour
 
-package_linux_amd64:
-  image: debian:bookworm
-  extends: .package_linux_template
-
-package_linux_i386:
-  image: i386/debian:bookworm
-  extends: .package_linux_template
-
-package_windows:
-  stage: package
-  needs:
-    - job: build
-  dependencies:
-    - build
+windows:
+  stage: build
   tags:
     - saas-windows-medium-amd64
   before_script:
     - |
       $env:JDK_X64_WINDOWS_URL = "https://download.bell-sw.com/java/$($env:JDK_WINDOWS_VERSION)/bellsoft-jdk$($env:JDK_WINDOWS_VERSION)-windows-amd64.zip"
-      $env:JDK_X86_WINDOWS_URL = "https://download.bell-sw.com/java/$($env:JDK_WINDOWS_VERSION)/bellsoft-jdk$($env:JDK_WINDOWS_VERSION)-windows-i586.zip"
       echo "JDK_X64_WINDOWS_URL: $env:JDK_X64_WINDOWS_URL"
-      echo "JDK_X86_WINDOWS_URL: $env:JDK_X86_WINDOWS_URL"
       echo "WIX_BINARIES_WINDOWS_URL: $env:WIX_BINARIES_WINDOWS_URL"
   script:
     - curl.exe --location --output jdk_x64_windows.zip $env:JDK_X64_WINDOWS_URL
-    - curl.exe --location --output jdk_x86_windows.zip $env:JDK_X86_WINDOWS_URL
     - curl.exe --location --output wix-binaries.zip $env:WIX_BINARIES_WINDOWS_URL
     - Get-Item jdk_x64_windows.zip | Select-Object Name, Length
-    - Get-Item jdk_x86_windows.zip | Select-Object Name, Length
     - Get-Item wix-binaries.zip | Select-Object Name, Length
     - Expand-Archive -Path jdk_x64_windows.zip -DestinationPath jdk_x64_windows
-    - Expand-Archive -Path jdk_x86_windows.zip -DestinationPath jdk_x86_windows
     - Expand-Archive -Path wix-binaries.zip -DestinationPath wix-binaries
-    - $env:VersionWithoutBuild = $env:JDK_WINDOWS_VERSION -split '\+' | Select-Object -First 1
-    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin" -Recurse
-    - Copy-Item -Path "wix-binaries/*" -Destination "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin" -Recurse
-    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/light.exe" -help'
-    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/light.exe" -help'
-    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/candle.exe" -help'
-    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/candle.exe" -help'
-    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/java.exe" --version'
-    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/java.exe" --version'
-    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/jlink.exe" --version'
-    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/jlink.exe" --version'
-    - '& "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" --version'
-    - '& "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" --version'
-    - mkdir build/jpackage
+    - '$env:VersionWithoutBuild = $env:JDK_WINDOWS_VERSION -split "\+" | Select-Object -First 1'
+    - '$env:JAVA_HOME = "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)"'
+    - 'echo "JAVA_HOME is set to: $env:JAVA_HOME"'
+    - Copy-Item -Path "wix-binaries/*" -Destination "$env:JAVA_HOME/bin" -Recurse
+    - '& "$env:JAVA_HOME/bin/light.exe" -help'
+    - '& "$env:JAVA_HOME/bin/candle.exe" -help'
+    - '& "$env:JAVA_HOME/bin/java.exe" --version'
+    - '& "$env:JAVA_HOME/bin/jlink.exe" --version'
+    - '& "$env:JAVA_HOME/bin/jpackage.exe" --version'
+    - '$env:APP_VERSION = (& .\gradlew.bat printVersion -q | Select-Object -Last 1).Trim()'
+    - echo "App version is $env:APP_VERSION"
+    - .\gradlew.bat jlink --stacktrace --info
+    - .\gradlew.bat --stop
     - |
-      & "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" `
+      & "$env:JAVA_HOME/bin/jpackage.exe" `
+        --verbose `
         --type exe `
-        --input build/libs `
-        --dest build/jpackage64 `
+        --runtime-image build/image `
+        --module $env:MODULE_NAME_MAIN_CLASS `
+        --dest build/jpackage `
         --name $env:APP_NAME `
-        --main-jar turbowin-$env:APP_VERSION.jar `
         --app-version $env:APP_VERSION `
         --license-file $env:LICENSE_FILE `
         --vendor $env:VENDOR `
@@ -128,24 +138,8 @@ package_windows:
         --win-menu-group $env:APP_NAME `
         --win-shortcut `
         --win-dir-chooser
-    - Move-Item "build/jpackage64/$($env:APP_NAME)-$($env:APP_VERSION).exe" "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION)_64-bit.exe"
-    - |
-      & "jdk_x86_windows/jdk-$($env:VersionWithoutBuild)/bin/jpackage.exe" `
-        --type exe `
-        --input build/libs `
-        --dest build/jpackage32 `
-        --name $env:APP_NAME `
-        --main-jar turbowin-$env:APP_VERSION.jar `
-        --app-version $env:APP_VERSION `
-        --license-file $env:LICENSE_FILE `
-        --vendor $env:VENDOR `
-        --icon $env:ICON_PATH_WINDOWS `
-        --win-upgrade-uuid "B0DE492B-BE59-47FC-996F-22AAD6CEC71D" `
-        --win-menu `
-        --win-menu-group $env:APP_NAME `
-        --win-shortcut `
-        --win-dir-chooser
-    - Move-Item "build/jpackage32/$($env:APP_NAME)-$($env:APP_VERSION).exe" "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION)_32-bit.exe"
+    - Move-Item "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION).exe" "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION)_64-bit.exe"
+    - tasklist
   artifacts:
     paths:
       - build/jpackage/*

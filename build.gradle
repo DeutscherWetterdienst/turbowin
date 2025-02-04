@@ -9,7 +9,7 @@ version = '4.5'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -43,7 +43,7 @@ jlink {
     launcher {
         name = 'turbowin'
     }
-    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    options = ['--strip-debug', '--compress', 'zip-6', '--no-header-files', '--no-man-pages']
 }
 
 task printVersion {

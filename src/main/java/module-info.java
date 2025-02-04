@@ -4,6 +4,4 @@ module turbowin {
     requires com.fazecast.jSerialComm;
     requires jakarta.activation;
     requires jakarta.mail;
-
-    exports turbowin;
 }
