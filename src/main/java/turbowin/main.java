@@ -14733,9 +14733,9 @@ private void initComponents2()
    //
 
    // initialisation
-   offline_mode = false;
+   offline_mode = true;
    offline_mode_via_jnlp = false;
-   offline_mode_via_cmd = false;
+   offline_mode_via_cmd = true;
    
    // turbowin jnlp offline file present? (turbowin_jws_offline.jnlp)
    String volledig_path_jnlp_offline_file = user_dir + java.io.File.separator + JNLP_OFFLINE_FILE;
