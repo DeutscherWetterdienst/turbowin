@@ -51,16 +51,15 @@ test:
     when: always
     expire_in: 1 hour
 
-linux:
+deb:
   stage: build
   image: eclipse-temurin:21-jdk-noble
   script:
     - echo ${JAVA_HOME}
     - ls -lh ${JAVA_HOME}
-    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes fakeroot icoutils binutils rpm
+    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes fakeroot binutils
     - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
     - echo "App version is $APP_VERSION"
-    - icotool -x --width=256 --height=256 -o src/main/resources/turbowin/install_ico/ ${ICON_PATH_WINDOWS}
     - ./gradlew jlink --stacktrace --info
     - ./gradlew --stop
     - |
@@ -75,6 +74,22 @@ linux:
       --license-file ${LICENSE_FILE} \
       --vendor ${VENDOR} \
       --icon ${ICON_PATH_LINUX}
+  artifacts:
+    paths:
+      - build/jpackage/*
+    expire_in: 1 hour
+
+rpm:
+  stage: build
+  image: eclipse-temurin:21-jdk-ubi9-minimal
+  script:
+    - echo ${JAVA_HOME}
+    - ls -lh ${JAVA_HOME}
+    - microdnf update -y && microdnf install -y rpm-build
+    - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
+    - echo "App version is $APP_VERSION"
+    - ./gradlew jlink --stacktrace --info
+    - ./gradlew --stop
     - |
       jpackage \
       --verbose \
@@ -92,7 +107,7 @@ linux:
       - build/jpackage/*
     expire_in: 1 hour
 
-windows:
+exe:
   stage: build
   tags:
     - saas-windows-medium-amd64

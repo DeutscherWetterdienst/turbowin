@@ -32,7 +32,6 @@ partition "Build Stage" <<Build Stage>> {
         note right
             On Linux (amd64):
             - Install build dependencies
-            - Convert icons
             - Build and package for Linux amd64
         end note
         -> turbowinplus_4.x-1_amd64.deb;
