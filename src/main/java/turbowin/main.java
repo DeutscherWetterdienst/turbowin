@@ -14704,8 +14704,28 @@ private void initComponents2()
    //create_popup_menu();
    // NB moved to lees_configuratie_regels() [main.java] and read_muffin() [main.java]
    
+   /* determine the OS this program is running on */
+   OSType ostype = detect_OS();
+   String os = "";
+   switch (ostype)
+   {
+      case WINDOWS: os = "WINDOWS";
+         break;
+      case MACOS:   os = "MACOS";
+         break;
+      case LINUX:   os = "LINUX";
+         break;
+      case OTHER:   os = "OTHER";
+         break;
+      default:      os = "OTHER";
+         break;
+   }
    /* user directory */
-   user_dir = System.getProperty("user.dir");
+   if (os.equals("WINDOWS")) {
+      user_dir = System.getProperty("user.home") + java.io.File.separator + "AppData" + java.io.File.separator + "Roaming" + java.io.File.separator + "TurboWinPlus";
+   } else {
+      user_dir = System.getProperty("user.home") + java.io.File.separator + ".turbowinplus";
+   }
    //log_turbowin_system_message("[GENERAL] user dir:" + user_dir);
    //JOptionPane.showMessageDialog(null, user_dir, "user_dir", JOptionPane.INFORMATION_MESSAGE);
    System.out.println("user dir = " + user_dir);  
@@ -16989,7 +17009,7 @@ public static void IMMT_log()
              
       // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
       //
-      String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
+      String help_file_path = System.getProperty("user.dir") + java.io.File.separator + "runtime" + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
       File f = new File(help_file_path);
       if (f.isFile())
       {
