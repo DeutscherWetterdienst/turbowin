@@ -32,6 +32,10 @@ public class ObservationFillingTest extends AbstractUiTest {
 
     @Test
     public void testFillingOutAllValuesForAFM13() throws InterruptedException {
+        closeStartDialogs();
+
+        addObserverInformation();
+
         fillAllStationData();
 
         fillDateTimeInformation();
@@ -62,13 +66,15 @@ public class ObservationFillingTest extends AbstractUiTest {
         verifyFM13Creation();
     }
 
-    @Test
-    public void testAddingObservers() throws InterruptedException {
-        fillLogFileSettings();
-        addObserverInformation();
+    private void closeStartDialogs() throws InterruptedException {
+        DialogFixture turboWinWarningFrame = WindowFinder.findDialog(new DialogTitleMatcher("TurboWin+ warning")).using(this.robot());
+        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        turboWinWarningFrame.button(JButtonMatcher.withText("OK")).requireVisible().requireEnabled().click();
+        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        DialogFixture dateTimeDialog = WindowFinder.findDialog(new DialogTitleMatcher("Date and Time")).using(this.robot());
+        TimeUnit.MILLISECONDS.sleep(TIMEOUT);
+        handleLocalizedButtonClick(dateTimeDialog, "No", "Nein");
     }
-
-
 
     private void fillPositionInformation() throws InterruptedException {
         this.frame.label(JLabelMatcher.withText("Position")).requireVisible().requireEnabled().click();
@@ -250,13 +256,6 @@ public class ObservationFillingTest extends AbstractUiTest {
         closeRestartDialog();
     }
 
-    private void fillLogFileSettings() throws InterruptedException {
-        clickOnLogFileSettings();
-        enterPassword();
-        selectLogFolder();
-        closeRestartDialog();
-    }
-
     private void closeRestartDialog() throws InterruptedException {
         DialogFixture turboWinInfoFrame = WindowFinder.findDialog(new DialogTitleMatcher("TurboWin+ info")).using(this.robot());
 
@@ -267,12 +266,6 @@ public class ObservationFillingTest extends AbstractUiTest {
     private void clickOnStationData() {
         this.maintenanceMenu.requireVisible().requireEnabled().click();
         JMenuItemFixture maintenanceStationDataMenu = this.frame.menuItemWithPath("Maintenance|Station data...");
-        maintenanceStationDataMenu.requireVisible().requireEnabled().click();
-    }
-
-    private void clickOnLogFileSettings() {
-        this.maintenanceMenu.requireVisible().requireEnabled().click();
-        JMenuItemFixture maintenanceStationDataMenu = this.frame.menuItemWithPath("Maintenance|Log files settings...");
         maintenanceStationDataMenu.requireVisible().requireEnabled().click();
     }
 
@@ -294,21 +287,6 @@ public class ObservationFillingTest extends AbstractUiTest {
         stationDataFrame.radioButton(new RadioButtonMatcher("intake")).click();
 
         clickOkButtonInFrame(stationDataFrame);
-    }
-
-    private void selectLogFolder() throws InterruptedException {
-        FrameFixture logFilesFrame = WindowFinder.findFrame(new FrameTitleMatcher("Log files")).using(this.robot());
-        logFilesFrame.button(JButtonMatcher.withText("folder")).click();
-        try {
-            DialogFixture folderSelectFrame = WindowFinder.findDialog(new DialogTitleMatcher("Speichern")).using(this.robot());
-            folderSelectFrame.button(JButtonMatcher.withText("Speichern")).click();
-        } catch (WaitTimedOutError e) {
-            DialogFixture folderSelectFrame = WindowFinder.findDialog(new DialogTitleMatcher("Save")).using(this.robot());
-            folderSelectFrame.button(JButtonMatcher.withText("Save")).click();
-        }
-
-
-        clickOkButtonInFrame(logFilesFrame);
     }
 
     private void enterPassword() throws InterruptedException {
@@ -334,7 +312,7 @@ public class ObservationFillingTest extends AbstractUiTest {
     private void verifyFM13Creation() throws InterruptedException {
         TimeUnit.MILLISECONDS.sleep(TIMEOUT);
         JTextComponentFixture fm13Field = this.frame.textBox("fm13_field");
-        assertEquals(fm13Field.text(), "BBXX 00000 29103 99101 10122 41494 40105 10050 20050 49915 51050 74765 83246 22212 00050 20510 80050=");
+        assertEquals("BBXX 00000 29103 99101 10122 41494 40105 10050 20050 49915 51050 74765 83246 22212 00050 20510 80050=", fm13Field.text());
     }
 
     @Override
