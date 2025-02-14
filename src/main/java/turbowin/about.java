@@ -355,7 +355,7 @@ private void initComponents2()
 
    // NB September 2023: for Windows 11, Microsoft still uses 10.0 as version number (if using System.getProperty("os.version") and "System.getenv("OS_VERSION"") !
    jLabel6.setText("operating system: " + System.getProperty("os.name") + " version " + System.getProperty("os.version") + " running on " + System.getProperty("os.arch"));
-   jLabel11.setText("user dir: " + System.getProperty("user.dir"));
+   jLabel11.setText("app dir: " + System.getProperty("app.dir"));
    jLabel12.setText("logs dir: " + main.logs_dir);
    
    jLabel1.setText("java: " + System.getProperty("java.version") + "; " + System.getProperty("java.vm.name"));

@@ -17009,7 +17009,7 @@ public static void IMMT_log()
              
       // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
       //
-      String help_file_path = System.getProperty("user.dir") + java.io.File.separator + "runtime" + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
+      String help_file_path = System.getProperty("app.dir") + java.io.File.separator + ".." + java.io.File.separator + "runtime" + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
       File f = new File(help_file_path);
       if (f.isFile())
       {

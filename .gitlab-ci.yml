@@ -68,6 +68,7 @@ deb:
       --type deb \
       --runtime-image build/image \
       --module ${MODULE_NAME_MAIN_CLASS} \
+      --java-options '-Dapp.dir=$APPDIR' \
       --dest build/jpackage \
       --name ${APP_NAME} \
       --app-version ${APP_VERSION} \
@@ -96,6 +97,7 @@ rpm:
       --type rpm \
       --runtime-image build/image \
       --module ${MODULE_NAME_MAIN_CLASS} \
+      --java-options '-Dapp.dir=$APPDIR' \
       --dest build/jpackage \
       --name ${APP_NAME} \
       --app-version ${APP_VERSION} \
@@ -142,6 +144,7 @@ exe:
         --type exe `
         --runtime-image build/image `
         --module $env:MODULE_NAME_MAIN_CLASS `
+        --java-options '-Dapp.dir=$APPDIR' `
         --dest build/jpackage `
         --name $env:APP_NAME `
         --app-version $env:APP_VERSION `
