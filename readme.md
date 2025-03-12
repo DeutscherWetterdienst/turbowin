@@ -8,7 +8,7 @@
   - [TurboWin+ V3.3.0 Linux 32 bit (117 Mb; Java JRE 7 or higher required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TurboWin+.zip)
       <br>  * Windows 11 by default.
 
-  _TurboWin+ RC (Release Candidate; not for operational use; beta)_
+  _TurboWin+ RC (Release Candidate; not for operational use; alpha/beta)_
   - none
  
   _TurboWin+ earlier versions_
