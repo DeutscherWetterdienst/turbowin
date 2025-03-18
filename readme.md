@@ -3,7 +3,7 @@
   _TurboWin+ GA (General-Availability)_
   - [TurboWin+ V4.6 Windows 64 bit (55 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_jpms_4_6_hl.exe)*
   - [TurboWin+ V4.6 Windows 32 bit (37 Mb; Java JRE 8 or higher required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/setup_turbowin+_4_6_hl.exe)
-  - [TurboWin+ V4.5 Linux 64 bit [rpm] (50 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TurboWin+-4.5.0-1.x86_64.rpm)
+  - [TurboWin+ V4.6 Linux 64 bit [rpm] (59 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TurboWin+-4.6.0-1.x86_64.rpm)
   - [TurboWin+ V4.5 Linux 64 bit [deb] (50 Mb; no Java required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TurboWin+_4.5.0-1.deb)
   - [TurboWin+ V3.3.0 Linux 32 bit (117 Mb; Java JRE 7 or higher required)](https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/binaries/TurboWin+.zip)
       <br>  * Windows 11 by default.
