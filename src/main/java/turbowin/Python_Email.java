@@ -357,7 +357,7 @@ public class Python_Email
    {
       // called from: Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101() [main.java]
       
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       int exitStatus = 0;
       

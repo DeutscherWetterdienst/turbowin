@@ -156,8 +156,8 @@ public class DASHBOARD_view_AWS_digital extends javax.swing.JFrame {
       
       // NB the complete instantiation of class format_101 is already done in a swingworker! so not necessary to use a swingworker here for file copying etc.
       
-      // NB in offline_mode:  logs_dir = user_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in offline_mode:  logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       
       // check if logs folder exists (because this will be the root folder of all the format_101 dirs and files)

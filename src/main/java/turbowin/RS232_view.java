@@ -2823,8 +2823,8 @@ private void Read_Sensor_Data_Files_For_Graphs_4()
          jLabel3.setText("--- Pressure = 1 min average. Air temp = 1 min average. Wind = 10 min average ---");
       }     
      
-      /* user directory */
-      // user_dir = System.getProperty("user.dir");
+      /* data directory */
+      // data_dir = System.getProperty("user.dir");
 
       // for data/time (output/java console) massages
       sdf2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");                            // HH hour in day (0-23) note there is also hh (with am, pm)

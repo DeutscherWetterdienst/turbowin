@@ -257,7 +257,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 * configuration data (bv call sign, imo nummer, hoogte deklading etc) wordt op 3 plaatsen weggeschreven: !!!
 *   - 1x in muffin (java cache)
 *   - 2x in configuration.txt - logs_dir (user defined in online mode sub dir in offline mode -dir waar immt.log staat-)
-*                             - user_dir (system defined -dir waar turbowin_jws.jar staat- NB kan zijn dat user-dir write protected is bv bij 
+*                             - data_dir (system defined -dir waar turbowin_jws.jar staat- NB kan zijn dat user-dir write protected is bv bij 
 *                                         installatie in de Program Files !! -> komt dan verder geen melding, dit is bij installatie script
 *                                         aan te passen zie [DIRS] section, permissions etc. bij inno setup)
 *
@@ -5157,7 +5157,7 @@ private static void disable_dashboard_and_maps_menu_items()
       /* NB input/output in een GUI altijd via een SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
       /* This is also a backup for writting to muffin !!! */
-      /* backup (file configuration.txt) in: user dir (system defined) AND logs dir (user defined) */
+      /* backup (file configuration.txt) in: data dir (system defined) AND logs dir (user defined) */
 
       /* NB i.v.m. Swingworker backgroud proces kan het niet in 1 lus gebeuren */
 
@@ -5167,9 +5167,9 @@ private static void disable_dashboard_and_maps_menu_items()
       
       
       /*
-      // to user dir
+      // to data dir
       */
-      if ((user_dir != null) && (user_dir.compareTo("") != 0))
+      if ((data_dir != null) && (data_dir.compareTo("") != 0))
       {
          new SwingWorker<Void, Void>()
          {
@@ -5177,7 +5177,7 @@ private static void disable_dashboard_and_maps_menu_items()
             protected Void doInBackground() throws Exception
             {
                // NB eg configuratie_regels[2]  = "wind source        : estimated; true speed and true direction"
-               String volledig_path = user_dir + java.io.File.separator + CONFIGURATION_FILE;
+               String volledig_path = data_dir + java.io.File.separator + CONFIGURATION_FILE;
       
                 //JOptionPane.showMessageDialog(null, hulp_dir, APPLICATION_NAME + " hulp_dir", JOptionPane.WARNING_MESSAGE);
                try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path, false)))
@@ -5196,7 +5196,7 @@ private static void disable_dashboard_and_maps_menu_items()
                } // try
                //catch (Exception e)
                //{
-               //   // No message if not writable, in the case of internet invoking (webstart) the user dir will be
+               //   // No message if not writable, in the case of internet invoking (webstart) the data dir will be
                //   // windows\ystem32 (or something like that) and under Vista or Windows7 write protected
                //   //JOptionPane.showMessageDialog(null, "unable to write to: " + volledig_path, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
                //} // catch
@@ -5210,7 +5210,7 @@ private static void disable_dashboard_and_maps_menu_items()
       
             } // protected Void doInBackground() throws Exception
          }.execute(); // new SwingWorker<Void, Void>()
-      } // if ((user_dir != null) && (user_dir.compareTo("") != 0))
+      } // if ((data_dir != null) && (data_dir.compareTo("") != 0))
 
 
       /*
@@ -5267,7 +5267,7 @@ private static void disable_dashboard_and_maps_menu_items()
       // could also be:
       // An alternative if function read_muffin() failed (geen persistentService of geen muffin aanwezig) !!! 
       // on 2 locations configuration.txt present: - logs_dir (user defined in online mode or fixed subdir in offline mode)
-      //                                           - user_dir (system defined)
+      //                                           - data_dir (system defined)
       //
       // NB input/output GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) 
 
@@ -5280,9 +5280,9 @@ private static void disable_dashboard_and_maps_menu_items()
       {
          hulp_dir = logs_dir;
       }
-      else if ((user_dir != null) && (user_dir.compareTo("") != 0))
+      else if ((data_dir != null) && (data_dir.compareTo("") != 0))
       {
-         hulp_dir = user_dir;
+         hulp_dir = data_dir;
       }
 
 
@@ -14720,15 +14720,15 @@ private void initComponents2()
       default:      os = "OTHER";
          break;
    }
-   /* user directory */
+   /* data directory */
    if (os.equals("WINDOWS")) {
-      user_dir = System.getProperty("user.home") + java.io.File.separator + "AppData" + java.io.File.separator + "Roaming" + java.io.File.separator + "TurboWinPlus";
+      data_dir = "C:" + java.io.File.separator + "ProgramData" + java.io.File.separator + "TurboWinPlus";
    } else {
-      user_dir = System.getProperty("user.home") + java.io.File.separator + ".turbowinplus";
+      data_dir = java.io.File.separator + "opt" + java.io.File.separator + "turbowinplus" + java.io.File.separator + "data";
    }
-   //log_turbowin_system_message("[GENERAL] user dir:" + user_dir);
-   //JOptionPane.showMessageDialog(null, user_dir, "user_dir", JOptionPane.INFORMATION_MESSAGE);
-   System.out.println("user dir = " + user_dir);  
+   //log_turbowin_system_message("[GENERAL] data dir:" + data_dir);
+   //JOptionPane.showMessageDialog(null, data_dir, "data_dir", JOptionPane.INFORMATION_MESSAGE);
+   System.out.println("data dir = " + data_dir);
 
    // for turbowin system logs
    sdf_tsl_1 = new SimpleDateFormat("MMM_yyyy");                                // e.g. JAN_2016 (part of the file name)
@@ -14758,7 +14758,7 @@ private void initComponents2()
    offline_mode_via_cmd = true;
    
    // turbowin jnlp offline file present? (turbowin_jws_offline.jnlp)
-   String volledig_path_jnlp_offline_file = user_dir + java.io.File.separator + JNLP_OFFLINE_FILE;
+   String volledig_path_jnlp_offline_file = data_dir + java.io.File.separator + JNLP_OFFLINE_FILE;
    File jnlp_offline_file = new File(volledig_path_jnlp_offline_file);
    if (jnlp_offline_file.exists())
    {
@@ -14768,13 +14768,13 @@ private void initComponents2()
    }
    
    // turbowin cmd or launcher file present? ("turbowin_plus_offline.cmd" or "turbowin_launcher.bat" or "turbowin_launcher")
-   String volledig_path_cmd_offline_file = user_dir + java.io.File.separator + CMD_OFFLINE_FILE;
+   String volledig_path_cmd_offline_file = data_dir + java.io.File.separator + CMD_OFFLINE_FILE;
    File cmd_offline_file = new File(volledig_path_cmd_offline_file);
    
-   String volledig_path_turbowin_launcher_file = user_dir + java.io.File.separator + TURBOWIN_LAUNCHER_FILE;
+   String volledig_path_turbowin_launcher_file = data_dir + java.io.File.separator + TURBOWIN_LAUNCHER_FILE;
    File turbowin_launcher_file = new File(volledig_path_turbowin_launcher_file);
    
-   String volledig_path_turbowin_launcher_file_linux = user_dir + java.io.File.separator + TURBOWIN_LAUNCHER_FILE_LINUX;
+   String volledig_path_turbowin_launcher_file_linux = data_dir + java.io.File.separator + TURBOWIN_LAUNCHER_FILE_LINUX;
    File turbowin_launcher_file_linux = new File(volledig_path_turbowin_launcher_file_linux);
  
    //System.out.println("calculated turbowin_launcher_file path = " + turbowin_launcher_file);
@@ -14795,7 +14795,7 @@ private void initComponents2()
       // logs sub dir
       //
       // NB logs dir fixed for offline mode (sub dir of main dir -main dir is the dir where jar file is located-)
-      logs_dir = user_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
+      logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
       //JOptionPane.showMessageDialog(null, logs_dir, main.APPLICATION_NAME + " logs_dir test", JOptionPane.WARNING_MESSAGE);
 
       /* check sub dir logs already present, if not -> create */
@@ -14827,7 +14827,7 @@ private void initComponents2()
       // amver sub dir
       //
       // NB amver dir fixed for offline mode (sub dir of main dir -main dir is the dir where jar file is located-)
-      String amver_dir = user_dir + java.io.File.separator + OFFLINE_AMVER_DIR;
+      String amver_dir = data_dir + java.io.File.separator + OFFLINE_AMVER_DIR;
 
       /* check sub dir amver already present, if not -> create */
       final File dirs_amver = new File(amver_dir);
@@ -16857,7 +16857,7 @@ public static void IMMT_log()
              
             // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
             //
-            String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
+            String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
             File f = new File(help_file_path);
             if (f.isFile())
             {
@@ -16882,7 +16882,7 @@ public static void IMMT_log()
                   //}
                   //else if (offline_mode == true)
                   //{
-                  //   String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
+                  //   String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
                   //   desktop.open(new File(help_file_path));
                   //}
                   
@@ -16890,7 +16890,7 @@ public static void IMMT_log()
                   // if no help file was found, secondly always try the internet
                   //
                   //
-                  //String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
+                  //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
                   //File f = new File(help_file_path);
                   //if (f.isFile())
                   if (local_help_file_exists)
@@ -16934,7 +16934,7 @@ public static void IMMT_log()
                }
                else if (offline_mode == true)
                {
-                  //String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
+                  //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
                   te_open_help_file = help_file_path;
                }
                   
@@ -17063,7 +17063,7 @@ public static void IMMT_log()
              
             // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
             //
-            String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
+            String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
             File f = new File(help_file_path);
             if (f.isFile())
             {
@@ -17122,7 +17122,7 @@ public static void IMMT_log()
                }
                else if (offline_mode == true)
                {
-                  //String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind, waves etc.
+                  //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind, waves etc.
                   te_open_help_file = help_file_path;
                }
                   
@@ -20682,7 +20682,7 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
    public static final String DASHBOARD_LOGO                       = "logo-sot.png";         // i.a. single dashboard barometer
    public static String application_mode                           = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
    public static String amver_report                               = "";                     // AMVER
-   public static String user_dir;
+   public static String data_dir;
    public static String[] configuratie_regels                      = new String[MAX_AANTAL_CONFIGURATIEREGELS];// default values: null
    public static String ship_name                                  = "";                     // meta data (mystationdata.java)
    public static String imo_number                                 = "";                     // meta data
@@ -20794,7 +20794,7 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
    //private SingleInstanceService sis                               = null;          // for checking only one instance is running
    //private SISListener sisL                                        = null;          // for checking only one instance is running
    public static String output_dir                                 = null;          // for function Kopieeren_Waarnemers_En_Aantallen()
-   private static String hulp_dir                                  = "";            // for writing configuration.txt file in user_dir (system defined) AND logs_dir (user defined) (backup for muffin)
+   private static String hulp_dir                                  = "";            // for writing configuration.txt file in data_dir (system defined) AND logs_dir (user defined) (backup for muffin)
    //private URL url_php;
    
    private String output_file                                      = "";

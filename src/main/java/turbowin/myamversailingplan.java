@@ -2112,7 +2112,7 @@ final public class myamversailingplan extends javax.swing.JFrame {
       if (main.offline_mode == true)
       {
          // NB amver dir fixed for offline mode (sub dir of main dir -main dir is the dir where jar file is located-)
-         amver_dir = main.user_dir + java.io.File.separator + main.OFFLINE_AMVER_DIR;
+         amver_dir = main.data_dir + java.io.File.separator + main.OFFLINE_AMVER_DIR;
       } 
       else // web mode
       {
@@ -2372,7 +2372,7 @@ final public class myamversailingplan extends javax.swing.JFrame {
          if (main.offline_mode == true)
          {
             // NB amver dir fixed for offline mode (sub dir of main dir -main dir is the dir where jar file is located-)
-            amver_dir = main.user_dir + java.io.File.separator + main.OFFLINE_AMVER_DIR;
+            amver_dir = main.data_dir + java.io.File.separator + main.OFFLINE_AMVER_DIR;
          } 
          else // web mode
          {

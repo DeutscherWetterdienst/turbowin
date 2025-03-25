@@ -203,8 +203,8 @@ public class FORMAT_101
       
       // NB the complete instantiation of class format_101 is already done in a swingworker! so not necessary to use a swingworker here for file copying etc.
       
-      // NB in offline_mode:  logs_dir = user_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in offline_mode:  logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       
       // check if logs folder exists (because this will be the root folder of all the format_101 dirs and files)
@@ -454,8 +454,8 @@ public class FORMAT_101
       // NB this function is only necessary for decompression
       // NB the file (HC_IDENT_FILE) created by this function must be placed in the config dir (expected by the decompression C routines)
       
-      // NB in offline_mode:  logs_dir = user_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in offline_mode:  logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       
       int exit_status = 0; 
@@ -501,7 +501,7 @@ public class FORMAT_101
    /***********************************************************************************************/
    private int check_and_clear_format_101_temp_folder()
    {
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       int exit_status = 0;
       
@@ -560,7 +560,7 @@ public class FORMAT_101
       //
       //; [MEMBER] ;PPPP;1; [ The name of the ship ]  ;INMC_SC;S-AWS-101
       
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       
       final File exeFile        = new File(main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + decompression_exe);
@@ -647,7 +647,7 @@ public class FORMAT_101
    /***********************************************************************************************/
    public void compress_101(String identifier)
    {
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       // The compression .exe file to execute
       final File exeFile = new File(main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + compression_exe);

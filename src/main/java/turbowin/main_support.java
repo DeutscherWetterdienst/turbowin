@@ -362,7 +362,7 @@ public class main_support {
                //else if (offline_mode == true)
                //else
                //{
-               //   //String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind, waves etc.
+               //   //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind, waves etc.
                //   te_open_help_file = browser_address;
                //}
                   
@@ -485,7 +485,7 @@ public class main_support {
              
             // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
             //
-            //String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
+            //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
             //File f = new File(help_file_path);
             //if (f.isFile())
             //{
@@ -517,7 +517,7 @@ public class main_support {
             //}
             //else if (offline_mode == true)
             //{
-            //   //String help_file_path = user_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind, waves etc.
+            //   //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind, waves etc.
             //   te_open_help_file = help_file_path;
             //}
                   

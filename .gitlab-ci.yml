@@ -66,6 +66,7 @@ deb:
       jpackage \
       --verbose \
       --type deb \
+      --resource-dir src/main/resources/jpackage \
       --runtime-image build/image \
       --module ${MODULE_NAME_MAIN_CLASS} \
       --java-options '-Dapp.dir=$APPDIR' \
@@ -95,6 +96,7 @@ rpm:
       jpackage \
       --verbose \
       --type rpm \
+      --resource-dir src/main/resources/jpackage \
       --runtime-image build/image \
       --module ${MODULE_NAME_MAIN_CLASS} \
       --java-options '-Dapp.dir=$APPDIR' \

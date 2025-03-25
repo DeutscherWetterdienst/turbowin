@@ -169,8 +169,8 @@ public class OSM
       
       // NB still in a swingworker! (Maps_OSM()[main.java] -> osm.OSM_control_center()). So not necessary to use a swingworker here for file copying etc.
       
-      // NB in offline_mode:  logs_dir = user_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
-      // NB in logs_dir always 'user_dir' already present (so a complete path)
+      // NB in offline_mode:  logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
+      // NB in logs_dir always 'data_dir' already present (so a complete path)
       
       
       // initialisation

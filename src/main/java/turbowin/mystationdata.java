@@ -1445,7 +1445,7 @@ final public class mystationdata extends javax.swing.JFrame {
        {
           //System.out.println("++++ gepasseerd");
           
-          /* write to configuration file in logs dir (backup for muffin) and user dir */
+          /* write to configuration file in logs dir (backup for muffin) and data dir */
           //main.schrijf_configuratie_regels();
           //
           /* write to muffin */
