@@ -1,0 +1,16677 @@
+package turbowin;
+
+
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.fazecast.jSerialComm.SerialPortEvent;
+import java.awt.Color;
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.MulticastSocket;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Objects;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
+import javax.net.ssl.HttpsURLConnection;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+import javax.swing.Timer;
+import static turbowin.main.RESPONSE_MALFORMED_URL;
+import static turbowin.main.RESPONSE_NO_INTERNET;
+//import jssc.SerialPort;
+//import jssc.SerialPortEvent;
+//import jssc.SerialPortEventListener;
+//import jssc.SerialPortException;
+//import jssc.SerialPortList;
+
+
+
+
+
+
+public class main_RS232_RS422 
+{
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+public void RS422_Check_Default_Serial_Port()   
+{
+   // called from: RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
+   //
+   // AWS connection (not used if barometer connected)
+   
+   String info = "";
+   
+   if (main.serialPort.isOpen())
+   {
+      info = "[AWS] starting-com-port still open (" + main.serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.serialPort.closePort();                     // will be opened again later
+      // NB main.defaultPort and main.defaultPort_descriptive still preserve their start-up value
+   }
+   else
+   {
+      info = "[AWS] starting-com-port closed (" + main.serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.defaultPort                                  = null;
+      main.defaultPort_descriptive                      = null;
+   }  
+   
+   
+/* BELOW IS OK BUT UNNECESSATY   
+   // initialisation
+   main.defaultPort                                  = null;
+   main.defaultPort_descriptive                      = null;
+
+   // writing to default port
+   //
+   System.out.println("[AWS] Writing \"" + "?" + "\" to " + main.serialPort.getDescriptivePortName()); 
+   String messageString_info = "?\r\n";                    // or "?\r" 
+   byte[] bytes_message = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+   main.serialPort.writeBytes(bytes_message, bytes_message.length);            // Write data to port 
+               
+   try
+   {
+      Thread.sleep(2000);                                                      // 1000 seems too short on a few systems
+   }
+   catch (InterruptedException ex){ }     
+                  
+   // the response
+   //
+   String response = "";
+   main.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+   try 
+   {
+      byte[] readBuffer = new byte[64];
+      main.serialPort.readBytes(readBuffer, readBuffer.length);
+      response = new String(readBuffer, StandardCharsets.UTF_8);
+      System.out.println(response);
+   } 
+   catch (Exception e) 
+   { 
+      System.out.println(e);
+   }
+                  
+   if (response != null && response.indexOf("EUCAWS") >= 0)   
+   {
+      info = "[AWS] found AWS on port: " + main.serialPort.getDescriptivePortName();
+      System.out.print("--- ");
+      main.log_turbowin_system_message(info);
+      System.out.println("");
+                     
+      main.serialPort.closePort();   
+      main.defaultPort = main.serialPort.getSystemPortName();
+      main.defaultPort_descriptive = main.serialPort.getDescriptivePortName();
+   }
+   else 
+   {
+      info = "[AWS] no AWS found on starting port (" + main.serialPort.getDescriptivePortName() + ")";
+      System.out.println("--- " + info);
+      System.out.println("");
+      
+      main.serialPort.closePort();   
+      main.defaultPort = null;
+      main.defaultPort_descriptive = null;
+   }
+*/
+}   
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
+{
+   // called from - main_RS232_RS422.RS422_initComponents() [main_RS232_RS422.java]
+   //             - RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
+   //
+   // AWS connection (not used if individual sensor like barometer/thermometer/GPS connected)
+   
+   int teller                                        = -1;
+   //String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   SerialPort[] serial_ports_portid_array            = new SerialPort[main.NUMBER_COM_PORTS];
+   String info                                       = "[AWS] start up: no AWS found";
+   String hulp_parity                                = "";                     // for message writing on java console
+
+   
+   // initialisation
+   for (int i = 0; i < main.NUMBER_COM_PORTS; i++)
+   {
+      serial_ports_portid_array[i]                   = null;
+   }
+
+   // initialisation
+   main.defaultPort                                  = null;
+   main.defaultPort_descriptive                      = null;
+   
+   
+   if (main.prefered_COM_port.equals("AUTOMATICALLY"))
+   {
+      // Temporary message box, (pop-up for only a short time) automatically disappears
+      //
+      if (completed_checks_serial_ports == 0)                  // only show this temporary meassagebox at first port-checking-round
+      {
+         final JOptionPane pane_begin = new JOptionPane("[AWS] checking serial com ports (this may take a while)", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true);
+      }
+
+      // Get sorted array of serial ports in the system
+	   //main.portList = SerialPort.getCommPorts();//main.portList = SerialPortList.getPortNames();
+      //main.serialPorts = SerialPort.getCommPorts();
+      SerialPort[] serialPorts = SerialPort.getCommPorts();//main.portList = SerialPortList.getPortNames();
+
+      for (int portNo = 0; portNo < serialPorts.length; portNo++)//for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      {
+         teller++;
+         SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getSystemPortName()); 
+         serialPort_test.openPort();  
+         
+         if (serialPort_test.isOpen()) 
+         { 
+            serial_ports_portid_array[teller] = serialPorts[portNo];
+            serialPort_test.closePort();
+            String message = "[AWS] found serial port (ok): " + serialPorts[portNo].getDescriptivePortName();
+            main.log_turbowin_system_message(message);
+         } // if (serialPort_test.isOpen()) 
+         else
+         {
+            serial_ports_portid_array[teller] = null;
+            System.out.println("couldn't open: " + serialPorts[portNo].getDescriptivePortName());
+         } // else
+                 
+
+         // NB opening a port cannot be done in SwingWorker, so must be done here !!
+
+	   } //  for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++)
+
+
+      for (int i = 0; i < main.NUMBER_COM_PORTS; i++)                      // max number ports to open
+      {
+         if (serial_ports_portid_array[i] != null)                         // so serial port present (and also not in use)
+         {
+            SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i].getSystemPortName()); //SerialPort serialPort_test = new SerialPort(serial_ports_portid_array[i]);
+            
+            serialPort_test.openPort();  
+            if (serialPort_test.isOpen()) 
+            { 
+               if (main.parity == 0)
+               {
+                  hulp_parity = "none";
+               }
+               else if (main.parity == 1)
+               {
+                  hulp_parity = "odd";
+               }
+               else if (main.parity == 2)
+               {
+                  hulp_parity = "even";
+               }               
+               
+               System.out.println("[AWS] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits) + " " + serial_ports_portid_array[i].getDescriptivePortName());
+               serialPort_test.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               serialPort_test.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+               int timeout = 1000;
+               serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, timeout, timeout);
+               
+               if (main.RS232_connection_mode == 3)   // EUCAWS
+               {
+                  int written_bytes = 0;
+                  System.out.println("[AWS] Writing \"" + "?" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName()); 
+                  String messageString_info = "?\r\n";                    // or "?\r" 
+                  byte[] bytes_message = messageString_info.getBytes(StandardCharsets.UTF_8);      // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message, bytes_message.length);                 // Write data to port 
+                  written_bytes = serialPort_test.writeBytes(bytes_message, bytes_message.length); // determine the number of actually written bytes
+               
+                  try
+                  {
+                     Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
+                  }
+                  catch (InterruptedException ex){ }     
+                  
+                  // the response
+                  //
+                  //String response = serialPort_test.readString();   
+                  //System.out.println(response);
+                  
+                  if (written_bytes == 0)
+                  {
+                     System.out.println("");
+                     info = "[AWS] no AWS found (" + serial_ports_portid_array[i].getDescriptivePortName() + " timed out)"; // for console window (all messages wil be displayed)
+                     System.out.println("--- " + info);
+                     System.out.println("");
+                     serialPort_test.closePort();
+                     info = "[AWS] no AWS found";                // for system log (only last recorded info will be written to the log)
+                  }
+                  else // written_bytes != 0
+                  {
+                     String response = "";
+                     serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+                     try 
+                     {
+                        byte[] readBuffer = new byte[64];
+                        serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        response = new String(readBuffer, StandardCharsets.UTF_8);
+                        System.out.println(response);
+                     } 
+                     catch (Exception e) 
+                     { 
+                        System.out.println(e);
+                     }
+                  
+                     if (response != null && response.indexOf("EUCAWS") >= 0)   
+                     {
+                        info = "[AWS] found AWS on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                        System.out.print("--- ");
+                        main.log_turbowin_system_message(info);
+                        System.out.println("");
+                     
+                        serialPort_test.closePort();   
+                        main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                        main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                        break;
+                     }
+                     else 
+                     {
+                        info = "[AWS] no AWS found";
+                        System.out.println("--- " + info);
+                        System.out.println("");
+                        serialPort_test.closePort();   
+                     }
+                  } // else (written_bytes != 0)   
+               } // if (main.RS232_connection_mode == 3)   // EUCAWS serial
+               else if (main.RS232_connection_mode == 9)   // OMC-140 serial
+               {
+                  try
+                  {
+                     Thread.sleep(2000);                                      // 1000 seems too short on a few systems
+                  }
+                  catch (InterruptedException ex){ }                 
+               
+                  //String response = serialPort_test.readString();   
+                  //System.out.println(response);
+ 
+                  // the response   
+                  String response = "";
+                  // NB The TIMEOUT_READ_SEMI_BLOCKING mode specifies that the corresponding call will block until either newReadTimeout milliseconds of inactivity have elapsed or at least 1 byte of data can be read.
+                  //
+                  // if testing OMC-140 with the EUCAWS simulator then set newReadTimeout >= 60000 because data send every minute
+                  // in a real situation the OMC-140 will send several messages (not only PEUMB) every minute
+                  // so newReadTimeout set to 20000 will be ok
+                  //  
+                  //serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 2000, 0); // till 11-06-2018
+                  serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 20000, 0);   // from 11-06-2018
+                  try 
+                  {
+                     //while (true) //NB while(true) doesn't work (idefinite loop, despite the newReadTimeout...) !!!!!!!!!
+                     //{
+                        byte[] readBuffer = new byte[1024];            // NB keep size 1024 because first part of incoming data is rubish
+                        //int numRead = serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        //System.out.println("Read " + numRead + " bytes.");
+                        response = new String(readBuffer, StandardCharsets.UTF_8);
+                        System.out.println(response);
+                     //}
+                  } 
+                  catch (Exception e) 
+                  { 
+                     System.out.println(e);
+                  }              
+               
+               
+                  if (response != null && (response.indexOf("$") >= 0 || response.indexOf("$") >= 0)) // NB this is the response of only the last line of the readBuffer
+                  {
+                     info = "[AWS] found AWS on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                     System.out.print("--- ");
+                     main.log_turbowin_system_message(info);
+                     System.out.println("");
+                     
+                     serialPort_test.closePort();   
+                     main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                     main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                     break;
+                  }
+                  else 
+                  {
+                     serialPort_test.closePort();
+                     info = "[AWS] no AWS found";
+                     System.out.println("--- " + info);
+                     System.out.println("");
+                  }    
+               } // else if (main.RS232_connection_mode == 9)
+               else if (main.RS232_connection_mode == 11)   // AMOS2X
+               {
+                  int written_bytes = 0;
+                  System.out.println("[AWS] Writing \"" + "?" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName()); 
+                  String messageString_info = "?\r\n";                    // or "?\r" 
+                  byte[] bytes_message = messageString_info.getBytes(StandardCharsets.UTF_8);      // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message, bytes_message.length);                 // Write data to port 
+                  written_bytes = serialPort_test.writeBytes(bytes_message, bytes_message.length); // determine the number of actually written bytes
+               
+                  try
+                  {
+                     Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
+                  }
+                  catch (InterruptedException ex){ }     
+                  
+                  // the response
+                  //
+                  //String response = serialPort_test.readString();   
+                  //System.out.println(response);
+                  
+                  if (written_bytes == 0)
+                  {
+                     System.out.println("");
+                     info = "[AWS] no AWS found (" + serial_ports_portid_array[i].getDescriptivePortName() + " timed out)"; // for console window (all messages wil be displayed)
+                     System.out.println("--- " + info);
+                     System.out.println("");
+                     serialPort_test.closePort();
+                     info = "[AWS] no AWS found";                // for system log (only last recorded info will be written to the log)
+                  }
+                  else // written_bytes != 0
+                  {
+                     String response = "";
+                     serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+                     try 
+                     {
+                        byte[] readBuffer = new byte[64];
+                        serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        response = new String(readBuffer, StandardCharsets.UTF_8);
+                        System.out.println(response);
+                     } 
+                     catch (Exception e) 
+                     { 
+                        System.out.println(e);
+                     }
+                  
+                     if (response != null && response.indexOf("AMOS") >= 0)   
+                     {
+                        info = "[AWS] found AWS on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                        System.out.print("--- ");
+                        main.log_turbowin_system_message(info);
+                        System.out.println("");
+                     
+                        serialPort_test.closePort();   
+                        main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                        main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                        break;
+                     }
+                     else 
+                     {
+                        info = "[AWS] no AWS found";
+                        System.out.println("--- " + info);
+                        System.out.println("");
+                        serialPort_test.closePort();   
+                     }
+                  } // else (written_bytes != 0)   
+               } // if (main.RS232_connection_mode == 11)   // AMOS2X serial
+            } // if (serialPort_test.isOpen()) 
+            else
+            {
+               System.out.println("[AWS] couldn't open: " + serial_ports_portid_array[i]);
+            }
+            
+         } // if (serial_ports_portid_array[i] != null)
+      } // for (int i = 0; i < NUMBER_COM_PORTS; i++)
+
+      if (main.defaultPort != null)
+      {
+         // temporary message box (AWS was found) 
+         final JOptionPane pane_end = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_end_dialog = pane_end.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_end = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               //checking_ports_end_dialog.setVisible(false);
+               // or maybe you'll need dialog.dispose() instead?
+               checking_ports_end_dialog.dispose();
+            }
+         });
+         timer_end.setRepeats(false);
+         timer_end.start();
+         checking_ports_end_dialog.setVisible(true);
+      }
+      else
+      {
+         // No com port with an AWS connected found
+         
+         // logging and blocking message box (no AWS found); but ony show message if it is the last port-checking-round 
+         if (completed_checks_serial_ports == MAX_COMPLETED_AWS_PORT_CHECKS - 1)
+         {
+            main.log_turbowin_system_message(info);       // default info used here: "[AWS] start up: no AWS found";
+            
+            if (main.obsolate_data_flag == false) 
+            {
+               // NB so only show this blocking messagebox the first time at start up but not in retrying to establish a new connection mode
+               //    see also: RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+         }
+      } // else
+ 
+   } // if (main.prefered_COM_port.equals("AUTOMATICALLY"))
+   else // fixed COM port selected
+   {
+      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+      serialPort_test.openPort();
+         
+      if (serialPort_test.isOpen())   
+      {   
+         serialPort_test.closePort();
+         
+         // OK, no problems encoutered
+         main.defaultPort = main.prefered_COM_port;
+         main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+         info = "[AWS] " + main.prefered_COM_port + " serial COM port available";
+         main.log_turbowin_system_message(info);
+         
+         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true); 
+      }
+      //catch (SerialPortException ex) 
+      else
+      {
+         // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
+         //System.out.println(ex);
+         info = "[AWS] " + main.prefered_COM_port + " serial COM port not available";
+         main.log_turbowin_system_message(info);
+         if (main.obsolate_data_flag == false) 
+         {
+            // NB so only show this blocking messagebox the first time at start up but not in retrying to establish a new connection mode
+            //    see also: RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         }
+         //System.out.println(info);
+         main.defaultPort = null;
+         main.defaultPort_descriptive = null;
+      }
+   } // else (fixed COM port selected)
+
+}
+   
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_GPS_NMEA_0183_Check_Default_Serial_Port()
+{
+   // called from: RS232_GPS_NMEA_0183_init_new_data_received_check_timer() [main_RS232_RS422.java]
+   //
+   // NB after power break or temporarily device failure the (default/starting)serial port is still open but the listener must be restarted
+   
+   String info = "";
+   
+   
+   if (main.GPS_serialPort.isOpen())
+   {
+      info = "[GPS] starting-com-port still open (" + main.GPS_serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.GPS_serialPort.closePort();                     // will be opened again later
+      // NB GPS_defaultPort and GPS_defaultPort_descriptive still preserve their start-up value
+   }
+   else
+   {
+      info = "[GPS] starting-com-port closed (" + main.GPS_serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      GPS_defaultPort                                  = null;
+      GPS_defaultPort_descriptive                      = null;
+   }
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_Check_Default_Serial_Port_II()
+{
+   String info = "";
+   
+   
+   if (main.serialPort_II.isOpen())
+   {
+      info = "[THERMOMETER] starting-com-port still open (" + main.serialPort_II.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.serialPort_II.closePort();                     // will be opened again later
+      // NB main.defaultPort_II and main.defaultPort_descriptive_II still preserve their start-up value
+   }
+   else
+   {
+      info = "[THERMOMETER] starting-com-port closed (" + main.serialPort_II.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.defaultPort_II                                  = null;
+      main.defaultPort_descriptive_II                      = null;
+   }
+}
+
+
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_Check_Default_Serial_Port()
+{
+   // called from: RS232_And_WiFi_init_new_sensor_data_received_check_timer() [main_RS232_RS422.java]
+   //
+   // NB after power break or temporarily device failure the (default/starting)serial port is still open but the listener must be restarted
+   
+   String info = "";
+   
+   
+   if (main.serialPort.isOpen())
+   {
+      info = "[BAROMETER] starting-com-port still open (" + main.serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.serialPort.closePort();                     // will be opened again later
+      // NB main.defaultPort and main.defaultPort_descriptive still preserve their start-up value
+   }
+   else
+   {
+      info = "[BAROMETER] starting-com-port closed (" + main.serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.defaultPort                                  = null;
+      main.defaultPort_descriptive                      = null;
+   }
+
+   
+/* BELOW IS OK BUT UNNECESSATY   
+   // initialisation
+   main.defaultPort                                  = null;
+   main.defaultPort_descriptive                      = null;
+
+   
+   if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)     // PTB220 or PTB330
+   {
+      // send data to the barometer
+      //
+      System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + main.serialPort.getDescriptivePortName());
+      String messageString_stop = "S\r";
+      byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+      main.serialPort.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+
+      try
+      {
+         Thread.sleep(2000);
+      }
+      catch (InterruptedException ex){ }     
+                  
+      System.out.println("[BAROMETER] Writing \"" + "VERS" + "\" to " + main.serialPort.getDescriptivePortName());
+      String messageString_info = "VERS\r";
+      byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+      main.serialPort.writeBytes(bytes_message_info, bytes_message_info.length);       // Write data to port 
+                  
+      try
+      {
+         Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
+      }
+      catch (InterruptedException ex){ }     
+                  
+                  
+      String response = "";
+      main.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+      try 
+      {
+         byte[] readBuffer = new byte[64];
+         main.serialPort.readBytes(readBuffer, readBuffer.length);
+         response = new String(readBuffer, StandardCharsets.UTF_8);
+         System.out.println(response);
+      } 
+      catch (Exception e) 
+      { 
+         System.out.println(e);
+      }
+                  
+                  
+      if (response != null && response.indexOf("PTB220") >= 0) 
+      {
+         info = "[BAROMETER] found PTB220 on port: " + main.serialPort.getDescriptivePortName();
+         System.out.print("--- ");
+         main.log_turbowin_system_message(info);
+         System.out.println("");
+
+         main.serialPort.closePort();
+         main.defaultPort = main.serialPort.getSystemPortName();
+         main.defaultPort_descriptive = main.serialPort.getDescriptivePortName();
+         //break;
+      } //else if (response.indexOf("PTB330") >= 0)
+      else if (response != null && response.indexOf("PTB330") >= 0) 
+      {
+         // NB after command "?" a BTB330 barometer will always return 4800 bit rate (or bit rate set for user port)
+         //    despite the PTB330 was opened via its service port (19200 bit rate)
+
+         info = "[BAROMETER] found PTB330 on port: " + main.serialPort.getDescriptivePortName();
+         System.out.print("--- ");
+         main.log_turbowin_system_message(info);
+         System.out.println("");
+
+         main.serialPort.closePort();
+         main.defaultPort = main.serialPort.getSystemPortName();
+         main.defaultPort_descriptive = main.serialPort.getDescriptivePortName();
+      } 
+      else 
+      {
+         info = "[BAROMETER] no barometer found";
+         System.out.println("--- " + info);
+         System.out.println("");
+         
+         main.serialPort.closePort();
+         main.defaultPort = null;
+         main.defaultPort_descriptive = null;
+      }
+   
+   } // if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2) 
+   else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5) // Mintaka Duo or MintakaStar USB
+   {
+      // send data to the barometer
+      //
+      System.out.println("[BAROMETER] Writing \"" + "asq" + "\" to " + main.serialPort.getDescriptivePortName());
+      String messageString_stop = "asq\r";
+      byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+      main.serialPort.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+
+      try 
+      {
+         Thread.sleep(2000);
+      } 
+      catch (InterruptedException ex) {  }
+
+      System.out.println("[BAROMETER] Writing \"" + "dm ma" + "\" to " + main.serialPort.getDescriptivePortName());
+      String messageString_info = "dm ma\r";
+      byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+      main.serialPort.writeBytes(bytes_message_info, bytes_message_info.length);       // Write data to port 
+
+      try 
+      {
+         Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
+      } 
+      catch (InterruptedException ex) { }
+
+      // the response
+      //
+      String response = "";
+      main.serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+      try 
+      {
+         byte[] readBuffer = new byte[1024];
+         main.serialPort.readBytes(readBuffer, readBuffer.length);
+         response = new String(readBuffer, StandardCharsets.UTF_8);
+         System.out.println(response);
+      } 
+      catch (Exception e) 
+      {
+         System.out.println(e);
+      }
+
+      if (response != null && response.indexOf("MintakaDuo") >= 0) 
+      {
+         info = "[BAROMETER] found Mintaka Duo on port: " + main.serialPort.getDescriptivePortName();
+         System.out.print("--- ");
+         main.log_turbowin_system_message(info);
+         System.out.println("");
+
+         main.serialPort.closePort();
+         main.defaultPort = main.serialPort.getSystemPortName();
+         main.defaultPort_descriptive = main.serialPort.getDescriptivePortName();
+      } 
+      else if (response != null && response.indexOf("Mintaka Star") >= 0) 
+      {
+         info = "[BAROMETER] found Mintaka Star on port: " + main.serialPort.getDescriptivePortName();
+         System.out.print("--- ");
+         main.log_turbowin_system_message(info);
+         System.out.println("");
+
+         main.serialPort.closePort();
+         main.defaultPort = main.serialPort.getSystemPortName();
+         main.defaultPort_descriptive = main.serialPort.getDescriptivePortName();
+      } 
+      else 
+      {
+         info = "[BAROMETER] no barometer found on starting port (" + main.serialPort.getDescriptivePortName() + ")";
+         System.out.println("--- " + info);
+         System.out.println("");
+         
+         main.serialPort.closePort();
+         main.defaultPort = null;
+         main.defaultPort_descriptive = null;
+      }
+
+   } //  else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5) 
+*/   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
+{
+   // called from: main_RS232_RS424.RS232_initComponents()
+   //
+      
+   ///////// only used for PTB220/PTB330/Mintaka Duo/MintakaStar USB barometers (not for EUCAWS) ////////   
+      
+   //SerialPort serialPort_test                        = null;
+   int teller                                        = -1;
+   //String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   SerialPort[] serial_ports_portid_array            = new SerialPort[main.NUMBER_COM_PORTS];
+   String info                                       = "[BAROMETER] start up: no barometer found";
+   String hulp_parity                                = "";                     // for message writing on java console
+
+      
+   // initialisation
+   for (int i = 0; i < main.NUMBER_COM_PORTS; i++)
+   {
+      serial_ports_portid_array[i]                   = null;
+   }
+
+   // initialisation
+   main.defaultPort                                  = null;
+   main.defaultPort_descriptive                      = null;
+   
+
+   ////////// automatically detecting COM port ///////////
+   //
+   if (main.prefered_COM_port.equals("AUTOMATICALLY"))
+   {
+   
+      // Temporary message box, (pop-up for only a short time) automatically disappears
+      //
+      if (completed_checks_serial_ports == 0)                  // only show this temporary meassagebox at first port-checking-round
+      {
+         final JOptionPane pane_begin = new JOptionPane("[BAROMETER] checking serial com ports (this may take a while)", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true);
+      }
+
+      // list all the available ports
+	   SerialPort[] serialPorts = SerialPort.getCommPorts();//main.portList = SerialPortList.getPortNames();
+
+      for (int portNo = 0; portNo < serialPorts.length; portNo++)//for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      {
+         // NB opening a port cannot be done in SwingWorker, so must be done here !!
+         
+         teller++;
+         //SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getDescriptivePortName()); 
+         SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getSystemPortName()); 
+         serialPort_test.openPort();  
+         
+         if (serialPort_test.isOpen()) 
+         { 
+            //serial_ports_portid_array[teller] = serialPorts[portNo].getSystemPortName();
+            serial_ports_portid_array[teller] = serialPorts[portNo];
+            serialPort_test.closePort();
+            String message = "[BAROMETER] found serial port (ok): " + serialPorts[portNo].getDescriptivePortName();
+            main.log_turbowin_system_message(message);
+         } // if (serialPort_test.isOpen()) 
+         else
+         {
+            serial_ports_portid_array[teller] = null;
+            System.out.println("[BAROMETER] couldn't open: " + serialPorts[portNo].getDescriptivePortName());
+         } // else      
+	   } // for (int portNo = 0; portNo < serialPorts.length; portNo++)
+
+
+      for (int i = 0; i < main.NUMBER_COM_PORTS; i++)                      // max aantal te scannen poorten
+      {
+         if (serial_ports_portid_array[i] != null)                         // dus serial port aanwezig (en ook niet in gebruik)
+         {
+            //SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i]);//serialPort_test = new SerialPort(serial_ports_portid_array[i]);
+            SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i].getSystemPortName());
+            serialPort_test.openPort();  
+            if (serialPort_test.isOpen()) 
+            {
+               serialPort_test.openPort();//Open serial port
+
+               if (main.parity == 0)
+               {
+                  hulp_parity = "none";
+               }
+               else if (main.parity == 1)
+               {
+                  hulp_parity = "odd";
+               }
+               else if (main.parity == 2)
+               {
+                  hulp_parity = "even";
+               }               
+               
+               System.out.println("[BAROMETER] trying to open with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits) + " " + serial_ports_portid_array[i].getDescriptivePortName());
+               serialPort_test.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               serialPort_test.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+               int timeout = 1000;
+               serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, timeout, timeout); // to prevent blocking 
+               
+               if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)     // PTB220 or PTB330
+               {
+                  // send data to the barometer
+                  //
+/*                  
+                  //System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serialPort_test.getDescriptivePortName());
+                  System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                  String messageString_stop = "S\r";
+                  //serialPort_test.writeBytes(messageString_stop.getBytes());                     // Write data to port
+                  byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+
+                  try
+                  {
+                     Thread.sleep(2000);
+                  }
+                  catch (InterruptedException ex){ }    
+*/                  
+                  int written_bytes = 0;
+                  for (int k = 0; k < 5; k++)                // NB more times sending "s" absolutely necessary ? (see also HMP155 user's guide; paragraph Serial Line Communication)
+                  {
+                     // send data to the barometer
+                     //
+                     System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                     String messageString_stop = "s\r";
+                     byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8);           // Java 7+ only
+                     serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length);                 // Write data to port 
+                     written_bytes = serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length); // determine the number of actually written bytes
+  
+                     try
+                     {
+                        //Thread.sleep(2000);
+                        Thread.sleep(1000);
+                     }
+                     catch (InterruptedException ex){ } 
+                  } // for (int k = 0; k < 5; k++)
+                  
+                  if (written_bytes == 0)
+                  {
+                     System.out.println("");
+                     info = "[BAROMETER] no barometer found (" + serial_ports_portid_array[i].getDescriptivePortName() + " timed out)"; // for console window (all messages wil be displayed)
+                     System.out.println("--- " + info);
+                     System.out.println("");
+                     serialPort_test.closePort();   
+                     info = "[BAROMETER] no barometer found";                // for system log (only last recorded info will be written to the log)
+                  }
+                  else // else (written_bytes != 0)
+                  {
+                     //System.out.println("[BAROMETER] Writing \"" + "VERS" + "\" to " + serialPort_test.getDescriptivePortName());
+                     System.out.println("[BAROMETER] Writing \"" + "VERS" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                     String messageString_info = "VERS\r";
+                     //serialPort_test.writeBytes(messageString_info.getBytes());                     // Write data to port
+                     byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                     serialPort_test.writeBytes(bytes_message_info, bytes_message_info.length);       // Write data to port 
+                  
+                     try
+                     {
+                        Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
+                     }
+                     catch (InterruptedException ex){ }     
+                  
+                     // the response
+                     //
+                     //String response = serialPort_test.readString();   
+                     //System.out.println(response);
+                  
+                     String response = "";
+                     serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+                     try 
+                     {
+                        //while (true)
+                        //{
+                           byte[] readBuffer = new byte[64];
+                           serialPort_test.readBytes(readBuffer, readBuffer.length);
+                           response = new String(readBuffer, StandardCharsets.UTF_8);
+                           System.out.println(response);
+                        //}
+                     } 
+                     catch (Exception e) 
+                     { 
+                        System.out.println(e);
+                     }
+                    //serialPort_test.closePort();                  
+                  
+                  
+                     //if (response.indexOf("PTB220") >= 0)
+                     if (response != null && response.indexOf("PTB220") >= 0)   
+                     {
+                        info = "[BAROMETER] found PTB220 on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                        System.out.print("--- ");
+                        main.log_turbowin_system_message(info);
+                        System.out.println("");
+                     
+                        serialPort_test.closePort();   
+                        main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                        main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                        break;
+                     }
+                     //else if (response.indexOf("PTB330") >= 0)
+                     else if (response != null && response.indexOf("PTB330") >= 0)   
+                     {
+                        // NB after command "?" a BTB330 barometer will always return 4800 bit rate (or bit rate set for user port)
+                        //    despite the PTB330 was opened via its service port (19200 bit rate)
+
+                        info = "[BAROMETER] found PTB330 on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                        System.out.print("--- ");
+                        main.log_turbowin_system_message(info);
+                        System.out.println("");
+                     
+                        serialPort_test.closePort();   
+                        main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                        main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                        //main.defaultPort = serial_ports_portid_array[i];
+                        break;
+                     }    
+                     else 
+                     {
+                        info = "[BAROMETER] no barometer found";
+                        System.out.println("--- " + info);
+                        System.out.println("");
+                        serialPort_test.closePort();   
+                     }
+                  } // else (written_bytes != 0)
+               } // if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2) 
+               else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 7)   // Mintaka Duo or MintakaStar USB or Mintaka StarX USB
+               {
+                  // send data to the barometer
+                  //
+                  int written_bytes = 0;
+                  System.out.println("[BAROMETER] Writing \"" + "asq" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                  String messageString_stop = "asq\r";
+                  //String messageString_stop = "asq\r\n";
+                  //serialPort_test.writeBytes(messageString_stop.getBytes());                     // Write data to port
+                  byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+                  written_bytes = serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length); // determine tthe number of actually written bytes
+                  
+                  try
+                  {
+                     Thread.sleep(2000);
+                  }
+                  catch (InterruptedException ex){ }  
+                  
+                  if (written_bytes == 0)
+                  {
+                     System.out.println("");
+                     info = "[BAROMETER] no barometer found ( " + serial_ports_portid_array[i].getDescriptivePortName() + " timed out)"; // for console window (all messages wil be displayed)
+                     System.out.println("--- " + info);
+                     System.out.println("");
+                     serialPort_test.closePort();
+                     info = "[BAROMETER] no barometer found";                // for system log (only last recorded info will be written to the log)
+                  }
+                  else // (written_bytes != 0)
+                  {
+                     System.out.println("[BAROMETER] Writing \"" + "dm ma" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                     String messageString_info = "dm ma\r";
+                     //serialPort_test.writeBytes(messageString_info.getBytes());                     // Write data to port
+                     byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                     serialPort_test.writeBytes(bytes_message_info, bytes_message_info.length);       // Write data to port 
+
+                     try
+                     {
+                        Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
+                     }
+                     catch (InterruptedException ex){ }                      
+                  
+                  
+                     // the response
+                     //
+                     //String response = serialPort_test.readString();   
+                     //System.out.println(response);    
+                     String response = "";
+                     serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+                     try 
+                     {
+                        //while (true)
+                        //{
+                           byte[] readBuffer = new byte[1024];
+                           //int numRead = serialPort_test.readBytes(readBuffer, readBuffer.length);
+                           serialPort_test.readBytes(readBuffer, readBuffer.length);
+                           //System.out.println("Read " + numRead + " bytes.");
+                           response = new String(readBuffer, StandardCharsets.UTF_8);
+                           System.out.println(response);
+                        //}
+                     } 
+                     catch (Exception e) 
+                     { 
+                        System.out.println(e);
+                     }
+                  
+                     if (response != null && response.indexOf("MintakaDuo") >= 0)
+                     {
+                        info = "[BAROMETER] found Mintaka Duo on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                        System.out.print("--- ");
+                        main.log_turbowin_system_message(info);
+                        System.out.println("");
+                     
+                        serialPort_test.closePort();   
+                        main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                        main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                        //main.defaultPort = serial_ports_portid_array[i];
+                        break;
+                     }        
+                     else if (response != null && response.indexOf("Mintaka Star") >= 0)
+                     {
+                        info = "[BAROMETER] found Mintaka Star on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                        System.out.print("--- ");
+                        main.log_turbowin_system_message(info);
+                        System.out.println("");
+                     
+                        serialPort_test.closePort();   
+                        main.defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                        main.defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                        //main.defaultPort = serial_ports_portid_array[i];
+                        break;
+                     }    
+                     else 
+                     {
+                        info = "[BAROMETER] no barometer found";
+                        System.out.println("--- " + info);
+                        System.out.println("");
+                        serialPort_test.closePort();   
+                     }                  
+                  } // else (written_bytes != 0)
+               } //  else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5) 
+               
+            } // if
+            //catch (SerialPortException ex)
+            else        
+            {
+               //System.out.println(ex);
+               System.out.println("[BAROMETER] couldn't open: " + serial_ports_portid_array[i].getDescriptivePortName());
+            }
+      
+         } // if (serial_ports_portid_array[i] != null)
+      } // for (int i = 0; i < main.NUMBER_COM_PORTS; i++) 
+
+      if (main.defaultPort != null)
+      {
+         // temporary message box (barometer was found) 
+         final JOptionPane pane_end = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_end_dialog = pane_end.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_end = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               //checking_ports_end_dialog.setVisible(false);
+               // or maybe you'll need dialog.dispose() instead?
+               checking_ports_end_dialog.dispose();
+            }
+         });
+         timer_end.setRepeats(false);
+         timer_end.start();
+         checking_ports_end_dialog.setVisible(true);
+      }
+      else
+      {
+         // No com port with barometer attached found
+         
+         // blocking message box + logging (no barometer found); but only show message if it is the last port-checking-round 
+         if (completed_checks_serial_ports == MAX_COMPLETED_BAROMETER_PORT_CHECKS - 1)
+         {
+            main.log_turbowin_system_message(info);  // default info = "[BAROMETER] start up: no barometer found";
+            if (main.obsolate_data_flag == false)  // eg at start up of this application
+            {
+               // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+         }
+      } // else
+   } // if (main.prefered_COM_port.equals("AUTOMATICALLY"))
+   
+   ///////// fixed COM port name or number ///////
+   //
+   else // fixed COM port selected
+   {
+      //serialPort_test = new SerialPort(main.prefered_COM_port);
+      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+      serialPort_test.openPort();
+      if (serialPort_test.isOpen())   
+      {
+         serialPort_test.closePort();
+         
+         // OK, no problems
+         main.defaultPort = main.prefered_COM_port;             // this construction is ok (prefered COM port is the same as getSystemPortName())
+         main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+         info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port available";
+         
+         main.log_turbowin_system_message(info);
+         
+         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(1000, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true);            
+      }
+      //catch (SerialPortException ex) 
+      else        
+      {
+         // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
+         info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port not available";
+         main.log_turbowin_system_message(info);
+         if (main.obsolate_data_flag == false)  // eg at start up of this application
+         {
+            // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         }
+         main.defaultPort = null;
+         main.defaultPort_descriptive = null;
+         //System.out.println(info);
+      } // else    
+      
+   } // else (fixed COM port selected)
+  
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_Check_Serial_Ports_8_II(int completed_checks_serial_ports_II)
+{
+   // called from: main_RS232_RS424.RS232_initComponents_II()
+   //
+   
+   
+   //////////////////// TEST START ///////////////
+   //main.prefered_COM_port_II = "AUTOMATICALLY";
+   //main.bits_per_second_II   = 4800;
+   //main.data_bits_II         = 7;
+   //main.stop_bits_II         = 1;
+   //main.parity_II            = 2;  // even
+   
+   //////////////////// TEST END ///////////////
+   
+   
+   
+      
+   ///////// only used for HMP155 ////////   
+      
+   //SerialPort serialPort_test                        = null;
+   int teller                                        = -1;
+   //String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   SerialPort[] serial_ports_portid_array            = new SerialPort[main.NUMBER_COM_PORTS];
+   String info                                       = "[THERMOMETER] start up: no thermometer found";
+   String hulp_parity                                = "";                     // for message writing on java console
+
+      
+   // initialisation
+   for (int i = 0; i < main.NUMBER_COM_PORTS; i++)
+   {
+      serial_ports_portid_array[i]                   = null;
+   }
+
+   // initialisation
+   main.defaultPort_II                               = null;
+   main.defaultPort_descriptive_II                   = null;
+   
+
+   ////////// automatically detecting COM port ///////////
+   //
+   if (main.prefered_COM_port_II.equals("AUTOMATICALLY"))
+   {
+   
+      // Temporary message box, (pop-up for only a short time) automatically disappears
+      //
+      if (completed_checks_serial_ports_II == 0)                  // only show this temporary meassagebox at first port-checking-round
+      {
+         final JOptionPane pane_begin = new JOptionPane("[THERMOMETER] checking serial com ports (this may take a while)", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true);
+      }
+
+      // list all the available ports
+	   SerialPort[] serialPorts = SerialPort.getCommPorts();//main.portList = SerialPortList.getPortNames();
+
+      for (int portNo = 0; portNo < serialPorts.length; portNo++)//for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      {
+         // NB opening a port cannot be done in SwingWorker, so must be done here !!
+         
+         teller++;
+         //SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getDescriptivePortName()); 
+         SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getSystemPortName()); 
+         serialPort_test.openPort();  
+         
+         if (serialPort_test.isOpen()) 
+         { 
+            //serial_ports_portid_array[teller] = serialPorts[portNo].getSystemPortName();
+            serial_ports_portid_array[teller] = serialPorts[portNo];
+            serialPort_test.closePort();
+            String message = "[THERMOMETER] found serial port (ok): " + serialPorts[portNo].getDescriptivePortName();
+            main.log_turbowin_system_message(message);
+         } // if (serialPort_test.isOpen()) 
+         else
+         {
+            serial_ports_portid_array[teller] = null;
+            System.out.println("[THERMOMETER] couldn't open: " + serialPorts[portNo].getDescriptivePortName());
+         } // else      
+	   } // for (int portNo = 0; portNo < serialPorts.length; portNo++)
+
+
+      boolean doorgaan_testing;
+      for (int i = 0; i < main.NUMBER_COM_PORTS; i++)                      // max number ports to scan
+      {
+         if (serial_ports_portid_array[i] != null)                         // so ports really present (and also but not in use)
+         {
+            doorgaan_testing = true;
+            
+            // NB check if already allocated by 1st meteo instrument; note for safety because most times already "couldn't open" because
+            // already openened by first RS232 thread, but if not or this thread is slow than this will be a good safety measure
+            if (main.defaultPort != null)
+            {
+               //System.out.println("[THERMOMETER] main.defaultPort = " + main.defaultPort);
+               //System.out.println("[THERMOMETER] serial_ports_portid_array[i].getSystemPortName() = " + serial_ports_portid_array[i].getSystemPortName());
+               
+               if (main.defaultPort.contains(serial_ports_portid_array[i].getSystemPortName()))
+               //if (serial_ports_portid_array[i].getDescriptivePortName().contains(main.defaultPort))  
+               {
+                  System.out.println("[THERMOMETER] " + serial_ports_portid_array[i].getDescriptivePortName() + " already allocated by 1st meteo instrument");   
+                  //System.out.println("[THERMOMETER] main.defaultPort = " + main.defaultPort);
+                  doorgaan_testing = false;
+                  // NB 19-Aug-2019 tested ok
+               }
+            }
+            //else if (main.GPS_defaultPort.equals(serial_ports_portid_array[i].getSystemPortName()))
+            //{
+            //    info = "[THERMOMETER] " + serial_ports_portid_array[i].getDescriptivePortName() + " already allocted by GPS";   
+            //}
+            
+            if (doorgaan_testing)
+            {
+            //SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i]);//serialPort_test = new SerialPort(serial_ports_portid_array[i]);
+            SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i].getSystemPortName());
+            serialPort_test.openPort();  
+            if (serialPort_test.isOpen()) 
+            {
+               serialPort_test.openPort();//Open serial port
+
+               if (main.parity_II == 0)
+               {
+                  hulp_parity = "none";
+               }
+               else if (main.parity_II == 1)
+               {
+                  hulp_parity = "odd";
+               }
+               else if (main.parity_II == 2)
+               {
+                  hulp_parity = "even";
+               }               
+               
+               System.out.println("[THERMOMETER] trying to open with " + String.valueOf(main.bits_per_second_II) + " " + hulp_parity + " " + String.valueOf(main.data_bits_II) + " " + String.valueOf(main.stop_bits_II) + " " + serial_ports_portid_array[i].getDescriptivePortName());
+               serialPort_test.setComPortParameters(main.bits_per_second_II, main.data_bits_II, main.stop_bits_II, main.parity_II);
+               serialPort_test.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+               int timeout = 1000;
+               serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, timeout, timeout);
+               
+               if (main.RS232_connection_mode_II == 1)                                             // HMP 155
+               {
+                  //.....SMODE STOP
+                  //System.out.println("[THERMOMETER] Writing \"" + "SMODE STOP" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                  //String messageString_smode_stop = "SMODE STOP\r";
+                  //byte[] bytes_message_smode_stop = messageString_smode_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  //serialPort_test.writeBytes(bytes_message_smode_stop, bytes_message_smode_stop.length);       // Write data to port 
+                  //try
+                  //{
+                   //  Thread.sleep(2000);
+                  //}
+                  //catch (InterruptedException ex){ }   
+                  
+                  int written_bytes = 0;
+                  for (int k = 0; k < 5; k++)                // NB more times sending "s" absolutely necessary (see also HMP155 user's guide; paragraph Serial Line Communication)
+                  {
+                     // send data to the thermomter
+                     //
+                     System.out.println("[THERMOMETER] Writing \"" + "S" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                     String messageString_stop = "s\r";
+                     byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8);           // Java 7+ only
+                     serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length);                 // Write data to port 
+                     written_bytes = serialPort_test.writeBytes(bytes_message_stop, bytes_message_stop.length); // determine the number of bytes actually written
+  
+                     try
+                     {
+                        //Thread.sleep(2000);
+                        Thread.sleep(1000);
+                     }
+                     catch (InterruptedException ex){ } 
+                  } // for (int k = 0; k < 5; k++)
+                  
+                  if (written_bytes == 0)
+                  {
+                     System.out.println("");
+                     info = "[THERMOMETER] no thermometer found (" + serial_ports_portid_array[i].getDescriptivePortName() + " timed out)"; // for console window (all messages wil be displayed)
+                     System.out.println("--- " + info);
+                     System.out.println("");
+                     serialPort_test.closePort();   
+                     info = "[THERMOMETER] no thermometer found";                // for system log (only last recorded info will be written to the log)
+                  }
+                  else // written_bytes != 0;
+                  {   
+                     //System.out.println("[BAROMETER] Writing \"" + "VERS" + "\" to " + serialPort_test.getDescriptivePortName());
+                     System.out.println("[THERMOMETER] Writing \"" + "VERS" + "\" to " + serial_ports_portid_array[i].getDescriptivePortName());
+                     String messageString_info = "vers\r";
+                     //serialPort_test.writeBytes(messageString_info.getBytes());                     // Write data to port
+                     byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                     serialPort_test.writeBytes(bytes_message_info, bytes_message_info.length);       // Write data to port 
+                  
+                     try
+                     {
+                        Thread.sleep(2000);                                                  // 1000 seems too short on a few systems
+                     }
+                     catch (InterruptedException ex){ }     
+                  
+                     // the response
+                     //
+                     //String response = serialPort_test.readString();   
+                     //System.out.println(response);
+                  
+                     String response = "";
+                     serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 1000, 0);
+                     try 
+                     {
+                        byte[] readBuffer = new byte[64];
+                        serialPort_test.readBytes(readBuffer, readBuffer.length);
+                        response = new String(readBuffer, StandardCharsets.UTF_8);
+                        System.out.println(response);
+                     } 
+                     catch (Exception e) 
+                     { 
+                        System.out.println(e);
+                        response = null;
+                     }
+                     //serialPort_test.closePort();                  
+                  
+                  
+                     if (response != null && response.indexOf("HMP155") >= 0)   
+                     {
+                        info = "[THERMOMETER] found HMP155 on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                        System.out.print("--- ");
+                        main.log_turbowin_system_message(info);
+                        System.out.println("");
+                     
+                        serialPort_test.closePort();   
+                        main.defaultPort_II = serial_ports_portid_array[i].getSystemPortName();
+                        main.defaultPort_descriptive_II = serial_ports_portid_array[i].getDescriptivePortName();
+                        break;
+                     }
+                     else 
+                     {
+                        info = "[THERMOMETER] no thermometer found";
+                        System.out.println("--- " + info);
+                        System.out.println("");
+                        serialPort_test.closePort();   
+                     }
+                  } // else (written_bytes != 0)
+               } // if (main.RS232_connection_mode_II == 1)   
+            } // if (serialPort_test.isOpen()) 
+            //catch (SerialPortException ex)
+            else        
+            {
+               //System.out.println(ex);
+               System.out.println("[THERMOMETER] couldn't open: " + serial_ports_portid_array[i].getDescriptivePortName());
+            }
+            } // if (doorgaan_testing)
+         } // if (serial_ports_portid_array[i] != null)
+      } // for (int i = 0; i < main.NUMBER_COM_PORTS; i++) 
+
+      if (main.defaultPort_II != null)
+      {
+         // temporary message box (thermometer was found) 
+         final JOptionPane pane_end = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_end_dialog = pane_end.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_end = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               //checking_ports_end_dialog.setVisible(false);
+               // or maybe you'll need dialog.dispose() instead?
+               checking_ports_end_dialog.dispose();
+            }
+         });
+         timer_end.setRepeats(false);
+         timer_end.start();
+         checking_ports_end_dialog.setVisible(true);
+      }
+      else
+      {
+         // No com port with thermometer attached found
+         
+         // blocking message box + logging (no barometer found); but only show message if it is the last port-checking-round 
+         if (completed_checks_serial_ports_II == MAX_COMPLETED_THERMOMETER_PORT_CHECKS - 1)
+         {
+            main.log_turbowin_system_message(info);  // default info = "[THERMOMETER] start up: no thermometer found";
+            if (main.obsolate_data_flag_II == false)  // eg at start up of this application
+            {
+               // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+         }
+      } // else
+   } // if (main.prefered_COM_port.equals("AUTOMATICALLY"))
+   
+   ///////// fixed COM port name or number ///////
+   //
+   else // fixed COM port selected
+   {
+      //serialPort_test = new SerialPort(main.prefered_COM_port);
+      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port_II);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+      serialPort_test.openPort();
+      if (serialPort_test.isOpen())   
+      {
+         serialPort_test.closePort();
+         
+         // OK, no problems
+         main.defaultPort_II = main.prefered_COM_port_II;             // this construction is ok (prefered COM port is the same as getSystemPortName())
+         main.defaultPort_descriptive_II = main.prefered_COM_port_II;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+         info = "[THERMOMETER] " + main.prefered_COM_port_II + ", serial com port available";
+         
+         main.log_turbowin_system_message(info);
+         
+         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(1000, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true);            
+      }
+      //catch (SerialPortException ex) 
+      else        
+      {
+         // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
+         info = "[THERMOMETER] " + main.prefered_COM_port_II + ", serial com port not available";
+         main.log_turbowin_system_message(info);
+         if (main.obsolate_data_flag_II == false)  // eg at start up of this application
+         {
+            // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         }
+         main.defaultPort_II = null;
+         main.defaultPort_descriptive_II = null;
+         //System.out.println(info);
+      } // else    
+   } // else (fixed COM port selected)
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public main_RS232_RS422() 
+{
+}
+
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/   
+public void RS232_Delete_Sensor_Data_Files_II()  
+{
+   // NB file name e.g. sensor_data_II_2019080301.txt  (for the second meteo sensor eg thermometer, never for an AWS)
+   //    (note there is also sensor_data_2019080301.txt)
+   
+   // console
+   System.out.println("--- deleting old (> 200 hrs) sensor data files II");
+   
+   new SwingWorker<Void, Void>()
+   {
+      @Override
+      protected Void doInBackground() throws Exception
+      {
+         String file_naam;
+         String volledig_path_sensor_data;
+         int i_start;
+         int i_end;
+            
+            
+         i_start = 200;                                    // 200 hours
+         i_end = 8760;                                     // 1 year
+
+         for (int i = i_start; i < i_end + i_start; i++)   // 365 days of 24 hours = 8760 hours
+         {
+            cal_delete_datum_tijd = new GregorianCalendar();
+            cal_delete_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
+
+            file_naam = "sensor_data_II_" + main.sdf3.format(cal_delete_datum_tijd.getTime()) + ".txt";    // is in UTC !!
+            volledig_path_sensor_data = main.logs_dir + java.io.File.separator + file_naam;
+               
+            File file_sensor_data = new File(volledig_path_sensor_data);
+            if (file_sensor_data.exists())
+            {
+               file_sensor_data.delete();
+            }
+         } // for (int i = i_start; i < i_end + i_start; i++)
+
+         return null;
+      } // protected Void doInBackground() throws Exception
+   }.execute(); // new SwingWorker<Void, Void>()   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+   public void RS232_Delete_Sensor_Data_Files()
+   {
+      // NB file name e.g. sensor_data_2019080301.txt (note there is also sensor_data_II_2019080301.txt)
+      // NB delete files older thean 200 hours till 1 year back
+      
+      // message to console
+      if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9|| main.RS232_connection_mode == 11)          // AWS connected
+      {
+         System.out.println("--- deleting old (> 1 year) sensor data files");
+      }
+      else
+      {
+         System.out.println("--- deleting old (> 200 hrs) sensor data files");
+      }
+      
+ /////////////////////////////////////////////////////
+/*
+      // Het is nu 11.20 lokale tijd (winter) dus 10.20 UTC
+
+
+       sdf2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");                            // HH hour in day (0-23) let op er is ook een hh (dan hoort er ook a, pm bij)
+       sdf2.setTimeZone(TimeZone.getTimeZone("UTC"));                              // <----- DEZE = ESSENTIEEL
+
+
+       cal_delete_datum_tijd = new GregorianCalendar();
+       cal_delete_datum_tijd.add(Calendar.HOUR_OF_DAY, 0);
+       System.out.println("--- getTime()" + sdf2.format(cal_delete_datum_tijd.getTime())); // geeft 10.20
+
+       cal_delete_datum_tijd.add(Calendar.HOUR_OF_DAY, -2);
+       System.out.println("--- getTime()" + sdf2.format(cal_delete_datum_tijd.getTime())); // geeft 8.20
+
+       System.out.println("--- Date()" + sdf2.format(new Date()));                         // geeft 10.20
+
+       cal_delete_datum_tijd = null;
+       cal_delete_datum_tijd = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+       System.out.println("--- getTime()" + sdf2.format(cal_delete_datum_tijd.getTime()));  // geeft 10.20
+
+       cal_delete_datum_tijd = null;
+       cal_delete_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
+       System.out.println("--- getTime()" + sdf2.format(cal_delete_datum_tijd.getTime()));  // geeft 10.20
+
+       cal_delete_datum_tijd = null;
+       cal_delete_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
+       System.out.println("--- getTime()" + sdf2.format(cal_delete_datum_tijd.getTime()));  // geeft 10.20
+
+*/
+//////////////////////////////////////////////////////////
+
+
+      new SwingWorker<Void, Void>()
+      {
+         @Override
+         protected Void doInBackground() throws Exception
+         {
+            String file_naam;
+            String volledig_path_sensor_data;
+            int i_start;
+            int i_end;
+            
+            if (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 11)  // AWS connected
+            {
+               i_start = 8760;                            // 1 year (365 days * 24 hours)
+               i_end = 17520;                             // 2 years
+            }
+            else
+            {
+               i_start = 200;                             // 200 hours
+               i_end = 8760;                              // 1 year
+            }
+
+            //for (int i = 200; i < 8760 + 200; i++)   // 365 dagen van 24 uur = 8760 uur
+            for (int i = i_start; i < i_end + i_start; i++)   // 365 dagen van 24 uur = 8760 uur
+            {
+               cal_delete_datum_tijd = new GregorianCalendar();
+               cal_delete_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
+
+               file_naam = "sensor_data_" + main.sdf3.format(cal_delete_datum_tijd.getTime()) + ".txt";    // is in UTC !!
+               //volledig_path_sensor_data = main.logs_dir + java.io.File.separator + java.io.File.separator + file_naam;
+               volledig_path_sensor_data = main.logs_dir + java.io.File.separator + file_naam;
+               
+               //System.out.println(volledig_path_sensor_data);
+               File file_sensor_data = new File(volledig_path_sensor_data);
+               if (file_sensor_data.exists())
+               {
+                  file_sensor_data.delete();
+               }
+            } // for (int i = 200; i < 8760 + 200; i++)
+
+            return null;
+         } // protected Void doInBackground() throws Exception
+      }.execute(); // new SwingWorker<Void, Void>()
+   }
+
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_write_sensor_data_to_file_II()   
+{
+   // called from: class RS232_Class_Receive_Sensor_Data_II() [main_RS232_RS422.java]
+   // 
+   // 
+   // for: HMP155
+   
+   
+   // NB PTB220:
+   // er wordt uiteindelijk geschreven bv:
+   // $3  996.87 ****.** ****.** 996.87 0   3$
+   //
+   // maar eigelijk worden er bv 3 stukken string geschreven!!!! bv:
+   // $3  996.87 ***
+   // *.** ****.**
+   // 996.87 0   3 #r #n$
+   //
+   // NB Dit is vrij normaal voor een serieele aansluiting 14 bytes per keer ingelezen
+   //    "De veel gebruikte UART chip type 16550 bevat een buffer van 14 bytes voor ontvangen en
+   //    16 bytes voor zenden, zodat de CPU van de PC niet voor iedere byte aandacht aan de poort hoeft te besteden."
+   //    (http://nl.wikipedia.org/wiki/Seri%C3%ABle_poort)
+   // NB via laptop virtuele seriele poort (USB) lijkt dat er veel minder bytes per keer wordt ingelezen!
+   //
+   //
+   // NB geen Swingworker hier gebruiken (worden dan alleen stukken geschreven)
+   //
+   
+   //BufferedWriter out                                        = null;
+   boolean doorgaan                                          = false;
+      
+
+   String file_naam = "sensor_data_II_" + main.sdf3.format(new Date()) + ".txt";
+   String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + file_naam;
+
+   if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))
+   {
+      // NB in Function RS232_initComponents_II() there was already checked on dir logs_dir
+      doorgaan = true;
+   }
+   
+   if (doorgaan)
+   {
+      try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_sensor_data, true)))// true means append the specified data to the file i.e. the pre-exist data in a file is not overwritten and the new data is appended after the pre-exist data.
+      {
+         // NB Alleen onderstaande zou al voldoende zijn als er geen aparte datum/tijd toegevoegd zou hoeven te worden
+         ///out.write(total_string);
+
+         if (main.total_string_II.indexOf("\n") != -1)
+         {
+            // test-record_II = date time to be published on main screen to show the last update date-time
+            test_record_II = main.sdf_tsl_2.format(new Date()) + " UTC";      // new Date() -> always in UTC  
+               
+            out.write(main.total_string_II.replaceAll("[\r\n]", ""));
+            out.write(main.sdf4.format(new Date()));                       // new Date() -> always in UTC
+            out.newLine();
+         }
+         else
+         {
+            out.write(main.total_string_II.replace("\r", ""));
+         }
+      } 
+      catch (IOException ex) 
+      {
+         String info = ex + "; unable to write to: " + volledig_path_sensor_data;
+         main.log_turbowin_system_message("[THERMOMETER] " + info);
+      }
+      
+   } // if (doorgaan)
+}  
+   
+ 
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+   public void RS232_write_sensor_data_to_file() 
+   {
+      // called from: class RS232_Class_Receive_Sensor_Data() [main_RS232_RS422.java]
+      //              class WiFi_Class_Receive_UDP() [main_RS232_RS422.java]
+      // 
+      // 
+      // for: PTB220, PTB330, Mintaka Duo, Mintaka Star USB, Mintaka Star WiFi, Mintaka StarX USB, Mintaka StarX WiFi ///////
+   
+   
+      // NB PTB220:
+      // er wordt uiteindelijk geschreven bv:
+      // $3  996.87 ****.** ****.** 996.87 0   3$
+      //
+      // maar eigelijk worden er bv 3 stukken string geschreven!!!! bv:
+      // $3  996.87 ***
+      // *.** ****.**
+      // 996.87 0   3 #r #n$
+      //
+      // NB Dit is vrij normaal voor een serieele aansluiting 14 bytes per keer ingelezen
+      //    "De veel gebruikte UART chip type 16550 bevat een buffer van 14 bytes voor ontvangen en
+      //    16 bytes voor zenden, zodat de CPU van de PC niet voor iedere byte aandacht aan de poort hoeft te besteden."
+      //    (http://nl.wikipedia.org/wiki/Seri%C3%ABle_poort)
+      // NB via laptop virtuele seriele poort (USB) lijkt dat er veel minder bytes per keer wordt ingelezen!
+      //
+      // NB PTB330 via service port alleen een luchtdruk bv 1020.33
+      //    PTB330 via user port kan verschillend zijn?? (maar er is wel een default??)
+      //
+      //
+      // NB geen Swingworker hier gebruiken (worden dan alleen stukken geschreven)
+      //
+   
+      boolean doorgaan                                          = false;
+      //boolean total_string_ok                                   = false;
+      
+
+      String file_naam = "sensor_data_" + main.sdf3.format(new Date()) + ".txt";
+      String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + file_naam;
+
+      if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))
+      {
+         // NB in Function RS232_initComponents() there was already checked on dir logs_dir
+         doorgaan = true;
+      }
+      
+
+      if (doorgaan)
+      {
+         try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_sensor_data, true)))
+         {
+            // NB Alleen onderstaande zou al voldoende zijn als er geen aparte datum/tijd toegevoegd zou hoeven te worden
+            ///out.write(total_string);
+
+            if (main.total_string.indexOf("\n") != -1)
+            {
+               // test-record = date time to be published on main screen to show the last update date-time
+               test_record = main.sdf_tsl_2.format(new Date()) + " UTC";      // new Date() -> always in UTC  
+               
+               out.write(main.total_string.replaceAll("[\r\n]", ""));
+               out.write(main.sdf4.format(new Date()));                       // new Date() -> always in UTC
+               out.newLine();
+               
+               //total_string_ok = true;                                        // for indicating (barometer) data is ready for displaying on main screen
+            }
+            else
+            {
+               out.write(main.total_string.replace("\r", ""));
+            }
+
+         } // try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_sensor_data, true)))
+         catch (IOException ex) 
+         {
+            String info = ex + "; unable to write to: " + volledig_path_sensor_data;
+            main.log_turbowin_system_message("[barometer] " + info);
+         }
+         
+      } // if (doorgaan)
+      
+      
+      
+      //if (total_string_ok)
+      //{
+      //   if (main.APR == true)
+     //    {
+      //      if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)   // Vaisala PTB220 / Vaisala PTB330
+      //      {
+      //         RS232_Vaisala_Extract_Sensor_Data_For_Main_Screen_APR(main.total_string);
+      //      }
+      //   } // if (main.APR == true)
+     // } // if (total_string_ok)
+   }
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_read_dasboard_values()
+{
+   // called from: init_dasboard_timer() [DASHBOARD_view.java]
+   
+   new SwingWorker<String, Void>()
+   {
+      @Override
+      protected String doInBackground() throws Exception
+      {
+         main.obs_file_datum_tijd = new GregorianCalendar();
+         main.obs_file_datum_tijd.add(Calendar.MINUTE, -2);     // of is -1 ook goed????? : to be sure there was all time that it was written to the file
+         File sensor_data_file;
+         String record             = null;
+         String laatste_record     = null;
+         String last_record        = null;
+
+         // initialisation
+         //main.sensor_data_record_obs_pressure = "";
+
+         // determine sensor data file name
+         String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(main.obs_file_datum_tijd.getTime()); // e.g. 2013020308
+         String sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
+
+         // first check if there is a sensor data file present (and not empty)
+         String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
+         //System.out.println("+++ te openen file voor obs: "+ volledig_path_sensor_data);
+
+         sensor_data_file = new File(volledig_path_sensor_data);
+         if (sensor_data_file.exists() && sensor_data_file.length() > 0)     // length() in bytes
+         {
+            try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data)))
+            {
+               record         = null;
+               laatste_record = null;
+
+
+               // retrieve the last record in the sensor data file
+               //
+               while ((record = in.readLine()) != null)
+               {
+                  laatste_record = record;
+               } // while ((record = in.readLine()) != null)
+
+
+
+               // last retrieved record ok
+               //
+               if (laatste_record != null)
+               {
+                  //System.out.println("+++ last retrieved record = " + laatste_record);
+
+                  //String record_datum_tijd_minuten = laatste_record.substring(main.type_record_datum_tijd_begin_pos, main.type_record_datum_tijd_begin_pos + 12);  // bv 201302201345
+
+                  int pos = laatste_record.length() -12;                                               // pos is now start position of YYYYMMDDHHmm
+                  String record_datum_tijd_minuten = laatste_record.substring(pos, pos + 12);  // YYYYMMDDHHmm has length 12
+
+                  Date file_date = main.sdf4.parse(record_datum_tijd_minuten);
+                  long system_sec = System.currentTimeMillis();
+
+                  long timeDiff = Math.abs(file_date.getTime() - system_sec) / (60 * 1000); // timeDiff in minutes
+
+                  ///System.out.println("+++ difference [minuten]: " + timeDiff); //differencs in min
+
+                  if (timeDiff <= TIMEDIFF_SENSOR_DATA)      // max 5 minutes old
+                  {
+                     last_record = laatste_record;
+                  } // 
+                  else // if (timeDiff <= TIMEDIFF_SENSOR_DATA) 
+                  {
+                     //main.sensor_data_record_obs_pressure = "";
+                     //System.out.println("--- automatically retrieved barometer reading obsolete");
+                     last_record = "";
+                  }
+               } // if (laatste_record != null)
+
+            } // try
+            catch (IOException ex) 
+            {  
+               System.out.println("--- Function RS232_read_dasboard_values(): " + ex);
+            }
+
+         } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
+ 
+         // clear memory
+         main.obs_file_datum_tijd      = null;
+
+         
+         return last_record;
+      } // protected Void doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         
+         String last_update_record = null;
+         try 
+         {
+            last_update_record = get();
+         } 
+         catch (InterruptedException | ExecutionException ex) 
+         {
+            //Logger.getLogger(main_RS232_RS422.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("+++ Function RS232_read_dasboard_values(), when retrieving last sensor data record: " + ex);
+         }
+         
+         String date_time_last_update = main.sdf_tsl_2.format(new Date()) + " UTC";      // new Date() -> always in UTC  
+         RS232_compute_dasboard_values(date_time_last_update, last_update_record);
+         
+      } // protected void done()
+   }.execute(); // new SwingWorker <Void, Void>()
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private static void RS232_compute_dasboard_values(final String date_time_last_update, final String last_update_record)
+{
+   // called from: RS232_read_dasboard_values() [main_RS232_RS422.java]
+   //
+   // NB only for single barometer on Dashboard 
+   //
+   //
+   // NB update the global dasboard var's if ok, otherwise do not reset them but leave the old values unchanged!
+   // NB dashboard_double_last_update_record_pressure_ic -> glabal var, link between this function and dashboard dial
+   // NB dashboard_string_last_update_record_date_time   -> glabal var, link between this function and dashboard dial   
+   // NB dashboard_double_last_update_record_ppp         -> glabal var, link between this function and dashboard dial  
+   
+   
+   new SwingWorker<Void, Void>()
+   {
+      @Override
+      protected Void doInBackground() throws Exception
+      {
+         boolean dashboard_double_last_update_record_pressure_ic_ok = false;
+         boolean checksum_ok                                        = false;
+         String dashboard_string_last_update_record_pressure        = "";
+         String dashboard_string_last_update_record_ppp             = "";
+         String local_obs_age = "";
+         final int AGE_NOT_OK = 999999;
+         int pos1 = 0;                       // position of the first "," in the last record
+         int pos2 = 0;                       // position of the second "," in the last record
+         int pos3 = 0;                       // position of the third "," in the last record
+         int pos4 = 0;                                        
+         int pos5 = 0;                                        
+         int pos6 = 0;                                        
+         int pos7 = 0;                                        
+         int pos8 = 0;                                        
+         int pos9 = 0;
+         int pos10 = 0;                                        
+         int pos11 = 0;                                        
+         int pos12 = 0;
+         int pos13 = 0;                                        
+         int pos14 = 0;                       // pos of the "*" 
+
+         //System.out.println("--- last_update_record = " + last_update_record);
+   
+         if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)     // PTB220, PTB330, Mintaka Duo or Mintaka Star USB or WiFi or Mintaka StarX USB or WiFi  
+         {
+            if (last_update_record.length() > 10)        // NB > 10 is a little bit arbitrary number
+            {
+               //System.out.println("--- record_checksum = " + record_checksum);
+               //System.out.println("--- computed_checksum = " + computed_checksum);
+         
+               if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)    // Mintaka Star USB or WiFi 0or Mintaka StarX USB or WiFi
+               {
+                  // Mintaka Star or StarX perform a cheksum check
+                  String record_checksum = last_update_record.substring(last_update_record.length() - 14, last_update_record.length() - 12);  // eg "24" from last_update_record: "1022.20,1022.20,0.80,2, 52 41.9497N,  6 14.1848E,0,0,-1*24"
+                  String computed_checksum = Mintaka_Star_Checksum(last_update_record);
+            
+                  checksum_ok = computed_checksum.equals(record_checksum);
+               }
+               else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4) // PTB220, PTB330 or Mintaka Duo
+               { 
+                  // no cheksum check (Sep 2017) for PTB220, PTB330 and Mintaka Duo. But Mintaka Duo checksum value is available so could be used in the future
+                  checksum_ok = true;        
+               }
+         
+               if (checksum_ok)   
+               {
+                  if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)   // Mintaka Duo, Mintaka Star USB, Mintaka Star WiFi
+                  {
+                     // NB pressure and ppp pos in the saved records is the same for Duo, Star and StarX
+                     pos1 = last_update_record.indexOf(",", 0);                                            // position of the first "," in the record
+                     pos2 = last_update_record.indexOf(",", pos1 + 1);                                     // position of the second "," in the last record
+                     pos3 = last_update_record.indexOf(",", pos2 + 1);                                     // position of the third "," in the last record
+
+                     dashboard_string_last_update_record_pressure = last_update_record.substring(0, pos1);
+                     dashboard_string_last_update_record_ppp = last_update_record.substring(pos2 + 1, pos3);
+                  }
+                  else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)   // Mintaka StarX USB or Mintaka StarX WiFi
+                  {
+                     // NB pressure and ppp pos in the saved records is the same for Duo, Star and StarX
+                     // StarX example: // 1009.73,1007.73,0.00,0, 52 41.9491N,  6 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
+                     pos1 = last_update_record.indexOf(",", 0);                                              // ML hereafter; position of the first "," in the last record
+                     pos2 = last_update_record.indexOf(",", pos1 +1);                                        // ppp hereafter; position of the second "," in the last record
+                     pos3 = last_update_record.indexOf(",", pos2 +1);                                        // a hereafter; position of the third "," in the last record
+                     pos4 = last_update_record.indexOf(",", pos3 +1);                                        // lat hereafter; position of the 4th "," in the last record
+                     pos5 = last_update_record.indexOf(",", pos4 +1);                                        // lon hereafter; position n of the 5th "," in the last record
+                     pos6 = last_update_record.indexOf(",", pos5 +1);                                        // course hereafter; position of the 6th "," in the last record
+                     pos7 = last_update_record.indexOf(",", pos6 +1);                                        // speed hereafter                                
+                     pos8 = last_update_record.indexOf(",", pos7 +1);                                        // elevation hereafter
+                     pos9 = last_update_record.indexOf(",", pos8 +1);                                        // air temp
+                     pos10 = last_update_record.indexOf(",", pos9 +1);                                       // RH
+                     pos11 = last_update_record.indexOf(",", pos10 +1);                                      // wet bulb                                      
+                     pos12 = last_update_record.indexOf(",", pos11 +1);                                      // dew point
+                     pos13 = last_update_record.indexOf(",", pos12 +1);                                      // observation age  
+                     pos14 = last_update_record.indexOf("*", pos13 +1);                                      // pos of the "*" 
+                              
+                     local_obs_age = last_update_record.substring(pos13 +1, pos14); 
+                     main.sensor_data_record_obs_pressure = last_update_record.substring(0, pos1);
+                     
+                     
+                     int int_local_obs_age = AGE_NOT_OK;                 // 999999 = random number but > 99.9
+                     if ( (local_obs_age.compareTo("") != 0) && (local_obs_age != null) && (local_obs_age.indexOf("*") == -1) )
+                     {
+                        try
+                        {
+                           int_local_obs_age = Integer.parseInt(local_obs_age.trim());
+                        }
+                        catch (NumberFormatException e)
+                        {
+                           int_local_obs_age = AGE_NOT_OK; 
+                           System.out.println("--- " + "RS232_compute_dasboard_values() " + e);
+                        }
+                     } // if ( (local_obs_age.compareTo("") != 0) etc.
+            
+                     if ((int_local_obs_age >= 0) && (int_local_obs_age <= MAX_AGE_STARX_OBS_DATA))
+                     {
+                        dashboard_string_last_update_record_pressure = last_update_record.substring(0, pos1);
+                        dashboard_string_last_update_record_ppp = last_update_record.substring(pos2 + 1, pos3);
+                     }
+                     else
+                     {
+                        dashboard_string_last_update_record_pressure = "";
+                        dashboard_string_last_update_record_ppp = "";
+                     }
+                  }
+                  else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)                 // PTB220 or PTB330
+                  {
+                     int type_record_pressure_begin_pos     = 0;
+                     int type_record_ppp_begin_pos          = 0;
+                     //int type_record_a_begin_pos            = 0;
+               
+                     if (main.RS232_connection_mode == 1)       // PTB220
+                     {
+                        type_record_pressure_begin_pos     = main.RECORD_P_BEGIN_POS_PTB220;
+                        type_record_ppp_begin_pos          = main.RECORD_ppp_BEGIN_POS_PTB220;
+                        //type_record_a_begin_pos          = main.RECORD_a_BEGIN_POS_PTB220;
+                     }
+                     else if (main.RS232_connection_mode == 2)  // PTB330   
+                     {
+                        type_record_pressure_begin_pos     = main.RECORD_P_BEGIN_POS_PTB330;
+                        type_record_ppp_begin_pos          = main.RECORD_ppp_BEGIN_POS_PTB330;
+                        //type_record_a_begin_pos            = main.RECORD_a_BEGIN_POS_PTB330;
+                     }
+              
+                     dashboard_string_last_update_record_pressure = last_update_record.substring(type_record_pressure_begin_pos, type_record_pressure_begin_pos + 7);
+                     dashboard_string_last_update_record_ppp      = last_update_record.substring(type_record_ppp_begin_pos, type_record_ppp_begin_pos + 5);
+                    
+                     //System.out.println("+++ dashboard_string_last_update_record_pressure = " + dashboard_string_last_update_record_pressure);
+                    
+                    //String sensor_data_record_obs_a              = last_update_record.substring(type_record_a_begin_pos, type_record_a_begin_pos + 1);
+                  } // else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)   
+            
+                  if ((dashboard_string_last_update_record_pressure.equals("") == false) && (dashboard_string_last_update_record_pressure != null))
+                  {
+                     // pressure at sensor height + apply ic
+                     double dashboard_double_last_update_record_pressure;
+                     try
+                     {
+                        dashboard_double_last_update_record_pressure = Double.parseDouble(dashboard_string_last_update_record_pressure);
+                        dashboard_double_last_update_record_pressure = Math.round(dashboard_double_last_update_record_pressure * 10) / 10.0d;  // bv 998.19 -> 998.2
+                     }
+                     catch (NumberFormatException e)
+                     {
+                        System.out.println("--- " + "Function RS232_compute_dasboard_values() " + e);
+                        dashboard_double_last_update_record_pressure = Double.MAX_VALUE;
+                     }   
+             
+                     double dashboard_double_barometer_instrument_correction = 0.0;
+                     if ((dashboard_double_last_update_record_pressure > 900.0) && (dashboard_double_last_update_record_pressure < 1100.0))
+                     {
+                        if (main.barometer_instrument_correction.equals("") || (main.barometer_instrument_correction == null))
+                        {
+                           // so in the case there was never an ic inserted
+                           dashboard_double_barometer_instrument_correction = 0.0;        
+                        }
+                        else
+                        {
+                           dashboard_double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
+                        }
+                        
+                        
+                        if ((dashboard_double_barometer_instrument_correction > -4.0) && (dashboard_double_barometer_instrument_correction < 4.0))
+                        {        
+                           // 1 digit precision
+                           // NB example (double)Math.round(value * 100000d) / 100000d -> rounding for 5 digits precision
+                           dashboard_double_last_update_record_pressure_ic = Math.round((dashboard_double_last_update_record_pressure + dashboard_double_barometer_instrument_correction) * 10d) / 10d;
+                           dashboard_double_last_update_record_pressure_ic_ok = true;
+                        }
+                        else // ic out of range -> consider ic = 0
+                        {
+                            //pressure_sensor_height = Double.toString(hulp_double_pressure_reading);
+                           // 1 digit precision
+                           dashboard_double_last_update_record_pressure_ic = Math.round(dashboard_double_last_update_record_pressure * 10d) / 10d;
+                           dashboard_double_last_update_record_pressure_ic_ok = true;
+                        }         
+                     } 
+                     else
+                     {
+                        dashboard_double_last_update_record_pressure_ic_ok = false;
+                     }
+         
+                     // only continue if the retrieved pressure was ok
+                     //
+                     if (dashboard_double_last_update_record_pressure_ic_ok == true)
+                     {
+                        // date time last update (retrieved pressure was ok, now we can update the date-time of the last update var)
+                        dashboard_string_last_update_record_date_time = date_time_last_update;            
+                     }
+               
+                     // ppp: only continue if the retrieved pressure was ok + there was at least 1 char for the ppp 
+                     //
+                     if (dashboard_double_last_update_record_pressure_ic_ok == true && dashboard_string_last_update_record_ppp.length() >= 1 && dashboard_string_last_update_record_ppp.indexOf("*") == -1)
+                     {   
+                        // pressure change (ppp; pressure change during last 3 hours)
+                        // so pressure was ok, if the ppp is not ok make it invalid, pressure is leading!
+                        try
+                        {
+                           dashboard_double_last_update_record_ppp = Double.parseDouble(dashboard_string_last_update_record_ppp);
+                           dashboard_double_last_update_record_ppp = Math.round(dashboard_double_last_update_record_ppp * 10) / 10.0d;  // bv 2.19 -> 2.2
+                           
+                           if (dashboard_double_last_update_record_ppp > 100.0)
+                           {
+                              dashboard_double_last_update_record_ppp = Double.MAX_VALUE;
+                           }
+                        }
+                        catch (NumberFormatException e)
+                        {
+                           System.out.println("--- " + "Function RS232_compute_dasboard_values() " + e);
+                           dashboard_double_last_update_record_ppp = Double.MAX_VALUE;
+                        }   
+                     } // if (dashboard_double_last_update_record_pressure_ic_ok == true)
+                  } // if ((dashboard_string_last_update_record_pressure.equals("") == false) && (dashboard_string_last_update_record_pressure != null))
+                  else
+                  {
+                     // do nothing!!
+                     // the previuous "dashboard" values are still valid! (but will not updated by this "last_update_record") 
+                     System.out.println("+++ Function RS232_compute_dasboard_values(): dashboard_string_last_update_record_pressure = null/empty");
+                  }
+               } // if (computed_checksum.equals(record_checksum))
+               else
+               {
+                  // do nothing!!
+                  // the previuous "dashboard" values are still valid! (but will not updated by this "last_update_record")  
+                  System.out.println("+++ Function RS232_compute_dasboard_values(): cheksum not ok");
+               }
+            } // if (last_update_record.length() > 10) 
+            else
+            {
+               // do nothing!!
+               // the previuous "dashboard" values are still valid! (but will not be updated by this "last_update_record")
+               System.out.println("+++ Function RS232_compute_dasboard_values(): last_update_record.length() <= 10 or not present");
+            }
+         } // if (main.RS232_connection_mode == 1 || etc
+   
+   
+         return null;
+      } // protected Void doInBackground() throws Exception
+   }.execute(); // new SwingWorker<Void, Void>()
+           
+}
+
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+//private static String Mintaka_Star_Checksum(String record
+public static String Mintaka_Star_Checksum(String record)   
+{
+   // called from: - RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_GPS_For_Obs() [main_RS232_RS422.java]
+   //              - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR() [main_RS232_RS422.java]
+   //              - RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_PPPP_For_Obs() [main_RS232_RS422.java]
+   //              - RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_a_ppp_Data_Files_For_Obs() [main_RS232_RS422.java]
+   //              - RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_GPS_For_Obs() [main_RS232_RS422.java]
+   //              - RS232_compute_dasboard_values()[main_RS232_RS422.java]
+   //              - Read_Sensor_Data_Files_For_Air_Temp_Mintaka_StarX() [RS232_view.java]
+   //              - Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX()[RS232_view.java]
+   //
+   // NB used for string data checking of the Mintaka Star USB/Wifi and the Mintaka StarX USB/Wifi
+   
+   
+   String computed_checksum = "";
+   int checksum = 0;
+   
+   
+   // cheksum computed between first pos and '*'
+   int start_pos = 0;
+   int end_pos   = record.indexOf('*');
+   
+   // cheksum ok? 
+   //
+   if (start_pos != -1 && end_pos != -1) 
+   {
+      for (int i = start_pos; i < end_pos; i++) 
+      {
+         checksum = checksum ^ record.charAt(i);
+      }   
+      
+      computed_checksum = Integer.toHexString(checksum);
+      if (computed_checksum.length() == 1)
+      {
+         computed_checksum = "0" + computed_checksum;
+      }
+   } // if (start_pos != -1 && end_pos != -1) 
+   
+   
+   return computed_checksum = computed_checksum.toUpperCase();
+}
+
+
+
+
+
+
+  
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS422_write_sensor_data_to_file() 
+{
+      ///// EUCAWS ONLY //////
+   
+      // called from class RS422_V1_Class_Receive_Sensor_Data
+      //
+   
+   
+      // NB PTB220:
+      // er wordt uiteindelijk geschreven bv:
+      // $3  996.87 ****.** ****.** 996.87 0   3$
+      //
+      // maar eigelijk worden er bv 3 stukken string geschreven!!!! bv:
+      // $3  996.87 ***
+      // *.** ****.**
+      // 996.87 0   3 #r #n$
+      //
+      // NB Dit is vrij normaal voor een serieele aansluiting 14 bytes per keer ingelezen
+      //    "De veel gebruikte UART chip type 16550 bevat een buffer van 14 bytes voor ontvangen en
+      //    16 bytes voor zenden, zodat de CPU van de PC niet voor iedere byte aandacht aan de poort hoeft te besteden."
+      //    (http://nl.wikipedia.org/wiki/Seri%C3%ABle_poort)
+      // NB via laptop virtuele seriele poort (USB) lijkt dat er veel minder bytes per keer wordt ingelezen!
+      //
+      // NB PTB330 via service port alleen een luchtdruk bv 1020.33
+      //    PTB330 via user port kan verschillend zijn?? (maar er is wel een default??)
+      //
+      //
+      // NB geen Swingworker hier gebruiken (worden dan alleen stukken geschreven)
+      //
+   
+      boolean doorgaan                                          = false;
+      
+      // if time is 57, 58 or 59 sec round to next whole minute
+      //
+      // to prevent such situations:
+      //
+      // $PEUMB,130815,121900,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815121859
+      // $PEUMB,130815,122000,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815121959
+      // $PEUMB,130815,122100,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122100
+      // $PEUMB,130815,122200,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122200
+      // $PEUMB,130815,122300,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122259
+      // $PEUMB,130815,122400,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122400
+      // $PEUMB,130815,122500,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122459
+      // $PEUMB,130815,122600,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122559
+      // $PEUMB,130815,122700,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122700
+      // $PEUMB,130815,122800,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122800
+      // $PEUMB,130815,122900,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122900
+      // $PEUMB,130815,123000,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123000
+      // $PEUMB,130815,123100,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123100
+      // $PEUMB,130815,123200,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123200
+      // $PEUMB,130815,123300,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123300
+      // $PEUMB,130815,123400,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123359
+      //
+      // NB seconds display at the end of every record only during testing  (eg 20130815122900, operational this will be 01308151229)
+      
+      cal_sensor_datum_tijd = new GregorianCalendar();
+      String number_sec = sdf7.format(cal_sensor_datum_tijd.getTime());  // format sdf7 = "ss" (show only seconds)
+      switch (number_sec)
+      {   
+         case "59" : cal_sensor_datum_tijd.add(Calendar.SECOND, + 1);
+         break;
+         case "58" : cal_sensor_datum_tijd.add(Calendar.SECOND, + 2);
+         break;
+         case "57" : cal_sensor_datum_tijd.add(Calendar.SECOND, + 3);
+         break;
+      }        
+
+      //String file_naam = "sensor_data_" + main.sdf3.format(new Date()) + ".txt";
+      String file_naam = "sensor_data_" + main.sdf3.format(cal_sensor_datum_tijd.getTime()) + ".txt";
+      
+      //String volledig_path_sensor_data = logs_dir + java.io.File.separator + SENSOR_DATA_SUB_DIR + java.io.File.separator + file_naam;
+      String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + java.io.File.separator + file_naam;
+
+      if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))
+      {
+         // NB in Function RS422_initComponents() there was already checked on dir logs_dir
+         doorgaan = true;
+      }
+      
+
+      if (doorgaan)
+      {
+         try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_sensor_data, true)))
+         {
+            // NB Alleen onderstaande zou al voldoende zijn als er geen aparte datum/tijd toegevoegd zou hoeven te worden
+            ///out.write(total_string);
+
+            if (main.total_string.indexOf("\n") != -1)
+            {
+               // test-record can be called by pressing the "Test" button on the instrument connections settings page
+               test_record = main.sdf_tsl_2.format(new Date()) + " UTC";   // // new Date() -> always in UTC 
+               
+               
+               out.write(main.total_string.replaceAll("[\r\n]", ""));
+               out.write(",");                                                // NB "," : typically for AWS connection (record data separated by commas)
+               
+               //out.write(main.sdf4.format(new Date()));                       // new Date() -> altijd in UTC
+               out.write(main.sdf4.format(cal_sensor_datum_tijd.getTime()));
+               out.newLine();
+               
+               // only if the last piece of a record string was written check for presence parameters (if parameter present disable the input on TurboWin+ input form)
+               //RS422_Read_AWS_Sensor_Data(); // and also if a parameter is present in the saved sensor data file then disable this parameter on the TurboWin+ input form
+            }
+            else
+            {
+               out.write(main.total_string.replace("\r", ""));
+            }
+
+         } // try
+         catch (IOException ex) 
+         {
+            String info = ex + "; unable to write to: " + volledig_path_sensor_data;
+            main.log_turbowin_system_message("[AWS] " + info);
+         }
+         
+      } // if (doorgaan)
+   }
+     
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+
+public void RS422_V3_write_sensor_data_to_file() 
+{
+      ///// EUCAWS serial and OMC-140 serial and OMC-140 LAN  //////
+   
+      // called from - class RS422_V3_Class_Receive_Sensor_Data
+      //             - class Ethernet_Class_Receive_UDP
+   
+   
+      // NB PTB220:
+      // er wordt uiteindelijk geschreven bv:
+      // $3  996.87 ****.** ****.** 996.87 0   3$
+      //
+      // maar eigelijk worden er bv 3 stukken string geschreven!!!! bv:
+      // $3  996.87 ***
+      // *.** ****.**
+      // 996.87 0   3 #r #n$
+      //
+      // NB Dit is vrij normaal voor een serieele aansluiting 14 bytes per keer ingelezen
+      //    "De veel gebruikte UART chip type 16550 bevat een buffer van 14 bytes voor ontvangen en
+      //    16 bytes voor zenden, zodat de CPU van de PC niet voor iedere byte aandacht aan de poort hoeft te besteden."
+      //    (http://nl.wikipedia.org/wiki/Seri%C3%ABle_poort)
+      // NB via laptop virtuele seriele poort (USB) lijkt dat er veel minder bytes per keer wordt ingelezen!
+      //
+      // NB PTB330 via service port alleen een luchtdruk bv 1020.33
+      //    PTB330 via user port kan verschillend zijn?? (maar er is wel een default??)
+      //
+      //
+      // NB geen Swingworker hier gebruiken (worden dan alleen stukken geschreven)
+      //
+   
+      //BufferedWriter out         = null;
+      boolean doorgaan           = false;
+      boolean peumb_update       = false;
+      boolean retry              = false;
+      
+      // if time is 57, 58 or 59 sec round to next whole minute
+      //
+      // to prevent such situations:
+      //
+      // $PEUMB,130815,121900,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815121859
+      // $PEUMB,130815,122000,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815121959
+      // $PEUMB,130815,122100,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122100
+      // $PEUMB,130815,122200,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122200
+      // $PEUMB,130815,122300,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122259
+      // $PEUMB,130815,122400,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122400
+      // $PEUMB,130815,122500,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122459
+      // $PEUMB,130815,122600,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122559
+      // $PEUMB,130815,122700,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122700
+      // $PEUMB,130815,122800,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122800
+      // $PEUMB,130815,122900,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815122900
+      // $PEUMB,130815,123000,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123000
+      // $PEUMB,130815,123100,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123100
+      // $PEUMB,130815,123200,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123200
+      // $PEUMB,130815,123300,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123300
+      // $PEUMB,130815,123400,...........................4.2,350.3,7.8,358.3,23.1,28.3,-38,,,,20130815123359
+      //
+      // NB seconds display at the end of every record only during testing  (eg 20130815122900, operational this will be 01308151229)
+      
+      cal_sensor_datum_tijd = new GregorianCalendar();
+      String number_sec = sdf7.format(cal_sensor_datum_tijd.getTime());  // format sdf7 = "ss" (show only seconds)
+      switch (number_sec)
+      {   
+         case "59" : cal_sensor_datum_tijd.add(Calendar.SECOND, + 1);
+         break;
+         case "58" : cal_sensor_datum_tijd.add(Calendar.SECOND, + 2);
+         break;
+         case "57" : cal_sensor_datum_tijd.add(Calendar.SECOND, + 3);
+         break;
+      }        
+
+      //String file_naam = "sensor_data_" + main.sdf3.format(new Date()) + ".txt";
+      String file_naam = "sensor_data_" + main.sdf3.format(cal_sensor_datum_tijd.getTime()) + ".txt";
+      
+      //String volledig_path_sensor_data = logs_dir + java.io.File.separator + SENSOR_DATA_SUB_DIR + java.io.File.separator + file_naam;
+      String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + java.io.File.separator + file_naam;
+
+      if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))
+      {
+         // NB in Function RS422_initComponents() there was already checked on dir logs_dir
+         doorgaan = true;
+      }
+      
+
+      if (doorgaan)
+      {
+         try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_sensor_data, true)))
+         {
+            for (int b = 0; b < main.total_string.length(); b++)
+            {
+               if (main.total_string.charAt(b) == '\r' || main.total_string.charAt(b) == '\n') 
+               {
+                  //if (message_peumb.toString().contains("$PEUMB"))
+                  
+                  // NB in case of OMC-140 LAN:
+                  //               UdPbC\0\s:D263G4,s:WI4263*31\$PEUMB,20180411,060028,52.5,4.9,257.2,4.0,259.2,1006.6,991.5,0.7,4,19.6,28.9,3.9,24.4,131.8,28.6,139.9,34.6,73.3,,,,,,*57
+                  //    stared as: $PEUMB,20180411,060028,52.5,4.9,257.2,4.0,259.2,1006.6,991.5,0.7,4,19.6,28.9,3.9,24.4,131.8,28.6,139.9,34.6,73.3,,,,,,*57
+                  //
+                  // but will have no effect on OMC-140 serial and EUCAWS serial 
+                  //
+                  int start = message_peumb.toString().indexOf("$PEUMB");
+                  if (start != -1)   
+                  {
+                     // test_record: for dispaying on main screen date/ime of this last received data update
+                     test_record = main.sdf_tsl_2.format(new Date()) + " UTC";   // // new Date() -> always in UTC  
+                      
+                     //out.write(message_peumb.toString().replaceAll("[\r\n]", ""));
+                     out.write(message_peumb.toString().substring(start).replaceAll("[\r\n]", ""));
+                     out.write(",");                                                // NB "," : typically for AWS connection (record data separated by commas)
+               
+                     out.write(main.sdf4.format(cal_sensor_datum_tijd.getTime()));
+                     out.newLine();
+                     
+                     peumb_update = true;
+                  }
+                  message_peumb.setLength(0);
+               }   
+               else
+               {
+                  message_peumb.append(main.total_string.charAt(b));
+               }
+                  
+            } // for (int b = 0; b < main.total_string.length(); b++)
+            
+            // NB Alleen onderstaande zou al voldoende zijn als er geen aparte datum/tijd toegevoegd zou hoeven te worden
+            //out.write(main.total_string);
+
+         } // try
+         catch (IOException ex) 
+         {
+            String info = ex + "; unable to write to: " + volledig_path_sensor_data;
+            main.log_turbowin_system_message("[AWS] " + info);
+         }
+         
+      } // if (doorgaan)
+      
+      
+      if (peumb_update)
+      {
+         // read the AWS data which was saved before by TurboWin+ from a sensor data file
+         //
+         // NB DIT ZOU BETER KUNNEN DOOR GELIJK UIT DE message_peumb string te lezen !!!!!!!
+         //
+         RS422_Read_AWS_Sensor_Data_For_Display();  
+                  
+         // update main screen with application name + mode and date time last received data (single info line botton screen)
+         String info = "";
+         if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) // test_rcord was set in RS422_write_sensor_data_to_file()
+         {
+            info = "no data";
+         } 
+         else 
+         {
+            info = main_RS232_RS422.test_record;
+         }     
+         main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received AWS data: " + info);
+                     
+         // for checking that the displayed data is not obsolete (i.e. not updated last 5 minutes)
+         last_new_data_received_TimeMillis = System.currentTimeMillis(); // see also Function: RS422_init_new_aws_data_received_check_timer() [main_RS232_422.java]
+      
+         
+         // AWSR (Automatic Weather Station Reporting)
+         if (main.AWSR == true)
+         {
+            cal_AWSR_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+            cal_AWSR_system_date_time.getTime();                                               // now effective
+            int AWSR_system_hour_local = cal_AWSR_system_date_time.get(Calendar.HOUR_OF_DAY);   // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+            int AWSR_system_minute_local = cal_AWSR_system_date_time.get(Calendar.MINUTE);
+                  
+            if ((AWSR_system_minute_local == 0) && (AWSR_system_hour_local % Integer.valueOf(main.AWSR_reporting_interval) == 0))   // e.g. every 1 hour (AWSR_reporting_interval);               
+            {
+               retry = false;
+                        
+               // logging
+               String message = "[AWSR] scheduled upload"; 
+               main.log_turbowin_system_message(message);
+               
+               // checking
+               boolean AWSR_settings_ok = RS422_check_AWSR_settings();
+               boolean GPS_date_time_ok = true;
+      
+               GPS_date_time_ok = true;
+               // NB in function RS422_Read_And_Send_Sensor_Data_For_AWSR() the date time of the last saved record will be checked, see below
+                        
+               if (AWSR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+               {
+                  // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                  // read the AWS data which was saved before by TurboWin+ from a sensor data file
+                  RS422_Read_And_Send_Sensor_Data_For_AWSR(retry); // nB in this function also the date-time of the last saved record will be checked
+                  
+               } // if (AWSR_settings_ok && GPS_date_time_ok) 
+            } // if ((AWSR_system_minute_local == 0) etc.
+            else if ((AWSR_server_response_code == main.RESPONSE_NO_INTERNET) && (AWSR_system_minute_local == AWSR_RETRY_MINUTES) && (AWSR_system_hour_local % Integer.valueOf(main.AWSR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+            {
+               retry = true;
+                        
+               // logging
+               String message = "[AWSR] retry scheduled upload"; 
+               main.log_turbowin_system_message(message);
+                        
+               // checking
+               boolean AWSR_settings_ok = RS422_check_AWSR_settings();
+               boolean GPS_date_time_ok = true;
+                        
+               // NB Mintaka StarX saved data do not contain date/time information so it is not possible to check this
+               //    so it is made always true
+               GPS_date_time_ok = true;
+                     
+               if (AWSR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+               {
+                  // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                  RS422_Read_And_Send_Sensor_Data_For_AWSR(retry);           
+                                             
+               } // if (APR_settings_ok && GPS_date_time_ok) 
+                        
+               // reset (to be sure)
+               AWSR_server_response_code = 0;
+                        
+            } // else if ((APR_server_response_code = main.RESPONSE_NO_INTERNET) etc.
+            else if ((AWSR_server_response_code == main.RESPONSE_NO_INTERNET) && (AWSR_system_minute_local < AWSR_RETRY_MINUTES) && (AWSR_system_hour_local % Integer.valueOf(main.AWSR_reporting_interval) == 0))   // e.g. every 1 hour (AWSR_reporting_interval);               
+            {
+               // text will be visible only a few minutes (till the retry upload)
+               main.jTextField4.setText("[AWSR] retry AWS report upload within a few minutes");
+            }
+            else
+            {
+               // text with next AWSR update bottom status line TurboWin+ main screen (updated every minute)
+               for (int i = (AWSR_system_hour_local + 1); i < (AWSR_system_hour_local + 1 + Integer.valueOf(main.AWSR_reporting_interval)); i++)
+               {
+                  // 24 hours or higher makes no difference for this computation
+                  if (i % Integer.valueOf(main.AWSR_reporting_interval) == 0)
+                  {
+                     cal_AWSR_system_date_time.add(Calendar.HOUR_OF_DAY, i - AWSR_system_hour_local);   // add 1 - 5 hours
+                     cal_AWSR_system_date_time.getTime();
+                                 
+                     String next_AWSR_string = "[AWSR] next automated AWS report upload: " + cal_AWSR_system_date_time.get(Calendar.DAY_OF_MONTH) + " " + main.convert_month(cal_AWSR_system_date_time.get(Calendar.MONTH)) + " " + cal_AWSR_system_date_time.get(Calendar.YEAR) + " " + cal_AWSR_system_date_time.get(Calendar.HOUR_OF_DAY) + ".00 UTC"; 
+                                 
+                     main.jTextField4.setText(next_AWSR_string);
+                     break;
+                  }
+               } // for (int i = (APR_system_hour_local + 1); etc.
+            } // else
+                        
+            cal_AWSR_system_date_time = null; 
+         
+         } // if (main.AWSR == true)
+      } // if (peumb_update)
+
+   }
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_Format_Thermometer_Output() 
+{
+   SerialPort serialPort_form                     = null;
+   String hulp_parity                             = "";          // only for message writing in java console
+
+
+   if (main.defaultPort_II == null)
+   {
+	   String info = "[THERMOMETER] selected serial port [function: RS232_Format_Thermometer_Output()] " + main.defaultPort_descriptive_II + " not found";
+      System.out.println(info);
+      // JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+	}
+   
+   if (main.defaultPort_II != null)
+   {
+      serialPort_form = SerialPort.getCommPort(main.defaultPort_II);//serialPort_form = new SerialPort(main.defaultPort);
+      serialPort_form.openPort(); 
+      if (serialPort_form.isOpen())
+      {
+         if (main.parity_II == 0)
+         {
+            hulp_parity = "none";
+         }
+         else if (main.parity_II == 1)
+         {
+            hulp_parity = "odd";
+         }
+         else if (main.parity_II == 2)
+         {
+            hulp_parity = "even";
+         }               
+              
+         System.out.println("[THERMOMETER] opening with " + String.valueOf(main.bits_per_second_II) + " " + hulp_parity + " " + String.valueOf(main.data_bits_II) + " " + String.valueOf(main.stop_bits_II) + " " + main.defaultPort_descriptive_II);
+         serialPort_form.setComPortParameters(main.bits_per_second_II, main.data_bits_II, main.stop_bits_II, main.parity_II);
+         serialPort_form.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+   
+         // STOP
+         for (int k = 0; k < 5; k++)                // NB more times sending "s" absolutely necessary (see also HMP155 user's guide; paragraph Serial Line Communication)
+         {
+            System.out.println("[THERMOMETER] Writing \"" + "S" + "\" to " + main.defaultPort_descriptive_II);
+            String messageString_stop = "s\r";
+            byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+            serialPort_form.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+   
+            try
+            {
+               //Thread.sleep(2000);       // gaat eigenlijk ook altijd goed bij 1000
+               Thread.sleep(1000);
+            }
+            catch (InterruptedException ex)
+            {
+               System.out.println("[THERMOMETER] InterruptedException [function: RS232_Format_Thermometer_Output()] " + ex);
+            }  
+         } // for (int k = 0; k < 5; k++)
+         
+         // ECHO OFF
+         System.out.println("[THERMOMETER] Writing \"" + "ECHO OFF" + "\" to " + main.defaultPort_descriptive_II);
+         String messageString_echo = "ECHO OFF\r";
+         byte[] bytes_message_echo = messageString_echo.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+         serialPort_form.writeBytes(bytes_message_echo, bytes_message_echo.length);       // Write data to port 
+         
+         // FORM
+         System.out.println("[THERMOMETER] Writing \"" + "form 6.1 Ta \" \" 6.1 Tw \" \" 6.1 Td \" \" 6.1 RH \" \" #r #n" + "\" to " + main.defaultPort_descriptive_II);
+         String messageString_format = "form 6.1 ta \" \" 6.1 tw \" \" 6.1 td \" \" 6.1 rh \" \" #r #n\r";
+         byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+         serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
+
+         // NB INTV 60 s niet voor het form commando uitvoeren!!!!!!!
+         System.out.println("[THERMOMETER] Writing \"" + "INTV 60 s" + "\" to " + main.defaultPort_descriptive_II);
+         String messageString_int = "intv 60 s\r";
+         byte[] bytes_message_int = messageString_int.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+         serialPort_form.writeBytes(bytes_message_int, bytes_message_int.length);       // Write data to port 
+
+         // UNIT m (metric)
+         System.out.println("[THERMOMETER] Writing \"" + "unit m" + "\" to " + main.defaultPort_descriptive_II);
+         String messageString_unit = "unit m\r";
+         byte[] bytes_message_unit = messageString_unit.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+         serialPort_form.writeBytes(bytes_message_unit, bytes_message_unit.length);       // Write data to port 
+         
+         // RUN
+         System.out.println("[THERMOMETER] Writing \"" + "R" + "\" to " + main.defaultPort_descriptive_II);
+         String messageString_cont_R = "r\r";
+         byte[] bytes_message_cont_R = messageString_cont_R.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+         serialPort_form.writeBytes(bytes_message_cont_R, bytes_message_cont_R.length);       // Write data to port 
+
+         try
+         {
+            Thread.sleep(1000);       // gaat eigenlijk ook altijd goed bij 1000
+         }
+         catch (InterruptedException ex)
+         {
+            System.out.println("[THERMOMETER] InterruptedException [function: RS232_Format_Thermometer_Output()] " + ex);
+         }
+      
+         // close the serial port
+         serialPort_form.closePort();
+         
+      } // if (serialPort_form.isOpen())
+      else        
+      {
+         System.out.println("[THERMOMETER] Couldn't open (for formatting) serial port: " + main.defaultPort_descriptive_II);
+      }  
+      
+   } // if (main.defaultPort_II != null)
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_Format_Barometer_Output_3()
+  {
+    
+      // NB Indien Vaisala barometer in POLL mode dan moeilijk deze hier uit te halen (zie manual aantekeningen)
+      //    (open 0 <cr> -> smode run <cr> -> reset <cr>)
+      //    Dit moet dan met putty of hyperterminal o.i.d. (in principe zal een barometer nooit in poll mode staan)
+
+      SerialPort serialPort_form                     = null;
+      String hulp_parity                             = "";          // only for message writing in java console
+
+
+      if (main.defaultPort == null)
+      {
+	      String info = "[BAROMETER] selected serial port [function: Format_Barometer_Output_3()] " + main.defaultPort_descriptive + " not found";
+         System.out.println(info);
+         // JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+	   }
+
+
+      if (main.defaultPort != null)
+      {
+         serialPort_form = SerialPort.getCommPort(main.defaultPort);//serialPort_form = new SerialPort(main.defaultPort);
+         serialPort_form.openPort(); 
+         if (serialPort_form.isOpen())
+         {
+            if (main.parity == 0)
+            {
+               hulp_parity = "none";
+            }
+            else if (main.parity == 1)
+            {
+               hulp_parity = "odd";
+            }
+            else if (main.parity == 2)
+            {
+               hulp_parity = "even";
+            }               
+              
+            System.out.println("[BAROMETER] opening with " + String.valueOf(main.bits_per_second) + " " + hulp_parity + " " + String.valueOf(main.data_bits) + " " + String.valueOf(main.stop_bits) + " " + main.defaultPort_descriptive);
+            serialPort_form.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+            serialPort_form.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
+             
+            if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)     // PTB220 or PRB330
+            {   
+               //System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + serialPort_form.getDescriptivePortName());
+               System.out.println("[BAROMETER] Writing \"" + "S" + "\" to " + main.defaultPort_descriptive);
+               String messageString_stop = "S\r";
+               byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+                  
+               // NB reset niet nodig (heeft geen effect)
+
+            } // if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2) 
+            else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)   // Mintaka Duo or Mintaka Star USB
+            {
+               System.out.println("[BAROMETER] Writing \"" + "asq" + "\" to " + main.defaultPort_descriptive);
+               String messageString_stop = "asq\r";                                    // asq = terminate autosampling
+               byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_stop, bytes_message_stop.length);       // Write data to port 
+            } // else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)            
+            
+            try
+            {
+               Thread.sleep(2000);       // gaat eigenlijk ook altijd goed bij 1000
+            }
+            catch (InterruptedException ex)
+            {
+               System.out.println("[BAROMETER] InterruptedException [function: RS232_Format_Barometer_Output_3()] " + ex);
+            }            
+            
+            // flush ???
+            
+            if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))    // PTB220 or PTB330
+            {
+               System.out.println("[BAROMETER] Writing \"" + "ECHO OFF" + "\" to " + main.defaultPort_descriptive);
+               String messageString_echo = "ECHO OFF\r";
+               byte[] bytes_message_echo = messageString_echo.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_echo, bytes_message_echo.length);       // Write data to port 
+            }           
+            
+            if (main.RS232_connection_mode == 1)             // PTB220
+            {
+               // NB LET OP DE TE VERZENDEN FORMAT STRING NAAR PTB220 MAG NIET TE LANG ZIJN (ongeveer 50 char -100 bytes-)!!!!
+               System.out.println("[BAROMETER] Writing \"" + "form 4.2 P \" \" 4.2 HCP \" \" 3.1 TREND \" \" A \" \" #r #n" + "\" to " + main.defaultPort_descriptive);
+               String messageString_format2 = "form 4.2 P \" \" 4.2 HCP \" \" 3.1 TREND \" \" A \" \" #r #n\r";
+               //String messageString_format2 = "form P \" \" P \" \" P \" \" P \" \" P \" \" P \" \" P \" \" #r #n\r";
+               //String messageString_format2 = "form \"0123456789 0123456789 01234567 \" P \" \" #r #n\r"; // deze gaat noog net goed
+               byte[] bytes_message_format2 = messageString_format2.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format2, bytes_message_format2.length);       // Write data to port 
+            } // if (barometer_type.equals(PTB220))
+            else if (main.RS232_connection_mode == 2)       // PTB330
+            {
+               // test voor bxpm171 - bxpm80
+               //String messageString_format = "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" DIT IS EEN TEST 1234567890 1234567890 1234567890 wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ X\r\n";
+               //String messageString_format = "123456789";
+               System.out.println("[BAROMETER] Writing \"" + "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" #r #n" + "\" to " + main.defaultPort_descriptive);
+               String messageString_format = "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" #r #n\r";
+               byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
+               
+            } //  else if (barometer_type.equals(PTB330_USER_PORT) || etc
+            else if (main.RS232_connection_mode == 4)       // Mintaka Duo
+            {            
+               System.out.println("[BAROMETER] Writing \"" + "as 60 TurboWin" + "\" to " + main.defaultPort_descriptive);
+               String messageString_format = "as 60 TurboWin\r\n";
+               //serialPort_form.writeBytes(messageString_format.getBytes());                    // Write data to port  
+               byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
+
+            } // else if (main.RS232_connection_mode == 4) 
+            
+            else if (main.RS232_connection_mode == 5)       // Mintaka Star USB
+            {            
+               System.out.println("[BAROMETER] Writing \"" + "as 60 TurboWinG" + "\" to " + main.defaultPort_descriptive);
+               String messageString_format = "as 60 TurboWinG\r\n";                            // note: turbowing !!
+               //serialPort_form.writeBytes(messageString_format.getBytes());                    // Write data to port  
+               byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
+
+            } // else if (main.RS232_connection_mode == 5) 
+            else if (main.RS232_connection_mode == 7)       // Mintaka Star + StarX USB
+            {            
+               System.out.println("[BAROMETER] Writing \"" + "as 60 TURBOWINH" + "\" to " + main.defaultPort_descriptive);
+               String messageString_format = "as 60 TURBOWINH\r\n";                            // note: turbowinH !!
+               //serialPort_form.writeBytes(messageString_format.getBytes());                    // Write data to port  
+               byte[] bytes_message_format = messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_format, bytes_message_format.length);       // Write data to port 
+
+            } // else if (main.RS232_connection_mode == 7) 
+            
+            else
+            {
+               System.out.println("[BAROMETER] barometer type unknown [function: RS232_Format_Barometer_Output()_3]");
+            }
+            
+            if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))         // PTB220 or PTB330
+            {   
+               // NB INTV 60 s niet voor het form commando uitvoeren!!!!!!!
+               System.out.println("[BAROMETER] Writing \"" + "INTV 60 s" + "\" to " + main.defaultPort_descriptive);
+               String messageString_int = "INTV 60 s\r";
+               byte[] bytes_message_int = messageString_int.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_int, bytes_message_int.length);       // Write data to port 
+
+               //flush??
+            } // if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))    // PTB220 or PTB330
+            
+            if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))    // PTB220 or PTB330
+            {   
+               System.out.println("[BAROMETER] Writing \"" + "R" + "\" to " + main.defaultPort_descriptive);
+               String messageString_cont_R = "R\r";
+               byte[] bytes_message_cont_R = messageString_cont_R.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+               serialPort_form.writeBytes(bytes_message_cont_R, bytes_message_cont_R.length);       // Write data to port 
+
+               // flush ??
+            } // if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))     // PTB220 or PTB330
+            
+            try
+            {
+               Thread.sleep(1000);       // gaat eigenlijk ook altijd goed bij 1000
+            }
+            catch (InterruptedException ex)
+            {
+               System.out.println("[BAROMETER] InterruptedException [function: Format_Barometer_Output()] " + ex);
+            }            
+            
+            // close the serial port
+            serialPort_form.closePort();
+            
+         } // if (serialPort_form.isOpen())
+         else        
+         {
+            //System.out.println("[BAROMETER] Function: RS232_Format_Barometer_Output_3() " + ex);
+            System.out.println("[BAROMETER] Couldn't open (for formatting) serial port:  " + main.defaultPort_descriptive);
+         }         
+         
+      } // if (defaultPort != null)
+
+   }
+
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS422_init_new_aws_data_received_check_timer()
+{
+   /////// NB AWS (EUCAWS and OMC-140) only (not for APR ////////
+   //
+   // called from: - RS422_initComponents() [main_RS232_RS422.java]
+   //              - Ethernet_initComponents() [main_RS232_RS422.java]
+   
+   ActionListener check_new_data_action = new ActionListener()
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+			//System.out.println("+++ System.currentTimeMillis() = " + System.currentTimeMillis());
+			//System.out.println("+++ last_new_data_received_TimeMillis = " + last_new_data_received_TimeMillis);
+			//System.out.println("+++ System.currentTimeMillis() - last_new_data_received_TimeMillis = " + (System.currentTimeMillis() - last_new_data_received_TimeMillis));
+			
+			
+         // NB currentTimeMillis(): returns the difference,in milliseconds, between the current system time and midnight, January 1, 1970 UTC
+         // NB last_new_data_received_TimeMillis: returns the difference,in milliseconds between the last aws data receipt system time and midnight, January 1, 1970 UTC.
+         if ((System.currentTimeMillis() - last_new_data_received_TimeMillis) > MAX_AGE_AWS_DATA)     // MAX_AGE_AWS_DATA e.g. 30000 msec (5 minutes)
+         {
+            // NB see function: RS422_initComponents() [main_RS232_RS422.java] for setting of var "last_new_data_received_TimeMillis"
+            
+            // gray meteo parameters data on main screen
+				
+				
+				//System.out.println("+++ System.currentTimeMillis() - last_new_data_received_TimeMillis) > MAX_AGE_AWS_DATA");
+            
+            
+            // TEST
+            //jTextField3.setForeground(main.input_color_from_aws);
+            
+            // ONDERSTAANDE FUNCTIES AANPASSEN VOOT GRAY
+            // display aws data values on main screen
+            main.displayed_aws_data_obsolate = true;                              // for DASHBOARD
+            
+            main.date_time_fields_update();
+            main.position_fields_update();
+            main.barometer_fields_update();   
+            main.barograph_fields_update();
+            main.temperatures_fields_update();
+            main.wind_fields_update();
+            
+            // OOK INDIVIDUELE meteo parameter (bv wind) INVUL SCHERMEN GRAY MAKEN ??????
+            
+              
+            // VOT (display on on main screen)
+            //main.jTextField4.setForeground(Color.GRAY);
+            main.jTextField4.setForeground(main.obsolate_color_data_from_aws);
+            main.jTextField4.setText("AWS data obsolete");
+            main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+            
+            // NIET VERGETEN WEER AANTE ZETTEN ALS DATA WEER WORDT ONTVANGEN
+            // OF GAAT AUTOMATISCH WEER GOED? (via VOT check)
+            // see: function: RS422_Read_AWS_Sensor_Data_For_Display()
+            // main.jMenuItem46.setEnabled(true);                  // Obs to AWS
+            
+            // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten TurboWin+)
+            
+            
+            // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten TurboWin+)
+          
+            // message obsolete data only the first time
+            if (main.obsolate_data_flag == false)
+            {
+               String message = "[AWS] sensor data obsolete (lost connection?)";
+               main.log_turbowin_system_message(message);
+            } // if (main.obsolate_data_flag == false)
+            else // data obsolete but after > 5 minutes
+            {
+               
+               if (main.RS232_connection_mode == 10)   // OMC-140 ethernet
+               {
+                  // do nothing port 0.0.0.0:60004 will alway stay open as long as TurboWin+/Web is running (Windows power shell command "netstat -aon")
+/*                  
+                  // NB Ethernet listener restart every hour
+                  cal_Ethernet_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+                  cal_Ethernet_system_date_time.getTime();                                               // now effective
+                  int Ethernet_system_minute_local = cal_Ethernet_system_date_time.get(Calendar.MINUTE);
+                  
+                  // cancel Ethernet listener thread
+                  if (Ethernet_system_minute_local == CANCEL_AWS_THREAD)           
+                  {
+                     try
+                     {
+                        // NB to prevent after every restart of the thread an extra UDP port will be opened 0.0.0.0:60004 (Windows power shell command "netstat -aon")
+                        //    and after 6 - 10 times opening a new 60004 UDP port there will be no comm .at all
+                        socket_udp.leaveGroup(group_udp);
+                     }
+                     catch (IOException ex)
+                     {
+                        // do nothing
+                     }
+                     socket_udp.close();
+                     Ethernet_worker.cancel(true);
+                     //Ethernet_worker = null;     // NB null do not prevent a Bindexception,; 
+                     // NB2 a Bindexception is not an issue because it means TurboWin+ is still bind to (UDP)Ethernet, 
+                     //     it would be an issue if it was bind to onother process/application
+                     //
+                     // NB3 with ip multicast it seems adifferent, cannot bind will not occure but every time a new UDP port will be opened
+                     //     and after -8 times there is no more communication at all
+                     //      therefor the socket_udp.leaveGroup(group_udp) and socket_udp.close()
+                     //
+                     String message = "[AWS] sensor data listener thread cancelling";
+                     main.log_turbowin_system_message(message);
+                  } 
+                  
+                  // restart Ethernet listener thread
+                  if (Ethernet_system_minute_local == START_AWS_THREAD)            
+                  {
+                     Ethernet_worker = new Ethernet_Class_Receive_UDP();
+                     Ethernet_worker.execute();
+                     String message = "[AWS] sensor data listener thread restarting";
+                     main.log_turbowin_system_message(message);
+                  } // if (Ethernet_system_minute_local == START_AWS_THREAD)  
+*/                  
+               } //  if (main.RS232_connection_mode == 10) 
+               else if ((main.RS232_connection_mode == 3) || (main.RS232_connection_mode == 9) || (main.RS232_connection_mode == 11)) // EUCAWS serial or OMC-140 serial or AMOS2X serial (but no OMC-140 ethernet)
+               {
+               
+                  // NB RS422 listener restart every hour
+                  cal_RS422_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+                  cal_RS422_system_date_time.getTime();                                                // now effective
+                  int RS422_system_minute_local = cal_RS422_system_date_time.get(Calendar.MINUTE);
+                  
+                  // cancel RS422 listener thread
+                  if (RS422_system_minute_local == CANCEL_AWS_THREAD)           
+                  {
+                     RS422_worker.cancel(true);
+                     String message = "[AWS] sensor data listener thread cancelling";
+                     main.log_turbowin_system_message(message);
+                  } 
+                  
+                  // restart RS422 listener thread
+                  if (RS422_system_minute_local == START_AWS_THREAD) 
+                  {
+                     // NB in case of power failure the com port of connected AWS is still ok (still open) but listener must be restarted
+                     //    so we cannot use Function: RS422_Check_Serial_Ports() because then the present default port, which is ok, will be reported as occupied!
+                     //    so first Function: RS422_Check_Default_Serial_Port(), see below
+                     RS422_Check_Default_Serial_Port(); // in this function:: main.defaultPort will be set to null if present default comm port was not valid anymore
+                     
+                     if (main.defaultPort == null)  
+                     {
+                        // so default port not valid anymore (most likely there was no power break) now first checking/looking for the correct com port
+                        // checking/looking for the correct com port
+                        int completed_checks_serial_ports = 0;
+                        main.defaultPort = null;                // reset !
+                        while ((main.defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_AWS_PORT_CHECKS))
+                        {
+                           RS422_Check_Serial_Ports(completed_checks_serial_ports);
+                           completed_checks_serial_ports++;
+                        }
+                  
+                        if (main.defaultPort == null)
+                        {
+                           String message = "[AWS] no AWS found (defaultPort = null); listener thread not restarted";
+                           main.log_turbowin_system_message(message);
+                        }
+                     } // if (main.defaultPort == null)
+               
+                      if (main.defaultPort != null)                     
+                     {
+                        main.serialPort  = SerialPort.getCommPort(main.defaultPort); 
+                     
+                        // restart RS422 listener thread
+                        RS422_worker = new RS422_V3_Class_Receive_Sensor_Data();//RS422_worker = new RS422_Class_Receive_Sensor_Data();
+                        RS422_worker.execute();
+                        String message = "[AWS] sensor data listener thread restarting";
+                        main.log_turbowin_system_message(message);
+                     } // if (main.defaultPort != null) 
+                  
+                  } // if (RS422_system_minute_local == START_AWS_THREAD) 
+                  
+               } // else if ((main.RS232_connection_mode == 3) || (main.RS232_connection_mode == 9) || (main.RS232_connection_mode == 11))
+            } // data obsolete but after > 5 minutes
+            
+            main.obsolate_data_flag = true;            
+            
+         } // if ((System.currentTimeMillis() - last_new_data_received_TimeMillis) > MAX_AGE_AWS_DATA)
+         else // so aws data NOT obsolate (data < 5 minutes old)
+         {
+            main.displayed_aws_data_obsolate = false;                          // for DASHBOARD
+            
+            // NB in this case: in function: RS422_Read_AWS_Sensor_Data_For_Display() the fields on the main screen will be updated
+            // NB main.date_time_fields_update() etc. and VOT will be updated there
+            
+            // reset message if before was written data obsolate
+            // NB probably the message below will never be written because disconnected serial connection must be reconnected by a program restart (contraru to WiFi connection)
+            if (main.obsolate_data_flag)
+            {
+               main.jTextField4.setForeground(Color.BLACK);                   // reset to black (default) color
+               String message = "[AWS] start receiving sensor data again";
+               main.log_turbowin_system_message(message);
+            } // if (main.obsolate_data_flag)
+            
+            main.obsolate_data_flag = false;
+            
+            // to depress "AWS data obsolete" on status line in the case of a connected AWS without VOT parameter (eg OMC-140)
+            if ((main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10) && (main.AWSR == false))  // OMC-140 serial or internet but not if AWSR because then next upload is set to blank every time
+            {
+               main.jTextField4.setText("");
+            }
+         } //else
+         
+         // initialisation
+         //last_new_data_received_TimeMillis = 0;
+
+         // for updating message "visual data adding is yes/no advised" (jLabel39)
+         if (main.AWSR)  // NOT FOR EUCAWS
+         {
+            if (main.obsolate_data_flag)
+            {
+               main.jLabel39.setText("");
+            }
+            else
+            {
+               cal_AWSR_system_dt = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+               cal_AWSR_system_dt.getTime();                                               // now effective
+               int AWSR_system_hour = cal_AWSR_system_dt.get(Calendar.HOUR_OF_DAY);        // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+               int AWSR_system_minutes = cal_AWSR_system_dt.get(Calendar.MINUTE);
+            
+               if ( ((AWSR_system_hour + 1) % Integer.valueOf(main.AWSR_reporting_interval)) == 0)    
+               {
+                  //System.out.println("+++ TEST GEPASSEERD 2"); 
+                  // NB NB currentTimeMillis(): returns the difference,in milliseconds, between the current system time and midnight, January 1, 1970 UTC
+                  // NB cal_AWSR_system_date_time.computeTime(): Converts calendar field values to the time value (millisecond offset from the Epoch).( Epoch, January 1, 1970 00:00:00.000 GMT (Gregorian))
+           
+                  //System.out.println("+++ System.currentTimeMillis() = " + System.currentTimeMillis());
+                  //System.out.println("+++ cal_AWSR_system_dt.getTimeInMillis() = " + cal_AWSR_system_dt.getTimeInMillis());
+                  //System.out.println("+++  AWSR_system_minutes = " +  AWSR_system_minutes);
+               
+                  //long AWSR_minutes_for_upload = (System.currentTimeMillis() - cal_AWSR_system_dt.getTimeInMillis()) / (1000 * 60);
+                  int AWSR_minutes_for_upload = 60 - AWSR_system_minutes;
+                  if (AWSR_minutes_for_upload <= 30)
+                  {
+                     // less the 30 minutes (= 1800000 msec) before next AWSR upload
+                     // NB "-1" too be sure, thread is always behind
+                     main.jLabel39.setForeground(new Color(0,153,0));          // dark green
+                     main.jLabel39.setText("--- " + (AWSR_minutes_for_upload -1) + " minutes to go before next automated upload, you can now add observation data ---");
+                  }
+                  else
+                  {
+                     main.jLabel39.setForeground(Color.RED);
+                     main.jLabel39.setText("--- more than 30 minutes to go before next automated upload, please do not add observation data --- ");
+                  }
+               } // if ( ((AWSR_system_hour + 1) % Integer.valueOf(main.AWSR_reporting_interval)) == 0)
+               else
+               {
+                  main.jLabel39.setForeground(Color.RED);
+                  main.jLabel39.setText("--- more than 30 minutes to go before next automated upload, please do not add observation data --- ");
+               } // else
+            } // no obsolete data
+         } // if (main.AWSR)
+
+         
+         // AWS (EUCAWS and OMC-140) clearing display and reseting core meteo parmaters 
+         //
+         cal_AWS_system_dt = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));        // system date time in UTC of this moment
+         cal_AWS_system_dt.getTime();                                                    // now effective
+         //int AWS_system_hour = cal_AWS_system_dt.get(Calendar.HOUR_OF_DAY);              // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+         int AWS_system_minutes = cal_AWS_system_dt.get(Calendar.MINUTE);
+         
+         // EUCAWS cleaning display + resetting core meteo parameters 
+         //
+         if (main.RS232_connection_mode == 3)                                            // EUCAWS serial
+         {
+            // NB in EUCAWS mode TurboWin+ will not upload/send the data itself so no autmatically cleaning/resetting of the display/parameters 
+            //    as long as the user do not select: "Output -> obs to AWS" so this automatic reset at every whole hour to be sure
+            //
+            // reset all meteo parameters at exactly 1 minute past the whole hour (ps 1 minute to be safe, maybe at 0 minutes it is also ok)
+            if (AWS_system_minutes == 1)
+            {
+               main_RS232_RS422.RS422_initialise_AWS_Sensor_Data_For_Display();          // must be called before: Reset_all_meteo_parameters();
+               main.Reset_all_meteo_parameters();
+            }
+         } // if (main.RS232_connection_mode == 3)  
+
+         
+         // AWS (EUCAWS or OMC-140): for system invoked pop-up (reminder visual obs) screen and system 'delete' pop-up screen 
+         //
+         
+         if (main.pop_up_screen)     // EUCAWS or OMC-140
+         {
+            Activate_Pop_Up_Screen_APR_AWS();                                                    // pop-up screen reminder add visual obs
+         }
+
+      } // public void actionPerformed(ActionEvent e)
+   };
+   
+   /* main loop for checking when new AWS data arrives */
+   check_new_data_timer_delay = DELAY_NEW_DATA_CHECK_LOOP;                              // delay between two new aws data checks (e.g. 1 minute)  
+   check_new_data_timer = new Timer(check_new_data_timer_delay, check_new_data_action);
+   check_new_data_timer.setRepeats(true);                                               // false = only one action
+   check_new_data_timer.setInitialDelay(INITIAL_DELAY_NEW_DATA_CHECK_LOOP);             // time in millisec to wait after timer is started to fire first event
+   check_new_data_timer.setCoalesce(true);                                              // to be sure
+   check_new_data_timer.start();   
+}        
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS422_initComponents()
+{
+   /////// NB EUCAWS serial or OMC-140 serial only ////////
+   //
+   // called from specific_connection_initComponents() [main.java]
+   //
+   
+   
+   
+   // http://www.snip2code.com/Snippet/1044/Java--read-from-USB-using-RXTX-library
+   // FOR LINUX:
+   //#==================================================================#
+   // WARNING! - DO NOT SET THE FOLLOWING PROPERTY WITH RXTX LIBRARY, IT
+   // CAUSES A PROGRAM LOCK:
+   // serialPort.notifyOnOutputEmpty(true);
+   //#==================================================================#     
+   
+   
+   
+   // start timer for checking every 1 minute if there is new AWS meteo sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+   //last_new_data_received_TimeMillis = 0;
+   //RS422_init_new_aws_data_received_check_timer();
+      
+   // for dispaying VOT (Visual Observation Trigger) line in bottom text field on main screen
+   color_dark_green = new Color(76, 153, 0);
+   
+   // for sensor data files (in the file name itself) (note also used in RS232_view.java)
+   main.sdf3 = new SimpleDateFormat("yyyyMMddHH");                                  // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+   
+   // for date-time strings/remarks in the sensor data records (note also used in RS232_view.java)
+   main.sdf4 = new SimpleDateFormat("yyyyMMddHHmm");                                // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+   // for function: RS422_write_sensor_data_to_file() and RS422_V3_write_sensor_data_to_file()
+   sdf7 = new SimpleDateFormat("ss");                                           
+   sdf7.setTimeZone(TimeZone.getTimeZone("UTC"));
+   
+   
+   // dir for storage sensor data
+   //if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2)
+   if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0))
+   {
+      String info = "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+   }
+      
+   // checking/looking for the correct com port
+   int completed_checks_serial_ports = 0;
+   while ((main.defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_AWS_PORT_CHECKS))
+   {
+      RS422_Check_Serial_Ports(completed_checks_serial_ports);
+      completed_checks_serial_ports++;
+   }
+   
+   // delete old sensor data files
+   main.log_turbowin_system_message("[GENERAL] deleting old (AWS) sensor data files");
+   RS232_Delete_Sensor_Data_Files();                                        // also used by RS422 (AWS)
+   
+
+   if (main.defaultPort != null)
+   {
+      // info text on (bottom) main screen 
+      main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received AWS data via serial communication: no data"); // application mode was set in initComponents2() [main.java]
+      
+      main.serialPort  = SerialPort.getCommPort(main.defaultPort);
+      
+      RS422_worker = new RS422_V3_Class_Receive_Sensor_Data();//RS422_worker = new RS422_Class_Receive_Sensor_Data();
+      RS422_worker.execute();
+   
+      String message = "[AWS] start listening";
+      main.log_turbowin_system_message(message);
+      
+      // set start-up sequence finished flag
+      //main.turbowin_start_up_sequence_finished = true;
+       
+      // start timer for checking every 1 minute if there is new AWS sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+      // NB invoking after: RS422_worker = new RS422_Class_Receive_Sensor_Data(); and RS422_worker.execute();
+      last_new_data_received_TimeMillis = 0;
+      RS422_init_new_aws_data_received_check_timer();
+   
+   } // if (main.defaultPort != null)
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private class RS422_Class_Receive_Sensor_Data extends SwingWorker<String, String>
+{
+   /////////////////// AWS only /////////////////
+   //
+   // called from: RS422_initComponents()
+   
+   //   new SwingWorker<String, String>()
+   //   {
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            main.serialPort.openPort(); 
+            if (main.serialPort.isOpen())
+            {
+               //main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
+               //main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               //main.serialPort.setFlowControlMode(main.flow_control);
+               main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+             
+               
+               // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
+               // Well, for example, we need to know what came some data, thus in the mask must have the
+               // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
+               // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
+               //int mask = SerialPort.MASK_RXCHAR;
+                  
+               // Set the prepared mask
+               //main.serialPort.setEventsMask(mask);                  
+                  
+		      } // if (serialPort.isOpen())
+            else        
+            {
+               System.out.println("+++ " + "[AWS] Couldn't open " +  main.serialPort.getDescriptivePortName());
+            }                       
+        
+            
+            if (main.serialPort.isOpen())
+            {
+               main.serialPort.addDataListener(new SerialPortDataListener() 
+               {
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
+                  {
+                     String ontvangen_SMD_string = "";
+                     
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                        return;
+                     
+                     //byte[] newData = new byte[main.serialPort.bytesAvailable()];
+                     //int numRead = main.serialPort.readBytes(newData, newData.length);
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.serialPort.bytesAvailable()];
+                        numRead = main.serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                        numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }
+                     
+                     //ontvangen_SMD_string = main.serialPort.readString(event.getEventValue());
+                     if (numRead > 0)
+                     {
+                        ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                        //System.out.println("Read " + numRead + " bytes.");
+                     
+                        // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                        //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                        //
+                        // For example:
+                        //
+                        // publish("1");
+                        // publish("2", "3");
+                        // publish("4", "5", "6");
+                        //
+                        // might result in: process("1", "2", "3", "4", "5", "6")
+                        //
+                        publish(new String[] { ontvangen_SMD_string });
+                     } // if (numRead > 0)
+                     else if (numRead == -1)
+                     {
+                        publish(new String[] { "interruption or excecution error\n" });
+                     }
+                  } // public void serialEvent(SerialPortEvent event)
+               });              
+            } // if (serialPort.isOpen())
+            
+            return null;
+
+         } // protected Void doInBackground() throws Exception
+
+         @Override
+         protected void process(List<String> data)
+         {
+            // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+            for (String ontvangen_SMD_string: data)
+            {
+               // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+               //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+               main.total_string = ontvangen_SMD_string;
+
+               // NB Onderstaande om i.p.v. elke minuut de data per 5 minuten op te slaan
+               //    werkt hier niet (door de 'brokken' record maar bij AWS zou het wel een mogelijkheid kunnen zijn
+               //if (total_string.indexOf("3$") != -1)
+               //{
+               //   String minuten = sdf4.format(new Date()).substring(10, 10 + 2);  // sdf4: yyyyMMddHHmm
+               //   int int_minuten = Integer.parseInt(minuten.trim());
+               //
+               //   if (int_minuten % 5 == 0   );
+               //
+               System.out.print(main.total_string);
+               //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+
+               // error logging
+               if (main.total_string.indexOf("error") != -1)
+               {
+                  String message = "[AWS] " + "interruption or execution exception"; 
+                  main.log_turbowin_system_message(message);
+                  
+                  //main.obsolate_data_flag = true;  // see also Function RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]                     
+                  
+               } //  if (main.total_string.indexOf("error") != -1)              
+               
+               
+               // write sensor data to sensor log file
+               RS422_write_sensor_data_to_file();
+                  
+               // only if the last piece of a record string was received update TurboWin+ display and check for presence parameters (if parameter present disable the manual input on TurboWin+ input form)
+               if (main.total_string.indexOf("\n") != -1)
+               {
+                  // read the AWS data which was saved before by TurboWin+ from a sensor data file
+                  RS422_Read_AWS_Sensor_Data_For_Display();  
+                  
+                  // update main screen with application name + mode and date time last received data (single info line botton screen)
+                  String info = "";
+                  if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) // test_rcord was set in RS422_write_sensor_data_to_file()
+                  {
+                     info = "no data";
+                  } 
+                  else 
+                  {
+                     info = main_RS232_RS422.test_record;
+                  }     
+                  main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received AWS data via serial communication: " + info);
+                     
+                  // for checking that the displayed data is not obsolete (i.e. not updated last 5 minutes)
+                  last_new_data_received_TimeMillis = System.currentTimeMillis(); // see also Function: RS422_init_new_aws_data_received_check_timer() [main_RS232_422.java]
+               } 
+               // update the date and time on the main screen (and the global date time var's)
+               // NB if during start up the date and time displayed in the pupup message was not comfired by the user
+               //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+            } // for (String ontvangen_string : data)
+         }
+     // }.execute(); // new SwingWorker<String, String>()
+   
+}
+*/
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private class RS422_V2_Class_Receive_Sensor_Data extends SwingWorker<String, String>
+{
+   /////////////////// AWS only /////////////////
+   //
+   // called from: RS422_initComponents()
+   
+   //   new SwingWorker<String, String>()
+   //   {
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            main.serialPort.openPort(); 
+            if (main.serialPort.isOpen())
+            {
+               main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+                  
+		      } // if (serialPort.isOpen())
+            else        
+            {
+               System.out.println("+++ " + "[AWS] Couldn't open " +  main.serialPort.getDescriptivePortName());
+            }                       
+        
+            
+            if (main.serialPort.isOpen())
+            {
+               main.serialPort.addDataListener(new SerialPortDataListener() 
+               {
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  StringBuilder message = new StringBuilder();
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
+                  {
+                     String ontvangen_SMD_string = "";
+                     
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                     {
+                        return;
+                     }
+                     
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.serialPort.bytesAvailable()];
+                        numRead = main.serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                        numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }
+                     
+                     //ontvangen_SMD_string = main.serialPort.readString(event.getEventValue());
+                     if (numRead > 0)
+                     {
+                        for (byte b: newData)
+                        {   
+                           if ((b == '\r' || b == '\n') && message.length() > 0) 
+                           //if ((b == 13 || b == 10) && message.length() > 0)    // https://gist.github.com/GermanCoding/d250ca5012ec25ceffcc
+                           {   
+                              ontvangen_SMD_string = message.toString();
+                     
+                              // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                              //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                              //
+                              // For example:
+                              //
+                              // publish("1");
+                              // publish("2", "3");
+                              // publish("4", "5", "6");
+                              //
+                              // might result in: process("1", "2", "3", "4", "5", "6")
+                              //
+                              
+                              if (ontvangen_SMD_string.indexOf("$PEUMB") != -1)
+                              {   
+                                 publish(new String[] { ontvangen_SMD_string + "\n" });
+                                 message.setLength(0);
+                              }
+                              
+                           } // if ((b == '\r' || b == '\n') && message.length() > 0)
+                           else
+                           {
+                              message.append((char)b);
+                           }
+                        } // for (byte b: newData
+                     } // if (numRead > 0)
+                     else if (numRead == -1)
+                     {
+                        publish(new String[] { "interruption or excecution error\n" });
+                     }
+                  } // public void serialEvent(SerialPortEvent event)
+               });              
+            } // if (serialPort.isOpen())
+            
+            return null;
+
+         } // protected Void doInBackground() throws Exception
+
+         @Override
+         protected void process(List<String> data)
+         {
+            // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+            for (String ontvangen_SMD_string: data)
+            {
+               // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+               //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+               main.total_string = ontvangen_SMD_string;
+
+               // NB Onderstaande om i.p.v. elke minuut de data per 5 minuten op te slaan
+               //    werkt hier niet (door de 'brokken' record maar bij AWS zou het wel een mogelijkheid kunnen zijn
+               //if (total_string.indexOf("3$") != -1)
+               //{
+               //   String minuten = sdf4.format(new Date()).substring(10, 10 + 2);  // sdf4: yyyyMMddHHmm
+               //   int int_minuten = Integer.parseInt(minuten.trim());
+               //
+               //   if (int_minuten % 5 == 0   );
+               //
+               System.out.print(main.total_string);
+               //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+
+               // error logging
+               if (main.total_string.indexOf("error") != -1)
+               {
+                  String message = "[AWS] " + "interruption or execution exception"; 
+                  main.log_turbowin_system_message(message);
+                  
+                  //main.obsolate_data_flag = true;  // see also Function RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]                     
+                  
+               } //  if (main.total_string.indexOf("error") != -1)              
+               
+               
+               // write sensor data to sensor log file
+               RS422_write_sensor_data_to_file();
+                  
+               // only if the last piece of a record string was received update TurboWin+ display and check for presence parameters (if parameter present disable the manual input on TurboWin+ input form)
+               if (main.total_string.indexOf("\n") != -1)
+               {
+                  // read the AWS data which was saved before by TurboWin+ from a sensor data file
+                  RS422_Read_AWS_Sensor_Data_For_Display();  
+                  
+                  // update main screen with application name + mode and date time last received data (single info line botton screen)
+                  String info = "";
+                  if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) // test_rcord was set in RS422_write_sensor_data_to_file()
+                  {
+                     info = "no data";
+                  } 
+                  else 
+                  {
+                     info = main_RS232_RS422.test_record;
+                  }     
+                  main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received AWS data via serial communication: " + info);
+                     
+                  // for checking that the displayed data is not obsolete (i.e. not updated last 5 minutes)
+                  last_new_data_received_TimeMillis = System.currentTimeMillis(); // see also Function: RS422_init_new_aws_data_received_check_timer() [main_RS232_422.java]
+               } 
+               // update the date and time on the main screen (and the global date time var's)
+               // NB if during start up the date and time displayed in the pupup message was not comfired by the user
+               //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+            } // for (String ontvangen_string : data)
+         }
+     // }.execute(); // new SwingWorker<String, String>()
+   
+}
+*/
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private class RS422_V3_Class_Receive_Sensor_Data extends SwingWorker<String, String>
+{
+   /////////////////// AWS serial only /////////////////
+   //
+   // called from: RS422_initComponents()
+   
+   //   new SwingWorker<String, String>()
+   //   {
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            main.serialPort.openPort(); 
+            if (main.serialPort.isOpen())
+            {
+               //main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
+               //main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               //main.serialPort.setFlowControlMode(main.flow_control);
+               main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+             
+               
+               // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
+               // Well, for example, we need to know what came some data, thus in the mask must have the
+               // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
+               // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
+               //int mask = SerialPort.MASK_RXCHAR;
+                  
+               // Set the prepared mask
+               //main.serialPort.setEventsMask(mask);                  
+                  
+		      } // if (serialPort.isOpen())
+            else        
+            {
+               System.out.println("+++ " + "[AWS] Couldn't open " +  main.serialPort.getDescriptivePortName());
+            }                       
+        
+            
+            if (main.serialPort.isOpen())
+            {
+               main.serialPort.addDataListener(new SerialPortDataListener() 
+               {
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
+                  {
+                     String ontvangen_SMD_string = "";
+                     
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                        return;
+                     
+                     //byte[] newData = new byte[main.serialPort.bytesAvailable()];
+                     //int numRead = main.serialPort.readBytes(newData, newData.length);
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.serialPort.bytesAvailable()];
+                        numRead = main.serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                        numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }
+                     
+                     //ontvangen_SMD_string = main.serialPort.readString(event.getEventValue());
+                     if (numRead > 0)
+                     {
+                        ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                        //System.out.println("Read " + numRead + " bytes.");
+                     
+                        // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                        //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                        //
+                        // For example:
+                        //
+                        // publish("1");
+                        // publish("2", "3");
+                        // publish("4", "5", "6");
+                        //
+                        // might result in: process("1", "2", "3", "4", "5", "6")
+                        //
+                        publish(new String[] { ontvangen_SMD_string });
+                     } // if (numRead > 0)
+                     else if (numRead == -1)
+                     {
+                        publish(new String[] { "interruption or excecution error\n" });
+                     }
+                  } // public void serialEvent(SerialPortEvent event)
+               });              
+            } // if (serialPort.isOpen())
+            
+            return null;
+
+         } // protected Void doInBackground() throws Exception
+
+         @Override
+         protected void process(List<String> data)
+         {
+            // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+            for (String ontvangen_SMD_string: data)
+            {
+               // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+               //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+               main.total_string = ontvangen_SMD_string;
+
+               // NB Onderstaande om i.p.v. elke minuut de data per 5 minuten op te slaan
+               //    werkt hier niet (door de 'brokken' record maar bij AWS zou het wel een mogelijkheid kunnen zijn
+               //if (total_string.indexOf("3$") != -1)
+               //{
+               //   String minuten = sdf4.format(new Date()).substring(10, 10 + 2);  // sdf4: yyyyMMddHHmm
+               //   int int_minuten = Integer.parseInt(minuten.trim());
+               //
+               //   if (int_minuten % 5 == 0   );
+               //
+               System.out.print(main.total_string);
+               //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+
+               // error logging
+               if (main.total_string.indexOf("error") != -1)
+               {
+                  String message = "[AWS] " + "interruption or execution exception"; 
+                  main.log_turbowin_system_message(message);
+                  
+                  //main.obsolate_data_flag = true;  // see also Function RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]                     
+                  
+               } //  if (main.total_string.indexOf("error") != -1)              
+               
+               
+               // write sensor data to sensor log file
+               RS422_V3_write_sensor_data_to_file();
+/*                  
+               // only if the last piece of a record string was received update TurboWin+ display and check for presence parameters (if parameter present disable the manual input on TurboWin+ input form)
+               if (main.total_string.indexOf("\n") != -1)
+               {
+                  // read the AWS data which was saved before by TurboWin+ from a sensor data file
+                  RS422_Read_AWS_Sensor_Data_For_Display();  
+                  
+                  // update main screen with application name + mode and date time last received data (single info line botton screen)
+                  String info = "";
+                  if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) // test_rcord was set in RS422_write_sensor_data_to_file()
+                  {
+                     info = "no data";
+                  } 
+                  else 
+                  {
+                     info = main_RS232_RS422.test_record;
+                  }     
+                  main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received AWS data via serial communication: " + info);
+                     
+                  // for checking that the displayed data is not obsolete (i.e. not updated last 5 minutes)
+                  last_new_data_received_TimeMillis = System.currentTimeMillis(); // see also Function: RS422_init_new_aws_data_received_check_timer() [main_RS232_422.java]
+               } 
+*/             
+               // update the date and time on the main screen (and the global date time var's)
+               // NB if during start up the date and time displayed in the pupup message was not comfired by the user
+               //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+               if (main.use_system_date_time_for_updating == true)
+               {  
+                  set_datetime_while_collecting_sensor_data();
+               }
+            } // for (String ontvangen_string : data)
+         }
+     // }.execute(); // new SwingWorker<String, String>()
+   
+}
+
+
+
+
+  
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+public void RS422_initComponents()
+{
+   
+   /////// NB EUCAWS only ////////
+   
+   // http://www.snip2code.com/Snippet/1044/Java--read-from-USB-using-RXTX-library
+   // FOR LINUX:
+   //#==================================================================#
+   // WARNING! - DO NOT SET THE FOLLOWING PROPERTY WITH RXTX LIBRARY, IT
+   // CAUSES A PROGRAM LOCK:
+   // serialPort.notifyOnOutputEmpty(true);
+   //#==================================================================#     
+   
+   
+   // called from main.read_muffin() or main.lees_configuratie_regels()
+   //
+   
+   // start timer for checking every 1 minute if there is new AWS meteo sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+   last_new_data_received_TimeMillis = 0;
+   RS422_init_new_aws_data_received_check_timer();
+      
+   // for dispaying VOT (Visual Observation Trigger) line in bottom text field on main screen
+   color_dark_green = new Color(76, 153, 0);
+   
+   // for sensor data files (in the file name itself) (note also used in RS232_view.java)
+   main.sdf3 = new SimpleDateFormat("yyyyMMddHH");                                  // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+   
+   // for date-time strings/remarks in the sensor data records (note also used in RS232_view.java)
+   main.sdf4 = new SimpleDateFormat("yyyyMMddHHmm");                                // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+   // for function: RS422_write_sensor_data_to_file
+   sdf7 = new SimpleDateFormat("ss");                                           
+   sdf7.setTimeZone(TimeZone.getTimeZone("UTC"));
+   
+   
+   // dir for storage sensor data
+   //if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2)
+   if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0))
+   {
+      String info = "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+   }
+      
+   // checking/looking for the correct com port
+   int completed_checks_serial_ports = 0;
+   while ((main.defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_AWS_PORT_CHECKS))
+   {
+      RS422_Check_Serial_Ports(completed_checks_serial_ports);
+      completed_checks_serial_ports++;
+   }
+   
+   // delete old sensor data files
+   main.log_turbowin_system_message("[GENERAL] deleting old (AWS) sensor data files");
+   RS232_Delete_Sensor_Data_Files();                                        // also used by RS422 (AWS)
+   
+
+   if (main.defaultPort != null)
+   {
+      // info text on (bottom) main screen 
+      //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", receiving AWS sensor data via serial communication....."); // application mode was set in initComponents2() [main.java]
+      main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received AWS data via serial communication: no data"); // application mode was set in initComponents2() [main.java]
+      
+      //final SerialPort serialPort  = SerialPort.getCommPort(main.defaultPort);//main.serialPort = new SerialPort(main.defaultPort);
+      main.serialPort  = SerialPort.getCommPort(main.defaultPort); 
+
+      new SwingWorker<String, String>()
+      {
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            main.serialPort.openPort(); 
+            if (main.serialPort.isOpen())
+            {
+               //main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
+               //main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               //main.serialPort.setFlowControlMode(main.flow_control);
+               main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+               main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+             
+               
+               // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
+               // Well, for example, we need to know what came some data, thus in the mask must have the
+               // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
+               // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
+               //int mask = SerialPort.MASK_RXCHAR;
+                  
+               // Set the prepared mask
+               //main.serialPort.setEventsMask(mask);                  
+                  
+		      } // if (serialPort.isOpen())
+            else        
+            {
+               System.out.println("+++ " + "[AWS] Couldn't open " +  main.serialPort.getDescriptivePortName());
+            }                       
+        
+            
+            if (main.serialPort.isOpen())
+            {
+               main.serialPort.addDataListener(new SerialPortDataListener() 
+               {
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
+                  {
+                     String ontvangen_SMD_string = "";
+                     
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                        return;
+                     
+                     //byte[] newData = new byte[main.serialPort.bytesAvailable()];
+                     //int numRead = main.serialPort.readBytes(newData, newData.length);
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.serialPort.bytesAvailable()];
+                        numRead = main.serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                        numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }
+                     
+                     //ontvangen_SMD_string = main.serialPort.readString(event.getEventValue());
+                     if (numRead > 0)
+                     {
+                        ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                        //System.out.println("Read " + numRead + " bytes.");
+                     
+                        // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                        //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                        //
+                        // For example:
+                        //
+                        // publish("1");
+                        // publish("2", "3");
+                        // publish("4", "5", "6");
+                        //
+                        // might result in: process("1", "2", "3", "4", "5", "6")
+                        //
+                        publish(new String[] { ontvangen_SMD_string });
+                     } // if (numRead > 0)
+                     else if (numRead == -1)
+                     {
+                        publish(new String[] { "interruption or excecution error\n" });
+                     }
+                  } // public void serialEvent(SerialPortEvent event)
+               });              
+            } // if (serialPort.isOpen())
+            
+            return null;
+
+         } // protected Void doInBackground() throws Exception
+
+         @Override
+         protected void process(List<String> data)
+         {
+            // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+            for (String ontvangen_SMD_string: data)
+            {
+               // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+               //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+               main.total_string = ontvangen_SMD_string;
+
+               // NB Onderstaande om i.p.v. elke minuut de data per 5 minuten op te slaan
+               //    werkt hier niet (door de 'brokken' record maar bij AWS zou het wel een mogelijkheid kunnen zijn
+               //if (total_string.indexOf("3$") != -1)
+               //{
+               //   String minuten = sdf4.format(new Date()).substring(10, 10 + 2);  // sdf4: yyyyMMddHHmm
+               //   int int_minuten = Integer.parseInt(minuten.trim());
+               //
+               //   if (int_minuten % 5 == 0   );
+               //
+               System.out.print(main.total_string);
+               //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+
+               // error logging
+               if (main.total_string.indexOf("error") != -1)
+               {
+                  String message = "[AWS] " + "interruption or execution exception"; 
+                  main.log_turbowin_system_message(message);
+                  
+                  //main.obsolate_data_flag = true;  // see also Function RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]                     
+                  
+               } //  if (main.total_string.indexOf("error") != -1)              
+               
+               
+               // write sensor data to sensor log file
+               RS422_write_sensor_data_to_file();
+                  
+               // only if the last piece of a record string was received update TurboWin+ display and check for presence parameters (if parameter present disable the manual input on TurboWin+ input form)
+               if (main.total_string.indexOf("\n") != -1)
+               {
+                  // read the AWS data which was saved before by TurboWin+ from a sensor data file
+                  RS422_Read_AWS_Sensor_Data_For_Display();  
+                  
+                  // update main screen with application name + mode and date time last received data (single info line botton screen)
+                  String info = "";
+                  if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) // test_rcord was set in RS422_write_sensor_data_to_file()
+                  {
+                     info = "no data";
+                  } 
+                  else 
+                  {
+                     info = main_RS232_RS422.test_record;
+                  }     
+                  main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received AWS data via serial communication: " + info);
+                     
+                  // for checking that the displayed data is not obsolete (i.e. not updated last 5 minutes)
+                  last_new_data_received_TimeMillis = System.currentTimeMillis(); // see also Function: RS422_init_new_aws_data_received_check_timer() [main_RS232_422.java]
+               } 
+               // update the date and time on the main screen (and the global date time var's)
+               // NB if during start up the date and time displayed in the pupup message was not comfired by the user
+               //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+            } // for (String ontvangen_string : data)
+         }
+      }.execute(); // new SwingWorker<String, String>()
+
+   } // if (defaultPort != null)
+   
+} 
+*/   
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_ports)
+{
+   int teller                                        = -1;
+   //String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
+   SerialPort[] serial_ports_portid_array            = new SerialPort[main.NUMBER_COM_PORTS];
+   String info                                       = "[GPS] start up: no GPS found";
+   String hulp_parity                                = "";                     // for message writing on java console
+   
+
+   // initialisation
+   for (int i = 0; i < main.NUMBER_COM_PORTS; i++)
+   {
+      serial_ports_portid_array[i]                   = null;
+   }
+
+   // initialisation
+   GPS_defaultPort                                   = null;
+   GPS_defaultPort_descriptive                       = null;  
+   
+   
+   if (main.prefered_GPS_COM_port.equals("AUTOMATICALLY"))
+   {
+      // Temporary message box, (pop-up for only a short time) automatically disappears
+      //
+      if (completed_checks_serial_ports == 0)                  // only show this temporary meassagebox at first port-checking-round
+      {
+         final JOptionPane pane_begin = new JOptionPane("[GPS] checking serial com ports (this may take a while)", JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true);
+      }
+
+      // Get sorted array of serial ports in the system
+	   //main.portList = SerialPortList.getPortNames();
+      SerialPort[] serialPorts = SerialPort.getCommPorts();
+
+      //for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++) 
+      for (int portNo = 0; portNo < serialPorts.length; portNo++)   
+      {
+         teller++;
+         SerialPort serialPort_test = SerialPort.getCommPort(serialPorts[portNo].getSystemPortName()); 
+         serialPort_test.openPort();  
+         
+         if (serialPort_test.isOpen())
+         { 
+            serial_ports_portid_array[teller] = serialPorts[portNo];
+            serialPort_test.closePort();
+            String message = "[GPS] found serial com port (ok): " + serialPorts[portNo].getDescriptivePortName();
+            main.log_turbowin_system_message(message);
+         } // if (serialPort_test.isOpen()) 
+         else
+         {
+            serial_ports_portid_array[teller] = null;
+            System.out.println("[GPS] couldn't open: " + serialPorts[portNo].getDescriptivePortName());
+         } // else         
+         
+
+         // NB opening a port cannot be done in SwingWorker, so must be done here !!
+
+	   } //  for (int i = 0; i < main.portList.length && i < main.NUMBER_COM_PORTS; i++)
+
+
+      for (int i = 0; i < main.NUMBER_COM_PORTS; i++)                      // max number ports to open
+      {
+         if (serial_ports_portid_array[i] != null)                         // so serial port present (and also not in use)
+         {
+            //SerialPort serialPort_test = new SerialPort(serial_ports_portid_array[i]);
+            SerialPort serialPort_test = SerialPort.getCommPort(serial_ports_portid_array[i].getSystemPortName());
+            serialPort_test.openPort();  
+            if (serialPort_test.isOpen()) 
+		      //try
+            {
+               serialPort_test.openPort();                                 // Open serial port
+               
+               if (GPS_NMEA_0183_parity == 0)
+               {
+                  hulp_parity = "none";
+               }
+               else if (GPS_NMEA_0183_parity == 1)
+               {
+                  hulp_parity = "odd";
+               }
+               else if (GPS_NMEA_0183_parity == 2)
+               {
+                  hulp_parity = "even";
+               }               
+               
+               System.out.println("[GPS] trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits) + " " + serial_ports_portid_array[i].getDescriptivePortName() );
+               //serialPort_test.setParams(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               serialPort_test.setComPortParameters(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               serialPort_test.setFlowControl(GPS_NMEA_0183_flow_control); 
+               
+                  
+               try
+               {
+                  Thread.sleep(2000);                                      // 1000 seems too short on a few systems
+               }
+               catch (InterruptedException ex){ }                 
+               
+               //String response = serialPort_test.readString();   
+               //System.out.println(response);
+ 
+               // the response   
+               String response = "";
+               serialPort_test.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 2000, 0);
+               try 
+               {
+                  //while (true)
+                  //{
+                     byte[] readBuffer = new byte[1024];            // NB keep size 1024 because first part of incoming data is rubish
+                     //int numRead = serialPort_test.readBytes(readBuffer, readBuffer.length);
+                     serialPort_test.readBytes(readBuffer, readBuffer.length);
+                     //System.out.println("Read " + numRead + " bytes.");
+                     response = new String(readBuffer, StandardCharsets.UTF_8);
+                     System.out.println(response);
+                  //}
+               } 
+               catch (Exception e) 
+               { 
+                  System.out.println(e);
+               }              
+               
+               
+               if (response != null && (response.indexOf("$GP") >= 0 || response.indexOf("$GL") >= 0 || response.indexOf("$GN") >= 0))
+               {
+                  info = "[GPS] found GPS on port: " + serial_ports_portid_array[i].getDescriptivePortName();
+                  System.out.print("--- ");
+                  main.log_turbowin_system_message(info);
+                  System.out.println("");
+                  
+                  serialPort_test.closePort();
+                  GPS_defaultPort = serial_ports_portid_array[i].getSystemPortName();
+                  GPS_defaultPort_descriptive = serial_ports_portid_array[i].getDescriptivePortName();
+                  break;
+               }
+               else 
+               {
+                  serialPort_test.closePort();
+                  info = "[GPS] no GPS found";
+                  System.out.println("--- " + info);
+                  System.out.println("");
+               }    
+		      } // if (serialPort_test.isOpen())
+            //catch (SerialPortException ex)
+            else
+            {
+               //System.out.println(ex);
+               System.out.println("[GPS] couldn't open: " + serial_ports_portid_array[i].getDescriptivePortName());     
+            }
+         } // if (serial_ports_portid_array[i] != null)
+      } // for (int i = 0; i < NUMBER_COM_PORTS; i++)
+
+      if (GPS_defaultPort != null)
+      {
+         // temporary message box (GPS (NMEA 0183) was found) 
+         final JOptionPane pane_end = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_end_dialog = pane_end.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_end = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               //checking_ports_end_dialog.setVisible(false);
+               // or maybe you'll need dialog.dispose() instead?
+               checking_ports_end_dialog.dispose();
+            }
+         });
+         timer_end.setRepeats(false);
+         timer_end.start();
+         checking_ports_end_dialog.setVisible(true);
+      }
+      else
+      {
+         // No com port with an GPS (NMEA 0183) connected found
+         
+         // blocking message box (no GPS NMEA 0183 found); but only show message if it is the last port-checking-round 
+         if (completed_checks_serial_ports == MAX_COMPLETED_GPS_PORT_CHECKS - 1)
+         {
+            main.log_turbowin_system_message(info);
+            
+            if (main.obsolate_GPS_data_flag == false)  // eg at start up of this application
+            {
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+         }
+      } // else
+ 
+   } // if (main.prefered_COM_port.equals("AUTOMATICALLY"))
+   
+   else // fixed GPS com port set by user
+   {   
+      //SerialPort serialPort_test = new SerialPort(main.prefered_GPS_COM_port);
+      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_GPS_COM_port);
+      serialPort_test.openPort();
+         
+      if (serialPort_test.isOpen())   
+      {  
+         serialPort_test.closePort();
+         
+         // OK, no port problems encoutered
+         GPS_defaultPort = main.prefered_GPS_COM_port;
+         GPS_defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+         info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port available";
+         
+         // file logging
+         main.log_turbowin_system_message(info);
+         
+         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_begin = new Timer(1000, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               checking_ports_begin_dialog.dispose();
+            }
+         });
+         timer_begin.setRepeats(false);
+         timer_begin.start();
+         checking_ports_begin_dialog.setVisible(true);            
+      } // if (serialPort_test.isOpen())  
+      else 
+      {
+         // error opening predefined (by the user)port, reset/warnings
+         info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port not available";
+         main.log_turbowin_system_message(info);
+         
+         if (main.obsolate_GPS_data_flag == false)  // eg at start up of this application
+         {
+            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         }
+         //System.out.println(info);
+         GPS_defaultPort = null;
+         GPS_defaultPort_descriptive = null;
+      } // else   
+   }
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static boolean RS232_GPS_NMEA_0183_Date_Position_Parsing(String mode)
+{
+   // mode options: - MINUTE_UPDATE
+   //               - "APR"
+   //               - "MANUAL"
+   //
+   //
+   // GPS_date: 230394       Date - 23rd of March 1994
+   // GPS_time: 092751.000   time 09:27:51                                             // nb fix_time could also be: 092751
+   //
+   
+   // called from: 
+   //              - initSynopparameters() [myposition.java]
+   //              - RS232_GPS_NMEA_0183_init_new_data_received_check_timer() [main_RS232_RS422.java]
+   //              - WiFi_Class_Receive_UDP
+   //              - RS232_Class_Receive_Sensor_Data_II
+   //              - RS232_Class_Receive_Sensor_Data
+   // 
+   //
+   
+   boolean GPS_date_time_ok = true;
+   String message = "";
+   String message_fix_date_time = "";
+   String message_fix_position = "";
+   String mode_retrieval = "";
+   long store_fix_date_minutes = Long.MAX_VALUE;                     // for storage of date-time for calculation of obs course end speed
+   double store_fix_lat = Double.MAX_VALUE;                          // for storage of positions for calculation of obs course end speed
+   double store_fix_lon = Double.MAX_VALUE;                          // for storage of positions for calculation of obs course end speed
+   double double_fix_latitude_minutes = 0;                           // for storage of positions for calculation of obs course end speed
+   double double_fix_longitude_minutes = 0;                          // for storage of positions for calculation of obs course end speed
+   
+   //myposition.COG_APR = Double.MAX_VALUE;
+   //myposition.SOG_APR = Double.MAX_VALUE;
+   //myposition.COG_APR_wind = Double.MAX_VALUE;
+   //myposition.SOG_APR_wind = Double.MAX_VALUE;
+   
+   
+   
+   
+   
+   if ((GPS_date.length() != 6) || (GPS_time.length() < 6))
+   {
+      GPS_date_time_ok = false;
+      message = "[GPS] GPS date/time format not ok (GPS date = " + GPS_date + ", GPS time = " + GPS_time + ")";
+   }   
+      
+   if (GPS_date_time_ok)
+   {
+      SimpleDateFormat sdf9 = new SimpleDateFormat("yyyyMMddHHmm");                      // HH hour in day (0-23) note there is also hh (then also with am, pm)
+      sdf9.setTimeZone(TimeZone.getTimeZone("UTC"));
+   
+      String hulp_GPS_yyyyMMdd = "20" + GPS_date.substring(4) + GPS_date.substring(2,4) + GPS_date.substring(0,2);
+      String hulp_GPS_HHmm = GPS_time.substring(0, 4); 
+      String hulp_fix_datum_tijd_minuten = hulp_GPS_yyyyMMdd + hulp_GPS_HHmm;    // eg final result : 202303940927
+      Date hulp_fix_date = null;
+      try 
+      {
+         hulp_fix_date = sdf9.parse(hulp_fix_datum_tijd_minuten);
+         
+         long system_sec = System.currentTimeMillis();
+         long timeDiff = Math.abs(hulp_fix_date.getTime() - system_sec) / (60 * 1000); // timeDiff in minutes (NB getTime() always produces msec since unix epoch)
+
+         // for GPS data storage (for calculation of obs course end speed)
+         //
+         store_fix_date_minutes = hulp_fix_date.getTime() / (60 * 1000);                     // the number of minutes since January 1, 1970, 00:00:00 URC
+        
+         //System.out.println("+++ system_sec: " + system_sec); 
+         //System.out.println("+++ hulp_fix_date: " + hulp_fix_date); 
+         //System.out.println("+++ difference [minuten]: " + timeDiff); //differencs in min
+      
+         //String record_pressure_present = null;
+
+         if (timeDiff > TIMEDIFF_GPS_DATA)      // max 10 minutes difference GPS time <--> computer time
+         {
+            GPS_date_time_ok = false;
+            message = "[GPS] GPS date/time obsolete; > " + (int)TIMEDIFF_GPS_DATA + " minutes old compared with computer date/time (time difference = " + timeDiff + " minutes)";
+         }    
+      } // try
+      catch (ParseException ex) 
+      {
+         GPS_date_time_ok = false;
+         message = "[GPS] GPS date/time format not ok (" + ex + ")";
+      }
+   } // if (GPS_date_time_ok)
+   
+   
+   if (GPS_date_time_ok)
+   {   
+      //
+      /////////// date ///////////////
+      // 
+         
+      // year
+      String fix_year = "20" + GPS_date.substring(4);
+         
+      // month
+      String fix_month = GPS_date.substring(2,4);
+         
+      // day
+      String fix_day = GPS_date.substring(0,2);      
+         
+         
+      //
+      ////////// Time (eg 092751) /////////
+      // 
+         
+      // hour
+      String fix_hour = GPS_time.substring(0, 2);
+       
+      // minutes
+      String fix_minute = GPS_time.substring(2, 4);
+      
+      //System.out.println("GPS date/time (dd-mm-yyyy hh.mm UTC): " + fix_day + "-" + fix_month + "-" + fix_year + " " +  fix_hour + "." + fix_minute + " UTC");
+      message_fix_date_time = "GPS date/time (dd-mm-yyyy hh.mm UTC): " + fix_day + "-" + fix_month + "-" + fix_year + " " +  fix_hour + "." + fix_minute + " UTC";   
+         
+      //
+      //////// latitude (eg 4804.7041778) /////////
+      //
+       
+      // fill the public string latitude values
+      //
+      myposition.latitude_degrees = GPS_latitude.substring(0, 2);    // eg 4804.7041778 -> 48
+         
+      String fix_latitude_minutes = GPS_latitude.substring(2);       // only the minutes of the latitude eg 4804.7041778 -> 04.7041778
+      BigDecimal bd_lat_min = new BigDecimal(fix_latitude_minutes).setScale(0, RoundingMode.HALF_UP); // 0 decimals 
+      
+///////////////////
+      int hulp_bd_lat_min = bd_lat_min.intValue();                                  // BigDecimal to int
+      if (hulp_bd_lat_min == 60)
+      {
+         // set latitude minutes to 0
+         hulp_bd_lat_min = 0;
+         bd_lat_min = BigDecimal.valueOf(hulp_bd_lat_min);                           // int to BigDecimal
+               
+         // increment latitude degrees
+         int hulp_latitude_degrees = Integer.parseInt(myposition.latitude_degrees);  // String to int
+         hulp_latitude_degrees++;
+         myposition.latitude_degrees = Integer.toString(hulp_latitude_degrees);      // int to String (via Integer)
+      }   
+///////////////////      
+      myposition.latitude_minutes = bd_lat_min.toString();           // rounded minutes value  e.g. 41.9504 -> 42 minutes
+         
+      if (GPS_latitude_hemisphere.toUpperCase().equals("N"))
+      {
+         myposition.latitude_hemisphere = myposition.HEMISPHERE_NORTH;
+      }
+      else if (GPS_latitude_hemisphere.toUpperCase().equals("S"))
+      {
+         myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH;
+      }
+      else
+      {
+         myposition.latitude_hemisphere = "";
+         GPS_date_time_ok = false;
+      }  
+         
+      // fill the public int latitude values and storage latude minutes (high accurancy)
+      //
+      try 
+      {
+         myposition.int_latitude_degrees = Integer.parseInt(myposition.latitude_degrees);
+      }
+      catch (NumberFormatException e)
+      {
+         GPS_date_time_ok = false;
+      }
+      
+      try 
+      {
+         myposition.int_latitude_minutes = Integer.parseInt(myposition.latitude_minutes);
+         double_fix_latitude_minutes = Double.parseDouble(fix_latitude_minutes);             // only for storage and retrievel for course and speed calculation
+      }
+      catch (NumberFormatException e)
+      {
+         GPS_date_time_ok = false;
+      }       
+         
+      // for latitude (LaLaLa) for IMMT log
+      //
+      int int_latitude_minutes_6 =  bd_lat_min.intValue() / 6;                           // devide the minutes by six and disregard the remainder, now tenths of degrees [IMMT rounding!!!}
+      String latitude_minutes_6 = Integer.toString(int_latitude_minutes_6);              // convert to String 
+      //myposition.lalala_code = myposition.latitude_degrees.trim().replaceFirst("^0+(?!$)", "") + latitude_minutes_6;
+      myposition.lalala_code = myposition.latitude_degrees + latitude_minutes_6;
+
+      int len = 3;                                                           // always 3 chars
+      if (myposition.lalala_code.length() < len) 
+      {
+         // pad on left with zeros
+         myposition.lalala_code = "0000000000".substring(0, len - myposition.lalala_code.length()) + myposition.lalala_code;
+      }         
+      else if (myposition.lalala_code.length() > len)
+      {
+         GPS_date_time_ok = false;
+         //System.out.println("+++++++++++ lalala_code error: " + myposition.lalala_code);
+      }    
+       
+         
+      //
+      //////// longitude (eg 01144.3966270) ////////
+      //
+         
+      // fill the public string longitude values
+      //
+      myposition.longitude_degrees = GPS_longitude.substring(0, 3);   // eg 01144.3966270 -> 011
+       
+      String fix_longitude_minutes = GPS_longitude.substring(3);      // only the minutes of the longitude eg  01144.3966270 -> 44.3966270
+      BigDecimal bd_lon_min = new BigDecimal(fix_longitude_minutes).setScale(0, RoundingMode.HALF_UP); // 0 decimals 
+      
+///////////////////
+      int hulp_bd_lon_min = bd_lon_min.intValue();                                     // BigDecimal to int
+      if (hulp_bd_lon_min == 60)
+      {
+         // set longitude minutes to 0
+         hulp_bd_lon_min = 0;
+         bd_lon_min = BigDecimal.valueOf(hulp_bd_lon_min);                             // int to BigDecimal
+               
+         // increment longitude degrees
+         int hulp_longitude_degrees = Integer.parseInt(myposition.longitude_degrees);  // String to int
+         hulp_longitude_degrees++;
+         myposition.longitude_degrees = Integer.toString(hulp_longitude_degrees);      // int to String (via Integer)
+      }   
+///////////////////        
+      myposition.longitude_minutes = bd_lon_min.toString();           // rounded minutes value  e.g. 41.9504 -> 42 minutes         
+         
+      if (GPS_longitude_hemisphere.toUpperCase().equals("E"))
+      {
+         myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST;
+      }
+      else if (GPS_longitude_hemisphere.toUpperCase().equals("W"))
+      {
+         myposition.longitude_hemisphere = myposition.HEMISPHERE_WEST;
+      }
+      else
+      {
+         myposition.longitude_hemisphere = "";
+         GPS_date_time_ok = false;
+      }
+         
+      // fill the public int longitude values and storage longitude minutes (high accurancy)
+      //
+      try 
+      {
+         myposition.int_longitude_degrees = Integer.parseInt(myposition.longitude_degrees);
+         double_fix_longitude_minutes = Double.parseDouble(fix_longitude_minutes);             // only for storage and retrievel for course and speed calculation
+      }
+      catch (NumberFormatException e)
+      {
+         GPS_date_time_ok = false;
+      }
+      
+      try 
+      {
+         myposition.int_longitude_minutes = Integer.parseInt(myposition.longitude_minutes);
+      }
+      catch (NumberFormatException e)
+      {
+         GPS_date_time_ok = false;
+      }
+         
+      // for longitude (LoLoLoLo) for IMMT log
+      //
+      int int_longitude_minutes_6 =  bd_lon_min.intValue() / 6;                           // devide the minutes by six and disregard the remainder, now tenths of degrees [IMMT rounding!!!}
+      String longitude_minutes_6 = Integer.toString(int_longitude_minutes_6);              // convert to String 
+      myposition.lolololo_code = myposition.longitude_degrees + longitude_minutes_6;
+
+      int len2 = 4;                                                           // always 4 chars
+      if (myposition.lolololo_code.length() < len2) 
+      {
+         // pad on left with zeros
+         myposition.lolololo_code = "0000000000".substring(0, len2 - myposition.lolololo_code.length()) + myposition.lolololo_code;
+      }  
+      else if (myposition.lolololo_code.length() > len2)
+      {
+         GPS_date_time_ok = false;
+         //System.out.println("+++++++++++ lolololo_code error: " + myposition.lolololo_code);
+      } 
+         
+         
+      // quadrant of the globe for IMMT
+      //
+      if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+      {
+         myposition.Qc_code = "1";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+      {
+         myposition.Qc_code = "3";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+      {
+         myposition.Qc_code = "5";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+      {
+         myposition.Qc_code = "7";
+      }
+      else
+      {
+         GPS_date_time_ok = false;
+         //System.out.println("+++++++++++ Qc_code error");
+         
+      }
+         
+      // message_fix_position = "GPS position (dd-mm [N/S] ddd-mm [E/W]): " + myposition.latitude_degrees + "-" + myposition.latitude_minutes + " " + myposition.latitude_hemisphere.substring(0, 1) +  " " + myposition.longitude_degrees + "-" + myposition.longitude_minutes + " " + myposition.longitude_hemisphere.substring(0, 1);  
+      
+      
+      // for GPS data storage latitude and longitude (for calculation of obs course end speed)
+      // 
+      if (GPS_date_time_ok)
+      {
+         //store_fix_lat = myposition.int_latitude_degrees + (myposition.int_latitude_minutes / 60);
+         store_fix_lat = myposition.int_latitude_degrees + (double_fix_latitude_minutes / 60.0);
+         
+         if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH))
+         {
+            store_fix_lat *= -1;        
+         }
+         
+         //store_fix_lon = myposition.int_longitude_degrees + (myposition.int_longitude_minutes / 60);
+         store_fix_lon = myposition.int_longitude_degrees + (double_fix_longitude_minutes / 60.0);
+         if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST))
+         {
+            store_fix_lon *= -1;
+         }
+      } // if (GPS_date_time_ok)
+      
+      
+      if (GPS_date_time_ok == false)   
+      {
+         message = "[GPS] formatting error";
+         message_fix_position = "";
+      }
+      else
+      {
+         message_fix_position = "GPS position (dd-mm [N/S] ddd-mm [E/W]): " + myposition.latitude_degrees + "-" + myposition.latitude_minutes + " " + myposition.latitude_hemisphere.substring(0, 1) +  " " + myposition.longitude_degrees + "-" + myposition.longitude_minutes + " " + myposition.longitude_hemisphere.substring(0, 1);  
+      }
+   } // if (GPS_date_time_ok)
+   
+   
+   if (GPS_date_time_ok == false)
+   {
+      // NB if mode.equals("MINUTE_UPDATE") -> do nothing, otherwise every minute an extra line in the log in case of bad connection
+      
+      if (mode.equals("APR"))                                                 // e.g. every 1, 3 or 6 hours
+      {
+         // message (was set before)
+         main.log_turbowin_system_message(message);
+      }
+      else if (mode.equals("MANUAL"))
+      {
+         // message (was set before)
+         main.log_turbowin_system_message(message);
+         
+         // temporary message box (eg mismatch GPS date-time and computer date-time) 
+         String info = "no reliable GPS position available";
+         
+         final JOptionPane pane_end = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+         final JDialog temp_dialog = pane_end.createDialog(main.APPLICATION_NAME);
+
+         Timer timer_end = new Timer(2500, new ActionListener()
+         {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               temp_dialog.dispose();
+            }
+         });
+         timer_end.setRepeats(false);
+         timer_end.start();
+         temp_dialog.setVisible(true);               
+      } // else if (mode.equals("MANUAL"))
+   } //  if (GPS_date_time_ok == false)
+   else // GPS_date_time_ok == true
+   {
+      
+      if (mode.equals("APR") || mode.equals("MANUAL"))    // only in APR mode (1, 3, 6 hours) or manual mode, otherwise every minute message lines in the log
+      {
+         main.log_turbowin_system_message("[GPS] date-time parsing ok; " + message_fix_date_time);
+         main.log_turbowin_system_message("[GPS] position parsing ok; " + message_fix_position);
+      }
+            
+      // Save the GPS data in array's for computing obs course and speed (based on 3 hrs if FM13 and 10 minutes if format#101)
+      //
+      RS232_GPS_NMEA_0183_Array_Store(store_fix_lat, store_fix_lon, store_fix_date_minutes);
+      
+      // determine the latitude and longitude from the track to be considered
+      //
+      mode_retrieval = "";
+      double[] positions = RS232_GPS_NMEA_0183_Array_Retrieval(mode_retrieval);
+      // NB double_lat_start = positions[0];
+      // NB double_lon_start = positions[1];
+      // NB double_lat_end = positions[2];
+      // NB double_lon_end = positions[3];
+      
+      new SwingWorker<Boolean, Void>()
+      {
+         @Override
+         protected Boolean doInBackground() throws Exception
+         {
+            boolean COG_SOG_ok = true;
+             
+            // calculate COG and SOG (and course and speed for main screen)
+            if ( (positions[0] < Double.MAX_VALUE -1) && (positions[1] < Double.MAX_VALUE -1) && (positions[2] < Double.MAX_VALUE -1) && (positions[3] < Double.MAX_VALUE -1))
+            {
+               // NB computing COG and SOG happens every minute in UPDATE_MINUTE mode
+               RS232_compute_APR_COG_SOG(positions[0], positions[1], positions[2], positions[3]);
+         
+               // publish course and speed on main screen (indirect via myposition.course and myposition.speed)
+               if ((myposition.COG_APR >= 0.0 && myposition.COG_APR <= 360.0) && (myposition.SOG_APR >= 0.0 && myposition.SOG_APR <= 100.0))
+               {
+                  // NB myposition.course and myposition.speed only for main screen
+                  //    see position_fields_update()[main.java] called by RS232_GPS_NMEA_0183_init_new_data_received_check_timer() [RS232_RS422.java]
+                  myposition.course = Double.toString(myposition.COG_APR);
+                  myposition.speed = Double.toString(myposition.SOG_APR);
+               }
+               else
+               {
+                  // reset the course ansd speed vars
+                  myposition.COG_APR = Double.MAX_VALUE;
+                  myposition.SOG_APR = Double.MAX_VALUE;
+                  myposition.course = "";
+                  myposition.speed = "";  
+                  myposition.Ds_code       = "";               // from version 4.2
+                  myposition.vs_code       = "";               // from version 4.2
+                  COG_SOG_ok = false;               
+               } // else
+            } // if ( (positions[0] < Double.MAX_VALUE -1) etc.
+            else
+            {
+               // reset the course ansd speed vars
+               myposition.COG_APR = Double.MAX_VALUE;
+               myposition.SOG_APR = Double.MAX_VALUE;
+               myposition.course = "";
+               myposition.speed = "";  
+               myposition.Ds_code       = "";                 // from version 4.2
+               myposition.vs_code       = "";                 // from version 4.2
+               COG_SOG_ok = false;
+            } // else
+            
+            return COG_SOG_ok;
+         
+         } // protected Void doInBackground() throws Exception
+         @Override
+         protected void done()
+         {
+            try
+            {
+               boolean COG_SOG_result = get();
+                
+                // only in APR mode (1, 3, 6 hours) or manual mode, otherwise every minute message lines in the log
+               if (mode.equals("APR") || mode.equals("MANUAL"))
+               {
+                  if (COG_SOG_result == true)
+                  {
+                     if (main.obs_format.equals(main.FORMAT_101))
+                     {
+                        main.log_turbowin_system_message("[GPS] COG and SOG calculation [10 min] ok; " + myposition.COG_APR + "\u00B0 " + myposition.SOG_APR + " kts");
+                     }
+                     else if (main.obs_format.equals(main.FORMAT_FM13))
+                     {
+                        main.log_turbowin_system_message("[GPS] COG and SOG calculation [3 hrs] ok; " + myposition.COG_APR + "\u00B0 " + myposition.SOG_APR + " kts");
+                     }
+                     
+                     //main.log_turbowin_system_message("[GPS] COG and SOG calculation ok; " + myposition.COG_APR + "\u00B0 " + myposition.SOG_APR + " kts");
+                  }
+                  else
+                  {   
+                     if (main.obs_format.equals(main.FORMAT_101))
+                     {
+                        main.log_turbowin_system_message("[GPS] COG and SOG calculation [10 min] error or start/end position not (yet) available");
+                     }
+                     else if (main.obs_format.equals(main.FORMAT_FM13))
+                     {
+                        main.log_turbowin_system_message("[GPS] COG and SOG calculation [3 hrs] error or start/end position not (yet) available");
+                     }
+                     //main.log_turbowin_system_message("[GPS] COG and SOG calculation error or start/end position not (yet) available");
+                  }
+               } // if (mode.equals("APR") || mode.equals("MANUAL"))
+            } // try
+            catch (InterruptedException | ExecutionException ex) 
+            {   
+               System.out.println("+++ Error in Function: RS232_GPS_NMEA_0183_Date_Position_Parsing()"); 
+            }
+             
+         } // protected void done()      
+      }.execute(); // new SwingWorker<Void, Void>()
+      
+      
+      // in case FM13: in APR mode we also need the SOG and COG over 10 minutes for the APTR meteo radar dashboard wind calculations (relative wind)
+      //
+      //if (main.obs_format.equals(main.FORMAT_FM13) && (main.APR))
+      if (main.APR)  
+      {
+         // determine the latitude and longitude from the track to be considered
+         if (main.obs_format.equals(main.FORMAT_FM13))
+         {
+            mode_retrieval = WIND_FM13_DASHBOARD;
+         }
+         else if (main.obs_format.equals(main.FORMAT_101))
+         {
+            mode_retrieval = WIND_101_DASHBOARD;
+         }
+         double[] positions_SOG_COG_wind = RS232_GPS_NMEA_0183_Array_Retrieval(mode_retrieval); 
+         // NB double_lat_start = positions_SOG_COG_wind[0];
+         // NB double_lon_start = positions_SOG_COG_wind[1];
+         // NB double_lat_end = positions_SOG_COG_wind[2];
+         // NB double_lon_end = positions_SOG_COG_wind[3];
+       
+         new SwingWorker<Boolean, Void>()
+         {
+            @Override
+            protected Boolean doInBackground() throws Exception
+            {
+               boolean COG_SOG_wind_ok = true;
+             
+               // calculate COG_wind and SOG_wind (and course and speed for main scren)
+               if ( (positions_SOG_COG_wind[0] < Double.MAX_VALUE -1) && (positions_SOG_COG_wind[1] < Double.MAX_VALUE -1) && (positions_SOG_COG_wind[2] < Double.MAX_VALUE -1) && (positions_SOG_COG_wind[3] < Double.MAX_VALUE -1))
+               {
+                  // NB computing COG_APR_wind and SOG_APR_wind happens every minute in UPDATE_MINUTE mode
+                  RS232_compute_APR_COG_SOG_wind(positions_SOG_COG_wind[0], positions_SOG_COG_wind[1], positions_SOG_COG_wind[2], positions_SOG_COG_wind[3]);
+         
+                  // publish course and speed on main screen (indirect via myposition.course and myposition.speed)
+                  if ((myposition.COG_APR_wind >= 0.0 && myposition.COG_APR_wind <= 360.0) && (myposition.SOG_APR_wind >= 0.0 && myposition.SOG_APR_wind <= 100.0))
+                  {
+                     // NB myposition.course and myposition.speed only for main screen
+                     //    see position_fields_update()[main.java] called by RS232_GPS_NMEA_0183_init_new_data_received_check_timer() [RS232_RS422.java]
+                     //myposition.course = Double.toString(myposition.COG_APR);
+                     //myposition.speed = Double.toString(myposition.SOG_APR);
+                  }
+                  else
+                  {
+                     // reset the course ansd speed vars
+                     myposition.COG_APR_wind = Double.MAX_VALUE;
+                     myposition.SOG_APR_wind = Double.MAX_VALUE;
+                     //myposition.course = "";
+                     //myposition.speed = "";  
+                     COG_SOG_wind_ok = false;               
+                  } // else
+               } // if ( (positions_SOG_COG_wind[0] < Double.MAX_VALUE -1) etc.
+               else
+               {
+                  // reset the course ansd speed vars
+                  myposition.COG_APR_wind = Double.MAX_VALUE;
+                  myposition.SOG_APR_wind = Double.MAX_VALUE;
+                  //myposition.course = "";
+                  //myposition.speed = "";  
+                  COG_SOG_wind_ok = false;
+               } // else
+            
+               return COG_SOG_wind_ok;
+         
+            } // protected Void doInBackground() throws Exception
+            @Override
+            protected void done()
+            {
+               try
+               {
+                  boolean COG_SOG_wind_result = get();
+                
+                   // only in APR mode (1, 3, 6 hours) or manual mode, otherwise every minute message lines in the log
+                  if (mode.equals("APR") || mode.equals("MANUAL"))
+                  {
+                     if (COG_SOG_wind_result == true)
+                     {
+                        main.log_turbowin_system_message("[GPS] For APTR dashboard wind [10 min].: COG and SOG calculation ok; " + myposition.COG_APR_wind + "\u00B0 " + myposition.SOG_APR_wind + " kts");
+                     }
+                     else
+                     {   
+                        main.log_turbowin_system_message("[GPS] For APTR dashboard wind [10 min]: COG and SOG calculation error or start/end position not (yet) available");
+                     }
+                  } // if (mode.equals("APR") || mode.equals("MANUAL"))
+               } // try
+               catch (InterruptedException | ExecutionException ex) 
+               {   
+                  System.out.println("+++ Error in Function: RS232_GPS_NMEA_0183_Date_Position_Parsing()"); 
+               }
+             
+            } // protected void done()      
+         }.execute(); // new SwingWorker<Void, Void>()
+         
+      } // if (main.obs_format.equals(main.FORMAT_FM13))
+      
+      // by default for format_101
+      //
+      //if (main.obs_format.equals(main.FORMAT_101) && (main.APR))
+      //{
+      //   myposition.COG_APR_wind = myposition.COG_APR;
+      //   myposition.SOG_APR_wind = myposition.SOG_APR;
+      //}
+      
+   } // else (GPS_date_time_ok == true)
+   
+   
+   return GPS_date_time_ok;
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private static double[] RS232_GPS_NMEA_0183_Array_Retrieval(String mode_retrieval)
+{
+   // private void RS232_compute_APR_COG_SOG(double double_lat_start, double double_lon_start, double double_lat_end, double double_lon_end)
+   double double_lat_start = Double.MAX_VALUE;
+   double double_lon_start = Double.MAX_VALUE;
+   double double_lat_end = Double.MAX_VALUE;
+   double double_lon_end = Double.MAX_VALUE;
+   long time_interval_min = Long.MAX_VALUE;
+   boolean doorgaan = true;
+   
+   
+   if (mode_retrieval.equals(WIND_FM13_DASHBOARD))
+   {
+      // in FM13 the COG and SOG (for Ds and vs) are based on 180 minutes but for the APTR wind radar dashboard also the 10 minutes period is required
+      time_interval_min = 10;
+   }   
+   else if (mode_retrieval.equals(WIND_101_DASHBOARD))
+   {
+      // for the APTR wind radar dashboard the 10 minutes period is required
+      time_interval_min = 10;        
+   }
+   else // no mode_retrieval defined
+   {
+      if (main.obs_format.equals(main.FORMAT_101))
+      {
+         time_interval_min = 10;
+      }
+      else if (main.obs_format.equals(main.FORMAT_FM13))
+      {
+         time_interval_min = 180;
+      }
+      else
+      {
+         // NB at start-up it is possible that "main.obs_format" is not yet determined (swingworker)
+         time_interval_min = Integer.MAX_VALUE;
+         doorgaan = false;
+      }
+   } // else (no mode_rerieval defined)
+   
+   
+   // TESTING //
+   //System.out.println("+++ time_interval_min = " + time_interval_min);
+   //System.out.println("+++ GPS_array_time[0] = " + GPS_array_time[0]);
+   //System.out.println("+++ GPS_array_time[10] = " + GPS_array_time[10]);
+   
+   if (doorgaan)
+   {
+      for (int m = MAX_GPS_ARRAY; m > 0; m--)
+      {
+         if ((GPS_array_time[0] - GPS_array_time[m]) == time_interval_min)
+         {
+            double_lat_start = GPS_array_pos[m][0];
+            double_lon_start = GPS_array_pos[m][1];
+         
+            double_lat_end = GPS_array_pos[0][0];
+            double_lon_end = GPS_array_pos[0][1];
+         
+            // TESTING START //
+            //System.out.println("+++ GPS data array indice match(" + time_interval_min + " based) = " + m);
+            //
+            //Date date_start = new Date(GPS_array_time[m] * (60 * 1000));        // Date argument in msec!
+            //System.out.println("+++ GPS data date-time UTC (" + time_interval_min + " ago) = " + main.sdf4.format(date_start));
+            //
+            //Date date_end = new Date(GPS_array_time[0] * (60 * 1000));        // Date argument in msec!
+            //System.out.println("+++ GPS data date-time UTC (0 ago) = " + main.sdf4.format(date_end));
+            //
+            //System.out.println("+++ GPS data lat start (" + time_interval_min + " ago) = " + double_lat_start);
+            //System.out.println("+++ GPS data lon start (" + time_interval_min + " ago) = " + double_lon_start);
+            //System.out.println("+++ GPS data lat end (0 ago) = " + double_lat_end);
+            //System.out.println("+++ GPS data lon end (0 ago) = " + double_lon_end);
+            // TESTING END //
+         
+            break;
+         }
+      } // for (int m = MAX_GPS_ARRAY; m > 0; m--)
+   } //  if (doorgaan)
+   
+   
+   return new double[] {double_lat_start, double_lon_start, double_lat_end, double_lon_end};
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private static void RS232_GPS_NMEA_0183_Array_Store(final double store_fix_lat, final double store_fix_lon, final long store_fix_date_minutes)
+{
+   // called from: RS232_GPS_NMEA_0183_Date_Position_Parsing() [main_RS232_RS422.java]
+   
+   // storing GPS data from a separate (mini)GPS (not for Mintaka StarX with integrated gPS) in a array for obs coure and speed calculation
+   //   
+   // NB start position: position 10 minutes (format#101) or 3 hours (FM13) ago
+   // NB end position: last saved position (= most recent position)
+   //    
+   //
+   //
+   // Two arrays for position (double lat and double lon) and time (long)
+   // array [0]   -> most recent GPS string checked ok (so max TIMEDIFF_GPS_DATA old = eg 10 minutes)
+   // array [1]   -> second last received GPS string checked ok
+   // array [2]   -> third last received GPS string checked ok
+   // etc...
+   //
+   // theoretically due to disruption etc. e.g.
+   // array[0] -> just received
+   // array[1] -> 25 minutes ago
+   // array[2] -> 26 minutes ago
+   // array[3] -> 40 minutes ago
+   // etc.
+   //
+   // but also sometimes same info in two consecutive array places!!
+   // array[0] -> just received
+   // array[1] -> 1 minutes ago
+   // array[2] -> 2 minutes ago !!
+   // array[3] -> 2 minutes ago !! // same GPS data as arry indice 2
+    //array[4] -> 3 minutes ago
+   // etc
+   //
+   // See above therefore MAX number array places not 180 (theoretical 3 hours = 180 minutes) but 200 (MAX_GPS_ARRAY)
+   //
+   //
+   //
+   // GPS_array_pos [0][0] -> lat [double; degrees; e.g. -30.56]
+   // GPS_array_pos [0][1] -> lon [double; degrees; e.g. 120.21]
+   // GPS_array_time [0] -> date-time [the number of minutes since January 1, 1970, 00:00:00 URC] // NB after getTime() -> the number of milliseconds since January 1, 1970, 00:00:00 URC (= Unix epoch)
+   // etc...
+   //
+   //
+   
+   if ( (store_fix_lat < (Double.MAX_VALUE - 1)) && (store_fix_lon < (Double.MAX_VALUE - 1)) && (store_fix_date_minutes < Long.MAX_VALUE) )
+   {
+      // shift them all 1 array place
+      for (int m = MAX_GPS_ARRAY; m > 0; m--)
+      {
+         GPS_array_pos[m][0] = GPS_array_pos[m - 1][0];                         // latidude              
+         GPS_array_pos[m][1] = GPS_array_pos[m - 1][1];                         // longitude
+         GPS_array_time[m] = GPS_array_time[m - 1];
+      }
+      GPS_array_pos[0][0] = store_fix_lat;                                      // most recent received (and checked ok) GPS string
+      GPS_array_pos[0][1] = store_fix_lon;
+      GPS_array_time[0] = store_fix_date_minutes;
+      
+      // TESTING //
+      //for (int m = 0; m < 20; m++)
+      //{
+      //   System.out.println("+++ GPS_array_time[" + m + "]= " + GPS_array_time[m]);
+      //}
+      //for (int m = 0; m < 20; m++)
+      //{
+      //   System.out.println("+++ GPS_array_pos[" + m + "][0]= " + GPS_array_pos[m][0]);
+      //   System.out.println("+++ GPS_array_pos[" + m + "][1]= " + GPS_array_pos[m][1]);
+      //}
+      //Date date_print = new Date(store_fix_date_minutes * (60 * 1000));        // Date argument in msec!
+      //System.out.println("+++ GPS data date-time UTC last storage = " + main.sdf4.format(date_print));
+      
+   } // if ( (store_fix_lat < (Double.MAX_VALUE - 1)) etc.
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_GPS_NMEA_0183_GGA(String ontvangen_GPS_string)
+{  
+   // called from: RS232_GPS_Class_Receive_Data
+   
+   // NB if an AWS is connected a GPS cannot be connected [see RS232_settings.java]
+   //
+   //
+   //
+   // source: http://www.gpsinformation.org/dale/nmea.htm#RMC
+
+   //GGA - essential fix data which provide 3D location and accuracy data.
+   //
+   // $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47
+   //
+   // Where:
+   //     GGA          Global Positioning System Fix Data
+   //     123519       Fix taken at 12:35:19 UTC
+   //     4807.038,N   Latitude 48 deg 07.038' N
+   //     01131.000,E  Longitude 11 deg 31.000' E
+   //     1            Fix quality: 0 = invalid
+   //                               1 = GPS fix (SPS)
+   //                               2 = DGPS fix
+   //                               3 = PPS fix
+   //			                        4 = Real Time Kinematic
+   //		                           5 = Float RTK
+   //                               6 = estimated (dead reckoning) (2.3 feature)
+   //			                        7 = Manual input mode
+   //			                        8 = Simulation mode
+   //     08           Number of satellites being tracked
+   //     0.9          Horizontal dilution of position
+   //     545.4,M      Altitude, Meters, above mean sea level
+   //     46.9,M       Height of geoid (mean sea level) above WGS84
+   //                      ellipsoid
+   //    (empty field) time in seconds since last DGPS update
+   //    (empty field) DGPS station ID number
+   //     *47          the checksum data, always begins with *
+   //
+   //
+   // source: https://en.wikipedia.org/wiki/NMEA_0183
+   // $GPGGA,092750.000,5321.6802,N,00630.3372,W,1,8,1.03,61.7,M,55.2,M,,*76
+   
+   String record_checksum = "";
+   String computed_checksum = "";
+   boolean checksum_ok = false;
+   int number_read_commas = 0;
+   int pos_comma = 0;
+   int start_fix_time = 0;
+   int end_fix_time = 0;
+   int start_fix_latitude = 0;
+   int end_fix_latitude = 0;
+   int start_fix_latitude_hemisphere = 0;
+   int end_fix_latitude_hemisphere = 0;
+   int start_fix_longitude = 0;
+   int end_fix_longitude = 0;
+   int start_fix_longitude_hemisphere = 0;
+   int end_fix_longitude_hemisphere = 0;
+   int start_fix_quality = 0;
+   int end_fix_quality = 0;   
+  
+   
+   // checksum check
+   computed_checksum = RS232_GPS_NMEA_Checksum(ontvangen_GPS_string);
+   record_checksum = ontvangen_GPS_string.substring(ontvangen_GPS_string.length() - 2);   
+   
+   if (computed_checksum.equals(record_checksum))
+   {
+      //System.out.println("checksum ok");
+      checksum_ok = true;
+   }
+   else
+   {
+      //System.out.println("record checksum = " + record_checksum);
+      //System.out.println("computed checksum = " + computed_checksum);
+      System.out.println(ontvangen_GPS_string);
+      System.out.println("checksum NOT ok"); 
+   }   
+   
+   // eg $GPGGA,092750.000,5321.6802,N,00630.3372,W,1,8,1.03,61.7,M,55.2,M,,*76
+   if ((checksum_ok) && (ontvangen_GPS_string.length() > 40))           // for savety, 40 arbitrary number (but will cover latitude, longitude etc)
+   {
+      do
+      {
+         pos_comma = ontvangen_GPS_string.indexOf(",", pos_comma + 1);
+         if (pos_comma > 0)     // "," found
+         {
+            //System.out.println("pos_comma = " + pos_comma);
+            number_read_commas++;
+            
+            if (number_read_commas == 1)
+            {
+               start_fix_time = pos_comma + 1;
+            }
+            else if (number_read_commas == 2)
+            {
+               end_fix_time = pos_comma;
+               start_fix_latitude = pos_comma + 1;
+            }
+            else if (number_read_commas == 3)
+            {
+               end_fix_latitude = pos_comma;
+               start_fix_latitude_hemisphere = pos_comma + 1;
+            }
+            else if (number_read_commas == 4)
+            {
+               end_fix_latitude_hemisphere = pos_comma;
+               start_fix_longitude = pos_comma + 1;
+            }
+            else if (number_read_commas == 5)
+            {
+               end_fix_longitude = pos_comma;
+               start_fix_longitude_hemisphere = pos_comma + 1;
+            }
+            else if (number_read_commas == 6) 
+            {
+               end_fix_longitude_hemisphere = pos_comma; 
+               start_fix_quality = pos_comma + 1; 
+            }
+            else if (number_read_commas == 7) 
+            {
+               end_fix_quality = pos_comma;
+            }
+                           
+         } // if (pos_comma > 0)
+      } while (pos_comma > 0);       
+      
+      
+      // fix time
+      String hulp_fix_time = ontvangen_GPS_string.substring(start_fix_time, end_fix_time);
+      
+      // fix quality (fix quality "0" = invalid)
+      String fix_quality = ontvangen_GPS_string.substring(start_fix_quality, end_fix_quality);
+      
+      // continue if status ok en seconds = 00
+      if ( (Integer.parseInt(fix_quality) != 0) && (hulp_fix_time.substring(4, 6).equals("00")) )    // quality=0 = invalid and seconds "00" (= every whole minute)
+      {
+         System.out.println(ontvangen_GPS_string);
+         
+         // raw storage, only for the device log
+         RS232_GPS_NMEA_0183_storage_device_log(ontvangen_GPS_string);
+         
+         // date (eg 280515)
+         //
+         // NB Because there is no date in the GGA sentence we can only compare the system time of the GPS and the computer time
+         //    For a generic approach the GPS_date is artificial set as computer date
+         //    Theroretically an outdated GPS position can be unfairly marked as ok only a few minutes per day
+         //    eg 18-12-2015 03.14 UTC last GPS date. Now current date-time 19-12-2015 02:00 UTC so GPS position set invalid by TurboWin+
+         //    but if current date-time 19-12-2015 03:13 UTC -> TurboWin+ set it ok because only times (and not date) can be compared
+         //
+         GregorianCalendar cal_systeem_datum_tijd_NMEA_GGA = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));// gives system date time in UTC of this moment
+         SimpleDateFormat sdf10;
+         sdf10 = new SimpleDateFormat("ddMMyy");                            // e.g "MMMM dd, yyyy" -> februari 27, 2010
+         GPS_date = sdf10.format(cal_systeem_datum_tijd_NMEA_GGA.getTime());
+         
+         // time (eg 181908.00)
+         GPS_time = hulp_fix_time;                    // now GPS_time always holds the last valid value (passed the "A" status check) of the whole minute
+         
+         // update date and time on main screen (and date time input form)
+         //main.date_time_fields_update();
+         
+         // latitude complete (eg 3404.7041778)
+         GPS_latitude = ontvangen_GPS_string.substring(start_fix_latitude, end_fix_latitude);
+         
+         // latitude hemisphere
+         GPS_latitude_hemisphere = ontvangen_GPS_string.substring(start_fix_latitude_hemisphere, end_fix_latitude_hemisphere);
+         
+         // longitude complete (eg 07044.3966270)
+         GPS_longitude = ontvangen_GPS_string.substring(start_fix_longitude, end_fix_longitude); 
+         
+         // longitude hemisphere
+         GPS_longitude_hemisphere = ontvangen_GPS_string.substring(start_fix_longitude_hemisphere, end_fix_longitude_hemisphere);         
+         
+         // for timer checking the GPS data is not obsolete (see Function: RS232_GPS_NMEA_0183_init_new_data_received_check_timer)
+         last_new_GPS_data_received_TimeMillis = System.currentTimeMillis(); 
+         
+         // update the position fields on the main screen  (so every whole minute)
+         //main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE");  // NB we do nothing with the return boolean of this function (this call was only for updating position on main screen)
+          
+      } // if ( (fix_status.toUpperCase().equals("A")) && (fix_time.substring(4, 6).equals("00")) )
+   } // if ((checksum_ok) && (ontvangen_GPS_string.length() > 40))
+   
+   
+   // NB in function RS232_GPS_NMEA_0183_Date_Position_Parsing() these GPS vars are inserted/compared with obs position values
+   
+}
+   
+  
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private String RS232_GPS_NMEA_Checksum(String ontvangen_GPS_string)
+{
+   // called from: - RS232_GPS_NMEA_0183_RMC()
+   //              - RS232_GPS_NMEA_0183_GGA()
+   
+   
+   String computed_checksum = "";
+   int checksum = 0;
+   
+   
+   // cheksum computed between '$' and '*'
+   int start_pos = ontvangen_GPS_string.indexOf('$');
+   int end_pos = ontvangen_GPS_string.indexOf('*');
+   
+   // cheksum ok? (compulsory for RMA, RMB, and RMC messages)
+   //
+   if (start_pos != -1 && end_pos != -1) 
+   {
+      for (int i = start_pos + 1; i < end_pos; i++) 
+      {
+         checksum = checksum ^ ontvangen_GPS_string.charAt(i);
+      }   
+      
+      computed_checksum = Integer.toHexString(checksum);
+      if (computed_checksum.length() == 1)
+      {
+         computed_checksum = "0" + computed_checksum;
+      }
+   } // if (start_pos != -1 && end_pos != -1) 
+   
+   
+   return computed_checksum = computed_checksum.toUpperCase();
+}
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_GPS_NMEA_0183_storage_device_log(String ontvangen_GPS_string)
+{
+   // memory storage only for the device log
+   //
+   //
+   // called from: - RS232_GPS_NMEA_0183_GGA()
+   //              - RS232_GPS_NMEA_0183_RMC()
+   //
+   // storing GPS data from a separate (mini)GPS (not for Mintaka StarX with integrated GPS) in a array for showing in device log
+   //   
+   //
+   // array for raw incoming GPS records
+   // array [0]   -> most recent GPS string 
+   // array [1]   -> second last received GPS string
+   // array [2]   -> third last received GPS string
+   // etc...
+   //
+   // theoretically due to disruption etc. e.g.
+   // array[0] -> just received
+   // array[1] -> 25 minutes ago
+   // array[2] -> 26 minutes ago
+   // array[3] -> 40 minutes ago
+   // etc.
+   //
+   // but also sometimes same info in two consecutive array places!!
+   // array[0] -> just received
+   // array[1] -> 1 minutes ago
+   // array[2] -> 2 minutes ago !!
+   // array[3] -> 2 minutes ago !! // same GPS data as arry indice 2
+    //array[4] -> 3 minutes ago
+   // etc
+   //
+   // See above therefore MAX number array places not 180 (theoretical 3 hours = 180 minutes) but 200 (MAX_GPS_ARRAY)
+   //
+
+   
+   // shift them all 1 array place
+   //
+   // m = MAX_GPS_ARRAY: oldest
+   // m = 0: youngest (just received)
+   //
+   // On the youngest, just received record, a date-time stamp (YYYYMMDDHHMM) will be added
+   //
+   //
+   for (int m = MAX_GPS_ARRAY; m > 0; m--)
+   {
+      GPS_array_device_log[m] = GPS_array_device_log[m - 1];
+   }
+   
+   // NB
+   //    in this application the added timestamp is mostly according: main.sdf4.format(new Date());  [format sdf4: YYYMMDDHHMM]
+   //    But 'new date()' do not round up the seconds, this is in most cases no problem
+   //    but here, concerning the GPS sentences, it could look odd because many GPS sentences contain the time of the fix
+   //    Then it is possible that you see in the record a time of e.g. 091100.000 and a added timestamp of 202404100910,
+   //    so suggesting the added timestamp was 1 minute earlier then the GPS fix itself
+   //    To avoid this, the added GPS timestamp will be rounded up the the next whole minute
+   //
+   
+   Calendar calendar = Calendar.getInstance(); 
+   calendar.add(Calendar.SECOND, 30); 
+   calendar.set(Calendar.SECOND, 0);
+   calendar.set(Calendar.MILLISECOND, 0);
+   Date date = calendar.getTime();             
+   
+   String timestamp = main.sdf4.format(date);
+   GPS_array_device_log[0] = ontvangen_GPS_string + timestamp;       
+   
+}
+   
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_GPS_NMEA_0183_RMC(String ontvangen_GPS_string)
+{  
+   // called from: RS232_GPS_Class_Receive_Data
+   
+   // NB if an AWS is connected a GPS cannot be connected [see RS232_settings.java]
+   //
+   //
+   //
+   // source: http://www.gpsinformation.org/dale/nmea.htm#RMC
+   //
+   // RMC - NMEA has its own version of essential gps pvt (position, velocity, time) data. It is called RMC, The Recommended Minimum, which will look similar to:
+   //
+   // $GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W*6A
+   //
+   // Where:
+   //     RMC          Recommended Minimum sentence C
+   //     123519       Fix taken at 12:35:19 UTC
+   //     A            Status A=active or V=Void.
+   //     4807.038,N   Latitude 48 deg 07.038' N
+   //     01131.000,E  Longitude 11 deg 31.000' E
+   //     022.4        Speed over the ground in knots
+   //     084.4        Track angle in degrees True
+   //     230394       Date - 23rd of March 1994
+   //     003.1,W      Magnetic Variation
+   //     *6A          The checksum data, always begins with *
+   // Note that, as of the 2.3 release of NMEA, there is a new field in the RMC sentence at the end just prior to the checksum. For more information on this field see here.
+   //
+   //
+   //
+   // source: https://en.wikipedia.org/wiki/NMEA_0183
+   //
+   // $GPRMC,092751.000,A,5321.6802,N,00630.3371,W,0.06,31.66,280511,,,A*45
+   //   NB LET OP FIX TAKEN AT 092751.000 COULD ALSO 092751
+   //
+   ////
+   // - Each message's starting character is a dollar sign.
+   // - The next five characters identify the talker (two characters) and the type of message (three characters).
+   // - All data fields that follow are comma-delimited.
+   // - Where data is unavailable, the corresponding field remains blank (it contains no character before the next delimiter \u00B0 see Sample file section below).
+   // - The first character that immediately follows the last data field character is an asterisk, but it is only included if a checksum is supplied.
+   // - The asterisk is immediately followed by a checksum represented as a two-digit hexadecimal number. The checksum is the bitwise exclusive OR of ASCII codes of all characters between the $ and *. 
+   //        According to the official specification, the checksum is optional for most data sentences, but is compulsory for RMA, RMB, and RMC (among others).
+   // - <CR><LF> ends the message. 
+   //
+   // Typical Baud rate	4800 (There is a variation of the standard called NMEA-0183HS that specifies a baud rate of 38,400. This is in general use by AIS devices.)
+   // Data bits	      8
+   // Parity	         None
+   // Stop bits	      1
+   // Handshake	      None
+   //
+   
+   
+   String record_checksum = "";
+   String computed_checksum = "";
+   int number_read_commas = 0;
+   int pos_comma = 0;
+   int start_fix_time = 0;
+   int end_fix_time = 0;
+   int start_fix_status = 0;
+   int end_fix_status = 0;
+   int start_fix_latitude = 0;
+   int end_fix_latitude = 0;
+   int start_fix_latitude_hemisphere = 0;
+   int end_fix_latitude_hemisphere = 0;
+   int start_fix_longitude = 0;
+   int end_fix_longitude = 0;
+   int start_fix_longitude_hemisphere = 0;
+   int end_fix_longitude_hemisphere = 0;
+   int start_fix_date = 0;
+   int end_fix_date = 0;   
+   boolean checksum_ok = false;
+
+   
+   // checksum check
+   computed_checksum = RS232_GPS_NMEA_Checksum(ontvangen_GPS_string);
+   record_checksum = ontvangen_GPS_string.substring(ontvangen_GPS_string.length() - 2);   
+   
+   if (computed_checksum.equals(record_checksum))
+   {
+      //System.out.println("checksum ok");
+      checksum_ok = true;
+   }
+   else
+   {
+      //System.out.println("record checksum = " + record_checksum);
+      //System.out.println("computed checksum = " + computed_checksum);
+      System.out.println(ontvangen_GPS_string);
+      System.out.println("checksum NOT ok"); 
+   }
+    
+   // process the received GPS RMC string
+   // eg $GPRMC,092751.000,A,5321.6802,N,00630.3371,W,0.06,31.66,280511,,,A*45 
+   //
+   if ((checksum_ok) && (ontvangen_GPS_string.length() > 40))           // for savety, 40 arbitrary number (but will cover latitude, longitude etc)
+   {
+      do
+      {
+         pos_comma = ontvangen_GPS_string.indexOf(",", pos_comma + 1);
+         if (pos_comma > 0)     // "," found
+         {
+            //System.out.println("pos_comma = " + pos_comma);
+            number_read_commas++;
+            
+            if (number_read_commas == 1)
+            {
+               start_fix_time = pos_comma + 1;
+            }
+            else if (number_read_commas == 2)
+            {
+               end_fix_time = pos_comma;
+               start_fix_status = pos_comma + 1;
+            }
+            else if (number_read_commas == 3)
+            {
+               end_fix_status = pos_comma;
+               start_fix_latitude = pos_comma + 1;
+            }
+            else if (number_read_commas == 4)
+            {
+               end_fix_latitude = pos_comma;
+               start_fix_latitude_hemisphere = pos_comma + 1;
+            }
+            else if (number_read_commas == 5)
+            {
+               end_fix_latitude_hemisphere = pos_comma;
+               start_fix_longitude = pos_comma + 1;
+            }
+            else if (number_read_commas == 6)
+            {
+               end_fix_longitude = pos_comma;
+               start_fix_longitude_hemisphere = pos_comma + 1;
+            }
+            else if (number_read_commas == 7) 
+            {
+               end_fix_longitude_hemisphere = pos_comma; 
+            }
+            else if (number_read_commas == 9) 
+            {
+               start_fix_date = pos_comma + 1;
+            }
+            else if (number_read_commas == 10) 
+            {
+               end_fix_date = pos_comma;
+            }
+                           
+         } // if (pos_comma > 0)
+      } while (pos_comma > 0);       
+      
+      
+      // http://gpsworld.com/what-exactly-is-gps-nmea-data/
+      //      181908.00 is the time stamp: UTC time in hours, minutes and seconds.
+      //      3404.7041778 is the latitude in the DDMM.MMMMM format. Decimal places are variable.
+      //      07044.3966270 is the longitude in the DDDMM.MMMMM format. Decimal places are variable.
+      
+      
+      // fix time
+      String hulp_fix_time = ontvangen_GPS_string.substring(start_fix_time, end_fix_time);
+      
+      // fix status ("A" = active/ok; V = void/not ok)
+      String fix_status = ontvangen_GPS_string.substring(start_fix_status, end_fix_status);
+      
+      // continue if status ok en seconds = 00
+      if ( (fix_status.toUpperCase().equals("A")) && (hulp_fix_time.substring(4, 6).equals("00")) )    // status "A" and seconds "00" (= every whole minute)
+      {
+         System.out.println(ontvangen_GPS_string);
+         
+         // raw storage, only for the device log
+         RS232_GPS_NMEA_0183_storage_device_log(ontvangen_GPS_string);
+         
+         // date (eg 280515)
+         GPS_date = ontvangen_GPS_string.substring(start_fix_date, end_fix_date);
+         
+         // time (eg 181908.00)
+         GPS_time = hulp_fix_time;                    // now GPS_time always holds the last valid value (passed the "A" status check) of the whole minute
+         
+         // update date and time on main screen (and date time input form)
+         //main.date_time_fields_update();
+         
+         // latitude complete (eg 3404.7041778)
+         GPS_latitude = ontvangen_GPS_string.substring(start_fix_latitude, end_fix_latitude);
+         
+         // latitude hemisphere
+         GPS_latitude_hemisphere = ontvangen_GPS_string.substring(start_fix_latitude_hemisphere, end_fix_latitude_hemisphere);
+         
+         // longitude complete (eg 07044.3966270)
+         GPS_longitude = ontvangen_GPS_string.substring(start_fix_longitude, end_fix_longitude); 
+         
+         // longitude hemisphere
+         GPS_longitude_hemisphere = ontvangen_GPS_string.substring(start_fix_longitude_hemisphere, end_fix_longitude_hemisphere);         
+         
+         // for timer checking the GPS data is not obsolete (see Function: RS232_GPS_NMEA_0183_init_new_data_received_check_timer)
+         last_new_GPS_data_received_TimeMillis = System.currentTimeMillis(); 
+         
+         // update the position fields on the main screen (so every whole minute)
+         //main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE");  // NB we do nothing with the return boolean of this function (this call was only for updating position on main screen)
+          
+      } // if ( (fix_status.toUpperCase().equals("A")) && (fix_time.substring(4, 6).equals("00")) )
+   } // if ((checksum_ok) && (ontvangen_GPS_string.length() > 40))
+   
+   // NB in function RS232_GPS_NMEA_0183_Date_Position_Parsing() these GPS vars are inserted/compared with obs position values
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_GPS_NMEA_0183_initComponents()
+{
+   // called from: - specific_connection_initComponents()
+   
+   // checking/looking for the correct com port
+   //
+   int completed_checks_serial_ports = 0;
+   while ((GPS_defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_GPS_PORT_CHECKS))
+   {
+      RS232_GPS_NMEA_0183_Check_Serial_Ports(completed_checks_serial_ports);               // GPS
+      completed_checks_serial_ports++;
+   }  
+   
+   
+   if (GPS_defaultPort != null)
+   {   
+      //System.out.println("+++ GPS_defaultPort = " + GPS_defaultPort);
+      
+      // info text on (bottom) main screen 
+      main.jLabel6.setText(main.APPLICATION_NAME + " receiving GPS data via serial communication.....");
+      
+      //GPS_serialPort = new SerialPort(GPS_defaultPort);  // NB GPS_defaultPort was determined in Function: RS232_GPS_NMEA_0183_Check_Serial_Ports()
+      //final SerialPort GPS_serialPort  = SerialPort.getCommPort(GPS_defaultPort); // // NB GPS_defaultPort was determined in Function: RS232_GPS_NMEA_0183_Check_Serial_Ports()
+      main.GPS_serialPort  = SerialPort.getCommPort(GPS_defaultPort);
+
+      
+      RS232_GPS_worker = new RS232_GPS_Class_Receive_Data();
+      RS232_GPS_worker.execute();
+   
+      String message = "[GPS] start listening";
+      main.log_turbowin_system_message(message);
+      
+      // start timer for checking every 1 minute if there is new barometer sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+      // NB invoking after: RS232_GPS_worker = new RS232_GPS_Class_Receive_Data(); and RS232_GPS_worker.execute();
+      last_new_GPS_data_received_TimeMillis = 0;
+      RS232_GPS_NMEA_0183_init_new_data_received_check_timer();
+      
+      
+      // GPS array's initialisation (used for course and speed last 10 minutes/3 hrs calculation)
+      for (int m = 0; m < MAX_GPS_ARRAY; m++)
+      {
+         GPS_array_pos[m][0] = Double.MAX_VALUE;        // latitude
+         GPS_array_pos[m][1] = Double.MAX_VALUE;        // longitude
+         GPS_array_time[m] = Long.MAX_VALUE;            // minutes sinds epoch (January 1, 1970)
+      }
+      
+   } // if (GPS_defaultPort != null)
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private class RS232_GPS_Class_Receive_Data extends SwingWorker<String, String>
+{
+   // called from: - RS232_GPS_NMEA_0183_initComponents()
+   //              - RS232_GPS_NMEA_0183_init_new_data_received_check_timer()
+   
+   // NB This class use doInBackground() and done() and not doInBackground(), publish() and process() (see outcommentd class RS232_GPS_Class_Receive_Data_2)
+   //    This because here, for the GPS connection, there is a continous input streem and not one string every minute. So better to handle everthing in the background
+   //    Disadvantage you cannot savely update the GUI in the doInbackground() eg to report the last updated date-time of the received data on label main screen
+   
+   
+      //new SwingWorker<String, String>()
+      //{
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            main.GPS_serialPort.openPort();                  // NB will NOT be closed in Function:  File_Exit_menu_actionPerformd() [main.java] ????
+            if (main.GPS_serialPort.isOpen())
+            {
+               String hulp_parity = "";
+               if (GPS_NMEA_0183_parity == 0)
+               {
+                  hulp_parity = "none";
+               }
+               else if (GPS_NMEA_0183_parity == 1)
+               {
+                  hulp_parity = "odd";
+               }
+               else if (GPS_NMEA_0183_parity == 2)
+               {
+                  hulp_parity = "even";
+               }          
+               //System.out.println("[GPS] " + GPS_serialPort.getPortName() + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               System.out.println("[GPS] " + GPS_defaultPort_descriptive + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               main.GPS_serialPort.setComPortParameters(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               main.GPS_serialPort.setFlowControl(GPS_NMEA_0183_flow_control);
+                  
+		      } // if (GPS_serialPort.isOpen())
+            //catch (SerialPortException ex) 
+            else        
+            {
+               System.out.println("[GPS] Couldn't open " +  GPS_defaultPort_descriptive);
+            }               
+   
+            if (main.GPS_serialPort.isOpen())
+            {
+               main.GPS_serialPort.addDataListener(new SerialPortDataListener() 
+               {
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  
+                  StringBuilder message = new StringBuilder();
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
+                  {
+                     String ontvangen_GPS_string = "";
+                  
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                     {
+                        return;
+                     }
+                     
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.GPS_serialPort.bytesAvailable()];
+                        numRead = main.GPS_serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                         numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }                     
+                     
+                  
+                     if (numRead > 0)
+                     {
+                        for (byte b: newData) 
+                        {
+                           if ((b == '\r' || b == '\n') && message.length() > 0) 
+                           {
+                              ontvangen_GPS_string = message.toString();
+                            
+                              // NB mail Henry Kleta 22-10-2015
+                              //    ...And if you have the choice: Go for the NMEA RMC sentence.
+                              //    One sentence, everyting in there and one of the view sentences that (nearly) all GPSes provide.
+                              if (main.RS232_GPS_sentence == 1)         // RMC
+                              {
+                                 // GP for a GPS unit, GL for a GLONASS, GN for satellites from multiple systems (e.g. https://docs.novatel.com/OEM7/Content/Logs/GPRMC.htm)
+                                 if ((ontvangen_GPS_string.indexOf("$GPRMC") != -1) || 
+                                     (ontvangen_GPS_string.indexOf("$GLRMC") != -1) ||
+                                     (ontvangen_GPS_string.indexOf("$GNRMC") != -1))                                
+                                 {
+                                    RS232_GPS_NMEA_0183_RMC(ontvangen_GPS_string);
+                                 }
+                              } // if (main.RS232_GPS_sentence == 1)
+                              else if (main.RS232_GPS_sentence == 2)     // GGA; could be an alternative in case of NMEA 2000 + converter
+                              {
+                                 // GP for a GPS unit, GL for a GLONASS
+                                 if ((ontvangen_GPS_string.indexOf("$GPGGA") != -1) || 
+                                     (ontvangen_GPS_string.indexOf("$GLGGA") != -1))  
+                                 {
+                                    RS232_GPS_NMEA_0183_GGA(ontvangen_GPS_string);
+                                 }
+                              } // else if (main.RS232_GPS_sentence == 2)
+                              
+                              message.setLength(0);
+                           } // if ((b == '\r' || b == '\n') && message.length() > 0) 
+                           else 
+                           {
+                              message.append((char)b);
+                           }
+                        } // for (byte b: newData)                     
+                     } // if (numRead > 0)  
+                     else if (numRead == -1)
+                     {
+                        String message_a = "[GPS] " + "interruption or execution error (NegativeArraySizeException)"; 
+                        main.log_turbowin_system_message(message_a);
+                     }
+                    
+                  } // public void serialEvent(SerialPortEvent spe)
+              });
+            } // if (GPS_serialPort.isOpen())
+            
+            return null;               
+               
+         } // protected Void doInBackground() throws Exception
+         
+         
+         //
+         // NB url: https://stackoverflow.com/questions/6523623/graceful-exception-handling-in-swing-worker
+         //         You should NOT try to catch exceptions in the background thread but rather let them pass through to the SwingWorker itself, 
+         //         and then you can get them in the done() method by calling get()which normally returns the result of doInBackground() 
+         //         (Voidin your situation). If an exceptionwas thrown in the background thread then get() will throw it, wrapped inside an ExecutionException.
+         // NB see above: when testing it seems that the NegativeArraySizeException wasn't passed to the Done method!! 
+         // NB not sure the program will ever execute the code below
+         //
+         // Executed in EDT
+         //
+         @Override
+         protected void done() 
+         {
+            try 
+            {
+               //get();
+               String message = get();
+               
+               if (message != null)
+               { 
+                  if (message.length() > 0)
+                  {
+                     main.log_turbowin_system_message(message);
+                  }
+               }
+            } 
+            catch (ExecutionException ex) 
+            {
+               String message = "[GPS] " + "execution excption"; 
+               main.log_turbowin_system_message(message);
+            } 
+            catch (InterruptedException ex) 
+            {
+               String message = "[GPS] " + "interruption exception"; 
+               main.log_turbowin_system_message(message);
+            }
+         } // protected void done()          
+            
+      //}.execute(); // new SwingWorker<String, String>()
+   
+}
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/* NB DEZE WERKT OOK GOED !!! [hier wordt niet alles in de achtergroond afgehandeld)
+private class RS232_GPS_Class_Receive_Data_2 extends SwingWorker<String, String>
+{
+      //new SwingWorker<String, String>()
+      //{
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            main.GPS_serialPort.openPort();                  // NB will NOT be closed in Function:  File_Exit_menu_actionPerformd() [main.java] ????
+            if (main.GPS_serialPort.isOpen())
+            {
+               String hulp_parity = "";
+               if (GPS_NMEA_0183_parity == 0)
+               {
+                  hulp_parity = "none";
+               }
+               else if (GPS_NMEA_0183_parity == 1)
+               {
+                  hulp_parity = "odd";
+               }
+               else if (GPS_NMEA_0183_parity == 2)
+               {
+                  hulp_parity = "even";
+               }          
+               //System.out.println("[GPS] " + GPS_serialPort.getPortName() + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               System.out.println("[GPS] " + GPS_defaultPort_descriptive + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               main.GPS_serialPort.setComPortParameters(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               main.GPS_serialPort.setFlowControl(GPS_NMEA_0183_flow_control);
+                  
+		      } // if (GPS_serialPort.isOpen())
+            //catch (SerialPortException ex) 
+            else        
+            {
+               System.out.println("[GPS] Couldn't open " +  GPS_defaultPort_descriptive);
+            }               
+   
+            if (main.GPS_serialPort.isOpen())
+            {
+               main.GPS_serialPort.addDataListener(new SerialPortDataListener() 
+               {
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  
+                  StringBuilder message = new StringBuilder();
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
+                  {
+                     String ontvangen_GPS_string = "";
+                  
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                     {
+                        return;
+                     }
+                     
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.GPS_serialPort.bytesAvailable()];
+                        numRead = main.GPS_serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                         numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }                     
+                     
+                  
+                     if (numRead > 0)
+                     {
+                        for (byte b: newData) 
+                        {
+                           if ((b == '\r' || b == '\n') && message.length() > 0) 
+                           {
+                              ontvangen_GPS_string = message.toString();
+                              
+                              // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                              //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                              //
+                              // For example:
+                              //
+                              // publish("1");
+                              // publish("2", "3");
+                              // publish("4", "5", "6");
+                              //
+                              // might result in: process("1", "2", "3", "4", "5", "6")
+  
+                              publish(new String[] { ontvangen_GPS_string });
+                              
+                              message.setLength(0);
+                           } // if ((b == '\r' || b == '\n') && message.length() > 0) 
+                           else 
+                           {
+                              message.append((char)b);
+                           }
+                        } // for (byte b: newData)                     
+                        
+                        //ontvangen_GPS_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                        //System.out.println("Read " + numRead + " bytes.");
+                     
+                        //publish(new String[] { ontvangen_GPS_string });
+                     } // if (numRead > 0)       
+                     else if (numRead == -1)
+                     {
+                        publish(new String[] { "interruption or excecution error\n" });
+                        
+                        // NB if publish error (see above) is not working (no message) the statemnts below do also not work (also no error message on screen or in the log file)
+                        //String message = "[GPS] " + "interruption or execution exception (NegativeArraySizeException)"; 
+                        //main.log_turbowin_system_message(message);
+                     } // else if (numRead == -1)
+                    
+                  } // public void serialEvent(SerialPortEvent spe)
+              });
+            } // if (GPS_serialPort.isOpen())
+            
+            return null;               
+               
+         } // protected Void doInBackground() throws Exception
+         
+         
+         //
+         // NB url: https://stackoverflow.com/questions/6523623/graceful-exception-handling-in-swing-worker
+         //         You should NOT try to catch exceptions in the background thread but rather let them pass through to the SwingWorker itself, 
+         //         and then you can get them in the done() method by calling get()which normally returns the result of doInBackground() 
+         //         (Voidin your situation). If an exceptionwas thrown in the background thread then get() will throw it, wrapped inside an ExecutionException.
+       
+         @Override
+         protected void process(List<String> data)
+         {
+            String total_GPS_string;        
+            
+            // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+            for (String ontvangen_GPS_string: data)
+            {
+               // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+               //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+               total_GPS_string = ontvangen_GPS_string;
+
+               //System.out.print(total_GPS_string);
+               //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+                  
+               // error logging
+               if (total_GPS_string.indexOf("error") != -1)
+               {
+                  String message = "[GPS] " + "interruption or execution exception"; 
+                  main.log_turbowin_system_message(message);
+               }  
+         
+               // update main screen label
+               // ...
+               // ......
+         
+               
+               if (main.RS232_GPS_sentence == 1)         // RMC
+               {
+                  if ((total_GPS_string.indexOf("$GPRMC") != -1) || (total_GPS_string.indexOf("$GLRMC") != -1))  // (GP for a GPS unit, GL for a GLONASS)
+                  {
+                     RS232_GPS_NMEA_0183_RMC(total_GPS_string);
+                  }
+               } // if (main.RS232_GPS_sentence == 1)
+               else if (main.RS232_GPS_sentence == 2)     // GGA; could be an alternative in case of NMEA 2000 + converter
+               {
+                  if ((total_GPS_string.indexOf("$GPGGA") != -1) || (total_GPS_string.indexOf("$GLGGA") != -1))  // (GP for a GPS unit, GL for a GLONASS)
+                  {
+                     RS232_GPS_NMEA_0183_GGA(total_GPS_string);
+                  }
+               } // else if (main.RS232_GPS_sentence == 2)               
+             
+            } // for (String ontvangen_GPS_string: data)
+         } //  protected void process(List<String> data)
+      //}.execute(); // new SwingWorker<String, String>()
+   
+   
+}
+*/
+
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+public void RS232_GPS_NMEA_0183_initComponents()
+{
+   // checking/looking for the correct com port
+   //
+   int completed_checks_serial_ports = 0;
+   while ((GPS_defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_GPS_PORT_CHECKS))
+   {
+      RS232_GPS_NMEA_0183_Check_Serial_Ports(completed_checks_serial_ports);               // GPS
+      completed_checks_serial_ports++;
+   }  
+   
+   
+   if (GPS_defaultPort != null)
+   {   
+      //System.out.println("+++ GPS_defaultPort = " + GPS_defaultPort);
+      
+      // info text on (bottom) main screen 
+      main.jLabel6.setText(main.APPLICATION_NAME + " receiving GPS data via serial communication.....");
+      
+      //GPS_serialPort = new SerialPort(GPS_defaultPort);  // NB GPS_defaultPort was determined in Function: RS232_GPS_NMEA_0183_Check_Serial_Ports()
+      //final SerialPort GPS_serialPort  = SerialPort.getCommPort(GPS_defaultPort); // // NB GPS_defaultPort was determined in Function: RS232_GPS_NMEA_0183_Check_Serial_Ports()
+      main.GPS_serialPort  = SerialPort.getCommPort(GPS_defaultPort);
+      
+      new SwingWorker<String, String>()
+      {
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            main.GPS_serialPort.openPort();                  // NB will NOT be closed in Function:  File_Exit_menu_actionPerformd() [main.java] ????
+            if (main.GPS_serialPort.isOpen())
+            {
+               String hulp_parity = "";
+               if (GPS_NMEA_0183_parity == 0)
+               {
+                  hulp_parity = "none";
+               }
+               else if (GPS_NMEA_0183_parity == 1)
+               {
+                  hulp_parity = "odd";
+               }
+               else if (GPS_NMEA_0183_parity == 2)
+               {
+                  hulp_parity = "even";
+               }          
+               //System.out.println("[GPS] " + GPS_serialPort.getPortName() + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               System.out.println("[GPS] " + GPS_defaultPort_descriptive + " trying to open with " + String.valueOf(main.GPS_bits_per_second) + " " + hulp_parity + " " + String.valueOf(GPS_NMEA_0183_data_bits) + " " + String.valueOf(GPS_NMEA_0183_stop_bits));
+               main.GPS_serialPort.setComPortParameters(main.GPS_bits_per_second, GPS_NMEA_0183_data_bits, GPS_NMEA_0183_stop_bits, GPS_NMEA_0183_parity);
+               main.GPS_serialPort.setFlowControl(GPS_NMEA_0183_flow_control);
+                  
+               // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
+               // Well, for example, we need to know what came some data, thus in the mask must have the
+               // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
+               // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
+               //int mask = SerialPort.MASK_RXCHAR;
+                  
+               //Set the prepared mask
+               //GPS_serialPort.setEventsMask(mask);   
+                  
+               //System.out.println("+++ passed try block");
+                  
+		      } // if (GPS_serialPort.isOpen())
+            //catch (SerialPortException ex) 
+            else        
+            {
+               //System.out.println("[GPS] " + ex);
+               //System.out.println("[GPS] Couldn't open " +  main.GPS_serialPort.getDescriptivePortName());
+               System.out.println("[GPS] Couldn't open " +  GPS_defaultPort_descriptive);
+            }               
+   
+            if (main.GPS_serialPort.isOpen())
+            {
+               main.GPS_serialPort.addDataListener(new SerialPortDataListener() 
+               {
+                  @Override
+                  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                  
+                  StringBuilder message = new StringBuilder();
+                  
+                  @Override
+                  public void serialEvent(SerialPortEvent event)
+                  {
+                     String ontvangen_GPS_string = "";
+                  
+                     if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                     {
+                        return;
+                     }
+                     
+                     //byte[] newData = new byte[main.GPS_serialPort.bytesAvailable()];
+                     //int numRead = main.GPS_serialPort.readBytes(newData, newData.length);
+                     int numRead;
+                     byte[] newData = null;
+                     try
+                     {
+                        newData = new byte[main.GPS_serialPort.bytesAvailable()];
+                        numRead = main.GPS_serialPort.readBytes(newData, newData.length);                  
+                     }
+                     catch (NegativeArraySizeException ex) 
+                     {
+                         numRead = -1;
+                        // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                     }                     
+                     
+                  
+                     if (numRead > 0)
+                     {
+                        for (byte b: newData) 
+                        {
+                           if ((b == '\r' || b == '\n') && message.length() > 0) 
+                           {
+                              ontvangen_GPS_string = message.toString();
+                            
+                              // NB mail Henry Kleta 22-10-2015
+                              //    ...And if you have the choice: Go for the NMEA RMC sentence.
+                              //    One sentence, everyting in there and one of the view sentences that (nearly) all GPSes provide.
+                              if (main.RS232_GPS_sentence == 1)         // RMC
+                              {
+                                 if ((ontvangen_GPS_string.indexOf("$GPRMC") != -1) || (ontvangen_GPS_string.indexOf("$GLRMC") != -1))  // (GP for a GPS unit, GL for a GLONASS)
+                                 {
+                                    RS232_GPS_NMEA_0183_RMC(ontvangen_GPS_string);
+                                 
+                                    // for checking that the displayed data is not obsolete (i.e. not updated last 5 minutes)
+                                    //last_new_GPS_data_received_TimeMillis = System.currentTimeMillis(); // see also Function: .... [main_RS232_422.java]
+                                 }
+                              } // if (main.RS232_GPS_sentence == 1)
+                              else if (main.RS232_GPS_sentence == 2)     // GGA; could be an alternative in case of NMEA 2000 + converter
+                              {
+                                 if ((ontvangen_GPS_string.indexOf("$GPGGA") != -1) || (ontvangen_GPS_string.indexOf("$GLGGA") != -1))  // (GP for a GPS unit, GL for a GLONASS)
+                                 {
+                                    RS232_GPS_NMEA_0183_GGA(ontvangen_GPS_string);
+                                 }
+                              } // else if (main.RS232_GPS_sentence == 2)
+                              
+                              message.setLength(0);
+                           } // if ((b == '\r' || b == '\n') && message.length() > 0) 
+                           else 
+                           {
+                              message.append((char)b);
+                           }
+                        } // for (byte b: buffer)                     
+                     } // if (numRead > 0)  
+                     else if (numRead == -1)
+                     {
+                        //publish(new String[] { "interruption or excecution error\n" });
+                        String message_a = "[GPS] " + "NegativeArraySizeException (interruption or execution error)"; 
+                        main.log_turbowin_system_message(message_a);
+                     }
+                    
+                  } // public void serialEvent(SerialPortEvent spe)
+              });
+            } // if (GPS_serialPort.isOpen())
+            
+            return null;               
+               
+         } // protected Void doInBackground() throws Exception
+         
+         
+         //
+         // NB url: https://stackoverflow.com/questions/6523623/graceful-exception-handling-in-swing-worker
+         //         You should NOT try to catch exceptions in the background thread but rather let them pass through to the SwingWorker itself, 
+         //         and then you can get them in the done() method by calling get()which normally returns the result of doInBackground() 
+         //         (Voidin your situation). If an exceptionwas thrown in the background thread then get() will throw it, wrapped inside an ExecutionException.
+         // NB see above: when testing it seems that the NegativeArraySizeException wasn't passed to the Done method!! 
+         // NB not sure the program will ever execute the code below
+         //
+         // Executed in EDT
+         //
+         @Override
+         protected void done() 
+         {
+            try 
+            {
+               get();
+            } 
+            catch (ExecutionException ex) 
+            {
+               //String message = "[GPS] " + ex.getMessage(); 
+               String message = "[GPS] " + "execution excption"; 
+               main.log_turbowin_system_message(message);
+               //message = "barometer connection execution exception (pc sleep mode?); restart this program";
+               //JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);                 
+            } 
+            catch (InterruptedException ex) 
+            {
+               String message = "[GPS] " + "interruption exception"; 
+               main.log_turbowin_system_message(message);
+               //message = "barometer connection interrupted; restart this program";
+               //JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+            }
+         } // protected void done()          
+            
+      }.execute(); // new SwingWorker<String, String>()
+   } // if (GPS.defaultPort != null)
+   
+} // public void RS232_GPS_initComponents()
+*/
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void WiFi_Check_Connection_b()
+{
+   System.out.println("start Wifi_Check_connection_b");
+   
+   
+ String host = "192.168.178.18";               // ALLEEN VOOR TEST
+         int port = 80;
+         try (Socket socket = new Socket(host, port);
+              InputStream is = socket.getInputStream();
+              BufferedReader in = new BufferedReader(new InputStreamReader(is));
+              OutputStream os = socket.getOutputStream();
+              PrintWriter out = new PrintWriter(os);
+            ) 
+         {
+            // test WiFiSystem.out.printf("Sending 'TurboWin' command to %s%n", host);
+         //out.print("dm wifi HTTP/1.1\r\n\r\n");
+         //out.flush();
+         String in_line;
+
+         //while ((in_line = in.readLine()).length() != 0) {}         // skip past the HTTP Headers
+
+         while ((in_line = in.readLine()) != null) 
+         {     
+            // read the TurboWin information
+            System.out.println(in_line);
+         }
+         socket.close();
+            
+         
+         } 
+         catch (UnknownHostException e) 
+         {
+            System.out.println("Don't know about host " + host);
+            // System.exit(1);
+         } 
+         catch (IOException e) 
+         {
+            System.out.println("Couldn't get I/O for the connection to " + host);
+            //System.exit(1);
+         }            
+
+}
+*/
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void WiFi_Check_Connection_UDP_c()
+{
+   
+   System.out.println("start Wifi_Check_connection_UDP_c");
+      
+}
+*/
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void WiFi_Check_Connection_UDP_b()
+{
+   // https://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
+   System.out.println("start Wifi_Check_connection_UDP_b");
+   
+DatagramSocket socket = null;
+   try {
+      try {
+         socket = new DatagramSocket(10110, InetAddress.getByName("0.0.0.0"));
+      } catch (UnknownHostException ex) {
+         Logger.getLogger(main_RS232_RS422.class.getName()).log(Level.SEVERE, null, ex);
+      }
+   } catch (SocketException ex) {
+      Logger.getLogger(main_RS232_RS422.class.getName()).log(Level.SEVERE, null, ex);
+   }
+   try {
+      //DatagramSocket socket = new DatagramSocket(10110, InetAddress.getByName("192.168.178.13"));
+      socket.setBroadcast(true);
+   } catch (SocketException ex) {
+      Logger.getLogger(main_RS232_RS422.class.getName()).log(Level.SEVERE, null, ex);
+   }
+   try {
+      System.out.println("Listen on " + socket.getLocalAddress() + " from " + socket.getInetAddress() + " port " + socket.getBroadcast());
+   } catch (SocketException ex) {
+      Logger.getLogger(main_RS232_RS422.class.getName()).log(Level.SEVERE, null, ex);
+   }
+         byte[] buf = new byte[512];
+         DatagramPacket packet = new DatagramPacket(buf, buf.length);
+   
+         while (true) 
+         {
+            System.out.println("Waiting for data");
+      try {
+         socket.receive(packet);
+      } catch (IOException ex) {
+         Logger.getLogger(main_RS232_RS422.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+            System.out.println("Data received: ");
+            int endidx = 0;
+            for (; endidx < buf.length; endidx++) if (buf[endidx] == '*') break;
+            endidx += 3;
+            int idx = 0;
+            for (int i = 0; i<endidx; i++) System.out.print((char) buf[idx++]);
+            System.out.println();
+        }   
+
+}
+*/
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private class WiFi_Class_Receive_UDP extends SwingWorker<String, String>
+{
+   // called from: WiFi_initComponents() [main_RS232_RS422.java]
+   //
+   
+   // initialisation
+   boolean retry = false;
+   boolean data_0_minutes_present = false;                 // to detemine if incoming sensor data from 00 minutes time is present, because this is directly linked to sending/uploading of the obs
+
+
+   @Override
+   protected String doInBackground() throws Exception
+   {
+      String connection_result = "";                       // to report connection error (as a return) on the Event Dispatch Thread after the doInBackground method is finished.
+      
+      if (!main.lan_ip_address.equals(""))                 // specific IP address was inserted (Mintaka ENet box with fixed IP listening address, introduced by Maersk fot next-gen firewalls)
+      {
+         final String INET_ADDR = main.lan_ip_address;     // e.g. 192.168.1.12
+         final int PORT         = 10110;
+
+         try (DatagramSocket socket = new DatagramSocket(PORT, InetAddress.getByName(INET_ADDR)))
+         {   
+            String ontvangen_SMD_string = "";
+            byte[] buf = new byte[1024];
+
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            while (true) 
+            {
+               ontvangen_SMD_string = "";
+
+               socket.receive(packet);
+
+               int endidx = 0;
+               for (; endidx < buf.length; endidx++) 
+               {
+                  if (buf[endidx] == '*') break;
+               }
+
+               endidx += 3;
+               int idx = 0;
+               for (int i = 0; i < endidx; i++) 
+               {
+                  ontvangen_SMD_string += (char)buf[idx];
+                  idx++;
+               }
+               ontvangen_SMD_string += "\n";
+
+               publish(new String[] { ontvangen_SMD_string });
+
+            } //  while (true)
+         } // try
+         catch (SocketException e) 
+         {
+            String message = "[LAN] connection error (" + main.lan_ip_address + "): " + e;
+            main.log_turbowin_system_message(message);
+            connection_result = message;
+         } 
+         catch (IOException e)
+         {
+            //System.out.println("Timeout. Client is closing.");
+            String message = "[LAN] IO error (" + main.lan_ip_address + "): " + e;
+            main.log_turbowin_system_message(message); 
+            connection_result = message;
+         }
+      } // if (!main.lan_ip_address.equals(""))
+      else // no specific IP address was inserted
+      {   
+         // no specific IP address was inserted, so now listing to Mintaka broadcasts
+         try (DatagramSocket socket = new DatagramSocket(null))     // unbound!
+         {     
+            // NB info: https://download.java.net/java/early_access/jdk17/docs/api/java.base/java/net/DatagramSocket.html
+            //          A DatagramSocket that is created with the intent of receiving multicast datagrams should be created unbound. 
+            //          Before binding the socket, setReuseAddress(true) should be configured:
+            //          (with DatagramSocket socket = new DatagramSocket(10110, InetAddress.getByName("0.0.0.0")); it is bound directly, so no option for setReuseAddress) 
+
+            socket.setReuseAddress(true);
+            socket.bind(new InetSocketAddress(10110));
+
+         //try (DatagramSocket socket = new DatagramSocket(10110, InetAddress.getByName("0.0.0.0"));)   
+         //{
+            String ontvangen_SMD_string = "";
+
+
+            socket.setBroadcast(true);
+
+            //System.out.println("Listen on " + socket.getLocalAddress() + " from " + socket.getInetAddress() + " port " + socket.getBroadcast());
+            byte[] buf = new byte[512];
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            while (true) 
+            {
+               ontvangen_SMD_string = "";
+               //System.out.println("Waiting for data");
+               socket.receive(packet);
+
+               //System.out.println("Data received: ");
+
+               int endidx = 0;
+               for (; endidx < buf.length; endidx++) 
+               {
+                  if (buf[endidx] == '*') break;
+               }
+
+               endidx += 3;
+               int idx = 0;
+               for (int i = 0; i < endidx; i++) 
+               {
+                  ontvangen_SMD_string += (char)buf[idx];
+                  //System.out.print((char) buf[idx]);
+                  idx++;
+               }
+               ontvangen_SMD_string += "\n";
+               //System.out.println();
+
+
+               publish(new String[] { ontvangen_SMD_string });
+
+            } //  while (true)
+         } // try
+         catch (SocketException e) 
+         {
+            String message = "[WIFI] connection error: " + e;
+            main.log_turbowin_system_message(message);
+            connection_result = message;
+         } 
+         catch (IOException e)
+         {
+            //System.out.println("Timeout. Client is closing.");
+            String message = "[WIFI] IO error: " + e;
+            main.log_turbowin_system_message(message);
+            connection_result = message;            
+         }
+      } // else (no specific IP address was inserted)
+
+      return connection_result;
+
+   } // protected String doInBackground() throws Exception
+
+   @Override
+   protected void process(List<String> data)
+   {
+      // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+      for (String ontvangen_SMD_string: data)
+      {
+         // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+         //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+         main.total_string = ontvangen_SMD_string;
+
+         System.out.print(main.total_string);
+         //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+
+         RS232_write_sensor_data_to_file();                             // PTB220, PTB330, MintakaDuo, Mintaka Star USB, Mintaka Star WiFi
+
+         // update main screen with application name + mode and date time last received data
+         String info = "";
+         if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) 
+         {
+           info = "no data";
+         } 
+         else 
+         {
+            info = main_RS232_RS422.test_record;
+         }     
+         
+         if (!main.lan_ip_address.equals(""))                 // specific IP address was inserted (Mintaka ENet box with fixed IP listening address, introduced by Maersk fot next-gen firewalls)
+         {
+            main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via LAN: " + info);
+         }
+         else
+         {
+            main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via WiFi: " + info);      
+         }
+         
+         // for timer checking the data is not obsolate (see Function: RS232_WiFi_init_new_barometer_received_check_timer)
+         last_new_data_received_TimeMillis = System.currentTimeMillis(); 
+
+         // update the date and time on the main screen (and the global date time var's)
+         // NB if during start up the date and time displayed in the pupup message was not comfirmed by the user
+         //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+         if (main.use_system_date_time_for_updating == true)
+         {  
+            set_datetime_while_collecting_sensor_data();
+         }
+
+         // WOW enabled (and not 'only publish if manual obs was send') and a complete sensor data string was received
+         if ((main.WOW == true) /*&& (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL))*/ && (main.total_string.indexOf("\n") != -1))
+         {
+            cal_WOW_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
+            cal_WOW_systeem_datum_tijd.getTime();                                             // now effective
+            int WOW_system_minute_local = cal_WOW_systeem_datum_tijd.get(Calendar.MINUTE);
+            cal_WOW_systeem_datum_tijd = null; 
+
+            //if (WOW_system_minute_local % Integer.valueOf(main.WOW_reporting_interval) == 0)      // e.g. every 10 minutes (WOW_reporting_interval);  
+            // NB avoid: retrieving sensor data exactly the same time as APR!!!! -> issue at whole hours
+            if ((WOW_system_minute_local -1) % Integer.valueOf(main.WOW_reporting_interval) == 0)      // e.g. every 10 minutes (WOW_reporting_interval);  e.g: 1, 11, 21, 31 etc min past every hour    
+            {
+               // logging
+               String message = "[WOW] scheduled upload"; 
+               main.log_turbowin_system_message(message);
+
+               // checking
+               boolean WOW_settings_ok = RS232_check_WOW_settings();
+
+               if (WOW_settings_ok)
+               {   
+                  // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                  if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)       // PTB220 or PTB330
+                  {
+                     RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                  }
+                  else if (main.RS232_connection_mode == 4)                                     // MintakaDuo
+                  {
+                     RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                  }
+                  else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                  {
+                     //RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                     boolean StarX = false;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry, StarX);
+                  } 
+                  else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // Mintaka StarX (USB or WiFi)
+                  {
+                     boolean StarX = true;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry, StarX);
+                  } 
+               } // if (WOW_settings_ok)
+            }   
+         } // if ((main.WOW == true) && (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL)) && (main.total_string.indexOf("\n") != -1))
+
+         // APR (Automated Pressure Reporting)
+         if ((main.APR == true) && (main.total_string.indexOf("\n") != -1))
+         {
+            cal_APR_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+            cal_APR_system_date_time.getTime();                                               // now effective
+            int APR_system_hour_local = cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY);   // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+            int APR_system_minute_local = cal_APR_system_date_time.get(Calendar.MINUTE);
+
+            if ((APR_system_minute_local == 0) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+            {
+               data_0_minutes_present = true;                                                 // to detemine if incoming sensor data from 00 minutes time is present, because this is directly linked to sending/uploading of the obs
+               retry = false;
+
+               // logging
+               String message = "[APR] scheduled upload"; 
+               main.log_turbowin_system_message(message);
+
+               // checking
+               boolean only_2nd_instrument = false;
+               boolean APR_settings_ok = RS232_check_APR_settings(only_2nd_instrument);
+               boolean GPS_date_time_ok = true;
+
+               if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8) // Mintaka Star or StarX  (USB or WiFi)
+               {
+                  // NB Mintaka Star and StarX saved data do not contain date/time information so it is not possible to check this
+                  //    so it is made always true
+                  GPS_date_time_ok = true;
+               }
+               else
+               {
+                  GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+               }
+
+               if (GPS_date_time_ok == false)
+               {
+                  main.Reset_all_meteo_parameters();
+               }
+
+               if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+               {
+                  // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+
+                  // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                  if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)       // PTB220 or PTB330
+                  {
+                     RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                  }
+                  else if (main.RS232_connection_mode == 4)                                     // MintakaDuo
+                  {
+                     RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                  }
+                  else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                  {
+                     //RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     boolean StarX = false;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                  }      
+                  else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // Mintaka StarX (USB or WiFi)
+                  {
+                     boolean StarX = true;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                  } 
+               } // if (APR_settings_ok && GPS_date_time_ok) 
+            } // if ((APR_system_minute_local == 0) etc.
+
+            if ( (data_0_minutes_present == false) && (APR_system_minute_local == 1) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))  
+            {
+               // NB sometimes the incoming data of exactly 0 minutes is not received, then also no obs (server)upload / (email)sending
+               //    so then try again at 1 minute past the (APR interval)hour 
+
+               retry = false;
+
+               // logging
+               String message = "[APR] scheduled upload"; 
+               main.log_turbowin_system_message(message);
+
+               // checking
+               boolean only_2nd_instrument = false;
+               boolean APR_settings_ok = RS232_check_APR_settings(only_2nd_instrument);
+               boolean GPS_date_time_ok = true;
+
+               if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8) // Mintaka Star or StarX  (USB or WiFi)
+               {
+                  // NB Mintaka Star and StarX saved data do not contain date/time information so it is not possible to check this
+                  //    so it is made always true
+                  GPS_date_time_ok = true;
+               }
+               else
+               {
+                  GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+               }
+
+               if (GPS_date_time_ok == false)
+               {
+                  main.Reset_all_meteo_parameters();
+               }
+
+               if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+               {
+                  // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+
+                  // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                  if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)       // PTB220 or PTB330
+                  {
+                     RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                  }
+                  else if (main.RS232_connection_mode == 4)                                     // MintakaDuo
+                  {
+                     RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                  }
+                  else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                  {
+                     //RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     boolean StarX = false;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                  }      
+                  else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // Mintaka StarX (USB or WiFi)
+                  {
+                     boolean StarX = true;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                  } 
+               } // if (APR_settings_ok && GPS_date_time_ok) 
+
+            } // if ( (data_0_minutes_present == false) && (APR_system_minute_local == 1) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))  
+
+
+            //else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local == APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+            if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local == APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+            {
+               retry = true;
+
+               // logging
+               String message = "[APR] retry scheduled upload"; 
+               main.log_turbowin_system_message(message);
+
+               // checking
+               boolean only_2nd_instrument = false;
+               boolean APR_settings_ok = RS232_check_APR_settings(only_2nd_instrument);
+               boolean GPS_date_time_ok = true;
+
+               if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8) // Mintaka Star or StarX (USB or WiFi)
+               {
+                  // NB Mintaka Star and StarX saved data do not contain date/time information so it is not possible to check this
+                  //    so it is made always true
+                  GPS_date_time_ok = true;
+               }
+               else
+               {
+                  GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+               }
+
+               if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+               {
+                  // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+
+                  // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                  if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)       // PTB220 or PTB330
+                  {
+                     RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                  }
+                  else if (main.RS232_connection_mode == 4)                                     // MintakaDuo
+                  {
+                     RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                  }
+                  else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                  {
+                     //RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     boolean StarX = false;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                  } 
+                  else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // Mintaka StarX (USB or WiFi)
+                  {
+                     boolean StarX = true;
+                     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                  } 
+               } // if (APR_settings_ok && GPS_date_time_ok) 
+
+               // reset (to be sure)
+               APR_server_response_code = 0;
+
+            } // else if ((APR_server_response_code = main.RESPONSE_NO_INTERNET) etc.
+            else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local < APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+            {
+               // text will be visible only a few minutes (till the retry upload)
+               main.jTextField4.setText("[APR] retry automated pressure report upload within a few minutes");
+            }
+            else
+            {
+               // text with next APR update bottom status line TurboWin+ main screen (updated every minute, directly linked to incoming sensor data of every minute)
+               for (int i = (APR_system_hour_local + 1); i < (APR_system_hour_local + 1 + Integer.valueOf(main.APR_reporting_interval)); i++)
+               {
+                  // 24 hours or higher makes no difference for this computation
+                  if (i % Integer.valueOf(main.APR_reporting_interval) == 0)
+                  {
+                     cal_APR_system_date_time.add(Calendar.HOUR_OF_DAY, i - APR_system_hour_local);   // add 1 - 5 hours
+                     cal_APR_system_date_time.getTime();
+
+                     String next_APR_string = "[APR] next automated meteo report upload: " + cal_APR_system_date_time.get(Calendar.DAY_OF_MONTH) + " " + main.convert_month(cal_APR_system_date_time.get(Calendar.MONTH)) + " " + cal_APR_system_date_time.get(Calendar.YEAR) + " " + cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY) + ".00 UTC"; 
+
+                     main.jTextField4.setText(next_APR_string);
+                     break;
+                  }
+               } // for (int i = (APR_system_hour_local + 1); etc.
+            } // else
+
+            cal_APR_system_date_time = null; 
+
+            // reset (but not too early!)
+            //if ( (APR_system_minute_local != 0) && (APR_system_minute_local != 1) )
+            if (APR_system_minute_local != 0)   
+            //if (APR_system_minute_local >= 2 && APR_system_minute_local <= 59)      
+            {
+               data_0_minutes_present = false;
+            }
+
+         } // if ( (main.APR == true) && (main.total_string.indexOf("\n") != -1))
+      } //  for (String ontvangen_SMD_string: data)
+
+   } // protected void process(List<String> data)
+   
+   @Override
+   protected void done()
+   {
+      try 
+      {
+         String result = get();                                   // get the return value of the doInBackground()
+         if (!result.equals(""))                                  // so there is a result/return message
+         {   
+            // NB Avoiding interference with the 'Date-Time' openings messageBox (which is always on top) !!
+            //    Because they are both created in different threads. Therefore this construction below
+            // 
+            final JOptionPane pane_begin = new JOptionPane(result, JOptionPane.WARNING_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            final JDialog lan_error_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+            
+            lan_error_dialog.setLocationRelativeTo(main.jLabel4);    // jLabel4 had public access (private access will not do)
+
+            Timer timer_begin = new Timer(5000, new ActionListener()
+            {
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  lan_error_dialog.dispose();
+               }
+            });
+            timer_begin.setRepeats(false);
+            timer_begin.start();
+            lan_error_dialog.setVisible(true);            
+            lan_error_dialog.setModal(false);                         // setModal(true or false) seems not important here in this specific situation 
+         }
+      } 
+      catch (InterruptedException | ExecutionException ex) 
+      {
+         System.out.println("--- WiFi_Class_Receive_UDP error: " + ex); 
+      }
+   } // protected void done()
+}
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private class Ethernet_Class_Receive_UDP extends SwingWorker<Void, String>
+{     
+      // AWS ethernet (LAN) only
+      //
+      // called from: - Ethernet_initComponents()
+      //              - RS422_init_new_aws_data_received_check_timer()
+      //
+      //
+      // NB OMC-140 LAN uses port 60004 and multicast ip adress 239.192.0.4   
+      // eg https://examples.javacodegeeks.com/core-java/net/multicastsocket-net/java-net-multicastsocket-example/
+      //    http://www.baeldung.com/java-broadcast-multicast
+      //    https://en.wikipedia.org/wiki/Multicast_address
+      //
+   
+      @Override
+      protected Void doInBackground() throws Exception
+      {
+         final String INET_ADDR = "239.192.0.4";              // multicast IP group OMC-140 LAN
+         final int PORT         = 60004;
+         
+         // ---- DEPRECATED START ----
+         //         InetAddress group_udp = InetAddress.getByName(INET_ADDR);
+         //         
+         //         try (MulticastSocket socket_udp = new MulticastSocket(PORT))  
+         //         {
+         //            socket_udp.joinGroup(group_udp);         // NB "joinGroup(InetAddress) in MulticastSocket has been deprecated" (https://bugs.openjdk.java.net/browse/JDK-8235330)
+         // ---- DEPRECATED END ----//
+         // NB see below new implementation tested succesfully on 18-Oct-2021 (with "Com Port Data Emulator" running on a second pc)
+            
+         NetworkInterface netIf = null;
+         InetAddress mcastaddr = InetAddress.getByName(INET_ADDR);
+         InetSocketAddress group = null;
+         
+         // network interface
+         try 
+         {
+            netIf = NetworkInterface.getByName(INET_ADDR);
+         }
+         catch (SocketException | NullPointerException e) 
+         {
+            String message = "[AWS] connection error: " + e;
+            main.log_turbowin_system_message(message);
+         }
+        
+         // multicast group
+         try
+         {
+            group = new InetSocketAddress(mcastaddr, PORT);
+         }
+         catch (IllegalArgumentException | SecurityException e)
+         {
+            String message = "[AWS] connection error: " + e;
+            main.log_turbowin_system_message(message);
+         }
+         
+         try (MulticastSocket socket_udp = new MulticastSocket(PORT))
+         {
+            socket_udp.joinGroup(group, netIf);
+            
+            //byte[] buf = new byte[512
+            byte[] buf = new byte[2048];                                 // NB 512 is not enough!! must cover the length of the whole $PEUMB string
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            while (true) 
+            {
+               socket_udp.receive(packet);
+               String ontvangen_SMD_string = new String(packet.getData(), 0, packet.getLength());
+               
+               publish(new String[] { ontvangen_SMD_string });
+               
+            } // while (true)
+         } // try
+         catch (SocketException e) 
+         {
+            String message = "[AWS] connection error: " + e;
+            main.log_turbowin_system_message(message);
+         } 
+         catch (IOException e)
+         {
+            String message = "[AWS] IO error: " + e;
+            main.log_turbowin_system_message(message);            
+         }
+         
+         
+         return null;
+      } // protected Void doInBackground() throws Exception
+      
+      
+      @Override
+      protected void process(List<String> data)
+      {
+         // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+         for (String ontvangen_SMD_string: data)
+         {
+            // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+            //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+            main.total_string = ontvangen_SMD_string;
+            
+            System.out.print(main.total_string);
+
+            RS422_V3_write_sensor_data_to_file();     // NB also main.jLabel4 will be updated in this function and also last_new_data_received_TimeMillis
+            
+            // update main screen with application name + mode and date time last received data
+            //String info = "";
+            //if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) 
+            //{
+            //  info = "no data";
+            //} 
+            //else 
+            //{
+            //   info = main_RS232_RS422.test_record;
+            //}     
+            //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received sensor data: " + info);
+
+            // for timer checking the data is not obsolate (see Function: RS232_WiFi_init_new_barometer_received_check_timer)
+            //last_new_data_received_TimeMillis = System.currentTimeMillis(); 
+            
+            // update the date and time on the main screen (and the global date time var's)
+            // NB if during start up the date and time displayed in the pupup message was not comfirmed by the user
+            //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+            if (main.use_system_date_time_for_updating == true)
+            {  
+               set_datetime_while_collecting_sensor_data();
+            }
+         } // for (String ontvangen_SMD_string: data)
+      } // protected void process(List<String> data)
+      
+      
+      
+      @Override
+      protected void done()
+      {
+         
+      } // protected void done()
+      
+}
+
+
+
+
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void WiFi_Receive_UDP()
+{
+   //System.out.println("+++ " + "WiFi_receiveUDP()");
+   // info text on (bottom) main screen 
+   //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", receiving barometer sensor data via WiFi communication.....");
+
+   // called from: WiFi_initComponents() [main_RS232_RS422.java]
+   // NB to kill the swingworker see: https://stackoverflow.com/questions/8083768/stop-cancel-swingworker-thread
+   //     0r https://stackoverflow.com/questions/20427697/trying-to-stop-swingworker
+   //     etc.
+   
+   
+   
+   new SwingWorker<String, String>()
+   //WiFi_worker = new SwingWorker<String, String>()
+   {
+      //String line;
+      boolean retry = false;
+      
+      @Override
+      protected String doInBackground() throws Exception
+      {
+         try (DatagramSocket socket = new DatagramSocket(10110, InetAddress.getByName("0.0.0.0"));)   
+         {
+            String ontvangen_SMD_string = "";
+            
+            
+            socket.setBroadcast(true);
+         
+            //System.out.println("Listen on " + socket.getLocalAddress() + " from " + socket.getInetAddress() + " port " + socket.getBroadcast());
+            byte[] buf = new byte[512];
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            while (true) 
+            {
+               ontvangen_SMD_string = "";
+               //System.out.println("Waiting for data");
+               socket.receive(packet);
+
+               //System.out.println("Data received: ");
+               
+               int endidx = 0;
+               for (; endidx < buf.length; endidx++) 
+               {
+                  if (buf[endidx] == '*') break;
+               }
+               
+               endidx += 3;
+               int idx = 0;
+               for (int i = 0; i < endidx; i++) 
+               {
+                  ontvangen_SMD_string += (char)buf[idx];
+                  //System.out.print((char) buf[idx]);
+                  idx++;
+               }
+               ontvangen_SMD_string += "\n";
+               //System.out.println();
+               
+               
+               publish(new String[] { ontvangen_SMD_string });
+               
+            } //  while (true)
+         } // try
+         catch (SocketException e) 
+         {
+            String message = "[WIFI] connection error: " + e;
+            main.log_turbowin_system_message(message);
+         } 
+         catch (IOException e)
+         {
+            //System.out.println("Timeout. Client is closing.");
+            String message = "[WIFI] IO error: " + e;
+            main.log_turbowin_system_message(message);            
+         }
+         
+         
+         return null;
+         
+      } // protected String doInBackground() throws Exception
+    
+      @Override
+      protected void process(List<String> data)
+      {
+         // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+         for (String ontvangen_SMD_string: data)
+         {
+            // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+            //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+            main.total_string = ontvangen_SMD_string;
+            
+            System.out.print(main.total_string);
+            //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+
+            RS232_write_sensor_data_to_file();                             // PTB220, PTB330, MintakaDuo, Mintaka Star USB, Mintaka Star WiFi
+           
+            // update main screen with application name + mode and date time last received data
+            String info = "";
+            if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) 
+            {
+              info = "no data";
+            } 
+            else 
+            {
+               info = main_RS232_RS422.test_record;
+            }     
+            main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via WiFi: " + info);
+
+            // for timer checking the data is not obsolate (see Function: RS232_WiFi_init_new_barometer_received_check_timer)
+            last_new_data_received_TimeMillis = System.currentTimeMillis(); 
+            
+            // update the date and time on the main screen (and the global date time var's)
+            // NB if during start up the date and time displayed in the pupup message was not comfirmed by the user
+            //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+            if (main.use_system_date_time_for_updating == true)
+            {  
+               set_datetime_while_collecting_sensor_data();
+            }
+                  
+            // WOW enabled (and not 'only publish if manual obs was send') and a complete sensor data string was received
+            if ((main.WOW == true) && (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL)) && (main.total_string.indexOf("\n") != -1))
+            {
+               cal_WOW_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
+               cal_WOW_systeem_datum_tijd.getTime();                                             // now effective
+               int WOW_system_minute_local = cal_WOW_systeem_datum_tijd.get(Calendar.MINUTE);
+               cal_WOW_systeem_datum_tijd = null; 
+                  
+               //if (WOW_system_minute_local % Integer.valueOf(main.WOW_reporting_interval) == 0)      // e.g. every 10 minutes (WOW_reporting_interval);  
+               // NB avoid: retrieving sensor data exactly the same time as APR!!!! -> issue at whole hours
+               if ((WOW_system_minute_local -1) % Integer.valueOf(main.WOW_reporting_interval) == 0)      // e.g. every 10 minutes (WOW_reporting_interval);  e.g: 1, 11, 21, 31 etc min past every hour    
+               {
+                  // logging
+                  String message = "[WOW] scheduled upload"; 
+                  main.log_turbowin_system_message(message);
+                        
+                  // checking
+                  boolean WOW_settings_ok = RS232_check_WOW_settings();
+                         
+                  if (WOW_settings_ok)
+                  {   
+                     // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                     if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)  // PTB220 or PTB330
+                     {
+                        RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                     }
+                     else if (main.RS232_connection_mode == 4)                                // MintakaDuo
+                     {
+                        RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                     }
+                     else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                     {
+                        RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                     } 
+                  } // if (WOW_settings_ok)
+               }   
+            } // if ((main.WOW == true) && (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL)) && (main.total_string.indexOf("\n") != -1))
+
+            // APR (Automated Pressure Reporting)
+            if ((main.APR == true) && (main.total_string.indexOf("\n") != -1))
+            {
+               cal_APR_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+               cal_APR_system_date_time.getTime();                                               // now effective
+               int APR_system_hour_local = cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY);   // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+               int APR_system_minute_local = cal_APR_system_date_time.get(Calendar.MINUTE);
+                  
+               if ((APR_system_minute_local == 0) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+               {
+                  retry = false;
+                        
+                  // logging
+                  String message = "[APR] scheduled upload"; 
+                  main.log_turbowin_system_message(message);
+                        
+                  // checking
+                  boolean APR_settings_ok = RS232_check_APR_settings();
+                  boolean GPS_date_time_ok = true;
+                        
+                  if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6) // Mintaka Star (USB or WiFi)
+                  {
+                     // NB Mintaka Star saved data do not contain date/time information so it is not possible to check this
+                     //    so it is made always true
+                     GPS_date_time_ok = true;
+                  }
+                  else
+                  {
+                     GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                  }
+                        
+                  if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                  {
+                     // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                     // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                     if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)  // PTB220 or PTB330
+                     {
+                        RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     }
+                     else if (main.RS232_connection_mode == 4)                                // MintakaDuo
+                     {
+                        RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     }
+                     else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                     {
+                        RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     }                           
+                  } // if (APR_settings_ok && GPS_date_time_ok) 
+               } // if ((APR_system_minute_local == 0) etc.
+               else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local == APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+               {
+                  retry = true;
+                        
+                  // logging
+                  String message = "[APR] retry scheduled upload"; 
+                  main.log_turbowin_system_message(message);
+                        
+                  // checking
+                  boolean APR_settings_ok = RS232_check_APR_settings();
+                  boolean GPS_date_time_ok = true;
+                        
+                  if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6) // Mintaka Star (USB or WiFi)
+                  {
+                     // NB Mintaka Star saved data do not contain date/time information so it is not possible to check this
+                     //    so it is made always true
+                     GPS_date_time_ok = true;
+                  }
+                  else
+                  {
+                     GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                  }
+                     
+                  if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                  {
+                     // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                     // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                     if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)  // PTB220 or PTB330
+                     {
+                        RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     }
+                     else if (main.RS232_connection_mode == 4)                                // MintakaDuo
+                     {
+                        RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     }
+                     else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                     {
+                        RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                     } 
+                  } // if (APR_settings_ok && GPS_date_time_ok) 
+                        
+                  // reset (to be sure)
+                  APR_server_response_code = 0;
+                        
+               } // else if ((APR_server_response_code = main.RESPONSE_NO_INTERNET) etc.
+               else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local < APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+               {
+                  // text will be visible only a few minutes (till the retry upload)
+                  main.jTextField4.setText("[APR] retry automated pressure report upload within a few minutes");
+               }
+               else
+               {
+                  // text with next APR update bottom status line TurboWin+ main screen (updated every minute)
+                  for (int i = (APR_system_hour_local + 1); i < (APR_system_hour_local + 1 + Integer.valueOf(main.APR_reporting_interval)); i++)
+                  {
+                     // 24 hours or higher makes no difference for this computation
+                     if (i % Integer.valueOf(main.APR_reporting_interval) == 0)
+                     {
+                        cal_APR_system_date_time.add(Calendar.HOUR_OF_DAY, i - APR_system_hour_local);   // add 1 - 5 hours
+                        cal_APR_system_date_time.getTime();
+                                 
+                        String next_APR_string = "[APR] next automated air pressure report upload: " + cal_APR_system_date_time.get(Calendar.DAY_OF_MONTH) + " " + main.convert_month(cal_APR_system_date_time.get(Calendar.MONTH)) + " " + cal_APR_system_date_time.get(Calendar.YEAR) + " " + cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY) + ".00 UTC"; 
+                                 
+                        main.jTextField4.setText(next_APR_string);
+                        break;
+                     }
+                  } // for (int i = (APR_system_hour_local + 1); etc.
+                           
+               } // else
+                        
+               cal_APR_system_date_time = null; 
+                        
+            } // if ( (main.APR == true) && (main.total_string.indexOf("\n") != -1))
+         } //  for (String ontvangen_SMD_string: data)
+         
+      } // protected void process(List<String> data)
+ 
+   }.execute(); // new SwingWorker <Void, Void>()  
+   //}
+   //};
+           //WiFi_worker.execute(); // new SwingWorker <Void, Void>() 
+   
+}
+*/
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void WiFi_Check_Connection_UDP()
+{
+   // https://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
+   System.out.println("start Wifi_Check_connection_UDP");
+   
+   main.total_string = "";
+   
+   new SwingWorker<String, Void>()
+   {
+      //String line;
+            
+      @Override
+      protected String doInBackground() throws Exception
+      {
+         try (DatagramSocket socket = new DatagramSocket(10110, InetAddress.getByName("0.0.0.0"));)   
+         {
+            socket.setBroadcast(true);
+         
+            System.out.println("Listen on " + socket.getLocalAddress() + " from " + socket.getInetAddress() + " port " + socket.getBroadcast());
+            byte[] buf = new byte[512];
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            while (true) 
+            {
+               System.out.println("Waiting for data");
+               socket.receive(packet);
+
+               System.out.println("Data received: ");
+               
+               int endidx = 0;
+               for (; endidx < buf.length; endidx++) 
+               {
+                  if (buf[endidx] == '*') break;
+               }
+               
+               endidx += 3;
+               int idx = 0;
+               for (int i = 0; i<endidx; i++) 
+               {
+                  System.out.print((char) buf[idx++]);
+               }
+               
+               System.out.println();
+            }
+            
+         
+         
+         
+   //    DatagramSocket socket = new DatagramSocket(10110, InetAddress.getByName("0.0.0.0"));
+   //    socket.setBroadcast(true);
+   //    System.out.println("Listen on " + socket.getLocalAddress() + " from " + socket.getInetAddress() + " port " + socket.getBroadcast());
+   //    byte[] buf = new byte[512];
+   //    DatagramPacket packet = new DatagramPacket(buf, buf.length);
+   //    while (true) {
+  ///         System.out.println("Waiting for data");
+   //        socket.receive(packet);
+//
+   //        System.out.println("Data received: ");
+   //        int endidx = 0;
+   //        for (; endidx < buf.length; endidx++) if (buf[endidx] == '*') break;
+   //        endidx += 3;
+   //        int idx = 0;
+   //        for (int i = 0; i<endidx; i++) System.out.print((char) buf[idx++]);
+    //       System.out.println();
+       }
+    
+
+         
+         
+///////////////////////////////////////////////////         
+         
+         
+         
+
+         //String in_line = "";
+         
+         
+         //return in_line;
+         
+   
+      } // protected Void doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+   //      try 
+  //       {
+  //          main.total_string = get();
+  //       }
+  //       catch (InterruptedException | ExecutionException ex) 
+   //      {
+  //          String message = "[WIFI] " + ex.toString();
+   //         main.log_turbowin_system_message(message);
+    //        main.total_string = "";
+   //      } // catch
+         
+      } // protected void done()
+
+   }.execute(); // new SwingWorker <Void, Void>()   
+   
+   
+   
+}
+*/
+
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void WiFi_Check_Connection()
+{
+   // https://docs.oracle.com/javase/tutorial/networking/sockets/readingWriting.html
+   
+   //System.out.println("start Wifi_Check_connection");
+   
+   main.total_string = "";
+   
+   new SwingWorker<String, Void>()
+   {
+      //String line;
+            
+      @Override
+      protected String doInBackground() throws Exception
+      {
+         
+///////////////////////////////////////         
+ //InetAddress localhost = InetAddress.getLocalHost();
+//        System.out.println(localhost);
+//        byte[] ip = localhost.getAddress();/
+// 
+//        for (int i = 1; i <= 254; i++) {
+//            ip[3] = (byte) i;
+//            InetAddress address = InetAddress.getByAddress(ip);
+//            if (address.isReachable(1000)) {
+//                System.out.println(address .getHostAddress()+ " - Active");
+//                System.out.println(address .getHostName());
+//            } else if (!address.getHostAddress().equals(address.getHostName())) {
+//                System.out.println(address.getHostAddress() + " - DNS lookup known..");
+//            } else {
+//                System.out.println(address.getHostAddress() + " - Not Active");
+//            }
+//        }         
+         
+         
+///////////////////////////////////         
+         
+         
+         
+         
+///////////////////////////////////////////////////         
+         
+         String host = "192.168.178.18";               // ALLEEN VOOR TEST
+         int port = 80;
+         try (Socket socket = new Socket(host, port);
+              InputStream is = socket.getInputStream();
+              BufferedReader in = new BufferedReader(new InputStreamReader(is));
+              OutputStream os = socket.getOutputStream();
+              PrintWriter out = new PrintWriter(os);
+            ) 
+         {
+            // test WiFiSystem.out.printf("Sending 'TurboWin' command to %s%n", host);
+         //out.print("dm wifi HTTP/1.1\r\n\r\n");
+         //out.flush();
+         String in_line;
+
+         //while ((in_line = in.readLine()).length() != 0) {}         // skip past the HTTP Headers
+
+         while ((in_line = in.readLine()) != null) 
+         {     
+            // read the TurboWin information
+            System.out.println(in_line);
+         }
+         socket.close();
+            
+            
+            
+         //   System.out.println(response);
+//
+         //         info = "[GPS] found GPS on port: " + serial_ports_portid_array[i];
+         //         System.out.print("--- ");
+         //         main.log_turbowin_system_message(info);
+         //         System.out.println("");
+            
+            
+            
+            //String userInput;
+            //while ((userInput = stdIn.readLine()) != null) 
+            //{
+            //   out.println(userInput);
+            //   System.out.println("echo: " + in.readLine());
+            //}
+         
+         
+            // while ((in_line = in.readLine()) != null) 
+            //{     
+            //   // read the TurboWin information
+            //   System.out.println(in_line);
+            //}
+         } 
+         catch (UnknownHostException e) 
+         {
+            System.out.println("Don't know about host " + host);
+            // System.exit(1);
+         } 
+         catch (IOException e) 
+         {
+            System.out.println("Couldn't get I/O for the connection to " + host);
+            //System.exit(1);
+         }          
+         
+         //..........
+         // socket connection 
+         //String host_wifi = "192.168.178.27";               // ALLEEN VOOR 
+         String host_wifi = "MintakaStar-292efe";               // ALLEEN VOOR TEST
+         Socket socket = new Socket(host_wifi, 80);
+         InputStream is = socket.getInputStream();
+         BufferedReader in = new BufferedReader(new InputStreamReader(is));
+         OutputStream os = socket.getOutputStream();
+         PrintWriter out = new PrintWriter(os);
+         
+         System.out.printf("Sending 'TurboWin' command to %s%n", host);
+         out.print("GET /turbowin HTTP/1.1\r\n\r\n");
+         out.flush();
+         String in_line;
+
+         //while ((in_line = in.readLine()).length() != 0) {}         // skip past the HTTP Headers
+
+         while ((in_line = in.readLine()) != null) 
+         {     
+            // read the TurboWin information
+            System.out.println(in_line);
+         }
+         socket.close();
+         System.out.println("Done");
+         
+         
+         return in_line;
+   
+      } // protected Void doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try 
+         {
+            main.total_string = get();
+         }
+         catch (InterruptedException | ExecutionException ex) 
+         {
+            String message = "[WIFI] " + ex.toString();
+            main.log_turbowin_system_message(message);
+            main.total_string = "";
+         } // catch
+         
+      } // protected void done()
+
+   }.execute(); // new SwingWorker <Void, Void>()
+}
+*/
+ 
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_GPS_NMEA_0183_init_new_data_received_check_timer()
+{
+   // called from: RS232_GPS_NMEA_0183_initComponents() [main_RS232_RS422.java]
+   
+   
+   ActionListener check_new_data_action = new ActionListener()
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         // NB currentTimeMillis(): returns the difference,in milliseconds, between the current system time and midnight, January 1, 1970 UTC
+         // NB last_new_GPS_data_received_TimeMillis: returns the difference,in milliseconds between the last GPS data receipt system time and midnight, January 1, 1970 UTC.
+         if ((System.currentTimeMillis() - last_new_GPS_data_received_TimeMillis) > MAX_AGE_GPS_DATA)     // MAX_AGE_GPS_DATA e.g. 60000 msec (10 minutes)
+         {
+            // NB see RS232_GPS_NMEA_0183_RMC() and RS232_GPS_NMEA_0183_GCC() [main_RS232_RS422.java] for setting of var "last_new_GPS_data_received_TimeMillis"
+            
+            // reset APTR dashboard vars
+            myposition.COG_APR = Double.MAX_VALUE;
+            myposition.SOG_APR = Double.MAX_VALUE;
+            myposition.COG_APR_wind = Double.MAX_VALUE;
+            myposition.SOG_APR_wind = Double.MAX_VALUE;
+            
+
+            // message obsolete GPS data only the first time
+            if (main.obsolate_GPS_data_flag == false)
+            {
+               String message = "[GPS] data obsolete (lost connection?)";
+               main.log_turbowin_system_message(message);
+               
+               // info text on (bottom) main screen 
+               main.jLabel6.setText(main.APPLICATION_NAME + " receiving GPS data via serial communication: stopped");
+               
+            } // if (main.obsolate_GPS_data_flag == false)
+            else
+            {
+               // NB RS232_GPS listener restart every hour
+               cal_RS232_GPS_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+               cal_RS232_GPS_system_date_time.getTime();                                                // now effective
+               int RS232_GPS_system_minute_local = cal_RS232_GPS_system_date_time.get(Calendar.MINUTE);
+                  
+               // cancel RS232_GPS listener thread
+               if (RS232_GPS_system_minute_local == CANCEL_GPS_THREAD)           
+               {
+                  RS232_GPS_worker.cancel(true);
+                  String message = "[GPS] data listener thread cancelling";
+                  main.log_turbowin_system_message(message);
+               } // if (WiFi_system_minute_local == 30)
+                  
+               // restart RS232_GPS listener thread
+               if (RS232_GPS_system_minute_local == START_GPS_THREAD)
+               {
+                  // NB in case of power failure GPS com port is still ok (still open) but listener must be restarted
+                  //    so we cannot use Function: RS232_GPS_NMEA_0183_Check_Serial_Ports(), bbecause then the present GPS default port, which is ok, will be reported as occupied!
+                  //    so first Function: RS232_GPS_NMEA_0183_Check_Default_Serial_Port(), see below
+                  RS232_GPS_NMEA_0183_Check_Default_Serial_Port(); // in this function:: GPS_defaultPort will be set to null if present default GPS com port was not valid anymore
+                  
+                  if (GPS_defaultPort == null) 
+                  {
+                     // checking/looking for the correct GPS com port
+                     int completed_checks_serial_ports = 0;
+                     GPS_defaultPort = null;                // reset !
+                     while ((GPS_defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_GPS_PORT_CHECKS))
+                     {
+                        RS232_GPS_NMEA_0183_Check_Serial_Ports(completed_checks_serial_ports);               // GPS
+                        completed_checks_serial_ports++;
+                     }  
+                  
+                     if (GPS_defaultPort == null)
+                     {
+                        String message = "[GPS] no GPS found (GPS_defaultPort = null); listener thread not restarted";
+                        main.log_turbowin_system_message(message);
+                     }
+                  } // if (GPS_defaultPort == null) 
+               
+                  if (GPS_defaultPort != null)                     
+                  {
+                     main.GPS_serialPort  = SerialPort.getCommPort(GPS_defaultPort);
+                     
+                     // restart RS232_GPS listener thread
+                     RS232_GPS_worker = new RS232_GPS_Class_Receive_Data();
+                     RS232_GPS_worker.execute();
+                     String message = "[GPS] data listener thread restarting";
+                     main.log_turbowin_system_message(message);
+                  } // if (GPS_defaultPort != null) 
+                     
+               } // if (RS232_gPS_system_minute_local == 33) 
+            } // else
+            
+            main.obsolate_GPS_data_flag = true;  
+            
+            if (main.APR == true)
+            {
+               // update the position field on main screen, but only in APR mode
+               //main.jTextField5.setForeground(main.obsolete_color_data_from_apr);
+               main.position_fields_update();
+            } // if (main.APR == true)
+            
+         } // if ((System.currentTimeMillis() - last_new_GPS_data_received_TimeMillis) > MAX_AGE_GPS_DATA)
+         else // so GPS data NOT obsolete (data < ? minutes old)
+         {
+            // reset message if before was written data obsolete
+            if (main.obsolate_GPS_data_flag)
+            {
+               String message = "[GPS] start receiving data again";
+               main.log_turbowin_system_message(message);
+               
+               // info text on (bottom) main screen 
+               main.jLabel6.setText(main.APPLICATION_NAME + " receiving GPS data via serial communication.....");
+               
+            } // if (main.obsolate_GPS_data_flag)
+            
+            main.obsolate_GPS_data_flag = false;
+            
+            if (main.APR == true)
+            {
+               // update the position field on main screen, but only in APR mode
+               String mode = "MINUTE_UPDATE";                                                 // update main screen position every minute
+               boolean GPS_date_time_ok = RS232_GPS_NMEA_0183_Date_Position_Parsing(mode);    // also SOG_APR, COG_APR and if applicable SOG_APR_wind and COG_APR_wind will be updated
+               if (GPS_date_time_ok)
+               {
+                  main.position_fields_update();
+               }
+            } // if (main. APR == true)
+            
+         } //else (so GPS data NOT obsolate)
+         
+      } // public void actionPerformed(ActionEvent e)
+   };
+   
+   // main loop for checking when new GPS data arrives 
+   check_new_GPS_data_timer_delay = DELAY_NEW_DATA_CHECK_LOOP;                              // delay between two new GPS data checks (e.g. 1 minute)  
+   check_new_GPS_data_timer = new Timer(check_new_GPS_data_timer_delay, check_new_data_action);
+   check_new_GPS_data_timer.setRepeats(true);                                               // false = only one action
+   check_new_GPS_data_timer.setInitialDelay(INITIAL_DELAY_NEW_DATA_CHECK_LOOP);             // time in millisec to wait after timer is started to fire first event
+   check_new_GPS_data_timer.setCoalesce(true);                                              // to be sure
+   check_new_GPS_data_timer.start();      
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_And_WiFi_init_new_sensor_data_received_check_timer_II()
+{
+   /////// for serial link/USB and WiFi connected thermometer  ///////
+   
+   // called from: RS232_initComponents_II()
+  
+     
+   ActionListener check_new_data_action = new ActionListener()
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+			//System.out.println("+++ System.currentTimeMillis() = " + System.currentTimeMillis());
+			//System.out.println("+++ last_new_data_received_TimeMillis = " + last_new_data_received_TimeMillis);
+			//System.out.println("+++ System.currentTimeMillis() - last_new_data_received_TimeMillis = " + (System.currentTimeMillis() - last_new_data_received_TimeMillis));
+			
+			
+         // NB currentTimeMillis(): returns the difference,in milliseconds, between the current system time and midnight, January 1, 1970 UTC
+         // NB last_new_data_received_TimeMillis_II: returns the difference,in milliseconds between the last thermometer data receipt system time and midnight, January 1, 1970 UTC.
+         if ((System.currentTimeMillis() - last_new_data_received_TimeMillis_II) > MAX_AGE_AWS_DATA)     // MAX_AGE_AWS_DATA e.g. 30000 msec (5 minutes), same for barometer and thermometer data
+         {
+            main.displayed_thermometer_data_obsolete = true;             // for DASHBOARD
+            
+            // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten TurboWin+)
+          
+            // message obsolete data only the first time
+            if (main.obsolate_data_flag_II == false)
+            {
+               if (main.RS232_connection_mode_II == 1)   // HMP155
+               {
+                  String message = "[THERMOMETER] sensor data obsolete (lost connection?)";
+                  main.log_turbowin_system_message(message);
+               }
+               
+            } // if (main.obsolate_data_flag_II == false)
+            else // data obsolete but after > 5 minutes
+            {
+               if (main.RS232_connection_mode_II == 1) // HMP155
+               {
+                  // NB RS232 listener restart every hour
+                  cal_RS232_system_date_time_II = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+                  cal_RS232_system_date_time_II.getTime();                                                // now effective
+                  int RS232_system_minute_local = cal_RS232_system_date_time_II.get(Calendar.MINUTE);
+                  
+                  // cancel RS232 listener thread
+                  if (RS232_system_minute_local == CANCEL_THERMOMETER_THREAD)           
+                  {
+                     RS232_worker_II.cancel(true);                      // Returns: false if the task could not be cancelled, typically because it has already completed normally; true otherwise
+                     String message = "[THERMOMETER] sensor data listener thread cancelling";
+                     main.log_turbowin_system_message(message);
+                  } 
+                  
+                  // restart RS232 listener thread
+                  if (RS232_system_minute_local == START_THERMOMETER_THREAD)            
+                  {
+                     // in case of power failure com port of connected thermometer is still ok (still open) but listener must be restarted
+                     // NB so we cannot use Function: RS232_Check_Serial_Ports_8_II(because then the present default port, which is ok, will be reported as occupied!
+                     //    so first Function: RS232_Check_Default_Serial_Port_II(), see below
+                     RS232_Check_Default_Serial_Port_II(); // in this function:: main.defaultPort_II will be set to null if present default comm port II was not valid anymore
+                  
+                     if (main.defaultPort_II != null)  
+                     {
+                        // NB expierenced during testing: at least for the PTB330 this (Function: RS232_Format_Barometer_Output_3()) is essential
+                        //    same for HMP155 ???
+                        RS232_Format_Thermometer_Output();    // to be sure, send format and start string to thermometer   
+                     }
+                     
+                     if (main.defaultPort_II == null)  
+                     {
+                        // so default port II not valid anymore (most likely there was no power break) now first checking/looking for the correct com port
+                        int completed_checks_serial_ports = 0;
+                        while ((main.defaultPort_II == null) && (completed_checks_serial_ports < MAX_COMPLETED_THERMOMETER_PORT_CHECKS))
+                        {
+                           RS232_Check_Serial_Ports_8_II(completed_checks_serial_ports);            // HMP155
+                           completed_checks_serial_ports++;
+                        }
+
+                        // send serial commands to the thermometer 
+                        if (main.defaultPort_II != null)
+                        {
+                           RS232_Format_Thermometer_Output();                                       // HMP155
+                        }
+                        else
+                        {
+                           String message = "[THERMOMETER] no thermometer found (defaultPort_II = null); listener thread not restarted";
+                           main.log_turbowin_system_message(message);
+                        }
+                     } // if (main.defaultPort_II == null) 
+
+                     if (main.defaultPort_II != null)                     
+                     {
+                        main.serialPort_II  = SerialPort.getCommPort(main.defaultPort_II); 
+                        
+                        // restart 2nd RS232 listener thread
+                        RS232_worker_II = new RS232_Class_Receive_Sensor_Data_II();
+                        RS232_worker_II.execute();
+                        String message = "[THERMOMETER] sensor data listener thread restarting";
+                        main.log_turbowin_system_message(message);
+                     } // if (main.defaultPort_II != null) 
+                     
+                  } // if (RS232_system_minute_local == START_BAROMETER_THREAD)
+               } // else if (main.RS232_connection_mode_II == 1)
+            } // else (data obsolate but after > 5 minutes)
+            
+            main.obsolate_data_flag_II = true;
+            
+            if (main.APR == true)
+            {
+               // update the temp fields
+               if (main.RS232_connection_mode_II == 1)                                // HMP155 conncted
+               {
+                  main.temperatures_fields_update();
+               }
+            } // if (main.APR == true)
+            
+         } // if ((System.currentTimeMillis() - last_new_data_received_TimeMillis_II) > MAX_AGE_AWS_DATA)
+         else // so sensor data NOT obsolete (data < 5 minutes old)
+         {
+            main.displayed_thermometer_data_obsolete = false;                         // for DASHBOARD
+            
+            // reset message if before was written data obsolete
+            if (main.obsolate_data_flag_II)
+            {
+               if (main.RS232_connection_mode_II == 1)                                 // HMP155
+               {
+                  String message = "[THERMOMETER] start receiving sensor data again";
+                  main.log_turbowin_system_message(message);
+                  
+                  // NB in the case of a PTB330 this could be a false message ("[BAROMETER] start receiving sensor data again";)
+                  //    because if the power was off and on the PTB330 reports "PTB330 / 1.02" and the listener eports this as receiving data again
+                  // same for thermometer HMP155 ?
+               }               
+            } // if (main.obsolate_data_flag_II)
+            
+            main.obsolate_data_flag_II = false;
+            
+            if (main.APR == true)
+            {
+               if (main.RS232_connection_mode_II == 1)                     // HMP155 connected
+               {
+                  String destination = "MAIN_SCREEN";
+                  boolean retry = false;                                   // NB 'retry' will not be used if destination == "MAIN_SCREEN"
+               
+                  RS232_vaisala.RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR(destination, retry);
+                  //main.temperatures_fields_update();                       // update the temp fields on main screen (but only in APR mode)
+               } // if (main.RS232_connection_mode_II == 1) 
+            } // if (main. APR == true)
+         } // else
+         
+         // initialisation
+         //last_new_data_received_TimeMillis_II = 0;
+   
+      } // public void actionPerformed(ActionEvent e)
+   };
+   
+   /* main loop for checking when new thermometer data arrives */
+   check_new_data_timer_delay_II = DELAY_NEW_DATA_CHECK_LOOP;                              // delay between two new aws data checks (e.g. 1 minute)  
+   check_new_data_timer_II = new Timer(check_new_data_timer_delay_II, check_new_data_action);
+   check_new_data_timer_II.setRepeats(true);                                               // false = only one action
+   check_new_data_timer_II.setInitialDelay(INITIAL_DELAY_NEW_DATA_CHECK_LOOP);             // time in millisec to wait after timer is started to fire first event
+   check_new_data_timer_II.setCoalesce(true);                                              // to be sure
+   check_new_data_timer_II.start();   
+
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS232_And_WiFi_init_new_sensor_data_received_check_timer()
+{
+   /////// for serial link and WiFi connected barometers (NB not EUCAWS) ////////
+   
+   // called from: RS232_initComponents()
+   //              WiFi_initComponents()
+   
+   
+   ActionListener check_new_data_action;
+   check_new_data_action = new ActionListener()
+   {
+      @Override
+      public void actionPerformed(ActionEvent e) 
+      {
+         //System.out.println("+++ System.currentTimeMillis() = " + System.currentTimeMillis());
+         //System.out.println("+++ last_new_data_received_TimeMillis = " + last_new_data_received_TimeMillis);
+         //System.out.println("+++ System.currentTimeMillis() - last_new_data_received_TimeMillis = " + (System.currentTimeMillis() - last_new_data_received_TimeMillis));
+         
+         
+         // NB currentTimeMillis(): returns the difference,in milliseconds, between the current system time and midnight, January 1, 1970 UTC
+         // NB last_new_data_received_TimeMillis: returns the difference,in milliseconds between the last aws data receipt system time and midnight, January 1, 1970 UTC.
+         if ((System.currentTimeMillis() - last_new_data_received_TimeMillis) > MAX_AGE_AWS_DATA)     // MAX_AGE_AWS_DATA e.g. 30000 msec (5 minutes), same for barometer data
+         {
+            main.displayed_barometer_data_obsolate = true;             // for DASHBOARD
+            
+            // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten TurboWin+)
+          
+            // message obsolete data only the first time
+            if (main.obsolate_data_flag == false)
+            {
+               if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8)   // Mintaka Star WiFi or Mintaka StarX Wifi
+               {
+                  String message = "";
+                  if (!main.lan_ip_address.equals(""))                 // lan_ip_address available (eg Mintaka ENet box with fixed ip address to listen to)
+                  {
+                     message = "[LAN] sensor data obsolete (lost connection?)";
+                     main.log_turbowin_system_message(message);
+                  }
+                  else
+                  {
+                     message = "[WIFI] sensor data obsolete (lost connection?)";
+                     main.log_turbowin_system_message(message);
+                  }
+               }
+               else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5) // PTB220, PTB330, Mintaka Duo, Mintaka Star USB
+               {
+                  String message = "[BAROMETER] sensor data obsolete (lost connection?)";
+                  main.log_turbowin_system_message(message);
+               }
+            } // if (main.obsolate_data_flag == false)
+            else // data obsolete but after > 5 minutes
+            {
+               if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8)   // Mintaka Star WiFi or Mintaka StarX Wifi
+               {
+                  // do nothing the opened UDP port (e.g. 0.0.0.0:60004) will alway stay open as long as TurboWin+/Web is running (Windows power shell command "netstat -aon")
+                  /*
+                  // NB WiFi listener restart every hour
+                  cal_WiFi_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+                  cal_WiFi_system_date_time.getTime();                                               // now effective
+                  int WiFi_system_minute_local = cal_WiFi_system_date_time.get(Calendar.MINUTE);
+                  
+                  // cancel WiFi listener thread
+                  if (WiFi_system_minute_local == CANCEL_BAROMETER_THREAD)           
+                  {
+                  WiFi_worker.cancel(true);
+                  //WiFi_worker = null;     // NB null do not prevent a Bindexception,;
+                  // NB2 a Bindexception is not an issue because it means TurboWin+ is still bind to (UDP)WiFi,
+                  //     it would be an issue if it was bind to onother process/application
+                  String message = "[WIFI] sensor data listener thread cancelling";
+                  main.log_turbowin_system_message(message);
+                  } 
+                  
+                  // restart WiFi listener thread
+                  if (WiFi_system_minute_local == START_BAROMETER_THREAD)            
+                  {
+                  WiFi_worker = new WiFi_Class_Receive_UDP();
+                  WiFi_worker.execute();
+                  String message = "[WIFI] sensor data listener thread restarting";
+                  main.log_turbowin_system_message(message);
+                  }
+                  */
+               } //  if (main.RS232_connection_mode == 6) 
+               else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 7) // PTB220, PTB330, Mintaka Duo, Mintaka Star USB, Mintaka StarX USB
+               {
+                  // NB RS232 listener restart every hour
+                  cal_RS232_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+                  cal_RS232_system_date_time.getTime();                                                // now effective
+                  int RS232_system_minute_local = cal_RS232_system_date_time.get(Calendar.MINUTE);
+                  
+                  // cancel RS232 listener thread
+                  if (RS232_system_minute_local == CANCEL_BAROMETER_THREAD)           
+                  {
+                     RS232_worker.cancel(true);                      // Returns: false if the task could not be cancelled, typically because it has already completed normally; true otherwise
+                     String message = "[BAROMETER] sensor data listener thread cancelling";
+                     main.log_turbowin_system_message(message);
+                  } 
+                  
+                  // restart RS232 listener thread
+                  if (RS232_system_minute_local == START_BAROMETER_THREAD)            
+                  {
+                     // in case of power failure com port of connected barometer is still ok (still open) but listener must be restarted
+                     // NB so we cannot use Function: RS232_Check_Serial_Ports_8(because then the present default port, which is ok, will be reported as occupied!
+                     //    so first Function: RS232_Check_Default_Serial_Port(), see below
+                     RS232_Check_Default_Serial_Port(); // in this function:: main.defaultPort will be set to null if present default comm port was not valid anymore
+                     
+                     if (main.defaultPort != null)  
+                     {
+                        // NB expierenced during testing: at least for the PTB330 this (Function: RS232_Format_Barometer_Output_3()) is essential
+                        RS232_Format_Barometer_Output_3();    // to be sure, send format and start string to barometer   
+                     }
+                     
+                     if (main.defaultPort == null)  
+                     {
+                        // so default port not valid anymore (most likely there was no power break) now first checking/looking for the correct com port
+                        int completed_checks_serial_ports = 0;
+                        while ((main.defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_BAROMETER_PORT_CHECKS))
+                        {
+                           RS232_Check_Serial_Ports_8(completed_checks_serial_ports);               // PTB220, PTB330, MintakaDuo, MintakaStar USB
+                           completed_checks_serial_ports++;
+                        }
+                        
+                        // send Vaisala/Mintaka serial commands to the barometer 
+                        if (main.defaultPort != null)
+                        {
+                           RS232_Format_Barometer_Output_3();                                       // PTB220, PTB330, MintakaDuo, MintakaStar USB
+                        }
+                        else
+                        {
+                           String message = "[BAROMETER] no barometer found (defaultPort = null); listener thread not restarted";
+                           main.log_turbowin_system_message(message);
+                        }
+                     } // if (main.defaultPort == null)
+                     
+                     if (main.defaultPort != null)                     
+                     {
+                        main.serialPort  = SerialPort.getCommPort(main.defaultPort); 
+                        
+                        // restart RS232 listener thread
+                        RS232_worker = new RS232_Class_Receive_Sensor_Data();
+                        RS232_worker.execute();
+                        String message = "[BAROMETER] sensor data listener thread restarting";
+                        main.log_turbowin_system_message(message);
+                     } // if (main.defaultPort != null) 
+                     
+                  } // if (RS232_system_minute_local == START_BAROMETER_THREAD)
+               } // else if (main.RS232_connection_mode == 1 etc.
+            } // else (data obsolate but after > 5 minutes)
+            
+            main.obsolate_data_flag = true;
+            
+            if ((main.RS232_connection_mode == 5) || (main.RS232_connection_mode == 6) || (main.RS232_connection_mode == 7) || (main.RS232_connection_mode == 8)) // Mintaka Star USB / Mintaka Srar Wifi/ Star + StarX USB/ Star + StarX WiFi
+            {
+               // Star with integrated GPS
+               main.obsolate_GPS_data_flag = true;
+            }
+            
+            
+            if (main.APR == true)
+            {
+               // update the air pressure reading / MSL fields on main screen, but only in APR mode
+               main.barometer_fields_update();
+               main.barograph_fields_update();
+               
+               // update the position fields
+               if ((main.RS232_connection_mode == 5) || (main.RS232_connection_mode == 6) || (main.RS232_connection_mode == 7) || (main.RS232_connection_mode == 8)) // Mintaka Star USB / Mintaka Srar Wifi/ Star + StarX USB/ Star + StarX WiFi
+               {
+                  // Star with integrated GPS
+                  main.position_fields_update();
+               }
+               
+               // update the barograph fields (pressure tendency and characteristic)
+               //if ((main.RS232_connection_mode == 5) || (main.RS232_connection_mode == 6) || (main.RS232_connection_mode == 7) || (main.RS232_connection_mode == 8)) // Mintaka Star USB / Mintaka Srar Wifi/ Star + StarX USB/ Star + StarX WiFi
+               //{
+               //   main.barograph_fields_update();
+               //}
+               
+               // update the temp fields
+               if ((main.RS232_connection_mode_II == 1) || ((main.RS232_connection_mode == 7) || (main.RS232_connection_mode == 8)))   // HMP155 or StarX connected
+               {
+                  main.temperatures_fields_update();
+               }
+               
+            } // if (main.APR == true)
+         }
+         else // so sensor data NOT obsolete (data < x minutes old)
+         {
+            main.displayed_barometer_data_obsolate = false;                         // for DASHBOARD
+            
+            // reset message if before was written data obsolete
+            if (main.obsolate_data_flag)
+            {
+               if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 8)   // Mintaka Star WiFi or StarX
+               {
+                  String message = "";
+                  if (!main.lan_ip_address.equals(""))                 // lan_ip_address available (eg Mintaka ENet box with fixed ip address to listen to)
+                  {
+                     message = "[LAN] sensor data receiving again"; 
+                     main.log_turbowin_system_message(message);
+                  }
+                  else
+                  {
+                     message = "[WIFI] sensor data receiving again";
+                     main.log_turbowin_system_message(message);
+                  }
+               }
+               else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 || main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5) // PTB220, PTB330, Mintaka Duo, Mintaka Star USB
+               {
+                  String message = "[BAROMETER] start receiving sensor data again";
+                  main.log_turbowin_system_message(message);
+                  
+                  // NB in the case of a PTB330 this could be a false message ("[BAROMETER] start receiving sensor data again";)
+                  //    because if the power was off and on the PTB330 reports "PTB330 / 1.02" and the listener eports this as receiving data again
+               }               
+            } // if (main.obsolate_data_flag)
+            
+            main.obsolate_data_flag = false;
+            
+            if ((main.RS232_connection_mode == 5) || (main.RS232_connection_mode == 6) || (main.RS232_connection_mode == 7) || (main.RS232_connection_mode == 8)) // Mintaka Star USB / Mintaka Srar Wifi/ Star + StarX USB/ Star + StarX WiFi
+            {
+               // Star with integrated GPS
+               main.obsolate_GPS_data_flag = false;
+            }
+            
+            
+            if (main.APR == true)
+            {
+               String destination = "MAIN_SCREEN";
+               boolean retry = false;                // NB 'retry' will not be used if destination == "MAIN_SCREEN"
+               
+               if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))      // Vaisala PTB330 or PTB220
+               {
+                  RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR(destination, retry);
+               }
+               else if (main.RS232_connection_mode == 4)                                        // Mintaka Duo
+               {
+                  RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR(destination, retry);  
+               }
+               else if ((main.RS232_connection_mode == 5) || (main.RS232_connection_mode == 6))    // Mintaka Star USB / Mintaka Star WiFi
+               {
+                  boolean StarX = false;
+                  RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR(destination, retry, StarX);          
+               }
+               else if ((main.RS232_connection_mode == 7) || (main.RS232_connection_mode == 8))    // Mintaka Star USB + SrarX / Mintaka Star WiFi + StarX
+               {
+                  boolean StarX = true;
+                  RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR(destination, retry, StarX);          
+               }
+               
+            } // if (main. APR == true)
+            
+            // NB in this case: in function: RS422_Read_AWS_Sensor_Data_For_Display() the fields on the main screen will be updated
+            // NB main.date_time_fields_update() etc. and VOT will be updated there
+         }
+         
+         // initialisation
+         //last_new_data_received_TimeMillis = 0;
+         
+         // APR: for updating message "visual data adding is yes/no advised" (jLabel39)
+         //
+         if (main.APR)
+         {
+            if (main.obsolate_data_flag)
+            {
+               main.jLabel39.setText("");
+            }
+            else
+            {
+               cal_APR_system_dt = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+               cal_APR_system_dt.getTime();                                               // now effective
+               int APR_system_hour = cal_APR_system_dt.get(Calendar.HOUR_OF_DAY);   // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+               int APR_system_minutes = cal_APR_system_dt.get(Calendar.MINUTE);
+            
+               if ( ((APR_system_hour + 1) % Integer.valueOf(main.APR_reporting_interval)) == 0)    
+               {
+                  // NB currentTimeMillis(): returns the difference,in milliseconds, between the current system time and midnight, January 1, 1970 UTC
+                  // NB cal_APR_system_date_time.computeTime(): Converts calendar field values to the time value (millisecond offset from the Epoch).( Epoch, January 1, 1970 00:00:00.000 GMT (Gregorian))
+           
+                  int APR_minutes_for_upload = 60 - APR_system_minutes;
+                  if (APR_minutes_for_upload <= 30)
+                  {
+                     // less the 30 minutes (= 1800000 msec) before next APR upload
+                     // NB "-1" too be sure, thread is always behind
+                     main.jLabel39.setForeground(new Color(0,153,0));          // dark green
+                     main.jLabel39.setText("--- " + (APR_minutes_for_upload -1) + " minutes to go before next automated upload, you can now add observation data ---");
+                  }
+                  else
+                  {
+                     main.jLabel39.setForeground(Color.RED);
+                     main.jLabel39.setText("--- more than 30 minutes to go before next automated upload, please do not add observation data --- ");
+                  }
+               } // if ( ((APR_system_hour + 1) % Integer.valueOf(main.APR_reporting_interval)) == 0)
+               else
+               {
+                  main.jLabel39.setForeground(Color.RED);
+                  main.jLabel39.setText("--- more than 30 minutes to go before next automated upload, please do not add observation data --- ");
+               } // else
+            } // no obsolete data
+         } // if (main.APR)
+   
+/*         
+         // APR: for system invoked pop-up (meteo radar) dashboard or system 'delete' (meteo radar) dashboard (but only in APR mode)
+         //
+         if (main.APR && main.pop_up_dashboard)
+         {
+            cal_APR_system_dt = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+            cal_APR_system_dt.getTime();                                               // now effective
+            int APR_system_hour = cal_APR_system_dt.get(Calendar.HOUR_OF_DAY);         // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+            int APR_system_minutes = cal_APR_system_dt.get(Calendar.MINUTE);
+            
+            if ( ((APR_system_hour + 1) % Integer.valueOf(main.pop_up_dashboard_interval)) == 0)     
+            {
+               int APR_minutes_before_dashboard_pop_up = 60 - APR_system_minutes;                                       // e.g. 60 - 55 = 5 minutes
+               if (APR_minutes_before_dashboard_pop_up <= DASHBOARD_view_APR_radar.APR_DASHBOARD_POP_UP_MINUTES_TO_HOUR)    // e.g. DASHBOARD_POP_UP_MINUTES_TO_HOUR = 10
+               {
+                  // SYSTEM INVOKED DASHBOARD POP-UP TIME!
+                  
+                  // NB less then xx minutes before whole hour; whole hour could be every hour, intermediate hours or main hours
+                  //    (depends on variable setting: pop_up_dashboard_interval [function: OK_button_actionPerformed() in WOW_APR_settings.java])
+                  // NB keep in mind, thread is always slightly 'behind' in time
+                     
+                  main.in_dashboard_pop_up_period = true;                                 // used in Function DASHBOARD_view_APR_windowClosing() [DASHBOARD_view_APR_radar.java]
+                  
+                  if ((APR_minutes_before_dashboard_pop_up == DASHBOARD_view_APR_radar.APR_DASHBOARD_POP_UP_MINUTES_TO_HOUR) && (main.dashboard_form_APR_radar != null) && 
+                      (main.dashboard_was_automatically_opened == false) && (main.turbowin_start_up_sequence_finished == true))
+                  {
+                     // NB because manually opening and closing of the pop-up dashboard takes precendence over the automatic procedure:
+                     //    to prevent that if once the APR dashboard was opened manually it could forever stay minimised/iconfied (so will 'never' pop-up)
+                     //    now if we close automatically the manual pop-up dashboard first, then it will be part of the automated pop-up dashboard sequence again
+                     //    note: can be done only once in the pop-up period (e.g. the period 10 minutes - whole hour)
+                     //
+                     // NB see also: DASHBOARD_view_APR_radar.DASHBOARD_view_APR_windowClosed(null) for the same code lines as below
+                     
+                     if (DASHBOARD_view_APR_radar.dashboard_update_APR_timer_is_gecreeerd == true)  
+                     {
+                        if (DASHBOARD_view_APR_radar.dashboard_update_APR_timer.isRunning())
+                        {
+                           DASHBOARD_view_APR_radar.dashboard_update_APR_timer.stop();
+                        }
+                     }
+      
+                     DASHBOARD_view_APR_radar.dashboard_update_APR_timer = null;
+                     DASHBOARD_view_APR_radar.dashboard_update_APR_timer_is_gecreeerd = false;      
+      
+                     main.dashboard_form_APR_radar.dispose();                                          // remove dashboard
+                     main.dashboard_form_APR_radar = null;                                             // reset (to be sure)
+                     main.dashboard_was_automatically_opened = false;                        // reset (for option augmentation pop-up window in APR mode)
+                     main.dashboard_was_manually_closed_in_dashboard_pop_up_period = false;  // reset
+                     
+                  } // if ((APR_minutes_before_dashboard_pop_up == DASHBOARD_view_APR_radar.DASHBOARD_POP_UP_MINUTES_TO_HOUR) etc.
+                  else if ((main.dashboard_form_APR_radar == null) && (main.dashboard_was_manually_closed_in_dashboard_pop_up_period == false) && 
+                           (main.turbowin_start_up_sequence_finished == true))
+                  {
+                     // invoke automatic pop-up dashboard 
+                     
+                     main.dashboard_was_automatically_opened = true;                          // related to AlwaysOnTop yes/no [DASHBOARD_view_APR_radar.java]
+                     
+                     main.dashboard_form_APR_radar = new DASHBOARD_view_APR_radar();
+                     main.dashboard_form_APR_radar.setExtendedState(main.MAXIMIZED_BOTH); 
+                     main.dashboard_form_APR_radar.setVisible(true); 
+                     
+                  } // else if ((main.dashboard_form_APR_radar == null) etc.
+               } // if (APR_minutes_before_dashboard_pop_up <= DASHBOARD_view_APR_radar.APR_DASHBOARD_POP_UP_MINUTES_TO_HOUR) 
+               
+            } //  if ( ((APR_system_hour + 1) % Integer.valueOf(main.APR_reporting_interval)) == 0) 
+            
+            int APR_minutes_before_whole_hour = 60 - APR_system_minutes; 
+            if (APR_minutes_before_whole_hour > DASHBOARD_view_APR_radar.APR_DASHBOARD_POP_UP_MINUTES_TO_HOUR)
+            {
+               // SYSTEM INVOKED DASHBOARD POP-UP DELETE TIME!
+                  
+               main.in_dashboard_pop_up_period = false;                               // used in Function DASHBOARD_view_APR_windowClosing() [DASHBOARD_view_APR_radar.java]
+                  
+               if ((main.dashboard_form_APR_radar != null) && (main.dashboard_was_automatically_opened == true)) 
+               {
+                  if (DASHBOARD_view_APR_radar.dashboard_update_APR_timer_is_gecreeerd == true)  
+                  {
+                     if (DASHBOARD_view_APR_radar.dashboard_update_APR_timer.isRunning())
+                     {
+                        DASHBOARD_view_APR_radar.dashboard_update_APR_timer.stop();
+                     }
+                  }
+                  DASHBOARD_view_APR_radar.dashboard_update_APR_timer = null;
+                  DASHBOARD_view_APR_radar.dashboard_update_APR_timer_is_gecreeerd = false;
+          
+                  main.dashboard_form_APR_radar.dispose();
+               }  
+                     
+               // set these flags always to false if outside 'dashboard pop-up period'
+               main.dashboard_was_manually_closed_in_dashboard_pop_up_period = false;
+               main.dashboard_was_automatically_opened = false;
+            }
+
+         } // if (main.APR && main.pop_up_dashboard)
+*/         
+         
+         // APR: for system invoked pop-up screen (add visual observation) or system 'delete' pop-up screen (but only in APR mode)
+         //
+         //////// BEGIN TEST //////
+         //main.APR = true;
+         //main.pop_up_screen = true;
+         //main.pop_up_screen_interval = "1";
+         //////// END TEST ///////
+         
+         if (main.APR && main.pop_up_screen)
+         {
+            Activate_Pop_Up_Screen_APR_AWS();                                                  // pop-up screen reminder add visual obs
+
+         } // if (main.APR && main.pop_up_screen)
+ 
+      } // public void actionPerformed(ActionEvent e)
+      
+   };
+   
+   // main loop for checking when new AWS data arrives 
+   check_new_data_timer_delay = DELAY_NEW_DATA_CHECK_LOOP;                              // delay between two new aws data checks (e.g. 1 minute)  
+   check_new_data_timer = new Timer(check_new_data_timer_delay, check_new_data_action);
+   check_new_data_timer.setRepeats(true);                                               // false = only one action
+   check_new_data_timer.setInitialDelay(INITIAL_DELAY_NEW_DATA_CHECK_LOOP);             // time in millisec to wait after timer is started to fire first event
+   check_new_data_timer.setCoalesce(true);                                              // to be sure
+   check_new_data_timer.start();   
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void Activate_Pop_Up_Screen_APR_AWS()
+{
+   // called from: RS232_And_WiFi_init_new_sensor_data_received_check_timer() [main_RS232_RS422.java]
+   //              RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
+   //
+   
+   cal_APR_AWS_system_dt = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));       // system date time in UTC of this moment
+   cal_APR_AWS_system_dt.getTime();                                                   // now effective
+   int APR_AWS_system_hour = cal_APR_AWS_system_dt.get(Calendar.HOUR_OF_DAY);         // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+   int APR_AWS_system_minutes = cal_APR_AWS_system_dt.get(Calendar.MINUTE);
+
+   if (((APR_AWS_system_hour + 1) % Integer.valueOf(main.pop_up_screen_interval)) == 0)
+   {
+      int APR_AWS_minutes_before_screen_pop_up = 60 - APR_AWS_system_minutes;                 // e.g. 60 - 55 = 5 minutes
+      if (APR_AWS_minutes_before_screen_pop_up <= main.APR_AWS_SCREEN_POP_UP_MINUTES_TO_HOUR) // e.g. APR_SCREEN_POP_UP_MINUTES_TO_HOUR = 10
+      {
+         // SYSTEM INVOKED SCREEN POP-UP TIME!
+         //
+         // NB less then xx minutes before whole hour; whole hour could be every hour, intermediate hours or main hours
+         //    (depends on variable setting: pop_up_screen_interval [function: OK_button_actionPerformed() in WOW_APR_settings.java])
+         // NB keep in mind, thread is always slightly 'behind' in time
+         
+         in_screen_pop_up_period = true;
+
+         if ((main.pop_up_form == null) && (main.screen_was_manually_closed_in_pop_up_period == false) && (main.turbowin_start_up_sequence_finished == true)) 
+         {
+            try 
+            {
+               main.pop_up_form = new pop_up_screen(in_screen_pop_up_period);
+            } 
+            catch (IOException ex) { /* ... */  }
+            main.pop_up_form.setVisible(true);
+            // NB main.pop_up_form.setAlwaysOnTop(true); : could block the TurboWIn+ app is another messageBox requires some action (like OK button to indicate that APR not valid etc.)
+         } 
+      } // if (APR_AWS_minutes_before_screen_pop_up <= main.APR_AWS_SCREEN_POP_UP_MINUTES_TO_HOUR)
+   } // if (((APR_AWS_system_hour + 1) % Integer.valueOf(main.pop_up_screen_interval)) == 0) 
+
+   int APR_AWS_minutes_before_whole_hour = 60 - APR_AWS_system_minutes;                     // e.g. 60 - 2 = 58
+   if (APR_AWS_minutes_before_whole_hour > main.APR_AWS_SCREEN_POP_UP_MINUTES_TO_HOUR) 
+   {
+      // SYSTEM INVOKED SCREEN POP-UP DELETE TIME!
+
+      in_screen_pop_up_period = false;
+
+      if (main.pop_up_form != null) 
+      {
+         main.pop_up_form.dispose();
+         main.pop_up_form = null;
+      }
+
+      // set this flag always to false if outside 'screen pop-up period'
+      main.screen_was_manually_closed_in_pop_up_period = false;
+   }
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void WiFi_initComponents()
+{
+   // called from specific_connection_initComponents() [main.java]
+   
+   
+   // for sensor data files (in the file name itself) (note also used in RS232_view.java)
+   main.sdf3 = new SimpleDateFormat("yyyyMMddHH");                                  // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+   // for date-time strings/remarks in the sensor data records (note also used in RS232_view.java)
+   main.sdf4 = new SimpleDateFormat("yyyyMMddHHmm");                                // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+   // for pop-up air pressure when clicking tray icon (TurboWin+ minimized/iconfied)
+   sdf8 = new SimpleDateFormat("dd MMM yyyy HH.mm");
+   sdf8.setTimeZone(TimeZone.getTimeZone("UTC"));                                   // <----- DEZE = ESSENTIEEL
+
+      
+   // dir for storage sensor data
+   if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0))
+   {
+      String info = "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+   }
+   
+   // delete old sensor data files (whether or not a barometer was found)
+   main.log_turbowin_system_message("[GENERAL] deleting old sensor data files");
+   RS232_Delete_Sensor_Data_Files();
+
+   
+   // check wifi connection
+  //WiFi_Check_Connection_b();
+   
+   //WiFi_Receive_UDP();
+   //WiFi_Class_Receive_UDP.execute();
+   WiFi_worker = new WiFi_Class_Receive_UDP();
+   WiFi_worker.execute();
+   
+   String message = "";
+   if (!main.lan_ip_address.equals(""))               // user inserted a custom ip address (e.g. 192.168.4.1) TurboWin+ should listening to (Mintaka ENet box in Maersk mode -fixed ip address-)
+   {   
+      message = "[LAN] start listening on " + main.lan_ip_address;
+   }
+   else
+   {
+      message = "[WIFI] start listening";
+   }
+   
+   main.log_turbowin_system_message(message);
+   
+   // start timer for checking every 1 minute if there is new barometer sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+   // NB invoking after: WiFi_worker = new WiFi_Class_Receive_UDP(); and WiFi_worker.execute();
+   last_new_data_received_TimeMillis = 0;
+   RS232_And_WiFi_init_new_sensor_data_received_check_timer();
+
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void Ethernet_initComponents()
+{
+   // called from specific_connection_initComponents() [main.java]
+   
+   
+   // for sensor data files (in the file name itself) (note also used in RS232_view.java)
+   main.sdf3 = new SimpleDateFormat("yyyyMMddHH");                                  // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+   // for date-time strings/remarks in the sensor data records (note also used in RS232_view.java)
+   main.sdf4 = new SimpleDateFormat("yyyyMMddHHmm");                                // HH hour in day (0-23) note there is also hh (then also with am, pm)
+   main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+   // for function: RS422_write_sensor_data_to_file() and RS422_V3_write_sensor_data_to_file()
+   sdf7 = new SimpleDateFormat("ss");                                           
+   sdf7.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+      
+   // dir for storage sensor data
+   if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0))
+   {
+      String info = "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+   }
+   
+   // delete old sensor data files (whether or not a barometer was found)
+   main.log_turbowin_system_message("[GENERAL] deleting old sensor data files");
+   RS232_Delete_Sensor_Data_Files();
+
+   Ethernet_worker = new Ethernet_Class_Receive_UDP();
+   Ethernet_worker.execute();
+   
+   String message = "[AWS] start listening";
+   main.log_turbowin_system_message(message);
+   
+   // set start-up sequence finished flag
+   //main.turbowin_start_up_sequence_finished = true;
+
+   // start timer for checking every 1 minute if there is new AWS data available (because if last data > 5 minutes old 'gray' data on main screen)
+   // NB invoking after: Ethernet_worker = new Ethernet_Class_Receive_UDP(); and Ethernet_worker.execute();
+   last_new_data_received_TimeMillis = 0;
+   RS422_init_new_aws_data_received_check_timer();
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private class RS232_Class_Receive_Sensor_Data_II extends SwingWorker<String, String>
+{
+   boolean retry = false;
+   
+   
+   @Override
+   protected String doInBackground() throws Exception
+   {
+      main.serialPort_II.openPort(); 
+      if (main.serialPort_II.isOpen())
+      {
+         main.serialPort_II.setComPortParameters(main.bits_per_second_II, main.data_bits_II, main.stop_bits_II, main.parity_II);
+         main.serialPort_II.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+	   } // if (serialPort_II.isOpen())
+      else        
+      {
+         System.out.println("+++ " + "[THERMOMETER] Couldn't open " +  main.serialPort_II.getDescriptivePortName());
+      }       
+      
+      if (!main.APPLICATION_VERSION.contains("[64-bit]"))  // so 32-bit
+      {
+         String message = "[THERMOMETER] " + "using 32-bit receive method"; 
+         main.log_turbowin_system_message(message);   
+                 
+         if (main.serialPort_II.isOpen())
+         {
+            main.serialPort_II.addDataListener(new SerialPortDataListener() 
+            {
+               // NB IMPLEMENTATION BELOW WORKS IN THE JPMS (64 bit) version  and on 32 bit (but the other method works better on 64bit) !!!!
+            
+               @Override
+               public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+               @Override
+               public void serialEvent(SerialPortEvent event)
+               {                  
+                  String ontvangen_SMD_string = "";
+                    
+                  if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                  {
+                     return;
+                  }
+                     
+                  int numRead = 0;
+                  byte[] newData = null;
+                  try
+                  {
+                     newData = new byte[main.serialPort_II.bytesAvailable()];
+                     numRead = main.serialPort_II.readBytes(newData, newData.length);                  
+                  }
+                  catch (NegativeArraySizeException ex) 
+                  {
+                     numRead = -1;
+                     // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                  }
+            
+                  if (numRead > 0)
+                  {
+                     ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                     //System.out.println("Read " + numRead + " bytes.");
+                     
+                     // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                     //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                     //
+                     // For example:
+                     //
+                     // publish("1");
+                     // publish("2", "3");
+                     // publish("4", "5", "6");
+                     //
+                     // might result in: process("1", "2", "3", "4", "5", "6")
+                     //
+                     publish(new String[] { ontvangen_SMD_string });
+                  } // if (numRead > 0)       
+                  else if (numRead == -1)
+                  {
+                     publish(new String[] { "interruption or excecution error\n" });
+                  }
+               } // public void serialEvent(SerialPortEvent event)
+            });                   
+         } // if (serialPort.isOpen())
+      } // if (!main.APPLICATION_VERSION.contains("[64-bit]"))        
+      else // 64-bit methode
+      {
+         //System.out.println("thermometer data via 64 bit method");
+         String message = "[THERMOMETER] " + "using 64-bit receive method"; 
+         main.log_turbowin_system_message(message);
+         
+         if (main.serialPort_II.isOpen())
+         {
+            main.serialPort_II.addDataListener(new SerialPortDataListener() 
+            {
+               // NB IMPLEMENTATION BELOW WORKS WELL IN THE JPMS (64 bit) version  but NOT on 32 bit !!!!
+            
+               @Override
+               public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; }
+            
+               @Override
+               public void serialEvent(SerialPortEvent event)
+               {
+                  String ontvangen_SMD_string = "";
+                  int numRead = 0;
+                  byte[] newData = null;
+               
+                  try
+                  {
+                     newData = event.getReceivedData();
+                     numRead = newData.length;
+              
+                     //System.out.println("Received data of size: " + newData.length);
+                     //for (int i = 0; i < newData.length; ++i)
+                     //      System.out.print((char)newData[i]);
+                     //System.out.println("\n");
+                  }
+                  catch (NegativeArraySizeException ex) 
+                  {
+                     numRead = -1;
+                     // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                  }
+
+            
+                  if (numRead > 0)
+                  {
+                     ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                     //System.out.println("Read " + numRead + " bytes.");
+                     
+                     // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                     //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                     //
+                     // For example:
+                     //
+                     // publish("1");
+                     // publish("2", "3");
+                     // publish("4", "5", "6");
+                     //
+                     // might result in: process("1", "2", "3", "4", "5", "6")
+                     //
+                     publish(new String[] { ontvangen_SMD_string });
+                  } // if (numRead > 0)       
+                  else if (numRead == -1)
+                  {
+                     publish(new String[] { "interruption or excecution error\n" });
+                  }
+               } // public void serialEvent(SerialPortEvent event)
+            });                   
+         } // if (serialPort.isOpen())
+         
+      } // 64-bit methode
+      
+      
+      return null;
+
+   } // protected Void doInBackground() throws Exception
+      
+      
+   @Override
+   protected void process(List<String> data)
+   {
+      // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+      for (String ontvangen_SMD_string: data)
+      {
+         // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+         //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+         main.total_string_II = ontvangen_SMD_string;
+         System.out.print(main.total_string_II);
+         //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+                  
+         // error logging
+         if (main.total_string_II.indexOf("error") != -1)
+         {
+                     
+            String message = "[THERMOMETER] " + "interruption or execution exception"; 
+            main.log_turbowin_system_message(message);
+         } //  if (main.total_string_II.indexOf("error") != -1)         
+         
+         // update main screen with application name + mode and date time last received data
+         String info = "";
+         if ((main_RS232_RS422.test_record_II.equals("")) || (main_RS232_RS422.test_record_II == null)) 
+         {
+            info = "no data";
+         } 
+         else 
+         {
+            info = main_RS232_RS422.test_record_II;
+         }   
+                  
+             //     if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 7)  // Mintaka Duo or Mintaka Star USB or StarX USB 
+             //     {
+             //        main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via USB: " + info);
+             //     }
+             //     else
+             //     {   
+             //        main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via serial communication: " + info);
+             //     }
+         main.jLabel41.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received thermometer data via USB: " + info);
+          
+                  
+         // save the received data to file         
+         RS232_write_sensor_data_to_file_II();                             // HMP155
+                  
+         // for timer checking the data is not obsolete; see Function: RS232_And_WiFi_init_new_barometer_received_check_timer()[main_RS232_RS422.java]
+         last_new_data_received_TimeMillis_II = System.currentTimeMillis(); 
+         
+         //  NB below only for thermometer if no barometer or AWS connected     
+         //     update the date and time on the main screen (and the global date time var's)
+         //     if during start up the date and time displayed in the pupup message was not comfirmed by the user
+         //     it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+         if (main.RS232_connection_mode == 0)                             // no 1st meteo instrument (barometer or AWS) connected
+         {
+            if (main.use_system_date_time_for_updating == true)
+            {  
+               set_datetime_while_collecting_sensor_data();
+            }
+            
+            // NB so only a 2nd meteo instrument; note: if there was also a first meteo instrument then the APR updates goes to that first instrument !!
+            if ((main.APR == true) && (main.total_string_II.indexOf("\n") != -1))
+            {
+               cal_APR_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+               cal_APR_system_date_time.getTime();                                               // now effective
+               int APR_system_hour_local = cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY);   // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+               int APR_system_minute_local = cal_APR_system_date_time.get(Calendar.MINUTE);
+                  
+               if ((APR_system_minute_local == 0) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+               {
+                  retry = false;
+                        
+                  // logging
+                  String message = "[APR] scheduled upload"; 
+                  main.log_turbowin_system_message(message);
+                        
+                  // checking
+                  boolean only_2nd_instrument = true;
+                  boolean APR_settings_ok = RS232_check_APR_settings(only_2nd_instrument);
+                  boolean GPS_date_time_ok = true;
+                  
+                  // NB because here, in this branch, the first meteo instrument is 0 (not present) the date time will always be retrieved from the NMEA GPS
+                  GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                  
+                  if (GPS_date_time_ok == false)
+                  {
+                     main.Reset_all_meteo_parameters();
+                  }
+                        
+                  if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                  {
+                     // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                     // read the thermometer data which was saved before by TurboWin+ from a sensor data II file
+                     RS232_vaisala.RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR("APR", retry);
+                      
+                  } // if (APR_settings_ok && GPS_date_time_ok) 
+               } // if ((APR_system_minute_local == 0) etc.
+               else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local == APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+               {
+                  // NB retry option will only be used in case of uploading to server (not if uloading by email, in case email will never enter this code paragraph)
+                  
+                  retry = true;        // only used if automatically "to server" not for automatically email upload
+                        
+                  // logging
+                  String message = "[APR] retry scheduled upload"; 
+                  main.log_turbowin_system_message(message);
+                        
+                  // checking
+                  boolean only_2nd_instrument = true;
+                  boolean APR_settings_ok = RS232_check_APR_settings(only_2nd_instrument);
+                  boolean GPS_date_time_ok = true;
+                        
+                  // NB because here, in this branch, the first meteo instrument is 0 (not present) the date time will always be retrieved from the NMEA GPS
+                  GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                     
+                  if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                  {
+                     // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                     
+                     // read the thermometer data which was saved before by TurboWin+ from a sensor data II file
+                     RS232_vaisala.RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR("APR", retry);
+                   
+                  } // if (APR_settings_ok && GPS_date_time_ok) 
+                        
+                  // reset (to be sure)
+                  APR_server_response_code = 0;
+                        
+               } // else if ((APR_server_response_code = main.RESPONSE_NO_INTERNET) etc.
+               else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local < APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+               {
+                  // NB retry option will only be used in cse of uploading to server (not if uloading by email, in case email will never enter this code paragraph)
+                  
+                  // text will be visible only a few minutes (till the retry upload)
+                  main.jTextField4.setText("[APR] retry automated pressure report upload within a few minutes");
+               }
+               else
+               {
+                  // text with next APR update bottom status line TurboWin+ main screen (updated every minute)
+                  for (int i = (APR_system_hour_local + 1); i < (APR_system_hour_local + 1 + Integer.valueOf(main.APR_reporting_interval)); i++)
+                  {
+                     // 24 hours or higher makes no difference for this computation
+                     if (i % Integer.valueOf(main.APR_reporting_interval) == 0)
+                     {
+                        cal_APR_system_date_time.add(Calendar.HOUR_OF_DAY, i - APR_system_hour_local);   // add 1 - 5 hours
+                        cal_APR_system_date_time.getTime();
+                                 
+                        String next_APR_string = "[APR] next automated meteo report upload: " + cal_APR_system_date_time.get(Calendar.DAY_OF_MONTH) + " " + main.convert_month(cal_APR_system_date_time.get(Calendar.MONTH)) + " " + cal_APR_system_date_time.get(Calendar.YEAR) + " " + cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY) + ".00 UTC"; 
+                                 
+                        main.jTextField4.setText(next_APR_string);
+                        break;
+                     }
+                 } // for (int i = (APR_system_hour_local + 1); etc.
+                           
+               } // else
+                        
+               cal_APR_system_date_time = null; 
+                        
+            } // if ( (main.APR == true) && (main.total_string.indexOf("\n") != -1))
+         } // if (main.RS232_connection_mode == 0)   
+         
+      } // for (String ontvangen_string : data)   
+   } // protected void process(List<String> data)
+}
+
+
+      
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private class RS232_Class_Receive_Sensor_Data extends SwingWorker<String, String>
+{
+   // called from RS232_initComponents()
+   
+    //  new SwingWorker<String, String>()
+    //     {
+            boolean retry = false;
+            
+            
+            @Override
+            protected String doInBackground() throws Exception
+            {
+               main.serialPort.openPort(); 
+               if (main.serialPort.isOpen())
+               {
+                  //main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
+                  //main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+                  //main.serialPort.setFlowControlMode(main.flow_control);
+                  main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+                  main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
+                  
+                  // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
+                  // Well, for example, we need to know what came some data, thus in the mask must have the
+                  // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
+                  // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
+                  //int mask = SerialPort.MASK_RXCHAR;
+                  
+                  //Set the prepared mask
+                  //main.serialPort.setEventsMask(mask);                  
+                  
+		         } // if (serialPort.isOpen())
+               else        
+               {
+                  //System.out.println("+++ " + ex);
+                  System.out.println("+++ " + "[BAROMETER] Couldn't open " +  main.serialPort.getDescriptivePortName());
+               }               
+	            
+               
+               if (main.serialPort.isOpen())
+               {
+                  main.serialPort.addDataListener(new SerialPortDataListener() 
+                  {
+                     @Override
+                     public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                     @Override
+                     public void serialEvent(SerialPortEvent event)
+                     {                  
+                        String ontvangen_SMD_string = "";
+                     
+                        if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                        {
+                           return;
+                        }
+                     
+                        //byte[] newData = new byte[main.serialPort.bytesAvailable()];
+                        //int numRead = main.serialPort.readBytes(newData, newData.length);  
+                        int numRead;
+                        byte[] newData = null;
+                        try
+                        {
+                           newData = new byte[main.serialPort.bytesAvailable()];
+                           numRead = main.serialPort.readBytes(newData, newData.length);                  
+                        }
+                        catch (NegativeArraySizeException ex) 
+                        {
+                           numRead = -1;
+                           // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                        }
+                  
+                        if (numRead > 0)
+                        {
+                           ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                           //System.out.println("Read " + numRead + " bytes.");
+                     
+                           // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                           //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                           //
+                           // For example:
+                           //
+                           // publish("1");
+                           // publish("2", "3");
+                           // publish("4", "5", "6");
+                           //
+                           // might result in: process("1", "2", "3", "4", "5", "6")
+                           //
+                           publish(new String[] { ontvangen_SMD_string });
+                        } // if (numRead > 0)       
+                        else if (numRead == -1)
+                        {
+                           publish(new String[] { "interruption or excecution error\n" });
+                        }
+                     } // public void serialEvent(SerialPortEvent event)
+                  });                   
+               } // if (serialPort.isOpen())
+               
+               
+               return null;
+
+            } // protected Void doInBackground() throws Exception
+            
+            // NB https://stackoverflow.com/questions/6523623/graceful-exception-handling-in-swing-worker
+            //    You should NOT try to catch exceptions in the background thread but rather let them pass through to the SwingWorker itself, 
+            //    and then you can get them in the done() method by calling get()which normally returns the result of doInBackground() 
+            //    (Void in your situation). If an exceptionwas thrown in the background thread then get() will throw it, wrapped inside an ExecutionException.
+            //
+            // NB Martin: but in this case it goes via the process() function, done() method has no effect!
+            //
+/*            
+            // Executed in EDT
+            @Override
+            protected void done() 
+            {
+               try 
+               {
+                  //System.out.println("Done");
+                  get();
+               } 
+               catch (ExecutionException ex) 
+               {
+                  //e.getCause().printStackTrace();
+                  //String msg = String.format("Unexpected problem: %s", 
+                  //            e.getCause().toString());
+                  //JOptionPane.showMessageDialog(Utils.getActiveFrame(),
+                  // msg, "Error", JOptionPane.ERROR_MESSAGE, errorIcon);
+                  String message = "[BAROMETER] " + ex.getMessage(); 
+                  main.log_turbowin_system_message(message);
+                  message = "barometer connection execution exception (pc sleep mode?); restart this program";
+                  JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);                 
+               } 
+               catch (InterruptedException ex) 
+               {
+                  // Process e here
+                  //String message = "[BAROMETER] " + ex.getMessage(); 
+                  String message = "[BAROMETER] " + "interruption exception"; 
+                  main.log_turbowin_system_message(message);
+                  message = "barometer connection interrupted; restart this program";
+                  JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+               }
+            } // protected void done() 
+*/           
+
+            @Override
+            protected void process(List<String> data)
+            {
+               // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+               for (String ontvangen_SMD_string: data)
+               {
+                  // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+                  //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+                  main.total_string = ontvangen_SMD_string;
+
+
+                  // NB Onderstaande om i.p.v. elke minuut de data per 5 minuten op te slaan
+                  //    werkt hier niet (door de 'brokken' record maar bij AWS zou het wel een mogelijkheid kunnen zijn
+                  //if (total_string.indexOf("3$") != -1)
+                  //{
+                  //   String minuten = sdf4.format(new Date()).substring(10, 10 + 2);  // sdf4: yyyyMMddHHmm
+                  //   int int_minuten = Integer.parseInt(minuten.trim());
+                  //
+                  //   if (int_minuten % 5 == 0   );
+                  //
+                  System.out.print(main.total_string);
+                  //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+                  
+                  // error logging
+                  if (main.total_string.indexOf("error") != -1)
+                  {
+/*                     
+                     // NB code below is OK but maybe dangerous if messagebox may blocking application? (eg after a 1 time hick-upp)
+                     if (comm_error_messagebox_shown == 0 )
+                     {
+                        String message = "[BAROMETER] " + "interruption or execution exception"; 
+                        main.log_turbowin_system_message(message);
+                        message = "barometer connection interrupted; check pc sleep mode and/or connection cable; if obsolete data restart this application";
+                     
+                        comm_error_messagebox_shown = 1;
+                        //int return = JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+                        Object[] options = { "OK" };
+                        int reply = JOptionPane.showOptionDialog(null, message, main.APPLICATION_NAME, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                        if (reply == JOptionPane.OK_OPTION) 
+                        {
+                           comm_error_messagebox_shown = 0;
+                        }
+                     } //  if (comm_error_messagebox_shown == 0)   
+*/                     
+                     String message = "[BAROMETER] " + "interruption or execution exception"; 
+                     main.log_turbowin_system_message(message);
+                  } //  if (main.total_string.indexOf("error") != -1)
+                  
+                  
+
+                  // update main screen with application name + mode and date time last received data
+                  String info = "";
+                  if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) 
+                  {
+                     info = "no data";
+                  } 
+                  else 
+                  {
+                     info = main_RS232_RS422.test_record;
+                  }   
+                  
+                  if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5 || main.RS232_connection_mode == 7)  // Mintaka Duo or Mintaka Star USB or StarX USB 
+                  {
+                     main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via USB: " + info);
+                  }
+                  else
+                  {   
+                     main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via serial communication: " + info);
+                  }
+                  
+                  RS232_write_sensor_data_to_file();                             // PTB220, PTB330, MintakaDuo, Mintaka Star USB, Mintaka StarX USB
+                  
+                  // for timer checking the data is not obsolete; see Function: RS232_WiFi_init_new_barometer_received_check_timer()[main_RS232_RS422.java]
+                  last_new_data_received_TimeMillis = System.currentTimeMillis(); 
+                  
+                  // update the date and time on the main screen (and the global date time var's)
+                  // NB if during start up the date and time displayed in the pupup message was not comfirmed by the user
+                  //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+                  if (main.use_system_date_time_for_updating == true)
+                  {  
+                     set_datetime_while_collecting_sensor_data();
+                  }
+                  
+                  // WOW enabled (and not 'only publish if manual obs was send') and a complete sensor data string was received
+                  if ((main.WOW == true) /*&& (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL))*/ && (main.total_string.indexOf("\n") != -1))
+                  {
+                     cal_WOW_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
+                     cal_WOW_systeem_datum_tijd.getTime();                                             // now effective
+                     int WOW_system_minute_local = cal_WOW_systeem_datum_tijd.get(Calendar.MINUTE);
+                     cal_WOW_systeem_datum_tijd = null; 
+                  
+                     if ((WOW_system_minute_local -1) % Integer.valueOf(main.WOW_reporting_interval) == 0)      // e.g. every 10 minutes (WOW_reporting_interval);   but no interference with APR!           
+                     {
+                        // logging
+                        String message = "[WOW] scheduled upload"; 
+                        main.log_turbowin_system_message(message);
+                        
+                        // checking
+                        boolean WOW_settings_ok = RS232_check_WOW_settings();
+                           
+                        if (WOW_settings_ok)
+                        {   
+                           // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                           if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)       // PTB220 or PTB330
+                           {
+                              RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                           }
+                           else if (main.RS232_connection_mode == 4)                                     // MintakaDuo
+                           {
+                              RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                           }
+                           else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                           {
+                              //RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                              boolean StarX = false;
+                              RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry, StarX);
+                           } 
+                           else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // Mintaka StarX (USB or WiFi)
+                           {
+                              boolean StarX = true;
+                              RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry, StarX);
+                           } 
+                        } // if (WOW_settings_ok)
+                     }   
+                  } // if ((main.WOW == true) && (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL)) && (main.total_string.indexOf("\n") != -1))
+
+                  
+                  
+                  /////////////////////////////////////
+                  //System.out.println("+++ " + "main.total_string = " + main.total_string);
+                  ////////////////////////////////
+                  
+                  
+                  // APR (Automated Pressure Reporting)
+                  if ((main.APR == true) && (main.total_string.indexOf("\n") != -1))
+                  {
+                     /////////////////////////////////////
+                     //System.out.println("+++ " + "main.total_string = " + main.total_string);
+                     ////////////////////////////////
+                     
+                     cal_APR_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+                     cal_APR_system_date_time.getTime();                                               // now effective
+                     int APR_system_hour_local = cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY);   // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+                     int APR_system_minute_local = cal_APR_system_date_time.get(Calendar.MINUTE);
+                  
+                     if ((APR_system_minute_local == 0) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+                     {
+                        retry = false;
+                        
+                        // logging
+                        String message = "[APR] scheduled upload"; 
+                        main.log_turbowin_system_message(message);
+                        
+                        // checking
+                        boolean only_2nd_instrument = false;
+                        boolean APR_settings_ok = RS232_check_APR_settings(only_2nd_instrument);
+                        boolean GPS_date_time_ok = true;
+                        
+                        if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8) // Mintaka Star (USB or WiFi) or StarX (USB or WiFi)
+                        {
+                           // NB Mintaka Star saved data do not contain date/time information so it is not possible to check this
+                           //    so it is made always true
+                           GPS_date_time_ok = true;
+                        }
+                        else
+                        {
+                           GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                        }
+                        
+                        if (GPS_date_time_ok == false)
+                        {
+                           main.Reset_all_meteo_parameters();
+                        }
+                        
+                        if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                        {
+                           // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                           // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                           if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)       // PTB220 or PTB330
+                           {
+                              RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 4)                                     // MintakaDuo
+                           {
+                              RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                           {
+                              //RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                              boolean StarX = false;
+                              RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                           }   
+                           else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // Mintaka StarX (USB or WiFi)
+                           {
+                              boolean StarX = true;
+                              RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                           } 
+                        } // if (APR_settings_ok && GPS_date_time_ok) 
+                     } // if ((APR_system_minute_local == 0) etc.
+                     else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local == APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+                     {
+                        retry = true;
+                        
+                        // logging
+                        String message = "[APR] retry scheduled upload"; 
+                        main.log_turbowin_system_message(message);
+                        
+                        // checking
+                        boolean only_2nd_instrument = false;
+                        boolean APR_settings_ok = RS232_check_APR_settings(only_2nd_instrument);
+                        boolean GPS_date_time_ok = true;
+                        
+                        if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8) // Mintaka Star (USB or WiFi) or StarX (USB or WiFi)
+                        {
+                           // NB Mintaka Star saved data do not contain date/time information so it is not possible to check this
+                           //    so it is made always true
+                           GPS_date_time_ok = true;
+                        }
+                        else
+                        {
+                           GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                        }
+                     
+                        if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                        {
+                           // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                           // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                           if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)  // PTB220 or PTB330
+                           {
+                              RS232_vaisala.RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 4)                                // MintakaDuo
+                           {
+                              RS232_mintaka.RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                           {
+                              //RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                              boolean StarX = false;
+                              RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                           } 
+                           else if (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)  // Mintaka StarX (USB or WiFi)
+                           {
+                              boolean StarX = true;
+                              RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry, StarX);
+                           }                            
+                        } // if (APR_settings_ok && GPS_date_time_ok) 
+                        
+                        // reset (to be sure)
+                        APR_server_response_code = 0;
+                        
+                     } // else if ((APR_server_response_code = main.RESPONSE_NO_INTERNET) etc.
+                     else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local < APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+                     {
+                        // text will be visible only a few minutes (till the retry upload)
+                        main.jTextField4.setText("[APR] retry automated pressure report upload within a few minutes");
+                     }
+                     else
+                     {
+                        // text with next APR update bottom status line TurboWin+ main screen (updated every minute)
+                        if (!main.APR_reporting_interval.equals(""))
+                        {
+                           for (int i = (APR_system_hour_local + 1); i < (APR_system_hour_local + 1 + Integer.valueOf(main.APR_reporting_interval)); i++)
+                           {
+                              // 24 hours or higher makes no difference for this computation
+                              if (i % Integer.valueOf(main.APR_reporting_interval) == 0)
+                              {
+                                 cal_APR_system_date_time.add(Calendar.HOUR_OF_DAY, i - APR_system_hour_local);   // add 1 - 5 hours
+                                 cal_APR_system_date_time.getTime();
+                                 
+                                 String next_APR_string = "[APR] next automated meteo report upload: " + cal_APR_system_date_time.get(Calendar.DAY_OF_MONTH) + " " + main.convert_month(cal_APR_system_date_time.get(Calendar.MONTH)) + " " + cal_APR_system_date_time.get(Calendar.YEAR) + " " + cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY) + ".00 UTC"; 
+                                 
+                                 main.jTextField4.setText(next_APR_string);
+                                 break;
+                              }
+                           } // for (int i = (APR_system_hour_local + 1); etc.
+                        }   
+                     } // else
+                        
+                     cal_APR_system_date_time = null; 
+                        
+                  } // if ( (main.APR == true) && (main.total_string.indexOf("\n") != -1))
+                  
+               } // for (String ontvangen_string : data)
+            } // protected void process(List<String> data)
+   //      }.execute(); // new SwingWorker<String, String>()
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_initComponents()
+{
+      // called from specific_connection_initComponents() [main.java] which is called from  read_muffin() [main.java] or lees_configuratie_regels() [main.java]
+      
+      ///////// only used for PTB220/PTB330/Mintaka Duo/Mintaka Star USB barometers (not for EUCAWS and not for Mintaka Star WiFi) ////////
+      
+      // http://www.snip2code.com/Snippet/1044/Java--read-from-USB-using-RXTX-library
+      // FOR LINUX:
+      //#==================================================================#
+      // WARNING! - DO NOT SET THE FOLLOWING PROPERTY WITH RXTX LIBRARY, IT
+      // CAUSES A PROGRAM LOCK:
+      // serialPort.notifyOnOutputEmpty(true);
+      //#==================================================================#     
+      
+      // start timer for checking every 1 minute if there is newbarometer sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+      //last_new_data_received_TimeMillis = 0;
+      //RS232_And_WiFi_init_new_sensor_data_received_check_timer();
+      
+      
+      //System.loadLibrary("C:\\Users\\hometrainer\\Documents\\NetBeansProjects\\turbowin_jws\\rxtxSerial.dll"); // gaat fout omdat het geen path mag zijn (alleen de library name)
+      
+      
+      // NB load dll via applet or java web start
+      //    You can definitely accomplish this. I have a working applet in production that does exactly this. 
+      //    Even if your applet is signed, you still need to use the Access Controller to access the dll, you cannot just call "loadlibrary". 
+      //    You can add this to the Java policy file however this is not recommended due to 1. You probably do not have access to the users java configuration. 2. 
+      //    Even if this is for your own company use, managing the policy file is a pain as users will download some JRE and your policy file is either overwritten or ignored.
+      //    You best bet is to sign your jar, making sure to wrap your load library code in a privileged block of code like this. 
+      //
+      //    You can Also use System.loadlibrary(mydll.dll) but you have to have the dll folder on the path in windows so the applet can find it. 
+      
+      // for writing info data to status line (bottom of screen)
+      //sdf2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");                            // HH hour in day (0-23) note there is also hh (with am, pm)
+      //sdf2.setTimeZone(TimeZone.getTimeZone("UTC"));
+      
+      // for sensor data files (in the file name itself) (note also used in RS232_view.java)
+      main.sdf3 = new SimpleDateFormat("yyyyMMddHH");                                  // HH hour in day (0-23) note there is also hh (then also with am, pm)
+      main.sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+      // for date-time strings/remarks in the sensor data records (note also used in RS232_view.java)
+      main.sdf4 = new SimpleDateFormat("yyyyMMddHHmm");                                // HH hour in day (0-23) note there is also hh (then also with am, pm)
+      main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+      // for pop-up air pressure when clicking tray icon (TurboWin+ minimized/iconfied)
+      sdf8 = new SimpleDateFormat("dd MMM yyyy HH.mm");
+      sdf8.setTimeZone(TimeZone.getTimeZone("UTC"));                                   // <----- DEZE = ESSENTIEEL
+
+      
+      // dir for storage sensor data
+      //if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2)
+      if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0))
+      {
+         String info = "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+      }
+      
+      // checking/looking for the correct com port
+      //
+      int completed_checks_serial_ports = 0;
+      while ((main.defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_BAROMETER_PORT_CHECKS))
+      {
+         RS232_Check_Serial_Ports_8(completed_checks_serial_ports);               // PTB220, PTB330, MintakaDuo, MintakaStar USB
+         completed_checks_serial_ports++;
+      }
+
+      // send Vaisala/Mintaka serial commands to the barometer 
+      if (main.defaultPort != null)
+      {
+         RS232_Format_Barometer_Output_3();                                       // PTB220, PTB330, MintakaDuo, MintakaStar USB
+      }
+      else
+      {
+         String info = "no barometer found (defaultPort = null)";
+         System.out.println(info);
+      }
+      
+      // delete old sensor data files (whether or not a barometer was found)
+      main.log_turbowin_system_message("[GENERAL] deleting old sensor data files");
+      RS232_Delete_Sensor_Data_Files();
+      
+
+      if (main.defaultPort != null)
+      {
+         // info text on (bottom) main screen 
+         //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", receiving barometer sensor data via serial communication.....");
+         if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5  || main.RS232_connection_mode == 7)            // Mintaka Duo or Mintaka Star USB or StarX USB
+         {
+            main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received barometer data via USB: no data");
+         }
+         else
+         {
+            main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received barometer data via serial communication: no data");
+         }
+         
+         //main.serialPort = new SerialPort(main.defaultPort);  // NB main.defaultPort was determined in Function: RS232_Check_Serial_Ports_8()
+         //final SerialPort serialPort  = SerialPort.getCommPort(main.defaultPort
+         main.serialPort  = SerialPort.getCommPort(main.defaultPort);        
+      
+      
+         RS232_worker = new RS232_Class_Receive_Sensor_Data();
+         RS232_worker.execute();
+   
+         String message = "[BAROMETER] start listening";
+         main.log_turbowin_system_message(message);
+         
+         // set start-up sequence finished flag
+         //main.turbowin_start_up_sequence_finished = true;
+   
+         // start timer for checking every 1 minute if there is new barometer sensor data available (because if last data > 10 minutes old 'gray' data on main screen)
+         // NB invoking after: RS232_worker = new RS232_Class_Receive_Sensor_Data(); and RS232_worker.execute();
+         last_new_data_received_TimeMillis = 0;
+         RS232_And_WiFi_init_new_sensor_data_received_check_timer();
+      } // if (main.defaultPort != null)
+      
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public void RS232_initComponents_II()
+{
+      // called from specific_connection_initComponents() [main.java] which is called from  read_muffin() [main.java] or lees_configuratie_regels() [main.java]
+      
+      ///////// only used 2nd instrument HMP155 (not for for PTB220/PTB330/Mintaka Duo/Mintaka Star USB barometers and not for EUCAWS and not for Mintaka Star WiFi) ////////
+      
+      
+      // for writing info data to status line (bottom of screen)
+      //sdf2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");                            // HH hour in day (0-23) note there is also hh (with am, pm)
+      //sdf2.setTimeZone(TimeZone.getTimeZone("UTC"));
+      
+      // for sensor data files (in the file name itself) (note also used in RS232_view.java)
+      main.sdf3 = new SimpleDateFormat("yyyyMMddHH");                                  // HH hour in day (0-23) note there is also hh (then also with am, pm)
+      main.sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+      // for date-time strings/remarks in the sensor data records (note also used in RS232_view.java)
+      main.sdf4 = new SimpleDateFormat("yyyyMMddHHmm");                                // HH hour in day (0-23) note there is also hh (then also with am, pm)
+      main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+      // for pop-up air pressure when clicking tray icon (TurboWin+ minimized/iconfied)
+      //sdf8 = new SimpleDateFormat("dd MMM yyyy HH.mm");
+      //sdf8.setTimeZone(TimeZone.getTimeZone("UTC"));                                   // <----- DEZE = ESSENTIEEL
+
+      
+      // dir for storage sensor data
+      if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0))
+      {
+         String info = "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+      }
+      
+      // checking/looking for the correct com port
+      //
+      int completed_checks_serial_ports_II = 0;
+      while ((main.defaultPort_II == null) && (completed_checks_serial_ports_II < MAX_COMPLETED_THERMOMETER_PORT_CHECKS))
+      {
+         RS232_Check_Serial_Ports_8_II(completed_checks_serial_ports_II);             // HMP 155
+         completed_checks_serial_ports_II++;
+      }
+
+      // send Vaisala serial commands to the thermometer 
+      if (main.defaultPort_II != null)
+      {
+         RS232_Format_Thermometer_Output();                                           // HMP 155
+      }
+      else
+      {
+         String info = "no thermometer found (defaultPort_II = null)";
+         System.out.println(info);
+      }
+      
+      // delete old sensor data files (whether or not a thermometer was found)
+      main.log_turbowin_system_message("[GENERAL] deleting old sensor data files II");
+      RS232_Delete_Sensor_Data_Files_II();
+      
+
+      if (main.defaultPort_II != null)
+      {
+         // info text on (bottom) main screen 
+         //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", receiving barometer sensor data via serial communication.....");
+         if (main.RS232_connection_mode_II == 1)                                   // HMP 155
+         {
+            //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received thermometer data via USB: no data");
+            main.jLabel41.setText(main.APPLICATION_NAME + " " + ", last received thermometer data via USB: no data");
+         }
+         
+         main.serialPort_II  = SerialPort.getCommPort(main.defaultPort_II);        
+      
+         RS232_worker_II = new RS232_Class_Receive_Sensor_Data_II();
+         RS232_worker_II.execute();
+   
+         String message = "[THERMOMETER] start listening";
+         main.log_turbowin_system_message(message);
+   
+         // start timer for checking every 1 minute if there is new thermometer sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+         // NB invoking after: RS232_worker_II = new RS232_Class_Receive_Sensor_Data_II(); and RS232_worker_II.execute();
+         last_new_data_received_TimeMillis_II = 0;
+         RS232_And_WiFi_init_new_sensor_data_received_check_timer_II();
+      } // if (main.defaultPort != null)
+      
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+   public void RS232_initComponents()
+   {
+      // called from read_muffin() [main.java] or lees_configuratie_regels() [main.java]
+      
+      ///////// only used for PTB220/PTB330/Mintaka Duo/Mintaka Star USB barometers (not for EUCAWS and not for Mintaka Star WiFi) ////////
+      
+      // http://www.snip2code.com/Snippet/1044/Java--read-from-USB-using-RXTX-library
+      // FOR LINUX:
+      //#==================================================================#
+      // WARNING! - DO NOT SET THE FOLLOWING PROPERTY WITH RXTX LIBRARY, IT
+      // CAUSES A PROGRAM LOCK:
+      // serialPort.notifyOnOutputEmpty(true);
+      //#==================================================================#     
+      
+      // start timer for checking every 1 minute if there is newbarometer sensor data available (because if last data > 5 minutes old 'gray' data on main screen)
+      last_new_data_received_TimeMillis = 0;
+      RS232_And_WiFi_init_new_sensor_data_received_check_timer();
+      
+      
+      //System.loadLibrary("C:\\Users\\hometrainer\\Documents\\NetBeansProjects\\turbowin_jws\\rxtxSerial.dll"); // gaat fout omdat het geen path mag zijn (alleen de library name)
+      
+      
+      // NB load dll via applet or java web start
+      //    You can definitely accomplish this. I have a working applet in production that does exactly this. 
+      //    Even if your applet is signed, you still need to use the Access Controller to access the dll, you cannot just call "loadlibrary". 
+      //    You can add this to the Java policy file however this is not recommended due to 1. You probably do not have access to the users java configuration. 2. 
+      //    Even if this is for your own company use, managing the policy file is a pain as users will download some JRE and your policy file is either overwritten or ignored.
+      //    You best bet is to sign your jar, making sure to wrap your load library code in a privileged block of code like this. 
+      //
+      //    You can Also use System.loadlibrary(mydll.dll) but you have to have the dll folder on the path in windows so the applet can find it. 
+      
+      // for writing info data to status line (bottom of screen)
+      //sdf2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");                            // HH hour in day (0-23) note there is also hh (with am, pm)
+      //sdf2.setTimeZone(TimeZone.getTimeZone("UTC"));
+      
+      // for sensor data files (in the file name itself) (note also used in RS232_view.java)
+      main.sdf3 = new SimpleDateFormat("yyyyMMddHH");                                  // HH hour in day (0-23) note there is also hh (then also with am, pm)
+      main.sdf3.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+      // for date-time strings/remarks in the sensor data records (note also used in RS232_view.java)
+      main.sdf4 = new SimpleDateFormat("yyyyMMddHHmm");                                // HH hour in day (0-23) note there is also hh (then also with am, pm)
+      main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
+    
+      // for pop-up air pressure when clicking tray icon (TurboWin+ minimized/iconfied)
+      sdf8 = new SimpleDateFormat("dd MMM yyyy HH.mm");
+      sdf8.setTimeZone(TimeZone.getTimeZone("UTC"));                                   // <----- DEZE = ESSENTIEEL
+
+      
+      // dir for storage sensor data
+      //if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2)
+      if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0))
+      {
+         String info = "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+         JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+      }
+      
+      // checking/looking for the correct com port
+      //
+      int completed_checks_serial_ports = 0;
+      while ((main.defaultPort == null) && (completed_checks_serial_ports < MAX_COMPLETED_BAROMETER_PORT_CHECKS))
+      {
+         RS232_Check_Serial_Ports_8(completed_checks_serial_ports);               // PTB220, PTB330, MintakaDuo, MintakaStar USB
+         completed_checks_serial_ports++;
+      }
+
+      // send Vaisala/Mintaka serial commands to the barometer 
+      if (main.defaultPort != null)
+      {
+         RS232_Format_Barometer_Output_3();                                       // PTB220, PTB330, MintakaDuo, MintakaStar USB
+      }
+      else
+      {
+         String info = "no barometer found (defaultPort = null)";
+         System.out.println(info);
+      }
+      
+      // delete old sensor data files (whether or not a barometer was found)
+      main.log_turbowin_system_message("[GENERAL] deleting old sensor data files");
+      RS232_Delete_Sensor_Data_Files();
+      
+
+      if (main.defaultPort != null)
+      {
+         // info text on (bottom) main screen 
+         //main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", receiving barometer sensor data via serial communication.....");
+         if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)            // Mintaka Duo or Mintaka Star USB
+         {
+            main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received barometer data via USB: no data");
+         }
+         else
+         {
+            main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode + ", last received barometer data via serial communication: no data");
+         }
+         
+         //main.serialPort = new SerialPort(main.defaultPort);  // NB main.defaultPort was determined in Function: RS232_Check_Serial_Ports_8()
+         //final SerialPort serialPort  = SerialPort.getCommPort(main.defaultPort
+         main.serialPort  = SerialPort.getCommPort(main.defaultPort);        
+         
+         new SwingWorker<String, String>()
+         {
+            boolean retry = false;
+            
+            
+            @Override
+            protected String doInBackground() throws Exception
+            {
+               main.serialPort.openPort(); 
+               if (main.serialPort.isOpen())
+               {
+                  //main.serialPort.openPort();               // NB will be closed in Function:  File_Exit_menu_actionPerformd() [main.java]
+                  //main.serialPort.setParams(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+                  //main.serialPort.setFlowControlMode(main.flow_control);
+                  main.serialPort.setComPortParameters(main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
+                  main.serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+
+                  
+                  // Preparing a mask. In a mask, we need to specify the types of events that we want to track.
+                  // Well, for example, we need to know what came some data, thus in the mask must have the
+                  // following value: MASK_RXCHAR. If we, for example, still need to know about changes in states 
+                  // of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
+                  //int mask = SerialPort.MASK_RXCHAR;
+                  
+                  //Set the prepared mask
+                  //main.serialPort.setEventsMask(mask);                  
+                  
+		         } // if (serialPort.isOpen())
+               else        
+               {
+                  //System.out.println("+++ " + ex);
+                  System.out.println("+++ " + "[BAROMETER] Couldn't open " +  main.serialPort.getDescriptivePortName());
+               }               
+	            
+               
+               if (main.serialPort.isOpen())
+               {
+                  main.serialPort.addDataListener(new SerialPortDataListener() 
+                  {
+                     @Override
+                     public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+                  
+                     @Override
+                     public void serialEvent(SerialPortEvent event)
+                     {                  
+                        String ontvangen_SMD_string = "";
+                     
+                        if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+                        {
+                           return;
+                        }
+                     
+                        //byte[] newData = new byte[main.serialPort.bytesAvailable()];
+                        //int numRead = main.serialPort.readBytes(newData, newData.length);  
+                        int numRead;
+                        byte[] newData = null;
+                        try
+                        {
+                           newData = new byte[main.serialPort.bytesAvailable()];
+                           numRead = main.serialPort.readBytes(newData, newData.length);                  
+                        }
+                        catch (NegativeArraySizeException ex) 
+                        {
+                           numRead = -1;
+                           // NB don't modify the GUI anywhere except for on the event-dispatch-thread.!! (so not here in the function doinBackground())
+                        }
+                  
+                        if (numRead > 0)
+                        {
+                           ontvangen_SMD_string = new String(newData, StandardCharsets.UTF_8);
+                     
+                           //System.out.println("Read " + numRead + " bytes.");
+                     
+                           // publish: Sends data chunks to the process(java.util.List) method. This method is to be used from inside the doInBackground method to deliver intermediate results for processing on the Event Dispatch Thread inside the process method.
+                           //          Because the process method is invoked asynchronously on the Event Dispatch Thread  multiple invocations to the publish method might occur before the process method is executed. For performance purposes all these invocations are coalesced into one invocation with concatenated arguments.
+                           //
+                           // For example:
+                           //
+                           // publish("1");
+                           // publish("2", "3");
+                           // publish("4", "5", "6");
+                           //
+                           // might result in: process("1", "2", "3", "4", "5", "6")
+                           //
+                           publish(new String[] { ontvangen_SMD_string });
+                        } // if (numRead > 0)       
+                        else if (numRead == -1)
+                        {
+                           publish(new String[] { "interruption or excecution error\n" });
+                        }
+                     } // public void serialEvent(SerialPortEvent event)
+                  });                   
+               } // if (serialPort.isOpen())
+               
+               
+               return null;
+
+            } // protected Void doInBackground() throws Exception
+            
+            // NB https://stackoverflow.com/questions/6523623/graceful-exception-handling-in-swing-worker
+            //    You should NOT try to catch exceptions in the background thread but rather let them pass through to the SwingWorker itself, 
+            //    and then you can get them in the done() method by calling get()which normally returns the result of doInBackground() 
+            //    (Void in your situation). If an exceptionwas thrown in the background thread then get() will throw it, wrapped inside an ExecutionException.
+            //
+            // NB Martin: but in this case it goes via the process() function, done() method has no effect!
+            //
+        
+
+            @Override
+            protected void process(List<String> data)
+            {
+               // process: Receives data chunks from the publish method asynchronously on the Event Dispatch Thread.
+               for (String ontvangen_SMD_string: data)
+               {
+                  // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
+                  //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+
+                  main.total_string = ontvangen_SMD_string;
+
+
+                  // NB Onderstaande om i.p.v. elke minuut de data per 5 minuten op te slaan
+                  //    werkt hier niet (door de 'brokken' record maar bij AWS zou het wel een mogelijkheid kunnen zijn
+                  //if (total_string.indexOf("3$") != -1)
+                  //{
+                  //   String minuten = sdf4.format(new Date()).substring(10, 10 + 2);  // sdf4: yyyyMMddHHmm
+                  //   int int_minuten = Integer.parseInt(minuten.trim());
+                  //
+                  //   if (int_minuten % 5 == 0   );
+                  //
+                  System.out.print(main.total_string);
+                  //System.out.println(total_string); // NB zo zie je ruwweg hoeveel bytes dat telkens beschikbaar zijn
+                  
+                  // error logging
+                  if (main.total_string.indexOf("error") != -1)
+                  {
+                     
+                     // NB code below is OK but maybe dangerous if messagebox may blocking application? (eg after a 1 time hick-upp)
+                  //   if (comm_error_messagebox_shown == 0 )
+                  //   {
+                  //      String message = "[BAROMETER] " + "interruption or execution exception"; 
+                  //      main.log_turbowin_system_message(message);
+                  //      message = "barometer connection interrupted; check pc sleep mode and/or connection cable; if obsolete data restart this application";
+                  //   
+                  //      comm_error_messagebox_shown = 1;
+                  //      //int return = JOptionPane.showMessageDialog(null, message, main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+                  //      Object[] options = { "OK" };
+                  //      int reply = JOptionPane.showOptionDialog(null, message, main.APPLICATION_NAME, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
+                  //      if (reply == JOptionPane.OK_OPTION) 
+                  //      {
+                  //         comm_error_messagebox_shown = 0;
+                  //      }
+                  //   } //  if (comm_error_messagebox_shown == 0)   
+                    
+                     String message = "[BAROMETER] " + "interruption or execution exception"; 
+                     main.log_turbowin_system_message(message);
+                  } //  if (main.total_string.indexOf("error") != -1)
+                  
+                  
+
+                  // update main screen with application name + mode and date time last received data
+                  String info = "";
+                  if ((main_RS232_RS422.test_record.equals("")) || (main_RS232_RS422.test_record == null)) 
+                  {
+                     info = "no data";
+                  } 
+                  else 
+                  {
+                     info = main_RS232_RS422.test_record;
+                  }   
+                  
+                  if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)            // Mintaka Duo or Mintaka Star USB
+                  {
+                     main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via USB: " + info);
+                  }
+                  else
+                  {   
+                     main.jLabel4.setText(main.APPLICATION_NAME + " " + main.application_mode  + ", last received barometer data via serial communication: " + info);
+                  }
+                  
+                  RS232_write_sensor_data_to_file();                             // PTB220, PTB330, MintakaDuo, Mintaka Star USB
+                  
+                  // for timer checking the data is not obsolate (see Function: RS232_WiFi_init_new_barometer_received_check_timer)
+                  last_new_data_received_TimeMillis = System.currentTimeMillis(); 
+                  
+                  // update the date and time on the main screen (and the global date time var's)
+                  // NB if during start up the date and time displayed in the pupup message was not comfirmed by the user
+                  //    it is assumed that the pc is not running on the correct time so then do not update the date time automatically
+                  if (main.use_system_date_time_for_updating == true)
+                  {  
+                     set_datetime_while_collecting_sensor_data();
+                  }
+                  
+                  // WOW enabled (and not 'only publish if manual obs was send') and a complete sensor data string was received
+                  if ((main.WOW == true) && (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL)) && (main.total_string.indexOf("\n") != -1))
+                  {
+                     cal_WOW_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
+                     cal_WOW_systeem_datum_tijd.getTime();                                             // now effective
+                     int WOW_system_minute_local = cal_WOW_systeem_datum_tijd.get(Calendar.MINUTE);
+                     cal_WOW_systeem_datum_tijd = null; 
+                  
+                     if ((WOW_system_minute_local -1) % Integer.valueOf(main.WOW_reporting_interval) == 0)      // e.g. every 10 minutes (WOW_reporting_interval);   but no interference with APR!           
+                     {
+                        // logging
+                        String message = "[WOW] scheduled upload"; 
+                        main.log_turbowin_system_message(message);
+                        
+                        // checking
+                        boolean WOW_settings_ok = RS232_check_WOW_settings();
+                           
+                        if (WOW_settings_ok)
+                        {   
+                           // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                           if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)  // PTB220 or PTB330
+                           {
+                              RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                           }
+                           else if (main.RS232_connection_mode == 4)                                // MintakaDuo
+                           {
+                              RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                           }
+                           else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                           {
+                              RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("WOW", retry);
+                           } 
+                        } // if (WOW_settings_ok)
+                     }   
+                  } // if ((main.WOW == true) && (!main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL)) && (main.total_string.indexOf("\n") != -1))
+
+                  // APR (Automated Pressure Reporting)
+                  if ((main.APR == true) && (main.total_string.indexOf("\n") != -1))
+                  {
+                     cal_APR_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
+                     cal_APR_system_date_time.getTime();                                               // now effective
+                     int APR_system_hour_local = cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY);   // HOUR_OF_DAY is used for the 24-hour clock. E.g., at 10:04:15.250 PM the HOUR_OF_DAY is 22.
+                     int APR_system_minute_local = cal_APR_system_date_time.get(Calendar.MINUTE);
+                  
+                     if ((APR_system_minute_local == 0) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+                     {
+                        retry = false;
+                        
+                        // logging
+                        String message = "[APR] scheduled upload"; 
+                        main.log_turbowin_system_message(message);
+                        
+                        // checking
+                        boolean APR_settings_ok = RS232_check_APR_settings();
+                        boolean GPS_date_time_ok = true;
+                        
+                        if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6) // Mintaka Star (USB or WiFi)
+                        {
+                           // NB Mintaka Star saved data do not contain date/time information so it is not possible to check this
+                           //    so it is made always true
+                           GPS_date_time_ok = true;
+                        }
+                        else
+                        {
+                           GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                        }
+                        
+                        if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                        {
+                           // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                           // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                           if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)  // PTB220 or PTB330
+                           {
+                              RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 4)                                // MintakaDuo
+                           {
+                              RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                           {
+                              RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }                           
+                        } // if (APR_settings_ok && GPS_date_time_ok) 
+                     } // if ((APR_system_minute_local == 0) etc.
+                     else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local == APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+                     {
+                        retry = true;
+                        
+                        // logging
+                        String message = "[APR] retry scheduled upload"; 
+                        main.log_turbowin_system_message(message);
+                        
+                        // checking
+                        boolean APR_settings_ok = RS232_check_APR_settings();
+                        boolean GPS_date_time_ok = true;
+                        
+                        if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6) // Mintaka Star (USB or WiFi)
+                        {
+                           // NB Mintaka Star saved data do not contain date/time information so it is not possible to check this
+                           //    so it is made always true
+                           GPS_date_time_ok = true;
+                        }
+                        else
+                        {
+                           GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
+                        }
+                     
+                        if (APR_settings_ok && GPS_date_time_ok) // GPS date-time was compared with system date-time                    
+                        {
+                           // NB in this stage we are sure the date-time is correct! + we are sure position is available!
+                             
+                           // read the barometer data which was saved before by TurboWin+ from a sensor data file
+                           if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)  // PTB220 or PTB330
+                           {
+                              RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 4)                                // MintakaDuo
+                           {
+                              RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           }
+                           else if (main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6)  // Mintaka Star (USB or WiFi)
+                           {
+                              RS232_Mintaka_Star_Read_And_Send_Sensor_Data_For_WOW_APR("APR", retry);
+                           } 
+                        } // if (APR_settings_ok && GPS_date_time_ok) 
+                        
+                        // reset (to be sure)
+                        APR_server_response_code = 0;
+                        
+                     } // else if ((APR_server_response_code = main.RESPONSE_NO_INTERNET) etc.
+                     else if ((APR_server_response_code == main.RESPONSE_NO_INTERNET) && (APR_system_minute_local < APR_RETRY_MINUTES) && (APR_system_hour_local % Integer.valueOf(main.APR_reporting_interval) == 0))   // e.g. every 1 hour (APR_reporting_interval);               
+                     {
+                        // text will be visible only a few minutes (till the retry upload)
+                        main.jTextField4.setText("[APR] retry automated pressure report upload within a few minutes");
+                     }
+                     else
+                     {
+                        // text with next APR update bottom status line TurboWin+ main screen (updated every minute)
+                        for (int i = (APR_system_hour_local + 1); i < (APR_system_hour_local + 1 + Integer.valueOf(main.APR_reporting_interval)); i++)
+                        {
+                           // 24 hours or higher makes no difference for this computation
+                           if (i % Integer.valueOf(main.APR_reporting_interval) == 0)
+                           {
+                              cal_APR_system_date_time.add(Calendar.HOUR_OF_DAY, i - APR_system_hour_local);   // add 1 - 5 hours
+                              cal_APR_system_date_time.getTime();
+                                 
+                              String next_APR_string = "[APR] next automated meteo report upload: " + cal_APR_system_date_time.get(Calendar.DAY_OF_MONTH) + " " + main.convert_month(cal_APR_system_date_time.get(Calendar.MONTH)) + " " + cal_APR_system_date_time.get(Calendar.YEAR) + " " + cal_APR_system_date_time.get(Calendar.HOUR_OF_DAY) + ".00 UTC"; 
+                                 
+                              main.jTextField4.setText(next_APR_string);
+                              break;
+                           }
+                        } // for (int i = (APR_system_hour_local + 1); etc.
+                           
+                     } // else
+                        
+                     cal_APR_system_date_time = null; 
+                        
+                  } // if ( (main.APR == true) && (main.total_string.indexOf("\n") != -1))
+                  
+               } // for (String ontvangen_string : data)
+            } // protected void process(List<String> data)
+         }.execute(); // new SwingWorker<String, String>()
+
+      } // if (defaultPort != null)
+
+   } // private void initComponents2()
+*/
+   
+   
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+private boolean RS422_check_AWSR_settings()   
+{
+   // called from: RS422_V3_write_sensor_data_to_file() [main.java]
+   //
+   // NB see also: AWSR_additional_requirements_checks() [WOW_APR_settings.java]
+   //
+   
+   String message = "";
+   
+   
+   // AWS connected? (EUCAWS only if uploads method is via turbowin)
+   if (main.RS232_connection_mode != 9 && main.RS232_connection_mode != 10 && main.RS232_connection_mode != 3 && main.RS232_connection_mode != 11)  // 9 or 10 = OMC 140 AWS connected; 3 = EUCAWS; 11 = AMOS2X
+   {
+     message = "[AWSR] AWS connection unknown (select: Maintenance -> Serial/USB/LAN device settings)"; 
+     main.log_turbowin_system_message(message);
+   }   
+   
+   // OMC 140 AWS serial connected but not working
+   if (main.RS232_connection_mode == 9 && main.defaultPort == null)        // 9 = OMC 140 AWS serial connected; 
+   {
+     message = "[AWSR] OMC 140 AWS connection error (comm port == null)"; 
+     main.log_turbowin_system_message(message);
+   }   
+     
+   // AMOS2X AWS serial connected but not working
+   if (main.RS232_connection_mode == 11 && main.defaultPort == null)        // 11 = AMOS2X AWS serial connected; 
+   {
+     message = "[AWSR] AMOS2X AWS connection error (comm port == null)"; 
+     main.log_turbowin_system_message(message);
+   }      
+   // GPS connected?      
+   //if (main.RS232_GPS_connection_mode == 0)                                                              // 0 no GPS connected
+   //{
+   //   message = "[AWSR] GPS connection unknown (select: Maintenance -> Serial/USB/WiFi connection settings)";
+   //   main.log_turbowin_system_message(message);
+   //}
+   
+   // GPS connected but not working (does not aplly if also a Mintaka Star is connected) 
+   //if (main.RS232_GPS_connection_mode != 3)                                                             // in case Mintaka Star there will be no GPS_defaultPort
+   //{
+   //   if (main.RS232_GPS_connection_mode != 0 && main_RS232_RS422.GPS_defaultPort == null)              // 0 no GPS connected
+   //   {
+   //      message = "[AWSR] GPS connection error (comm port == null)";
+   //      main.log_turbowin_system_message(message);
+   //   }
+   //}
+   
+   // call sign
+   //if (main.call_sign.trim().equals("") == true || main.call_sign.trim().length() < 2)
+   //{
+   //   message = "[AWSR] Call sign unknown (select: Maintenance -> Station data)";
+   //   main.log_turbowin_system_message(message);
+   //}
+   
+   // station_ID
+   if (main.station_ID.trim().equals("") == true || main.station_ID.trim().length() < 2)
+   {
+      message = "[AWSR] station ID unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // height barometer
+   if (main.barometer_above_sll.trim().equals("") == true || main.barometer_above_sll.trim().length() < 1)
+   {
+      message = "[AWSR] Height of the barometer above SLL unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+   if (main.keel_sll.trim().equals("") == true || main.keel_sll.trim().length() < 1)
+   {
+      message = "[AWSR] Distance of bottom of the keel to SLL unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+
+   // logs folder        
+   if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2)
+   {
+      message = "[AWSR] Logs folder unknown (select: Maintenance -> Log files settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // obs format
+   if ( (main.obs_format.equals(main.FORMAT_FM13) == false) && (main.obs_format.equals(main.FORMAT_101) == false) && 
+        (main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN) == false) )
+   {
+      // NB AWS mode is always reporting with format101
+      message = "[AWSR] In AWSR mode the obs format must be FM13 or 101 or 'AWS + uploads via TurboWin+' (select: Maintenance -> Obs format setting)"; 
+      main.log_turbowin_system_message(message);
+   }  
+   
+   // AWSR reporting interval
+   //if (main.APR_reporting_interval.equals(""))
+   if (main.AWSR_reporting_interval.equals(""))   
+   {
+      message = "[AWSR] AWSR reporting interval unknown (select: Maintenance -> APR/APTR/AWSR settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // draught
+   if (main.WOW_APR_average_draught.equals("")) 
+   {
+      message = "[AWSR] Draught unknown (select: Maintenance -> APR/APTR/AWSR settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // IC barometer
+   if (main.barometer_instrument_correction.equals(""))
+   {
+      message = "[AWSR] Barometer instrument correction unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // upload URL 
+   //if (main.upload_URL.equals(""))
+   //{
+   //   message = "[AWSR] upload URL unknown (select: Maintenance -> Server settings)";
+   //   main.log_turbowin_system_message(message);
+   //}
+   
+   // NB not necessary see also: specific_connection_initComponents() [main.java]
+   // update of date and time automatically
+   //if (main.use_system_date_time_for_updating == false)
+   //{
+   //   message = "[AWSR] obs and system date/time not comfirmed by the user at startup";
+   //   main.log_turbowin_system_message(message);
+   //}
+   
+   
+   return message.equals(""); 
+
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+private boolean RS232_check_APR_settings(final boolean only_2nd_instrument)   
+{
+   // called from: - class RS232_Class_Receive_Sensor_Data()
+   //              - class WiFi_Class_Receive_UDP()
+   //              - class RS232_Class_Receive_Sensor_Data_II()
+   //
+   // NB see also: APR_additional_requirements_checks() [WOW_APR_settings.java]
+   
+   String message = "";
+   
+   
+   // only 2nd instrument (HMP155) connected
+   if (only_2nd_instrument == true)
+   {
+      if (main.RS232_connection_mode_II != 1)
+      {
+         message = "[APR] Thermometer connection unknown (select: Maintenance -> Serial/USB/LAN device settings)"; 
+         main.log_turbowin_system_message(message);
+      }
+      
+      if ((main.RS232_connection_mode_II != 0) && (main.defaultPort_II == null))
+      {
+         message = "[APR] Thermometer connection error (comm port == null)"; 
+         main.log_turbowin_system_message(message);
+      }
+   } // if (only_2nd_instrument == true)
+   
+   else // at least 1st meteo instrument connected
+   {
+      // barometer connected? 
+      if (main.RS232_connection_mode == 0 || main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10 || main.RS232_connection_mode == 11)  // 0 = no instrument connected, 3 or 9/10/11 = AWS connected
+      {
+         message = "[APR] Barometer connection unknown (select: Maintenance -> Serial/USB/LAN device settings)"; 
+         main.log_turbowin_system_message(message);
+      }   
+   
+      // barometer serial or AWS serial connected but not working
+      if (main.RS232_connection_mode != 0 && main.RS232_connection_mode != 3 && main.RS232_connection_mode != 6 && main.RS232_connection_mode != 8 &&
+         main.RS232_connection_mode != 9 && main.RS232_connection_mode != 10 && main.RS232_connection_mode != 11 && main.defaultPort == null)   // 0 = no instrument connected, 3 or 9 or 10 or 11 = AWS connected; 6 = Mintaka Star WiFi
+      {
+         message = "[APR] Barometer connection error (comm port == null)"; 
+         main.log_turbowin_system_message(message);
+      }   
+   } // else (at least 1 st meteo instrument connected)
+   
+   // GPS connected?      
+   if (main.RS232_GPS_connection_mode == 0)                                                              // 0 no GPS connected
+   {
+      message = "[APR] GPS connection unknown (select: Maintenance -> Serial/USB/LAN device settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // GPS connected but not working (does not aplly if also a Mintaka Star or StarX is connected because than integrated GPS) 
+   if (main.RS232_GPS_connection_mode != 3 &&main.RS232_GPS_connection_mode != 4)                       // in case Mintaka Star or StarX there will be no GPS_defaultPort
+   {
+      if (main.RS232_GPS_connection_mode != 0 && main_RS232_RS422.GPS_defaultPort == null)              // 0 no GPS connected
+      {
+         message = "[APR] GPS connection error (comm port == null)";
+         main.log_turbowin_system_message(message);
+      }
+   }
+   
+   // call sign
+   //if (main.call_sign.trim().equals("") == true || main.call_sign.trim().length() < 2)
+   //{
+   //   message = "[APR] Call sign unknown (select: Maintenance -> Station data)";
+   //   main.log_turbowin_system_message(message);
+   //}
+   
+   // station ID
+   if (main.station_ID.trim().equals("") == true || main.station_ID.trim().length() < 2)
+   {
+      message = "[APR] station ID unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // height barometer
+   if (main.barometer_above_sll.trim().equals("") == true || main.barometer_above_sll.trim().length() < 1)
+   {
+      message = "[APR] Height of the barometer above SLL unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+   if (main.keel_sll.trim().equals("") == true || main.keel_sll.trim().length() < 1)
+   {
+      message = "[APR] Distance of bottom of the keel to SLL unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+
+   // logs folder        
+   if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2)
+   {
+      message = "[APR] Logs folder unknown (select: Maintenance -> Log files settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // obs format
+   if (main.obs_format.equals(main.FORMAT_101) == false && main.obs_format.equals(main.FORMAT_FM13) == false)
+   {
+      message = "[APR] In APR mode the obs format must be '101' or FM13 (select: Maintenance -> Obs format setting)";  
+      main.log_turbowin_system_message(message);
+   }            
+   
+   // APR reporting interval
+   if (main.APR_reporting_interval.equals(""))
+   {
+      message = "[APR] APR reporting interval unknown (select: Maintenance -> APR/APTR/AWSR settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // draught
+   if (main.WOW_APR_average_draught.equals("")) 
+   {
+      message = "[APR] Draught unknown (select: Maintenance -> APR/APTR/AWSR settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // IC barometer
+   if (main.barometer_instrument_correction.equals(""))
+   {
+      message = "[APR] Barometer instrument correction unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // upload URL 
+   //if (main.upload_URL.equals(""))
+   //{
+   //   message = "[APR] upload URL unknown (select: Maintenance -> Server settings)";
+   //   main.log_turbowin_system_message(message);
+   //}
+   
+   // update of date and time automatically
+   if (main.use_system_date_time_for_updating == false)
+   {
+      message = "[APR] obs and system date/time not comfirmed by the user at startup";
+      main.log_turbowin_system_message(message);
+   }
+   
+   
+   return message.equals(""); 
+}   
+   
+   
+   
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+private boolean RS232_check_WOW_settings()
+{
+   String message = "";
+   
+           
+   // Barometer connected?
+   if (main.RS232_connection_mode == 0 || main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10 || main.RS232_connection_mode == 11)   
+   {
+      message = "[WOW] Barometer connection unknown (select: Maintenance -> Serial/USB/LAN device settings)"; 
+      main.log_turbowin_system_message(message);
+   }
+   
+   // MintakeDuo connected but not working
+   if (main.RS232_connection_mode == 4 && main.defaultPort == null)
+   {
+      message = "[WOW] MintakaDuo connection error (comm port == null)"; 
+      main.log_turbowin_system_message(message);
+   }
+               
+   // WOW site id
+   else if ((main.WOW_site_id.length() < 2 || main.WOW_site_id.length() > 20))
+   {
+      message = "[WOW] site ID not ok (select: Maintenance -> WOW/AP[&T]R/AWSR settings)"; 
+      main.log_turbowin_system_message(message);
+   }          
+                  
+   // site pin
+   if ((main.WOW_site_pin.length() < 2 || main.WOW_site_pin.length() > 20))
+   {
+      message = "[WOW] pin not ok (select: Maintenance -> WOW/AP{&T]R/AWSR settings)";
+      main.log_turbowin_system_message(message);
+   }
+                  
+   // reporting interval
+   if ((main.WOW_reporting_interval.equals("") /*|| main.WOW_reporting_interval.equals(main.WOW_REPORTING_INTERVAL_MANUAL)*/))   
+   {
+      message = "[WOW] reporting interval not ok (select: Maintenance -> WOW/AP[&T]R/AWSR settings)";
+      main.log_turbowin_system_message(message);
+   }
+               
+   // draught
+   if (main.WOW_APR_average_draught.equals("")) 
+   {
+      message = "[WOW] Draught unknown (select: Maintenance -> WOW/AP[&T]R/AWSR settings)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // IC barometer
+   if (main.barometer_instrument_correction.equals(""))
+   {
+      message = "[WOW] Barometer instrument correction unknown (select: Maintenance -> Station data)";
+      main.log_turbowin_system_message(message);
+   }
+   
+   // update of date and time automatically
+   if (main.use_system_date_time_for_updating == false)
+   {
+      message = "[WOW] obs and system date/time not comfirmed by the user at startup";
+      main.log_turbowin_system_message(message);
+   }
+   
+   
+   return message.equals(""); 
+}   
+   
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+/*
+private void RS232_Vaisala_Extract_Sensor_Data_For_Main_Screen_APR(final String laatste_record)
+{
+   // called from: RS232_write_sensor_data_to_file() [main_RS232_RS422.java]
+   
+   // required - hulp_apr_main_screen_pressure_reading_corrected (same as mybarometer.pressure_reading_corrected)
+   //          - hulp_apr_main_screen_pressure_msl_corrected (same as mybarometer.MSL_corrected)
+   
+   
+   // initialisation
+   String sensor_data_record_APR_pressure_hpa = "";
+   
+   hulp_apr_main_screen_pressure_reading_corrected = "";
+   hulp_apr_main_screen_pressure_msl_corrected = "";
+   
+   
+   if (main.RS232_connection_mode == 1)       // PTB220
+   {
+      main.type_record_lengte                 = main.RECORD_LENGTE_PTB220;
+      main.type_record_datum_tijd_begin_pos   = main.RECORD_DATUM_TIJD_BEGIN_POS_PTB220;
+      main.type_record_pressure_begin_pos     = main.RECORD_P_BEGIN_POS_PTB220;
+   }
+   else if (main.RS232_connection_mode == 2)  // PTB330   
+   {
+      main.type_record_lengte                 = main.RECORD_LENGTE_PTB330;
+      main.type_record_datum_tijd_begin_pos   = main.RECORD_DATUM_TIJD_BEGIN_POS_PTB330;
+      main.type_record_pressure_begin_pos     = main.RECORD_P_BEGIN_POS_PTB330;
+   }
+   
+   if (laatste_record.length() == main.type_record_lengte -12)
+   {
+      sensor_data_record_APR_pressure_hpa = laatste_record.substring(main.type_record_pressure_begin_pos, main.type_record_pressure_begin_pos + 7);
+   }
+   else
+   {
+      System.out.println("--- " + "vaisala record length = " + laatste_record.length());
+      sensor_data_record_APR_pressure_hpa = "";   
+   }   
+
+   
+   if ((sensor_data_record_APR_pressure_hpa.compareTo("") != 0))
+   {
+      double hulp_double_APR_pressure_reading;
+      try
+      {
+         hulp_double_APR_pressure_reading = Double.parseDouble(sensor_data_record_APR_pressure_hpa.trim());
+         //hulp_double_pressure_reading = Math.round(hulp_double_pressure_reading * 10) / 10.0d;  // bv 998.19 -> 998.2
+      }
+      catch (NumberFormatException e)
+      {
+         System.out.println("--- " + "Function RS232_Vaisala_Extract_Sensor_For_Main_Screen_APR() " + e);
+         hulp_double_APR_pressure_reading = Double.MAX_VALUE;
+      }   
+             
+      if ((hulp_double_APR_pressure_reading > 900.0) && (hulp_double_APR_pressure_reading < 1100.0))
+      {
+         DecimalFormat df = new DecimalFormat("0.0");           // rounding only 1 decimal
+               
+         // CONVERT TO MSL (+ apply barometer instrument correction)
+         double APR_height_correction_pressure = RS232_WOW_APR_compute_air_pressure_height_correction(hulp_double_APR_pressure_reading);
+                  
+         //String message_b = "[APR] air pressure at sensor height = " + sensor_data_record_APR_pressure_hpa + " hPa";
+         //main.log_turbowin_system_message(message_b);
+         //String message_hc = "[APR] air pressure height corection = " + Double.toString(APR_height_correction_pressure) + " hPa";
+         //main.log_turbowin_system_message(message_hc);
+         //String message_ic = "[APR] air pressure instrument corection = " + main.barometer_instrument_correction + " hPa";
+         //main.log_turbowin_system_message(message_ic);
+               
+         if (APR_height_correction_pressure > -50.0 && APR_height_correction_pressure < 50.0)
+         {   
+            // ic correction (make it 0.0 if outside the range)
+            double double_barometer_instrument_correction = 0.0;
+                     
+            if (main.barometer_instrument_correction.equals("") == false)
+            {
+               try
+               {
+                  double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction);
+             
+                  if (!(double_barometer_instrument_correction >= -4.0 && double_barometer_instrument_correction  <= 4.0))
+                  {
+                     double_barometer_instrument_correction = 0.0;
+                  }
+               }
+               catch (NumberFormatException e) 
+               {
+                  double_barometer_instrument_correction = 0.0;
+               }               
+            }
+   
+            //DecimalFormat df = new DecimalFormat("0.0");           // rounding only 1 decimal
+                   
+            ////////////////// barometer reading (pressure at sensor height + ic) ////////////////
+            //
+            String sensor_data_record_APR_pressure_reading_hpa_corrected = df.format(hulp_double_APR_pressure_reading + double_barometer_instrument_correction); 
+            hulp_apr_main_screen_pressure_reading_corrected = sensor_data_record_APR_pressure_reading_hpa_corrected;   // now pressure at sensor height corrected for ic
+   
+   
+            ///////////////// pressure at MSL (+ ic) ///////////
+            //
+            //sensor_data_record_APR_pressure_MSL_hpa = df.format(hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction); 
+            double hulp_double_APR_pressure_MSL_not_rounded = hulp_double_APR_pressure_reading + APR_height_correction_pressure + double_barometer_instrument_correction;
+            BigDecimal bd = new BigDecimal(hulp_double_APR_pressure_MSL_not_rounded).setScale(2, RoundingMode.HALF_UP);
+            double hulp_double_APR_pressure_MSL_rounded = bd.doubleValue();
+            String sensor_data_record_APR_pressure_MSL_hpa = Double.toString(hulp_double_APR_pressure_MSL_rounded);
+            hulp_apr_main_screen_pressure_msl_corrected = sensor_data_record_APR_pressure_MSL_hpa;   // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
+                     
+            //String message_msl = "[APR] air pressure MSL = " + mybarometer.pressure_msl_corrected + " hPa";
+            //main.log_turbowin_system_message(message_msl);
+                     
+            // make IMMT (and FM13) ready
+            //RS232_make_pressure_APR_FM13_IMMT_ready();
+
+            //RS232_Send_Sensor_Data_to_APR_format101_Server(retry);
+                     
+            // send the data
+            //
+            //RS232_APR_AWSR_send(retry);
+                                     
+                     
+            // for updating main screen (NB dit heeft hier geen zin omdat hij hier maar eens in de 1, 3 of 6 uur komt)
+            //mybarometer.pressure_reading_corrected = df.format(hulp_double_APR_pressure_reading + Double.parseDouble(main.barometer_instrument_correction));
+            //mybarometer.pressure_msl_corrected = sensor_data_record_APR_pressure_MSL_hpa;        
+         } // if (APR_height_correction_pressure > -50.0 && APR_height_correction_pressure < 50.0)
+      } // if ((hulp_double_APR_pressure_reading > 900.0) && (hulp_double_APR_pressure_reading < 1100.0))
+   }  // if ((sensor_data_record_APR_pressure_hpa.compareTo("") != 0)) 
+}
+*/
+
+   
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+public static void RS232_APR_AWSR_send(final boolean retry)
+{
+   // called from: - RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
+   //              - RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR() [RS232_vaisala.java]
+   //              - RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR() [main_RS232_RS422.java]
+   //              - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR() [main_RS232_RS422.java]
+   //              - RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR() [main_RS232_RS422.java]
+   //
+   
+   String log_tag;
+   if (main.AWSR == true)
+   {
+      log_tag = "[AWSR]";
+   }
+   else
+   {
+      log_tag = "[APR]";
+   }
+   
+   if (main.port_mode_option && (myposition.SOG_APR_wind > 0.0) && (myposition.SOG_APR_wind < 0.5) )
+   {
+      // NB SOG_APR_wind always over the last 10 minutes. There is also a myposition.SOG_APR but over 10 minutes [format 101] or 3 hours [FM13] depending the obs format
+      //main.log_turbowin_system_message(log_tag + " upload cancelled; SOG = " + myposition.SOG_APR_wind + " (port mode option set via menu: Maintenance -> APR/APTR/AWSR settings)");
+      main.log_turbowin_system_message(log_tag + " upload cancelled; SOG [10 min] = " + String.format("%.2f", myposition.SOG_APR_wind) + " knot (port mode option set via menu: Maintenance -> APR/APTR/AWSR settings)");
+   }
+   else if (main.port_mode_option && (myposition.SOG_APR_wind > 100.0))
+   {
+      main.log_turbowin_system_message(log_tag + " upload cancelled; SOG [10 min] = not available (port mode option set via menu: Maintenance -> APR/APTR/AWSR settings)");
+   }
+   else
+   {
+      // send the data
+      //
+      if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_SERVER))
+      {
+         if (main.obs_format.equals(main.FORMAT_101) || (main.obs_format.equals(main.FORMAT_AWS) && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN)))
+         {
+            RS232_Send_Sensor_Data_to_APR_format101_Server_V2(retry);                        // format101 only; APR and AWSR
+         }
+         else if (main.obs_format.equals(main.FORMAT_FM13))
+         {
+            RS232_Send_Sensor_Data_to_APR_FM13_Server(retry);                                // format FM13 only; APR and AWSR
+         }
+         else
+         {
+            main.log_turbowin_system_message("[APR] obs format unknown (must be format101 or FM13 or 'AWS + uploads via TurboWin+')");
+         }
+      }
+      else if ( (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_SMTP_HOST)) ||
+                (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_GMAIL)) ||
+                (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_YAHOO_MAIL)) ||
+                (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_CUSTOM_MAIL)) )
+      {
+         RS232_Output_obs_by_email_all_APR();                                                // for both, format101 and FM13; APR and AWSR
+      }        
+      else
+      {
+         main.log_turbowin_system_message("[APR] APTR-AWSR send method unknown");
+      }
+   }
+}
+
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+//private void RS232_compute_APR_COG_SOG_wind(double double_lat_start, double double_lon_start, double double_lat_end, double double_lon_end)
+public static void RS232_compute_APR_COG_SOG_wind(double double_lat_start, double double_lon_start, double double_lat_end, double double_lon_end)        
+{
+   //    
+   //
+   //
+   // http://www.movable-type.co.uk/scripts/latlong.html
+   //
+   
+   double R             = 6371e3;                                           // metres
+   double lat1_rad      = Math.toRadians(double_lat_start);                 // start latitude (latitude 10 min or 3 hours ago)     
+   double lat2_rad      = Math.toRadians(double_lat_end);                   // end latitude (most recent stored latitude)
+   double delta_lat_rad = Math.toRadians(double_lat_end - double_lat_start);
+   double delta_lon_rad = Math.toRadians(double_lon_end - double_lon_start);
+   //double SOG           = Double.MAX_VALUE;
+   //double COG           = Double.MAX_VALUE;
+               
+   double delta_projected_lat = Math.log(Math.tan(Math.PI / 4 + lat2_rad / 2) / Math.tan(Math.PI / 4 + lat1_rad / 2));
+               
+   double q = Math.abs(delta_projected_lat) > 10e-12 ? delta_lat_rad / delta_projected_lat : Math.cos(lat1_rad);
+              
+   //if (Math.abs(delta_lon_rad) > Math.PI) delta_lon_rad = delta_lon_rad > 0 ? -(2*Math.PI - delta_lon_rad) : (2*Math.PI + delta_lon_rad);
+   // if dLon over 180\u00B0 take shorter rhumb line across the anti-meridian:
+   if (delta_lon_rad >  Math.PI) delta_lon_rad -= 2*Math.PI;
+   if (delta_lon_rad < -Math.PI) delta_lon_rad += 2*Math.PI;
+    
+   double dist = Math.sqrt(delta_lat_rad * delta_lat_rad + q * q * delta_lon_rad * delta_lon_rad) * R; 
+               
+   // wind always 10 minutes based
+   myposition.SOG_APR_wind = (dist / 1852) * 6;                   // now SOG in knots          
+    
+   myposition.COG_APR_wind = Math.toDegrees(Math.atan2(delta_lon_rad, delta_projected_lat));
+   if (myposition.COG_APR_wind < 0) myposition.COG_APR_wind += 360.0;
+   
+   // SOG_APR_wind wind rounding to three decimals
+   BigDecimal bd_SOG_APR_wind = new BigDecimal(myposition.SOG_APR_wind). setScale(3, RoundingMode.HALF_UP); // three decimals 
+   myposition.SOG_APR_wind = bd_SOG_APR_wind.doubleValue();
+   
+   // COG_APR_wind rounding to three decimals
+   BigDecimal bd_COG_APR_wind = new BigDecimal(myposition.COG_APR_wind). setScale(3, RoundingMode.HALF_UP); // three decimals 
+   myposition.COG_APR_wind = bd_COG_APR_wind.doubleValue();
+
+   // TESTING
+   //System.out.println("+++ COG = " + myposition.COG_APR);
+   //System.out.println("+++ SOG = " + myposition.SOG_APR);
+   
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_compute_APR_COG_SOG(double double_lat_start, double double_lon_start, double double_lat_end, double double_lon_end)
+{
+   // called from: - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //              - RS232_GPS_NMEA_0183_Date_Position_Parsing()
+   //    
+   //
+   //
+   // http://www.movable-type.co.uk/scripts/latlong.html
+   //
+   
+   double R             = 6371e3;                                           // metres
+   double lat1_rad      = Math.toRadians(double_lat_start);                 // start latitude (latitude 10 min or 3 hours ago)     
+   double lat2_rad      = Math.toRadians(double_lat_end);                   // end latitude (most recent stored latitude)
+   double delta_lat_rad = Math.toRadians(double_lat_end - double_lat_start);
+   double delta_lon_rad = Math.toRadians(double_lon_end - double_lon_start);
+   //double SOG           = Double.MAX_VALUE;
+   //double COG           = Double.MAX_VALUE;
+               
+   double delta_projected_lat = Math.log(Math.tan(Math.PI / 4 + lat2_rad / 2) / Math.tan(Math.PI / 4 + lat1_rad / 2));
+               
+   double q = Math.abs(delta_projected_lat) > 10e-12 ? delta_lat_rad / delta_projected_lat : Math.cos(lat1_rad);
+              
+   //if (Math.abs(delta_lon_rad) > Math.PI) delta_lon_rad = delta_lon_rad > 0 ? -(2*Math.PI - delta_lon_rad) : (2*Math.PI + delta_lon_rad);
+   // if dLon over 180\u00B0 take shorter rhumb line across the anti-meridian:
+   if (delta_lon_rad >  Math.PI) delta_lon_rad -= 2*Math.PI;
+   if (delta_lon_rad < -Math.PI) delta_lon_rad += 2*Math.PI;
+    
+   double dist = Math.sqrt(delta_lat_rad * delta_lat_rad + q * q * delta_lon_rad * delta_lon_rad) * R; 
+               
+   if (main.obs_format.equals(main.FORMAT_101)) 
+   {
+      // 10 minutes based
+      myposition.SOG_APR = (dist / 1852) * 6;                   // now SOG in knots          
+   }
+   else if (main.obs_format.equals(main.FORMAT_FM13))
+   {
+      // 180 minutes (3 hours, between positions to compute SOG and COG) based   
+      myposition.SOG_APR = (dist / 1852) / 3;                   // now SOG in knots 
+   }
+   
+   myposition.COG_APR = Math.toDegrees(Math.atan2(delta_lon_rad, delta_projected_lat));
+   if (myposition.COG_APR < 0) myposition.COG_APR += 360.0;
+   
+   // SOG_APR rounding to three decimals
+   BigDecimal bd_SOG_APR = new BigDecimal(myposition.SOG_APR). setScale(3, RoundingMode.HALF_UP); // three decimals 
+   myposition.SOG_APR = bd_SOG_APR.doubleValue();
+   
+   // COG_APR rounding to three decimals
+   BigDecimal bd_COG_APR = new BigDecimal(myposition.COG_APR). setScale(3, RoundingMode.HALF_UP); // three decimals 
+   myposition.COG_APR = bd_COG_APR.doubleValue();
+
+   // TESTING
+   //System.out.println("+++ COG = " + myposition.COG_APR);
+   //System.out.println("+++ SOG = " + myposition.SOG_APR);
+   
+   
+   //
+   ///////////// Below for FM13 + APR (not for format #101 + APR) and IMMT + APR + FM13 ////////////
+   //
+               
+   // NB WMO_NO_306.pdf
+   // 
+   // WMO table  4451
+   // vs Ship s average speed made good during the three hours preceding the time of observation
+   // Code
+   // figure
+   // 0 = 0 knot 0 km h 1
+   // 1 = 1 5 knots 1 10 km h 1
+   // 2 = 6 10 knots 11 19 km h 1
+   // 3 = 11 15 knots 20 28 km h 1
+   // 4 = 16 20 knots 29 37 km h 1
+   // 5 = 21 25 knots 38 47 km h 1
+   // 6 = 26 30 knots 48 56 km h 1
+   // 7 = 31 35 knots 57 65 km h 1
+   // 8 = 36 40 knots 66 75 km h 1
+   // 9 = Over 40 knots Over 75 km h 1
+   // / = Not applicable (report from a coastal land station) or not reported (see Regulation 12.3.1.2 (b))
+   
+   if (myposition.SOG_APR < 1.0)
+   {
+      myposition.vs_code = "0";
+   }
+   else if (myposition.SOG_APR >= 1.0 && myposition.SOG_APR <= 5.0)
+   {
+      myposition.vs_code = "1";
+   }           
+   else if (myposition.SOG_APR > 5.0 && myposition.SOG_APR <= 10.0)
+   {
+      myposition.vs_code = "2";
+   } 
+   else if (myposition.SOG_APR > 10.0 && myposition.SOG_APR <= 15.0)
+   {
+      myposition.vs_code = "3";
+   } 
+   else if (myposition.SOG_APR > 15.0 && myposition.SOG_APR <= 20.0)
+   {
+      myposition.vs_code = "4";
+   } 
+   else if (myposition.SOG_APR > 20.0 && myposition.SOG_APR <= 25.0)
+   {
+      myposition.vs_code = "5";
+   } 
+   else if (myposition.SOG_APR > 25.0 && myposition.SOG_APR <= 30.0)
+   {
+      myposition.vs_code = "6";
+   } 
+   else if (myposition.SOG_APR > 30.0 && myposition.SOG_APR <= 35.0)
+   {
+      myposition.vs_code = "7";
+   } 
+   else if (myposition.SOG_APR > 35.0 && myposition.SOG_APR <= 40.0)
+   {
+      myposition.vs_code = "8";
+   } 
+   else if (myposition.SOG_APR > 40 && myposition.SOG_APR <= 99)
+   {
+      myposition.vs_code = "9";
+   } 
+   
+
+   // NB WMO_NO_306.pdf
+   //
+   // Ds True direction of resultant displacement of the ship during the three hours preceding
+   // the time of observation
+   // D1 True direction of the point position from the station
+   // Code
+   // figure
+   // 0 Calm (in D, DK), or stationary (in Ds), or at the station (in Da, D1), or stationary or no clouds (in DH,DL, DM)
+   // 1 = NE
+   // 2 = E
+   // 3 = SE
+   // 4 = S
+   // 5 = SW
+   // 6 = W
+   // 7 = NW
+   // 8 = N
+   // 9 All directions (in Da, D1), or confused (in DK), or variable (in D(wind)), or unknown (in Ds), or unknown
+   // or clouds invisible (in DH, DL, DM)
+   // / Report from a coastal land station or displacement of ship not reported (in Ds only see
+   // Regulation 12.3.1.2 (b))               
+   
+   if (myposition.SOG_APR < 1.0) // stopped
+   {
+      // by default: in case SOG is indicating stopped then SOG always stopped also!
+      myposition.Ds_code = "0";
+   }
+   //else if (SOG >= 1.0 && SOG <= 999.9) // not stopped (halverwege de test maar veranderd om toch een richting tijdens laatste testjes te krijgen)
+   else if (myposition.SOG_APR >= 1.0 && myposition.SOG_APR <= 999999.9) // not stopped   
+   {
+      if (myposition.COG_APR > 23.0 && myposition.COG_APR <= 67.0)
+      {
+         myposition.Ds_code = "1";
+      }
+      else if (myposition.COG_APR > 67.0 && myposition.COG_APR <= 112.0)
+      {
+         myposition.Ds_code = "2";
+      }
+      else if (myposition.COG_APR > 112.0 && myposition.COG_APR <= 157.0)
+      {
+         myposition.Ds_code = "3";
+      }
+      else if (myposition.COG_APR > 157.0 && myposition.COG_APR <= 202.0)
+      {
+         myposition.Ds_code = "4";
+      }
+      else if (myposition.COG_APR > 202.0 && myposition.COG_APR <= 247.0)
+      {
+         myposition.Ds_code = "5";
+      }
+      else if (myposition.COG_APR > 247.0 && myposition.COG_APR <= 292.0)
+      {
+         myposition.Ds_code = "6";
+      }
+      else if (myposition.COG_APR > 292.0 && myposition.COG_APR <= 337.0)
+      {
+         myposition.Ds_code = "7";
+      }
+      else if (myposition.COG_APR > 337.0 && myposition.COG_APR <= 360.0 || myposition.COG_APR > 0.0 && myposition.COG_APR <= 23.0)
+      {
+         myposition.Ds_code = "8";
+      }
+      else
+      {
+         myposition.Ds_code = "9";                           // no information (could be Ds_code = "/" also, because two options to code Ds undefined)
+      }
+   } // else if (SOG >= 1.0 && SOG <= 99.9)
+               
+               // below for testing
+               //System.out.println("+++ double_lat_start = " + double_lat_start);
+               //System.out.println("+++ double_lon_start = " + double_lon_start);
+               //System.out.println("+++ double_lat_end = " + double_lat_end);
+               //System.out.println("+++ double_lon_end = " + double_lon_end);
+               //System.out.println("+++ dist [metres] = " + dist);
+               
+   //System.out.println("--- SOG APR [knots] = " + myposition.SOG_APR);
+   //System.out.println("--- COG APR [deg] = " + myposition.COG_APR);
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private static void RS232_Send_Sensor_Data_to_APR_FM13_Server(final boolean retry)         
+{
+   // NB see also: Output_obs_to_server_FM13() [main.java] and 
+   
+   // called from: - RS232_APR_AWSR_send()
+   //      which itself is called from  - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //                                   - RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //                                   - RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //
+ 
+   String log_tag;
+   if (main.AWSR == true)
+   {
+      log_tag = "[AWSR]";
+   }
+   else
+   {
+      log_tag = "[APR]";
+   }
+   
+  
+   new SwingWorker<Integer, Void>()
+   {
+      @Override
+      protected Integer doInBackground() throws Exception
+      {
+         Integer responseCode          = main.OK_RESPONSE_FORMAT_FM13;            // OK 
+         
+         // NB in this phase you kow: - date-time ok
+         //                           - position ok
+         //                           - call sign ok (RS232_check_APR_settings())
+         //                           - logs ok (RS232_check_APR_settings())
+         //
+             
+         // compose coded obs [obs_write = FM13 obs !!!]
+         String SPATIE = main.SPATIE_OBS_SERVER;                                   // use "_" as marker between obs groups
+         main.obs_write = main.compose_coded_obs(SPATIE);                          // returns UNDEFINED if call sign, position or date/time not inserted
+
+         if ( (main.obs_write.equals("") == true) || (main.obs_write.equals(main.UNDEFINED) == true) )
+         {
+            responseCode = main.INVALID_RESPONSE_FORMAT_FM13;        
+         }
+         
+         
+         return responseCode;
+               
+      } // protected Integer doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try
+         {
+            Integer response_code = get();
+            
+            // continue if FM13 obs ok
+            //
+            if (Objects.equals(response_code, main.OK_RESPONSE_FORMAT_FM13))       // null save comparising
+            {   
+               // NB encoding for FM13 obs not necessary, but if necessary in the future see comments below
+               
+               // NB encoding:
+               // Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. This method uses the supplied encoding scheme to obtain 
+               // the bytes for unsafe characters.
+               // Note: The World Wide Web Consortium Recommendation states that UTF-8 should be used. Not doing so may introduce incompatibilites.
+               // 
+               // http://stackoverflow.com/questions/10786042/java-url-encoding-of-query-string-parameters:
+               // You only need to keep in mind to encode only the individual query string parameter name and/or value, not the entire URL, 
+               // for sure not the query string parameter separator character & nor the parameter name-value separator character =.
+               // String q = "random word 500 bank $";
+               // String url = "http://example.com/query?q=" + URLEncoder.encode(q, "UTF-8");
+               //
+               // Encode all 'not alloud' ASCII chars if not java.net.URISyntaxException (with index number in the URL string)
+               //String encoded_format_FM13_obs = null;               
+               //try 
+               //{
+               //   encoded_format_FM13_obs = URLEncoder.encode(main.obs_write, "UTF-8");
+               //} 
+               //catch (UnsupportedEncodingException ex) 
+               //{
+               //   response_code = main.RESPONSE_UNSUPPORTED_ENCODING;
+               //}
+               
+               
+               // continue if the encoding was ok (= always in case of FM13 obs)
+               if (!Objects.equals(response_code, main.RESPONSE_UNSUPPORTED_ENCODING))       // null save comparising
+               {   
+                  // eg String url = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?obs=" + encoded_format_101_obs;  
+                  //String url = main.upload_URL + "obs=" + encoded_format_FM13_obs; 
+                  String url = main.upload_URL + "obs=" + main.obs_write;
+               
+                  URL obj = null;
+                  try 
+                  {
+                     //obj = new URL(url);  deprecated in Java 20
+                     obj = new URI(url).toURL();
+                     HttpURLConnection con = (HttpURLConnection)obj.openConnection();
+            
+                     // optional (default is GET)
+                     con.setRequestMethod("GET");  
+                  
+                     String message = log_tag + " sending 'GET' request to URL: " + url;
+                     main.log_turbowin_system_message(message);
+     
+                     response_code = con.getResponseCode();                     // if internet available the default OK_RESPONSE_FORMAT_FM13 will be overwritten here
+                  
+                  } // try
+                  catch (MalformedURLException ex)
+                  {
+                     response_code = main.RESPONSE_MALFORMED_URL;
+                  }
+                  catch (URISyntaxException ex)
+                  {
+                     response_code = main.RESPONSE_MALFORMED_URL;
+                  }
+                  catch (IOException ex) 
+                  {
+                     response_code = main.RESPONSE_NO_INTERNET;
+                  } // catch            
+               } // if (!Objects.equals(response_code, main.RESPONSE_UNSUPPORTED_ENCODING))
+            } // if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_FM13)) 
+               
+               
+            // how to continue depends on response_code            
+            //
+            if (response_code == 200)          // OK
+            {
+               String message_a = log_tag + " send obs success"; 
+               main.log_turbowin_system_message(message_a);
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_a); // update status field (bottom line main -progress- window) 
+               
+               // save data to immt log and clear main screen
+               //
+               // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+               //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+               //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+               //
+               if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                 (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+               {          
+                  //RS232_make_APR_IMMT_ready();                        // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                  main.IMMT_log();
+               }
+               main.Reset_all_meteo_parameters();
+            }  
+            else // send obs NOT ok or compresing NOT ok or encoding NOT ok
+            {
+               // NB besides the response code there is also a corresponding response text, but unfortunately with html tags, 
+               //    and only with the standard response codes, self defined response codes are not returned?. Not suitable for direct using it into a popup message box
+               //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
+               
+               // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
+               //    (if internet avaialble the response code will be overwritten with eg 200)
+                     
+		         String message_b = log_tag + " send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+                  
+               // file logging
+               main.log_turbowin_system_message(message_b);
+                  
+               // bottom main screen
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_b); 
+               
+               // so even no success after a retry, but now save the data to IMMT because no further attempts will follow (and the data was not saved before)
+               if (retry)
+               {
+                  // save data to immt log and clear main screen
+                  //
+                  // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+                  //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+                  //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+                  //
+                  if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                    (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+                  {
+                     //RS232_make_APR_IMMT_ready();                     // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                     main.IMMT_log();
+                  }   
+                  main.Reset_all_meteo_parameters();
+               } // if retry
+            } // else (send obs NOT ok
+            
+            // for checking if a upload retry will be necessary [ see function ...]
+            APR_server_response_code = response_code;
+               
+         } // try
+         catch (InterruptedException | ExecutionException ex) 
+         {   
+            String message = log_tag + " error in Function: RS232_Send_Sensor_Data_to_APR_FM13_Server(); no internet connection available?; " + ex.toString(); 
+            main.log_turbowin_system_message(message);
+            main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+         }
+      } // protected void done()
+   }.execute(); // new SwingWorker<Void, Void>()
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_make_pressure_APR_FM13_IMMT_ready()
+{
+   // NB also for making IMMT ready
+   
+   // called from: 
+   
+ 
+   // NB below exactly the same as in: RS232_make_APR_IMMT_ready()
+   if (mybarometer.pressure_msl_corrected.compareTo("") != 0)
+   {
+      try
+      {
+         // string to double
+         double hulp_double_pressure_msl_corrected = Double.parseDouble(mybarometer.pressure_msl_corrected);
+      
+         int num_PPPP_code = (int)Math.floor(hulp_double_pressure_msl_corrected * 10 + 0.5);
+
+         // remove the "thousands"
+         if (num_PPPP_code >= 10000)
+         {
+            num_PPPP_code -= 10000;
+         }
+             
+         mybarometer.PPPP_code = Integer.toString(num_PPPP_code);     // convert to string
+
+         // NB PPPP_code always 4 characters width e.g. 0007 (accomplish via construction below)
+         int len = 4;
+         if (mybarometer.PPPP_code.length() < len)                                            // pad on left with zeros
+         {
+            mybarometer.PPPP_code = "0000000000".substring(0, len - mybarometer.PPPP_code.length()) + mybarometer.PPPP_code;
+         }
+      }
+      catch (NumberFormatException ex)
+      {
+         mybarometer.PPPP_code = "";
+      }
+   } // if (mybarometer.pressure_msl_corrected.compareTo("") != 0)  
+ 
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_make_pressure_ppp_APR_FM13_IMMT_ready()
+{
+   // called from: - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   
+   
+   boolean doorgaan = false;
+   double local_double_pressure_amount_tendency = main.INVALID;
+   
+   if (mybarograph.pressure_amount_tendency.trim().length() > 0)
+   {
+      doorgaan = true;         
+   } // if (doorgaan)
+   
+   if (doorgaan)
+   {
+      try 
+      {
+         local_double_pressure_amount_tendency = Double.parseDouble(mybarograph.pressure_amount_tendency.trim());
+      } 
+      catch (NumberFormatException e) 
+      {
+         doorgaan = false;
+      }
+   } // if (doorgaan)
+   
+   if (doorgaan)
+   {
+      // NB so assuming: mybarograph.pressure_amount_tendency and local_double_pressure_amount_tendency always positive !!!
+      //    this is already done in Function: RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+      //    see: mybarograph.pressure_amount_tendency = df.format(Math.abs(hulp_double_APR_pressure_ppp)); 
+      if ((local_double_pressure_amount_tendency < 0.0) || (local_double_pressure_amount_tendency > 99.9))
+      {
+         doorgaan = false;
+      }
+   } // if (doorgaan)
+   
+   
+   if (doorgaan)
+   {
+      int num_ppp_code = (int)Math.floor(local_double_pressure_amount_tendency * 10 + 0.5);
+             
+      mybarograph.ppp_code = Integer.toString(num_ppp_code);     // convert to string
+             
+      // NB PPPP_code always 3 characters width e.g. 017 (accomplish via construction below)
+      int len = 3;
+      if (mybarograph.ppp_code.length() < len)   
+      {
+         // pad on left with zeros
+         mybarograph.ppp_code = "0000000000".substring(0, len - mybarograph.ppp_code.length()) + mybarograph.ppp_code;
+      }    
+   } // if (doorgaan)
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_make_pressure_a_APR_FM13_IMMT_ready()
+{
+   // called from: - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   
+   // NB a_code already determined ! in calling function
+   
+   // THESE ARE ALREADY KNOWN IN THE CALLING FUNCTIONS SO NO ACTION REQUIRED HERE
+   //
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_make_RH_APR_FM13_IMMT_ready()
+{
+   // called from - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //             - RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument()
+   //             - RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR()
+    
+   
+   // NB RH is not used in FM13
+   
+   //
+   // for IMMT:
+   //
+   // needed: mytemp.double_rv
+   //         mytemp.RH
+   //
+   // THESE ARE ALREADY KNOWN IN THE CALLING FUNCTIONS SO NO ACTION REQUIRED HERE
+   //
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_make_air_temp_APR_FM13_IMMT_ready()
+{
+   // NB also for making IMMT ready
+   
+   // air temp
+   //   
+   if (mytemp.air_temp.compareTo("") != 0)
+   {
+      try
+      {
+         // string to double
+         double hulp_double_air_temp = Double.parseDouble(mytemp.air_temp);
+         
+         // Sn of TTT
+         if (hulp_double_air_temp < 0)
+         {
+            mytemp.sn_TTT_code = "1";
+         }
+         else
+         {   
+            mytemp.sn_TTT_code = "0";
+         }        
+           
+         // TTT
+         int num_TTT_code = (int)Math.floor(Math.abs(hulp_double_air_temp) * 10 + 0.5);
+         mytemp.TTT_code = Integer.toString(num_TTT_code);     // convert to string      
+
+         // NB TTT_code always 3 characters width e.g. 027 (accomplished via construction below)
+         int len = 3;
+         if (mytemp.TTT_code.length() < len)    
+         {
+            // pad on left with zeros
+            mytemp.TTT_code = "0000000000".substring(0, len - mytemp.TTT_code.length()) + mytemp.TTT_code;
+         }
+      }
+      catch (NumberFormatException ex)
+      {
+         mytemp.sn_TTT_code = "";
+         mytemp.TTT_code = "";
+      }
+   } // if (mytemp.air_temp.compareTo("") != 0)
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_make_wet_bulb_temp_APR_FM13_IMMT_ready()
+{
+   // NB also for making IMMT ready
+   
+   if (mytemp.wet_bulb_temp.compareTo("") != 0)
+   {
+      try
+      {
+         // string to double
+         double hulp_double_wet_bulb_temp = Double.parseDouble(mytemp.wet_bulb_temp);
+         
+         // sn of wet-bulb (TbTbTb)
+         if (hulp_double_wet_bulb_temp < 0.0)
+         {
+            if (mytemp.wet_bulb_frozen == true)                 // possible in automatic mode ??
+            { 
+               mytemp.sn_TbTbTb_code = "2";                     // measured; iced wet bulb
+            }
+            else
+            {
+               mytemp.sn_TbTbTb_code = "1";                     // measured; negative
+            }
+         } // if (double_wet_bulb_temp < 0.0)
+         else
+         {
+            mytemp.sn_TbTbTb_code = "0";                         // measured; positive or zero
+         } // else
+              
+         // TbTbTb
+         int num_TbTbTb_code = (int)Math.floor(Math.abs(hulp_double_wet_bulb_temp) * 10 + 0.5);
+         mytemp.TbTbTb_code = Integer.toString(num_TbTbTb_code);     // convert to string      
+              
+         // NB TbTbTb_code always 3 characters width e.g. 127 (accomplish via construction below)
+         int len = 3;
+         if (mytemp.TbTbTb_code.length() < len)    
+         {
+            // pad on left with zeros
+            mytemp.TbTbTb_code = "0000000000".substring(0, len - mytemp.TbTbTb_code.length()) + mytemp.TbTbTb_code;
+         }
+      } // try
+      catch (NumberFormatException ex)
+      {
+         mytemp.sn_TbTbTb_code = "";
+         mytemp.TbTbTb_code = "";
+      }
+   } // if (mytemp.wet_bulb_temp.compareTo("") != 0)
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS232_make_dew_point_APR_FM13_IMMT_ready()
+{
+   // NB also for making IMMT ready
+   
+   if (mytemp.double_dew_point != main.INVALID)
+   {
+      // sn van dew point (TdTdTd)
+      if (mytemp.double_dew_point < 0.0)
+      {
+         mytemp.sn_TdTdTd_code = "1";
+      }
+      else
+      {
+         mytemp.sn_TdTdTd_code = "0";
+      }
+              
+      // TdTdTd
+      int num_TdTdTd_code = (int)Math.floor(Math.abs(mytemp.double_dew_point) * 10 + 0.5);
+      mytemp.TdTdTd_code = Integer.toString(num_TdTdTd_code);     // convert to string      
+              
+      // NB TdTdTd_code always 3 characters width e.g. 127 (accomplish via construction below)
+      int len = 3;
+      if (mytemp.TdTdTd_code.length() < len)  
+      {
+         // pad on left with zeros
+         mytemp.TdTdTd_code = "0000000000".substring(0, len - mytemp.TdTdTd_code.length()) + mytemp.TdTdTd_code;
+      }
+   } // if (double_dew_point != main.INVALID)
+   else
+   {
+      mytemp.sn_TdTdTd_code = "";
+      mytemp.TdTdTd_code = "";
+   }
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private static void RS232_Output_obs_by_email_all_APR()
+{          
+   // called from: - RS232_APR_AWSR_send()
+   
+ 
+   String log_tag;
+   if (main.AWSR == true)
+   {
+      log_tag = "[AWSR]";
+   }
+   else
+   {
+      log_tag = "[APR]";
+   }
+
+
+   
+   new SwingWorker<Boolean, Void>()
+   {
+      @Override
+      protected Boolean doInBackground() throws Exception
+      {
+         boolean doorgaan = false;
+        
+         // compose coded obs [obs_write = FM13 obs !!!]
+         String SPATIE = main.SPATIE_OBS_VIEW;                                     // use " " as marker between obs groeps
+         main.obs_write = main.compose_coded_obs(SPATIE);                          // returns UNDEFINED if call sign, position or date/time not inserted
+         
+         // check Obs E-mail recipient address was added
+         if (main.obs_email_recipient.compareTo("") != 0)
+         {
+            doorgaan = true;
+         }
+         else
+         {
+            doorgaan = false;
+      
+            String info = "Email address recipient not inserted (Select: Maintenance -> Email settings)";
+            main.log_turbowin_system_message(log_tag + " " + info);
+         } // else
+
+
+         // check obs must contain at least call sign, date/time and position
+         if (doorgaan == true)
+         {
+            if (main.obs_write.compareTo(main.UNDEFINED) != 0)
+            {
+               doorgaan = true;
+            }
+            else
+            {
+               doorgaan = false;
+               String info = "Call sign, date/time or position not present";
+               main.log_turbowin_system_message(log_tag + " " + info);
+            } // else
+         } // if (doorgaan == true)
+
+
+         // check log dir known
+         if (doorgaan == true)
+         {
+            if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2)
+            {
+               doorgaan = false;
+               String info = "logs folder unknown, select: 'Maintenance -> Log files settings' and retry";
+               main.log_turbowin_system_message(log_tag + " " + info);
+            }
+         } // if (doorgaan == true)
+
+
+         // position + time sequence checks
+         //if (doorgaan == true)
+         //{
+         //   bepaal_last_record_uit_immt();
+         //   doorgaan = position_sequence_check();
+         //
+         //   if (doorgaan)
+         //   {
+         //      doorgaan = Check_Land_Sea_Mask();
+         //   }
+         //} // if (doorgaan == true)
+
+         
+         // if appropriate make a format 101 obs
+         if (doorgaan == true)
+         {
+            if (main.obs_format.equals(main.FORMAT_101) || (main.obs_format.equals(main.FORMAT_AWS) && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN)))// in case AWS (EUCAWS) format: in combination with uploads via turbowin (and not via eucaws own iridium modem)
+            {
+               // NB although "obs_write = compose_coded_obs(SPATIE);" (makes FM13 record)  see above is not necessary for the compressed obs 
+               //    it is useful because parts of it will be used for checking position etc.
+               
+               main.format_101_class = new FORMAT_101();
+               main.format_101_class.compress_and_decompress_101_control_center();
+            } // if (obs_format.equals(FORMAT_101) etc.)
+         } // if (doorgaan == true)
+         
+
+         return doorgaan;
+
+      } // protected Void doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try
+         {
+            boolean doorgaan = get();
+            if (doorgaan == true)
+            {
+               if (main.obs_format.equals(main.FORMAT_FM13))
+               {
+                  boolean manual_send = false;
+                  if (main.custom_email_module.equals(main.PYTHON_EMAIL))
+                  {   
+                     main.Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(manual_send);           // via python email app
+                  }
+                  else // use the primary email module
+                  {
+                     main.Output_obs_by_email_jakarta_FM13_format_101(manual_send);                         // via jakarta email module 
+                  }
+               }
+               else if (main.obs_format.equals(main.FORMAT_101) || (main.obs_format.equals(main.FORMAT_AWS) && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))) // in case AWS (EUCAWS) format: in combination with uploads via turbowin (and not via eucaws own iridium modem)
+               {
+                  boolean manual_send = false;
+                  if (main.custom_email_module.equals(main.PYTHON_EMAIL))
+                  {   
+                     main.Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(manual_send);           // via python email app
+                     
+                  }
+                  else // use the primary email module
+                  {
+                     main.Output_obs_by_email_jakarta_FM13_format_101(manual_send);                         // via jakarta email module 
+                  }
+               }
+               else
+               {
+                  String info = "obs format unknown (select: Maintenance -> Obs format setting)";
+                  main.log_turbowin_system_message(log_tag + " " + info);
+                  
+                  System.out.println("+++ Not supported obs format in Function: RS232_Output_obs_by_email_all_APR()");
+               }  // else 
+            } // if (doorgaan == true)
+         } // try
+         catch (InterruptedException | ExecutionException ex) 
+         { 
+            System.out.println("+++ Error in Function: Output_obs_by_email_all_APR() " + ex);
+         }
+
+      } // protected void done()
+   }.execute(); // new SwingWorker<Void, Void>()
+}
+
+
+
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void RS232_Send_Sensor_Data_to_APR_OLD(String sensor_data_record_APR_pressure_MSL_hpa, double hulp_double_APR_pressure_reading, final boolean retry)  
+{
+   // NB see also: Output_obs_to_server_FM13() [main.java]
+   
+   //final Integer INVALID_RESPONSE_FORMAT_101 = 710;                // see also: Function: http_respons_code_to_text() [main.java]
+   //final Integer OK_RESPONSE_FORMAT_101      = 713;                // see also: Function: http_respons_code_to_text() [main.java]
+   
+   double double_barometer_instrument_correction = 0.0;
+   //String server_format_101_line = "";
+   
+   
+   // NB in function main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing(); the obs vars like myposition.longitude_degrees etc were already set
+   //
+   //
+   
+   
+   ////////////////// barometer reading (pressure at sensor height, no ic included) ////////////////
+   // (not a nice solution but because the ic was not applied/available the reading corrected for instrument error must be done again)
+   //
+   
+   // ic correction
+   if (main.barometer_instrument_correction.equals("") == false)
+   {
+      try
+      {
+         double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction);
+               
+         if (!(double_barometer_instrument_correction >= -4.0 && double_barometer_instrument_correction  <= 4.0))
+         {
+            double_barometer_instrument_correction = 0.0;
+         }
+      }
+      catch (NumberFormatException e) 
+      {
+         double_barometer_instrument_correction = 0.0;
+      }               
+   }
+   
+   DecimalFormat df = new DecimalFormat("0.0");           // rounding only 1 decimal
+   String sensor_data_record_APR_pressure_reading_hpa_corrected = df.format(hulp_double_APR_pressure_reading + double_barometer_instrument_correction); 
+   mybarometer.pressure_reading_corrected = sensor_data_record_APR_pressure_reading_hpa_corrected;   // now pressure at sensor height corrected for ic
+   
+   
+   ///////////////// pressure at MSL (ic is ready included in sensor_data_record_APR_pressure_MSL_hpa) ///////////
+   //
+   mybarometer.pressure_msl_corrected = sensor_data_record_APR_pressure_MSL_hpa;   // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
+
+   
+   ///////////////// compress the data end send it //////////////////////
+   //
+   new SwingWorker<Integer, Void>()
+   {
+      @Override
+      protected Integer doInBackground() throws Exception
+      {
+         Integer responseCode          = main.OK_RESPONSE_FORMAT_101;            // OK 
+         
+         // NB in this phase you kow: - date-time ok
+         //                          - position ok
+         //                          - call sign ok (RS232_check_APR_settings())
+         //                          = logs ok (RS232_check_APR_settings())
+         //
+             
+         // compress the data
+         //
+         main.format_101_class = new FORMAT_101();
+         main.format_101_class.compress_and_decompress_101_control_center();
+            
+            
+         // read the compressed obs (format 101) which is the only line in file HPK_format_101.txt
+         //
+         String format_101_obs = "";
+         
+         final String volledig_path_format_101_compressed_file = main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + main.FORMAT_101_TEMP_DIR + java.io.File.separator + "HPK_" + main.FORMAT_101_INPUT_FILE;// NB adding "HPK_" to the input file name is automatically done by the C-code compression functions
+
+         try
+         {
+            BufferedReader in = new BufferedReader(new FileReader(volledig_path_format_101_compressed_file));
+                  
+            if ((format_101_obs = in.readLine()) == null)
+            {
+               String message = "[APR] when retrieveing format 101 data empty file: " + volledig_path_format_101_compressed_file;
+               main.log_turbowin_system_message(message);
+                  
+               format_101_obs = "";                // the function which invoke get_format_101_obs_from_file() will check this value
+               responseCode = main.INVALID_RESPONSE_FORMAT_101;
+            } // else
+                     
+            in.close();
+         } // try
+         catch (IOException | HeadlessException e)
+         {
+            String message = "[APR] when retrieving format 101 data error opening file: " + volledig_path_format_101_compressed_file;
+            main.log_turbowin_system_message(message);
+               
+            format_101_obs = "";                   // the function which invoke get_format_101_obs_from_file() will check this value
+            responseCode = main.INVALID_RESPONSE_FORMAT_101;
+         } // catch         
+      
+            
+         // send the data
+         //
+         if (Objects.equals(responseCode, main.OK_RESPONSE_FORMAT_101))       // null save comparison
+         {   
+            // NB encoding:
+            // Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. This method uses the supplied encoding scheme to obtain 
+            // the bytes for unsafe characters.
+            // Note: The World Wide Web Consortium Recommendation states that UTF-8 should be used. Not doing so may introduce incompatibilites.
+            // 
+            // http://stackoverflow.com/questions/10786042/java-url-encoding-of-query-string-parameters:
+            // You only need to keep in mind to encode only the individual query string parameter name and/or value, not the entire URL, 
+            // for sure not the query string parameter separator character & nor the parameter name-value separator character =.
+            // String q = "random word 500 bank $";
+            // String url = "http://example.com/query?q=" + URLEncoder.encode(q, "UTF-8");
+            //
+            // Encode all 'not alloud' ASCII chars if not java.net.URISyntaxException (with index number in the URL string)
+            String encoded_format_101_obs = URLEncoder.encode(format_101_obs, "UTF-8");               
+               
+            //String url = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?obs=" + encoded_format_101_obs;  
+            String url = main.upload_URL + "obs=" + encoded_format_101_obs; 
+               
+            URL obj = null;
+            try 
+            {
+               obj = new URL(url);
+               HttpURLConnection con = (HttpURLConnection)obj.openConnection();
+            
+               // optional (default is GET)
+               con.setRequestMethod("GET");  
+                  
+               String message = "[APR] sending 'GET' request to URL: " + url;
+               main.log_turbowin_system_message(message);
+     
+               responseCode = con.getResponseCode();                     // if internet available the default OK_RESPONSE_FORMAT_101 will be overwritten here
+                  
+            } // try
+            catch (MalformedURLException ex)
+            {
+               //String message = "[APR] send obs failed; MalformedURLException (function: RS232_Send_Sensor_Data_to_APR)"; 
+               //main.log_turbowin_system_message(message);
+               //main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+               
+               responseCode = main.RESPONSE_MALFORMED_URL;
+            }
+            catch (IOException ex) 
+            {
+               //String message = "[APR] send obs failed; IOException; most probably no internet connection available; (function: RS232_Send_Sensor_Data_to_APR)"; 
+               //main.log_turbowin_system_message(message);
+               //main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+               
+               responseCode = main.RESPONSE_NO_INTERNET;
+            } // catch            
+            
+         } // if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_101)) 
+
+
+         return responseCode;
+               
+      } // protected Integer doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try
+         {
+            Integer response_code = get();
+
+            if (response_code == 200)          // OK
+            {
+               String message_a = "[APR] send obs success"; 
+               main.log_turbowin_system_message(message_a);
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_a); // update status field (bottom line main -progress- window) 
+               
+               // save data to immt log and clear main screen
+               //
+               // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+               //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+               //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+               //
+               if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                 (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+               {          
+                  RS232_make_APR_pressure_IMMT_ready();                        // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                  main.IMMT_log();
+               }
+               main.Reset_all_meteo_parameters();
+            }  
+            else // send obs NOT ok
+            {
+               // NB besides the response code there is also a corresponding response text, but unfortunately with html tags, 
+               //    and only with the standard response codes, self defined response codes are not returned?. Not suitable for direct using it into a popup message box
+               //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
+               
+               // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
+               //    (if internet avaialble the response code will be overwritten with eg 200)
+                     
+		         String message_b = "[APR] send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+                  
+               // file logging
+               main.log_turbowin_system_message(message_b);
+                  
+               // bottom main screen
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_b); 
+               
+               // so even no success after a retry, but now save the data to IMMT because no further attempts will follow (and the data was not saved before)
+               if (retry)
+               {
+                  // save data to immt log and clear main screen
+                  //
+                  // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+                  //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+                  //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+                  //
+                  if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                    (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+                  {
+                     RS232_make_APR_pressure_IMMT_ready();                     // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                     main.IMMT_log();
+                  }   
+                  main.Reset_all_meteo_parameters();
+               } // if retry
+            } // else (send obs NOT ok
+            
+            // for checking if a upload retry will be necessary [ see unction ...
+            APR_server_response_code = response_code;
+               
+         } // try
+         catch (InterruptedException | ExecutionException ex) 
+         {   
+            String message = "[APR] error in Function: RS232_Send_Sensor_Data_to_APR(); no internet connection available?; " + ex.toString(); 
+            main.log_turbowin_system_message(message);
+            main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+         }
+      } // protected void done()
+   }.execute(); // new SwingWorker<Void, Void>()
+}
+*/   
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private static void RS232_Send_Sensor_Data_to_APR_format101_Server(final boolean retry)         
+{
+   // NB see also: Output_obs_to_server_FM13() [main.java]
+   
+   // called from: - RS232_APR_AWSR_send()
+   //      which irself is called from  - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //                                   - RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //                                   - RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //
+ 
+   String log_tag;
+   if (main.AWSR == true)
+   {
+      log_tag = "[AWSR]";
+   }
+   else
+   {
+      log_tag = "[APR]";
+   }
+   
+   
+   ///////////////// compress the data end send it //////////////////////
+   //
+   new SwingWorker<Integer, Void>()
+   {
+      @Override
+      protected Integer doInBackground() throws Exception
+      {
+         Integer responseCode          = main.OK_RESPONSE_FORMAT_101;            // OK 
+         
+         // NB in this phase you kow: - date-time ok
+         //                           - position ok
+         //                           - call sign ok (RS232_check_APR_settings())
+         //                           - logs ok (RS232_check_APR_settings())
+         //
+             
+         // compress the data
+         //
+         main.format_101_class = new FORMAT_101();
+         main.format_101_class.compress_and_decompress_101_control_center();
+            
+            
+         // read the compressed obs (format 101) which is the only line in file HPK_format_101.txt
+         //
+         format_101_obs = "";
+         
+         final String volledig_path_format_101_compressed_file = main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + main.FORMAT_101_TEMP_DIR + java.io.File.separator + "HPK_" + main.FORMAT_101_INPUT_FILE;// NB adding "HPK_" to the input file name is automatically done by the C-code compression functions
+
+         try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_format_101_compressed_file)))
+         {
+            if ((format_101_obs = in.readLine()) == null)
+            {
+               String message = log_tag + " when retrieveing format 101 data empty file: " + volledig_path_format_101_compressed_file;
+               main.log_turbowin_system_message(message);
+                  
+               format_101_obs = "";                // the function which invoke get_format_101_obs_from_file() will check this value
+               responseCode = main.INVALID_RESPONSE_FORMAT_101;
+            } // else
+                     
+         } // try
+         catch (IOException | HeadlessException e)
+         {
+            String message = log_tag + " when retrieving format 101 data error opening file: " + volledig_path_format_101_compressed_file;
+            main.log_turbowin_system_message(message);
+               
+            format_101_obs = "";                   // the function which invoke get_format_101_obs_from_file() will check this value
+            responseCode = main.INVALID_RESPONSE_FORMAT_101;
+         } // catch         
+      
+
+         return responseCode;
+               
+      } // protected Integer doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try
+         {
+            Integer response_code = get();
+            
+            // continue if compressing went ok
+            //
+            if (Objects.equals(response_code, main.OK_RESPONSE_FORMAT_101))       // null save comparising
+            {   
+               // NB encoding:
+               // Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. This method uses the supplied encoding scheme to obtain 
+               // the bytes for unsafe characters.
+               // Note: The World Wide Web Consortium Recommendation states that UTF-8 should be used. Not doing so may introduce incompatibilites.
+               // 
+               // http://stackoverflow.com/questions/10786042/java-url-encoding-of-query-string-parameters:
+               // You only need to keep in mind to encode only the individual query string parameter name and/or value, not the entire URL, 
+               // for sure not the query string parameter separator character & nor the parameter name-value separator character =.
+               // String q = "random word 500 bank $";
+               // String url = "http://example.com/query?q=" + URLEncoder.encode(q, "UTF-8");
+               //
+               // Encode all 'not alloud' ASCII chars if not java.net.URISyntaxException (with index number in the URL string)
+               String encoded_format_101_obs = null;               
+               try 
+               {
+                  encoded_format_101_obs = URLEncoder.encode(format_101_obs, "UTF-8");
+               } 
+               catch (UnsupportedEncodingException ex) 
+               {
+                  response_code = main.RESPONSE_UNSUPPORTED_ENCODING;
+               }
+               
+               // continue if the encoding was ok
+               if (!Objects.equals(response_code, main.RESPONSE_UNSUPPORTED_ENCODING))       // null save comparising
+               {   
+                  //String url = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?obs=" + encoded_format_101_obs;  
+                  String url = main.upload_URL + "obs=" + encoded_format_101_obs; 
+               
+                  URL obj = null;
+                  try 
+                  {
+                     //obj = new URL(url);         // deprecated in Java 20
+                     obj = new URI(url).toURL();
+                     HttpURLConnection con = (HttpURLConnection)obj.openConnection();
+            
+                     // optional (default is GET)
+                     con.setRequestMethod("GET");  
+                  
+                     String message = log_tag + " sending 'GET' request to URL: " + url;
+                     main.log_turbowin_system_message(message);
+     
+                     response_code = con.getResponseCode();                     // if internet available the default OK_RESPONSE_FORMAT_101 will be overwritten here
+                  
+                  } // try
+                  catch (MalformedURLException ex)
+                  {
+                     response_code = main.RESPONSE_MALFORMED_URL;
+                  }
+                   catch (URISyntaxException ex)
+                  {
+                     response_code = main.RESPONSE_MALFORMED_URL;
+                  }
+                  catch (IOException ex) 
+                  {
+                     response_code = main.RESPONSE_NO_INTERNET;
+                  } // catch            
+               } // if (!Objects.equals(response_code, main.RESPONSE_UNSUPPORTED_ENCODING))
+            } // if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_101)) 
+               
+               
+            // how to continue depends on response_code            
+            //
+            if (response_code == 200)          // OK
+            {
+               String message_a = log_tag + " send obs success"; 
+               main.log_turbowin_system_message(message_a);
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_a); // update status field (bottom line main -progress- window) 
+               
+               // save data to immt log and clear main screen
+               //
+               // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+               //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+               //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+               //
+               if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                 (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+               {          
+                  //RS232_make_APR_IMMT_ready();                        // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                  main.IMMT_log();
+               }
+               main.Reset_all_meteo_parameters();
+            }  
+            else // send obs NOT ok or compresing NOT ok or encoding NOT ok
+            {
+               // NB besides the response code there is also a corresponding response text, but unfortunately with html tags, 
+               //    and only with the standard response codes, self defined response codes are not returned?. Not suitable for direct using it into a popup message box
+               //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
+               
+               // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
+               //    (if internet avaialble the response code will be overwritten with eg 200)
+                     
+		         String message_b = log_tag + " send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+                  
+               // file logging
+               main.log_turbowin_system_message(message_b);
+                  
+               // bottom main screen
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_b); 
+               
+               // so even no success after a retry, but now save the data to IMMT because no further attempts will follow (and the data was not saved before)
+               if (retry)
+               {
+                  // save data to immt log and clear main screen
+                  //
+                  // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+                  //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+                  //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+                  //
+                  if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                    (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+                  {
+                     //RS232_make_APR_IMMT_ready();                     // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                     main.IMMT_log();
+                  }   
+                  main.Reset_all_meteo_parameters();
+               } // if retry
+            } // else (send obs NOT ok
+            
+            // for checking if a upload retry will be necessary [ see unction ...
+            APR_server_response_code = response_code;
+               
+         } // try
+         catch (InterruptedException | ExecutionException ex) 
+         {   
+            String message = log_tag + " error in Function: RS232_Send_Sensor_Data_to_APR_format101_Server(); no internet connection available?; " + ex.toString(); 
+            main.log_turbowin_system_message(message);
+            main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+         }
+      } // protected void done()
+   }.execute(); // new SwingWorker<Void, Void>()
+}
+*/ 
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private static void RS232_Send_Sensor_Data_to_APR_format101_Server_V2(final boolean retry)         
+{
+   // NB see also: Output_obs_to_server_FM13() [main.java]
+   
+   // called from: - RS232_APR_AWSR_send()
+   //      which itself is called from  - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //                                   - RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //                                   - RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR()
+   //
+ 
+   String log_tag;
+   if (main.AWSR == true)
+   {
+      log_tag = "[AWSR]";
+   }
+   else
+   {
+      log_tag = "[APR]";
+   }
+   
+   
+   ///////////////// compress the data end send it //////////////////////
+   //
+   new SwingWorker<String, Void>()
+   {
+      @Override
+      protected String doInBackground() throws Exception
+      {
+         int responseCode                  = main.OK_RESPONSE_FORMAT_101;            // OK 
+         String responseString            = "";
+         HttpURLConnection con_http       = null;
+         HttpsURLConnection con_https     = null;
+       
+         boolean isHttps = true; 
+         if (main.server_com_protocol.equals(main.HTTP_PROTOCOL))
+         {   
+            isHttps = false;  
+         }  
+         
+         
+         // NB in this phase you kow: - date-time ok
+         //                           - position ok
+         //                           - call sign ok (RS232_check_APR_settings())
+         //                           - logs ok (RS232_check_APR_settings())
+         //
+             
+         // compress the data
+         //
+         main.format_101_class = new FORMAT_101();
+         main.format_101_class.compress_and_decompress_101_control_center();
+            
+            
+         // read the compressed obs (format 101) which is the only line in file HPK_format_101.txt
+         //
+         format_101_obs = "";
+         
+         final String volledig_path_format_101_compressed_file = main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + main.FORMAT_101_TEMP_DIR + java.io.File.separator + "HPK_" + main.FORMAT_101_INPUT_FILE;// NB adding "HPK_" to the input file name is automatically done by the C-code compression functions
+
+         try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_format_101_compressed_file)))
+         {
+            if ((format_101_obs = in.readLine()) == null)
+            {
+               String message = log_tag + " when retrieveing format 101 data empty file: " + volledig_path_format_101_compressed_file;
+               main.log_turbowin_system_message(message);
+                  
+               format_101_obs = "";                // the function which invoke get_format_101_obs_from_file() will check this value
+               responseCode = main.INVALID_RESPONSE_FORMAT_101;
+            } // else
+                     
+         } // try
+         catch (IOException | HeadlessException e)
+         {
+            String message = log_tag + " when retrieving format 101 data error opening file: " + volledig_path_format_101_compressed_file;
+            main.log_turbowin_system_message(message);
+               
+            format_101_obs = "";                   // the function which invoke get_format_101_obs_from_file() will check this value
+            responseCode = main.INVALID_RESPONSE_FORMAT_101;
+         } // catch         
+      
+         if (Objects.equals(responseCode, main.OK_RESPONSE_FORMAT_101))       // null save comparising
+         {   
+            // NB encoding:
+            // Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. This method uses the supplied encoding scheme to obtain 
+            // the bytes for unsafe characters.
+            // Note: The World Wide Web Consortium Recommendation states that UTF-8 should be used. Not doing so may introduce incompatibilites.
+            // 
+            // http://stackoverflow.com/questions/10786042/java-url-encoding-of-query-string-parameters:
+            // You only need to keep in mind to encode only the individual query string parameter name and/or value, not the entire URL, 
+            // for sure not the query string parameter separator character & nor the parameter name-value separator character =.
+            // String q = "random word 500 bank $";
+            // String url = "http://example.com/query?q=" + URLEncoder.encode(q, "UTF-8");
+            //
+            // Encode all 'not alloud' ASCII chars if not java.net.URISyntaxException (with index number in the URL string)
+            String encoded_format_101_obs = null;               
+            try 
+            {
+               encoded_format_101_obs = URLEncoder.encode(format_101_obs, "UTF-8");
+            } 
+            catch (UnsupportedEncodingException ex) 
+            {
+               responseCode = main.RESPONSE_UNSUPPORTED_ENCODING;
+            }
+               
+            // continue if the encoding was ok
+            if (!Objects.equals(responseCode, main.RESPONSE_UNSUPPORTED_ENCODING))       // null save comparising
+            {   
+               //String url = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?obs=" + encoded_format_101_obs;  
+               String url = main.upload_URL + "obs=" + encoded_format_101_obs; 
+ 
+               int maxRetries = 2;  // Maximum retries per IP (ps keep in mind, in this automatic mode, after failing there is always a retry after 3 minutes)
+               boolean success = false;
+               URL obj = null;
+               try 
+               {
+                  // Resolve all IP addresses for the given domain
+                  InetAddress[] addresses = InetAddress.getAllByName(new URI(url).toURL().getHost());
+
+                  // Loop through all resolved IP addresses
+                  for (InetAddress address : addresses)                          // Loop through all resolved IP addresses
+                  {
+                     // Multiple Connection Attempts (Failover Mechanism).
+                     // If one IP is encountering issues, another IP may work fine. This is particularly useful in cases where 
+                     // certain routing or networking issues might cause a TCP reset.
+
+                     System.out.println("--- Trying IP: " + address.getHostAddress());
+                     int attempt = 0;
+                     int backoff = 1000;                                          // Start with 1 second
+                     while (attempt < maxRetries && !success)                     // Automatic Retries within same IP
+                     {
+                        // Automatic Retries with Exponential Backoff (Delaying Retries).
+                        // TCP resets can be caused by transient network issues or server-side conditions that may be temporary. 
+                        // A retry helps in such cases by allowing the server to recover, or by avoiding network glitches that       
+                        // could have caused the reset. Exponential backoff prevents overwhelming the server with rapid retry attempts 
+                        // and gives time for transient errors to resolve. It also helps in reducing congestion on the network
+
+                        attempt++;
+                        try
+                        {   
+                           //obj = new URL(url);   // deprecated in Java 20
+                           obj = new URI(url).toURL();
+
+                           if (isHttps) 
+                           {
+                              String message = "[MANUAL] sending 'GET' request (https) to URL: " + url;
+                              main.log_turbowin_system_message(message);
+
+                              con_https = (HttpsURLConnection)obj.openConnection();    // For HTTPS
+                              con_https.setRequestMethod("GET");
+                              responseCode = con_https.getResponseCode(); 
+                           }
+                           else
+                           { 
+                              String message = "[MANUAL] sending 'GET' request (http) to URL: " + url;
+                              main.log_turbowin_system_message(message);
+
+                              con_http = (HttpURLConnection)obj.openConnection();    // FOR HTTP
+                              con_http.setRequestMethod("GET");
+                              responseCode = con_http.getResponseCode(); 
+                           } // else               
+
+                        } // try
+                        catch (MalformedURLException | URISyntaxException ex)
+                        {
+                           responseCode = RESPONSE_MALFORMED_URL;
+                           responseString = ex.getMessage();
+                        }
+                        catch (SocketException se) 
+                        {
+                           // (hopefully...) also catching TCP errors ('TCP reset from server' / 'TCP RST')
+                           responseCode = RESPONSE_NO_INTERNET;
+                           responseString = se.getMessage();                                 // e.g. ........
+
+                           Thread.sleep(backoff);                                            // Wait before retrying
+                           backoff *= 2;                                                     // Exponential backoff
+                        }   
+                        catch (IOException ix) 
+                        {
+                           responseCode = RESPONSE_NO_INTERNET;
+                           responseString = ix.getMessage();                                 // e.g. "Permission denied: connect" (when firewall blocking)
+
+                           Thread.sleep(backoff);                                            // Wait before retrying
+                           backoff *= 2;                                                     // Exponential backoff
+                        } // catch (IOException ex)   
+                        finally 
+                        {
+                           // Always disconnect to free up resources
+                           if (isHttps && (con_https != null))
+                           {
+                              con_https.disconnect();
+                           }
+                           if ((!isHttps) && (con_http != null)) 
+                           {
+                              con_http.disconnect();
+                           }
+                        }  // finally
+
+                        if (responseCode == 200) 
+                        {
+                           // Handle response
+                           success = true;
+                        }
+                     } // while (attempt < maxRetries && !success)
+
+                     if (success) 
+                     {
+                         // Exit the IP loop if one IP worked successfully
+                        break;
+                     }
+                  } //  for (InetAddress address : addresses) 
+
+                  if (!success) 
+                  {
+                     System.out.println("--- All IP addresses failed after retries.");
+                  }
+
+               } // try
+               catch (UnknownHostException | MalformedURLException e)
+               {
+                  responseCode = RESPONSE_NO_INTERNET;
+                  responseString = e.getMessage();
+               } 
+            } // if (!Objects.equals(response_code, main.RESPONSE_UNSUPPORTED_ENCODING))
+         } // if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_101)) 
+         
+         String response = Integer.toString(responseCode);
+         
+         if (!responseString.equals(""))
+         {
+            response += " (" + responseString + ")";
+         }   
+         
+         return response;
+               
+      } // protected Integer doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try
+         {
+            String response = get();
+           
+            int int_response_code = main.INTERNAL_ERROR_RESPONSE_CODE;                                          // default, initial value
+            String response_error = "";
+      
+            try
+            {
+               String string_response_code = response.substring(0,3);             // e.g. "200"
+               try
+               {   
+                  int_response_code = Integer.parseInt(string_response_code); 
+                  if (response.length() > 3)
+                  {   
+                     response_error = response.substring(3);
+                  }   
+               }
+               catch (NumberFormatException e2)
+               {
+                  int_response_code = main.INTERNAL_ERROR_RESPONSE_CODE;   
+               }
+            }
+            catch (IndexOutOfBoundsException e)
+            {
+               int_response_code = main.INTERNAL_ERROR_RESPONSE_CODE;   
+            }
+            
+            // how to continue depends on response_code            
+            //
+            if (int_response_code == 200)          // OK
+            {
+               String message_a = log_tag + " send obs success"; 
+               main.log_turbowin_system_message(message_a);
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_a); // update status field (bottom line main -progress- window) 
+               
+               // save data to immt log and clear main screen
+               //
+               // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+               //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+               //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+               //
+               if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                 (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+               {          
+                  //RS232_make_APR_IMMT_ready();                        // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                  main.IMMT_log();
+               }
+               main.Reset_all_meteo_parameters();
+            }  
+            else // send obs NOT ok or compresing NOT ok or encoding NOT ok
+            {
+               // NB besides the response code there is also a corresponding response text, but unfortunately with html tags, 
+               //    and only with the standard response codes, self defined response codes are not returned?. Not suitable for direct using it into a popup message box
+               //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
+               
+               // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
+               //    (if internet available the response code will be overwritten with eg 200)
+                     
+		         String message_b = log_tag + " send obs failed; " + main.http_respons_code_to_text(int_response_code).replace("<br>", " ") + response_error;
+                  
+               // file logging
+               main.log_turbowin_system_message(message_b);
+                  
+               // bottom main screen
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_b); 
+               
+               // so even no success after a retry, but now save the data to IMMT because no further attempts will follow (and the data was not saved before)
+               if (retry)
+               {
+                  // save data to immt log and clear main screen
+                  //
+                  // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+                  //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+                  //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+                  //
+                  if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                    (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+                  {
+                     //RS232_make_APR_IMMT_ready();                     // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                     main.IMMT_log();
+                  }   
+                  main.Reset_all_meteo_parameters();
+               } // if retry
+            } // else (send obs NOT ok
+            
+            // for checking if a upload retry will be necessary [ see unction ...
+            APR_server_response_code = int_response_code;
+               
+         } // try
+         catch (InterruptedException | ExecutionException ex) 
+         {   
+            String message = log_tag + " error in Function: RS232_Send_Sensor_Data_to_APR_format101_Server_V2(); no internet connection available?; " + ex.toString(); 
+            main.log_turbowin_system_message(message);
+            main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+         }
+      } // protected void done()
+   }.execute(); // new SwingWorker<String, Void>()
+}
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+
+public static void RS232_make_APR_IMMT_ready()        
+{
+   // called from: - RS232_Send_Sensor_Data_to_APR_format101_Server() [main_RS232_RS422.java]
+   //              - Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101() [main.java]
+   
+   
+
+   
+   
+   // NB in FM13 mode the FM13 code (= same as IMMT code) is already compiled before (see: RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR())
+   //    so only if not FM13 mode we must now compile the IMMT code (= the same as FM13)
+   //if (main.obs_format.equals(main.FORMAT_FM13) == false)        // so not FM13                      
+   //{
+   //   RS232_make_pressure_APR_FM13_ready();                      // also IMMT ready now
+   //   RS232_make_air_temp_APR_FM13_ready();                      // also IMMT ready now
+   //   RS232_make_wet_bulb_temp_APR_FM13_ready();                 // also IMMT ready now
+   //   RS232_make_dew_point_APR_FM13_ready();                     // also IMMT ready now
+   //}
+   
+   
+   
+   // ????????????????????????
+   // IS ONDERSTAANDE NODIG WANT ZIE FUNCTION: RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
+   
+   
+   // NB in case of Mintaka Star the position data was not yet made IMMT ready
+   // NB for the NMEA connected GPS's this was already done, see: RS232_GPS_NMEA_0183_Date_Position_Parsing() [main_RS232_RS422.java]
+   //
+   if (main.RS232_GPS_connection_mode == 3 || main.RS232_GPS_connection_mode == 4)  // Mintaka Star or StarX GPS (USB or station mode or acess point)          
+   {   
+      // determine (IMMT)code figures (latitude)
+      //
+      int int_latitude_minutes_6 = myposition.int_latitude_minutes / 6;               // devide the minutes by six and disregard the remainder
+      String latitude_minutes_6 = Integer.toString(int_latitude_minutes_6);           // convert to String 
+         
+      if (latitude_minutes_6.length() != 1)                                           // debug check
+      {
+         myposition.lalala_code = "   ";                                              // 3x space
+      }
+      else
+      {
+         myposition.lalala_code = myposition.latitude_degrees.trim().replaceFirst("^0+(?!$)", "") + latitude_minutes_6;
+
+         int len = 3;                                                                  // always 3 chars
+         if (myposition.lalala_code.length() < len) 
+         {
+            // pad on left with zeros
+            myposition.lalala_code = "0000000000".substring(0, len - myposition.lalala_code.length()) + myposition.lalala_code;
+         }
+      } // else
+      
+      // determine (IMMT)code figures (longitude)
+      //
+      int int_longitude_minutes_6 = myposition.int_longitude_minutes / 6;               // devide the minutes by six and disregard the remainder
+      String longitude_minutes_6 = Integer.toString(int_longitude_minutes_6);           // convert to String 
+         
+      if (longitude_minutes_6.length() != 1)                                            // debug check
+      {
+         myposition.lolololo_code = "    ";                                             // 4 x space
+      }
+      else
+      {
+         myposition.lolololo_code = myposition.longitude_degrees.trim().replaceFirst("^0+(?!$)", "") + longitude_minutes_6;
+        
+         int len = 4;                                                                    // always 4 chars
+         if (myposition.lolololo_code.length() < len)                                    // pad on left with zeros
+         {
+            myposition.lolololo_code = "0000000000".substring(0, len - myposition.lolololo_code.length()) + myposition.lolololo_code;
+         }
+      } // else
+      
+      
+      // quadrant of the globe for IMMT
+      //
+      if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+      {
+          myposition.Qc_code = "1";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+      {
+         myposition.Qc_code = "3";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+      {
+         myposition.Qc_code = "5";
+      }
+      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+      {
+         myposition.Qc_code = "7";
+      }
+      else
+      {
+         myposition.Qc_code = " ";
+         //System.out.println("+++++++++++ Qc_code error");
+      }
+     
+   } // if (maiin.RS232_GPS_connection_mode == 3) etc.
+
+}
+*/
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static double RS232_WOW_APR_compute_air_pressure_height_correction(double double_pressure_reading)
+{
+   // NB this function is used for height air pressure conversion from station level to mean sea level for the WOW site and/or APR
+   // NB before this function is called the WOW/APR settings were checked 
+   
+   double height_correction_pressure = Double.MAX_VALUE;
+   double temp;
+   double term_1;
+   double term_2;
+   double double_barometer_instrument_correction = 0;
+   double double_barometer_above_sll = 0;
+   double double_keel_sll = 0;
+   double double_draught = 0;
+   double double_hoogte_barometer;
+   double double_pressure_reading_corrected;
+   boolean checks_ok = true;
+   
+  
+      
+   /*
+   /////////// checks 
+   */
+   if ( (main.barometer_above_sll.equals("")) || (main.barometer_above_sll.trim().length() == 0) )
+   {
+      //JOptionPane.showMessageDialog(null, "barometer height above MSL not available (Maintenance -> Station data)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+      System.out.println("[APR] barometer height above MSL not available (Maintenance -> Station data)");
+      checks_ok = false;
+   }
+   if ( (main.keel_sll.equals("")) || (main.keel_sll.trim().length() == 0) )
+   {
+      //JOptionPane.showMessageDialog(null, "distance keel - MSL not available (Maintenance -> Station data)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+      System.out.println("[APR] distance keel - MSL not available (Maintenance -> Station data)");
+      checks_ok = false;
+   }
+   if ( (main.barometer_instrument_correction.equals("")) || (main.barometer_instrument_correction.trim().length() == 0) )   
+   {
+      System.out.println("[APR] barometer instrument correction not available (Maintenance -> Station data)");
+      checks_ok = false;
+   }
+   if ( (main.WOW_APR_average_draught.equals("")) || (main.WOW_APR_average_draught.trim().length() == 0) )   
+   {
+      System.out.println("[APR] average draught not available (Maintenance -> APR/APTR/AWSR settings)");
+      checks_ok = false;
+   }
+   
+   
+   // compute the doubles
+   //
+   if (checks_ok)
+   {     
+      // convert to double: distance barometer - keel
+      try 
+      {
+         double_barometer_above_sll = Double.parseDouble(main.barometer_above_sll.trim());
+      } 
+      catch (NumberFormatException e) 
+      {  
+         //JOptionPane.showMessageDialog(null, "Internal error (converting distance barometer - SLL to double)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+         System.out.println("[APR] Internal error (converting distance barometer - SLL to double)");
+         checks_ok = false;
+      }
+
+      // convert to double: distance keel - sll
+      try 
+      {
+         double_keel_sll = Double.parseDouble(main.keel_sll.trim());
+      } 
+      catch (NumberFormatException e) 
+      {
+         //JOptionPane.showMessageDialog(null, "Internal error (converting distance keel - SLL to double)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+         System.out.println("[APR] Internal error (converting distance keel - SLL to double)");
+         checks_ok = false;
+      }
+      
+      try
+      {
+         double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction);
+      }
+      catch (NumberFormatException e) 
+      {
+         System.out.println("[APR] Internal error (converting distance barometer ic to double)");
+         checks_ok = false;
+      }               
+      
+      try
+      {
+         double_draught = Double.parseDouble(main.WOW_APR_average_draught);
+      }
+      catch (NumberFormatException e) 
+      {
+         System.out.println("[APR] Internal error (converting average draught to double)");
+         checks_ok = false;
+      }               
+      
+   } // if checks_ok
+   
+   
+   // the 'real' computation
+   //
+   if (checks_ok)
+   {
+      double_pressure_reading_corrected = double_pressure_reading + double_barometer_instrument_correction;
+      
+      double_hoogte_barometer = double_keel_sll + double_barometer_above_sll - double_draught;
+   
+      temp = 15.0 + CELCIUS_TO_KELVIN_FACTOR;                  // so calculated with a default air temperature (15.0 C) !!!!
+      term_1 = double_pressure_reading_corrected * double_hoogte_barometer;
+      term_2 = 29.27 * temp;
+
+      if (term_2 != 0) // prevent exception (in principle will never be 0))
+      {
+         height_correction_pressure = term_1 / term_2;
+      } 
+      else 
+      {
+         height_correction_pressure = 0.0;
+      }      
+      
+      // round to two digits behind the "."
+      height_correction_pressure = Math.round(height_correction_pressure * 100.0 ) / 100.0;
+      
+      // at Great lakes? (for extra height correction value)
+      double great_lakes_corr = check_at_Great_Lakes();
+      if (great_lakes_corr < 50.0)                                        // so at Great Lakes
+      {
+         height_correction_pressure += great_lakes_corr;
+      }
+      else if ((great_lakes_corr > AT_GREAT_LAKES_OUTSIDE_MAIN_AREAS - 1) && (great_lakes_corr < AT_GREAT_LAKES_OUTSIDE_MAIN_AREAS + 1))     // so at Great Lakes but in transition between two lakes (locks)
+      {
+         height_correction_pressure = AT_GREAT_LAKES_OUTSIDE_MAIN_AREAS;
+         String message = "[APR] air pressure will not be reported because outside Great Lakes main areas (in the transition between two Lakes)"; 
+         main.log_turbowin_system_message(message);
+      }
+   
+   } // if (checks_ok)
+   
+   //System.out.println("--- WOW/APR height_correction_pressure : " + height_correction_pressure);  
+   
+   
+   return height_correction_pressure;
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static double check_at_Great_Lakes()
+{
+   double north_limit_great_lakes     = 49;
+   double south_limit_great_lakes     = 41;
+   double west_limit_great_lakes      = -93;
+   double east_limit_great_lakes      = -73;
+   
+   double north_limit_lake_ontario    = 44;
+   double south_limit_lake_ontario    = 43.3;
+   double west_limit_lake_ontario     = -80;
+   double east_limit_lake_ontario     = -76.5;
+           
+   double north_limit_lake_erie_upper = 42.8;
+   double south_limit_lake_erie_upper = 41.5;
+   double west_limit_lake_erie_upper  = -82;
+   double east_limit_lake_erie_upper  = -79;
+   
+   double north_limit_lake_erie_lower = 42; 
+   double south_limit_lake_erie_lower = 41.5;
+   double west_limit_lake_erie_lower  = -83.4;
+   double east_limit_lake_erie_lower  = -82;
+           
+   double north_limit_lake_clair      = 42.5;
+   double south_limit_lake_clair      = 42.35;
+   double west_limit_lake_clair       = -82.9;
+   double east_limit_lake_clair       = -82.7;
+           
+   double north_limit_lake_huron      = 46;
+   double south_limit_lake_huron      = 43;
+   double west_limit_lake_huron       = -84.5;
+   double east_limit_lake_huron       = -80;
+           
+   double north_limit_lake_michagan   = 45.5;
+   double south_limit_lake_michagan   = 42;
+   double west_limit_lake_michagan    = -87.5;
+   double east_limit_lake_michagan    = -86.0;
+           
+   double north_limit_lake_superior   = 48; 
+   double south_limit_lake_superior   = 46.5;
+   double west_limit_lake_superior    = -92;
+   double east_limit_lake_superior    = -85;
+           
+   double extra_great_lakes_pressure_height_correction = Double.MAX_VALUE;        
+   double num_huidige_obs_breedte = Double.MAX_VALUE;
+   double num_huidige_obs_lengte  = Double.MAX_VALUE;
+   boolean doorgaan = true;
+   
+   
+   try
+   {
+      num_huidige_obs_breedte = (double)myposition.int_latitude_degrees +  ((double)myposition.int_latitude_minutes / 60);
+      num_huidige_obs_lengte =  (double)myposition.int_longitude_degrees + ((double)myposition.int_longitude_minutes / 60);
+   
+      if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
+      {
+         num_huidige_obs_breedte *= -1;
+      }
+
+      if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)
+      {
+         num_huidige_obs_lengte *= -1;
+      }   
+   } // try
+   catch(NumberFormatException ex)
+   {
+      String message = "[APR] Great Lakes position check failed; NumberFormatException (function: check_at_Great_Lakes)"; 
+      main.log_turbowin_system_message(message);
+      doorgaan = false;
+   }
+   
+   
+   if (doorgaan == true)
+   {   
+      // at the Great Lakes ?
+      if (num_huidige_obs_breedte > south_limit_great_lakes && num_huidige_obs_breedte < north_limit_great_lakes && num_huidige_obs_lengte > west_limit_great_lakes && num_huidige_obs_lengte < east_limit_great_lakes)
+      {
+         // Lake Ontario ?
+         if (num_huidige_obs_breedte >= south_limit_lake_ontario && num_huidige_obs_breedte <= north_limit_lake_ontario && num_huidige_obs_lengte >= west_limit_lake_ontario && num_huidige_obs_lengte <= east_limit_lake_ontario)
+         {
+            extra_great_lakes_pressure_height_correction = 8.99;
+         }
+         
+         // Lake Erie upper part ?
+         else if (num_huidige_obs_breedte >= south_limit_lake_erie_upper && num_huidige_obs_breedte <= north_limit_lake_erie_upper && num_huidige_obs_lengte >= west_limit_lake_erie_upper && num_huidige_obs_lengte <= east_limit_lake_erie_upper)
+         {
+            extra_great_lakes_pressure_height_correction = 21.05;
+         }
+        
+         // Lake Erie lower part ?
+         else if (num_huidige_obs_breedte >= south_limit_lake_erie_lower && num_huidige_obs_breedte <= north_limit_lake_erie_lower && num_huidige_obs_lengte >= west_limit_lake_erie_lower && num_huidige_obs_lengte <= east_limit_lake_erie_lower)
+         {
+            extra_great_lakes_pressure_height_correction = 21.05;
+         }
+         
+         // Lake St Clair ?
+         else if (num_huidige_obs_breedte >= south_limit_lake_clair && num_huidige_obs_breedte <= north_limit_lake_clair && num_huidige_obs_lengte >= west_limit_lake_clair && num_huidige_obs_lengte <= east_limit_lake_clair)
+         {
+            extra_great_lakes_pressure_height_correction = 21.16;
+         }
+         
+         // Lake Huron ?
+         else if (num_huidige_obs_breedte >= south_limit_lake_huron && num_huidige_obs_breedte <= north_limit_lake_huron && num_huidige_obs_lengte >= west_limit_lake_huron && num_huidige_obs_lengte <= east_limit_lake_huron)
+         {
+            extra_great_lakes_pressure_height_correction = 21.35;
+         }
+         
+         // Lake Michagan ?
+         else if (num_huidige_obs_breedte >= south_limit_lake_michagan && num_huidige_obs_breedte <= north_limit_lake_michagan && num_huidige_obs_lengte >= west_limit_lake_michagan && num_huidige_obs_lengte <= east_limit_lake_michagan)
+         {
+            extra_great_lakes_pressure_height_correction = 21.35;
+         }
+         
+         // Lake Superior ?
+         else if (num_huidige_obs_breedte >= south_limit_lake_superior && num_huidige_obs_breedte <= north_limit_lake_superior && num_huidige_obs_lengte >= west_limit_lake_superior && num_huidige_obs_lengte <= east_limit_lake_superior)
+         {
+            extra_great_lakes_pressure_height_correction = 22.24;
+         }
+         
+         else
+         {
+            // so at the Great lakes but between two Lakes (e.g. in the locks!) or outside a 'main' area
+            extra_great_lakes_pressure_height_correction = AT_GREAT_LAKES_OUTSIDE_MAIN_AREAS;
+         }
+         
+      } // if (num_huidige_obs_breedte > south_limit_great_lakes etc.
+      else
+      {
+         // not at the Great Lakes
+         extra_great_lakes_pressure_height_correction = Double.MAX_VALUE;
+      }
+   } // if (doorgaan == true)    
+   
+   
+   return extra_great_lakes_pressure_height_correction;
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+public static void RS232_Send_Sensor_Data_to_WOW(String sensor_data_record_WOW_pressure_MSL_inhg)  
+{
+   // format YYYY-mm-DD HH:mm:ss (where : = coded as %3A and space as %20)
+   
+   cal_WOW_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
+   cal_WOW_systeem_datum_tijd.getTime();                                             // now effective
+   
+   int int_WOW_system_year   = cal_WOW_systeem_datum_tijd.get(Calendar.YEAR); 
+   int int_WOW_system_month  = cal_WOW_systeem_datum_tijd.get(Calendar.MONTH);          // Jan = 0, not 1
+   int int_WOW_system_day    = cal_WOW_systeem_datum_tijd.get(Calendar.DAY_OF_MONTH);
+   int int_WOW_system_hour   = cal_WOW_systeem_datum_tijd.get(Calendar.HOUR_OF_DAY);    // hOUR_OF_DAY for 24 hour format (HOUR is in 12 hour format [am/pm])
+   int int_WOW_system_minute = cal_WOW_systeem_datum_tijd.get(Calendar.MINUTE);   
+   
+   String string_WOW_system_year = Integer.toString(int_WOW_system_year);
+   String string_WOW_system_month  = String.format("%02d", int_WOW_system_month + 1);
+   String string_WOW_system_day    = String.format("%02d", int_WOW_system_day);
+   String string_WOW_system_hour   = String.format("%02d", int_WOW_system_hour);
+   String string_WOW_system_minute = String.format("%02d", int_WOW_system_minute);
+   
+   String WOW_date_time = string_WOW_system_year + "-" + string_WOW_system_month + "-" + string_WOW_system_day + "+" +
+                          string_WOW_system_hour + "%3A" + string_WOW_system_minute + "%3A" + "00";
+           
+           
+   //System.out.println("--- pressure (inHg) for WOW: " + WOW_date_time + " " + sensor_data_record_WOW_pressure_inhg);        
+           
+   String url = "http://wow.metoffice.gov.uk/automaticreading" + "?" + 
+                                                   "siteid=" + main.WOW_site_id + "&" +
+                                                   "siteAuthenticationKey=" + main.WOW_site_pin + "&" +
+                                                   "dateutc=" + WOW_date_time + "&" +
+                                                   "baromin=" + sensor_data_record_WOW_pressure_MSL_inhg + "&" +
+                                                   "softwaretype=" + main.APPLICATION_NAME;
+  
+   URL obj = null;
+   try 
+   {
+      obj = new URL(url);
+      HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+      
+      // optional (default is GET)
+	   con.setRequestMethod("GET");  
+
+      String message = "[WOW] sending 'GET' request to URL: " + url;
+      main.log_turbowin_system_message(message);
+      
+      //add request header
+      //String USER_AGENT = "Mozilla/5.0";
+	   //con.setRequestProperty("User-Agent", USER_AGENT);
+     
+      int responseCode = con.getResponseCode();
+		//System.out.println("--- WOW Response Code: " + responseCode);
+      
+      // update status field (bottom line main -progress- window) 
+      if (responseCode == 200)  // ok
+      {
+         // main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + "send data to WOW successesfully"); 
+         String message_a = "[WOW] send data success"; 
+         main.log_turbowin_system_message(message_a);
+         main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_a); // update status field (bottom line main -progress- window) 
+      }
+      else // not ok
+      {
+         BufferedReader in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+		   String inputLine;
+		   StringBuilder response = new StringBuilder();
+
+		   while ((inputLine = in.readLine()) != null) 
+         {
+			   response.append(inputLine);
+		   }
+		   in.close();
+
+		   String message_b = "[WOW] send data failed; " + response.toString(); 
+         main.log_turbowin_system_message(message_b);
+         main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_b); 
+      } // else (not ok)
+   } 
+   catch (MalformedURLException ex)
+   {
+      //String message = "[WOW] send data failed; MalformedURLException (function: RS232_Send_Sensor_Data_to_WOW)"; 
+      String message = "[WOW] send data failed; MalformedURLException"; 
+      main.log_turbowin_system_message(message);
+      main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+   }
+   catch (IOException ex) 
+   {
+      //String message = "[WOW] send data failed; most probably no internet connection available or firewall/scanner is blocking; IOException (function: RS232_Send_Sensor_Data_to_WOW)"; 
+      String message = "[WOW] send data failed; most probably no internet connection available or firewall/scanner is blocking; IOException"; 
+      main.log_turbowin_system_message(message);
+      main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+   }
+   
+}   
+*/ 
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void set_datetime_while_collecting_sensor_data()
+{
+   // called from: class RS232_Class_Receive_Sensor_Data [file main_RS232_RS422.java]
+   //              class Ethernet_Class_Receive_UDP [file main_RS232_RS422.java]
+   //              class class WiFi_Class_Receive_UDP 
+   //
+   //
+   //
+   //
+   // Never mind the computer is set to UTC or not. SimpleTimeZone with argument UTC convert system date time
+   // always to UTC !!
+   //
+
+   String system_month_volledig = "";
+   int len;
+
+   main.cal_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
+   main.cal_systeem_datum_tijd.getTime();                                             // now effective
+   int system_minute_local = main.cal_systeem_datum_tijd.get(Calendar.MINUTE);
+      
+   if (system_minute_local % 5 == 0)
+   {   
+      if (system_minute_local > 30)
+      {
+         main.cal_systeem_datum_tijd.add(Calendar.HOUR_OF_DAY, 1);   // add 1 hour
+         main.cal_systeem_datum_tijd.getTime();
+      }
+
+      int system_year          = main.cal_systeem_datum_tijd.get(Calendar.YEAR);
+      int system_month         = main.cal_systeem_datum_tijd.get(Calendar.MONTH);        // The first month of the year is JANUARY which is 0
+      int system_day_of_month  = main.cal_systeem_datum_tijd.get(Calendar.DAY_OF_MONTH); // The first day of the month has value 1
+      int system_hour_of_day   = main.cal_systeem_datum_tijd.get(Calendar.HOUR_OF_DAY);
+
+
+      if (system_month == 0)
+      {
+         system_month_volledig = "January";
+      }
+      else if (system_month == 1)
+      {
+         system_month_volledig = "February";
+      }
+      if (system_month == 2)
+      {
+         system_month_volledig = "March";
+      }
+      if (system_month == 3)
+      {
+         system_month_volledig = "April";
+      }
+      if (system_month == 4)
+      {
+         system_month_volledig = "May";
+      }
+      if (system_month == 5)
+      {
+         system_month_volledig = "June";
+      }
+      if (system_month == 6)
+      {
+         system_month_volledig = "July";
+      }
+      if (system_month == 7)
+      {
+         system_month_volledig = "August";
+      }
+      if (system_month == 8)
+      {
+         system_month_volledig = "September";
+      }
+      if (system_month == 9)
+      {
+         system_month_volledig = "October";
+      }
+      if (system_month == 10)
+      {
+         system_month_volledig = "November";
+      }
+      if (system_month == 11)
+      {
+         system_month_volledig = "December";
+      }
+
+      mydatetime.year  = Integer.toString(system_year);                     // for progress main screen and IMMT
+      mydatetime.month = system_month_volledig;                             // for progress main screen
+      mydatetime.day   = Integer.toString(system_day_of_month);             // for progress main screen
+      mydatetime.hour  = Integer.toString(system_hour_of_day);              // for progress main screen
+
+      /* update date and time on TurboWin+ main screen */
+      main.date_time_fields_update();
+
+      // determine code figures for month (not for operational obs only for IMMT storage)
+      //
+      mydatetime.MM_code = Integer.toString(system_month +1);               // +1 because system month started with 0 (January)
+
+      len = 2;                                                               // MM_code always 2 characters width e.g. 03
+      if (mydatetime.MM_code.length() < len)                                 // pad on left with zeros
+      {
+         mydatetime.MM_code = "0000000000".substring(0, len - mydatetime.MM_code.length()) + mydatetime.MM_code;
+      }
+         
+      // determine code figures for day of the month (for obs and IMMT)
+      //
+      mydatetime.YY_code = Integer.toString(system_day_of_month);            // system_day_of_month e.g. 1,2,11,23,29
+
+      len = 2;                                                               // YY_code always 2 characters width e.g. 03
+      if (mydatetime.YY_code.length() < len)                                 // pad on left with zeros
+      {
+         mydatetime.YY_code = "0000000000".substring(0, len - mydatetime.YY_code.length()) + mydatetime.YY_code;
+      }
+
+      // determine code figures for hour of day (for obs and IMMT)
+      //
+      mydatetime.GG_code = Integer.toString(system_hour_of_day);             // system_hour_of_day e.g. 1,2,11,23
+
+      len = 2;                                                               // GG_code always 2 characters width e.g. 03
+      if (mydatetime.GG_code.length() < len)                                 // pad on left with zeros
+      {
+         mydatetime.GG_code = "0000000000".substring(0, len - mydatetime.GG_code.length()) + mydatetime.GG_code;
+      }
+   } // if (system_minute_local % 5 == 0)
+}   
+   
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+public static void RS422_initialise_AWS_Sensor_Data_For_Display()
+{
+   // initialisation
+   main.date_from_AWS_present                     = false;
+   main.time_from_AWS_present                     = false;
+   main.latitude_from_AWS_present                 = false;
+   main.longitude_from_AWS_present                = false;
+   main.COG_from_AWS_present                      = false;
+   main.SOG_from_AWS_present                      = false;
+   main.true_heading_from_AWS_present             = false;
+   main.pressure_sensor_level_from_AWS_present    = false;
+   main.pressure_MSL_from_AWS_present             = false;
+   main.pressure_tendency_from_AWS_present        = false;
+   main.pressure_characteristic_from_AWS_present  = false;
+       //    NB in AWS connected mode the date and time parameters by default only from AWS!
+       //    NB in AWS connected mode the GPS parameters (lat, lon, SOG, COG, true heading) by default only from AWS!
+       //    NB in AWS connected mode the air pressure parameters by default only from AWS! (if not present than still observer cannot insert them manually)
+   main.air_temp_from_AWS_present                 = false;
+   main.rh_from_AWS_present                       = false;  
+   main.SST_from_AWS_present                      = false;
+   main.relative_wind_speed_from_AWS_present      = false;
+   main.relative_wind_dir_from_AWS_present        = false;
+   main.true_wind_speed_from_AWS_present          = false;
+   main.true_wind_dir_from_AWS_present            = false;
+   main.true_wind_gust_from_AWS_present           = false;
+   main.true_wind_gust_dir_from_AWS_present       = false;
+   main.VOT_from_AWS_present                      = false;
+   
+   mydatetime.year                                = "";
+   mydatetime.month                               = "";
+   mydatetime.day                                 = "";
+   mydatetime.hour                                = "";
+   myposition.latitude_hemisphere                 = "";
+   myposition.latitude_degrees                    = "";
+   myposition.latitude_minutes                    = "";
+   myposition.longitude_hemisphere                = "";
+   myposition.longitude_degrees                   = "";
+   myposition.longitude_minutes                   = "";
+   myposition.course                              = "";
+   myposition.speed                               = "";
+   mywind.ship_ground_course                      = "";
+   mywind.ship_ground_speed                       = "";
+   mywind.ship_heading                            = "";
+   mybarometer.pressure_reading                   = "";
+   mybarometer.pressure_reading_corrected         = "";
+   mybarometer.pressure_msl_corrected             = "";
+   mybarograph.pressure_amount_tendency           = "";
+   mybarograph.a_code                             = "";
+   main.VOT                                       = Integer.MAX_VALUE;
+   
+   if (main.jTextField36.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   {
+      mytemp.air_temp                             = "";
+   }
+   
+   if (main.jTextField37.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   {
+      mytemp.wet_bulb_temp                        = "";
+   }
+   
+   if (main.jTextField38.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   {
+      mytemp.RH                                   = "";
+      mytemp.double_rv                            = main.INVALID;      // double
+      mytemp.double_dew_point                     = main.INVALID;      // double
+   }
+   
+   if (main.jTextField40.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   {
+      mytemp.sea_water_temp                       = "";
+   }
+   
+   //if (main.jTextField16.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   //{
+   //   mywind.int_true_wind_speed                  = main.INVALID;      // integer
+   //   mywind.wind_speed                           = "";
+   //}
+   //
+   //if (main.jTextField17.getForeground().getRGB() != main.input_color_from_observer.getRGB())
+   //{
+   //   mywind.int_true_wind_dir                    = main.INVALID;      // integer
+   //   mywind.wind_dir                             = "";
+   //}
+   if (main.jTextField16.getForeground().getRGB() != main.input_color_from_observer.getRGB())  // apparent wind
+   {
+      mywind.int_relative_wind_dir                = main.INVALID;
+      mywind.int_relative_wind_speed              = main.INVALID;
+      mywind.wind_speed                           = "";
+      mywind.wind_dir                             = "";
+   }
+   
+   if (main.jTextField17.getForeground().getRGB() != main.input_color_from_observer.getRGB())  // true wind
+   {
+      mywind.int_true_wind_speed                  = main.INVALID;      // integer
+      mywind.int_true_wind_dir                    = main.INVALID;      // integer
+   }
+
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS422_Read_AWS_Sensor_Data_For_Display()
+{
+   // check the presence of the various meteo parameters in the data received from AWS (data stored by TurboWin+ in sensor data files)
+   
+   // called from: Function RS422_V3_write_sensor_data_to_file() [file main_RS232_RS422.java]
+   //
+   
+   
+   //check_presence_parameter_system_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
+   check_presence_parameter_system_datum_tijd = new GregorianCalendar();                             // UTC at this momnet not important (only retrieving minutes)
+   check_presence_parameter_system_datum_tijd.getTime();                                             // now effective
+   
+   //int system_minute = check_presence_parameter_system_datum_tijd.get(Calendar.MINUTE);
+   system_minute = check_presence_parameter_system_datum_tijd.get(Calendar.MINUTE);
+      
+   // initialisation
+   RS422_initialise_AWS_Sensor_Data_For_Display();
+   
+   
+   // only check every 1 or 5 minutes? [eg if (system_minute % 5 == 0)]
+   if (system_minute % 1 == 0)   
+   {
+      //System.out.println("+++ checking parameter presence in sensor data file");
+      
+      new SwingWorker<String, Void>()
+      {
+         @Override
+         protected String doInBackground() throws Exception
+         {
+            File sensor_data_file;
+            String record;
+            String last_record = null;
+            
+            
+            if (system_minute != 0)
+            {           
+               // otherwise at 00 minutes the system is looking in an 'old' file because of the -1 MINUTE (without the 00 minutes sensor obs)
+               check_presence_parameter_system_datum_tijd.add(Calendar.MINUTE, -1);
+            }
+            
+            String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(check_presence_parameter_system_datum_tijd.getTime()); // -> eg 2013020308 // sdf3 was set in RS422_initComponents() to UTC
+            String sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
+
+            // first check if there is a sensor data file present (and not empty)
+            String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;         
+
+            //System.out.println("+++ checking file: " + volledig_path_sensor_data);
+            
+            sensor_data_file = new File(volledig_path_sensor_data);
+            if (sensor_data_file.exists() && sensor_data_file.length() > 0)     // length() in bytes
+            {
+               try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data)))
+               {
+                  // initialisation
+                  record         = "";
+                  last_record    = "";
+
+                  while ((record = in.readLine()) != null)
+                  {
+                     //pos = record.indexOf("\n");    
+                     //if (pos > 0)     // "\n" found
+
+                     if (record.length() > 43)               // arbitrary but > $PEUMB + yyyymmdduu + TOTAL_NUMBER_RECORD_COMMAS
+                     {
+                        if ( (record.substring(0, 6).equals("$PEUMB")) && (record.indexOf(sensor_data_file_naam_datum_tijd_deel) != -1) )
+                        {
+                           last_record = record;
+                        }
+                     } // if (record.length() > 43)  
+                  } // while ((record = in.readLine()) != null)
+                     
+               } // try
+               catch (IOException ex) 
+               {  
+                  last_record = "";
+                  System.out.println("--- Function RS422_Read_AWS_Sensor_Data_For_Display(): " + ex);
+               }
+            } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
+            else // no sensor_data_file present
+            {
+               last_record = null;
+            }
+            
+            return last_record;
+            
+         } // protected Void doInBackground() throws Exception
+
+         @Override
+         protected void done()
+         {
+            boolean doorgaan_in_record = true;
+            int number_read_commas;
+            int pos;
+
+            
+            String laatste_record = null;
+            try 
+            {
+               laatste_record = get();
+            } 
+            catch (InterruptedException | ExecutionException ex) 
+            {
+               String message = "[AWS] error retrieving AWS data from sensor data file; " + ex.toString();
+               main.log_turbowin_system_message(message);
+            }
+            
+            if (laatste_record == null)
+            {
+               String message = "[AWS] no sensor data file exists or file empty";
+               main.log_turbowin_system_message(message);    
+               doorgaan_in_record = false;
+            }
+            else if (laatste_record.equals(""))
+            {
+               String message = "[AWS] sensor data file found but no records found or misformed records";
+               main.log_turbowin_system_message(message); 
+               doorgaan_in_record = false;
+            }
+            
+            
+            if (doorgaan_in_record == true && laatste_record != null) 
+            {
+               // Check the number of comma's in the record that must exactely match the fixed expected number (TOTAL_NUMBER_RECORD_COMMAS)
+               number_read_commas = 0;
+               pos = -1;
+
+               do 
+               {
+                  pos = laatste_record.indexOf(",", pos + 1);
+                  if (pos > 0) // "," found
+                  {
+                     number_read_commas++;
+                  }
+               } while (pos > 0);
+
+               //System.out.println("+++ record = " + laatste_record);
+               //System.out.println("+++ number read commas = " + number_read_commas);
+               if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS) {
+                  doorgaan_in_record = false;
+               }
+            } // if (doorgaan_in_record == true)
+
+            if (doorgaan_in_record == true && laatste_record != null) 
+            {
+               number_read_commas = 0;
+               pos = -1;
+
+               do 
+               {
+                  pos = laatste_record.indexOf(",", pos + 1);    // searching "," from position "pos + 1"
+                  if (pos > 0) // "," found
+                  {
+                     number_read_commas++;
+
+                     // Date
+                     //
+                     if (number_read_commas == main.DATE_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              String record_aws_date = laatste_record.substring(pos + 1, pos2); // YYYYMMDD or YYMMDD
+
+                              //mydatetime.day   = record_aws_date.substring(record_aws_date.length() -2) + " -";   // DD
+                              //mydatetime.month = record_aws_date.substring(record_aws_date.length() -4, record_aws_date.length() -2) + " -"; // MM
+                              mydatetime.day = record_aws_date.substring(record_aws_date.length() - 2);   // DD
+
+                              if (mydatetime.day.substring(0, 1).equals("0")) 
+                              {
+                                 // otherwise will not match in the mydatetime input form
+                                 mydatetime.day = mydatetime.day.substring(1, 2);
+                              }
+
+                              //System.out.println("+++ day = " + mydatetime.day);
+                              String str_month = record_aws_date.substring(record_aws_date.length() - 4, record_aws_date.length() - 2); // MM
+
+                                       //System.out.println("+++ month = " + str_month);
+                              switch (str_month) 
+                              {
+                                 case "01":
+                                    mydatetime.month = "January";
+                                    break;
+                                 case "02":
+                                    mydatetime.month = "February";
+                                    break;
+                                 case "03":
+                                    mydatetime.month = "March";
+                                    break;
+                                 case "04":
+                                    mydatetime.month = "April";
+                                    break;
+                                 case "05":
+                                    mydatetime.month = "May";
+                                    break;
+                                 case "06":
+                                    mydatetime.month = "June";
+                                    break;
+                                 case "07":
+                                    mydatetime.month = "July";
+                                    break;
+                                 case "08":
+                                    mydatetime.month = "August";
+                                    break;
+                                 case "09":
+                                    mydatetime.month = "September";
+                                    break;
+                                 case "10":
+                                    mydatetime.month = "October";
+                                    break;
+                                 case "11":
+                                    mydatetime.month = "November";
+                                    break;
+                                 case "12":
+                                    mydatetime.month = "December";
+                                    break;
+                                 default:
+                                    mydatetime.month = "unknown";
+                                    break;
+                              }
+
+                              mydatetime.year = record_aws_date.substring(0, record_aws_date.length() - 4);       // YYYY (or YY)
+
+                              main.date_from_AWS_present = true;
+                              //System.out.println("+++ parameter date is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        }
+
+                     } // if (number_read_commas == etc.                             
+                     // Time
+                     //
+                     else if (number_read_commas == main.TIME_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              String record_aws_time = laatste_record.substring(pos + 1, pos2);
+                              if (record_aws_time.length() == 6) // HHMMSS
+                              {
+                                 mydatetime.hour = record_aws_time.substring(0, 2);   // HH from HHMMSS
+                                 mydatetime.minute = record_aws_time.substring(2, 4); // MM from HHMMSS
+                              }
+
+                              if (mydatetime.hour.substring(0, 1).equals("0")) 
+                              {
+                                 // otherwise will not match in the mydatetime input form
+                                 mydatetime.hour = mydatetime.hour.substring(1, 2);
+                              }
+
+                              main.time_from_AWS_present = true;
+                              //System.out.println("+++ parameter time is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        }
+                     } // else if (number_read_commas == etc.                             
+                     // Latitude [format sDD.ddd; s = "-" if South; + always omitted]
+                     //
+                     else if (number_read_commas == main.LATITUDE_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_latitude = laatste_record.substring(pos + 1, pos2);
+
+                              if (record_aws_latitude.indexOf("-") != -1) // found "-" in string
+                              {
+                                 myposition.latitude_hemisphere = "South";
+                                 myposition.latitude_degrees = record_aws_latitude.substring(1, record_aws_latitude.indexOf("."));   // -12.344 -> 12
+                              } 
+                              else 
+                              {
+                                 myposition.latitude_hemisphere = "North";
+                                 myposition.latitude_degrees = record_aws_latitude.substring(0, record_aws_latitude.indexOf("."));   // 12.344 -> 12
+                              }
+
+                              //double decimal_degrees_lat = Double.parseDouble(record_aws_latitude);
+                              double decimal_degrees_lat = Math.abs(Double.parseDouble(record_aws_latitude));
+                              
+                              //double double_minutes_lat = (decimal_degrees_lat - Math.floor(decimal_degrees_lat)) * 60;
+                              //
+                              //BigDecimal bd = new BigDecimal(double_minutes_lat).setScale(1, RoundingMode.HALF_UP);  // one decimal, rounded e.g. 2.12939 -> 2.1
+                              //double_minutes_lat = bd.doubleValue();
+                              //
+                              //if (double_minutes_lat < 10)
+                              //{   
+                              //   myposition.latitude_minutes = "0" + Double.toString(double_minutes_lat);
+                              //}
+                              //else
+                              //{
+                              //   myposition.latitude_minutes = Double.toString(double_minutes_lat);
+                              //} 
+                              int int_minutes_lat = (int) Math.round((decimal_degrees_lat - Math.floor(decimal_degrees_lat)) * 60);
+                              if (int_minutes_lat < 10) 
+                              {
+                                 myposition.latitude_minutes = "0" + Integer.toString(int_minutes_lat);
+                              } 
+                              else 
+                              {
+                                 myposition.latitude_minutes = Integer.toString(int_minutes_lat);
+                              }
+
+                              main.latitude_from_AWS_present = true;
+                              //System.out.println("+++ parameter latitude is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // if (laatste_record.length() etc.
+                     } // else if (number_read_commas == etc.                                     
+                     // Longitude [format sDDD.ddd; s = "-" if West; + always omitted]
+                     //
+                     else if (number_read_commas == main.LONGITUDE_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_longitude = laatste_record.substring(pos + 1, pos2);
+
+                              if (record_aws_longitude.indexOf("-") != -1) // found "-" in string
+                              {
+                                 myposition.longitude_hemisphere = "West";
+                                 myposition.longitude_degrees = record_aws_longitude.substring(1, record_aws_longitude.indexOf("."));   // -12.344 -> 12
+                              } 
+                              else 
+                              {
+                                 myposition.longitude_hemisphere = "East";
+                                 myposition.longitude_degrees = record_aws_longitude.substring(0, record_aws_longitude.indexOf("."));   // 12.344 -> 12
+                              }
+
+                              double decimal_degrees_lon = Math.abs(Double.parseDouble(record_aws_longitude));
+                              
+                              //double double_minutes_lon = (decimal_degrees_lon - Math.floor(decimal_degrees_lon)) * 60;
+                              //
+                              //BigDecimal bd = new BigDecimal(double_minutes_lon).setScale(1, RoundingMode.HALF_UP);  // one decimal, rounded e.g. 2.12939 -> 2.1
+                              //double_minutes_lon = bd.doubleValue();
+                              //
+                              //if (double_minutes_lon < 10)
+                              //{
+                              //   myposition.longitude_minutes = "0" + Double.toString(double_minutes_lon);
+                              //}  
+                              //else
+                              //{   
+                              //   myposition.longitude_minutes = Double.toString(double_minutes_lon);
+                              //}
+                              int int_minutes_lon = (int) Math.round((decimal_degrees_lon - Math.floor(decimal_degrees_lon)) * 60);
+                              if (int_minutes_lon < 10) 
+                              {
+                                 myposition.longitude_minutes = "0" + Integer.toString(int_minutes_lon);
+                              } 
+                              else 
+                              {
+                                 myposition.longitude_minutes = Integer.toString(int_minutes_lon);
+                              }
+
+                              main.longitude_from_AWS_present = true;
+                              //System.out.println("+++ parameter longitude is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.                                     
+                     // Course Over Ground (COG) [format CCC.c]
+                     //
+                     else if (number_read_commas == main.COG_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_COG = laatste_record.substring(pos + 1, pos2);
+
+                              int int_COG = (int) Math.round(Double.parseDouble(record_aws_COG));
+
+                              if (int_COG == 0) 
+                              {
+                                 int_COG = 360;
+                              }
+
+                              // NB if the ship is stationary then COG retrieved from the the AWS will be blanco -> unfortunately no option to indicate stationary
+                              //if (int_COG == 0)
+                              //{
+                              //   myposition.course = myposition.COURSE_STATIONARY;
+                              //}
+                              if (int_COG >= 23 && int_COG <= 67) {
+                                 myposition.course = myposition.COURSE_023_067;
+                              } else if (int_COG >= 68 && int_COG <= 112) {
+                                 myposition.course = myposition.COURSE_068_112;
+                              } else if (int_COG >= 113 && int_COG <= 157) {
+                                 myposition.course = myposition.COURSE_113_157;
+                              } else if (int_COG >= 158 && int_COG <= 202) {
+                                 myposition.course = myposition.COURSE_158_202;
+                              } else if (int_COG >= 203 && int_COG <= 247) {
+                                 myposition.course = myposition.COURSE_203_247;
+                              } else if (int_COG >= 248 && int_COG <= 292) {
+                                 myposition.course = myposition.COURSE_248_292;
+                              } else if (int_COG >= 293 && int_COG <= 337) {
+                                 myposition.course = myposition.COURSE_293_337;
+                              } else if (int_COG >= 338 && int_COG <= 360) {
+                                 myposition.course = myposition.COURSE_338_022;
+                              } else if (int_COG > 0 && int_COG <= 22) {
+                                 myposition.course = myposition.COURSE_338_022;
+                              }
+
+                              // COG = 10 min average so can also used for wind input page
+                              //mywind.ship_ground_course = record_aws_COG;
+                              //
+                              //if (mywind.ship_ground_course.equals("0.0"))
+                              //{
+                              //   mywind.ship_ground_course = "360.0";
+                              //}
+                              mywind.ship_ground_course = Integer.toString(int_COG);
+
+                              main.COG_from_AWS_present = true;
+                              //System.out.println("+++ parameter COG is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // if (record.length() > number_read_commas + 12)
+                     } // else if (number_read_commas == etc.
+                     // Speed Over Ground (SOG) [format SS.s]
+                     //
+                     else if (number_read_commas == main.SOG_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              String record_aws_SOG = laatste_record.substring(pos + 1, pos2);  // in m/s
+                              double double_SOG = Double.parseDouble(record_aws_SOG);           // in m/s
+                              int int_SOG = (int) Math.round(double_SOG * M_S_TO_KNOTS);         // in knots rounded
+
+                              if (int_SOG == 0) {
+                                 myposition.speed = myposition.SPEED_0;
+                              } else if (int_SOG >= 1 && int_SOG <= 5) {
+                                 myposition.speed = myposition.SPEED_1_5;
+                              } else if (int_SOG >= 6 && int_SOG <= 10) {
+                                 myposition.speed = myposition.SPEED_6_10;
+                              } else if (int_SOG >= 11 && int_SOG <= 15) {
+                                 myposition.speed = myposition.SPEED_11_15;
+                              } else if (int_SOG >= 16 && int_SOG <= 20) {
+                                 myposition.speed = myposition.SPEED_16_20;
+                              } else if (int_SOG >= 21 && int_SOG <= 25) {
+                                 myposition.speed = myposition.SPEED_21_25;
+                              } else if (int_SOG >= 26 && int_SOG <= 30) {
+                                 myposition.speed = myposition.SPEED_26_30;
+                              } else if (int_SOG >= 31 && int_SOG <= 35) {
+                                 myposition.speed = myposition.SPEED_31_35;
+                              } else if (int_SOG >= 36 && int_SOG <= 40) {
+                                 myposition.speed = myposition.SPEED_36_40;
+                              } else if (int_SOG >= 41) {
+                                 myposition.speed = myposition.SPEED_MORE_40;
+                              }
+
+                              // SOG 10 min average so can also used for wind input page
+                              double_SOG = Math.round(double_SOG * main.M_S_KNOT_CONVERSION * 10) / 10.0; // always round to one decimal
+                              mywind.ship_ground_speed = Double.toString(double_SOG);
+
+                              main.SOG_from_AWS_present = true;
+                              //System.out.println("+++ parameter SOG is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // if (record.length() > number_read_commas + 12)
+                     } // else if (number_read_commas == etc.
+                     // True heading [format HHH.h]
+                     //
+                     else if (number_read_commas == main.HEADING_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_ship_heading = laatste_record.substring(pos + 1, pos2);
+                              double double_ship_heading = Double.parseDouble(record_aws_ship_heading);
+
+                              int int_ship_heading = (int) Math.round(double_ship_heading);
+
+                              if (int_ship_heading == 0) 
+                              {
+                                 int_ship_heading = 360;
+                              }
+
+                              mywind.ship_heading = Integer.toString(int_ship_heading);
+
+                              main.true_heading_from_AWS_present = true;
+                              // NB heading is not displayed on TurboWin+ main screen (only on wind input form)
+
+                              //System.out.println("+++ parameter Heading is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // if (record.length() > number_read_commas + 12)
+                     } // else if (number_read_commas == etc.
+                     // air pressure at sensor height (read) [format PPPP.p]
+                     //
+                     else if (number_read_commas == main.PRESSURE_SENSOR_HEIGHT_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              mybarometer.pressure_reading_corrected = laatste_record.substring(pos + 1, pos2);
+
+                              // by default for pressure value obtained from AWS!
+                              mybarometer.pressure_reading = mybarometer.pressure_reading_corrected;
+
+                              // ic = 0.0 by default for pressure value obtained from AWS!
+                              main.barometer_instrument_correction = "0.0";
+
+                                       // for barometer input form
+                              //if (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_NO))
+                              //{
+                              //   mybarometer.pressure_reading = mybarometer.pressure_reading_corrected;
+                              //    
+                              //   // ic = 0.0 by default for pressure value obtained from AWS!
+                              //   main.barometer_instrument_correction = "0.0";
+                              //}
+                              main.pressure_sensor_level_from_AWS_present = true;
+                              //System.out.println("+++ parameter air pressure read is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // if (record.length() > number_read_commas + 12)
+                     } // else if (number_read_commas == etc.
+                     // air pressure MSL [format PPPP.p]
+                     //
+                     else if (number_read_commas == main.PRESSURE_MSL_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              mybarometer.pressure_msl_corrected = laatste_record.substring(pos + 1, pos2);
+
+                              // for barometer input form
+                              // NB if AWS connected, barometer input form will always indicate barometer reading at sensor level (never MSL)
+                              main.pressure_MSL_from_AWS_present = true;
+                              //System.out.println("+++ parameter air pressure MSL is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // if (record.length() > number_read_commas + 12)
+                     } // else if (number_read_commas == etc.
+                     // air pressure tendency over three three hours [format sPP.p]
+                     //
+                     else if (number_read_commas == main.PRESSURE_TENDENCY_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              mybarograph.pressure_amount_tendency = laatste_record.substring(pos + 1, pos2);
+
+                              main.pressure_tendency_from_AWS_present = true;
+                              //System.out.println("+++ parameter air pressure tendency is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // if (record.length() > number_read_commas + 12)
+                     } // else if (number_read_commas == etc.                              
+                     // air pressure characteristic [format A]
+                     //
+                     else if (number_read_commas == main.PRESSURE_CHARACTERISTIC_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              mybarograph.a_code = laatste_record.substring(pos + 1, pos2);
+
+                              main.pressure_characteristic_from_AWS_present = true;
+                              //System.out.println("+++ parameter air pressure characteristic (a code) is aanwezig");
+
+                           } // if (pos2 - pos >= 2)
+                        } // if (record.length() > number_read_commas + 12)
+                     } // else if (number_read_commas == etc.    
+                     // air temp [format sTA.a]
+                     //
+                     else if (number_read_commas == main.AIR_TEMP_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              mytemp.air_temp = laatste_record.substring(pos + 1, pos2);
+
+                              main.air_temp_from_AWS_present = true;
+
+                                       //System.out.println("+++ parameter air temp is aanwezig");
+                           } // if (pos2 - pos >= 2)
+
+                           //System.out.println("+++++++= pos = " + pos);
+                           //System.out.println("+++++++= pos2 = " + pos2);
+                           //System.out.println("+++++++=  main.air_temp_from_AWS_present = " +  main.air_temp_from_AWS_present);
+                        } // 
+                     } // else if (number_read_commas == etc.
+                     // relative humidity [format UUU.u]
+                     //
+                     else if (number_read_commas == main.HUMIDITY_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              mytemp.double_rv = Double.parseDouble(laatste_record.substring(pos + 1, pos2)) / 100;
+                              // NB "/100" for consistency with not AWS computed rh (see also main.temperatures_fields_update() and mytemp.OK_button_actioPerformed())
+
+                              mytemp.RH = laatste_record.substring(pos + 1, pos2);
+                              
+                              main.rh_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter relative humidity is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.
+                     // SST [format sTW.w]
+                     //
+                     else if (number_read_commas == main.SST_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between conmmas at least 1 char
+                           {
+                              mytemp.sea_water_temp = laatste_record.substring(pos + 1, pos2);
+
+                              main.SST_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter sst is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.
+                     // relative wind speed [format WS.r]
+                     //
+                     else if (number_read_commas == main.RELATIVE_WIND_SPEED_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              int int_relative_wind_speed;
+                              String record_aws_relative_wind_speed = laatste_record.substring(pos + 1, pos2);
+                              Double double_relative_wind_speed = Double.parseDouble(record_aws_relative_wind_speed);
+
+                              // convert if necessary and round to integer
+                              if (main.wind_units.indexOf(main.M_S) == -1) //  not m/s so convert to knots (see TurboWin+ menu:
+                              {
+                                 int_relative_wind_speed = (int) Math.round(double_relative_wind_speed * main.M_S_KNOT_CONVERSION); // NB int cast necessary for conversion from long (result from Math.round) to int
+                                 double_relative_wind_speed = double_relative_wind_speed * main.M_S_KNOT_CONVERSION;
+                              } 
+                              else 
+                              {
+                                 int_relative_wind_speed = (int) Math.round(double_relative_wind_speed);
+                                 // NB double_relative_wind_speed in m/s
+                              }
+
+                              mywind.wind_speed = Integer.toString(int_relative_wind_speed);        // for wind input screen
+                              mywind.int_relative_wind_speed = int_relative_wind_speed;
+                              mywind.double_relative_wind_speed = double_relative_wind_speed;              // only for dashboard
+                              
+                              main.relative_wind_speed_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter relative wind speed is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.
+                     // relative wind direction [format WDR.r]
+                     //
+                     else if (number_read_commas == main.RELATIVE_WIND_DIR_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_relative_wind_dir = laatste_record.substring(pos + 1, pos2);
+                              double double_relative_wind_dir = Double.parseDouble(record_aws_relative_wind_dir);
+
+                              //int int_relative_wind_dir = (int) Math.round(double_relative_wind_dir);
+                              //mywind.int_relative_wind_dir = (int) Math.round(double_relative_wind_dir);
+                              int int_relative_wind_dir = (int) Math.round(double_relative_wind_dir);
+
+                              //if (int_relative_wind_dir == 0)
+                              //{
+                              //   int_relative_wind_dir = 360;
+                              //}
+                              //mywind.wind_dir = Integer.toString(mywind.int_relative_wind_dir);
+                              mywind.wind_dir = Integer.toString(int_relative_wind_dir);           // for wind input screen
+                              mywind.int_relative_wind_dir = int_relative_wind_dir;
+                              main.relative_wind_dir_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter relative wind dir is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.          
+                     // true wind speed [format WS.t]
+                     //
+                     else if (number_read_commas == main.TRUE_WIND_SPEED_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              int int_true_wind_speed;
+                              String record_aws_true_wind_speed = laatste_record.substring(pos + 1, pos2);
+                              Double double_true_wind_speed = Double.parseDouble(record_aws_true_wind_speed); 
+
+                              if (main.wind_units.indexOf(main.M_S) == -1) //  not m/s so convert to knots (see TurboWin+ menu:
+                              {
+                                 int_true_wind_speed = (int) Math.round(double_true_wind_speed * main.M_S_KNOT_CONVERSION); // NB int cast necessary for conversion from long (result from Math.round) to int
+                                 double_true_wind_speed = double_true_wind_speed * main.M_S_KNOT_CONVERSION; // in knots
+                              } 
+                              else 
+                              {
+                                 int_true_wind_speed = (int) Math.round(double_true_wind_speed);
+                                 //NB double_true_wind_speed; in m/s
+                              }
+
+                              mywind.int_true_wind_speed = int_true_wind_speed;
+                              mywind.double_true_wind_speed = double_true_wind_speed;                         // only for dashboard
+
+                              main.true_wind_speed_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter true wind speed is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.
+                     // true wind direction [format WDT.t]
+                     //
+                     else if (number_read_commas == main.TRUE_WIND_DIR_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_true_wind_dir = laatste_record.substring(pos + 1, pos2);
+                              double double_true_wind_dir = Double.parseDouble(record_aws_true_wind_dir);
+
+                              int int_true_wind_dir = (int) Math.round(double_true_wind_dir);
+
+                              if (int_true_wind_dir == 0) 
+                              {
+                                 int_true_wind_dir = 360;
+                              }
+
+                              mywind.int_true_wind_dir = int_true_wind_dir;
+
+                              main.true_wind_dir_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter true wind dir is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // if (laatste_record.length() > pos + 1 + 12)
+                     } // else if (number_read_commas == etc.                              
+                     // max wind gust speed from 10min [format WSX.x]
+                     //
+                     else if (number_read_commas == main.TRUE_WIND_GUST_COMMA_NUMBER)
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              int int_true_wind_gust_speed;
+                              String record_aws_true_wind_gust_speed = laatste_record.substring(pos + 1, pos2);
+                              Double double_true_wind_gust_speed = Double.parseDouble(record_aws_true_wind_gust_speed);
+
+                              // convert if necessary and round to integer
+                              if (main.wind_units.indexOf(main.M_S) == -1) //  not originally measured/observed in m/s so convert to knots (see TurboWin+ menu: Maintenance -> Station data)
+                              {
+                                 int_true_wind_gust_speed = (int) Math.round(double_true_wind_gust_speed * main.M_S_KNOT_CONVERSION); // NB int cast necessary for conversion from long (result from Math.round) to int
+                                 double_true_wind_gust_speed = double_true_wind_gust_speed * main.M_S_KNOT_CONVERSION;      // knots   // only for dashboard
+                              } 
+                              else 
+                              {
+                                 int_true_wind_gust_speed = (int) Math.round(double_true_wind_gust_speed);
+                                 // NB double_true_wind_gust_speed in knots
+                              }
+
+                              mywind.int_true_wind_gust_speed = int_true_wind_gust_speed;
+                              mywind.double_true_wind_gust_speed = double_true_wind_gust_speed;    // only for dashboard
+
+                              main.true_wind_gust_from_AWS_present = true;
+                           } // if (pos2 - pos >= 2)
+                        } // if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     } // else if (number_read_commas == main.TRUE_WIND_GUST_COMMA_NUMBER)
+                     // max wind gust direction from 10min [format WDX.x]
+                     //
+                     else if (number_read_commas == main.TRUE_WIND_GUST_DIR_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              String record_aws_true_wind_gust_dir = laatste_record.substring(pos + 1, pos2);
+                              double double_true_wind_gust_dir = Double.parseDouble(record_aws_true_wind_gust_dir);
+
+                              int int_true_wind_gust_dir = (int) Math.round(double_true_wind_gust_dir);
+
+                              if (int_true_wind_gust_dir == 0) 
+                              {
+                                 int_true_wind_gust_dir = 360;
+                              }
+
+                              mywind.int_true_wind_gust_dir = int_true_wind_gust_dir;
+
+                              main.true_wind_gust_dir_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter true wind gust dir is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // if (laatste_record.length() > pos + 1 + 12)
+                     } // else if (number_read_commas == etc.                         
+                     //
+                     // supply voltage [format VV.v]
+                     //
+                     // -- not for displaying in TurboWin+
+                     //
+                     // internal temperature [format sTT.t]
+                     //
+                     // -- not for displaying in TurboWin+
+                     //
+                     // VOT (visual observation acquisition trigger) [format sNNN]
+                     //
+                     // else if (number_read_commas == main.VOT_COMMA_NUMBER) 
+                     else if ((number_read_commas == main.VOT_COMMA_NUMBER) && (main.RS232_connection_mode == 3) && (main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN) == false))   // only in case of EUCAWS + 'eucaws uploads method' (not for OMC !)    
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              int int_VOT = Integer.parseInt(laatste_record.substring(pos + 1, pos2));
+                              main.VOT = int_VOT;  // for dashboard Meteo France
+                              
+                              if (int_VOT < 0) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 //main.jTextField4.setText(hulp_VOT + " minutes to go before you can insert obervation parameters");
+                                 int_VOT = Math.abs(int_VOT) + 20;
+                                 String str_VOT = Integer.toString(int_VOT);
+                                 main.jTextField4.setText(str_VOT + " minutes to go before the obs will be sent by the AWS, please do not insert observation parameters");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 100) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("ship is in port (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 101) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("observations are not required in this area (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 102) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("the AWS transmitter is out of order (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 103) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("the AWS GPS is out of order (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 104) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("AWS transmission is deactivated (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else 
+                              {
+                                 main.jTextField4.setForeground(color_dark_green);
+                                 String str_VOT = Integer.toString(int_VOT);
+                                 main.jTextField4.setText(str_VOT + " minutes to go before the obs will be sent by the AWS, you can now insert observation parameters and select \"Output -> Obs to AWS\" ");
+
+                                 main.jMenuItem46.setEnabled(true);                  // Obs to AWS (uploads via EUCAWS iridium modem)
+                              }
+                              
+                              main.VOT_from_AWS_present = true;
+
+                              //System.out.println("+++ parameter VOT is present");
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.   
+
+                     // SPARE
+                     //
+                     // -- not for displaying in TurboWin+
+                     // 
+                              //
+                     // SPARE
+                     // -- not for displaying in TurboWin+
+                     //
+                     // SPARE
+                     //
+                     // -- not for displaying in TurboWin+
+                     //
+                  } // if (pos > 0)
+               } while (pos > 0);
+
+               
+               // update data text fields on main screen
+               //
+               main.date_time_fields_update();
+               main.position_fields_update();
+               main.barometer_fields_update();
+               main.barograph_fields_update();
+               main.temperatures_fields_update();
+               main.wind_fields_update();
+               
+               // update AWS dasboard values
+               RS422_update_AWS_dasboard_values();
+
+            } // if (doorgaan_in_record)                       
+                     
+ 
+            // clear memory
+            check_presence_parameter_system_datum_tijd    = null;
+            
+         } // protected void done()
+
+      }.execute(); // new SwingWorker <Void, Void>()
+      
+   } // if (system_minute % 1 == 0)  
+} // private void RS422_Read_AWS_Sensor_Data_For_Display()
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private static void RS422_initialise_AWS_Sensor_Data_For_AWSR()
+{
+   // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
+   
+   
+   // Date and Time   
+   mydatetime.year                                 = "";
+   mydatetime.month                                = "";
+   mydatetime.day                                  = "";
+   mydatetime.hour                                 = "";
+   mydatetime.MM_code                              = "";                            // month of year (only for IMMT)
+   mydatetime.YY_code                              = "";                            // day of the month
+   mydatetime.GG_code                              = "";                            // hour of obs
+
+   // position
+   myposition.Qc_code                              = "";
+   myposition.int_latitude_degrees                 = main.INVALID;
+   myposition.int_latitude_minutes                 = main.INVALID;
+   myposition.latitude_degrees                     = "";
+   myposition.latitude_hemisphere                  = "";
+   myposition.lalala_code                          = "";
+   myposition.int_longitude_degrees                = main.INVALID;
+   myposition.int_longitude_minutes                = main.INVALID;
+   myposition.longitude_degrees                    = "";
+   myposition.longitude_hemisphere                 = "";
+   myposition.lolololo_code                        = ""; 
+   
+   // Course and speed
+   myposition.Ds_code                              = "";
+   myposition.vs_code                              = "";
+   mywind.ship_heading                             = "";
+   
+  // Air pressure
+   mybarometer.pressure_reading_corrected          = "";
+   mybarometer.pressure_msl_corrected              = "";
+   mybarometer.PPPP_code                           = "";
+   mybarograph.pressure_amount_tendency            = "";
+   mybarograph.a_code                              = "";
+   mybarograph.ppp_code                            = "";
+   
+   // Temperatures
+   mytemp.air_temp                                 = "";
+   mytemp.sn_TTT_code                              = "";
+   mytemp.TTT_code                                 = "";
+   mytemp.double_rv                                = main.INVALID;      // double
+   mytemp.sea_water_temp                           = "";
+   mytemp.ss_TsTsTs_code                           = "";
+   mytemp.immt_sst_indicator                       = "";
+   mytemp.TsTsTs_code                              = "";
+   
+   // wind
+   mywind.RWS_code                                 = "";
+   mywind.RWD_code                                 = "";
+   mywind.int_true_wind_speed                      = main.INVALID;      // integer
+   mywind.ff_code                                  = "";
+   mywind.int_true_wind_dir                        = main.INVALID;      // integer
+   mywind.dd_code                                  = "";
+   mywind.HDG_code                                 = "";
+   mywind.COG_code                                 = "";
+   mywind.SOG_code                                 = "";
+   
+   // wind related (IMMT only)
+   mywind.SLL_code                                 = "";
+   mywind.sl_code                                  = "";
+   mywind.hh_code                                  = "";
+   
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private boolean RS422_Check_Date_Time_Last_Saved_Record_For_AWSR(final String record_aws_date, final String record_aws_time)
+{
+   // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
+   //
+   // NB record_aws_date format: yyyyMMdd
+   // NB record_aws_time format: HHMmmss
+   
+   
+   boolean record_date_time_ok = true;
+   
+   
+   if ((record_aws_date.length() != 8) || (record_aws_time.length() != 6))
+   {
+      record_date_time_ok = false;  
+   }
+   
+   if (record_date_time_ok)
+   {
+      SimpleDateFormat sdf9 = new SimpleDateFormat("yyyyMMddHHmm");                      // HH hour in day (0-23) note there is also hh (then also with am, pm); July = 07 !!
+      sdf9.setTimeZone(TimeZone.getTimeZone("UTC"));
+   
+      //String hulp_GPS_yyyyMMdd = "20" + GPS_date.substring(4) + GPS_date.substring(2,4) + GPS_date.substring(0,2);
+      //String hulp_GPS_HHmm = GPS_time.substring(0, 4); 
+      //String hulp_fix_datum_tijd_minuten = hulp_GPS_yyyyMMdd + hulp_GPS_HHmm;    // eg final result : 202303940927
+      String hulp_record_datum_tijd_minuten = record_aws_date + record_aws_time.substring(0, 4);    // eg final result : 202303940927
+      Date hulp_record_date = null;
+      try 
+      {
+         hulp_record_date = sdf9.parse(hulp_record_datum_tijd_minuten);
+         
+         long system_sec = System.currentTimeMillis();
+         long timeDiff = Math.abs(hulp_record_date.getTime() - system_sec) / (60 * 1000);           // timeDiff in minutes
+
+         //System.out.println("+++ system_sec: " + system_sec); 
+         //System.out.println("+++ hulp_record_date: " + hulp_record_date); 
+         //System.out.println("+++ difference [minuten]: " + timeDiff); //differencs in min
+      
+         //String record_pressure_present = null;
+
+         if (timeDiff > TIMEDIFF_AWSR_DATA)      // max 10 minutes difference AWS time <--> computer time
+         {
+            record_date_time_ok = false;
+            String message = "[AWSR] AWS last saved record date/time obsolete; > " + (int)TIMEDIFF_AWSR_DATA + " minutes old compared with computer date/time (time difference = " + timeDiff + " minutes)";
+            main.log_turbowin_system_message(message);
+         }    
+      } // try
+      catch (ParseException ex) 
+      {
+         record_date_time_ok = false;
+         String message = "[AWSR] AWS date/time format not ok (" + ex + ")";
+         main.log_turbowin_system_message(message);
+      }
+   } // if (record_date_time_ok)   
+   
+   
+   return record_date_time_ok;
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+/*
+private void RS422_Send_Sensor_Data_To_AWSR(final boolean retry)
+{
+   // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
+   //
+   
+   ///////////////// compress the data end send it //////////////////////
+   //
+   new SwingWorker<Integer, Void>()
+   {
+      @Override
+      protected Integer doInBackground() throws Exception
+      {
+         Integer responseCode          = main.OK_RESPONSE_FORMAT_101;            // OK 
+         
+         // NB in this phase you kow: - date-time ok
+         //                           - position ok
+         //                           - call sign ok (RS422_check_AWSR_settings()) [main_RS232_Rs422.java]
+         //                           - logs ok (RS422_check_AWSR_settings()) [main_RS232_Rs422.java]
+         //
+             
+         // compress the data
+         //
+         main.format_101_class = new FORMAT_101();
+         main.format_101_class.compress_and_decompress_101_control_center();
+            
+            
+         // read the compressed obs (format 101) which is the only line in file HPK_format_101.txt
+         //
+         format_101_obs = "";
+         
+         final String volledig_path_format_101_compressed_file = main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + main.FORMAT_101_TEMP_DIR + java.io.File.separator + "HPK_" + main.FORMAT_101_INPUT_FILE;// NB adding "HPK_" to the input file name is automatically done by the C-code compression functions
+
+         try
+         {
+            BufferedReader in = new BufferedReader(new FileReader(volledig_path_format_101_compressed_file));
+                  
+            if ((format_101_obs = in.readLine()) == null)
+            {
+               String message = "[AWSR] when retrieveing format 101 data empty file: " + volledig_path_format_101_compressed_file;
+               main.log_turbowin_system_message(message);
+                  
+               format_101_obs = "";                // the function which invoke get_format_101_obs_from_file() will check this value
+               responseCode = main.INVALID_RESPONSE_FORMAT_101;
+            } // else
+                     
+            in.close();
+         } // try
+         catch (IOException | HeadlessException e)
+         {
+            String message = "[AWSR] when retrieving format 101 data error opening file: " + volledig_path_format_101_compressed_file;
+            main.log_turbowin_system_message(message);
+               
+            format_101_obs = "";                   // the function which invoke get_format_101_obs_from_file() will check this value
+            responseCode = main.INVALID_RESPONSE_FORMAT_101;
+         } // catch         
+      
+
+         return responseCode;
+               
+      } // protected Integer doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         try
+         {
+            Integer response_code = get();
+            
+            // continue if compressing went ok
+            //
+            if (Objects.equals(response_code, main.OK_RESPONSE_FORMAT_101))       // null save comparising
+            {   
+               // NB encoding:
+               // Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. This method uses the supplied encoding scheme to obtain 
+               // the bytes for unsafe characters.
+               // Note: The World Wide Web Consortium Recommendation states that UTF-8 should be used. Not doing so may introduce incompatibilites.
+               // 
+               // http://stackoverflow.com/questions/10786042/java-url-encoding-of-query-string-parameters:
+               // You only need to keep in mind to encode only the individual query string parameter name and/or value, not the entire URL, 
+               // for sure not the query string parameter separator character & nor the parameter name-value separator character =.
+               // String q = "random word 500 bank $";
+               // String url = "http://example.com/query?q=" + URLEncoder.encode(q, "UTF-8");
+               //
+               // Encode all 'not alloud' ASCII chars if not java.net.URISyntaxException (with index number in the URL string)
+               String encoded_format_101_obs = null;               
+               try 
+               {
+                  encoded_format_101_obs = URLEncoder.encode(format_101_obs, "UTF-8");
+               } 
+               catch (UnsupportedEncodingException ex) 
+               {
+                  response_code = main.RESPONSE_UNSUPPORTED_ENCODING;
+               }
+               
+               // continue if the encoding was ok
+               if (!Objects.equals(response_code, main.RESPONSE_UNSUPPORTED_ENCODING))       // null save comparising
+               {   
+                  //String url = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?obs=" + encoded_format_101_obs;  
+                  String url = main.upload_URL + "obs=" + encoded_format_101_obs; 
+               
+                  URL obj = null;
+                  try 
+                  {
+                     obj = new URL(url);
+                     HttpURLConnection con = (HttpURLConnection)obj.openConnection();
+            
+                     // optional (default is GET)
+                     con.setRequestMethod("GET");  
+                  
+                     String message = "[AWSR] sending 'GET' request to URL: " + url;
+                     main.log_turbowin_system_message(message);
+     
+                     response_code = con.getResponseCode();                     // if internet available the default OK_RESPONSE_FORMAT_101 will be overwritten here
+                  
+                  } // try
+                  catch (MalformedURLException ex)
+                  {
+                     response_code = main.RESPONSE_MALFORMED_URL;
+                  }
+                  catch (IOException ex) 
+                  {
+                     response_code = main.RESPONSE_NO_INTERNET;
+                  } // catch            
+               } // if (!Objects.equals(response_code, main.RESPONSE_UNSUPPORTED_ENCODING))
+            } // if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_101)) 
+               
+               
+            // how to continue depends on response_code            
+            //
+            if (response_code == 200)          // OK
+            {
+               String message_a = "[AWSR] send obs success"; 
+               main.log_turbowin_system_message(message_a);
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_a); // update status field (bottom line main -progress- window) 
+               
+               // save data to immt log and clear main screen
+               //
+               // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+               //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+               //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+               //
+               if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                 (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+               {          
+                  //....RS232_make_APR_pressure_IMMT_ready();                        // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                  main.IMMT_log();
+               }
+               main.Reset_all_meteo_parameters();
+            }  
+            else // send obs NOT ok or compresing NOT ok or encoding NOT ok
+            {
+               // NB besides the response code there is also a corresponding response text, but unfortunately with html tags, 
+               //    and only with the standard response codes, self defined response codes are not returned?. Not suitable for direct using it into a popup message box
+               //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
+               
+               // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
+               //    (if internet avaialble the response code will be overwritten with eg 200)
+                     
+		         String message_b = "[AWSR] send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+                  
+               // file logging
+               main.log_turbowin_system_message(message_b);
+                  
+               // bottom main screen
+               main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message_b); 
+               
+               // so even no success after a retry, but now save the data to IMMT because no further attempts will follow (and the data was not saved before)
+               if (retry)
+               {
+                  // save data to immt log and clear main screen
+                  //
+                  // NB in some rare occasions it is possible that within 1 second the obs will be send twice
+                  //    (somethimes if the wifi/ethernet connection is bridged) and in that case a misformed record will be writkten to the IMMT log
+                  //    to prevent this check the date/time and position elements (because after the first upload they were reset)
+                  //
+                  if ( (!mydatetime.year.equals("")) && (!mydatetime.MM_code.equals("")) && (!mydatetime.YY_code.equals("")) && (!mydatetime.GG_code.equals("")) &&                     
+	                    (!myposition.Qc_code.equals("")) && (!myposition.lalala_code.equals("")) && (!myposition.lolololo_code.equals("")) )
+                  {
+                     //....RS232_make_APR_pressure_IMMT_ready();                     // pressure in IMMT will only be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                     main.IMMT_log();
+                  }   
+                  main.Reset_all_meteo_parameters();
+               } // if retry
+            } // else (send obs NOT ok
+            
+            // for checking if a upload retry will be necessary [ see unction ...
+            APR_server_response_code = response_code;
+               
+         } // try
+         catch (InterruptedException | ExecutionException ex) 
+         {   
+            String message = "[AWSR] error in Function: RS422_Send_Sensor_Data_To_AWSR(); no internet connection available?; " + ex.toString(); 
+            main.log_turbowin_system_message(message);
+            main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
+         }
+      } // protected void done()
+   }.execute(); // new SwingWorker<Void, Void>()
+   
+}
+*/
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private boolean RS422_Set_Date_Time_Obs_And_IMMT_For_AWSR(String record_aws_date, String record_aws_time)
+{
+   // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
+   //
+   // NB record_aws_date format: yyyyMMdd
+   // NB record_aws_time format: HHmmss
+   
+   int len = 0;
+   boolean record_date_time_ok = true;
+   
+   
+   if ((record_aws_date.length() != 8) || (record_aws_time.length() != 6))
+   {
+      record_date_time_ok = false;  
+      String message = "[AWSR] AWS date/time last saved record format not ok";
+      main.log_turbowin_system_message(message);
+   }
+   
+   if (record_date_time_ok)
+   {   
+      SimpleDateFormat sdf9 = new SimpleDateFormat("yyyyMMddHHmm");                      // HH hour in day (0-23) note there is also hh (then also with am, pm); July = 07 !!
+      sdf9.setTimeZone(TimeZone.getTimeZone("UTC"));
+   
+      String hulp_record_datum_tijd_minuten = record_aws_date + record_aws_time.substring(0, 4);    // eg final result : 202303940927
+      Date hulp_record_date = null;
+      try 
+      {
+         hulp_record_date = sdf9.parse(hulp_record_datum_tijd_minuten);
+         
+         Calendar hulp_cal = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));          // UTC
+         hulp_cal.setTime(hulp_record_date);
+         hulp_cal.getTime();
+         
+         int hulp_cal_minute_local = hulp_cal.get(Calendar.MINUTE);
+         
+         if (hulp_cal_minute_local > 30)
+         {
+            hulp_cal.add(Calendar.HOUR_OF_DAY, 1);   // add 1 hour
+            hulp_cal.getTime();
+         }
+         
+         int hulp_year          = hulp_cal.get(Calendar.YEAR);         // e.g. 2023
+         int hulp_month         = hulp_cal.get(Calendar.MONTH);        // The first month of the year is JANUARY which is 0
+         int hulp_day_of_month  = hulp_cal.get(Calendar.DAY_OF_MONTH); // The first day of the month has value 1
+         int hulp_hour_of_day   = hulp_cal.get(Calendar.HOUR_OF_DAY);
+         
+         mydatetime.year  = Integer.toString(hulp_year);                // e.g. 2023    
+         mydatetime.month = Integer.toString(hulp_month + 1);           // now  mydatetime.month [1 .. 12]                        
+         mydatetime.day   = Integer.toString(hulp_day_of_month);        // [1 .. 31]     
+         mydatetime.hour  = Integer.toString(hulp_hour_of_day);         // [0 .. 23]       
+
+         // determine code figures for month (for obs and IMMT)
+         //
+         mydatetime.MM_code = mydatetime.month;                                 // mydatetime.month [1 .. 12]            
+
+         len = 2;                                                               // MM_code always 2 characters width e.g. 03
+         if (mydatetime.MM_code.length() < len)                                 // pad on left with zeros
+         {
+            mydatetime.MM_code = "0000000000".substring(0, len - mydatetime.MM_code.length()) + mydatetime.MM_code;
+         }
+         
+         // determine code figures for day of the month (for obs and IMMT)
+         //
+         mydatetime.YY_code = mydatetime.day;                                   // mydatetime.day e.g. 1,2,11,23,29
+
+         len = 2;                                                               // YY_code always 2 characters width e.g. 03
+         if (mydatetime.YY_code.length() < len)                                 // pad on left with zeros
+         {
+            mydatetime.YY_code = "0000000000".substring(0, len - mydatetime.YY_code.length()) + mydatetime.YY_code;
+         }
+
+         // determine code figures for hour of day (for obs and IMMT)
+         //
+         mydatetime.GG_code = mydatetime.hour;                                  // mydatetime.hour e.g. 0,1,2,11,23
+
+         len = 2;                                                               // GG_code always 2 characters width e.g. 03
+         if (mydatetime.GG_code.length() < len)                                 // pad on left with zeros
+         {
+            mydatetime.GG_code = "0000000000".substring(0, len - mydatetime.GG_code.length()) + mydatetime.GG_code;
+         }         
+         
+      } // try
+      catch (ParseException ex) 
+      {
+         record_date_time_ok = false;
+         String message = "[AWSR] AWS date/time last saved record format not ok (" + ex + ")";
+         main.log_turbowin_system_message(message);
+      }
+   } //  if (record_date_time_ok)
+   
+   
+   return record_date_time_ok;
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/
+private void RS422_Read_And_Send_Sensor_Data_For_AWSR(final boolean retry)
+{
+   // check the presence of the various meteo parameters in the data received from an AWS (data stored by TurboWin+ in sensor data files)
+   
+   // called from: Function RS422_V3_write_sensor_data_to_file() [file main_RS232_RS422.java]
+   //
+   
+   
+   // 3201312130055180596059842742000955055999202112502009000              44PDZS   NL 314    0075300722           A411111111119999111111 06907106000002080151111 11100764 8951932 BLOKZYL RR
+   // 32018061308745900210                                  0              44TESTNL UK 314        2   35           A599999999999999191191                    9999 9990530001234567 
+   // 32018061312745900210                                  0              44TESTNL US 314        2   35           A599999999999999191191              12839999 9110530001234567 
+   // 32018061313745900210                                  0              44TESTNL US 314        2   35           A599999999999999191191              12839999 9110530001234567 
+   // 32018061314745900210                                  0              44TESTNL US 314        2   35           A599999999999999191191              12839999 9110530001234567 
+
+   
+   // initialisation
+   RS422_initialise_AWS_Sensor_Data_For_AWSR();
+   
+  
+   new SwingWorker<String, Void>()
+   {
+      @Override
+      protected String doInBackground() throws Exception
+      {
+         main.obs_file_datum_tijd = new GregorianCalendar();
+         main.obs_file_datum_tijd.add(Calendar.MINUTE, -2);     // of is -1 ook goed????? : to be sure there was all time that it was written to the file
+         File sensor_data_file;
+         String record         = null;
+         String last_record    = null;
+
+         // determine sensor data file name
+         String sensor_data_file_naam_datum_tijd_deel = main.sdf3.format(main.obs_file_datum_tijd.getTime()); // e.g. 2013020308
+         String sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
+
+         // first check if there is a sensor data file present (and not empty)
+         String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
+         //System.out.println("+++ te openen file voor obs: "+ volledig_path_sensor_data);
+
+         sensor_data_file = new File(volledig_path_sensor_data);
+         if (sensor_data_file.exists() && sensor_data_file.length() > 0)     // length() in bytes
+         {
+            try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data)))
+            {
+               record         = "";
+               last_record    = "";
+
+               while ((record = in.readLine()) != null)
+               {
+                  if (record.length() > 43)               // arbitrary but > $PEUMB + yyyymmdduu + TOTAL_NUMBER_RECORD_COMMAS
+                  {
+                     if ( (record.substring(0, 6).equals("$PEUMB")) && (record.indexOf(sensor_data_file_naam_datum_tijd_deel) != -1) )
+                     {
+                        last_record = record;
+                     }
+                  } // if (record.length() > 43)  
+               } // while ((record = in.readLine()) != null)
+            } // try
+            catch (IOException ex) 
+            {  
+               last_record = "";
+               System.out.println("--- Function RS422_Read_And_Send_Sensor_Data_For_AWSR(): " + ex);
+            }
+         } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
+         else // no sensor_data_file present
+         {
+            last_record = null;
+         }
+           
+         return last_record;
+            
+      } // protected Void doInBackground() throws Exception
+
+      @Override
+      protected void done()
+      {
+         boolean doorgaan_in_record = true;
+         int number_read_commas;
+         int pos;
+         String record_aws_date = ""; // will be passed to function: RS422_Check_Date_Time_Last_Saved_Record_For_AWSR()
+         String record_aws_time = ""; // will be passed to function: RS422_Check_Date_Time_Last_Saved_Record_For_AWSR()
+         boolean set_date_time_record_ok = false;
+         boolean check_date_time_record_ok = false;
+
+            
+         String laatste_record = null;
+         try 
+         {
+            laatste_record = get();
+         } 
+         catch (InterruptedException | ExecutionException ex) 
+         {
+            String message = "[AWSR] error retrieving AWS data from sensor data file; " + ex.toString();
+            main.log_turbowin_system_message(message);
+         }
+            
+         if (laatste_record == null)
+         {
+            String message = "[AWSR] no sensor data file exists or file empty";
+            main.log_turbowin_system_message(message);    
+            doorgaan_in_record = false;
+         }
+         else if (laatste_record.equals(""))
+         {
+            String message = "[AWSR] sensor data file found but no records found or misformed records";
+            main.log_turbowin_system_message(message); 
+            doorgaan_in_record = false;
+         }
+            
+            
+         if (doorgaan_in_record == true && laatste_record != null) 
+         {
+            // Check the number of comma's in the record that must exactely match the fixed expected number (TOTAL_NUMBER_RECORD_COMMAS)
+            number_read_commas = 0;
+            pos = -1;
+
+            do 
+            {
+               pos = laatste_record.indexOf(",", pos + 1);
+               if (pos > 0) // "," found
+               {
+                  number_read_commas++;
+               }
+            } while (pos > 0);
+
+            //System.out.println("+++ record = " + laatste_record);
+            //System.out.println("+++ number read commas = " + number_read_commas);
+            if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS) 
+            {
+               doorgaan_in_record = false;
+            }
+         } // if (doorgaan_in_record == true)
+
+         if (doorgaan_in_record == true && laatste_record != null) 
+         {
+            number_read_commas = 0;
+            pos = -1;
+
+            do 
+            {
+               // NB eg:
+               // $PEUMB,20120715,090227,52.405, 5.338,192.0,5.2,184.0, 997.4,998.6,2.3,2,16.0,87.5, ,9.4,98.5,12.4,55.2,15.2,44.0,24.2,18.8,-38,,,201207150902
+               pos = laatste_record.indexOf(",", pos + 1);    // searching "," from position "pos + 1"
+               if (pos > 0) // "," found
+               {
+                  number_read_commas++;
+
+                  //////////////////// Date /////////////////
+                  //
+                  // format 101:
+                  //   mydatetime.year
+                  //   mydatetime.MM_code
+                  //   mydatetime.day 
+                  //
+                  // extra for IMMT:
+                  //   mydatetime.YY_code
+                  //
+                  if (number_read_commas == main.DATE_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           record_aws_date = laatste_record.substring(pos + 1, pos2);                                                  // YYYYMMDD
+                           //mydatetime.day = record_aws_date.substring(record_aws_date.length() - 2);                                   // DD eg "12" or "02"
+                           //mydatetime.MM_code = record_aws_date.substring(record_aws_date.length() - 4, record_aws_date.length() - 2); // MM
+                           //mydatetime.year = record_aws_date.substring(0, record_aws_date.length() - 4);                               // YYYY 
+                           //mydatetime.YY_code = mydatetime.day; // in case this AWS record it is always the same! (not in case manual input)
+                        } // if (pos2 - pos >= 2)
+                     }
+                  } // if (number_read_commas == etc.     
+                  
+                  
+                  ////////////////// Time /////////////////
+                  //
+                  // see also:  Function RS422_Set_Date_Time_Obs_And_IMMT_For_AWSR()
+                  //            Function RS422_Check_Date_Time_Last_Saved_Record_For_AWSR()
+                  //            (called from within this function just for sending)
+                  //
+                  //
+                  // format 101: see: 'see also' above
+                  //
+                  // extra for IMMT: see:  'see also' above
+                  //
+                  if (number_read_commas == main.TIME_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           record_aws_time = laatste_record.substring(pos + 1, pos2);
+                           //if (record_aws_time.length() == 6) // HHMMSS
+                           //{
+                           //   mydatetime.hour = record_aws_time.substring(0, 2);      // HH from HHMMSS
+                           //   mydatetime.GG_code = mydatetime.hour; // in case this AWS record it is always the same! (not in case manual input)
+                           //}
+                        } // if (pos2 - pos >= 2)
+                     }
+                  } // if (number_read_commas == etc.  
+                  
+
+                  
+                  ////////////////// Latitude [SMD output format sDD.ddd; s = "-" if South; + always omitted] //////////////////
+                  //
+                  // for format101:
+                  //   myposition.int_latitude_degrees
+                  //   myposition.int_latitude_minutes
+                  //   myposition.latitude_hemisphere
+                  //
+                  // extra for IMMT:
+                  //   (myposition.Qc_code) 
+                  //   myposition.lalala_code
+                  //
+                  if (number_read_commas == main.LATITUDE_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_latitude = laatste_record.substring(pos + 1, pos2);
+
+                           if (record_aws_latitude.indexOf("-") != -1) // found "-" in string
+                           {
+                              myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH; //"South";
+                              myposition.latitude_degrees = record_aws_latitude.substring(1, record_aws_latitude.indexOf("."));   // -12.344 -> 12
+                           } 
+                           else 
+                           {
+                              myposition.latitude_hemisphere = myposition.HEMISPHERE_NORTH; //"North";
+                              myposition.latitude_degrees = record_aws_latitude.substring(0, record_aws_latitude.indexOf("."));   // 12.344 -> 12
+                           }
+                           
+                           // String latitude convert to integer
+                           try 
+                           {
+                              myposition.int_latitude_degrees = Integer.parseInt(myposition.latitude_degrees.trim());
+                           }
+                           catch (NumberFormatException e){ }   
+
+                           double decimal_degrees_lat = Double.parseDouble(record_aws_latitude);
+                           myposition.int_latitude_minutes = (int) Math.round((decimal_degrees_lat - Math.floor(decimal_degrees_lat)) * 60);
+                           
+                           
+                           // for IMMT
+                           //
+                           //
+                           // NB myposition.Qc_code will be determined in the Longitude section (see below)
+                           
+                           int int_latitude_minutes_6 = myposition.int_latitude_minutes / 6;               // devide the minutes by six and disregard the remainder
+                           String latitude_minutes_6 = Integer.toString(int_latitude_minutes_6);           // convert to String 
+         
+                           myposition.lalala_code = myposition.latitude_degrees.trim().replaceFirst("^0+(?!$)", "") + latitude_minutes_6;
+
+                           int len = 3;                                                                    // always 3 chars
+                           if (myposition.lalala_code.length() < len) 
+                           { 
+                              // pad on left with zeros
+                              myposition.lalala_code = "0000000000".substring(0, len - myposition.lalala_code.length()) + myposition.lalala_code;
+                           }                           
+                           
+                        } // if (pos2 - pos >= 2)
+                     } // if (laatste_record.length() etc.
+                  } // if (number_read_commas == etc.    
+                  
+                  
+                  ////////////// Longitude [SMD output format sDDD.ddd; s = "-" if West; + always omitted] ////////////////
+                  //
+                  // for format101:
+                  //   myposition.int_longitude_degrees
+                  //   myposition.int_longitude_minutes
+                  //   myposition.longitude_hemisphere
+                  //
+                  // extra for IMMT:
+                  //   myposition.Qc_code
+                  //   myposition.lolololo_code
+                  //
+                  if (number_read_commas == main.LONGITUDE_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_longitude = laatste_record.substring(pos + 1, pos2);
+
+                           if (record_aws_longitude.indexOf("-") != -1) // found "-" in string
+                           {
+                              myposition.longitude_hemisphere = myposition.HEMISPHERE_WEST; //"West";
+                              myposition.longitude_degrees = record_aws_longitude.substring(1, record_aws_longitude.indexOf("."));   // -12.344 -> 12
+                           } 
+                           else 
+                           {
+                              myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST; //"East";
+                              myposition.longitude_degrees = record_aws_longitude.substring(0, record_aws_longitude.indexOf("."));   // 12.344 -> 12
+                           }
+                           
+                           // String longitude omzetten naar integer
+                           try 
+                           {
+                              myposition.int_longitude_degrees = Integer.parseInt(myposition.longitude_degrees.trim());
+                           }
+                           catch (NumberFormatException e){ }
+
+                           double decimal_degrees_lon = Math.abs(Double.parseDouble(record_aws_longitude));
+                           myposition.int_longitude_minutes = (int) Math.round((decimal_degrees_lon - Math.floor(decimal_degrees_lon)) * 60);
+                           
+                           // for IMMT
+                           //
+                           int int_longitude_minutes_6 = myposition.int_longitude_minutes / 6;               // devide the minutes by six and disregard the remainder
+                           String longitude_minutes_6 = Integer.toString(int_longitude_minutes_6);           // convert to String 
+         
+                           myposition.lolololo_code = myposition.longitude_degrees.trim().replaceFirst("^0+(?!$)", "") + longitude_minutes_6;
+         
+                           int len = 4;                                                                          // always 4 chars
+                           if (myposition.lolololo_code.length() < len)                                      // pad on left with zeros
+                           {
+                              myposition.lolololo_code = "0000000000".substring(0, len - myposition.lolololo_code.length()) + myposition.lolololo_code;
+                           }    
+                           
+                           // myposition.Qc_code (must come after latitude_hemisphere and longitude_hemisphere is determined)
+                           if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+                           {
+                              myposition.Qc_code = "1";
+                           }
+                           else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true))
+                           {
+                              myposition.Qc_code = "3";
+                           }
+                           else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+                           {
+                              myposition.Qc_code = "5";
+                           }
+                           else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true) && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+                           {
+                              myposition.Qc_code = "7";
+                           }
+
+                        } // if (pos2 - pos >= 2)
+                     }  
+                  } // if (number_read_commas == etc.                                     
+
+                  
+                  //////////////// Course Over Ground (COG) [SMD output format CCC.c] ////////////////
+                  //
+                  // for format101:
+                  //   myposition.Ds_code
+                  //
+                  if (number_read_commas == main.COG_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_COG = laatste_record.substring(pos + 1, pos2);
+
+                           int int_COG = (int) Math.round(Double.parseDouble(record_aws_COG));
+
+                           if (int_COG == 0) 
+                           {
+                              int_COG = 360;
+                           }
+
+                           
+                           // determine code figure course
+                           //
+                           // NB "stationary" not possible with AWS COG reporting (so no myposition.Ds_code = "0";)
+                           if (int_COG >= 23 && int_COG <= 67)                                              // NE
+                           {
+                              myposition.Ds_code = "1";
+                           }
+                           else if (int_COG >= 68 && int_COG <= 112)                                        // E 
+                           {
+                              myposition.Ds_code = "2";
+                           }
+                           else if (int_COG >= 113 && int_COG <= 157)                                       // SE
+                           {
+                              myposition.Ds_code = "3";
+                           }
+                           else if (int_COG >= 158 && int_COG <= 202)                                       // S
+                           {
+                              myposition.Ds_code = "4";
+                           }
+                           else if (int_COG >= 203 && int_COG <= 247)                                       // SW
+                           {
+                              myposition.Ds_code = "5";
+                           }
+                           else if (int_COG >= 248 && int_COG <= 292)                                       // W
+                           {
+                              myposition.Ds_code = "6";
+                           }
+                           else if (int_COG >= 293 && int_COG <= 337)                                       // NW
+                           {
+                              myposition.Ds_code = "7";
+                           }
+                           else if ((int_COG >= 338 && int_COG <= 360) || (int_COG >= 0 && int_COG <= 022)) // N
+                           {
+                              myposition.Ds_code = "8";
+                           }
+                           else
+                           {
+                              myposition.Ds_code = "9";                                                    // no information (could be Ds_code = "/" also, because two options to code Ds undefined)
+                           }
+                           
+                           // IMMT
+                           //
+                           // NB there is no 'stationary' in case of COG reporting in SMD output format
+                           if (int_COG <= 9)
+                           {
+                              mywind.COG_code = "00" +  Integer.toString(int_COG);         // 3 char
+                           }
+                           else if (int_COG >= 10 && int_COG <= 99)
+                           {
+                              mywind.COG_code = "0" +  Integer.toString(int_COG);          // 3 char
+                           }
+                           else if (int_COG >= 100 && int_COG <= 360)
+                           {
+                              mywind.COG_code = Integer.toString(int_COG);                 // 3 char
+                           }
+                           else
+                           {
+                              mywind.COG_code = "///";                                     // 3 char
+                           }
+                        } // if (pos2 - pos >= 2)
+                     } // if (record.length() > number_read_commas + 12)
+                  } // if (number_read_commas == etc.
+                  
+                  
+                  ///////////////// Speed Over Ground (SOG) [SMD output format SS.s] ////////////////
+                  //
+                  // for format101:
+                  //   myposition.vs_code
+                  //
+                  if (number_read_commas == main.SOG_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           String record_aws_SOG = laatste_record.substring(pos + 1, pos2);  // in m/s
+                           double double_SOG = Double.parseDouble(record_aws_SOG);           // in m/s
+                           int int_SOG = (int) Math.round(double_SOG * M_S_TO_KNOTS);        // in knots rounded
+                           myposition.SOG_APR_wind = double_SOG * M_S_TO_KNOTS;              // in knots not rounded; NB SOG_APR_wind in AWSR will be used only if the port mode option is set (= cancel APR/AWSR uploads is ship speed < 0.5 knot)
+
+                           // determine code figure speed
+                           if (int_SOG < 1)
+                           {
+                              myposition.vs_code = "0";
+                           }
+                           else if (int_SOG >= 1 && int_SOG <= 5)
+                           {
+                              myposition.vs_code = "1";
+                           }
+                           else if (int_SOG >= 6 && int_SOG <= 10)
+                           {
+                              myposition.vs_code = "2";
+                           }
+                           else if (int_SOG >= 11 && int_SOG <= 15)
+                           {
+                              myposition.vs_code = "3";
+                           }
+                           else if (int_SOG >= 16 && int_SOG <= 20)
+                           {
+                              myposition.vs_code = "4";
+                           }
+                           else if (int_SOG >= 21 && int_SOG <= 25)
+                           {
+                              myposition.vs_code = "5";
+                           }
+                           else if (int_SOG >= 26 && int_SOG <= 30)
+                           {
+                              myposition.vs_code = "6";
+                           }
+                           else if (int_SOG >= 31 && int_SOG <= 35)
+                           {
+                              myposition.vs_code = "7";
+                           }
+                           else if (int_SOG >= 36 && int_SOG <= 40)
+                           {
+                              myposition.vs_code = "8";
+                           }
+                           else if (int_SOG > 40)
+                           {
+                              myposition.vs_code = "9";
+                           }
+                           else
+                           {
+                              myposition.vs_code = "/";
+                           }
+                           
+                           // IMMT
+                           //
+                           if (int_SOG <= 9)
+                           {
+                              mywind.SOG_code = "0" + Integer.toString(int_SOG);           // 2 char
+                           }
+                           else if (int_SOG >= 10 && int_SOG <= 99)
+                           {
+                              mywind.SOG_code = Integer.toString(int_SOG);                 // 2 char
+                           }
+                           else
+                           {
+                             mywind.SOG_code = "//";                                       // 2 char
+                           }
+                           
+                        } // if (pos2 - pos >= 2)
+                     } // if (record.length() > number_read_commas + 12)
+                  } // if (number_read_commas == etc.
+                  
+                  
+                  ///////////////// max height deck cargo (SLL only for IMMT) ///////////////////
+                  //
+                  //
+                  //
+                  //
+                  int int_max_height_deck_cargo = main.INVALID;
+                  try 
+                  {
+                     int_max_height_deck_cargo = Integer.parseInt(main.max_height_deck_cargo.trim());
+                  }
+                  catch (NumberFormatException e)
+                  {
+                     int_max_height_deck_cargo = main.INVALID;
+                  }
+                  
+                  if (int_max_height_deck_cargo <= 9)
+                  {
+                     mywind.SLL_code = "0" + Integer.toString(int_max_height_deck_cargo);      // 2 char
+                  }
+                  else if (int_max_height_deck_cargo >= 10 && int_max_height_deck_cargo <= 99)
+                  {
+                     mywind.SLL_code = Integer.toString(int_max_height_deck_cargo);            // 2 char
+                  }
+                  else
+                  {
+                     mywind.SLL_code = "//";                                                   // 2 char
+                  }
+                  
+                  
+       
+                  /////////////// departure of reference level (sl and hh, format 101 and IMMT) ///////////////
+                  //
+                  //
+                  //
+                  //
+                  //
+                  
+                  //int int_difference_sll_wl = main.INVALID;  // local var (NB there is also a global var mywind.int_difference_sll_wl)
+                  //try 
+                  //{
+                  //   int_difference_sll_wl = Integer.parseInt(main.diff_sll_wl.trim());
+                  //}
+                  //catch (NumberFormatException e)
+                  //{
+                  //   int_difference_sll_wl = main.INVALID;
+                  //}
+                  //
+                  //if (int_difference_sll_wl >= -10 && int_difference_sll_wl < 0)
+                  //{
+                  //   mywind.sl_code = "1";                   // negative                          // 1 char
+                  //
+                  //   if (int_difference_sll_wl <= -10)
+                  //   {
+                  //      mywind.hh_code = Integer.toString(Math.abs(int_difference_sll_wl));       // 2 char
+                  //   }
+                  //   else // range -1 - -9
+                  //   {
+                  //      mywind.hh_code = "0" + Integer.toString(Math.abs(int_difference_sll_wl)); // 2 char
+                  //   }
+                  //} // if (int_difference_sll_wl >= -10 && int_difference_sll_wl < 0)
+                  //else if (int_difference_sll_wl >= 0 && int_difference_sll_wl < 50)
+                  //{
+                  //   mywind.sl_code = "0";                   // positive                          // 1 char
+                  //
+                  //   if (int_difference_sll_wl >= 0 && int_difference_sll_wl <= 9)
+                  //   {
+                  //      mywind.hh_code = "0" + Integer.toString(int_difference_sll_wl);           // 2 char
+                  //   }
+                  //   else // range 10 - 49
+                  //   {
+                  //      mywind.hh_code = Integer.toString(int_difference_sll_wl);                 // 2 char
+                  //   }
+                  //} // else if (int_difference_sll_wl > 0 && int_difference_sll_wl < 50)
+                  //else
+                  //{
+                  //   mywind.sl_code = "/";                                                        // 1 char
+                  //   mywind.hh_code = "//";                                                       // 2 char
+                  //} // else
+
+                  // NB
+                  // because in a automated situation (AWSR) most probable the diff. sll-wl will never be verified/updated (on the wind input page)
+                  // the sl_code(IMMT) and hh_code (IMMT) and mywind.int_difference_sll_wl (format101) will be set to 'not preset'
+                  
+                  // forma101:
+                  mywind.int_difference_sll_wl = main.INVALID;
+                  
+                  // IMMT
+                  // 
+                  mywind.sl_code = "/";                                                        // 1 char
+                  mywind.hh_code = "//";                                                       // 2 char
+                  
+                  
+                  
+                  //////////////////// True heading [SMD output format HHH.h] ///////////////////
+                  //
+                  // for format101:
+                  //   mywind.ship_heading
+                  //
+                  if (number_read_commas == main.HEADING_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_ship_heading = laatste_record.substring(pos + 1, pos2);
+                           double double_ship_heading = Double.parseDouble(record_aws_ship_heading);
+
+                           int int_ship_heading = (int) Math.round(double_ship_heading);
+
+                           if (int_ship_heading == 0) 
+                           {
+                              int_ship_heading = 360;
+                           }
+
+                           mywind.ship_heading = Integer.toString(int_ship_heading);
+                           
+                           // IMMT
+                           // 
+                           if (int_ship_heading <= 9)
+                           {
+                              mywind.HDG_code = "00" + Integer.toString(int_ship_heading);               // 3 char
+                           }
+                           else if (int_ship_heading >= 10 && int_ship_heading <= 99)
+                           {
+                              mywind.HDG_code = "0" + Integer.toString(int_ship_heading);                // 3 char
+                           }
+                           else if (int_ship_heading >= 100 && int_ship_heading <= 360)
+                           {
+                              mywind.HDG_code = Integer.toString(int_ship_heading);                       // 3 char
+                           }
+                           else
+                           {
+                              mywind.HDG_code = "///";                                                    // 3 char
+                           }
+
+                        } // if (pos2 - pos >= 2)
+                     } // if (record.length() > number_read_commas + 12)
+                  } // if (number_read_commas == etc.
+
+                  
+                  /////////////////////// air pressure at sensor height (read) [SMD output format PPPP.p] ////////////////////
+                  //
+                  // for format101:
+                  //   (main.pressure_reading_msl_yes_no)
+                  //   mybarometer.pressure_reading_corrected
+                  //
+                  //
+                  //
+                  if (number_read_commas == main.PRESSURE_SENSOR_HEIGHT_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           mybarometer.pressure_reading_corrected = laatste_record.substring(pos + 1, pos2);
+
+                           // by default for pressure value obtained from AWS!
+                           //mybarometer.pressure_reading = mybarometer.pressure_reading_corrected;
+
+                           // NB ic = 0.0 by default for pressure value obtained from AWS!
+                           
+                           //main.barometer_instrument_correction = "0.0";
+                        } // if (pos2 - pos >= 2)
+                     } // if (record.length() > number_read_commas + 12)
+                  } // if (number_read_commas == etc.
+
+                  
+                  /////////////////// air pressure MSL [SMD output format PPPP.p] /////////////////////
+                  //
+                  // for format101:
+                  //   mybarometer.pressure_msl_corrected
+                  //
+                  // IMMT:
+                  //   mybarometer.PPPP_code
+                  //
+                  if (number_read_commas == main.PRESSURE_MSL_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           double double_pressure_msl_corrected = main.INVALID;
+                           
+                           mybarometer.pressure_msl_corrected = laatste_record.substring(pos + 1, pos2);
+                           
+                           // NB ic = 0.0 by default for pressure value obtained from AWS!
+                           
+                           // IMMT
+                           try
+                           {
+                              double_pressure_msl_corrected = Double.parseDouble(mybarometer.pressure_msl_corrected.trim());
+                           }
+                           catch (NumberFormatException e) 
+                           { 
+                              double_pressure_msl_corrected = main.INVALID;
+                           }
+                           
+                           if (double_pressure_msl_corrected != main.INVALID)   
+                           {
+                              int num_PPPP_code = (int)Math.floor(double_pressure_msl_corrected * 10 + 0.5);
+
+                              // thousands of the air pressure value not in IMMT air pressure code
+                              if (num_PPPP_code >= 10000)
+                              {
+                                 num_PPPP_code -= 10000;
+                              }
+             
+                              mybarometer.PPPP_code = Integer.toString(num_PPPP_code);     // convert to string
+
+                              // NB PPPP_code always 4 characters width e.g. 0007 (accomplish via construction below)
+                              int len = 4;
+                              if (mybarometer.PPPP_code.length() < len)                                            // pad on left with zeros
+                              {
+                                 mybarometer.PPPP_code = "0000000000".substring(0, len - mybarometer.PPPP_code.length()) + mybarometer.PPPP_code;
+                              }
+                           } // if (double_pressure_msl != INVALID)
+                           
+                        } // if (pos2 - pos >= 2)
+                     } // if (record.length() > number_read_commas + 12)
+                  } // if (number_read_commas == etc.
+
+                   
+                  ///////////////// air pressure tendency over three three hours [SMD output format sPP.p] ///////////////////////
+                  //
+                  // for format101:
+                  //   mybarograph.pressure_amount_tendency
+                  //
+                  if (number_read_commas == main.PRESSURE_TENDENCY_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           double double_pressure_amount_tendency = main.INVALID;
+                           
+                           mybarograph.pressure_amount_tendency = laatste_record.substring(pos + 1, pos2);
+
+                           // IMMT
+                           //
+                           try
+                           {
+                              double_pressure_amount_tendency = Double.parseDouble(mybarograph.pressure_amount_tendency.trim());
+                           }
+                           catch (NumberFormatException e) 
+                           { 
+                              double_pressure_amount_tendency = main.INVALID;
+                           }
+                           
+                           
+                           if (double_pressure_amount_tendency != main.INVALID)
+                           {
+                              int num_ppp_code = (int)Math.floor(double_pressure_amount_tendency * 10 + 0.5);
+             
+                               mybarograph.ppp_code = Integer.toString(num_ppp_code);     // convert to string
+             
+                              // NB ppp_code always 3 characters width e.g. 017 (accomplish via construction below)
+                              int len = 3;
+                              if ( mybarograph.ppp_code.length() < len)                                            // pad on left with zeros
+                              {   
+                                 mybarograph.ppp_code = "0000000000".substring(0, len -  mybarograph.ppp_code.length()) +  mybarograph.ppp_code;
+                              }  
+                           } // if (double_pressure_amount_tendency != INVALID)
+                        } // if (pos2 - pos >= 2)
+                     } // if (record.length() > number_read_commas + 12)
+                  } // if (number_read_commas == etc.                              
+
+
+                  ////////////////// air pressure characteristic [SMD output format A] ///////////////
+                  //
+                  // for format101:
+                  //   mybarograph.a_code
+                  //
+                  //
+                  if (number_read_commas == main.PRESSURE_CHARACTERISTIC_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           mybarograph.a_code = laatste_record.substring(pos + 1, pos2);
+                        } // if (pos2 - pos >= 2)
+                     } // if (record.length() > number_read_commas + 12)
+                  } // if (number_read_commas == etc.    
+                
+                  
+                  //////////////////////// air temp [SMD output format sTA.a] /////////////
+                  //
+                  // for format101:
+                  //   mytemp.air_temp
+                  //
+                  // extra for IMMT:
+                  //   mytemp.sn_TTT_code (1 char)
+                  //   mytemp.TTT_code  (3 chr)
+                  //
+                  if (number_read_commas == main.AIR_TEMP_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char
+                        {
+                           mytemp.air_temp = laatste_record.substring(pos + 1, pos2);
+                           
+                           // for IMMT
+                           //
+                           double double_air_temp = main.INVALID;
+                           try 
+                           {
+                              double_air_temp = Double.parseDouble(mytemp.air_temp.trim());
+                           }
+                           catch (NumberFormatException e)
+                           {
+                              double_air_temp = main.INVALID;
+                           }
+                        
+                           if (double_air_temp != main.INVALID)
+                           {
+                              // Sn of TTT (only for IMMT)
+                              if (double_air_temp < 0)
+                              {
+                                 mytemp.sn_TTT_code = "1";
+                              }
+                              else
+                              {
+                                 mytemp.sn_TTT_code = "0";
+                              }
+           
+                              // TTT (only for IMMT)
+                              int num_TTT_code = (int)Math.floor(Math.abs(double_air_temp) * 10 + 0.5);
+                              mytemp.TTT_code = Integer.toString(num_TTT_code);     // convert to string      // or (alternative): Hw_code = String.valueOf(num_Hw_code);
+
+                              // NB TTT_code always 3 characters width e.g. 027 (accomplished via construction below)
+                              int len = 3;
+                              if (mytemp.TTT_code.length() < len)                                            // pad on left with zeros
+                              {   
+                                 mytemp.TTT_code = "0000000000".substring(0, len - mytemp.TTT_code.length()) + mytemp.TTT_code;
+                              }   
+  
+                              //JOptionPane.showMessageDialog(null, TTT_code, main.APPLICATION_NAME + " TTT code", JOptionPane.WARNING_MESSAGE);
+                           } // if (float_air_temp != INVALID)     
+                        } // if (pos2 - pos >= 2)
+                     } // if (laatste_record.length() > pos + 1 + 12)
+                  } // if (number_read_commas == etc.
+                  
+                  
+                  //////////////////////// relative humidity [SMD output format UUU.u] ///////////////
+                  //
+                  // for format101:
+                  //   mytemp.double_rv
+                  //
+                  // fot IMMT:
+                  //   RH (4 char)
+                  //   RHi (1 char)
+                  //
+                  if (number_read_commas == main.HUMIDITY_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char (e.g. "87.5")
+                        {
+                           mytemp.double_rv = Double.parseDouble(laatste_record.substring(pos + 1, pos2)) / 100;
+                           // NB "/100" for consistency with not AWS computed rh (see also main.temperatures_fields_update() and mytemp.OK_button_actioPerformed())
+
+                           
+                           // IMMT
+                           //
+                           // NB computing RH and RHi will be done in IMMT_log() [main.java]
+                           
+                        } // if (pos2 - pos >= 2)
+                     } // if (laatste_record.length() > pos + 1 + 12)
+                  } // if (number_read_commas == etc.
+                     
+
+                  /////////////////////////// SST [SMD output format sTW.w] ////////////////////
+                  //
+                  // for format101:
+                  //    mytemp.sea_water_temp
+                  //
+                  // for IMMT:
+                  //    ss_TsTsTs_code (1 char)
+                  //    TstsTs_code (3 char)
+                  //    immt_ss_indicator (1 char)
+                  //
+                  if (number_read_commas == main.SST_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between conmmas at least 1 char (e.g. 15.4)
+                        {
+                           mytemp.sea_water_temp = laatste_record.substring(pos + 1, pos2);
+                           
+                           // IMMT
+                           //
+                           double double_sea_water_temp = main.INVALID;
+                           try 
+                           {
+                              double_sea_water_temp = Double.parseDouble(mytemp.sea_water_temp.trim());
+                           }
+                           catch (NumberFormatException e)
+                           {
+                              double_sea_water_temp = main.INVALID;
+                           }
+                           
+                           
+                           if (double_sea_water_temp != main.INVALID)
+                           {
+                              // ss of TsTsTs and sst indicator (IMMT only)
+                              if (double_sea_water_temp < 0.0)
+                              {
+                                 if (main.sst_exposure.equals(main.INTAKE) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "1";                        // for obs and indirect also for immt (Sn calculation)
+                                    mytemp.immt_sst_indicator = "1";                    // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.BUCKET) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "3";                         // for obs and indirect also for immt
+                                    mytemp.immt_sst_indicator = "0";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.HULL_CONTACT_SENSOR) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "5";                         // for obs and indirect also for immt
+                                    mytemp.immt_sst_indicator = "3";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.TRAILING_THERMISTOR) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "7";                         // trailing thermistor not for obs but for IMMT
+                                    mytemp.immt_sst_indicator = "2";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.THROUGH_HULL_SENSOR) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "7";                         // through hull sensor not for obs but for IMMT
+                                    mytemp.immt_sst_indicator = "4";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.RADIATION_THERMOMETER) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "7";                         // radiation thermometer not for obs but for IMMT
+                                    mytemp.immt_sst_indicator = "5";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.BAIT_TANKS_THERMOMETER) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "7";                         // bait tanks thermometer not for obs but for IMMT
+                                    mytemp.immt_sst_indicator = "6";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.OTHER) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "7";                         // for obs and indirect also for immt
+                                    mytemp.immt_sst_indicator = "7";                     // only for immt log not for operational obs
+                                 }
+                              } // if (double_sea_water_temp < 0.0
+                              else // sst >= 0
+                              {
+                                 if (main.sst_exposure.equals(main.INTAKE) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "0";
+                                    mytemp.immt_sst_indicator = "1";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.BUCKET) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "2";
+                                    mytemp.immt_sst_indicator = "0";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.HULL_CONTACT_SENSOR) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "4";
+                                    mytemp.immt_sst_indicator = "3";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.TRAILING_THERMISTOR) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "6";                         
+                                    mytemp.immt_sst_indicator = "2";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.THROUGH_HULL_SENSOR) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "6";                         
+                                    mytemp.immt_sst_indicator = "4";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.RADIATION_THERMOMETER) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "6";                         
+                                    mytemp.immt_sst_indicator = "5";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.BAIT_TANKS_THERMOMETER) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "6";                         
+                                    mytemp.immt_sst_indicator = "6";                     // only for immt log not for operational obs
+                                 }
+                                 else if (main.sst_exposure.equals(main.OTHER) == true)
+                                 {
+                                    mytemp.ss_TsTsTs_code = "6";
+                                    mytemp.immt_sst_indicator = "7";                     // only for immt log not for operational obs
+                                 }
+                              } // else (sst >= 0)
+                 
+                              // TsTsTs (IMMT only)
+                              int num_TsTsTs_code = (int)Math.floor(Math.abs(double_sea_water_temp) * 10 + 0.5);
+                              mytemp.TsTsTs_code = Integer.toString(num_TsTsTs_code);     // convert to string      // or (alternative): Hw_code = String.valueOf(num_Hw_code);
+              
+                              // NB TsTsTs_code always 3 characters width e.g. 127 (accomplish via construction below)
+                              int len = 3;
+                              if ( mytemp.TsTsTs_code.length() < len)   
+                              {
+                                 // pad on left with zeros
+                                 mytemp.TsTsTs_code = "0000000000".substring(0, len - mytemp.TsTsTs_code.length()) +  mytemp.TsTsTs_code;
+                              }
+                           } // if (float_sea_water != INVALID)   
+                        } // if (pos2 - pos >= 2)
+                     } // if (laatste_record.length() > pos + 1 + 12)
+                  } // if (number_read_commas == etc.
+                     
+
+                  /////////////////////// relative wind speed [SMD output format WS.r] //////////////////
+                  //
+                  // for format101:
+                  //   mywind.RWS_code
+                  //   (main.wind_units)
+                  //
+                  if (number_read_commas == main.RELATIVE_WIND_SPEED_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_relative_wind_speed = laatste_record.substring(pos + 1, pos2);
+                           Double double_relative_wind_speed = Double.parseDouble(record_aws_relative_wind_speed);
+
+                           // round to integer (NB already in m/s)
+
+                           // NB in this stage always m/s (by default in case of AWS SMD ouput data)
+                           mywind.int_relative_wind_speed = (int) Math.round(double_relative_wind_speed);
+                           
+                           if (mywind.int_relative_wind_speed <= 9)
+                           {
+                              mywind.RWS_code = "00" + Integer.toString(mywind.int_relative_wind_speed);              // 3 char
+                           }
+                           else if (mywind.int_relative_wind_speed >= 10 && mywind.int_relative_wind_speed <= 99)
+                           {
+                              mywind.RWS_code = "0" + Integer.toString(mywind.int_relative_wind_speed);               // 3 char
+                           }
+                           else if (mywind.int_relative_wind_speed >= 100 && mywind.int_relative_wind_speed <= 300)
+                           {
+                              mywind.RWS_code = Integer.toString(mywind.int_relative_wind_speed);                     // 3 char // so now in m/s or knots depending var. "main.wind_units"
+                           }
+                           else
+                           {
+                              mywind.RWS_code = "///";                                                                // 3 char
+                           }
+                        } // if (pos2 - pos >= 2)
+                     } // 
+                  } // if (number_read_commas == etc.
+                     
+                     
+                  ///////////////////// relative wind direction [SMD output format WDR.r] //////////////////
+                  //
+                  // for format101:
+                  //   mywind.RWD_code
+                  //
+                  if (number_read_commas == main.RELATIVE_WIND_DIR_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_relative_wind_dir = laatste_record.substring(pos + 1, pos2);
+                           double double_relative_wind_dir = Double.parseDouble(record_aws_relative_wind_dir);
+                           mywind.int_relative_wind_dir = (int) Math.round(double_relative_wind_dir);
+
+                           if (mywind.int_relative_wind_dir == mywind.WIND_DIR_VARIABLE)                             // variable (I think this will never met, but it makes no difference)
+                           {
+                              mywind.RWD_code = "999";                                               // not in IMMT description but possible in MQCS (in IMMT no entry for variable mmeasured wind)
+                           }
+                           else if (mywind.int_relative_wind_dir <= 9)
+                           {
+                              mywind.RWD_code = "00" + Integer.toString(mywind.int_relative_wind_dir);               // 3 char
+                           }
+                           else if (mywind.int_relative_wind_dir >= 10 && mywind.int_relative_wind_dir <= 99)
+                           {
+                              mywind.RWD_code = "0" + Integer.toString(mywind.int_relative_wind_dir);                // 3 char
+                           }
+                           else if (mywind.int_relative_wind_dir >= 100 && mywind.int_relative_wind_dir <= 360)
+                           {
+                              mywind.RWD_code = Integer.toString(mywind.int_relative_wind_dir);                      // 3 char
+                           }
+                           else
+                           {
+                              mywind.RWD_code = "///";                                                               // 3 char
+                           }                           
+                           
+                        } // if (pos2 - pos >= 2)
+                     }  
+                  } // if (number_read_commas == etc.          
+                     
+                  
+                  ///////////////////// true wind speed [SMD output format WS.t in m/s] /////////////////////
+                  //
+                  // for format101:
+                  //   mywind.int_true_wind_speed
+                  //   (main.wind_units)
+                  //
+                  // IMMT:
+                  //   mywind.ff_code
+                  //   mywind.iw_code
+                  //
+                  if (number_read_commas == main.TRUE_WIND_SPEED_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_true_wind_speed = laatste_record.substring(pos + 1, pos2);
+                           Double double_true_wind_speed = Double.parseDouble(record_aws_true_wind_speed);
+
+                           // NB in this stage it is always m/s
+                           mywind.int_true_wind_speed = (int) Math.round(double_true_wind_speed);
+                           
+                           // IMMT
+                           //
+                           // NB in case of AWS: by default wind speed units indicator = m/s was set and checked [mystationdata.java] (iw = 1)
+                           mywind.iw_code = "1";       // by defaut for AWS saved sensor data (see SMD output format)
+                           
+                           if (mywind.int_true_wind_speed <= 9)
+                           {
+                              mywind.ff_code = "0" + Integer.toString(mywind.int_true_wind_speed);
+                           }
+                           else if ((mywind.int_true_wind_speed >= 10) && (mywind.int_true_wind_speed <= 99))
+                           {
+                              mywind.ff_code = Integer.toString(mywind.int_true_wind_speed);
+                           }
+                        } // if (pos2 - pos >= 2)
+                     } // 
+                  } // if (number_read_commas == etc.
+                     
+
+                  /////////////////// true wind direction [SMD output format WDT.t] /////////////////
+                  //
+                  // for format101:
+                  //   mywind.int_true_wind_dir
+                  // 
+                  // IMMT:
+                  //   mywind.dd_code
+                  //
+                  if (number_read_commas == main.TRUE_WIND_DIR_COMMA_NUMBER) 
+                  {
+                     if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     {
+                        int pos2 = laatste_record.indexOf(",", pos + 1);
+                        if (pos2 - pos >= 2) // between commas at least 1 char
+                        {
+                           String record_aws_true_wind_dir = laatste_record.substring(pos + 1, pos2);
+                           double double_true_wind_dir = Double.parseDouble(record_aws_true_wind_dir);
+
+                           int int_true_wind_dir = (int) Math.round(double_true_wind_dir);
+
+                           if (int_true_wind_dir == 0) 
+                           {
+                              int_true_wind_dir = 360;
+                           }
+
+                           mywind.int_true_wind_dir = int_true_wind_dir;
+                           
+                           // IMMT
+                           //
+                           int int_hulp_true_wind_dir;
+                           int int_hulp_dd_code;
+                 
+                           // 1 - 4 degrees -> 360 deg 
+	                        if (int_true_wind_dir >= 1 && int_true_wind_dir <= 4)
+                           {
+	                           int_hulp_true_wind_dir = 360;
+                           }
+	                        else
+                           {
+	                           int_hulp_true_wind_dir = int_true_wind_dir;
+                           }
+            
+                           // rounding to tens
+                           int_hulp_dd_code = (int)Math.round((float)int_hulp_true_wind_dir / 10);
+                 
+                           // coding
+                           if (int_hulp_dd_code <= 9)
+                           {
+                              mywind.dd_code = "0" + Integer.toString(int_hulp_dd_code);
+                           }
+                           else if ((int_hulp_dd_code >= 10) && (int_hulp_dd_code <= 36))
+                           {
+                              mywind.dd_code = Integer.toString(int_hulp_dd_code);
+                           }
+
+                        } // if (pos2 - pos >= 2)
+                     } // if (laatste_record.length() > pos + 1 + 12)
+                  } // if (number_read_commas == etc.                              
+                  
+                     
+                  /*
+                     // max wind gust speed from 10min [format WSX.x]
+                     //
+                     else if (number_read_commas == main.TRUE_WIND_GUST_COMMA_NUMBER)
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              int int_true_wind_gust_speed;
+                              String record_aws_true_wind_gust_speed = laatste_record.substring(pos + 1, pos2);
+                              Double double_true_wind_gust_speed = Double.parseDouble(record_aws_true_wind_gust_speed);
+
+                              // convert if necessary and round to integer
+                              if (main.wind_units.indexOf(main.M_S) == -1) //  not m/s so convert to knots (see TurboWin+ menu:
+                              {
+                                 int_true_wind_gust_speed = (int) Math.round(double_true_wind_gust_speed * main.M_S_KNOT_CONVERSION); // NB int cast necessary for conversion from long (result from Math.round) to int
+                              } 
+                              else 
+                              {
+                                 int_true_wind_gust_speed = (int) Math.round(double_true_wind_gust_speed);
+                              }
+
+                              mywind.int_true_wind_gust_speed = int_true_wind_gust_speed;
+
+                              main.true_wind_gust_from_AWS_present = true;
+                           } // if (pos2 - pos >= 2)
+                        } // if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                     } // else if (number_read_commas == main.TRUE_WIND_GUST_COMMA_NUMBER)
+                     //
+                     // max wind gust direction from 10min [format WDX.x]
+                     //
+                     // -- not for displaying in TurboWin+
+                     //
+                     // supply voltage [format VV.v]
+                     //
+                     // -- not for displaying in TurboWin+
+                     //
+                     // internal temperature [format sTT.t]
+                     //
+                     // -- not for displaying in TurboWin+
+                     //
+                     // VOT (visual observation acquisition trigger) [format sNNN]
+                     //
+                     else if (number_read_commas == main.VOT_COMMA_NUMBER) 
+                     {
+                        if (laatste_record.length() > pos + 1 + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every record)
+                        {
+                           int pos2 = laatste_record.indexOf(",", pos + 1);
+                           if (pos2 - pos >= 2) // between commas at least 1 char
+                           {
+                              //String record_aws_VOT = laatste_record.substring(pos + 1, pos2);
+                              int int_VOT = Integer.parseInt(laatste_record.substring(pos + 1, pos2));
+                              //String hulp_VOT = Integer.toString(Math.abs(int_VOT));
+
+                              if (int_VOT < 0) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 //main.jTextField4.setText(hulp_VOT + " minutes to go before you can insert obervation parameters");
+                                 int_VOT = Math.abs(int_VOT) + 20;
+                                 String str_VOT = Integer.toString(int_VOT);
+                                 main.jTextField4.setText(str_VOT + " minutes to go before the obs will be sent by the AWS, please do not insert observation parameters");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 100) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("ship is in port (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 101) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("observations are not required in this area (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 102) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("the AWS transmitter is out of order (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 103) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("the AWS GPS is out of order (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else if (int_VOT == 104) 
+                              {
+                                 main.jTextField4.setForeground(Color.RED);
+                                 main.jTextField4.setText("AWS transmission is deactivated (no obs will be sent)");
+
+                                 main.jMenuItem46.setEnabled(false);                  // Obs to AWS
+                              } 
+                              else 
+                              {
+                                 main.jTextField4.setForeground(color_dark_green);
+                                 String str_VOT = Integer.toString(int_VOT);
+                                 main.jTextField4.setText(str_VOT + " minutes to go before the obs will be sent by the AWS, you can now insert observation parameters and select \"Output -> Obs to AWS\" ");
+
+                                 main.jMenuItem46.setEnabled(true);                  // Obs to AWS
+                              }
+
+                                       //System.out.println("+++ parameter VOT is aanwezig");
+                           } // if (pos2 - pos >= 2)
+                        } // 
+                     } // else if (number_read_commas == etc.   
+
+                     // SPARE
+                     //
+                     // -- not for displaying in TurboWin+
+                     // 
+                              //
+                     // SPARE
+                     // -- not for displaying in TurboWin+
+                     //
+                     // SPARE
+                     //
+                     // -- not for displaying in TurboWin+
+                     //
+                  */
+                  
+               } // if (pos > 0)
+            } while (pos > 0);
+
+         } //  if (doorgaan_in_record == true && laatste_record != null)    
+ 
+         // clear memory
+         //check_presence_parameter_system_datum_tijd    = null;
+         
+         // set and check the date time parameters for format101 obs and IMMT
+         set_date_time_record_ok = RS422_Set_Date_Time_Obs_And_IMMT_For_AWSR(record_aws_date, record_aws_time);
+         check_date_time_record_ok = RS422_Check_Date_Time_Last_Saved_Record_For_AWSR(record_aws_date, record_aws_time);
+         
+         // send the data
+         if (check_date_time_record_ok && set_date_time_record_ok)
+         {
+            RS232_APR_AWSR_send(retry);              // so also applicable for RS422 of OMC-140
+         }   
+         else
+         {
+            main.Reset_all_meteo_parameters();       // to be sure all the (possible) manual inserted data will be cleared
+         }
+      } // protected void done()
+
+   }.execute(); // new SwingWorker <Void, Void>()
+      
+} // private void RS422_Read_And_Send_Sensor_Data_For_AWSR(final boolean retry)
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+private void RS422_update_AWS_dasboard_values()
+{
+   // called from: RS422_Read_AWS_Sensor_Data_For_Display() [main_RS232_RS422.java]
+   
+   
+   new SwingWorker<Void, Void>()
+   {
+      @Override
+      protected Void doInBackground() throws Exception
+      {
+         // 'last update' date time [PC based]
+         //
+         //
+         dashboard_string_last_update_record_date_time = main.sdf_tsl_2.format(new Date()) + " UTC";   // new Date() -> always in UTC 
+   
+         
+         // measured at (date, time) [part of the outputs AWS string]
+         //
+         //
+         if (main.date_from_AWS_present)
+         {
+            dashboard_string_last_update_record_date = mydatetime.day + " " + mydatetime.month + " " + mydatetime.year;
+         }
+         else
+         {
+            dashboard_string_last_update_record_date = "";
+         }
+         
+         if (main.time_from_AWS_present)
+         {
+            dashboard_string_last_update_record_time = mydatetime.hour + ":" + mydatetime.minute;
+         }
+         else
+         {
+            dashboard_string_last_update_record_time = "";
+         }
+         
+         
+         
+         // latitude 
+         //
+         //
+         if (main.latitude_from_AWS_present)
+         {   
+            dashboard_string_last_update_record_latitude = myposition.latitude_degrees + "\u00B0" + myposition.latitude_minutes + "' " + myposition.latitude_hemisphere.substring(0, 1);
+         }
+         else
+         {
+            dashboard_string_last_update_record_latitude = "";
+         }
+           
+         
+         // longitude 
+         //
+         //
+         if (main.longitude_from_AWS_present)
+         {
+            dashboard_string_last_update_record_longitude = myposition.longitude_degrees + "\u00B0" + myposition.longitude_minutes + "' " + myposition.longitude_hemisphere.substring(0, 1);
+         }
+         else
+         {
+            dashboard_string_last_update_record_longitude = "";
+         }
+           
+         
+         // SOG
+         //
+         //
+         if (main.SOG_from_AWS_present)
+         {
+            dashboard_string_last_update_record_SOG = mywind.ship_ground_speed;
+         }
+         else
+         {
+            dashboard_string_last_update_record_SOG = "";
+         }
+         
+         
+         // COG
+         //
+         //
+         if (main.COG_from_AWS_present)
+         {
+            dashboard_string_last_update_record_COG = mywind.ship_ground_course;
+         }
+         else
+         {
+            dashboard_string_last_update_record_COG = "";
+         }
+        
+         
+         // Heading
+         //
+         //
+         if (main.true_heading_from_AWS_present)
+         {
+            dashboard_string_last_update_record_heading = mywind.ship_heading;
+         }
+         else
+         {
+            dashboard_string_last_update_record_heading = "";
+         }
+         
+   
+         // air pressure sensor_height
+         //
+         //
+         // NB if AWS connected always pressure with ic intergrated (contrary to only a barometer connected)
+         //
+         if (main.pressure_sensor_level_from_AWS_present)
+         {
+            // nb in case EUCAWS always ic integrated in barometer reading!
+            dashboard_double_last_update_record_sensor_level_pressure_ic = Double.parseDouble(mybarometer.pressure_reading);
+         } 
+         else
+         {
+            dashboard_double_last_update_record_sensor_level_pressure_ic = Double.MAX_VALUE;
+         }
+   
+   
+         // air pressure MSL
+         //
+         //
+         // NB if AWS connected always pressure with ic intergrated (contrary to only a barometer connected)
+         //
+         if (main.pressure_MSL_from_AWS_present)
+         {
+            dashboard_double_last_update_record_MSL_pressure_ic = Double.parseDouble(mybarometer.pressure_msl_corrected);
+         } 
+         else
+         {
+            dashboard_double_last_update_record_MSL_pressure_ic = Double.MAX_VALUE;
+         }
+         
+         
+         // air pressure tendency
+         //
+         //
+         //
+         if (main.pressure_tendency_from_AWS_present)                // set in Function: RS422_Read_AWS_Sensor_Data_For_Display()
+         {
+            dashboard_double_last_update_record_pressure_tendency = Double.parseDouble(mybarograph.pressure_amount_tendency);
+         }
+         else
+         {
+            dashboard_double_last_update_record_pressure_tendency = Double.MAX_VALUE;
+         }
+   
+   
+         // air temperature
+         //
+         //
+         if (main.air_temp_from_AWS_present)
+         {
+            dashboard_double_last_update_record_air_temp = Double.parseDouble(mytemp.air_temp);
+         } 
+         else
+         {
+            dashboard_double_last_update_record_air_temp = Double.MAX_VALUE;
+         }
+   
+         // humidity
+         //
+         //
+         if (main.rh_from_AWS_present)
+         {
+            double hulp_double_rv = Math.round(mytemp.double_rv * 10 * 100) / 10.0; // nb Math.round(xxx) - > geeft long terug  // NB * 100 for getting %
+           dashboard_double_last_update_record_humidity = hulp_double_rv;
+         } 
+         else
+         {
+            dashboard_double_last_update_record_humidity = Double.MAX_VALUE;
+         }        
+     
+   
+         // true wind dir
+         //
+         //
+         if (main.true_wind_dir_from_AWS_present)
+         {
+            dashboard_int_last_update_record_true_wind_dir = mywind.int_true_wind_dir;
+         }
+         else
+         {
+            dashboard_int_last_update_record_true_wind_dir = Integer.MAX_VALUE;        
+         }
+   
+   
+         // relative wind dir
+         //
+         //
+         if (main.relative_wind_dir_from_AWS_present) 
+         {
+            //dashboard_int_last_update_record_relative_wind_dir = Integer.parseInt(mywind.wind_dir);
+            dashboard_int_last_update_record_relative_wind_dir = mywind.int_relative_wind_dir;
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_relative_wind_dir = Integer.MAX_VALUE;
+         }
+         
+         
+         
+         // true wind gust dir
+         //
+         //
+         if (main.true_wind_gust_dir_from_AWS_present) 
+         {
+            dashboard_int_last_update_record_true_wind_gust_dir = mywind.int_true_wind_gust_dir;
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_true_wind_gust_dir = Integer.MAX_VALUE;
+         }
+   
+   
+         // true wind speed
+         //
+         //
+         if (main.true_wind_speed_from_AWS_present) 
+         {
+            // NB 4 options:
+            // 1) measured/observed in m/s   -> dashboard and graph in knots
+            // 2) measured/observed in m/s   -> dashboard and graph in m/s
+            // 3) measured/observed in knots -> dashboard and graph in knots
+            // 4) measured/observed in knots -> dashboard and graph in m/s
+            
+            
+            if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
+               {
+                  // rounding up! (11 m/s -> 21.4 knots -> roundend 21 knots = Bf 5 but 11 m/s = Bf 6 !!!)
+                  dashboard_int_last_update_record_true_wind_speed = (int) Math.round(mywind.double_true_wind_speed * main.M_S_KNOT_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
+               {
+                  dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed;    
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m);
+               }
+            }
+            else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
+               {
+                  dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed; 
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed); 
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m);
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
+               {
+                  dashboard_int_last_update_record_true_wind_speed = (int) Math.round(mywind.double_true_wind_speed * main.KNOT_M_S_CONVERSION);  
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  dashboard_int_last_update_record_true_wind_speed_10m = (int) Math.round(hulp_double_true_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+               }   
+            }
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_true_wind_speed = Integer.MAX_VALUE;
+         }
+   
+   
+         // relative wind speed
+         //
+         //
+         if (main.relative_wind_speed_from_AWS_present) 
+         {
+            // NB 4 options:
+            // 1) measured/observed in m/s   -> dashboard and graph in knots
+            // 2) measured/observed in m/s   -> dashboard and graph in m/s
+            // 3) measured/observed in knots -> dashboard and graph in knots
+            // 4) measured/observed in knots -> dashboard and graph in m/s
+            
+            if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
+               {
+                  dashboard_int_last_update_record_relative_wind_speed = (int) Math.round(mywind.double_relative_wind_speed * main.M_S_KNOT_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
+               {
+                  dashboard_int_last_update_record_relative_wind_speed = mywind.int_relative_wind_speed;   
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m);
+               }
+            }
+            else if (main.wind_units.indexOf(main.KNOTS) != -1)             // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
+               {
+                  dashboard_int_last_update_record_relative_wind_speed = mywind.int_relative_wind_speed; 
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed); 
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m);
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
+               {
+                  dashboard_int_last_update_record_relative_wind_speed = (int) Math.round(mywind.double_relative_wind_speed * main.KNOT_M_S_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_relative_wind_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  dashboard_int_last_update_record_relative_wind_speed_10m = (int) Math.round(hulp_double_relative_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+               }   
+            }
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_relative_wind_speed = Integer.MAX_VALUE;
+         }
+   
+   
+         // true wind gust speed
+         //
+         //
+         if (main.true_wind_gust_from_AWS_present) 
+         {
+            // NB 4 options:
+            // 1) measured/observed in m/s   -> dashboard and graph in knots
+            // 2) measured/observed in m/s   -> dashboard and graph in m/s
+            // 3) measured/observed in knots -> dashboard and graph in knots
+            // 4) measured/observed in knots -> dashboard and graph in m/s
+            
+            
+            if (main.wind_units.indexOf(main.M_S) != -1)                   // wind_units 'as measured' set to m/s by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
+               {
+                  dashboard_int_last_update_record_true_wind_gust = (int) Math.round(mywind.double_true_wind_gust_speed * main.M_S_KNOT_CONVERSION);
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m * main.M_S_KNOT_CONVERSION); 
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
+               {
+                  dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;  
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m);
+               }
+            }
+            else if (main.wind_units.indexOf(main.KNOTS) != -1)            // wind_units 'as measured' set to knots by observer in Maintenance -> Station data
+            {
+               if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)    // dashboard in knots
+               {
+                  dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed; 
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed); 
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m);
+               }
+               else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
+               {
+                  dashboard_int_last_update_record_true_wind_gust = (int) Math.round(mywind.double_true_wind_gust_speed * main.KNOT_M_S_CONVERSION);  
+                  
+                  // 10 m wind speed (only for wind radar dashboard)
+                  double hulp_double_true_wind_gust_speed_10m = RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  dashboard_int_last_update_record_true_wind_gust_10m = (int) Math.round(hulp_double_true_wind_gust_speed_10m * main.M_S_KNOT_CONVERSION);
+               }   
+            }
+         } 
+         else 
+         {
+            dashboard_int_last_update_record_true_wind_gust = Integer.MAX_VALUE;
+         }
+
+   
+         // SST
+         //
+         //
+         if (main.SST_from_AWS_present)
+         {
+            dashboard_double_last_update_record_sst = Double.parseDouble((mytemp.sea_water_temp));
+         }
+         else
+         {
+            dashboard_double_last_update_record_sst = Double.MAX_VALUE;        
+         }
+         
+         
+         // VOT
+         //
+         //
+         if (main.VOT_from_AWS_present)
+         {
+            dashboard_int_last_update_record_VOT = main.VOT;
+         }
+         else
+         {
+            dashboard_int_last_update_record_VOT = Integer.MAX_VALUE;
+         }
+  
+         return null;
+      } // protected Void doInBackground() throws Exception
+   }.execute(); // new SwingWorker<Void, Void>()
+
+}
+
+
+
+/***********************************************************************************************/
+/*                                                                                             */
+/*                                                                                             */
+/*                                                                                             */
+/***********************************************************************************************/  
+private double RS422_convert_wind_speed_to_10m(double wind_speed_at_anemometer_height)
+{
+	 //double num_hoogte_anemometer_ship;
+    //char* endptr;
+	 //string info                       = "\0";
+    //char char_hulpje[10];
+    //const double Zo                   = 0.0002;
+    //double herleidingsfactor;
+
+
+    /* om de wind van sensor hoogte naar 10 meter nivo te reduceren:                  */
+    /*                                                                                */
+    /* zie: Guide to Meteorological Instruments and Methods of Observation [WMO no.8] */
+    /*                                                                                */
+    /* Uc = U.Cf.Ct. ln(10/Zou) . ln(60/Zou) ln(10/Zo)                                */
+    /*               ---------    --------------------                                */
+    /*               ln(z/Zou)    ln(10/Zou) ln(60/Zo)                                */
+    /*                                                                                */
+    /* waarbij:                                                                       */
+    /* Uc = wind speed op 10 meter                                                    */
+    /* U = wind speed op sensor hoogte                                                */
+    /* z = sensor hoogte                                                              */
+    /* Zou = roughness length of the terrain upstream of the wind station             */
+    /* Z0 = rougness length in the application                                        */
+    /* Cf = flow distortion factor                                                    */
+    /* Ct = topographic correction                                                    */
+    /*                                                                                */
+    /* ter vereenvoudiging: Cf = 1                                                    */
+    /*                      Ct = 1                                                    */
+    /*                      Zo = Zou                                                  */
+    /* dan:                                                                           */
+    /*                                                                                */
+    /* Uc =  U. ln(10/Zo)                                                             */
+    /*          ---------                                                             */
+    /*          ln(z/Zo)                                                              */
+    /*                                                                                */
+    /*  volgens annex "the effective roughness length"van de zelfde publicatie        */
+    /* moet voor Zo voor "open sea, fetch at least 5 km" genomen worden 0.0002        */
+    /*                                                                                */
+    /*                                                                                */
+    /* voor het gemak: herleidingsfactor =  ln(10/Zo)                                 */
+    /*                                      ---------                                 */
+    /*                                      ln(z/Zo)                                  */
+    /*                                                                                */
+
+
+	// if (hoogte_anemometer_ship.compare("\0") != 0)
+   //	 {
+	//	 num_hoogte_anemometer_ship = strtod(hoogte_anemometer_ship.c_str(), &endptr);
+   //   if (num_hoogte_anemometer_ship >= 1 && num_hoogte_anemometer_ship <= 200)
+   //    {
+   //       herleidingsfactor = log(10 / Zo) / (log(num_hoogte_anemometer_ship / Zo));
+   //       num_true_wind_speed = int((double(num_true_wind_speed) * herleidingsfactor) + 0.5);
+//
+	//	    /* ook de obs_wind_speed omzetten */
+	//	    sprintf(char_hulpje, "%d", num_true_wind_speed);
+	//	    obs_wind_speed = string(char_hulpje);
+   //    }
+   //    else // hoogte buiten range
+	//    {
+	//	    info = "Height anemometer outside range 1 - 200 metres, windspeed unreliable. ";
+	//	    info += "Please correct anemometer height (Maintenance | Station data | fixed sea station).";
+	//	    MessageBox(info.c_str(), "TurboWin warning", MB_OK | MB_ICONWARNING);
+	//    } // else (hoogte buiten range
+//
+	// } // if (hoogte_anemometer.compare("\0") != 0)
+	// else // hoogte anemometer niet ingevuld
+	// {
+	//	 info = "Height anemometer not available, windspeed unreliable. ";
+	//	 info += "Please insert anemometer height (Maintenance | Station data | ship).";
+	//	 MessageBox(info.c_str(), "TurboWin warning", MB_OK | MB_ICONWARNING);
+	// } // else (hoogte anemometer niet ingevuld
+   
+   final double Zo = 0.0002;
+   int int_height_anemometer = Integer.MAX_VALUE;
+   double wind_speed_10m = main.INVALID;
+   
+   if (!main.height_anemometer.trim().equals(""))
+   {
+      try
+      {
+         int_height_anemometer = Integer.parseInt(main.height_anemometer);   
+      }
+      catch (NumberFormatException ex)
+      {
+          int_height_anemometer = Integer.MAX_VALUE;        
+      }       
+   } // if (!main.height_anemometer.trim().equals(""))
+   
+   
+   if ( (int_height_anemometer > 10 && int_height_anemometer < 200) && 
+        (wind_speed_at_anemometer_height >= 0 && wind_speed_at_anemometer_height < 500) )
+   {
+      double conversion_factor = Math.log(10 / Zo) / (Math.log(int_height_anemometer / Zo));
+  
+      wind_speed_10m = wind_speed_at_anemometer_height * conversion_factor;
+      
+   }
+   
+   
+   return wind_speed_10m;
+}
+
+public final static String WIND_FM13_DASHBOARD                                  = "wind_FM13_dashboard";
+public final static String WIND_101_DASHBOARD                                   = "wind_101_dashboard";
+/*
+private final String STRING_PRESSURE_INTERRUPTION_EXECUTIONEXEPTION_ERROR       = "11111111";
+private final String STRING_PRESSURE_RETRIEVING_ERROR                           = "11111112"; // number without significance (random)
+private final String STRING_PRESSURE_OUTSIDE_RANGE_ERROR                        = "11111113"; // number without significance (random)
+private final String STRING_PRESSURE_NUMBERFORMATECEPTION_ERROR                 = "11111114"; // number without significance (random)
+private final String STRING_PRESSURE_RECORD_GPS_ERROR                           = "11111115"; // number without significance (random)
+private final String STRING_PRESSURE_HEIGHT_CORRECTION_ERROR                    = "11111116"; // number without significance (random)
+private final String STRING_STARX_PART_OBSOLETE_ERROR                           = "11111117"; // number without significance (random)
+private final String STRING_PRESSURE_AMOUNT_TENDENCY_OUTSIDE_RANGE_ERROR        = "11111118"; // number without significance (random)
+private final String STRING_PRESSURE_CHARACTERISTIC_OUTSIDE_RANGE_ERROR         = "11111119"; // number without significance (random)
+private final String STRING_AIR_TEMP_OUTSIDE_RANGE_ERROR                        = "11111120"; // number without significance (random)
+private final String STRING_WET_BULB_OUTSIDE_RANGE_ERROR                        = "11111121"; // number without significance (random)
+private final String STRING_DEWPOINT_OUTSIDE_RANGE_ERROR                        = "11111122"; // number without significance (random)
+private final String STRING_RH_OUTSIDE_RANGE_ERROR                              = "11111123"; // number without significance (random)
+
+
+private final String STRING_PRESSURE_IO_FILE_ERROR                              = "4444444"; // number without significance (random)
+//private final String STRING_AIR_TEMP_IO_FILE_ERROR                              = "4444444"; // number without significance (random)
+private final String STRING_PRESSURE_NO_FILE_ERROR                              = "5555555"; // number without significance (random)
+//private final String STRING_AIR_TEMP_NO_FILE_ERROR                              = "5555555"; // number without significance (random)
+private final String STRING_PRESSURE_RECORD_FORMAT_ERROR                        = "6666666"; // number without significance (random)
+//private final String STRING_AIR_TEMP_RECORD_FORMAT_ERROR                        = "6666666"; // number without significance (random)
+private final String STRING_PRESSURE_CHECKSUM_ERROR                             = "7777777"; // number without significance (random)
+//private final String STRING_AIR_TEMP_CHECKSUM_ERROR                             = "7777777"; // number without significance (random)
+private final String STRING_PRESSURE_TIMEDIFF_ERROR                             = "8888888"; // number without significance (random)
+//private final String STRING_AIR_TEMP_TIMEDIFF_ERROR                             = "8888888"; // number without significance (random)
+private final String STRING_PRESSURE_OBS_AGE_ERROR                              = "3333333"; // number without significance (random)
+//private final String STRING_AIR_TEMP_OBS_AGE_ERROR                              = "3333333"; // number without significance (random)
+private final int INT_PRESSURE_IO_FILE_ERROR                                    = 4444444;   // number without significance (see STRING_PRESSURE_IO_FILE_ERROR)
+private final int INT_AIR_TEMP_IO_FILE_ERROR                                    = 4444444;   // number without significance (see STRING_AIR_TEMP_IO_FILE_ERROR)
+private final int INT_PRESSURE_NO_FILE_ERROR                                    = 5555555;   // number without significance (see STRING_PRESSURE_NO_DFILE_ERROR)
+private final int INT_AIR_TEMP_NO_FILE_ERROR                                    = 5555555;   // number without significance (see STRING_AIR_TEMP_NO_DFILE_ERROR)
+private final int INT_PRESSURE_RECORD_FORMAT_ERROR                              = 6666666;   // number without significance (see STRING_PRESSURE_RECORD_FORMAT_ERROR)
+private final int INT_AIR_TEMP_RECORD_FORMAT_ERROR                              = 6666666;   // number without significance (see STRING_AIR_TEMP_RECORD_FORMAT_ERROR)
+private final int INT_PRESSURE_CHECKSUM_ERROR                                   = 7777777;   // number without significance (see STRING_PRESSURE_CHECKSUM_ERROR)
+private final int INT_AIR_TEMP_CHECKSUM_ERROR                                   = 7777777;   // number without significance (see STRING_AIR_TEMP_CHECKSUM_ERROR)
+private final int INT_PRESSURE_TIMEDIFF_ERROR                                   = 8888888;   // number without significance (see STRING_PRESSURE_TIMEDIFF_ERROR)
+private final int INT_AIR_TEMP_TIMEDIFF_ERROR                                   = 8888888;   // number without significance (see STRING_AIR_TEMP_TIMEDIFF_ERROR)
+private final int INT_PRESSURE_OBS_AGE_ERROR                                    = 3333333;   // number without significance (see STRING_PRESSURE_OBS_AGE_ERROR)
+private final int INT_AIR_TEMP_OBS_AGE_ERROR                                    = 3333333;   // number without significance (see STRING_AIR_TEMP_OBS_AGE_ERROR)
+*/
+public static final long TIMEDIFF_SENSOR_DATA                                   = 10L;       // retrieved sensor data (pressure) max ? minutes old, after this the data is considered not valid anymore
+private static final long TIMEDIFF_GPS_DATA                                     = 10L;       // retrieved data (GPS) max ?minutes old, after this the data is considered not valid anymore
+private static final long TIMEDIFF_AWSR_DATA                                    = 10L;       // retrieved sensor data AWSR mode max ?minutes old, after this the data is considered not valid anymore
+public static final double HPA_TO_INHG                                          = 0.02952998751;      // WOW
+private final int DELAY_NEW_DATA_CHECK_LOOP                                     = 60000;     // time between checks new aws data in msec (e.g. 1 min = 1 * 60 * 1000 = 60000)
+private final int INITIAL_DELAY_NEW_DATA_CHECK_LOOP                             = 60000;     // time to wait after start up in msec (e.g. 2 min = 2 * 60 * 1000 = 120000)
+private final long MAX_AGE_AWS_DATA                                             = 120000;//300000;    // time in msec (e.g. 5 min = 5 * 60 * 1000 = 300000) // before listening thread cancelling/restarting
+private final int APR_RETRY_MINUTES                                             = 3;         // APR
+private final int AWSR_RETRY_MINUTES                                            = 3;         // AWSR
+public static final int AT_GREAT_LAKES_OUTSIDE_MAIN_AREAS                       = 777;       // APR; symbolic value, only to indicate the ship is at the great lakes but mabe in a lock (not possible to determine height corr)
+private final int CANCEL_GPS_THREAD                                             = 40;        // minutes, for reconnecting lost connection
+private final int START_GPS_THREAD                                              = 43;        // minutes, for reconnecting lost connection
+private final int CANCEL_BAROMETER_THREAD                                       = 30;        // minutes, for reconnecting lost connection
+private final int START_BAROMETER_THREAD                                        = 33;        // minutes, for reconnecting lost connection
+private final int CANCEL_THERMOMETER_THREAD                                     = 30;        // minutes, for reconnecting lost connection
+private final int START_THERMOMETER_THREAD                                      = 33;        // minutes, for reconnecting lost connection
+private final int CANCEL_AWS_THREAD                                             = 30;        // minutes, for reconnecting lost connection
+private final int START_AWS_THREAD                                              = 33;        // minutes, for reconnecting lost connection
+private final long MAX_AGE_GPS_DATA                                             = 300000;    // time in msec (e.g. 10 min = 10 * 60 * 1000 = 600000) before listening thread cancelling/restarting        
+public final static int MAX_AGE_STARX_OBS_DATA                                  = 600;       // time in sec (e.g. 10 min = 10 * 60 = 600)
+public final static int MAX_GPS_ARRAY                                           = 200;       // theoretically: array indices 0 - 180 (included) -> 181 array places ; representing the minutes since last received GPS data string but sometimes same data in two consecutive array places -> increased to 200
+
+//private int comm_error_messagebox_shown                                         = 0;
+private Color color_dark_green;
+private GregorianCalendar cal_RS232_GPS_system_date_time;                       // for restarting RS232 GPS listener if no data data was received
+private GregorianCalendar cal_RS422_system_date_time;                           // for restarting RS422 (AWS) listener if no data data was received
+private GregorianCalendar cal_RS232_system_date_time;                           // for restarting RS232 (Barometer) listener if no data data was received
+private GregorianCalendar cal_RS232_system_date_time_II;                        // for restarting RS232 (thermomter) listener if no data data was received
+//private GregorianCalendar cal_WiFi_system_date_time;                            // for restarting WiFi listener if no Wifi data was received
+//private GregorianCalendar cal_Ethernet_system_date_time;                        // for restarting WiFi listener if no Ethernet data was received
+private GregorianCalendar cal_WOW_systeem_datum_tijd;                           // format: yyyyMMddHHmm
+private GregorianCalendar cal_APR_system_date_time;
+private GregorianCalendar cal_APR_system_dt;
+private GregorianCalendar cal_AWSR_system_date_time;
+private GregorianCalendar cal_AWSR_system_dt;                                   
+private GregorianCalendar cal_AWS_system_dt;                                    
+private GregorianCalendar cal_APR_AWS_system_dt;                                // pop-up dashboard
+private GregorianCalendar cal_delete_datum_tijd;   
+private GregorianCalendar cal_sensor_datum_tijd; 
+private GregorianCalendar check_presence_parameter_system_datum_tijd;
+public static GregorianCalendar cal_system_date_time;
+private SimpleDateFormat sdf7;
+public static SimpleDateFormat sdf8;                                                       // for pressure reading pop-up in system tray
+//private SimpleDateFormat sdf9;                                                            // for GPS check gps time vz sustem time
+private final int MAX_COMPLETED_BAROMETER_PORT_CHECKS                           = 2;
+private final int MAX_COMPLETED_AWS_PORT_CHECKS                                 = 2;
+private final int MAX_COMPLETED_THERMOMETER_PORT_CHECKS                         = 2;
+private int system_minute;
+public static long last_new_data_received_TimeMillis;                           // returns the time of last aws or barometer data receipt in milliseconds since midnight, January 1, 1970 UTC.
+private long last_new_data_received_TimeMillis_II;                              // returns the time of last thermometer data receipt in milliseconds since midnight, January 1, 1970 UTC.
+public static long last_new_GPS_data_received_TimeMillis;                       // returns the time of last GPS data receipt in milliseconds since midnight, January 1, 1970 UTC.
+private int check_new_data_timer_delay;
+private int check_new_data_timer_delay_II;
+private Timer check_new_data_timer;                                             // for checking sensor data not obsolete (AWS or barometer)
+private Timer check_new_data_timer_II;                                          // for checking sensor data not obsolete (thermometer)
+private Timer check_new_GPS_data_timer;                                         // for checking sensor data not obsolete (GPS)
+private int check_new_GPS_data_timer_delay;   
+private final static double[][] GPS_array_pos = new double[MAX_GPS_ARRAY +1][2]; // [][0] = latitude and [][1] = longitude
+private final static long[] GPS_array_time = new long[MAX_GPS_ARRAY +1];         // time in minutes since epoch
+public final static String[] GPS_array_device_log = new String [MAX_GPS_ARRAY +1];
+private boolean in_screen_pop_up_period                                          = false;   // screen pop-up (add visual obs)
+
+//private SwingWorker WiFi_worker;
+private WiFi_Class_Receive_UDP WiFi_worker;                                     // SwingWorker with reference (for WiFi connection)
+private Ethernet_Class_Receive_UDP Ethernet_worker;                             // SwingWorker with reference (for Ethernet connection)
+private RS232_Class_Receive_Sensor_Data RS232_worker;                           // SwingWorker with reference (for RS232 connection
+private RS232_Class_Receive_Sensor_Data_II RS232_worker_II;                     // SwingWorker with reference (for RS232 connection
+//private RS422_Class_Receive_Sensor_Data RS422_worker;                           // SwingWorker with reference (for RS422 connection)
+private RS422_V3_Class_Receive_Sensor_Data RS422_worker;                        // SwingWorker with reference (for RS422 connection)
+private RS232_GPS_Class_Receive_Data RS232_GPS_worker;                          // SwingWorker with reference (for RS232 GPS connection)
+
+
+private final StringBuilder message_peumb = new StringBuilder();
+
+private final static double CELCIUS_TO_KELVIN_FACTOR                            = 273.15; 
+private final double M_S_TO_KNOTS                                               = 1.94384;
+
+
+public static String test_record                                                = "";
+public static String test_record_II                                             = "";
+
+// RS232 GPS
+public static String GPS_defaultPort                                            = null;  // port info for the system (to open/close etc)
+public static String GPS_defaultPort_descriptive                                = null;  // port info for messages and logging
+private final int MAX_COMPLETED_GPS_PORT_CHECKS                                 = 2;
+
+private final int GPS_NMEA_0183_parity                                          = 0;   // 0 = none parity
+private final int GPS_NMEA_0183_data_bits                                       = 8;
+private final int GPS_NMEA_0183_stop_bits                                       = 1;
+private final int GPS_NMEA_0183_flow_control                                    = SerialPort.FLOW_CONTROL_DISABLED;//SerialPort.FLOWCONTROL_NONE;
+
+public static String GPS_date                                                   = "";
+public static String GPS_time                                                   = "";
+public static String GPS_latitude                                               = "";
+public static String GPS_latitude_hemisphere                                    = "";
+public static String GPS_longitude                                              = "";
+public static String GPS_longitude_hemisphere                                   = "";
+public static String GPS_latitude_earlier                                       = "";                     // for computing COG and SOG (Ds, Vs)
+public static String GPS_longitude_earlier                                      = "";                     // for vomputing COG and SOG (Ds, Vs)       
+public static String GPS_latitude_earlier_wind                                  = "";                     // for computing COG and SOG (wind)
+public static String GPS_longitude_earlier_wind                                 = "";                     // for vomputing COG and SOG (wind)       
+
+
+// APR and AWSR
+public static int APR_server_response_code                                      = 0;
+public static int AWSR_server_response_code                                     = 0;
+//private String format_101_obs                                                   = "";
+private static String format_101_obs                                                   = "";
+
+
+//public static String hulp_apr_main_screen_pressure_reading_corrected            = "";
+//public static String hulp_apr_main_screen_pressure_msl_corrected                = "";
+
+// Dashboard
+public static double dashboard_double_last_update_record_pressure_ic              = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_ppp                      = Double.MAX_VALUE;
+public static String dashboard_string_last_update_record_date_time                = "";  // pc based (NOT output string based)
+public static String dashboard_string_last_update_record_date                     = "";  // AWS output string based (mwasured at)
+public static String dashboard_string_last_update_record_time                     = "";  // AWS output string based (mwasured at)
+public static String dashboard_string_last_update_record_latitude                 = "";
+public static String dashboard_string_last_update_record_longitude                = "";
+public static String dashboard_string_last_update_record_SOG                      = "";
+public static String dashboard_string_last_update_record_COG                      = "";  
+public static String dashboard_string_last_update_record_heading                  = ""; 
+public static double dashboard_double_last_update_record_MSL_pressure_ic          = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_sensor_level_pressure_ic = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_air_temp                 = Double.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_dir                  = Integer.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_speed                = Integer.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_gust                 = Integer.MAX_VALUE;   // true wind gust speed
+public static int dashboard_int_last_update_record_relative_wind_dir              = Integer.MAX_VALUE;
+public static int dashboard_int_last_update_record_relative_wind_speed            = Integer.MAX_VALUE;
+public static double dashboard_double_last_update_record_sst                      = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_humidity                 = Double.MAX_VALUE;
+public static double dashboard_double_last_update_record_pressure_tendency        = Double.MAX_VALUE;
+public static int dashboard_int_last_update_record_true_wind_gust_dir             = Integer.MAX_VALUE;  
+public static int dashboard_int_last_update_record_VOT                            = Integer.MAX_VALUE; 
+
+public static int dashboard_int_last_update_record_true_wind_speed_10m            = Integer.MAX_VALUE;  // only used on wind radar dashboard
+public static int dashboard_int_last_update_record_true_wind_gust_10m             = Integer.MAX_VALUE;  // only used on wind radar dashboard
+public static int dashboard_int_last_update_record_relative_wind_speed_10m        = Integer.MAX_VALUE;  // only used on wind radar dashboard
+
+} // public class main_RS232_RS422
