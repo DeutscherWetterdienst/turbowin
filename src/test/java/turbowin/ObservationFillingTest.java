@@ -126,7 +126,6 @@ public class ObservationFillingTest extends AbstractUiTest {
         this.frame.label(JLabelMatcher.withText("Pressure (read+ic)")).requireVisible().requireEnabled().click();
         FrameFixture pressureFrame = WindowFinder.findFrame(new FrameTitleMatcher("barometer reading")).using(this.robot());
         pressureFrame.textBox("barometer_reading").setText("990");
-        pressureFrame.textBox("instrument_correction").setText("0");
         pressureFrame.textBox("deepest_draft").setText("10");
 
         clickOkButtonInFrame(pressureFrame);
