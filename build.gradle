@@ -56,3 +56,7 @@ task printVersion {
         println project.version
     }
 }
+
+test {
+    jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+}
