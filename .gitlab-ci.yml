@@ -1,13 +1,3 @@
-variables:
-  APP_NAME: 'TurboWinPlus'
-  LICENSE_FILE: 'LICENSE'
-  VENDOR: 'KNMI'
-  MODULE_NAME_MAIN_CLASS: 'turbowin/turbowin.main'
-  ICON_PATH_LINUX: 'src/main/resources/turbowin/install_ico/TurboWin+_install_3_256x256x32.png'
-  ICON_PATH_WINDOWS: 'src/main/resources/turbowin/install_ico/TurboWin+_install.ico'
-  JDK_WINDOWS_VERSION: '21.0.5+11'
-  WIX_BINARIES_WINDOWS_URL: 'https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip'
-
 stages:
   - build
 
@@ -16,12 +6,7 @@ jar:
   when: manual
   image: eclipse-temurin:21-jdk-noble
   script:
-    - echo ${JAVA_HOME}
-    - ls -lh ${JAVA_HOME}
-    - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
-    - echo "App version is $APP_VERSION"
-    - ./gradlew build -x test --stacktrace --info
-    - ./gradlew --stop
+    - ./scripts/task_linux.bash jar
   artifacts:
     paths:
       - build/libs/*
@@ -31,19 +16,7 @@ test:
   stage: build
   image: eclipse-temurin:21-jdk-noble
   script:
-    - echo ${JAVA_HOME}
-    - ls -lh ${JAVA_HOME}
-    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes xvfb libxtst6 libxi6 openbox ffmpeg
-    - Xvfb :99 -screen 0 1280x1024x24 &
-    - export DISPLAY=:99
-    - openbox &
-    - ffmpeg -y -f x11grab -r 60 -i $DISPLAY -codec:v libvpx-vp9 -b:v 2M -pix_fmt yuv420p screen_capture.webm & echo $! > ffmpeg_pid
-    - ./gradlew test --stacktrace --info
-    - ./gradlew --stop
-    - sleep 1
-    - kill -SIGINT $(cat ffmpeg_pid)
-    - wait $(cat ffmpeg_pid) || true
-    - rm ffmpeg_pid
+    - ./scripts/task_linux.bash test
   retry: 2
   artifacts:
     paths:
@@ -55,27 +28,7 @@ deb:
   stage: build
   image: eclipse-temurin:21-jdk-noble
   script:
-    - echo ${JAVA_HOME}
-    - ls -lh ${JAVA_HOME}
-    - apt-get update --quiet=2 && apt-get install --quiet=2 --yes fakeroot binutils
-    - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
-    - echo "App version is $APP_VERSION"
-    - ./gradlew jlink --stacktrace --info
-    - ./gradlew --stop
-    - |
-      jpackage \
-      --verbose \
-      --type deb \
-      --resource-dir src/main/resources/jpackage \
-      --runtime-image build/image \
-      --module ${MODULE_NAME_MAIN_CLASS} \
-      --java-options '-Dapp.dir=$APPDIR' \
-      --dest build/jpackage \
-      --name ${APP_NAME} \
-      --app-version ${APP_VERSION} \
-      --license-file ${LICENSE_FILE} \
-      --vendor ${VENDOR} \
-      --icon ${ICON_PATH_LINUX}
+    - ./scripts/task_linux.bash deb
   artifacts:
     paths:
       - build/jpackage/*
@@ -85,27 +38,7 @@ rpm:
   stage: build
   image: eclipse-temurin:21-jdk-ubi9-minimal
   script:
-    - echo ${JAVA_HOME}
-    - ls -lh ${JAVA_HOME}
-    - microdnf update -y && microdnf install -y rpm-build
-    - export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
-    - echo "App version is $APP_VERSION"
-    - ./gradlew jlink --stacktrace --info
-    - ./gradlew --stop
-    - |
-      jpackage \
-      --verbose \
-      --type rpm \
-      --resource-dir src/main/resources/jpackage \
-      --runtime-image build/image \
-      --module ${MODULE_NAME_MAIN_CLASS} \
-      --java-options '-Dapp.dir=$APPDIR' \
-      --dest build/jpackage \
-      --name ${APP_NAME} \
-      --app-version ${APP_VERSION} \
-      --license-file ${LICENSE_FILE} \
-      --vendor ${VENDOR} \
-      --icon ${ICON_PATH_LINUX}
+    - ./scripts/task_linux.bash rpm
   artifacts:
     paths:
       - build/jpackage/*
@@ -115,51 +48,8 @@ exe:
   stage: build
   tags:
     - saas-windows-medium-amd64
-  before_script:
-    - |
-      $env:JDK_X64_WINDOWS_URL = "https://download.bell-sw.com/java/$($env:JDK_WINDOWS_VERSION)/bellsoft-jdk$($env:JDK_WINDOWS_VERSION)-windows-amd64.zip"
-      echo "JDK_X64_WINDOWS_URL: $env:JDK_X64_WINDOWS_URL"
-      echo "WIX_BINARIES_WINDOWS_URL: $env:WIX_BINARIES_WINDOWS_URL"
   script:
-    - curl.exe --location --output jdk_x64_windows.zip $env:JDK_X64_WINDOWS_URL
-    - curl.exe --location --output wix-binaries.zip $env:WIX_BINARIES_WINDOWS_URL
-    - Get-Item jdk_x64_windows.zip | Select-Object Name, Length
-    - Get-Item wix-binaries.zip | Select-Object Name, Length
-    - Expand-Archive -Path jdk_x64_windows.zip -DestinationPath jdk_x64_windows
-    - Expand-Archive -Path wix-binaries.zip -DestinationPath wix-binaries
-    - '$env:VersionWithoutBuild = $env:JDK_WINDOWS_VERSION -split "\+" | Select-Object -First 1'
-    - '$env:JAVA_HOME = "jdk_x64_windows/jdk-$($env:VersionWithoutBuild)"'
-    - 'echo "JAVA_HOME is set to: $env:JAVA_HOME"'
-    - Copy-Item -Path "wix-binaries/*" -Destination "$env:JAVA_HOME/bin" -Recurse
-    - '& "$env:JAVA_HOME/bin/light.exe" -help'
-    - '& "$env:JAVA_HOME/bin/candle.exe" -help'
-    - '& "$env:JAVA_HOME/bin/java.exe" --version'
-    - '& "$env:JAVA_HOME/bin/jlink.exe" --version'
-    - '& "$env:JAVA_HOME/bin/jpackage.exe" --version'
-    - '$env:APP_VERSION = (& .\gradlew.bat printVersion -q | Select-Object -Last 1).Trim()'
-    - echo "App version is $env:APP_VERSION"
-    - .\gradlew.bat jlink --stacktrace --info
-    - .\gradlew.bat --stop
-    - |
-      & "$env:JAVA_HOME/bin/jpackage.exe" `
-        --verbose `
-        --type exe `
-        --runtime-image build/image `
-        --module $env:MODULE_NAME_MAIN_CLASS `
-        --java-options '-Dapp.dir=$APPDIR' `
-        --dest build/jpackage `
-        --name $env:APP_NAME `
-        --app-version $env:APP_VERSION `
-        --license-file $env:LICENSE_FILE `
-        --vendor $env:VENDOR `
-        --icon $env:ICON_PATH_WINDOWS `
-        --win-upgrade-uuid "73902787-F60E-40DE-B64B-CA593EE0A5E0" `
-        --win-menu `
-        --win-menu-group $env:APP_NAME `
-        --win-shortcut `
-        --win-dir-chooser
-    - Move-Item "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION).exe" "build/jpackage/$($env:APP_NAME)-$($env:APP_VERSION)_64-bit.exe"
-    - tasklist
+    - powershell -File scripts/task_windows.ps1
   artifacts:
     paths:
       - build/jpackage/*

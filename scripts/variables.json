@@ -1,0 +1,10 @@
+{
+  "APP_NAME": "TurboWinPlus",
+  "LICENSE_FILE": "LICENSE",
+  "VENDOR": "KNMI",
+  "MODULE_NAME_MAIN_CLASS": "turbowin/turbowin.main",
+  "ICON_PATH_LINUX": "src/main/resources/turbowin/install_ico/TurboWin+_install_3_256x256x32.png",
+  "ICON_PATH_WINDOWS": "src/main/resources/turbowin/install_ico/TurboWin+_install.ico",
+  "JDK_WINDOWS_VERSION": "21.0.5+11",
+  "WIX_BINARIES_WINDOWS_URL": "https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip"
+}
