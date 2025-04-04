@@ -19,8 +19,7 @@ repositories {
 
 dependencies {
     implementation 'com.fazecast:jSerialComm:2.11.0'
-    implementation 'com.sun.activation:jakarta.activation:2.0.1'
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'org.eclipse.angus:smtp:2.0.3'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.assertj:assertj-swing-junit:3.17.1'
