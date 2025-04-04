@@ -286,7 +286,7 @@ final public class myobsformat extends javax.swing.JFrame {
          // NB also eucaws + 'uploads via turbowin': format101 by default
          
          // only Windows virus scanners (so not Linux) tend to warn for the compression and decompression programs
-         main.OSType ostype = main.detect_OS();
+         OSDetector.OSType ostype = OSDetector.detect_OS();
          switch (ostype)
          {
             case WINDOWS: FORMAT_101.compression_exe   = FORMAT_101.COMPRESSION_EXE_WIN; 

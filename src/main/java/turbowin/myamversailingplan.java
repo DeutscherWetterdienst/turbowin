@@ -20,7 +20,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.table.TableCellEditor;
-import static turbowin.main.detect_OS;
 
 /*
  * To change this template, choose Tools | Templates
@@ -2450,21 +2449,7 @@ final public class myamversailingplan extends javax.swing.JFrame {
          @Override
          protected Integer doInBackground() throws Exception
          {
-            main.OSType ostype = detect_OS();
-            String os = "";
-            switch (ostype)
-            {
-               case WINDOWS: os = "WINDOWS"; 
-                             break;
-               case MACOS:   os = "MACOS"; 
-                             break;
-               case LINUX:   os = "LINUX"; 
-                             break;
-               case OTHER:   os = "OTHER"; 
-                             break;
-               default:      os = "OTHER"; 
-                             break;
-            }
+            String os = OSDetector.getOSString();
              
             String link_url = "https://www.amver.com";
             Integer code = 0; 

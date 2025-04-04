@@ -55,7 +55,7 @@ public class FORMAT_101
       //
       //////// determine OS (for selecting the correct compression and decompression modules)
       //
-      main.OSType ostype = main.detect_OS();
+      OSDetector.OSType ostype = OSDetector.detect_OS();
       switch (ostype)
       {
          case LINUX:   compression_exe   = COMPRESSION_EXE_LIN; 
@@ -287,7 +287,7 @@ public class FORMAT_101
                main.log_turbowin_system_message("[FORMAT-101] error when copying " + compression_exe + " from jar to: " + main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + compression_exe);
             } 
             // on Linux systems set "allow executing file as program"
-            main.OSType ostype = main.detect_OS();
+            OSDetector.OSType ostype = OSDetector.detect_OS();
             switch (ostype)
             {
                case LINUX: File f = new File(main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator + compression_exe); 

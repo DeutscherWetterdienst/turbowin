@@ -12,7 +12,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-import static turbowin.main.detect_OS;
 /*
  * myposition.java
  *
@@ -1206,21 +1205,7 @@ final public class myposition extends javax.swing.JFrame {
             @Override
             protected Void doInBackground() throws Exception
             {
-               main.OSType ostype = detect_OS();
-               String os = "";
-               switch (ostype)
-               {
-                  case WINDOWS: os = "WINDOWS"; 
-                                break;
-                  case MACOS:   os = "MACOS"; 
-                                break;
-                  case LINUX:   os = "LINUX"; 
-                                break;
-                  case OTHER:   os = "OTHER"; 
-                                break;
-                  default:      os = "OTHER"; 
-                                break;
-               }
+               String os = OSDetector.getOSString();
                
                //String link_url = "https://www.google.com";             // arbitray address could also take www.knmi.nl or etc.
                Desktop desktop = null;

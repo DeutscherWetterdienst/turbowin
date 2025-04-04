@@ -461,22 +461,8 @@ public class main extends javax.swing.JFrame {
             catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) { }
          }
          
-         OSType ostype = detect_OS();
-         String os = "";
-         switch (ostype)
-         {
-            case WINDOWS: os = "WINDOWS"; 
-                          break;
-            case MACOS:   os = "MACOS"; 
-                          break;
-            case LINUX:   os = "LINUX"; 
-                          break;
-            case OTHER:   os = "OTHER"; 
-                          break;
-            default:      os = "OTHER"; 
-                          break;
-         }
-            
+         String os = OSDetector.getOSString();
+
          if (os.equals("LINUX"))
          {
             if (theme_changed == false)
@@ -492,22 +478,8 @@ public class main extends javax.swing.JFrame {
       else // THEME_TRANSPARENT
       {
          // NB https://stackoverflow.com/questions/7434845/setting-the-default-font-of-swing-program
-         
-         OSType ostype = detect_OS();
-         String os = "";
-         switch (ostype)
-         {
-            case WINDOWS: os = "WINDOWS"; 
-                          break;
-            case MACOS:   os = "MACOS"; 
-                          break;
-            case LINUX:   os = "LINUX"; 
-                          break;
-            case OTHER:   os = "OTHER"; 
-                          break;
-            default:      os = "OTHER"; 
-                          break;
-         }
+
+         String os = OSDetector.getOSString();
             
          if (os.equals("LINUX"))
          {
@@ -534,21 +506,7 @@ public class main extends javax.swing.JFrame {
          setOpacity(0.75f);
          
          // font check
-         OSType ostype = detect_OS();
-         String os = "";
-         switch (ostype)
-         {
-            case WINDOWS: os = "WINDOWS"; 
-                          break;
-            case MACOS:   os = "MACOS"; 
-                          break;
-            case LINUX:   os = "LINUX"; 
-                          break;
-            case OTHER:   os = "OTHER"; 
-                          break;
-            default:      os = "OTHER"; 
-                          break;
-         }
+         String os = OSDetector.getOSString();
             
          if (os.equals("LINUX"))
          {
@@ -3611,21 +3569,7 @@ public class main extends javax.swing.JFrame {
    /***********************************************************************************************/
    private void initImages()
    {
-      main.OSType ostype = main.detect_OS();
-      String os = "";
-      switch (ostype)
-      {
-         case WINDOWS: os = "WINDOWS"; 
-                       break;
-         case MACOS:   os = "MACOS"; 
-                       break;
-         case LINUX:   os = "LINUX"; 
-                       break;
-         case OTHER:   os = "OTHER"; 
-                       break;
-         default:      os = "OTHER"; 
-                       break;
-      }    
+      String os = OSDetector.getOSString();
       
       if (os.equals("LINUX"))
       {
@@ -9882,21 +9826,7 @@ private void Info_Statistics_menu_actionPerformed(java.awt.event.ActionEvent evt
       @Override
       protected Integer doInBackground() throws Exception
       {
-         main.OSType ostype = detect_OS();
-         String os = "";
-         switch (ostype)
-         {
-            case WINDOWS: os = "WINDOWS"; 
-                          break;
-            case MACOS:   os = "MACOS"; 
-                          break;
-            case LINUX:   os = "LINUX"; 
-                          break;
-            case OTHER:   os = "OTHER"; 
-                          break;
-            default:      os = "OTHER"; 
-                          break;
-         }         
+         String os = OSDetector.getOSString();
 
          
          // NB deprecated from October 2024: String link_url = "http://esurfmar.meteo.fr/cgi-bin/meteo/display_vos_ext.cgi?callchx=";
@@ -11004,8 +10934,8 @@ private void IMMT_AWS_manual_input_preperations()
       //    looks like the evt event WINDOW_ICONIFIED is send several times
       //
       boolean use_system_tray = false;
-      
-      OSType ostype = detect_OS();
+
+      OSDetector.OSType ostype = OSDetector.detect_OS();
       switch (ostype)
       {
          case WINDOWS: use_system_tray = true;
@@ -12236,7 +12166,7 @@ private void IMMT_AWS_manual_input_preperations()
       
       //System.out.println("+++ Function main_windowDeiconified():" + evt);
    /*   
-      OSType ostype = detect_OS();
+      OSDetector.OSType ostype = OSDetector.detect_OS();
       switch (ostype)
       {
          case WINDOWS: break;         // for Windows: this will be done in Function: main_windowIconfied() [main.java]
@@ -12785,21 +12715,7 @@ private void IMMT_AWS_manual_input_preperations()
          @Override
          protected Integer doInBackground() throws Exception 
          {
-            main.OSType ostype = detect_OS();
-            String os = "";
-            switch (ostype)
-            {
-               case WINDOWS: os = "WINDOWS"; 
-                             break;
-               case MACOS:   os = "MACOS"; 
-                             break;
-               case LINUX:   os = "LINUX"; 
-                             break;
-               case OTHER:   os = "OTHER"; 
-                             break;
-               default:      os = "OTHER"; 
-                             break;
-            }   
+            String os = OSDetector.getOSString();
             
             
             String sub_url_chart_number = "";
@@ -12945,21 +12861,7 @@ private void IMMT_AWS_manual_input_preperations()
 
                if (response_code == -1) 
                {
-                  main.OSType ostype = detect_OS();
-                  String os = "";
-                  switch (ostype)
-                  {
-                     case WINDOWS: os = "WINDOWS"; 
-                                   break;
-                     case MACOS:   os = "MACOS"; 
-                                   break;
-                     case LINUX:   os = "LINUX"; 
-                                   break;
-                     case OTHER:   os = "OTHER"; 
-                                   break;
-                     default:      os = "OTHER"; 
-                                   break;
-                  }   
+                  String os = OSDetector.getOSString();
                   
                   String message = "";
                   if (os.equals("LINUX"))
@@ -14603,44 +14505,6 @@ private String compile_obs_for_AWS()
 /*                                                                                             */
 /*                                                                                             */
 /***********************************************************************************************/
-public static OSType detect_OS()
-{
-   // source: http://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
-   OSType detectedOS;
-   
-   
-   String OS_property_name = System.getProperty("os.name", "generic").toLowerCase();
-   //String OS_property_arch = System.getProperty("os.arch", "generic").toLowerCase();  // zal bij RaspBerry en Linux veelal ARM geven (kan niet gebruikt worden om te onderscheiden)
-      
-   if ((OS_property_name.indexOf("mac") >= 0) || (OS_property_name.indexOf("darwin") >= 0)) 
-   {
-      detectedOS = OSType.MACOS;
-   } 
-   else if (OS_property_name.indexOf("win") >= 0) 
-   {
-      detectedOS = OSType.WINDOWS;
-   } 
-   else if (OS_property_name.indexOf("nux") >= 0) 
-   {
-      // NB could also be on a RaspberryPi (unfortunately not possible to distinguish)
-      detectedOS = OSType.LINUX;
-   } 
-   else 
-   {
-      detectedOS = OSType.OTHER;
-   }
-     
-   
-   return detectedOS;
-}
-
-
-
-/***********************************************************************************************/
-/*                                                                                             */
-/*                                                                                             */
-/*                                                                                             */
-/***********************************************************************************************/
 public static void set_APR_toolbar()
 {
    // check APR
@@ -14705,21 +14569,7 @@ private void initComponents2()
    // NB moved to lees_configuratie_regels() [main.java] and read_muffin() [main.java]
    
    /* determine the OS this program is running on */
-   OSType ostype = detect_OS();
-   String os = "";
-   switch (ostype)
-   {
-      case WINDOWS: os = "WINDOWS";
-         break;
-      case MACOS:   os = "MACOS";
-         break;
-      case LINUX:   os = "LINUX";
-         break;
-      case OTHER:   os = "OTHER";
-         break;
-      default:      os = "OTHER";
-         break;
-   }
+   String os = OSDetector.getOSString();
    /* data directory */
    if (os.equals("WINDOWS")) {
       data_dir = "C:" + java.io.File.separator + "ProgramData" + java.io.File.separator + "TurboWinPlus";
@@ -16988,22 +16838,8 @@ public static void IMMT_log()
    /***********************************************************************************************/
    public static void help_mouseClicked(final String help_page) {
       // TODO add your handling code here:
-      
-      OSType ostype = detect_OS();
-      String os = "";
-      switch (ostype)
-      {
-         case WINDOWS: os = "WINDOWS"; 
-                       break;
-         case MACOS:   os = "MACOS"; 
-                       break;
-         case LINUX:   os = "LINUX"; 
-                       break;
-         case OTHER:   os = "OTHER"; 
-                       break;
-         default:      os = "OTHER"; 
-                       break;
-      }
+
+      String os = OSDetector.getOSString();
       
       boolean local_help_file_exists = false;
              
@@ -18267,21 +18103,7 @@ private void Output_obs_by_email_FM13()
             // NB http://www.wsoftware.de/practices/proc-execs.html
             
             /* determine the OS this program is running on */
-            OSType ostype = detect_OS();
-            String os = "";
-            switch (ostype)
-            {
-               case WINDOWS: os = "WINDOWS"; 
-                             break;
-               case MACOS:   os = "MACOS"; 
-                             break;
-               case LINUX:   os = "LINUX"; 
-                             break;
-               case OTHER:   os = "OTHER"; 
-                             break;
-               default:      os = "OTHER"; 
-                             break;
-            }
+            String os = OSDetector.getOSString();
             
             
             //JOptionPane.showMessageDialog(null, "Error invoking default Email program (method not supported on this computer system)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
@@ -19865,21 +19687,7 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
       @Override
       protected Integer doInBackground() throws Exception
       {
-         main.OSType ostype = detect_OS();
-         String os = "";
-         switch (ostype)
-         {
-            case WINDOWS: os = "WINDOWS"; 
-                          break;
-            case MACOS:   os = "MACOS"; 
-                          break;
-            case LINUX:   os = "LINUX"; 
-                          break;
-            case OTHER:   os = "OTHER"; 
-                          break;
-            default:      os = "OTHER"; 
-                          break;
-         }         
+         String os = OSDetector.getOSString();
          
          String link_url = "";
          link_url = "https://realearth.ssec.wisc.edu/?products=globalir&time=latest&center=52,4&zoom=4";
@@ -20663,7 +20471,6 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
    public static final String HTTPS_PROTOCOL                = "HTTPS_protocol";
    public static final String HTTP_PROTOCOL                 = "HTTP_protocol";
    
-   public enum OSType {WINDOWS, MACOS, LINUX, OTHER};
    //public static final String KNMI_UPLOAD_URL               = "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?"; // "www.turbowin.knmi.nl/webstart101/index_webstart_101.php?";
    public static final Integer INVALID_RESPONSE_FORMAT_101         = 710;                    // self defined http response code
    public static final Integer RESPONSE_NO_INTERNET                = 711;                    // self defined http response code (IOException)

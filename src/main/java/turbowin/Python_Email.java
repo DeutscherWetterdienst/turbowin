@@ -148,7 +148,7 @@ public class Python_Email
       //
       //////// determine OS (for selecting the correct python (sub)email executable)
       //
-      main.OSType ostype = main.detect_OS();
+      OSDetector.OSType ostype = OSDetector.detect_OS();
       switch (ostype)
       {
          case LINUX:   //python_email_exe   = PYTHON_EMAIL_EXE_LIN; 
@@ -293,7 +293,7 @@ public class Python_Email
                
                // Set Execute Permission of just copied python email program but only for Linux
                // because after uzipping and unzipping the included exe file was set to not executable
-               main.OSType ostype = main.detect_OS();
+               OSDetector.OSType ostype = OSDetector.detect_OS();
                switch (ostype)
                {
                   case LINUX:    File file = new File(output); 

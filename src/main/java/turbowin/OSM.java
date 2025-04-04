@@ -29,7 +29,6 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
-import static turbowin.main.detect_OS;
 
 
 /**
@@ -798,22 +797,8 @@ public class OSM
       // called from: OSM_IMMT_on_leaflet_map() [OSM.java]
       //
       // NB this function is still in background thread
-      
-      main.OSType ostype = detect_OS();
-      String os = "";
-      switch (ostype)
-      {
-         case WINDOWS: os = "WINDOWS"; 
-                       break;
-         case MACOS:   os = "MACOS"; 
-                       break;
-         case LINUX:   os = "LINUX"; 
-                       break;
-         case OTHER:   os = "OTHER"; 
-                       break;
-         default:      os = "OTHER"; 
-                       break;
-      } 
+
+      String os = OSDetector.getOSString();
       
       
       Integer code = 0;

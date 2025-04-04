@@ -426,21 +426,7 @@ final public class mych extends javax.swing.JFrame
    /***********************************************************************************************/
    private void initImages()
    {
-      main.OSType ostype = main.detect_OS();
-      String os = "";
-      switch (ostype)
-      {
-         case WINDOWS: os = "WINDOWS"; 
-                       break;
-         case MACOS:   os = "MACOS"; 
-                       break;
-         case LINUX:   os = "LINUX"; 
-                       break;
-         case OTHER:   os = "OTHER"; 
-                       break;
-         default:      os = "OTHER"; 
-                       break;
-      }    
+      String os = OSDetector.getOSString();
       
       if (os.equals("LINUX"))
       {

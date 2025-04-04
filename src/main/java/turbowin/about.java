@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-import static turbowin.main.detect_OS;
 
 /*
  * about.java
@@ -292,21 +291,7 @@ final public class about extends javax.swing.JFrame {
 /***********************************************************************************************/
 private void initComponents2()
 {
-   main.OSType ostype = main.detect_OS();
-   String os = "";
-   switch (ostype)
-   {
-      case WINDOWS: os = "WINDOWS"; 
-                    break;
-      case MACOS:   os = "MACOS"; 
-                    break;
-      case LINUX:   os = "LINUX"; 
-                    break;
-      case OTHER:   os = "OTHER"; 
-                    break;
-      default:      os = "OTHER"; 
-                    break;
-   }    
+   String os = OSDetector.getOSString();
    
    
    // NB see also Functions: Themes_1_actionPerformed() etc. [main.java]
@@ -707,21 +692,7 @@ private void OK_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
          @Override
          protected Integer doInBackground() throws Exception
          {
-            main.OSType ostype = detect_OS();
-            String os = "";
-            switch (ostype)
-            {
-               case WINDOWS: os = "WINDOWS"; 
-                             break;
-               case MACOS:   os = "MACOS"; 
-                             break;
-               case LINUX:   os = "LINUX"; 
-                             break;
-               case OTHER:   os = "OTHER"; 
-                             break;
-               default:      os = "OTHER"; 
-                             break;
-            }
+            String os = OSDetector.getOSString();
             
             
             String link_url = "";
