@@ -1,0 +1,21 @@
+name: rpm
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk-ubi9-minimal
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build RPM package
+        run: ./scripts/task_linux.bash rpm
+      - name: Upload RPM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-artifacts
+          path: build/jpackage/*

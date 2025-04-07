@@ -1,0 +1,19 @@
+name: exe
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build EXE package
+        run: powershell -File scripts/task_windows.ps1
+      - name: Upload EXE artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: exe-artifacts
+          path: build/jpackage/*

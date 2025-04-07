@@ -1,0 +1,25 @@
+name: jar
+
+on:
+  workflow_dispatch:
+    inputs:
+      jar:
+        description: 'jar'
+        required: false
+        type: boolean
+
+jobs:
+  jar:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk-noble
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build JAR
+        run: ./scripts/task_linux.bash jar
+      - name: Upload JAR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar-artifacts
+          path: build/libs/*
