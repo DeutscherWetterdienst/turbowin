@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_jar:
+        description: 'Run jar job'
+        required: false
+        type: boolean
+
+jobs:
+  jar:
+    if: ${{ github.event.inputs.run_jar == 'true' }}
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk-noble
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build JAR
+        run: ./scripts/task_linux.bash jar
+      - name: Upload JAR artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar-artifacts
+          path: build/libs/*
+
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk-noble
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run tests
+        run: ./scripts/task_linux.bash test
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: screen_capture.webm
+
+  deb:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk-noble
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build DEB package
+        run: ./scripts/task_linux.bash deb
+      - name: Upload DEB artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-artifacts
+          path: build/jpackage/*
+
+  rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk-ubi9-minimal
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build RPM package
+        run: ./scripts/task_linux.bash rpm
+      - name: Upload RPM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-artifacts
+          path: build/jpackage/*
+
+  exe:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Build EXE package
+        run: powershell -File scripts/task_windows.ps1
+      - name: Upload EXE artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: exe-artifacts
+          path: build/jpackage/*
