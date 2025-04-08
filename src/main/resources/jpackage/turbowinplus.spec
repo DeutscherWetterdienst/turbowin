@@ -77,9 +77,19 @@ package_type=rpm
 LAUNCHER_AS_SERVICE_SCRIPTS
 DESKTOP_COMMANDS_INSTALL
 LAUNCHER_AS_SERVICE_COMMANDS_INSTALL
-# Custom directory creation and permission setting
+# Create custom data directory and set permission for shared access (777 for full access)
 mkdir -p /opt/turbowinplus/data
 chmod 777 /opt/turbowinplus/data
+# Set umask to 000 to allow full shared access to the data directory before launching the application.
+# The script creates a wrapper that sets the umask and then launches the actual TurboWinPlus binary.
+mv /opt/turbowinplus/bin/TurboWinPlus /opt/turbowinplus/bin/TurboWinPlus.run
+mv /opt/turbowinplus/lib/app/TurboWinPlus.cfg /opt/turbowinplus/lib/app/TurboWinPlus.run.cfg
+cat <<EOF > /opt/turbowinplus/bin/TurboWinPlus
+#!/bin/bash
+umask 000
+exec /opt/turbowinplus/bin/TurboWinPlus.run "\$@"
+EOF
+chmod +x /opt/turbowinplus/bin/TurboWinPlus
 
 %pre
 package_type=rpm
@@ -90,6 +100,9 @@ fi
 
 %preun
 package_type=rpm
+# Move original binary and configuration files back to their original locations before uninstallation
+mv /opt/turbowinplus/bin/TurboWinPlus.run /opt/turbowinplus/bin/TurboWinPlus
+mv /opt/turbowinplus/lib/app/TurboWinPlus.run.cfg /opt/turbowinplus/lib/app/TurboWinPlus.cfg
 DESKTOP_SCRIPTS
 LAUNCHER_AS_SERVICE_SCRIPTS
 DESKTOP_COMMANDS_UNINSTALL
