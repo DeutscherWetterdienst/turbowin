@@ -8703,7 +8703,7 @@ private class RS232_Class_Receive_Sensor_Data_II extends SwingWorker<String, Str
          System.out.println("+++ " + "[THERMOMETER] Couldn't open " +  main.serialPort_II.getDescriptivePortName());
       }       
       
-      if (!main.APPLICATION_VERSION.contains("[64-bit]"))  // so 32-bit
+      if (!TurboWinAppInfo.APPLICATION_VERSION.contains("[64-bit]"))  // so 32-bit
       {
          String message = "[THERMOMETER] " + "using 32-bit receive method"; 
          main.log_turbowin_system_message(message);   
@@ -8766,7 +8766,7 @@ private class RS232_Class_Receive_Sensor_Data_II extends SwingWorker<String, Str
                } // public void serialEvent(SerialPortEvent event)
             });                   
          } // if (serialPort.isOpen())
-      } // if (!main.APPLICATION_VERSION.contains("[64-bit]"))        
+      } // if (!TurboWinAppInfo.APPLICATION_VERSION.contains("[64-bit]"))        
       else // 64-bit methode
       {
          //System.out.println("thermometer data via 64 bit method");

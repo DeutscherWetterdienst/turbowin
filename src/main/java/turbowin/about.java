@@ -317,7 +317,7 @@ private void initComponents2()
    setTitle("about " + main.APPLICATION_NAME);
    
    // NB this will overwrite default value "Turbo+" (which is in design mode)
-   //jLabel1.setText(main.APPLICATION_NAME + " " + main.APPLICATION_VERSION);
+   //jLabel1.setText(main.APPLICATION_NAME + " " + TurboWinAppInfo.APPLICATION_VERSION);
    
    if (os.equals("LINUX"))
    { 
@@ -336,7 +336,7 @@ private void initComponents2()
       loadImage_GPL_logo(main.ICONS_DIRECTORY + "gplv3-with-text-136x68.png");
    } // else
    
-   jLabel4.setText(main.APPLICATION_NAME + " " + main.APPLICATION_VERSION);
+   jLabel4.setText(main.APPLICATION_NAME + " " + TurboWinAppInfo.APPLICATION_VERSION);
 
    // NB September 2023: for Windows 11, Microsoft still uses 10.0 as version number (if using System.getProperty("os.version") and "System.getenv("OS_VERSION"") !
    jLabel6.setText("operating system: " + System.getProperty("os.name") + " version " + System.getProperty("os.version") + " running on " + System.getProperty("os.arch"));

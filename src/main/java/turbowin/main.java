@@ -5282,11 +5282,11 @@ private static void disable_dashboard_and_maps_menu_items()
                // "TurboWin+ started" message to log (logs dir must be known!)
                if (!theme_changed)
                {
-                  log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+                  log_turbowin_system_message("[GENERAL] started " + APPLICATION_NAME + " " + application_mode + " " + TurboWinAppInfo.APPLICATION_VERSION);
                }
                else
                {
-                  log_turbowin_system_message("[GENERAL] restarted main module (Theme changed)" + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+                  log_turbowin_system_message("[GENERAL] restarted main module (Theme changed)" + APPLICATION_NAME + " " + application_mode + " " + TurboWinAppInfo.APPLICATION_VERSION);
                }
                
                // log Java version
@@ -10014,7 +10014,7 @@ private void Amver_PositionReport_actionPerformed(java.awt.event.ActionEvent evt
          }
          
          // TurboWin+ stopped message to log
-         log_turbowin_system_message("[GENERAL] stopped " + APPLICATION_NAME + " " + application_mode + " " + APPLICATION_VERSION);
+         log_turbowin_system_message("[GENERAL] stopped " + APPLICATION_NAME + " " + application_mode + " " + TurboWinAppInfo.APPLICATION_VERSION);
          
          // exit
          System.exit(0);     
@@ -19569,7 +19569,6 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
    
    // public var's
    public static final String APPLICATION_NAME                     = "TurboWin+";            // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-   public static final String APPLICATION_VERSION                  = "4.7.0 [64-bit] (build 3-April-2025)"; // NB DO NOT FORGET TO COMPILE MAIN.JAVA AND ABOUT.JAVA AFTER A CHANGE OF THIS STRING // NB wordt getest op substring "[64-bit]"
    public static final String APPLICATION_MET_MODULES              = "MAWSbin_TW; teste_hc_TW; email_tbw_43;";
    public static final String DASHBOARD_LOGO                       = "logo-sot.png";         // i.a. single dashboard barometer
    public static String application_mode                           = "";                     // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]

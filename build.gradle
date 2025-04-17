@@ -25,6 +25,14 @@ dependencies {
     testImplementation 'org.assertj:assertj-swing-junit:3.17.1'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs += "$buildDir/generated/source/appinfo/java"
+        }
+    }
+}
+
 jar {
     manifest {
         attributes(
@@ -44,6 +52,27 @@ jlink {
     }
     options = ['--strip-debug', '--compress', 'zip-6', '--no-header-files', '--no-man-pages']
 }
+
+task generateAppInfoJava {
+    doLast {
+        def generatedSourceDir = file("$buildDir/generated/source/appinfo/java")
+        generatedSourceDir.mkdirs()
+
+        def javaFile = new File(generatedSourceDir, "TurboWinAppInfo.java")
+        javaFile.text = """\
+            package turbowin;
+
+            public class TurboWinAppInfo {
+                public static final String APPLICATION_VERSION = "${project.version} [${System.getProperty("sun.arch.data.model")}-bit] (build ${new Date().format('d-MMMM-yyyy')})";  // is tested for substring "[64-bit]" 
+            }
+        """
+    }
+}
+
+compileJava.dependsOn generateAppInfoJava
+
+processResources.dependsOn generateAppInfoJava
+
 tasks.jlink.doLast {
     copy {
         from('src/main/resources/turbowin/help_files')
