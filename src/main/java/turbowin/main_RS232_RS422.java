@@ -11119,7 +11119,7 @@ private static void RS232_Send_Sensor_Data_to_APR_FM13_Server(final boolean retr
                // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
                //    (if internet avaialble the response code will be overwritten with eg 200)
                      
-		         String message_b = log_tag + " send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+		         String message_b = log_tag + " send obs failed; " + HttpStatusMapper.httpResponseCodeToText(response_code).replace("<br>", " ");
                   
                // file logging
                main.log_turbowin_system_message(message_b);
@@ -11634,8 +11634,8 @@ private void RS232_Send_Sensor_Data_to_APR_OLD(String sensor_data_record_APR_pre
 {
    // NB see also: Output_obs_to_server_FM13() [main.java]
    
-   //final Integer INVALID_RESPONSE_FORMAT_101 = 710;                // see also: Function: http_respons_code_to_text() [main.java]
-   //final Integer OK_RESPONSE_FORMAT_101      = 713;                // see also: Function: http_respons_code_to_text() [main.java]
+   //final Integer INVALID_RESPONSE_FORMAT_101 = 710;                // see also: Function: HttpStatusMapper.httpResponseCodeToText() [HttpStatusMapper.java]
+   //final Integer OK_RESPONSE_FORMAT_101      = 713;                // see also: Function: HttpStatusMapper.httpResponseCodeToText() [HttpStatusMapper.java]
    
    double double_barometer_instrument_correction = 0.0;
    //String server_format_101_line = "";
@@ -11826,7 +11826,7 @@ private void RS232_Send_Sensor_Data_to_APR_OLD(String sensor_data_record_APR_pre
                // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
                //    (if internet avaialble the response code will be overwritten with eg 200)
                      
-		         String message_b = "[APR] send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+		         String message_b = "[APR] send obs failed; " + HttpStatusMapper.httpResponseCodeToText(response_code).replace("<br>", " ");
                   
                // file logging
                main.log_turbowin_system_message(message_b);
@@ -12050,7 +12050,7 @@ private static void RS232_Send_Sensor_Data_to_APR_format101_Server(final boolean
                // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
                //    (if internet avaialble the response code will be overwritten with eg 200)
                      
-		         String message_b = log_tag + " send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+		         String message_b = log_tag + " send obs failed; " + HttpStatusMapper.httpResponseCodeToText(response_code).replace("<br>", " ");
                   
                // file logging
                main.log_turbowin_system_message(message_b);
@@ -12394,7 +12394,7 @@ private static void RS232_Send_Sensor_Data_to_APR_format101_Server_V2(final bool
                // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
                //    (if internet available the response code will be overwritten with eg 200)
                      
-		         String message_b = log_tag + " send obs failed; " + main.http_respons_code_to_text(int_response_code).replace("<br>", " ") + response_error;
+		         String message_b = log_tag + " send obs failed; " + HttpStatusMapper.httpResponseCodeToText(int_response_code).replace("<br>", " ") + response_error;
                   
                // file logging
                main.log_turbowin_system_message(message_b);
@@ -14432,7 +14432,7 @@ private void RS422_Send_Sensor_Data_To_AWSR(final boolean retry)
                // NB If no internet connection available the responseCode will be RESPONSE_NO_INTERNET
                //    (if internet avaialble the response code will be overwritten with eg 200)
                      
-		         String message_b = "[AWSR] send obs failed; " + main.http_respons_code_to_text(response_code).replace("<br>", " ");
+		         String message_b = "[AWSR] send obs failed; " + HttpStatusMapper.httpResponseCodeToText(response_code).replace("<br>", " ");
                   
                // file logging
                main.log_turbowin_system_message(message_b);

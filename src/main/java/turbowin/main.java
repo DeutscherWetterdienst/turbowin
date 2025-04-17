@@ -18414,7 +18414,7 @@ private void Output_obs_to_server_FM13_TurboWin_stand_alone()
                //    Not suitable for direct using it into a popup message box
                //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
                //
-               String message_b = "[MANUAL] send obs failed; " + http_respons_code_to_text(response_code).replace("<br>", " ");
+               String message_b = "[MANUAL] send obs failed; " + HttpStatusMapper.httpResponseCodeToText(response_code).replace("<br>", " ");
                   
                // file logging
                main.log_turbowin_system_message(message_b);
@@ -18425,7 +18425,7 @@ private void Output_obs_to_server_FM13_TurboWin_stand_alone()
                // pop-up message in manual mode
                String info = "<html>" + 
                              main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
-                             http_respons_code_to_text(response_code) + 
+                             HttpStatusMapper.httpResponseCodeToText(response_code) + 
                              "</html>";
                JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
             
@@ -18455,7 +18455,7 @@ private void Output_obs_to_server_FM13_TurboWin_stand_alone()
             // pop-up message in manual mode
             String info = "<html>" + 
                           main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
-                          http_respons_code_to_text(RESPONSE_INTERRUPTION) + 
+                          HttpStatusMapper.httpResponseCodeToText(RESPONSE_INTERRUPTION) + 
                           "</html>";
             JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
             
@@ -18620,7 +18620,7 @@ private void Output_obs_to_server_format_101()
                //    Not suitable for direct using it into a popup message box
                //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
                //
-               String message_b = "[MANUAL] send obs failed; " + http_respons_code_to_text(response_code).replace("<br>", " ");
+               String message_b = "[MANUAL] send obs failed; " + HttpStatusMapper.httpResponseCodeToText(response_code).replace("<br>", " ");
                   
                // file logging
                main.log_turbowin_system_message(message_b);
@@ -18631,7 +18631,7 @@ private void Output_obs_to_server_format_101()
                // pop-up message in manual mode
                String info = "<html>" + 
                              main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
-                             http_respons_code_to_text(response_code) + 
+                             HttpStatusMapper.httpResponseCodeToText(response_code) + 
                              "</html>";
                JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
             
@@ -18661,7 +18661,7 @@ private void Output_obs_to_server_format_101()
             // pop-up message in manual mode
             String info = "<html>" + 
                           main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
-                          http_respons_code_to_text(RESPONSE_INTERRUPTION) + 
+                          HttpStatusMapper.httpResponseCodeToText(RESPONSE_INTERRUPTION) + 
                           "</html>";
             JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
             
@@ -18931,7 +18931,7 @@ private void Output_obs_to_server_format_101_V2()
                //    Not suitable for direct using it into a popup message box
                //    so only using the reponse code and locally (in this program) determined the corresponding return http message text
                //
-               String message_b = "[MANUAL] send obs failed; " + http_respons_code_to_text(int_response_code).replace("<br>", " ") + response_error;
+               String message_b = "[MANUAL] send obs failed; " + HttpStatusMapper.httpResponseCodeToText(int_response_code).replace("<br>", " ") + response_error;
                   
                // file logging
                main.log_turbowin_system_message(message_b);
@@ -18942,7 +18942,7 @@ private void Output_obs_to_server_format_101_V2()
                // pop-up message in manual mode
                String info = "<html>" + 
                              main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
-                             http_respons_code_to_text(int_response_code) + response_error +  
+                             HttpStatusMapper.httpResponseCodeToText(int_response_code) + response_error +  
                              "</html>";
                JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
             
@@ -18972,7 +18972,7 @@ private void Output_obs_to_server_format_101_V2()
             // pop-up message in manual mode
             String info = "<html>" + 
                           main.sdf_tsl_2.format(new Date()) + " UTC " + "send obs failed; " + "<br>" +
-                          http_respons_code_to_text(RESPONSE_INTERRUPTION) + 
+                          HttpStatusMapper.httpResponseCodeToText(RESPONSE_INTERRUPTION) + 
                           "</html>";
             JOptionPane.showMessageDialog(null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
             
@@ -18995,109 +18995,6 @@ private void Output_obs_to_server_format_101_V2()
 
 
 ///////
-
-/***********************************************************************************************/
-/*                                                                                             */
-/*                                                                                             */
-/*                                                                                             */
-/***********************************************************************************************/
-public static String http_respons_code_to_text(int responseCode)
-{
-   // called from:
-   //     - RS232_Send_Sensor_Data_to_APR_format101_Server() [main_RS232_RS422.java]
-   //     - RS232_Send_Sensor_Data_to_APR_FM13_Server [main_RS232_RS422.java]
-   
-   
-   String text = "Unknown error";          
-   switch (responseCode) 
-   {
-      // 1xx: Information
-      case 100: text = "Continue (HTTP code 100)"; break;
-      case 101: text = "Switching Protocols (HTTP code 101)"; break;
-      case 103: text = "Checkpoint (HTTP code 103)"; break;
-      
-      // 2xx: Successful
-      case 200: text = "OK"; break;
-      case 201: text = "Created"; break;
-      case 202: text = "Accepted"; break;
-      case 203: text = "Non-Authoritative Information"; break;
-      case 204: text = "No Content"; break;
-      case 205: text = "Reset Content"; break;
-      case 206: text = "Partial Content"; break;
-      
-      // 3xx: Redirection
-      case 300: text = "Multiple Choices (HTTP code 300)"; break;
-      case 301: text = "Moved Permanently (HTTP code 301)"; break;
-      case 302: text = "Moved Temporarily (HTTP code 302)"; break;
-      case 303: text = "See Other (HTTP code 303)"; break;
-      case 304: text = "Not Modified (HTTP code 304)"; break;
-      case 305: text = "Use Proxy (HTTP code 305)"; break;
-      case 306: text = "Switch Proxy (HTTP code 306)"; break;
-      case 307: text = "Temporary Redirect (HTTP code 307)"; break;
-      case 308: text = "Resume Incomplete (HTTP code 308)"; break;   
-      
-      // 4xx: Client Error
-      case 400: text = "Bad Request (HTTP code 400)"; break;
-      case 401: text = "Unauthorized (HTTP code 401)"; break;
-      case 402: text = "Payment Required (HTTP code 402)"; break;
-      case 403: text = "Forbidden (HTTP code 403)"; break;
-      case 404: text = "Not Found (upload URL unknown) (HTTP code 404)"; break;
-      case 405: text = "Method Not Allowed (HTTP code 405)"; break;
-      case 406: text = "Not Acceptable (HTTP code 406)"; break;
-      case 407: text = "Proxy Authentication Required (HTTP code 407)"; break;
-      case 408: text = "Request Time-out (HTTP code 408)"; break;
-      case 409: text = "Conflict (HTTP code 409)"; break;
-      case 410: text = "Gone (HTTP code 410)"; break;
-      case 411: text = "Length Required (HTTP code 411)"; break;
-      case 412: text = "Precondition Failed (HTTP code 412)"; break;
-      case 413: text = "Request Entity Too Large (HTTP code 413)"; break;
-      case 414: text = "Request-URI Too Large (HTTP code 414)"; break;
-      case 415: text = "Unsupported Media Type (HTTP code 415)"; break;
-      case 416: text = "Requested Range Not Satisfiable (HTTP code 416)"; break;
-      case 417: text = "Expectation Failed (HTTP code 417)"; break;        
-            
-      // 5xx: Server Error   
-      case 500: text = "Internal Server Error (HTTP code 500)"; break;                
-      case 501: text = "Not Implemented (HTTP code 501)"; break;
-      case 502: text = "Bad Gateway (HTTP code 502)"; break;
-      case 503: text = "Service Unavailable (HTTP code 503)"; break;
-      case 504: text = "Gateway Time-out (HTTP code 504)"; break;
-      case 505: text = "HTTP Version not supported (HTTP code 505)"; break;
-      case 511: text = "Authentication Required (HTTP code 511)"; break;
-         
-      // 7xx: TurboWin+/server Error (custom/sef defined errors) [2 sections] 
-      //// start first self defined section (must be coordinated with server [index_webstart_101.php]) //////   
-      case 700: text = "obs invalid format"; break;                                                                       // self defined
-      case 701: text = "station ID or call sign in the obs not on the email whitelist of this server." + "<br>" +         // self defined
-                       "Please send an email with your station ID and call sign to the addressee National Meteorological Service"; break;
-      case 702: text = "obs routing from server to Meteorological Centre failed"; break;                                  // self defined
-       //// end first self defined section ////// 
-         
-      //// start second self defined section (no coordination with server [index_webstart_101.php or index_webstart_fm13.php]) //////      
-      case 710: text = "internal error when generating format 101 obs"; break;                                            // self defined 
-      //case 711: text = "most probably no internet connection available or firewall/scanner is blocking"; break;           // self defined (actually IOexception)
-      case 711: text = "communication error"; break;                                                                      // self defined (actually IOexception)
-      case 712: text = "internal error, malformed URL"; break;                                                            // self defined
-      case 713: text = "most probably no internet connection available (format 101 obs ok)"; break;                       // self defined
-      case 714: text = "InterruptedException or ExecutionException"; break;                                               // self defined
-      case 715: text = "Unsupported UTF-8 encoding"; break;                                                               // self defined 
-      case 716: text = "most probably no internet connection available (FM13 obs ok)"; break;                             // self defined
-      case 717: text = "internal error when generating FM13 obs"; break;                                                  // self defined   
-      case 718: text = "internal error when determining response code"; break;                                                 // self defined 
-      //// end second self defined section //////         
-         
-      // default   
-      default:  text = "Unknown error"; break;                  
-   } // switch   
-       
-   
-   return text;     
-}                  
-
-
-
-
-
 
 /***********************************************************************************************/
 /*                                                                                             */
