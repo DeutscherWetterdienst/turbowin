@@ -1,24 +1,26 @@
-name: exe
+name: rpm-amd64
 
 on:
   push:
   pull_request:
 
 jobs:
-  exe:
-    runs-on: windows-latest
+  rpm-amd64:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk-ubi9-minimal
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Build EXE package
-        run: powershell -File scripts/task_windows.ps1
+      - name: Build RPM package
+        run: ./scripts/task_linux.bash rpm
         env:
           TURBOWIN_EMAIL_ENCRYPTION_KEY: ${{ secrets.TURBOWIN_EMAIL_ENCRYPTION_KEY }}
           TURBOWIN_EMAIL_CHARACTER_ENCODING: ${{ secrets.TURBOWIN_EMAIL_CHARACTER_ENCODING }}
           TURBOWIN_EMAIL_CIPHER_TRANSFORMATION: ${{ secrets.TURBOWIN_EMAIL_CIPHER_TRANSFORMATION }}
           TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM: ${{ secrets.TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM }}
-      - name: Upload EXE artifacts
+      - name: Upload RPM artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: exe-artifacts
+          name: rpm-amd64-artifacts
           path: build/jpackage/*

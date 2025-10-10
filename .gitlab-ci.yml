@@ -24,7 +24,7 @@ test:
     when: always
     expire_in: 1 hour
 
-deb:
+deb-amd64:
   stage: build
   image: eclipse-temurin:21-jdk-noble
   script:
@@ -34,7 +34,19 @@ deb:
       - build/jpackage/*
     expire_in: 1 hour
 
-rpm:
+deb-arm64:
+  stage: build
+  tags:
+    - saas-linux-small-arm64
+  image: eclipse-temurin:21-jdk-noble
+  script:
+    - ./scripts/task_linux.bash deb
+  artifacts:
+    paths:
+      - build/jpackage/*
+    expire_in: 1 hour
+
+rpm-amd64:
   stage: build
   image: eclipse-temurin:21-jdk-ubi9-minimal
   script:
@@ -44,7 +56,7 @@ rpm:
       - build/jpackage/*
     expire_in: 1 hour
 
-exe:
+exe-amd64:
   stage: build
   tags:
     - saas-windows-medium-amd64
