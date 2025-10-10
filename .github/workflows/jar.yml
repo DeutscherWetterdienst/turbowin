@@ -18,6 +18,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Build JAR
         run: ./scripts/task_linux.bash jar
+        env:
+          TURBOWIN_EMAIL_ENCRYPTION_KEY: ${{ secrets.TURBOWIN_EMAIL_ENCRYPTION_KEY }}
+          TURBOWIN_EMAIL_CHARACTER_ENCODING: ${{ secrets.TURBOWIN_EMAIL_CHARACTER_ENCODING }}
+          TURBOWIN_EMAIL_CIPHER_TRANSFORMATION: ${{ secrets.TURBOWIN_EMAIL_CIPHER_TRANSFORMATION }}
+          TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM: ${{ secrets.TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM }}
       - name: Upload JAR artifacts
         uses: actions/upload-artifact@v4
         with:

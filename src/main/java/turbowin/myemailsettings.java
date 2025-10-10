@@ -1083,7 +1083,7 @@ private void Cancel_button_actionPerformed(java.awt.event.ActionEvent evt) {//GE
       {
          Cipher cipher = Cipher.getInstance(cipherTransformation);
          byte[] key = encryptionKey.getBytes(characterEncoding);
-         SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithem);
+         SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithm);
          IvParameterSpec ivparameterspec = new IvParameterSpec(key);
          cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivparameterspec);
          byte[] cipherText = cipher.doFinal(plainText.getBytes("UTF8"));
@@ -1121,7 +1121,7 @@ private void Cancel_button_actionPerformed(java.awt.event.ActionEvent evt) {//GE
       {
          Cipher cipher = Cipher.getInstance(cipherTransformation);
          byte[] key = encryptionKey.getBytes(characterEncoding);
-         SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithem);
+         SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithm);
          IvParameterSpec ivparameterspec = new IvParameterSpec(key);
          cipher.init(Cipher.DECRYPT_MODE, secretKey, ivparameterspec);
           
@@ -1211,11 +1211,11 @@ private void Cancel_button_actionPerformed(java.awt.event.ActionEvent evt) {//GE
    private javax.swing.JTextField jTextField5;
    // End of variables declaration//GEN-END:variables
 
-   
-   private static final String encryptionKey                 = "";     
-   private static final String characterEncoding             = "";
-   private static final String cipherTransformation          = "";
-   private static final String aesEncryptionAlgorithem       = "";
+
+   private static final String encryptionKey                 = EmailSettingsConstants.encryptionKey;
+   private static final String characterEncoding             = EmailSettingsConstants.characterEncoding;
+   private static final String cipherTransformation          = EmailSettingsConstants.cipherTransformation;
+   private static final String aesEncryptionAlgorithm        = EmailSettingsConstants.aesEncryptionAlgorithm;
    
    //private String gmail_app_password_plain                   = "";
    //private String yahoo_app_password_plain                   = "";
