@@ -7,3 +7,5 @@
 - Some variables and function names are in Dutch though the majority is in English
 - In the future it could make sense to replace Swing as a GUI toolkit with JavaFX
 - Transmission of data over open channels
+- Some legacy helper binaries still remain in the repository and should be replaced or externalized in the future
+- Large generated release artifacts are no longer stored in Git; see `documentation/repository_cleanup.md`
