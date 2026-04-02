@@ -43,15 +43,6 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     out: list[DecodedField] = []
     n_total_bits = len(octets) * 8
 
-    # Group marker mapping for TurboWin legacy pilot CSV:
-    # - 410000: visual group marker, followed by 10 fields
-    # - 408000: wave group marker, followed by 8 fields
-    # - 408000: ice group marker, followed by 8 fields
-    GROUP_SIZES = {
-        "410000": 10,  # visual
-        "408000": 8,  # wave and ice
-    }
-
     i = 0
     while i < len(pilote):
         desc = pilote[i]
@@ -79,18 +70,9 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
 
         out.append(DecodedField(key=key, value=value))
 
-        # Optional group handling: if marker bit is 0, skip reading the group's fields.
-        if desc.bufr in GROUP_SIZES and value in (0, 0.0):
-            group_len = GROUP_SIZES[desc.bufr]
-            for j in range(1, group_len + 1):
-                if i + j >= len(pilote):
-                    break
-                d2 = pilote[i + j]
-                k2 = f"{d2.bufr}{('_' + d2.ref) if d2.ref else ''}"
-                out.append(DecodedField(key=k2, value=None))
-            i += group_len + 1
-            continue
-
+        # NOTE: In TurboWin legacy vectors, the group markers are always present and the
+        # group fields are still part of the bitstream even when absent (encoded as missing).
+        # Therefore we do not skip group fields when the marker is 0.
         i += 1
 
     return out
@@ -107,7 +89,7 @@ def decode_hpk_line(
 
     The line consists of:
     - 7-character station id prefix (left padded with spaces)
-    - followed by a half-compressed payload (6-bit words stored in bytes)
+    - followed by a half-compressed payload
     """
     pilote = load_pilote_csv(pilote_csv)
 
