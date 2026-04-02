@@ -64,6 +64,12 @@ uv run --project python python tests/harness/run_reference_encoder_windows.py te
 uv run --project python python tests/harness/verify_decoder_against_vectors.py
 ```
 
+### For debugging the decoder
+
+```powershell
+uv run --project python python tests/harness/debug_decode_one.py tests/vectors/minimal_id34567.expected.hpk.txt
+```
+
 ---
 
 ## Running the CLI
