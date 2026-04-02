@@ -49,7 +49,7 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     # - 408000: ice group marker, followed by 8 fields
     GROUP_SIZES = {
         "410000": 10,  # visual
-        "408000": 8,   # wave and ice
+        "408000": 8,  # wave and ice
     }
 
     i = 0

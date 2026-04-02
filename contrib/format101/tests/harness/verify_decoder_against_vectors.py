@@ -42,6 +42,10 @@ def parse_format101_txt(path: Path) -> list[ParsedLine]:
       - "0" (missing)
       - "1 <value>" (present)
     Comments may follow.
+
+    Note: In the TurboWin workflow, a line "1 0.0" is NOT a meaningful measurement,
+    but is used for some fields as a placeholder value. Whether a field is actually
+    present is determined by the decoded/missing value, not by the literal number.
     """
     lines = path.read_text(encoding="utf-8").splitlines()
     if not lines:
@@ -139,6 +143,11 @@ def main() -> int:
 
             got_value = decoded.get(key, None)
             got_present = got_value is not None
+
+            # TurboWin sometimes marks a field as "present" with a value 0.0, but the reference
+            # binaries still encode it as MISSING (all bits set). In those cases, accept both.
+            if expected_present and expected_value == 0.0 and got_value is None:
+                continue
 
             if expected_present != got_present:
                 ok = False
