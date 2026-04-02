@@ -42,11 +42,6 @@ def parse_format101_txt(path: Path) -> list[ParsedLine]:
       - "0" (missing)
       - "1 <value>" (present)
     Comments may follow.
-
-    Note: In the TurboWin workflow, some fields can be marked as present in
-    format_101.txt but are still encoded as MISSING by the reference binaries.
-    Therefore, tests must compare against decoded presence rather than blindly
-    trusting the input file.
     """
     lines = path.read_text(encoding="utf-8").splitlines()
     if not lines:
