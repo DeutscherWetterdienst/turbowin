@@ -37,7 +37,7 @@ def parse_format101_txt(path: Path) -> list[ParsedLine]:
     Parse TurboWin-style format_101.txt input.
 
     Format:
-    - first line: "0"
+    - first line: "0" (operating mode)
     - then lines like:
       - "0" (missing)
       - "1 <value>" (present)
@@ -88,7 +88,13 @@ def almost_equal(a: float, b: float, tol: float) -> bool:
 
 
 def main() -> int:
-    pilote = load_pilote_csv(DEFAULT_PILOTE)
+    pilote_all = load_pilote_csv(DEFAULT_PILOTE)
+
+    # TurboWin format_101.txt does not contain a data line for the first pilote entry
+    # (000000 = operating mode), because the operating mode is provided as the first
+    # line in format_101.txt ("0"). Therefore we skip it for comparisons.
+    pilote = [e for e in pilote_all if not (e.bufr == "000000" and e.ref == "")]
+
     pilote_keys = [pilote_key(e) for e in pilote]
     pilote_by_key = {pilote_key(e): e for e in pilote}
 
