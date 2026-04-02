@@ -145,20 +145,6 @@ def main() -> int:
             got_value = decoded.get(key, None)
             got_present = got_value is not None
 
-            # For the legacy TurboWin vectors, the group marker bits in the encoded payload
-            # do not reliably match the values written in format_101.txt. These are
-            # 410000 (visual marker) and 408000 (wave/ice marker).
-            if entry.bufr in ("410000", "408000"):
-                continue
-
-            if expected_present and got_value is None:
-                continue
-
-            # If TurboWin marks missing, but decoded yields something, also accept it for now.
-            # (This can happen if the binary forces some marker bits to 1 in the encoded payload.)
-            if not expected_present and got_present:
-                continue
-
             if expected_present != got_present:
                 ok = False
                 print(f"[FAIL] {stem}: presence mismatch at idx={idx} key={key}")
