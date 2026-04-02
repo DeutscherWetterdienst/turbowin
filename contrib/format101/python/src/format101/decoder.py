@@ -38,14 +38,19 @@ class DecodedMessage:
         return "\n".join(lines) + "\n"
 
 
+VISUAL_COUNT = 10
+WAVE_COUNT = 8
+ICE_COUNT = 8
+
+
 def _field_key(desc: PilotEntry) -> str:
     return f"{desc.bufr}{('_' + desc.ref) if desc.ref else ''}"
 
 
 def _decode_entry(
-    octets: bytes, b_ofs: int, desc: PilotEntry
+    octets: bytes, b_ofs: int, desc: PilotEntry, *, key_override: str | None = None
 ) -> tuple[int, DecodedField]:
-    key = _field_key(desc)
+    key = key_override if key_override is not None else _field_key(desc)
     b_ofs, raw = read_bits(octets, b_ofs, desc.nbits)
     if raw is None:
         return b_ofs, DecodedField(key=key, value=None)
@@ -109,7 +114,7 @@ def _split_pilote_into_sections(
         )
 
     idx_vis_fields_start = idx_vis_marker + 1
-    idx_vis_fields_end = idx_vis_fields_start + 10
+    idx_vis_fields_end = idx_vis_fields_start + VISUAL_COUNT
     if idx_vis_fields_end > len(pilote):
         raise ValueError("Invalid pilote file: insufficient visual fields after 410000")
     vis_fields = pilote[idx_vis_fields_start:idx_vis_fields_end]
@@ -124,7 +129,7 @@ def _split_pilote_into_sections(
         )
 
     idx_wave_fields_start = idx_wave_marker + 1
-    idx_wave_fields_end = idx_wave_fields_start + 8
+    idx_wave_fields_end = idx_wave_fields_start + WAVE_COUNT
     if idx_wave_fields_end > len(pilote):
         raise ValueError(
             "Invalid pilote file: insufficient wave fields after first 408000"
@@ -141,7 +146,7 @@ def _split_pilote_into_sections(
         )
 
     idx_ice_fields_start = idx_ice_marker + 1
-    idx_ice_fields_end = idx_ice_fields_start + 8
+    idx_ice_fields_end = idx_ice_fields_start + ICE_COUNT
     if idx_ice_fields_end > len(pilote):
         raise ValueError(
             "Invalid pilote file: insufficient ice fields after second 408000"
@@ -190,18 +195,17 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
 
     # main block
     if not ensure_bits(sum(e.nbits for e in main)):
-        # Payload too short: fall back to linear missing fill
         _, fields_main = (
             _decode_block(octets, b_ofs, main)
             if n_total_bits > 0
             else (b_ofs, _missing_block(main))
         )
         out.extend(fields_main)
-        out.append(DecodedField(key=_field_key(vis_marker), value=None))
+        out.append(DecodedField(key="410000_visual", value=None))
         out.extend(_missing_block(vis_fields))
-        out.append(DecodedField(key=_field_key(wave_marker), value=None))
+        out.append(DecodedField(key="408000_wave", value=None))
         out.extend(_missing_block(wave_fields))
-        out.append(DecodedField(key=_field_key(ice_marker), value=None))
+        out.append(DecodedField(key="408000_ice", value=None))
         out.extend(_missing_block(ice_fields))
         return out
 
@@ -210,15 +214,17 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
 
     # visual marker + block
     if not ensure_bits(vis_marker.nbits):
-        out.append(DecodedField(key=_field_key(vis_marker), value=None))
+        out.append(DecodedField(key="410000_visual", value=None))
         out.extend(_missing_block(vis_fields))
-        out.append(DecodedField(key=_field_key(wave_marker), value=None))
+        out.append(DecodedField(key="408000_wave", value=None))
         out.extend(_missing_block(wave_fields))
-        out.append(DecodedField(key=_field_key(ice_marker), value=None))
+        out.append(DecodedField(key="408000_ice", value=None))
         out.extend(_missing_block(ice_fields))
         return out
 
-    b_ofs, vis_m = _decode_entry(octets, b_ofs, vis_marker)
+    b_ofs, vis_m = _decode_entry(
+        octets, b_ofs, vis_marker, key_override="410000_visual"
+    )
     out.append(vis_m)
     vis_rep = 0 if vis_m.value is None else int(vis_m.value)
 
@@ -233,13 +239,15 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
 
     # wave marker + block
     if not ensure_bits(wave_marker.nbits):
-        out.append(DecodedField(key=_field_key(wave_marker), value=None))
+        out.append(DecodedField(key="408000_wave", value=None))
         out.extend(_missing_block(wave_fields))
-        out.append(DecodedField(key=_field_key(ice_marker), value=None))
+        out.append(DecodedField(key="408000_ice", value=None))
         out.extend(_missing_block(ice_fields))
         return out
 
-    b_ofs, wave_m = _decode_entry(octets, b_ofs, wave_marker)
+    b_ofs, wave_m = _decode_entry(
+        octets, b_ofs, wave_marker, key_override="408000_wave"
+    )
     out.append(wave_m)
     wave_rep = 0 if wave_m.value is None else int(wave_m.value)
 
@@ -254,11 +262,11 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
 
     # ice marker + block
     if not ensure_bits(ice_marker.nbits):
-        out.append(DecodedField(key=_field_key(ice_marker), value=None))
+        out.append(DecodedField(key="408000_ice", value=None))
         out.extend(_missing_block(ice_fields))
         return out
 
-    b_ofs, ice_m = _decode_entry(octets, b_ofs, ice_marker)
+    b_ofs, ice_m = _decode_entry(octets, b_ofs, ice_marker, key_override="408000_ice")
     out.append(ice_m)
     ice_rep = 0 if ice_m.value is None else int(ice_m.value)
 
@@ -290,6 +298,11 @@ def decode_hpk_line(
     pilote = load_pilote_csv(pilote_csv)
 
     raw = hpk_line.rstrip("\r\n")
+    if len(raw) < 7:
+        raise ValueError(
+            "HPK line too short (expected at least 7 chars for station id)"
+        )
+
     prefix = raw[:7]
     station_id = prefix.strip()
 
