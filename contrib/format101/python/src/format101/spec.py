@@ -22,7 +22,13 @@ def _parse_float(s: str) -> float:
 def load_pilote_csv(path: str | Path) -> list[PilotEntry]:
     p = Path(path)
     entries: list[PilotEntry] = []
-    for raw_line in p.read_text(encoding="utf-8").splitlines():
+
+    try:
+        text = p.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        text = p.read_text(encoding="latin1")
+
+    for raw_line in text.splitlines():
         line = raw_line.strip()
         if not line or line.startswith("#"):
             continue
