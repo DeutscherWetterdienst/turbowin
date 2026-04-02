@@ -57,3 +57,15 @@ uv run --project python python tests/harness/run_reference_encoder_windows.py te
 ```powershell
 uv run --project python python tests/harness/run_reference_encoder_windows.py tests/vectors/minimal_id34567.format_101.txt --identifier 34567 --write-expected
 ```
+
+---
+
+## Running the CLI
+
+From `contrib/format101`:
+
+### Decode
+
+```powershell
+uv run --project python format101 decode --hpk-file tests/vectors/minimal_id34567.expected.hpk.txt
+```
