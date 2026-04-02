@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from format101.bitstream import read_bits
-from format101.codec6 import compact_6bit_text_to_octets
+from format101.codec6 import expand_6bit_text_to_octets
 from format101.spec import PilotEntry, load_pilote_csv
 
 
@@ -48,8 +48,8 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     # - 408000: wave group marker, followed by 8 fields
     # - 408000: ice group marker, followed by 8 fields
     GROUP_SIZES = {
-        "410000": 10,
-        "408000": 8,
+        "410000": 10,  # visual
+        "408000": 8,   # wave and ice
     }
 
     i = 0
@@ -118,8 +118,8 @@ def decode_hpk_line(
     # The payload contains bytes like 0x7F (DEL), so we must treat it as raw bytes.
     payload_text = raw[7:].encode("latin1")
 
-    # TurboWin stores 6-bit words in the lower 6 bits of each byte; compact to octets.
-    octets = compact_6bit_text_to_octets(payload_text)
+    # TurboWin payload bytes are in the range 0x40..0x7F; convert to 6-bit values and compact.
+    octets = expand_6bit_text_to_octets(payload_text)
 
     # TurboWin's legacy pilot CSV includes an initial '000000' (operating mode) entry.
     # That value is not part of the encoded payload, so we skip it when decoding.
