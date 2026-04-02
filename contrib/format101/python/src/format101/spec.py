@@ -46,3 +46,7 @@ def load_pilote_csv(path: str | Path) -> list[PilotEntry]:
 
 def iter_pilote_fields(entries: Iterable[PilotEntry]) -> list[str]:
     return [f"{e.bufr}{('_' + e.ref) if e.ref else ''}" for e in entries]
+
+
+def pilote_key(entry: PilotEntry) -> str:
+    return f"{entry.bufr}{('_' + entry.ref) if entry.ref else ''}"

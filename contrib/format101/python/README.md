@@ -58,6 +58,12 @@ uv run --project python python tests/harness/run_reference_encoder_windows.py te
 uv run --project python python tests/harness/run_reference_encoder_windows.py tests/vectors/minimal_id34567.format_101.txt --identifier 34567 --write-expected
 ```
 
+### Check decoder against golden vectors (tolerance-based)
+
+```powershell
+uv run --project python python tests/harness/verify_decoder_against_vectors.py
+```
+
 ---
 
 ## Running the CLI
