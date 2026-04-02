@@ -9,3 +9,18 @@ Input file format used by the reference encoder binary (`teste_hc_TW*`), as prod
 
 ### `*.expected.hpk.txt`
 Expected encoded output (single line), matching the contents of `HPK_format_101.txt`.
+
+The files are stored as Latin-1 (byte-oriented) because the payload contains bytes like `0x7F`.
+
+## Naming convention
+
+Input vectors follow this naming convention:
+
+- `<name>_id<STATIONID>.format_101.txt`
+
+The station ID (`STATIONID`) is extracted from the filename and passed to the reference encoder as
+the `indicatif`/identifier argument. TurboWin+ accepts up to 7 characters for the station ID.
+
+The corresponding expected output file is:
+
+- `<name>_id<STATIONID>.expected.hpk.txt`
