@@ -52,9 +52,11 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
         # than the full pilote definition. If we run out of bits, treat remaining fields as missing.
         if b_ofs + desc.nbits > n_total_bits:
             out.append(DecodedField(key=key, value=None))
-            b_ofs += desc.nbits
             i += 1
-            continue
+            for rest in pilote[i:]:
+                rest_key = f"{rest.bufr}{('_' + rest.ref) if rest.ref else ''}"
+                out.append(DecodedField(key=rest_key, value=None))
+            break
 
         b_ofs, raw = read_bits(octets, b_ofs, desc.nbits)
         if raw is None:
