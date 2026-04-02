@@ -42,8 +42,18 @@ class DecodedMessage:
 def _decode_fields(octets: bytes, pilote: Iterable[PilotEntry]) -> list[DecodedField]:
     b_ofs = 0
     out: list[DecodedField] = []
+    n_total_bits = len(octets) * 8
+
     for desc in pilote:
         key = f"{desc.bufr}{('_' + desc.ref) if desc.ref else ''}"
+
+        # Some TurboWin+ messages omit optional groups. In that case, the payload is shorter
+        # than the full pilote definition. If we run out of bits, treat remaining fields as missing.
+        if b_ofs + desc.nbits > n_total_bits:
+            out.append(DecodedField(key=key, value=None))
+            b_ofs += desc.nbits
+            continue
+
         b_ofs, raw = read_bits(octets, b_ofs, desc.nbits)
         if raw is None:
             out.append(DecodedField(key=key, value=None))
@@ -54,6 +64,7 @@ def _decode_fields(octets: bytes, pilote: Iterable[PilotEntry]) -> list[DecodedF
             out.append(DecodedField(key=key, value=int(val)))
         else:
             out.append(DecodedField(key=key, value=float(val)))
+
     return out
 
 
