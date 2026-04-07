@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from format101.bitstream import read_bits
-from format101.codec6 import expand_6bit_text_to_octets
+from format101.codec6 import decode_turbowin_text_to_octets
 from format101.spec import PilotEntry, load_pilote_csv
 
 
@@ -73,16 +73,6 @@ def _decode_entry(
     return bits_offset, DecodedField(key=key, value=value)
 
 
-def _decode_block(
-    octets: bytes, bits_offset: int, entries: list[PilotEntry]
-) -> tuple[int, list[DecodedField]]:
-    out: list[DecodedField] = []
-    for e in entries:
-        bits_offset, field = _decode_entry(octets, bits_offset, e)
-        out.append(field)
-    return bits_offset, out
-
-
 def _missing_block(entries: list[PilotEntry]) -> list[DecodedField]:
     return [DecodedField(key=_field_key(e), value=None) for e in entries]
 
@@ -128,6 +118,10 @@ def _split_pilote_into_sections(
     if idx_vis_fields_end > len(pilote):
         raise ValueError("Invalid pilote file: insufficient visual fields after 410000")
     vis_fields = pilote[idx_vis_fields_start:idx_vis_fields_end]
+    if vis_fields and vis_fields[0].bufr != "020001":
+        raise ValueError(
+            f"Invalid pilote file: expected 020001 after 410000, got {vis_fields[0].bufr}"
+        )
 
     idx_wave_marker = idx_vis_fields_end
     if idx_wave_marker >= len(pilote):
@@ -145,6 +139,10 @@ def _split_pilote_into_sections(
             "Invalid pilote file: insufficient wave fields after first 408000"
         )
     wave_fields = pilote[idx_wave_fields_start:idx_wave_fields_end]
+    if wave_fields and wave_fields[0].bufr != "022012":
+        raise ValueError(
+            f"Invalid pilote file: expected 022012 after first 408000, got {wave_fields[0].bufr}"
+        )
 
     idx_ice_marker = idx_wave_fields_end
     if idx_ice_marker >= len(pilote):
@@ -162,6 +160,10 @@ def _split_pilote_into_sections(
             "Invalid pilote file: insufficient ice fields after second 408000"
         )
     ice_fields = pilote[idx_ice_fields_start:idx_ice_fields_end]
+    if ice_fields and ice_fields[0].bufr != "020031":
+        raise ValueError(
+            f"Invalid pilote file: expected 020031 after second 408000, got {ice_fields[0].bufr}"
+        )
 
     return (
         main,
@@ -313,7 +315,7 @@ def decode_hpk_line(
     payload_text = raw[7:].encode("latin1")
 
     # TurboWin payload bytes are in the range 0x40..0x7F; convert to 6-bit values and compact.
-    octets = expand_6bit_text_to_octets(payload_text)
+    octets = decode_turbowin_text_to_octets(payload_text)
 
     # TurboWin's legacy pilot CSV includes an initial '000000' (operating mode) entry.
     # That value is not part of the encoded payload, so we skip it when decoding.
