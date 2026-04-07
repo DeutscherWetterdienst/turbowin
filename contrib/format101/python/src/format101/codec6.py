@@ -45,19 +45,13 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     """
     Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
 
-    Important:
-    - The original ecosystem compaction algorithm is not bijective.
-    - TurboWin+ / reference binaries produce a very specific 6-bit text representation.
-    - For legacy 1:1 compatibility, we derive this text representation by emulating the
-      same 6-bit packing used by the reference encoder: sequentially take 6-bit words
-      from the payload bitstream (MSB-first), then store them as bytes (0x40..0x7F).
-
-    This corresponds to the classic "8-to-6 expansion" mentioned in the format docs:
+    This performs an "8-to-6 expansion":
       - payload is a byte-aligned bitstream
       - it is expanded to 6-bit words (MSB-first)
       - each 6-bit word is stored as (0x40 + word)
 
-    Note: This intentionally does not try to invert compact_6bit_text_to_octets().
+    Note: This intentionally does not try to invert compact_6bit_text_to_octets(),
+    because that compaction is not bijective.
     """
     if not octets:
         return b""
@@ -68,17 +62,16 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
 
     bitpos = 0
     for _ in range(nwords):
-        # read next 6 bits MSB-first from octets
         val = 0
         for _i in range(6):
+            if bitpos >= nbits:
+                val <<= 1
+                continue
             byte_idx = bitpos // 8
             bit_in_byte = bitpos % 8
             bit = (octets[byte_idx] >> (7 - bit_in_byte)) & 1
             val = (val << 1) | bit
             bitpos += 1
-            if bitpos >= nbits:
-                # pad remaining bits with 0
-                bitpos = nbits
         out.append((val & 0x3F) + 0x40)
 
     return bytes(out)
