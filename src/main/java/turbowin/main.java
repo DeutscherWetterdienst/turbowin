@@ -47,6 +47,7 @@ import java.util.Objects;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -17056,7 +17057,7 @@ public static void Output_obs_by_email_jakarta_FM13_format_101(boolean manual_se
                info_attachment = "yes";
             }
             
-            main.log_turbowin_system_message("[EMAIL] trying to send obs (body= " + "\"" + email_body + "\"" + ") to " + send_to + " cc " + info_cc + " from " + send_from + " via " + smtp_mode + " port " + info_port + " attachment " + info_attachment + " [primary email module]");
+            main.log_turbowin_system_message("[EMAIL] trying to send obs (body= " + "\"" + email_body + "\"" + ") to " + send_to + " cc " + info_cc + " from " + send_from + " via " + smtp_mode + " port " + info_port + " attachment " + info_attachment + " [primary email module, virtual thread]");
             
             
             if (jakarta_email_class == null)
@@ -17077,16 +17078,33 @@ public static void Output_obs_by_email_jakarta_FM13_format_101(boolean manual_se
                smtp_password_local_plain = "null";
             }
                
+            //
             // invoke the (jakarta)email send function
-            
+            //
+
             //// TEST ///
             //System.out.println("--- smtp_host_local = " + smtp_host_local);
             //System.out.println("--- send_to = " + send_to);
             
-            int exit_status = jakarta_email_class.send_jakarta_email_obs(smtp_mode, smtp_host_local, smtp_password_local_plain, send_to, send_from, email_subject, email_body, send_cc, smtp_port_local, attachment);
-               
+            //int exit_status = jakarta_email_class.send_jakarta_email_obs(smtp_mode, smtp_host_local, smtp_password_local_plain, send_to, send_from, email_subject, email_body, send_cc, smtp_port_local, attachment);
+            //jakarta_email_status = exit_status;
             
-            jakarta_email_status = exit_status;
+            // freeze parameters before executing on a virtual thread
+            final String smtp_mode_f                  = smtp_mode;
+            final String smtp_host_local_f            = smtp_host_local;
+            final String smtp_password_local_plain_f  = smtp_password_local_plain;
+            final String send_to_f                    = send_to;
+            final String send_from_f                  = send_from;
+            final String email_subject_f              = email_subject;
+            final String email_body_f                 = email_body;
+            final String send_cc_f                    = send_cc;
+            final String smtp_port_local_f            = smtp_port_local;
+            final String attachment_f                 = attachment;
+            try (var executor = java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor())
+            {
+               int exit_status = executor.submit(() -> jakarta_email_class.send_jakarta_email_obs(smtp_mode_f, smtp_host_local_f, smtp_password_local_plain_f, send_to_f, send_from_f, email_subject_f, email_body_f, send_cc_f, smtp_port_local_f, attachment_f)).get();
+               jakarta_email_status = exit_status;
+            }
             
          } //  if (doorgaan)
          
@@ -17492,7 +17510,7 @@ public static void Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(boo
             }
             
             //main.log_turbowin_system_message(info);
-            main.log_turbowin_system_message("[EMAIL] trying to send obs (body= " + "\"" + email_body + "\"" + ") to " + send_to + " cc " + info_cc + " from " + send_from + " via " + smtp_mode + " port " + info_port + " attachment " + info_attachment + " [secondary email module]");
+            main.log_turbowin_system_message("[EMAIL] trying to send obs (body= " + "\"" + email_body + "\"" + ") to " + send_to + " cc " + info_cc + " from " + send_from + " via " + smtp_mode + " port " + info_port + " attachment " + info_attachment + " [secondary email module, virtual thread]");
             
             
             if (python_email_class == null)
@@ -17518,13 +17536,37 @@ public static void Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(boo
                }
                
                // invoke the (python)email exe
-               int exit_status = python_email_class.send_python_email(smtp_mode, smtp_host_local, smtp_password_local_plain, send_to, send_from, email_subject, email_body, send_cc, smtp_port_local, attachment);
+               //int exit_status = python_email_class.send_python_email(smtp_mode, smtp_host_local, smtp_password_local_plain, send_to, send_from, email_subject, email_body, send_cc, smtp_port_local, attachment);
+
+               ////////////////////////////////
+               // freeze parameters before executing on a virtual thread
+               final String smtp_mode_f                  = smtp_mode;
+               final String smtp_host_local_f            = smtp_host_local;
+               final String smtp_password_local_plain_f  = smtp_password_local_plain;
+               final String send_to_f                    = send_to;
+               final String send_from_f                  = send_from;
+               final String email_subject_f              = email_subject;
+               final String email_body_f                 = email_body;
+               final String send_cc_f                    = send_cc;
+               final String smtp_port_local_f            = smtp_port_local;
+               final String attachment_f                 = attachment;
+               try (var executor = java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor())
+               {
+                  int exit_status = executor.submit(() -> python_email_class.send_python_email(smtp_mode_f, smtp_host_local_f, smtp_password_local_plain_f, send_to_f, send_from_f, email_subject_f, email_body_f, send_cc_f, smtp_port_local_f, attachment_f)).get();
+
+                  // convert the numerical return status to text line return status + write to system log
+                  String exit_status_text = python_email_class.python_email_exe_return_status_to_text(exit_status);
+                  main.log_turbowin_system_message("[EMAIL] " + exit_status_text);
+
+                  python_email_status = exit_status;
+               }
+
                
                // convert the numerical return status to text line return status + write to system log
-               String exit_status_text = python_email_class.python_email_exe_return_status_to_text(exit_status);
-               main.log_turbowin_system_message("[EMAIL] " + exit_status_text);
+               //String exit_status_text = python_email_class.python_email_exe_return_status_to_text(exit_status);
+               //main.log_turbowin_system_message("[EMAIL] " + exit_status_text);
             
-               python_email_status = exit_status;
+               //python_email_status = exit_status;
             }
             else // python module not found / copy-error
             {
