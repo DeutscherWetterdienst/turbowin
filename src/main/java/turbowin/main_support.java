@@ -5,8 +5,6 @@
 package turbowin;
 
 import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -35,8 +33,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
@@ -681,8 +677,9 @@ public class main_support {
    /*                                                                                             */
    /*                                                                                             */
    /*                                                                                             */
-   /***********************************************************************************************/   
-   public void determine_satellite_image_url(String satellite_image_mode) 
+   /***********************************************************************************************/  
+/*  
+   public void determine_satellite_image_url_SSEC(String satellite_image_mode) 
    {  
       // defaults
       String products = "";
@@ -737,7 +734,7 @@ public class main_support {
                url_lat_ok = true;
             }
          }
-         catch (NumberFormatException ex){/* ... */}
+         catch (NumberFormatException ex){// ... //}
                   
       } // if (myposition.latitude_degrees.compareTo("") != 0 etc.
             
@@ -766,7 +763,7 @@ public class main_support {
                url_lon_ok = true;
             }
          }
-         catch (NumberFormatException ex){/* ... */}
+         catch (NumberFormatException ex){// ... //}
                   
       } // if (myposition.longitude_degrees.compareTo("") != 0 etc.
                
@@ -794,7 +791,209 @@ public class main_support {
       main.satellite_link_mouse_clicked(url_satellite_image);
       
    }
+*/
+   public void determine_satellite_image_url_SSEC(String satellite_image_mode) 
+   {
+       // defaults
+       String products = "";
+       String url_satellite_image = "";
+
+       // determine type of satellite image
+       if (satellite_image_mode.equals(main.SATELLITE_IR_IMAGE))
+       {
+           products = "globalir";
+       }
+       else if (satellite_image_mode.equals(main.SATELLITE_VIS_IMAGE))
+       {
+           products = "global1kmvis";
+       }
+       else if (satellite_image_mode.equals(main.SATELLITE_SST_IMAGE))  
+       {
+           products = "NESDIS-SST";
+       }
+
+       // Latitude
+       double centerLat = 0.0;
+       if (myposition.latitude_degrees != null && !myposition.latitude_degrees.isEmpty() &&
+           myposition.latitude_hemisphere != null && !myposition.latitude_hemisphere.isEmpty())
+       {
+           try 
+           {
+               int intLat = Integer.parseInt(myposition.latitude_degrees.trim());
+               if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH))
+                   intLat *= -1;
+               // clamp latitude to [-90, 90]
+               centerLat = Math.max(-90, Math.min(90, intLat));
+           }
+           catch (NumberFormatException ex){/* ignore, default 0 */}    
+       }
+
+       // Longitude
+       double centerLon = 0.0;
+       if (myposition.longitude_degrees != null && !myposition.longitude_degrees.isEmpty() &&
+           myposition.longitude_hemisphere != null && !myposition.longitude_hemisphere.isEmpty())
+       {
+           try 
+           {
+               int intLon = Integer.parseInt(myposition.longitude_degrees.trim());
+               if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST))
+                   intLon *= -1;
+               // clamp longitude to [-180, 180]
+               centerLon = Math.max(-180, Math.min(180, intLon));
+           }
+           catch (NumberFormatException ex){/* ignore, default 0 */}    
+       }
+
+       // Force zoom <= 4 to reduce chance of watermark
+       int zoomLevel = 2;
+
+       // construct URL
+       url_satellite_image = String.format("https://realearth.ssec.wisc.edu/?products=%s&time=latest&center=%.6f,%.6f&zoom=%d", products, centerLat, centerLon, zoomLevel);
+
+       // open in browser
+       main.satellite_link_mouse_clicked(url_satellite_image);
+   }
    
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/   
+   public void determine_satellite_image_url_NOAA(String satellite_image_mode) 
+   {     
+      //
+      // Build a Worldview URL.
+      //
+      // @param centerLat Center latitude in degrees
+      // @param centerLon Center longitude in degrees
+      // @param halfWidthDeg Half-width of bounding box in degrees (controls zoom)
+      // @param halfHeightDeg Half-height of bounding box in degrees (controls zoom)
+      // @param layer Layer string, e.g., "GOES16:ABI-L2-CMIPF"
+      // @param time Optional UTC time in format "YYYY-MM-DDTHH:MM:SSZ", or null for latest
+      // @return Constructed Worldview URL
+      //
+      //
+      //
+      // NB For real-time frames, black areas happen a lot
+      //
+      //   - Cropping or viewport changes never fix it
+      //   - Layer switching rarely fixes it
+      //   - This problem is specific to Worldview tile service
+      //
+      
+      int int_lat_degrees = 0; 
+      int int_lon_degrees = 0;
+      double halfWidthDeg = 90.0;                 // ~zoom level
+      double halfHeightDeg = 90.0;                // ~zoom level
+      String layer = "GOES16:ABI-L2-CMIPF";      // default the standard IR
+      double centerLat = 0.0;
+      double centerLon = 0.0;
+       
+      
+      if (satellite_image_mode.equals(main.SATELLITE_IR_IMAGE))
+      {
+         layer = "GOES16:ABI-L2-CMIPF";
+         //layer = "GOES16:ABI-L2-MCMIPF";                  // The MCMIPF layers are multi-channel composite products and are usually delivered with fewer or no tile gaps NO effect
+      }
+      else if (satellite_image_mode.equals(main.SATELLITE_SST_IMAGE))
+      {
+         //layer = "GHRSST_L4_MUR_SST"; //"GOES16:ABI-L2-RadC02";
+         layer = ""; //"GOES16:ABI-L2-RadC02";
+      }
+      
+       
+      // Latitude
+      //
+      if (myposition.latitude_degrees.compareTo("") != 0 && myposition.latitude_hemisphere.compareTo("") != 0 &&
+          myposition.latitude_degrees != null && myposition.latitude_hemisphere != null)
+      {
+         try 
+         {
+            int_lat_degrees = Integer.parseInt(myposition.latitude_degrees.trim());
+                     
+            if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true))
+            {
+               int_lat_degrees *= -1;
+            }
+         }
+         catch (NumberFormatException ex){/* ... */}
+      } // if (myposition.latitude_degrees.compareTo("") != 0 etc.
+               
+      // Longitude
+      //
+      if (myposition.longitude_degrees.compareTo("") != 0 && myposition.longitude_hemisphere.compareTo("") != 0 &&
+          myposition.longitude_degrees != null && myposition.longitude_hemisphere != null)
+      {
+         // String longitude convert to integer
+         try 
+         {
+            int_lon_degrees = Integer.parseInt(myposition.longitude_degrees.trim());
+                    
+            if ((myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
+            {
+               int_lon_degrees *= -1;
+            }
+         }
+         catch (NumberFormatException ex){/* ... */}
+      } // if (myposition.longitude_degrees.compareTo("") != 0 etc.
+ 
+      
+      //
+      // bounding box 
+      //
+      // - Even if the user is near the poles or the dateline, the bounding box will never produce values outside the allowed world limits.
+      // - This handles cases where your half-width or half-height zoom factor makes the bounding box exceed the map envelope.
+      //
+      centerLon = int_lon_degrees;
+      centerLat = int_lat_degrees;
+
+      // ensure center coordinates remain valid
+      centerLat = Math.max(-90.0, Math.min(90.0, centerLat));
+      centerLon = Math.max(-180.0, Math.min(180.0, centerLon));
+
+      double minLon = centerLon - halfWidthDeg;
+      double maxLon = centerLon + halfWidthDeg;
+      double minLat = centerLat - halfHeightDeg;
+      double maxLat = centerLat + halfHeightDeg;
+
+      // clamp bounding box to valid geographic limits
+      minLat = Math.max(-90.0, minLat);
+      maxLat = Math.min(90.0, maxLat);
+      minLon = Math.max(-180.0, minLon);
+      maxLon = Math.min(180.0, maxLon);
+
+      String vParam = String.format("%.6f,%.6f,%.6f,%.6f", minLon, minLat, maxLon, maxLat);
+      
+      // compile complete URL string 
+      //    NB if a colour layer the visible layer 'menuitem' will not be visible in the left worldview panel
+      //    NB but a colour layer is need otherwise no image visible...
+      //    Layer stacking: TrueColor first, then IR on top, then reference layers?
+      //
+      StringBuilder url = new StringBuilder("https://worldview.earthdata.nasa.gov/?");
+      url.append("v=").append(vParam);
+      url.append("&l=").append(layer);
+      if (satellite_image_mode.equals(main.SATELLITE_IR_IMAGE))
+      {   
+         url.append(",MODIS_Terra_CorrectedReflectance_TrueColor"); // trueColor gives land/sea reference even if the main layer is semi-transparent
+      }
+      else if (satellite_image_mode.equals(main.SATELLITE_SST_IMAGE))
+      {
+         url.append(",MODIS_Aqua_L2_Sea_Surface_Temp_Night,MODIS_Aqua_L2_Sea_Surface_Temp_Day");
+         //url.append(",MODIS_Aqua_L3_SST_Thermal_4km_Night_Daily,MODIS_Aqua_L3_SST_Thermal_4km_Day_Daily);      // not working nov 2025
+      }   
+      url.append(",Reference_Labels,Reference_Features");        // with no reference layers, the map may appear empty, dark, or “not loaded yet”
+      //url.append("&t=now");                                    // force timestamp-independent latest image, not necessary
+      //url.append("&pt=").append("52.0,6.0,10,FF0000,ship");    // altough mentioned a few times in docs it is not working nov 2025
+      url.append("&al=false");                                   // clear all previous stored layers
+      
+      
+      // invoke, in the default web browser, the url to the satellite image
+      //
+      main.satellite_link_mouse_clicked(url.toString());
+   }
+
    
  
 /***********************************************************************************************/

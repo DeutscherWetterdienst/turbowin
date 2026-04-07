@@ -751,8 +751,8 @@ public class main extends javax.swing.JFrame {
       jMenuItem69 = new javax.swing.JMenuItem();
       jMenuItem70 = new javax.swing.JMenuItem();
       jSeparator15 = new javax.swing.JPopupMenu.Separator();
+      jMenuItem141 = new javax.swing.JMenuItem();
       jMenuItem78 = new javax.swing.JMenuItem();
-      jMenuItem140 = new javax.swing.JMenuItem();
       jMenuItem79 = new javax.swing.JMenuItem();
       jSeparator16 = new javax.swing.JPopupMenu.Separator();
       jMenu11 = new javax.swing.JMenu();
@@ -1995,7 +1995,7 @@ public class main extends javax.swing.JFrame {
                .addComponent(jLabel39, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 931, Short.MAX_VALUE)
                .addComponent(jLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addContainerGap(20, Short.MAX_VALUE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
       );
 
       jPanel5Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel4, jSeparator1, jTextField4});
@@ -2635,27 +2635,27 @@ public class main extends javax.swing.JFrame {
       jMenu10.add(jMenuItem70);
       jMenu10.add(jSeparator15);
 
-      jMenuItem78.setText("Satellite image IR  (internet)");
+      jMenuItem141.setText("Satellite image IR [NOAA] (internet)");
+      jMenuItem141.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Maps_satellite_image_IR_NOAA_actionPerformed(evt);
+         }
+      });
+      jMenu10.add(jMenuItem141);
+
+      jMenuItem78.setText("Satellite image IR [SSEC] (internet)");
       jMenuItem78.setActionCommand("Satellite image IR (internet)");
       jMenuItem78.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Maps_satellite_image_IR_actionPerformed(evt);
+            Maps_satellite_image_IR_SSEC_actionPerformed(evt);
          }
       });
       jMenu10.add(jMenuItem78);
 
-      jMenuItem140.setText("Satellite image vis (internet)");
-      jMenuItem140.addActionListener(new java.awt.event.ActionListener() {
-         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Maps_satellite_image_vis_actionPerformed(evt);
-         }
-      });
-      jMenu10.add(jMenuItem140);
-
-      jMenuItem79.setText("Satellite image SST (internet)");
+      jMenuItem79.setText("Satellite image SST [NOAA] (internet)");
       jMenuItem79.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Maps_satellite_image_SST_actionPerformed(evt);
+            Maps_satellite_image_SST_NOAA_actionPerformed(evt);
          }
       });
       jMenu10.add(jMenuItem79);
@@ -12439,26 +12439,14 @@ private void IMMT_AWS_manual_input_preperations()
    /*                                                                                             */
    /*                                                                                             */
    /***********************************************************************************************/      
-   private void Maps_satellite_image_IR_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_satellite_image_IR_actionPerformed
+   private void Maps_satellite_image_IR_SSEC_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_satellite_image_IR_SSEC_actionPerformed
       // TODO add your handling code here:
       
       String satellite_image_mode = SATELLITE_IR_IMAGE;
-      support_class.determine_satellite_image_url(satellite_image_mode);
-   }//GEN-LAST:event_Maps_satellite_image_IR_actionPerformed
+      support_class.determine_satellite_image_url_SSEC(satellite_image_mode);
+   }//GEN-LAST:event_Maps_satellite_image_IR_SSEC_actionPerformed
 
    
-   
-   /***********************************************************************************************/
-   /*                                                                                             */
-   /*                                                                                             */
-   /*                                                                                             */
-   /***********************************************************************************************/   
-   private void Maps_satellite_image_SST_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_satellite_image_SST_actionPerformed
-      // TODO add your handling code here:
-      
-      String satellite_image_mode = SATELLITE_SST_IMAGE;
-      support_class.determine_satellite_image_url(satellite_image_mode);
-   }//GEN-LAST:event_Maps_satellite_image_SST_actionPerformed
 
    
    
@@ -12931,13 +12919,6 @@ private void IMMT_AWS_manual_input_preperations()
       Maps_pilot_charts(pilot_charts_mode);
    }//GEN-LAST:event_Maps_pilot_charts_IN_december_actionPerformed
 
-   private void Maps_satellite_image_vis_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_satellite_image_vis_actionPerformed
-      // TODO add your handling code here:
-      
-      String satellite_image_mode = SATELLITE_VIS_IMAGE;
-      support_class.determine_satellite_image_url(satellite_image_mode);
-   }//GEN-LAST:event_Maps_satellite_image_vis_actionPerformed
-
    
    
    /***********************************************************************************************/
@@ -12981,7 +12962,34 @@ private void IMMT_AWS_manual_input_preperations()
       form.setExtendedState(MAXIMIZED_BOTH);                      // full screen
       form.setVisible(true);
    }//GEN-LAST:event_Info_device_log_menu_actionPerformed
-  
+
+
+
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private void Maps_satellite_image_IR_NOAA_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_satellite_image_IR_NOAA_actionPerformed
+      // TODO add your handling code here:
+
+      String satellite_image_mode = SATELLITE_IR_IMAGE;
+      support_class.determine_satellite_image_url_NOAA(satellite_image_mode);
+   }//GEN-LAST:event_Maps_satellite_image_IR_NOAA_actionPerformed
+
+
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private void Maps_satellite_image_SST_NOAA_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Maps_satellite_image_SST_NOAA_actionPerformed
+      // TODO add your handling code here:
+
+      String satellite_image_mode = SATELLITE_SST_IMAGE;
+      support_class.determine_satellite_image_url_NOAA(satellite_image_mode);
+   }//GEN-LAST:event_Maps_satellite_image_SST_NOAA_actionPerformed
+
    
    
    /***********************************************************************************************/
@@ -19077,7 +19085,7 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
    private javax.swing.JMenuItem jMenuItem138;
    private javax.swing.JMenuItem jMenuItem139;
    private javax.swing.JMenuItem jMenuItem14;
-   private javax.swing.JMenuItem jMenuItem140;
+   private javax.swing.JMenuItem jMenuItem141;
    private javax.swing.JMenuItem jMenuItem15;
    private javax.swing.JMenuItem jMenuItem16;
    private javax.swing.JMenuItem jMenuItem17;

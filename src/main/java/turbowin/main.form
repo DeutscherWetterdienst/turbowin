@@ -724,29 +724,29 @@
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator15">
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem141">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Satellite image IR [NOAA] (internet)"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maps_satellite_image_IR_NOAA_actionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem78">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Satellite image IR  (internet)"/>
+                <Property name="text" type="java.lang.String" value="Satellite image IR [SSEC] (internet)"/>
                 <Property name="actionCommand" type="java.lang.String" value="Satellite image IR (internet)"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maps_satellite_image_IR_actionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem140">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Satellite image vis (internet)"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maps_satellite_image_vis_actionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maps_satellite_image_IR_SSEC_actionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem79">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Satellite image SST (internet)"/>
+                <Property name="text" type="java.lang.String" value="Satellite image SST [NOAA] (internet)"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maps_satellite_image_SST_actionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Maps_satellite_image_SST_NOAA_actionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator16">

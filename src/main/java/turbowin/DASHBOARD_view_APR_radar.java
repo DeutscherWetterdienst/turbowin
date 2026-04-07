@@ -68,10 +68,14 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
    /* inner class HitLinkMouseListener */
    public class HitLinkMouseListener extends MouseAdapter // https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/2d/advanced/examples/HitTestSample.java
    {
-      //
+  
+      // disabled from version 4.7
+      // but left the source code here for possible future ideas
+
+
       // Perform action if mouse click in satellite image text link.
       //
-      
+/*      
       @Override
       //public void mouseClicked(MouseEvent e)                            // Invoked when the mouse button has been clicked (pressed and released) on a component.
       public void mousePressed(MouseEvent e)                              // Invoked when a mouse button has been pressed on a component.     
