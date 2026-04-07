@@ -1,3 +1,4 @@
+import argparse
 import re
 from pathlib import Path
 
@@ -5,7 +6,7 @@ from format101.encoder import encode_format101_from_txt
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
+DEFAULT_VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
 DEFAULT_PILOTE = (
     REPO_ROOT / "miscellaneous" / "format_101" / "config" / "S-AWS-101_modl_pilote.csv"
 )
@@ -24,11 +25,21 @@ def extract_identifier(stem: str) -> str:
 
 
 def main() -> int:
-    ok = True
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--dir",
+        type=Path,
+        default=DEFAULT_VECTORS_DIR,
+        help="Directory containing vectors (default: tests/vectors)",
+    )
+    args = ap.parse_args()
 
-    for input_path in sorted(VECTORS_DIR.glob("*.format_101.txt")):
+    ok = True
+    vectors_dir = args.dir
+
+    for input_path in sorted(vectors_dir.glob("*.format_101.txt")):
         stem = input_path.stem.replace(".format_101", "")
-        expected_path = VECTORS_DIR / f"{stem}.expected.hpk.txt"
+        expected_path = vectors_dir / f"{stem}.expected.hpk.txt"
         if not expected_path.exists():
             print(f"[FAIL] Missing expected file: {expected_path}")
             ok = False

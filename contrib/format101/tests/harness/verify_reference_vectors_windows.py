@@ -1,6 +1,10 @@
+import argparse
 import re
+from pathlib import Path
 
 from run_reference_encoder_windows import REPO_ROOT, run_one
+
+DEFAULT_VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
 
 ID_RE = re.compile(r"_id([A-Za-z0-9]{1,7})$")
 
@@ -16,7 +20,16 @@ def extract_identifier(stem: str) -> str:
 
 
 def main() -> int:
-    vectors_dir = REPO_ROOT / "tests" / "vectors"
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--dir",
+        type=Path,
+        default=DEFAULT_VECTORS_DIR,
+        help="Directory containing vectors (default: tests/vectors)",
+    )
+    args = ap.parse_args()
+
+    vectors_dir = args.dir
     work_dir = REPO_ROOT / "tests" / ".work"
     work_dir.mkdir(parents=True, exist_ok=True)
 

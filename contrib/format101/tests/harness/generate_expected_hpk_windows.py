@@ -4,8 +4,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
-
+DEFAULT_VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
 SCRIPT = REPO_ROOT / "tests" / "harness" / "run_reference_encoder_windows.py"
 
 
@@ -16,13 +15,19 @@ def main() -> int:
         type=Path,
         help="Generate expected output only for a single *.format_101.txt file",
     )
+    ap.add_argument(
+        "--dir",
+        type=Path,
+        default=DEFAULT_VECTORS_DIR,
+        help="Directory containing *.format_101.txt files (default: tests/vectors)",
+    )
     args = ap.parse_args()
 
     vectors = []
     if args.vector is not None:
         vectors = [args.vector]
     else:
-        vectors = sorted(VECTORS_DIR.glob("*.format_101.txt"))
+        vectors = sorted(args.dir.glob("*.format_101.txt"))
 
     for input_path in vectors:
         stem = input_path.stem.replace(".format_101", "")
