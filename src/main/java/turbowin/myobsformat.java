@@ -46,6 +46,9 @@ final public class myobsformat extends javax.swing.JFrame {
       jRadioButton3 = new javax.swing.JRadioButton();
       jRadioButton4 = new javax.swing.JRadioButton();
       jLabel3 = new javax.swing.JLabel();
+      jLabel4 = new javax.swing.JLabel();
+      jPanel2 = new javax.swing.JPanel();
+      jCheckBox1 = new javax.swing.JCheckBox();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("Obs Format");
@@ -69,7 +72,7 @@ final public class myobsformat extends javax.swing.JFrame {
 
       jLabel2.setForeground(new java.awt.Color(0, 0, 255));
       jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel2.setText("--- please change this setting only with the prior agreement of your National Meteorological Service ---");
+      jLabel2.setText("--- change this setting only with the prior agreement of your National Meteorological Service ---");
 
       jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -125,9 +128,19 @@ final public class myobsformat extends javax.swing.JFrame {
 
       buttonGroup3.add(jRadioButton3);
       jRadioButton3.setText("uploads via EUCAWS (device's iridium modem) ");
+      jRadioButton3.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            EUCAWS_uploads_via_AWS_itemStateChanged(evt);
+         }
+      });
 
       buttonGroup3.add(jRadioButton4);
       jRadioButton4.setText("uploads via TurboWin+ (Maintenance -> APR / APTR / AWSR settings)");
+      jRadioButton4.addItemListener(new java.awt.event.ItemListener() {
+         public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            EUCAWS_uploads_via_turbowin_itemStateChanged(evt);
+         }
+      });
 
       javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
       jPanel1.setLayout(jPanel1Layout);
@@ -152,6 +165,29 @@ final public class myobsformat extends javax.swing.JFrame {
 
       jLabel3.setText("EUCAWS uploads");
 
+      jLabel4.setText("EUCAWS SMD input");
+
+      jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+      jCheckBox1.setText("add observer intials (OBS_ID) to SMD input");
+
+      javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+      jPanel2.setLayout(jPanel2Layout);
+      jPanel2Layout.setHorizontalGroup(
+         jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addGroup(jPanel2Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+      );
+      jPanel2Layout.setVerticalGroup(
+         jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+         .addGroup(jPanel2Layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jCheckBox1)
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+      );
+
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
       layout.setHorizontalGroup(
@@ -168,13 +204,14 @@ final public class myobsformat extends javax.swing.JFrame {
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
          .addGroup(layout.createSequentialGroup()
             .addContainerGap(120, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-               .addComponent(jLabel3)
-               .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                  .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
-                  .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                  .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                  .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+               .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
+               .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+               .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addContainerGap(121, Short.MAX_VALUE))
       );
 
@@ -189,11 +226,15 @@ final public class myobsformat extends javax.swing.JFrame {
             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel2)
-            .addGap(70, 70, 70)
+            .addGap(47, 47, 47)
             .addComponent(jLabel3)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+            .addGap(30, 30, 30)
+            .addComponent(jLabel4)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(15, 15, 15)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -247,7 +288,7 @@ final public class myobsformat extends javax.swing.JFrame {
       
       
       
-      // obs format EUCAWS-AWS, so we have to check also upload method (eucaws or turbowin)
+      // obs format EUCAWS-AWS, so we have to check upload method too (eucaws or turbowin)
       //
       if ( (doorgaan == true) && (main.obs_format.equals(main.FORMAT_AWS)) )
       {
@@ -277,8 +318,23 @@ final public class myobsformat extends javax.swing.JFrame {
             String info = "EUCAWS upload method unknown";
             JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
          }
+         
+         // check if OBS_ID must be added to SMD input
+         //
+         if (doorgaan == true)
+         {
+            if (jCheckBox1.isSelected())
+            {
+               // add obs id (observer initials) to SMD input
+               main.eucaws_obs_id = true;   
+            }   
+            else
+            {
+               main.eucaws_obs_id = false;
+            }
+         }
        
-      } // if ( (doorgaan == true) && (main.obs_format.equals(main.FORMAT_101)) )
+      } // if ( (doorgaan == true) && (main.obs_format.equals(main.FORMAT_AWS)) )
       
       
       if ( (doorgaan == true) && (main.obs_format.equals(main.FORMAT_101)) || ((main.obs_format.equals(main.FORMAT_AWS) && (main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN)))) )
@@ -296,7 +352,7 @@ final public class myobsformat extends javax.swing.JFrame {
                           JOptionPane.showMessageDialog(null, info_message, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
                           break;
          } // switch (ostype)  
-      }
+      } // if ( (doorgaan == true) etc.
       
       
       //
@@ -355,6 +411,9 @@ final public class myobsformat extends javax.swing.JFrame {
          
          jRadioButton3.setEnabled(false);                     // uploads via eucaws
          jRadioButton4.setEnabled(false);                     // uploads via turbowin
+         
+         jCheckBox1.setSelected(false);                       // add OBS_ID to SMD input
+         jCheckBox1.setEnabled(false);                        // add OBS_ID to SMD input
       } // if (jRadioButton1.isSelected() == true)
       
    }//GEN-LAST:event_FM13_itemStateChanged
@@ -375,6 +434,9 @@ final public class myobsformat extends javax.swing.JFrame {
          
          jRadioButton3.setEnabled(false);                     // uploads via eucaws
          jRadioButton4.setEnabled(false);                     // uploads via turbowin
+         
+         jCheckBox1.setSelected(false);                       // add OBS_ID to SMD input
+         jCheckBox1.setEnabled(false);                        // add OBS_ID to SMD input
       } // if (jRadioButton2.isSelected() == true)
 
    }//GEN-LAST:event_format_101_itemStateChanged
@@ -396,10 +458,43 @@ final public class myobsformat extends javax.swing.JFrame {
          
          jRadioButton3.setEnabled(true);                      // uploads via eucaws
          jRadioButton4.setEnabled(true);                      // uploads via turbowin
+         
+         jCheckBox1.setSelected(false);                       // add OBS_ID to SMD input
+         jCheckBox1.setEnabled(true);                         // add OBS_ID to SMD input
       } // if (jRadioButton7.isSelected() == true)
       
    }//GEN-LAST:event_AWS_itemStateChanged
 
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/ 
+   private void EUCAWS_uploads_via_turbowin_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_EUCAWS_uploads_via_turbowin_itemStateChanged
+      // TODO add your handling code here:
+
+      // obs uploads/sending via TurboWin+ then there is no SMD input (SMD input always via iridium modem of the EUCAWS)
+      
+      jCheckBox1.setSelected(false);                       // add OBS_ID to SMD input
+      jCheckBox1.setEnabled(false);                        // add OBS_ID to SMD input
+   }//GEN-LAST:event_EUCAWS_uploads_via_turbowin_itemStateChanged
+
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/    
+   private void EUCAWS_uploads_via_AWS_itemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_EUCAWS_uploads_via_AWS_itemStateChanged
+      // TODO add your handling code here:
+      
+      jCheckBox1.setEnabled(true);                        // add OBS_ID to SMD input
+   }//GEN-LAST:event_EUCAWS_uploads_via_AWS_itemStateChanged
+
+   
    
    
    /***********************************************************************************************/
@@ -415,6 +510,7 @@ final public class myobsformat extends javax.swing.JFrame {
       jRadioButton3.setSelected(false);                   // uploads via eucaws
       jRadioButton4.setSelected(false);                   // uploads via turbowin
       jRadioButton7.setSelected(false);                   // AWS
+      jCheckBox1.setSelected(false);                      // add OBS_ID to SMD input
         
       
       //
@@ -434,7 +530,7 @@ final public class myobsformat extends javax.swing.JFrame {
       {   
          jRadioButton7.setSelected(true);
          
-         // EUCAWS uploads  method
+         // EUCAWS uploads method
          if (main.eucaws_uploads_method.equals(main.UPLOADS_VIA_EUCAWS))        
          {   
             jRadioButton3.setSelected(true);                             // uploads via eucaws
@@ -446,9 +542,14 @@ final public class myobsformat extends javax.swing.JFrame {
          else // default 
          {
             jRadioButton3.setSelected(true);                             // uploads via eucaws
-         }            
-      } 
-    
+         }        
+         
+         // EUCAWS, add OBS_ID to SMD input
+         if (main.eucaws_obs_id)                                         // boolean; add OBS_ID to SMD iput
+         {
+            jCheckBox1.setSelected(true);
+         }
+      } // else if (main.obs_format.equals(main.FORMAT_AWS))
    }
     
    
@@ -490,10 +591,13 @@ final public class myobsformat extends javax.swing.JFrame {
    private javax.swing.ButtonGroup buttonGroup3;
    private javax.swing.JButton jButton1;
    private javax.swing.JButton jButton2;
+   private javax.swing.JCheckBox jCheckBox1;
    private javax.swing.JLabel jLabel1;
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
+   private javax.swing.JLabel jLabel4;
    private javax.swing.JPanel jPanel1;
+   private javax.swing.JPanel jPanel2;
    private javax.swing.JPanel jPanel4;
    private javax.swing.JRadioButton jRadioButton1;
    private javax.swing.JRadioButton jRadioButton2;

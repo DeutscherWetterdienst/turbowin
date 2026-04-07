@@ -43,8 +43,7 @@ final public class myobserver extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-   private void initComponents()
-   {
+   private void initComponents() {
 
       jSeparator1 = new javax.swing.JSeparator();
       jButton1 = new javax.swing.JButton();
@@ -58,6 +57,7 @@ final public class myobserver extends javax.swing.JFrame {
       jLabel4 = new javax.swing.JLabel();
       jButton4 = new javax.swing.JButton();
       jButton5 = new javax.swing.JButton();
+      jLabel5 = new javax.swing.JLabel();
 
       setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
       setTitle("Observer");
@@ -65,26 +65,21 @@ final public class myobserver extends javax.swing.JFrame {
       setResizable(false);
 
       jButton1.setText("OK");
-      jButton1.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton1.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             OK_button_actionPerformed(evt);
          }
       });
 
       jButton2.setText("Cancel");
-      jButton2.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton2.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             Cancel_button_actionPerformed(evt);
          }
       });
 
       jTable1.setModel(new javax.swing.table.DefaultTableModel(
-         new Object [][]
-         {
+         new Object [][] {
             {null, null, null, null},
             {null, null, null, null},
             {null, null, null, null},
@@ -106,19 +101,15 @@ final public class myobserver extends javax.swing.JFrame {
             {null, null, null, null},
             {null, null, null, null}
          },
-         new String []
-         {
+         new String [] {
             "surname", "full initials*", "rank", "discharge book**"
          }
-      )
-      {
-         Class[] types = new Class []
-         {
+      ) {
+         Class[] types = new Class [] {
             java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
          };
 
-         public Class getColumnClass(int columnIndex)
-         {
+         public Class getColumnClass(int columnIndex) {
             return types [columnIndex];
          }
       });
@@ -134,13 +125,11 @@ final public class myobserver extends javax.swing.JFrame {
       jLabel2.setText("--- double click cell to insert new data ---");
 
       jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-      jLabel3.setText("--- to clear table cells: double click appropriate cells and delete data ---");
+      jLabel3.setText("--- to clear records: double click surname cell and delete data ---");
 
       jButton3.setText("Internet");
-      jButton3.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton3.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             Internet_button_actionPerformed(evt);
          }
       });
@@ -151,22 +140,21 @@ final public class myobserver extends javax.swing.JFrame {
       jLabel4.setMinimumSize(new java.awt.Dimension(338, 14));
 
       jButton4.setText("Back");
-      jButton4.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton4.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             Back_button_actionPerformed(evt);
          }
       });
 
       jButton5.setText("Stop");
-      jButton5.addActionListener(new java.awt.event.ActionListener()
-      {
-         public void actionPerformed(java.awt.event.ActionEvent evt)
-         {
+      jButton5.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
             Stop_button_actionParformed(evt);
          }
       });
+
+      jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+      jLabel5.setText("-");
 
       javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
       getContentPane().setLayout(layout);
@@ -183,7 +171,8 @@ final public class myobserver extends javax.swing.JFrame {
                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                           .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                           .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                           .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                      .addGroup(layout.createSequentialGroup()
                         .addGap(160, 160, 160)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -208,13 +197,15 @@ final public class myobserver extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel1)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel3)
-            .addGap(18, 18, 18)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jLabel5)
+            .addGap(4, 4, 4)
             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(15, 15, 15)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -299,120 +290,65 @@ final public class myobserver extends javax.swing.JFrame {
          );
 
          jTable1.setModel(model);
-
+         
          jLabel1.setText("*e.g. Heinz Andreas Dieter                                        **discharge book or seaman's card number if applicable");
 
       } // if (main.recruiting_country.indexOf("GERMANY") != -1)
 
+      
+      if (main.eucaws_obs_id == true)
+      {
+         DefaultTableModel model = new DefaultTableModel
+         (
+            new Object [][]
+            {
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null},
+               {null, null, null, null}
+            },
+            new String []
+            {
+               "surname", "full initials*", "OBS_ID**", "discharge book***"
+            }
+         )
+         {
+            @Override
+            public boolean isCellEditable(int row, int column) 
+            {
+               return column != 2; // Column index 2 (OBS_ID**) is uneditable
+            }
+         };   
 
+         jTable1.setModel(model);
+
+         jLabel1.setText("*e.g. A.B.          **computed          ***discharge book or seaman's card number if applicable");
+         
+         jLabel2.setText("--- double click cell to insert new data (OBS_ID excepted) ---");
+         
+         jLabel5.setText("--- uploading observers data: 'Maintenance -> Move log files' ---");
+         
+      } // if (main.eucaws_obs_id == true)
+      
       lees_observer_log_en_vul_table();
    }
 
-
-
-/*
-   private void initComponents3()
-   {
-      class MyTableModel extends AbstractTableModel
-      {
-         private String[] columnNames = {"First Name",
-                                         "Last Name",
-                                         "Sport",
-                                         "# of Years",
-                                         "Vegetarian"};
-         private Object[][] data =
-         {
-            {"Mary", "Campione", "Snowboarding", new Integer(5), new Boolean(false)},
-            {"Alison", "Huml", "Rowing", new Integer(3), new Boolean(true)},
-            {"Kathy", "Walrath", "Knitting", new Integer(2), new Boolean(false)},
-            {"Sharon", "Zakhour", "Speed reading", new Integer(20), new Boolean(true)},
-            {"Philip", "Milne", "Pool", new Integer(10), new Boolean(false)},
-         };
-
-         public int getColumnCount() {
-            return columnNames.length;
-         }
-
-         @Override
-         public int getRowCount() {
-            return data.length;
-         }
-
-         @Override
-         public String getColumnName(int col) {
-            return columnNames[col];
-         }
-
-         public Object getValueAt(int row, int col) {
-            return data[row][col];
-         }
-
-         //
-         // JTable uses this method to determine the default renderer/
-         // editor for each cell.  If we didn't implement this method,
-         // then the last column would contain text ("true"/"false"),
-         // rather than a check box.
-         //
-         @Override
-         public Class getColumnClass(int c) {
-            return getValueAt(0, c).getClass();
-         }
-
-         //
-         // Don't need to implement this method unless your table's
-         // editable.
-         //
-         @Override
-         public boolean isCellEditable(int row, int col) {
-            //Note that the data/cell address is constant,
-            //no matter where the cell appears onscreen.
-            if (col < 2) {
-                return false;
-            } else {
-                return true;
-            }
-         }
-
-         //
-         // Don't need to implement this method unless your table's
-         // data can change.
-         //
-         public void setValueAt(Object value, int row, int col) {
-            boolean DEBUG = true;
-            if (DEBUG) {
-                System.out.println("Setting value at " + row + "," + col
-                                   + " to " + value
-                                   + " (an instance of "
-                                   + value.getClass() + ")");
-            }
-
-            data[row][col] = value;
-            fireTableCellUpdated(row, col);
-
-            if (DEBUG) {
-                System.out.println("New value of data:");
-                printDebugData();
-            }
-         }
-
-         private void printDebugData()
-         {
-            int numRows = getRowCount();
-            int numCols = getColumnCount();
-
-            for (int i=0; i < numRows; i++) {
-                System.out.print("    row " + i + ":");
-                for (int j=0; j < numCols; j++) {
-                    System.out.print("  " + data[i][j]);
-                }
-                System.out.println();
-            }
-            System.out.println("--------------------------");
-         }
-      } // class MyTableModel extends AbstractTableModel
-
-   } // private void initComponents3()
-*/
 
 
    /***********************************************************************************************/
@@ -436,76 +372,388 @@ final public class myobserver extends javax.swing.JFrame {
    /*                                                                                             */
    /***********************************************************************************************/
     private void OK_button_actionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OK_button_actionPerformed
-        // TODO add your handling code here:
+      // TODO add your handling code here:
+
+      if (main.eucaws_obs_id == true)
+      {
+         /* initialisation */
+         clear_observer_data_array();
+         boolean checks_ok = true;
 
 
-       /* initialisation */
-       clear_observer_data_array();
+         // NOTE: stopCellEditing() is called automatically when you hit [Enter] or [Tab] on a cell indicating the end of editing
+         //       But we want it to stop if the user click the OK button, if fuction stopCellEditing() is not called
+         //       it is possible that the last changes/inserts of a cell, if this cell has still the focus, are ignored
+         //       when pressing the OK button
+         stopCellEditing();
+
+         // collect data from all table cells
+         for (int r = 0; r < OBSERVER_ROWS; r++)
+         {
+            for (int c = 0; c < OBSERVER_COLUMNS; c++)
+            {
+               observer_data[r][c] = (String)jTable1.getValueAt(r, c);
+            }
+         }
+
+         // check the inserted values
+         checks_ok = check_data_observer_log();
+
+         // compute OBS_Ids
+         if (checks_ok)
+         {   
+            checks_ok = compute_OBS_IDs();
+         }      
+
+         if (checks_ok)
+         {   
+            /* save observer data to file */
+            schrijf_observer_log();
 
 
-       // NOTE: stopCellEditing() is called automatically when you hit [Enter] or [Tab] on a cell indicating the end of editing
-       //       But we want it to stop if the user click the OK button, if fuction stopCellEditing() is not called
-       //       it is possible that the last changes/inserts of a cell, if this cell has still the focus, are ignored
-       //       when pressing the OK button
-       stopCellEditing();
+            // retrieve selected observer (surname + full initials + rank + discharge number)
+            int selectedRow = jTable1.getSelectedRow();           // index of the firstselected row (start 0); -1 if no row was selected
+            //JOptionPane.showMessageDialog(null, selectedRow);
+            if (selectedRow != -1) // -1 means no observer row selected
+            {
+               // nu kan het zijn dat na invullen van een nieuwe naam deze direct wordt geselecteerd
+               // dan was deze bv Janssen;K;;; en wordt zo geschreven in immt.log
+               // maar wordt opgeslagen in observer.log als Janssen;K;-;-;
+               // dan bij downloaden log files geen match !!
 
-       // collect data from all table cells
-       for (int r = 0; r < OBSERVER_ROWS; r++)
-       {
-          for (int c = 0; c < OBSERVER_COLUMNS; c++)
+               if (observer_data[selectedRow][1].equals("") == true)       // full initials
+               {
+                  observer_data[selectedRow][1] = "-";
+               }
+               if (observer_data[selectedRow][2].equals("") == true)       // rank (or OBS_ID)
+               {
+                  observer_data[selectedRow][2] = "-";
+               }
+               if (observer_data[selectedRow][3].equals("") == true)       // discharge book number
+               {
+                  observer_data[selectedRow][3] = "-";
+               }
+
+               selected_observer = observer_data[selectedRow][0] + ";" + observer_data[selectedRow][1] + ";" + observer_data[selectedRow][2] + ";" + observer_data[selectedRow][3] + ";";
+            } // if (selectedRow != -1)
+
+
+            /* update observer field on main (progress) screen */
+            main.observer_field_update();
+
+            /* close input page */
+            setVisible(false);
+            dispose();
+         } // if (checks_ok)
+
+         /* next screen if in_next_screen mode */
+         if (main.in_next_sequence == true)
+         {
+            // last input screen of the next_screen_mode sequence
+            main.in_next_sequence = false;
+         }
+
+      } // if (main.eucaws_obs_id == true)
+      else // NOT obs_id
+      {
+         /* initialisation */
+          clear_observer_data_array();
+
+
+          // NOTE: stopCellEditing() is called automatically when you hit [Enter] or [Tab] on a cell indicating the end of editing
+          //       But we want it to stop if the user click the OK button, if fuction stopCellEditing() is not called
+          //       it is possible that the last changes/inserts of a cell, if this cell has still the focus, are ignored
+          //       when pressing the OK button
+          stopCellEditing();
+
+          // collect data from all table cells
+          for (int r = 0; r < OBSERVER_ROWS; r++)
           {
-             observer_data[r][c] = (String)jTable1.getValueAt(r, c);
+             for (int c = 0; c < OBSERVER_COLUMNS; c++)
+             {
+                observer_data[r][c] = (String)jTable1.getValueAt(r, c);
+             }
           }
-       }
 
-       /* save observer data to file */
-       schrijf_observer_log();
+          /* save observer data to file */
+          schrijf_observer_log();
 
 
-       // retrieve selected observer (surname + full initials + rank + discharge number)
-       int selectedRow = jTable1.getSelectedRow();           // index of the firstselected row (start 0); -1 if no row was selected
-       //JOptionPane.showMessageDialog(null, selectedRow);
-       if (selectedRow != -1) // -1 means no observer row selected
-       {
-          // nu kan het zijn dat na invullen van een nieuwe naam deze direct wordt geselecteerd
-          // dan was deze bv Janssen;K;;; en wordt zo geschreven in immt.log
-          // maar wordt opgeslagen in observer.log als Janssen;K;-;-;
-          // dan bij downloaden log files geen match !!
-
-          if (observer_data[selectedRow][1].equals("") == true)       // full initials
+          // retrieve selected observer (surname + full initials + rank + discharge number)
+          int selectedRow = jTable1.getSelectedRow();           // index of the firstselected row (start 0); -1 if no row was selected
+          //JOptionPane.showMessageDialog(null, selectedRow);
+          if (selectedRow != -1) // -1 means no observer row selected
           {
-             observer_data[selectedRow][1] = "-";
-          }
-          if (observer_data[selectedRow][2].equals("") == true)       // rank
+             // nu kan het zijn dat na invullen van een nieuwe naam deze direct wordt geselecteerd
+             // dan was deze bv Janssen;K;;; en wordt zo geschreven in immt.log
+             // maar wordt opgeslagen in observer.log als Janssen;K;-;-;
+             // dan bij downloaden log files geen match !!
+
+             if (observer_data[selectedRow][1].equals("") == true)       // full initials
+             {
+                observer_data[selectedRow][1] = "-";
+             }
+             if (observer_data[selectedRow][2].equals("") == true)       // rank
+             {
+                observer_data[selectedRow][2] = "-";
+             }
+             if (observer_data[selectedRow][3].equals("") == true)       // discharge book number
+             {
+                observer_data[selectedRow][3] = "-";
+             }
+
+             selected_observer = observer_data[selectedRow][0] + ";" + observer_data[selectedRow][1] + ";" + observer_data[selectedRow][2] + ";" + observer_data[selectedRow][3] + ";";
+          } // if (selectedRow != -1)
+
+
+          /* update observer field on main (progress) screen */
+          main.observer_field_update();
+
+          /* close input page */
+          setVisible(false);
+          dispose();
+
+          /* next screen if in_next_screen mode */
+          if (main.in_next_sequence == true)
           {
-             observer_data[selectedRow][2] = "-";
+             // last input screen of the next_screen_mode sequence
+             main.in_next_sequence = false;
           }
-          if (observer_data[selectedRow][3].equals("") == true)       // discharge book number
-          {
-             observer_data[selectedRow][3] = "-";
-          }
-
-          selected_observer = observer_data[selectedRow][0] + ";" + observer_data[selectedRow][1] + ";" + observer_data[selectedRow][2] + ";" + observer_data[selectedRow][3] + ";";
-       } // if (selectedRow != -1)
-
-
-       /* update observer field on main (progress) screen */
-       main.observer_field_update();
-
-       /* close input page */
-       setVisible(false);
-       dispose();
-
-       /* next screen if in_next_screen mode */
-       if (main.in_next_sequence == true)
-       {
-          // last input screen of the next_screen_mode sequence
-          main.in_next_sequence = false;
-       }
-
+      
+      } // else (NOT obs_id)
+      
+      
     }//GEN-LAST:event_OK_button_actionPerformed
 
+   
+    
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private boolean compute_OBS_IDs()
+   {
+      boolean checks_ok = true;
+      
+      for (int r = 0; r < OBSERVER_ROWS; r++)
+      {
+         String surname  = observer_data[r][0];
+         String initials = observer_data[r][1];  // e.g. 'J' or "J.B. or 'JB' or 'JBC' or 'J.B.C.' or 'Hans Christansen'  
+         String obs_id   = observer_data[r][2];  // colomn 2 (0 = first column) = OBS_ID
+         
+                  //String row_number = String.valueOf(r + 1);
+                  //String info3 = "TEST (" + "row " + row_number + ")" + "\n" + "obs_id=" + obs_id;
+                  //JOptionPane.showMessageDialog(null, info3, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);   
+         
+         
+         if ("".equals(obs_id) && (!"".equals(surname)))  // OBS_ID is empty and surname is inserted!
+         {
+            // check the initials
+            StringBuilder obs_id_raw = new StringBuilder();  // obs_id_raw: after first computation but still not checked for 'doubles'
 
+            // Collect up to 2 valid letters
+            // where a valid character is defined as a letter (e.g., A–Z, a–z) — so digits (0–9), punctuation (like .), and other symbols are ignored.
+            for (int i = 0; i < initials.length() && obs_id_raw.length() < 2; i++) 
+            {
+               char c = initials.charAt(i);
+               if (Character.isLetter(c)) 
+               {
+                  obs_id_raw.append(Character.toUpperCase(c));    // always append the letter as upper case
+               }
+            }
+            // so now":
+            // -empty            -> ""
+            // J                 -> J
+            // J.B.              -> JB
+            // J.B.C.            -> JB
+            // Hans Christiansen -> HA
+            // 
+
+            // Pad with '1' characters if less than 3
+            while (obs_id_raw.length() < 3) 
+            {
+               obs_id_raw.append('1');
+            }
+            // so now":
+            // ""                -> 111
+            // J                 -> J11
+            // JB                -> JB1
+            // JB                -> JB1
+            // HA                -> HA1
+            // 
+
+            boolean duplicate = false;
+            for (int x = 0; x < OBSERVER_ROWS; x++)  // do not use r as iterator!
+            {
+               // duplicate
+               //String r_num = String.valueOf(r);
+               //String x_num = String.valueOf(x);
+               //
+               //String info7 = "compute_OBS_IDs(): " + "r_num=" + r_num + " x_num=" + x_num;
+               //JOptionPane.showMessageDialog(null, info7, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);   
+
+               //if (r != x)
+               //{
+               String existing_obs_id = observer_data[x][2]; // column 3 = index 2 = OBS_ID
+
+               if ( (!obs_id_raw.toString().equals("111")) && (existing_obs_id.equals(obs_id_raw.toString())) )   
+               {
+                     // duplicate
+                     //String r_num2 = String.valueOf(r);
+                     //String x_num2 = String.valueOf(x);
+                     //String info2 = "compute_OBS_IDs() duplicate found: " + "r_num=" + r_num2 + " x_num=" + x_num2 + "\n" + "existing_obs_id=" + existing_obs_id + " ;obs_id_raw=" + obs_id_raw;
+                     //JOptionPane.showMessageDialog(null, info2, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);   
+
+                  duplicate = true; // Duplicate found
+                  break;
+               }
+               //} // if (r != x)
+            } // for (int x = 0; x < OBSERVER_ROWS; x++)
+
+            if (!duplicate)
+            {
+               observer_data[r][2] = obs_id_raw.toString();   
+            }
+
+            if (duplicate)
+            {
+               String obs_id_raw_alternative = compute_alternative_OBS_ID(obs_id_raw);
+
+               if (!"".equals(obs_id_raw_alternative))
+               {   
+                  observer_data[r][2] = obs_id_raw_alternative; 
+               }
+               else
+               {
+                  checks_ok = false;
+                  String info = "Error when computing OBS_ID (more than 9 records with the same first 2 letters of 'full initials'?), observer data will not be saved";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+               }
+            }   
+         } // for (int r = 0; r < OBSERVER_ROWS; r++)
+      } // if ("".equals(obs_id))
+         
+      return checks_ok;
+   }
+    
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/    
+   private String compute_alternative_OBS_ID(StringBuilder obs_id_raw)
+   {
+      String obs_id_raw_alternative = "";
+      int MAX_DIGIT = 9;
+      
+      
+      for (int y = 0; y < MAX_DIGIT; y++)
+      {
+         if (obs_id_raw.length() != 3)
+         {
+            //throw new IllegalArgumentException("obs_id_raw must be exactly 3 characters long.");
+            obs_id_raw_alternative = "";
+            break;
+         }
+
+         char lastChar = obs_id_raw.charAt(2);
+
+         if (!Character.isDigit(lastChar))
+         {
+            //throw new IllegalArgumentException("Last character must be a digit.");
+            obs_id_raw_alternative = "";
+            break;
+         }
+
+         int digit = lastChar - '0';  // Convert char to int
+         digit++;                     // Increment
+
+         if (digit > 9)
+         {
+            //throw new IllegalArgumentException("Digit overflow: only 1 to 9 supported.");
+            obs_id_raw_alternative = "";
+            break;
+         }
+
+         obs_id_raw.setCharAt(2, (char) ('0' + digit)); // Convert back to char and set   
+         
+         //String row_num = String.valueOf(y);
+         //String info2 = "compute_alternative_OBS_ID; increasing for duplicate (" + "y " + row_num + ")" + "\n" + "obs_id_raw=" + obs_id_raw;
+         //JOptionPane.showMessageDialog(null, info2, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);   
+         
+         boolean duplicate = false;
+         for (int x = 0; x < OBSERVER_ROWS; x++)  // do not use r as iterator!
+         {
+            String existing_obs_id = observer_data[x][2]; // column 3 = index 2 = OBS_ID
+            if ( (!obs_id_raw.toString().equals("111")) && (existing_obs_id.equals(obs_id_raw.toString())) )    
+            {
+               duplicate = true; // Duplicate found
+               break;
+            }
+         } // for (int x = 0; x < OBSERVER_ROWS; x++)
+         
+         if (!duplicate)
+         {
+            obs_id_raw_alternative = obs_id_raw.toString();
+            break;
+         }
+      } // for (int y = 0; y < MAX_DIGIT; y++)
+
+      
+      return obs_id_raw_alternative;  // NB obs_id_raw_alternative = "" if error or duplicate check coulnot be performed becuse > 9 options
+   }
+   
+   
+   
+   /***********************************************************************************************/
+   /*                                                                                             */
+   /*                                                                                             */
+   /*                                                                                             */
+   /***********************************************************************************************/
+   private boolean check_data_observer_log()
+   {
+      // check 'full initials' [1], must be present (if surname is not present the record will be never saved (same result as the complete record is deleted)
+      if (main.eucaws_obs_id == true)
+      {   
+         if (observer_data == null)
+         {   
+            return true;
+         }
+         else
+         {   
+            for (int r = 0; r < OBSERVER_ROWS; r++)
+            {
+/*               
+               if (("".equals(observer_data[r][0])) && (!"".equals(observer_data[r][1]))) 
+               {
+                  // name empty but initials not empty
+                  String row_num = String.valueOf(r + 1);
+                  String info = "surname empty (" + "row " + row_num + ")" + "\n" + "observer data changes will not be saved";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  return false;
+               }
+*/
+               if ((!"".equals(observer_data[r][0])) && ("".equals(observer_data[r][1]))) 
+               {
+                  // name not empty but initials empty
+                  String row_num = String.valueOf(r + 1);
+                  String info = "full initials empty (" + "row " + row_num + ")" + "\n" + "observer data changes will not be saved";
+                  JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+                  return false;
+               }
+            } // for (int r = 0; r < OBSERVER_ROWS; r++)
+         } // else 
+      } // if (main.eucaws_obs_id == true)
+      
+      
+      return true;
+   }
+    
+
+   
    /***********************************************************************************************/
    /*                                                                                             */
    /*                                                                                             */
@@ -622,6 +870,7 @@ final public class myobserver extends javax.swing.JFrame {
       }.execute(); // new SwingWorker<Void, Void>()
    }
 
+   
 
    /***********************************************************************************************/
    /*                                                                                             */
@@ -829,6 +1078,7 @@ final public class myobserver extends javax.swing.JFrame {
    private javax.swing.JLabel jLabel2;
    private javax.swing.JLabel jLabel3;
    private javax.swing.JLabel jLabel4;
+   private javax.swing.JLabel jLabel5;
    private javax.swing.JScrollPane jScrollPane1;
    private javax.swing.JSeparator jSeparator1;
    private javax.swing.JTable jTable1;

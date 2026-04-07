@@ -45,14 +45,14 @@
           </Group>
           <Group type="102" attributes="0">
               <EmptySpace pref="120" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jLabel2" pref="599" max="32767" attributes="0"/>
-                      <Component id="jLabel1" min="-2" pref="103" max="-2" attributes="0"/>
-                      <Component id="jPanel4" max="32767" attributes="0"/>
-                      <Component id="jPanel1" max="32767" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jLabel2" pref="599" max="32767" attributes="0"/>
+                  <Component id="jPanel4" max="32767" attributes="0"/>
+                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLabel4" alignment="0" min="-2" pref="253" max="-2" attributes="0"/>
+                  <Component id="jLabel3" alignment="0" min="-2" pref="256" max="-2" attributes="0"/>
+                  <Component id="jLabel1" alignment="0" min="-2" pref="255" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="121" max="32767" attributes="0"/>
           </Group>
@@ -67,11 +67,15 @@
               <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="124" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="59" max="32767" attributes="0"/>
               <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -113,7 +117,7 @@
           <Color blue="ff" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="--- please change this setting only with the prior agreement of your National Meteorological Service ---"/>
+        <Property name="text" type="java.lang.String" value="--- change this setting only with the prior agreement of your National Meteorological Service ---"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel4">
@@ -231,6 +235,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="uploads via EUCAWS (device&apos;s iridium modem) "/>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="EUCAWS_uploads_via_AWS_itemStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JRadioButton" name="jRadioButton4">
           <Properties>
@@ -239,6 +246,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="uploads via TurboWin+ (Maintenance -&gt; APR / APTR / AWSR settings)"/>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="EUCAWS_uploads_via_turbowin_itemStateChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -247,5 +257,47 @@
         <Property name="text" type="java.lang.String" value="EUCAWS uploads"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JLabel" name="jLabel4">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="EUCAWS SMD input"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JPanel" name="jPanel2">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
+            <EtchetBorder/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jCheckBox1" min="-2" pref="533" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="add observer intials (OBS_ID) to SMD input"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

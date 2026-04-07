@@ -334,7 +334,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 * main.configuratie_regels[83]                                  => port mode option; deactivate_APR_AWSR_ship_speed_minimal [true/false]
 * main.configuratie_regels[84]                                  => LAN IP addrees; (IP address TurboWin+ is listening to if Mintaka ENet box is connected)
 * main.configuratie_regels[85]                                  => dashboard ship (LNG)tank color
-* main.configuratie_regels[86]                                  => communication protocol client <-> server (HTTPS-HTTP]
+* main.configuratie_regels[86]                                  => dashboard_font;                          // for hybrid dashboard
+* main.configuratie_regels[87]                                  => communication protocol client <-> server (HTTPS-HTTP]
+* main.configuratie_regels[88]                                  => eucaws obs id (if added to SMD input)
 *
 *
 *+++++++++++++++++++ NB IF NEW ENTRY, IT IS ONLY NECESSARY TO APPEND THESE TWO FUNCTIONS: ++++++++++++++++++++
@@ -5086,7 +5088,8 @@ private static void disable_dashboard_and_maps_menu_items()
       configuratie_regels[84] = main.LAN_IP_ADDRESS_TXT + main.lan_ip_address;
       configuratie_regels[85] = main.DASHBOARD_SHIP_TANK_COLOR_TXT + main.ship_tank_color_String;
       configuratie_regels[86] = main.DASHBOARD_FONT_TXT + main.dashboard_font;                          // for hybrid dashboard
-      configuratie_regels[87] = main.COM_PROTOCOL_TXT + main.server_com_protocol;
+      configuratie_regels[87] = main.COM_PROTOCOL_TXT + main.server_com_protocol;                       // HTTPS / HTTP
+      configuratie_regels[88] = main.EUCAWS_OBS_ID_TXT + String.valueOf(main.eucaws_obs_id);            // boolean
    }
    
     
@@ -6068,7 +6071,13 @@ public static void meta_data_from_configuration_regels_into_global_vars()
          {
             server_com_protocol = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
          }  
-                 
+
+         // EUCAWS OBS_ID (intials added to the SMD input)
+         if (configuratie_regels[teller].indexOf(EUCAWS_OBS_ID_TXT) != -1)
+         {
+            eucaws_obs_id = Boolean.parseBoolean(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+         }
+
       } // if ((configuratie_regels[teller] != null) etc.
    } // for (teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++)
 
@@ -13258,7 +13267,7 @@ private String compile_obs_for_AWS()
    String AWS_zi                        = "";
    String AWS_Si                        = "";
    String AWS_Di                        = "";
-  
+   String AWS_obs_id                    = "";
    
    double double_wind_speed;
    double double_sst;
@@ -14014,7 +14023,35 @@ private String compile_obs_for_AWS()
       AWS_Di = "";
    }   
    
-   
+   // OBS_ID (but only if requested and set in the maintenance section
+   //
+   if (eucaws_obs_id == true)
+   {
+      if (!"".equals(myobserver.selected_observer)) // so there is an observer selected
+      {
+         // extract OBS_ID (column3) from selected_observer  e.g.: "Janssen;K;AB1;-;" -> OBS_ID = AB1
+         int firstSemicolon = myobserver.selected_observer.indexOf(';');
+         int secondSemicolon = myobserver.selected_observer.indexOf(';', firstSemicolon + 1);
+         int thirdSemicolon = myobserver.selected_observer.indexOf(';', secondSemicolon + 1);
+
+         if (firstSemicolon != -1 && secondSemicolon != -1 && thirdSemicolon != -1)
+         {
+            String selected_obs_id = myobserver.selected_observer.substring(secondSemicolon + 1, thirdSemicolon);
+
+            if (selected_obs_id.length() == 3) // so a "-" is also not taken into account
+            {
+               AWS_obs_id = selected_obs_id;
+            }
+            else
+            {
+               AWS_obs_id = "";
+            }
+         } // if (firstSemicolon != -1 && secondSemicolon != -1 && thirdSemicolon != -1)
+      } // if (!"".equals(myobserver.selected_observer))
+
+   } // if (eucaws_obs_id == true)
+
+
    // compose AWS string
    //
    AWS_obs = AWS_id + "," +                   
@@ -14051,13 +14088,21 @@ private String compile_obs_for_AWS()
              AWS_Si + "," +                        
              AWS_Di;                       
    
-   
+   // add OBS_ID if requested and present
+   //
+   //if ((eucaws_obs_id == true) && (!"".equals(AWS_obs_id))) //
+   if (eucaws_obs_id == true)
+   {
+      // see https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/issues/211
+      // $PTBWP,sHH,WDT,WS.s,sTA.a,UUU,TW.w,VV,WW,W1W1,W2W2,N,NH,CL,CM,CH,H,PW,HW.w,DSW1, PW1,HW1.w1,DSW2, PW2,HW2.w2,E.EE,R,I,CC,BB,ZZ,SS,DDD,OBS
+      AWS_obs += "," +
+      AWS_obs_id;           // could be empty ("") !
+   }
         
   // voor testen
   //JOptionPane.showMessageDialog(null, AWS_obs  , APPLICATION_NAME + " AWS_obs", JOptionPane.INFORMATION_MESSAGE);
 
-   
-   
+
    return AWS_obs;
 }   
    
@@ -19460,7 +19505,8 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
    public static final String DASHBOARD_SHIP_TANK_COLOR_TXT = "dashbrd tank color : ";   // t/m : is 20 characters
    public static final String DASHBOARD_FONT_TXT            = "dashbrd font       : ";   // t/m : is 20 characters
    public static final String COM_PROTOCOL_TXT              = "com protocol       : ";   // t/m : is 20 characters
-   
+   public static final String EUCAWS_OBS_ID_TXT             = "EUCAWS obs id      : ";   // t/m : is 20 characters
+
    public static final String YACHT                         = "yacht";
    public static final String FULL_RIGGED_3                 = "full_rigged_3";
    public static final String FULL_RIGGED_4                 = "full_rigged_4";
@@ -19655,7 +19701,8 @@ public static void satellite_link_mouse_clicked(String url_satellite_image)
    public static String OSM_mode                                   = "";
    public static String GUI_mode                                   = "";                     // light/full               // always empty from version 4.2
    public static String GUI_logo                                   = "";                     // EUMETNET/NOAA/SOT logo   // always empty from version 4.2
-   
+
+   public static boolean eucaws_obs_id                             = false;                  // meta data (myobsformat.java)
    public static String eucaws_uploads_method                      = "";                     // meta data for obs format settings
    public static String obs_format                                 = "";                     // meta data for obs format settings (e.g. FORMAT_101 or FORMAT_FM13)
    public static String obs_101_encryption                         = FORMAT_101_ENCRYPTION_NO;// meta data for obs format settings (from version 4.4. no call sign encryption by default)
