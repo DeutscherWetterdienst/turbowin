@@ -41,60 +41,69 @@ def expand_6bit_text_to_octets(text: bytes) -> bytes:
     return compact_6bit_text_to_octets(bytes(((b - 0x40) & 0x3F) for b in text))
 
 
-def uncompact_octets_to_6bit_words(octets: bytes) -> bytes:
-    """
-    Inverse of compact_6bit_text_to_octets().
-
-    Return raw 6-bit values (0..63) such that:
-
-        compact_6bit_text_to_octets(result) == octets
-
-    Note: The compaction algorithm discards some bits due to shifting. For those degrees
-    of freedom, this function uses deterministic zero-padding to ensure stable output.
-    """
-    out = bytearray()
-    idx = 0
-    while idx < len(octets):
-        # Steps (0,1): buf = (a << 2) | (b >> 4)
-        buf = octets[idx] & 0xFF
-        a = (buf >> 2) & 0x3F
-        b_hi = buf & 0x03  # equals (b >> 4)
-        b = (b_hi << 4) & 0x3F
-        out.append(a)
-        out.append(b)
-        idx += 1
-        if idx >= len(octets):
-            break
-
-        # Steps (2,3): buf = (c << 4) | (d >> 2)
-        buf = octets[idx] & 0xFF
-        c = (buf >> 4) & 0x3F
-        d_hi = buf & 0x0F  # equals (d >> 2)
-        d = (d_hi << 2) & 0x3F
-        out.append(c)
-        out.append(d)
-        idx += 1
-        if idx >= len(octets):
-            break
-
-        # Steps (4,5): buf = (e << 6) | f
-        buf = octets[idx] & 0xFF
-        e = (buf >> 6) & 0x3F
-        f = buf & 0x3F
-        out.append(e)
-        out.append(f)
-        idx += 1
-
-    return bytes(out)
-
-
 def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     """
     Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
 
-    This is the inverse of expand_6bit_text_to_octets():
-      - derive the raw 6-bit word stream as the inverse of the compaction algorithm
-      - store each 6-bit word as a single byte in the range 0x40..0x7F
+    This is the inverse of expand_6bit_text_to_octets(), but the compaction algorithm
+    is not bijective due to bit shifts and OR-composition. Therefore we deterministically
+    synthesize the 6-bit word stream by searching for the lexicographically smallest
+    words that reproduce each target output byte when decoded.
+
+    The output is a byte string where each byte is in the range 0x40..0x7F and encodes
+    a 6-bit value in its lower bits.
     """
-    six = uncompact_octets_to_6bit_words(octets)
-    return bytes(((b & 0x3F) + 0x40) & 0xFF for b in six)
+    if not octets:
+        return b""
+
+    rss = [0, 4, 0, 2, 0, 0]  # right-shift amounts
+    lss = [2, 0, 4, 0, 6, 0]  # left-shift amounts
+
+    def contrib(word: int, i: int) -> int:
+        return (((word & 0x3F) >> rss[i]) << lss[i]) & 0xFF
+
+    out_words: list[int] = []
+
+    # The decoder emits one octet after steps (0,1), (2,3), and (4,5).
+    # We therefore solve 2x 6-bit words per output octet, and produce up to 6 words
+    # for each group of 3 output octets.
+    idx = 0
+    src = list(octets)
+    while idx < len(src):
+        targets = src[idx : idx + 3]
+        idx += 3
+        while len(targets) < 3:
+            targets.append(None)
+
+        cycle_words: list[int] = []
+
+        for j, (i0, i1) in enumerate(((0, 1), (2, 3), (4, 5))):
+            tgt = targets[j]
+            if tgt is None:
+                break
+
+            best: tuple[int, int] | None = None
+            for w0 in range(64):
+                c0 = contrib(w0, i0)
+                # Since output is built by OR-ing contributions, c0 must not set bits
+                # outside the target byte.
+                if (c0 | tgt) != tgt:
+                    continue
+                for w1 in range(64):
+                    c = c0 | contrib(w1, i1)
+                    if c == tgt:
+                        best = (w0, w1)
+                        break
+                if best is not None:
+                    break
+
+            if best is None:
+                raise ValueError(
+                    f"Could not encode target byte 0x{tgt:02x} at cycle part {j}"
+                )
+
+            cycle_words.extend(best)
+
+        out_words.extend(cycle_words)
+
+    return bytes(((w & 0x3F) + 0x40) & 0xFF for w in out_words)

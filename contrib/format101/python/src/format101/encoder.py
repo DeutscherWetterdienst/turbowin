@@ -142,7 +142,8 @@ def encode_format101_from_txt(
 
         b_ofs = write_bits(out, b_ofs, entry.nbits, raw)
 
-    payload_octets = bytes(out)
+    # Trim to the number of whole bytes actually written
+    payload_octets = bytes(out[: (b_ofs + 7) // 8])
     payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
 
     return EncodedMessage(
