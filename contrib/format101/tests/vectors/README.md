@@ -24,3 +24,17 @@ the `indicatif`/identifier argument. TurboWin+ accepts up to 7 characters for th
 The corresponding expected output file is:
 
 - `<name>_id<STATIONID>.expected.hpk.txt`
+
+## Generating expected outputs (Windows)
+
+To generate or refresh `*.expected.hpk.txt` files via the reference encoder binary:
+
+```powershell
+uv run --project python python tests/harness/generate_expected_hpk_windows.py
+```
+
+To generate only for a single vector:
+
+```powershell
+uv run --project python python tests/harness/generate_expected_hpk_windows.py --vector tests/vectors/<name>_id<STATIONID>.format_101.txt
+```

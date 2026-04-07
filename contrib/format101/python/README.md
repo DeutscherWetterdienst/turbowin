@@ -52,6 +52,12 @@ uv run --project python python tests/harness/verify_reference_vectors_windows.py
 uv run --project python python tests/harness/verify_python_encoder_against_vectors.py
 ```
 
+### Generate/refresh expected outputs (reference binary)
+
+```powershell
+uv run --project python python tests/harness/generate_expected_hpk_windows.py
+```
+
 ### Run reference encoder for a single vector
 
 ```powershell
