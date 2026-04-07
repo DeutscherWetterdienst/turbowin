@@ -10,6 +10,7 @@ class PilotEntry:
     nbits: int
     factor: float
     offset: float
+    codmax: int
 
 
 def _parse_float(s: str) -> float:
@@ -34,18 +35,26 @@ def load_pilote_csv(path: str | Path) -> list[PilotEntry]:
             continue
         cols = [c.strip() for c in line.split(";")]
         # Expected columns (MAWSconfig/MAWSbin style):
-        # 0 BUFR; 1 ref; 2 nbits; 3 degre; 4 factor; 5 offset; ...
-        if len(cols) < 6:
+        # 0 BUFR; 1 ref; 2 nbits; 3 degre; 4 factor; 5 offset; 6 codmax; ...
+        if len(cols) < 7:
             raise ValueError(
-                f"Invalid pilote csv line (expected >= 6 columns): {raw_line!r}"
+                f"Invalid pilote csv line (expected >= 7 columns): {raw_line!r}"
             )
         bufr = cols[0]
         ref = cols[1]
         nbits = int(cols[2])
         factor = _parse_float(cols[4])
         offset = _parse_float(cols[5])
+        codmax = int(float(cols[6]))
         entries.append(
-            PilotEntry(bufr=bufr, ref=ref, nbits=nbits, factor=factor, offset=offset)
+            PilotEntry(
+                bufr=bufr,
+                ref=ref,
+                nbits=nbits,
+                factor=factor,
+                offset=offset,
+                codmax=codmax,
+            )
         )
     return entries
 

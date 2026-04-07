@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from format101.decoder import decode_hpk_line
-from format101.spec import pilote_key, load_pilote_csv
+from format101.spec import pilote_key, load_pilote_csv, PilotEntry
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -90,6 +90,25 @@ def almost_equal(a: float, b: float, tol: float) -> bool:
     return math.isfinite(a) and math.isfinite(b) and abs(a - b) <= tol
 
 
+def normalize_expected_value(entry: PilotEntry, input_value: float) -> float:
+    """
+    Normalize an input value to the value representable after encoding + decoding.
+
+    The reference encoder quantizes and also clamps to the representable raw range.
+    """
+    if entry.factor == 0:
+        return entry.offset
+
+    raw = round((input_value - entry.offset) / entry.factor)
+
+    if raw < 0:
+        raw = 0
+    if raw > entry.codmax:
+        raw = entry.codmax
+
+    return raw * entry.factor + entry.offset
+
+
 def main() -> int:
     pilote_all = load_pilote_csv(DEFAULT_PILOTE)
 
@@ -103,7 +122,7 @@ def main() -> int:
 
     # Fields that are known to be forced/mangled by the reference encoder/decoder pipeline
     # in the legacy TurboWin vectors:
-    # - 001199: the reference decoder MAWSbin_TW reports it as absent even when set in input
+    # - 001199: a 1-bit field where value 1 collides with the legacy MISSING convention
     # - 410000 / 408000: group markers are handled via special keys in our decoder implementation
     IGNORE_KEYS = {"001199", "410000", "408000"}
 
@@ -147,7 +166,7 @@ def main() -> int:
 
             entry = pilote_by_key[key]
             expected_present = inp[idx].present
-            expected_value = inp[idx].value
+            expected_value_input = inp[idx].value
 
             got_value = decoded.get(key, None)
             got_present = got_value is not None
@@ -157,7 +176,7 @@ def main() -> int:
                 print(f"[FAIL] {stem}: presence mismatch at idx={idx} key={key}")
                 print("  expected present: True")
                 print("  got present     : False")
-                print(f"  expected value  : {expected_value}")
+                print(f"  expected value  : {expected_value_input}")
                 print(f"  got value       : {got_value}")
                 continue
 
@@ -166,14 +185,14 @@ def main() -> int:
                 print(f"[FAIL] {stem}: presence mismatch at idx={idx} key={key}")
                 print("  expected present: False")
                 print("  got present     : True")
-                print(f"  expected value  : {expected_value}")
+                print(f"  expected value  : {expected_value_input}")
                 print(f"  got value       : {got_value}")
                 continue
 
             if not expected_present:
                 continue
 
-            assert expected_value is not None
+            assert expected_value_input is not None
 
             if not isinstance(got_value, (int, float)):
                 ok = False
@@ -184,16 +203,19 @@ def main() -> int:
                 continue
 
             got_f = float(got_value)
+            expected_value_norm = normalize_expected_value(entry, expected_value_input)
             tol = format101_tolerance(entry.factor)
 
-            if not almost_equal(expected_value, got_f, tol):
+            if not almost_equal(expected_value_norm, got_f, tol):
                 ok = False
                 print(f"[FAIL] {stem}: value mismatch at idx={idx} key={key}")
-                print(f"  factor  : {entry.factor}")
-                print(f"  offset  : {entry.offset}")
-                print(f"  tol     : {tol}")
-                print(f"  expected: {expected_value}")
-                print(f"  got     : {got_f}")
+                print(f"  factor         : {entry.factor}")
+                print(f"  offset         : {entry.offset}")
+                print(f"  codmax(raw)    : {entry.codmax}")
+                print(f"  tol            : {tol}")
+                print(f"  expected(input): {expected_value_input}")
+                print(f"  expected(norm) : {expected_value_norm}")
+                print(f"  got            : {got_f}")
 
         # Group marker checks (by special keys produced by our decoder)
         if "410000_visual" in decoded:
