@@ -4,6 +4,7 @@ package turbowin;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
+import com.fazecast.jSerialComm.SerialPortInvalidPortException;
 import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -84,6 +85,12 @@ public void RS422_Check_Default_Serial_Port()
       
       main.serialPort.closePort();                     // will be opened again later
       // NB main.defaultPort and main.defaultPort_descriptive still preserve their start-up value
+      
+      info = "[AWS] starting-com-port now closed (" + main.serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.defaultPort                                  = null;
+      main.defaultPort_descriptive                      = null;
    }
    else
    {
@@ -505,51 +512,64 @@ public void RS422_Check_Serial_Ports(int completed_checks_serial_ports)
    } // if (main.prefered_COM_port.equals("AUTOMATICALLY"))
    else // fixed COM port selected
    {
-      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
-      serialPort_test.openPort();
-         
-      if (serialPort_test.isOpen())   
-      {   
-         serialPort_test.closePort();
-         
-         // OK, no problems encoutered
-         main.defaultPort = main.prefered_COM_port;
-         main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
-         info = "[AWS] " + main.prefered_COM_port + " serial COM port available";
-         main.log_turbowin_system_message(info);
-         
-         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
-
-         Timer timer_begin = new Timer(2500, new ActionListener()
-         {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-               checking_ports_begin_dialog.dispose();
-            }
-         });
-         timer_begin.setRepeats(false);
-         timer_begin.start();
-         checking_ports_begin_dialog.setVisible(true); 
-      }
-      //catch (SerialPortException ex) 
-      else
+      try
       {
-         // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
-         //System.out.println(ex);
-         info = "[AWS] " + main.prefered_COM_port + " serial COM port not available";
-         main.log_turbowin_system_message(info);
-         if (main.obsolate_data_flag == false) 
-         {
-            // NB so only show this blocking messagebox the first time at start up but not in retrying to establish a new connection mode
-            //    see also: RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
-            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+         SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+         serialPort_test.openPort();
+
+         if (serialPort_test.isOpen())   
+         {   
+            serialPort_test.closePort();
+
+            // OK, no problems encoutered
+            main.defaultPort = main.prefered_COM_port;
+            main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+            info = "[AWS] " + main.prefered_COM_port + " serial COM port available";
+            main.log_turbowin_system_message(info);
+
+            final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+            Timer timer_begin = new Timer(2500, new ActionListener()
+            {
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  checking_ports_begin_dialog.dispose();
+               }
+            });
+            timer_begin.setRepeats(false);
+            timer_begin.start();
+            checking_ports_begin_dialog.setVisible(true); 
          }
-         //System.out.println(info);
-         main.defaultPort = null;
-         main.defaultPort_descriptive = null;
-      }
+         //catch (SerialPortException ex) 
+         else
+         {
+            // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
+            //System.out.println(ex);
+            info = "[AWS] " + main.prefered_COM_port + " serial COM port not available";
+            main.log_turbowin_system_message(info);
+            if (main.obsolate_data_flag == false) 
+            {
+               // NB so only show this blocking messagebox the first time at start up but not in retrying to establish a new connection mode
+               //    see also: RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+            //System.out.println(info);
+            main.defaultPort = null;
+            main.defaultPort_descriptive = null;
+         }
+      } // try
+      catch (SerialPortInvalidPortException | HeadlessException e)
+      {
+         // NB with fixed COM port on Windows systems: reconnecting will give in most situations no problem (same USB-COM port)
+         //                        on Linux systems: big chance the USB port is changed (especially if via USB-hub)
+         //
+         //    so on Linux with fixed COM port big chance tise catch will be invoked but not on Windows
+         
+         info = "[AWS] " + e;
+         main.log_turbowin_system_message(info);
+      } // catch
    } // else (fixed COM port selected)
 
 }
@@ -577,6 +597,12 @@ public void RS232_GPS_NMEA_0183_Check_Default_Serial_Port()
       
       main.GPS_serialPort.closePort();                     // will be opened again later
       // NB GPS_defaultPort and GPS_defaultPort_descriptive still preserve their start-up value
+      
+      info = "[GPS] starting-com-port now closed (" + main.GPS_serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      GPS_defaultPort                                  = null;
+      GPS_defaultPort_descriptive                      = null;
    }
    else
    {
@@ -607,6 +633,12 @@ public void RS232_Check_Default_Serial_Port_II()
       
       main.serialPort_II.closePort();                     // will be opened again later
       // NB main.defaultPort_II and main.defaultPort_descriptive_II still preserve their start-up value
+      
+      info = "[THERMOMETER] starting-com-port now closed (" + main.serialPort_II.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.defaultPort_II                                  = null;
+      main.defaultPort_descriptive_II                      = null;
    }
    else
    {
@@ -641,6 +673,12 @@ public void RS232_Check_Default_Serial_Port()
       
       main.serialPort.closePort();                     // will be opened again later
       // NB main.defaultPort and main.defaultPort_descriptive still preserve their start-up value
+      
+      info = "[BAROMETER] starting-com-port now closed (" + main.serialPort.getDescriptivePortName() + ")";
+      main.log_turbowin_system_message(info);
+      
+      main.defaultPort                                  = null;
+      main.defaultPort_descriptive                      = null;
    }
    else
    {
@@ -1211,51 +1249,63 @@ public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports)
    //
    else // fixed COM port selected
    {
-      //serialPort_test = new SerialPort(main.prefered_COM_port);
-      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
-      serialPort_test.openPort();
-      if (serialPort_test.isOpen())   
+      try
       {
-         serialPort_test.closePort();
-         
-         // OK, no problems
-         main.defaultPort = main.prefered_COM_port;             // this construction is ok (prefered COM port is the same as getSystemPortName())
-         main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
-         info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port available";
-         
-         main.log_turbowin_system_message(info);
-         
-         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+         //serialPort_test = new SerialPort(main.prefered_COM_port);
+         SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+         serialPort_test.openPort();
+         if (serialPort_test.isOpen())   
+         {
+            serialPort_test.closePort();
 
-         Timer timer_begin = new Timer(1000, new ActionListener()
-         {
-            @Override
-            public void actionPerformed(ActionEvent e)
+            // OK, no problems
+            main.defaultPort = main.prefered_COM_port;             // this construction is ok (prefered COM port is the same as getSystemPortName())
+            main.defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+            info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port available";
+
+            main.log_turbowin_system_message(info);
+
+            final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+            Timer timer_begin = new Timer(1000, new ActionListener()
             {
-               checking_ports_begin_dialog.dispose();
-            }
-         });
-         timer_begin.setRepeats(false);
-         timer_begin.start();
-         checking_ports_begin_dialog.setVisible(true);            
-      }
-      //catch (SerialPortException ex) 
-      else        
-      {
-         // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
-         info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port not available";
-         main.log_turbowin_system_message(info);
-         if (main.obsolate_data_flag == false)  // eg at start up of this application
-         {
-            // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
-            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  checking_ports_begin_dialog.dispose();
+               }
+            });
+            timer_begin.setRepeats(false);
+            timer_begin.start();
+            checking_ports_begin_dialog.setVisible(true);            
          }
-         main.defaultPort = null;
-         main.defaultPort_descriptive = null;
-         //System.out.println(info);
-      } // else    
-      
+         //catch (SerialPortException ex) 
+         else        
+         {
+            // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
+            info = "[BAROMETER] " + main.prefered_COM_port + ", serial com port not available";
+            main.log_turbowin_system_message(info);
+            if (main.obsolate_data_flag == false)  // eg at start up of this application
+            {
+               // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+            main.defaultPort = null;
+            main.defaultPort_descriptive = null;
+            //System.out.println(info);
+         } // else    
+      } // try
+      catch (SerialPortInvalidPortException | HeadlessException e)
+      {
+         // NB with fixed COM port on Windows systems: reconnecting will give in most situations no problem (same USB-COM port)
+         //                        on Linux systems: big chance the USB port is changed (especially if via USB-hub)
+         //
+         //    so on Linux with fixed COM port big chance this catch will be invoked but not on Windows
+         
+         info = "[BAROMETER] " + e;
+         main.log_turbowin_system_message(info);
+      } // catch
    } // else (fixed COM port selected)
   
 }
@@ -1566,50 +1616,63 @@ public void RS232_Check_Serial_Ports_8_II(int completed_checks_serial_ports_II)
    //
    else // fixed COM port selected
    {
-      //serialPort_test = new SerialPort(main.prefered_COM_port);
-      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port_II);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
-      serialPort_test.openPort();
-      if (serialPort_test.isOpen())   
-      {
-         serialPort_test.closePort();
-         
-         // OK, no problems
-         main.defaultPort_II = main.prefered_COM_port_II;             // this construction is ok (prefered COM port is the same as getSystemPortName())
-         main.defaultPort_descriptive_II = main.prefered_COM_port_II;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
-         info = "[THERMOMETER] " + main.prefered_COM_port_II + ", serial com port available";
-         
-         main.log_turbowin_system_message(info);
-         
-         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+      try
+      {   
+         //serialPort_test = new SerialPort(main.prefered_COM_port);
+         SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_COM_port_II);//SerialPort serialPort_test = new SerialPort(main.prefered_COM_port);
+         serialPort_test.openPort();
+         if (serialPort_test.isOpen())   
+         {
+            serialPort_test.closePort();
 
-         Timer timer_begin = new Timer(1000, new ActionListener()
-         {
-            @Override
-            public void actionPerformed(ActionEvent e)
+            // OK, no problems
+            main.defaultPort_II = main.prefered_COM_port_II;             // this construction is ok (prefered COM port is the same as getSystemPortName())
+            main.defaultPort_descriptive_II = main.prefered_COM_port_II;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+            info = "[THERMOMETER] " + main.prefered_COM_port_II + ", serial com port available";
+
+            main.log_turbowin_system_message(info);
+
+            final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+            Timer timer_begin = new Timer(1000, new ActionListener()
             {
-               checking_ports_begin_dialog.dispose();
-            }
-         });
-         timer_begin.setRepeats(false);
-         timer_begin.start();
-         checking_ports_begin_dialog.setVisible(true);            
-      }
-      //catch (SerialPortException ex) 
-      else        
-      {
-         // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
-         info = "[THERMOMETER] " + main.prefered_COM_port_II + ", serial com port not available";
-         main.log_turbowin_system_message(info);
-         if (main.obsolate_data_flag_II == false)  // eg at start up of this application
-         {
-            // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
-            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  checking_ports_begin_dialog.dispose();
+               }
+            });
+            timer_begin.setRepeats(false);
+            timer_begin.start();
+            checking_ports_begin_dialog.setVisible(true);            
          }
-         main.defaultPort_II = null;
-         main.defaultPort_descriptive_II = null;
-         //System.out.println(info);
-      } // else    
+         //catch (SerialPortException ex) 
+         else        
+         {
+            // error opening predefined (by the user)port, reset/warnings; logging and blocking messagebox
+            info = "[THERMOMETER] " + main.prefered_COM_port_II + ", serial com port not available";
+            main.log_turbowin_system_message(info);
+            if (main.obsolate_data_flag_II == false)  // eg at start up of this application
+            {
+               // NB no blocking messagebox if in "trying to restart the RS232 listener" mode (see Function: RS232_And_WiFi_init_new_sensor_data_received-check_timer() [main_RS232_RS422.java]
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+            main.defaultPort_II = null;
+            main.defaultPort_descriptive_II = null;
+            //System.out.println(info);
+         } // else  
+      } // try
+      catch (SerialPortInvalidPortException | HeadlessException e)
+      {
+         // NB with fixed COM port on Windows systems: reconnecting will give in most situations no problem (same USB-COM port)
+         //                        on Linux systems: big chance the USB port is changed (especially if via USB-hub)
+         //
+         //    so on Linux with fixed COM port big chance this catch will be invoked but not on Windows
+         
+         info = "[THERMOMETER] " + e;
+         main.log_turbowin_system_message(info);
+      } // catch
    } // else (fixed COM port selected)
 }
 
@@ -4447,51 +4510,64 @@ private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_
    
    else // fixed GPS com port set by user
    {   
-      //SerialPort serialPort_test = new SerialPort(main.prefered_GPS_COM_port);
-      SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_GPS_COM_port);
-      serialPort_test.openPort();
-         
-      if (serialPort_test.isOpen())   
-      {  
-         serialPort_test.closePort();
-         
-         // OK, no port problems encoutered
-         GPS_defaultPort = main.prefered_GPS_COM_port;
-         GPS_defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
-         info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port available";
-         
-         // file logging
-         main.log_turbowin_system_message(info);
-         
-         final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-         final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
-
-         Timer timer_begin = new Timer(1000, new ActionListener()
-         {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-               checking_ports_begin_dialog.dispose();
-            }
-         });
-         timer_begin.setRepeats(false);
-         timer_begin.start();
-         checking_ports_begin_dialog.setVisible(true);            
-      } // if (serialPort_test.isOpen())  
-      else 
+      try
       {
-         // error opening predefined (by the user)port, reset/warnings
-         info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port not available";
-         main.log_turbowin_system_message(info);
-         
-         if (main.obsolate_GPS_data_flag == false)  // eg at start up of this application
+         //SerialPort serialPort_test = new SerialPort(main.prefered_GPS_COM_port);
+         SerialPort serialPort_test = SerialPort.getCommPort(main.prefered_GPS_COM_port);
+         serialPort_test.openPort();
+
+         if (serialPort_test.isOpen())   
+         {  
+            serialPort_test.closePort();
+
+            // OK, no port problems encoutered
+            GPS_defaultPort = main.prefered_GPS_COM_port;
+            GPS_defaultPort_descriptive = main.prefered_COM_port;  // NB this is a work around this is not the exact descriptive term as obtained via the AUTOMTICALLY branch
+            info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port available";
+
+            // file logging
+            main.log_turbowin_system_message(info);
+
+            final JOptionPane pane_begin = new JOptionPane(info, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+            final JDialog checking_ports_begin_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
+
+            Timer timer_begin = new Timer(1000, new ActionListener()
+            {
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  checking_ports_begin_dialog.dispose();
+               }
+            });
+            timer_begin.setRepeats(false);
+            timer_begin.start();
+            checking_ports_begin_dialog.setVisible(true);            
+         } // if (serialPort_test.isOpen())  
+         else 
          {
-            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-         }
-         //System.out.println(info);
-         GPS_defaultPort = null;
-         GPS_defaultPort_descriptive = null;
-      } // else   
+            // error opening predefined (by the user)port, reset/warnings
+            info = "[GPS] " + main.prefered_GPS_COM_port + ", serial com port not available";
+            main.log_turbowin_system_message(info);
+
+            if (main.obsolate_GPS_data_flag == false)  // eg at start up of this application
+            {
+               JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+            }
+            //System.out.println(info);
+            GPS_defaultPort = null;
+            GPS_defaultPort_descriptive = null;
+         } // else   
+      } // try
+      catch (SerialPortInvalidPortException | HeadlessException e)
+      {
+         // NB with fixed COM port on Windows systems: reconnecting will give in most situations no problem (same USB-COM port)
+         //                        on Linux systems: big chance the USB port is changed (especially if via USB-hub)
+         //
+         //    so on Linux with fixed COM port big chance this catch will be invoked but not on Windows
+         
+         info = "[GPS] " + e;
+         main.log_turbowin_system_message(info);
+      } // catch
    }
 }
 
@@ -12240,7 +12316,8 @@ private static void RS232_Send_Sensor_Data_to_APR_format101_Server_V2(final bool
 
                            if (isHttps) 
                            {
-                              String message = "[MANUAL] sending 'GET' request (https) to URL: " + url;
+                              //String message = "[MANUAL] sending 'GET' request (https) to URL: " + url;
+                              String message = log_tag + " sending 'GET' request (https) to URL: " + url;
                               main.log_turbowin_system_message(message);
 
                               con_https = (HttpsURLConnection)obj.openConnection();    // For HTTPS
@@ -12249,7 +12326,8 @@ private static void RS232_Send_Sensor_Data_to_APR_format101_Server_V2(final bool
                            }
                            else
                            { 
-                              String message = "[MANUAL] sending 'GET' request (http) to URL: " + url;
+                              //String message = "[MANUAL] sending 'GET' request (http) to URL: " + url;
+                              String message = log_tag + " sending 'GET' request (http) to URL: " + url;
                               main.log_turbowin_system_message(message);
 
                               con_http = (HttpURLConnection)obj.openConnection();    // FOR HTTP
