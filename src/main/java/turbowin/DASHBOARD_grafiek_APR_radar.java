@@ -11,9 +11,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
@@ -21,7 +18,6 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 import java.io.IOException;
-import java.text.AttributedString;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -117,6 +113,8 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel
       double block_width       = 0;
       double block_height      = 0;
       double wind_rose_radius  = 0;
+      int worldLightDir        = 315;
+      int relativeLightDir     = 0;
       
       
       // always call the super's method to clean "dirty" pixels
@@ -597,6 +595,7 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel
 //      //main.ship_type_dashboard = main.RO_RO_SHIP;
 //      //main.ship_type_dashboard = main.FERRY;
 //      //main.ship_type_dashboard = main.LNG_TANKER_II;
+//       main.ship_type_dashboard = main.CHEMICAL_TANKER;
 ////////////////////////////////////////////////// END TESTING ////////////////////////////////////////
  
  
@@ -645,6 +644,14 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel
          if (reading_int_course >= 1 && reading_int_course <= 360) 
          {
             g2d.rotate(Math.toRadians(reading_int_course));  // what follows will be rotated xxx(reading_int_course) degrees
+            
+            // improve the raised hatches on some ships
+            relativeLightDir = worldLightDir - reading_int_course;
+            relativeLightDir = (relativeLightDir % 360 + 360) % 360;            //  normalize to [1, 360)
+            if (relativeLightDir == 0)                                          //  normalize to [1, 360)
+            {
+               relativeLightDir = 360;
+            }
          }   
       
          switch (main.ship_type_dashboard)
@@ -658,13 +665,14 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel
             case main.BARQUE_5              : main.myship.draw_tall_ship(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
             case main.GENERAL_CARGO_SHIP    : main.myship.draw_general_cargo_ship(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
             case main.CONTAINER_SHIP        : main.myship.draw_container_ship(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
-            case main.BULK_CARRIER          : main.myship.draw_bulk_carrier(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
+            case main.BULK_CARRIER          : main.myship.draw_bulk_carrier(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color, relativeLightDir); break;
             case main.OIL_TANKER            : main.myship.draw_oil_tanker(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
             case main.LNG_TANKER            : main.myship.draw_lng_tanker(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color, DASHBOARD_view_APR_radar.tank_color); break;
             case main.PASSENGER_SHIP        : main.myship.draw_passenger_ship(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
             case main.RESEARCH_VESSEL       : main.myship.draw_research_vessel(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
             case main.NEUTRAL_SHIP          : main.myship.draw_neutral_ship(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
-            case main.RO_RO_SHIP            : main.myship.draw_ro_ro_ship(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
+            case main.RO_RO_SHIP_1          : main.myship.draw_ro_ro_ship_I(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
+            case main.RO_RO_SHIP_2          : main.myship.draw_ro_ro_ship_II(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, relativeLightDir); break;
             case main.FERRY                 : main.myship.draw_ferry(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
             case main.CONTAINER_SHIP_2      : main.myship.draw_container_ship_II(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
             case main.GENERAL_CARGO_CLASSIC : main.myship.draw_general_cargo_classic(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
@@ -672,6 +680,13 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel
             case main.GENERAL_CARGO_SHIP_2  : main.myship.draw_general_cargo_ship_II(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
             case main.LNG_TANKER_II         : main.myship.draw_lng_tanker_II(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
             case main.FRUIT_JUICE_TANKER    : main.myship.draw_fruit_juice_tanker(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
+            case main.CHEMICAL_TANKER       : main.myship.draw_chemical_tanker(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
+            case main.GENERAL_CARGO_SHIP_3  : main.myship.draw_general_cargo_ship_III(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
+            case main.HEAVY_LIFT_1          : main.myship.draw_heavy_lift_I(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
+            case main.HEAVY_LIFT_2          : main.myship.draw_heavy_lift_II(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
+            case main.BULK_CARRIER_2        : main.myship.draw_bulk_carrier_II(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color, relativeLightDir); break;
+            case main.SAILING_YACHT         : main.myship.draw_sailing_yacht(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
+            case main.CATAMARAN             : main.myship.draw_catamaran(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision); break;
             default                         : main.myship.draw_container_ship(g2d, wind_rose_diameter, DASHBOARD_view_APR_radar.night_vision, DASHBOARD_view_APR_radar.deck_color); break;
          } // switch (main.ship_type_dashboard)
       
@@ -1015,7 +1030,10 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel
          y_line = (int)DASHBOARD_view_APR_radar.y1_block + height_letter * 48;
          g2d.drawString(visual_obs_line, x_line, y_line);
          
-         
+/*         
+         // disabled from version 4.7
+         // but left the source code here for possible future ideas
+         //
          ////////// left: satellite image link //////
          //
          String satellite_link_txt = "satellite image (internet)";
@@ -1037,7 +1055,7 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel
          DASHBOARD_view_APR_radar.bounds = DASHBOARD_view_APR_radar.layout_satellite_link.getBounds();
          DASHBOARD_view_APR_radar.bounds.setRect(DASHBOARD_view_APR_radar.bounds.getX()+ DASHBOARD_view_APR_radar.x_line_satellite_link, DASHBOARD_view_APR_radar.bounds.getY()+ DASHBOARD_view_APR_radar.y_line_satellite_link, DASHBOARD_view_APR_radar.bounds.getWidth(), DASHBOARD_view_APR_radar.bounds.getHeight());
          //NB for completely outlined: g2d.draw(DASHBOARD_view_APR_radar.bounds);
-         
+*/         
       } // if (draw_info_blocks)  
       
       

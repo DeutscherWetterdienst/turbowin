@@ -115,6 +115,9 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel
       double block_height      = 0;
       double wind_rose_radius  = 0;
       int beaufort_class       = Integer.MAX_VALUE;                                                 // for the correct background photo of the radar screen
+      int worldLightDir        = 315;
+      int relativeLightDir     = 0;
+
       
       
       // always call the super's method to clean "dirty" pixels
@@ -952,6 +955,14 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel
          if (reading_int_course >= 1 && reading_int_course <= 360) 
          {
             g2d.rotate(Math.toRadians(reading_int_course));  // what follows will be rotated xxx(reading_int_course) degrees
+            
+            // improve the raised hatches on some ships
+            relativeLightDir = worldLightDir - reading_int_course;
+            relativeLightDir = (relativeLightDir % 360 + 360) % 360;            //  normalize to [1, 360)
+            if (relativeLightDir == 0)                                          //  normalize to [1, 360)
+            {
+               relativeLightDir = 360;
+            }
          }   
       
          switch (main.ship_type_dashboard)
@@ -965,13 +976,14 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel
             case main.BARQUE_5              : main.myship.draw_tall_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
             case main.GENERAL_CARGO_SHIP    : main.myship.draw_general_cargo_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
             case main.CONTAINER_SHIP        : main.myship.draw_container_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
-            case main.BULK_CARRIER          : main.myship.draw_bulk_carrier(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
+            case main.BULK_CARRIER          : main.myship.draw_bulk_carrier(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color, relativeLightDir); break;
             case main.OIL_TANKER            : main.myship.draw_oil_tanker(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
             case main.LNG_TANKER            : main.myship.draw_lng_tanker(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color, DASHBOARD_view_AWS_radar.tank_color); break;
             case main.PASSENGER_SHIP        : main.myship.draw_passenger_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
             case main.RESEARCH_VESSEL       : main.myship.draw_research_vessel(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
             case main.NEUTRAL_SHIP          : main.myship.draw_neutral_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
-            case main.RO_RO_SHIP            : main.myship.draw_ro_ro_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.RO_RO_SHIP_1          : main.myship.draw_ro_ro_ship_I(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.RO_RO_SHIP_2          : main.myship.draw_ro_ro_ship_II(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, relativeLightDir); break;
             case main.FERRY                 : main.myship.draw_ferry(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
             case main.CONTAINER_SHIP_2      : main.myship.draw_container_ship_II(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
             case main.GENERAL_CARGO_CLASSIC : main.myship.draw_general_cargo_classic(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
@@ -979,6 +991,13 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel
             case main.GENERAL_CARGO_SHIP_2  : main.myship.draw_general_cargo_ship_II(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
             case main.LNG_TANKER_II         : main.myship.draw_lng_tanker_II(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
             case main.FRUIT_JUICE_TANKER    : main.myship.draw_fruit_juice_tanker(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.CHEMICAL_TANKER       : main.myship.draw_chemical_tanker(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
+            case main.GENERAL_CARGO_SHIP_3  : main.myship.draw_general_cargo_ship_III(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
+            case main.HEAVY_LIFT_1          : main.myship.draw_heavy_lift_I(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
+            case main.HEAVY_LIFT_2          : main.myship.draw_heavy_lift_II(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
+            case main.BULK_CARRIER_2        : main.myship.draw_bulk_carrier_II(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color, relativeLightDir); break;
+            case main.SAILING_YACHT         : main.myship.draw_sailing_yacht(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
+            case main.CATAMARAN             : main.myship.draw_catamaran(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision); break;
             default                         : main.myship.draw_container_ship(g2d, wind_rose_diameter, DASHBOARD_view_AWS_radar.night_vision, DASHBOARD_view_AWS_radar.deck_color); break;
          } // switch (main.ship_type_dashboard)
       
