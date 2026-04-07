@@ -48,29 +48,33 @@ def _field_key(desc: PilotEntry) -> str:
 
 
 def _decode_entry(
-    octets: bytes, b_ofs: int, desc: PilotEntry, *, key_override: str | None = None
+    octets: bytes,
+    bits_offset: int,
+    desc: PilotEntry,
+    *,
+    key_override: str | None = None,
 ) -> tuple[int, DecodedField]:
     key = key_override if key_override is not None else _field_key(desc)
-    b_ofs, raw = read_bits(octets, b_ofs, desc.nbits)
+    bits_offset, raw = read_bits(octets, bits_offset, desc.nbits)
     if raw is None:
-        return b_ofs, DecodedField(key=key, value=None)
+        return bits_offset, DecodedField(key=key, value=None)
 
     val = raw * desc.factor + desc.offset
     if desc.factor >= 1 and float(val).is_integer():
         value: float | int = int(val)
     else:
         value = float(val)
-    return b_ofs, DecodedField(key=key, value=value)
+    return bits_offset, DecodedField(key=key, value=value)
 
 
 def _decode_block(
-    octets: bytes, b_ofs: int, entries: list[PilotEntry]
+    octets: bytes, bits_offset: int, entries: list[PilotEntry]
 ) -> tuple[int, list[DecodedField]]:
     out: list[DecodedField] = []
     for e in entries:
-        b_ofs, field = _decode_entry(octets, b_ofs, e)
+        bits_offset, field = _decode_entry(octets, bits_offset, e)
         out.append(field)
-    return b_ofs, out
+    return bits_offset, out
 
 
 def _missing_block(entries: list[PilotEntry]) -> list[DecodedField]:
@@ -173,12 +177,8 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     - 408000: wave group replication indicator (0/1)
     - 408000: ice group replication indicator (0/1)
 
-    The reference encoder always includes the subsequent group fields in the
-    bitstream (variable length comes from later trailing groups or other formats),
-    but uses the per-field MISSING convention to indicate absence.
-
-    Therefore, for TurboWin+ legacy compatibility, the decoder always reads the
-    full field sequence linearly and only uses the group marker bits for reporting.
+    These are control bits for a variable-length message. If a marker is 0,
+    the subsequent block is not present in the bitstream and must be skipped.
     """
     (
         main,
@@ -191,55 +191,75 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     ) = _split_pilote_into_sections(pilote)
 
     out: list[DecodedField] = []
-    b_ofs = 0
+    bits_offset = 0
     n_total_bits = len(octets) * 8
 
     def have_bits(nbits: int) -> bool:
-        return b_ofs + nbits <= n_total_bits
+        return bits_offset + nbits <= n_total_bits
 
-    def decode_or_missing(entries: list[PilotEntry]) -> list[DecodedField]:
-        nonlocal b_ofs
+    def decode_block_or_missing(entries: list[PilotEntry]) -> list[DecodedField]:
+        nonlocal bits_offset
         res: list[DecodedField] = []
         for e in entries:
             if have_bits(e.nbits):
-                b_ofs, f = _decode_entry(octets, b_ofs, e)
+                bits_offset, f = _decode_entry(octets, bits_offset, e)
                 res.append(f)
             else:
                 res.append(DecodedField(key=_field_key(e), value=None))
         return res
 
+    def to_int01(v: float | int | None) -> int | None:
+        if v is None:
+            return None
+        return int(v)
+
     # main block
-    out.extend(decode_or_missing(main))
+    out.extend(decode_block_or_missing(main))
 
     # visual marker + fields
+    vis_val: int | None = None
     if have_bits(vis_marker.nbits):
-        b_ofs, vis_m = _decode_entry(
-            octets, b_ofs, vis_marker, key_override="410000_visual"
+        bits_offset, vis_m = _decode_entry(
+            octets, bits_offset, vis_marker, key_override="410000_visual"
         )
         out.append(vis_m)
+        vis_val = to_int01(vis_m.value)
     else:
         out.append(DecodedField(key="410000_visual", value=None))
-    out.extend(decode_or_missing(vis_fields))
+    if vis_val == 1:
+        out.extend(decode_block_or_missing(vis_fields))
+    else:
+        out.extend(_missing_block(vis_fields))
 
     # wave marker + fields
+    wave_val: int | None = None
     if have_bits(wave_marker.nbits):
-        b_ofs, wave_m = _decode_entry(
-            octets, b_ofs, wave_marker, key_override="408000_wave"
+        bits_offset, wave_m = _decode_entry(
+            octets, bits_offset, wave_marker, key_override="408000_wave"
         )
         out.append(wave_m)
+        wave_val = to_int01(wave_m.value)
     else:
         out.append(DecodedField(key="408000_wave", value=None))
-    out.extend(decode_or_missing(wave_fields))
+    if wave_val == 1:
+        out.extend(decode_block_or_missing(wave_fields))
+    else:
+        out.extend(_missing_block(wave_fields))
 
     # ice marker + fields
+    ice_val: int | None = None
     if have_bits(ice_marker.nbits):
-        b_ofs, ice_m = _decode_entry(
-            octets, b_ofs, ice_marker, key_override="408000_ice"
+        bits_offset, ice_m = _decode_entry(
+            octets, bits_offset, ice_marker, key_override="408000_ice"
         )
         out.append(ice_m)
+        ice_val = to_int01(ice_m.value)
     else:
         out.append(DecodedField(key="408000_ice", value=None))
-    out.extend(decode_or_missing(ice_fields))
+    if ice_val == 1:
+        out.extend(decode_block_or_missing(ice_fields))
+    else:
+        out.extend(_missing_block(ice_fields))
 
     return out
 
