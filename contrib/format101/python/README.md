@@ -40,10 +40,16 @@ This creates a virtual environment in `python/.venv` and installs dependencies
 The harness scripts live in `tests/harness/` and must be executed from `contrib/format101`
 so that relative paths (to `tests/`, `reference/`, `miscellaneous/`) work correctly.
 
-### Verify all golden vectors
+### Verify all golden vectors (reference binary)
 
 ```powershell
 uv run --project python python tests/harness/verify_reference_vectors_windows.py
+```
+
+### Verify all golden vectors (Python encoder)
+
+```powershell
+uv run --project python python tests/harness/verify_python_encoder_against_vectors.py
 ```
 
 ### Run reference encoder for a single vector
@@ -80,4 +86,10 @@ From `contrib/format101`:
 
 ```powershell
 uv run --project python format101 decode --hpk-file tests/vectors/minimal_id34567.expected.hpk.txt
+```
+
+### Encode
+
+```powershell
+uv run --project python format101 encode --format101 tests/vectors/minimal_id34567.format_101.txt --station-id 34567
 ```

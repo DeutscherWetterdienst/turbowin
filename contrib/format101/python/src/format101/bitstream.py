@@ -28,3 +28,41 @@ def read_bits(
     if treat_all_ones_as_missing and (val ^ ((1 << nbits) - 1)) == 0:
         return bits_offset + nbits, None
     return bits_offset + nbits, val
+
+
+def write_bits(
+    out: bytearray,
+    bits_offset: int,
+    nbits: int,
+    value: int,
+) -> int:
+    """
+    Write nbits of value into out starting at bits_offset.
+
+    Bit layout matches read_bits(): values are written MSB-first into the bitstream.
+
+    The output buffer (out) is grown as needed.
+    """
+    if nbits <= 0:
+        return bits_offset
+
+    mask = (1 << nbits) - 1
+    value &= mask
+
+    end_bit = bits_offset + nbits
+    needed_bytes = (end_bit + 7) // 8
+    if len(out) < needed_bytes:
+        out.extend(b"\x00" * (needed_bytes - len(out)))
+
+    for i in range(nbits):
+        bit_val = (value >> (nbits - 1 - i)) & 1
+        abs_bit = bits_offset + i
+        byte_idx = abs_bit // 8
+        bit_in_byte = abs_bit % 8
+        shift = 7 - bit_in_byte
+        if bit_val:
+            out[byte_idx] |= 1 << shift
+        else:
+            out[byte_idx] &= ~(1 << shift)
+
+    return bits_offset + nbits
