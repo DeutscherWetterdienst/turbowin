@@ -53,9 +53,15 @@ def _decode_entry(
     desc: PilotEntry,
     *,
     key_override: str | None = None,
+    treat_all_ones_as_missing: bool = True,
 ) -> tuple[int, DecodedField]:
     key = key_override if key_override is not None else _field_key(desc)
-    bits_offset, raw = read_bits(octets, bits_offset, desc.nbits)
+    bits_offset, raw = read_bits(
+        octets,
+        bits_offset,
+        desc.nbits,
+        treat_all_ones_as_missing=treat_all_ones_as_missing,
+    )
     if raw is None:
         return bits_offset, DecodedField(key=key, value=None)
 
@@ -179,6 +185,9 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
 
     These are control bits for a variable-length message. If a marker is 0,
     the subsequent block is not present in the bitstream and must be skipped.
+
+    Note: The legacy "all-ones means missing" convention cannot be applied to 1-bit
+    control fields, because the value 1 would otherwise collide with MISSING.
     """
     (
         main,
@@ -220,7 +229,11 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     vis_val: int | None = None
     if have_bits(vis_marker.nbits):
         bits_offset, vis_m = _decode_entry(
-            octets, bits_offset, vis_marker, key_override="410000_visual"
+            octets,
+            bits_offset,
+            vis_marker,
+            key_override="410000_visual",
+            treat_all_ones_as_missing=False,
         )
         out.append(vis_m)
         vis_val = to_int01(vis_m.value)
@@ -235,7 +248,11 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     wave_val: int | None = None
     if have_bits(wave_marker.nbits):
         bits_offset, wave_m = _decode_entry(
-            octets, bits_offset, wave_marker, key_override="408000_wave"
+            octets,
+            bits_offset,
+            wave_marker,
+            key_override="408000_wave",
+            treat_all_ones_as_missing=False,
         )
         out.append(wave_m)
         wave_val = to_int01(wave_m.value)
@@ -250,7 +267,11 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     ice_val: int | None = None
     if have_bits(ice_marker.nbits):
         bits_offset, ice_m = _decode_entry(
-            octets, bits_offset, ice_marker, key_override="408000_ice"
+            octets,
+            bits_offset,
+            ice_marker,
+            key_override="408000_ice",
+            treat_all_ones_as_missing=False,
         )
         out.append(ice_m)
         ice_val = to_int01(ice_m.value)
