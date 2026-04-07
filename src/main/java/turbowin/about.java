@@ -342,8 +342,7 @@ private void initComponents2()
    jLabel6.setText("operating system: " + System.getProperty("os.name") + " version " + System.getProperty("os.version") + " running on " + System.getProperty("os.arch"));
    jLabel11.setText("app dir: " + System.getProperty("app.dir"));
    jLabel12.setText("logs dir: " + main.logs_dir);
-   
-   jLabel1.setText("java: " + System.getProperty("java.version") + "; " + System.getProperty("java.vm.name"));
+   jLabel1.setText("java: " + System.getProperty("java.runtime.version") + "; " + System.getProperty("java.vm.name"));
    
    // NB See also Function log_memory_statistics() [main_support.java]
    //

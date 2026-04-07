@@ -828,14 +828,14 @@ public void log_memory_statistics()
    // Used memory, has to be calculated:
    long used_memory = total_allocated_memory - current_allocated_free_memory;
    
-   // Total free memory, has to be calculated:
-   long total_free_memory = total_designated_memory - used_memory;
+   // Total free designated memory, has to be calculated:
+   long total_free_designated_memory = total_designated_memory - used_memory;
    
    String memory_summary = "JVM: total designated memory = " + total_designated_memory + " MB; " + 
                                  "current allocated free memory = " + current_allocated_free_memory + " MB; " + 
                                  "total allocated memory = " + total_allocated_memory + " MB; " +
                                  "used memory = " + used_memory + " MB; " +   
-                                 "total free memory = " + total_free_memory + " MB";
+                                 "total free designated memory = " + total_free_designated_memory + " MB";
    log_turbowin_system_message("[GENERAL] " + memory_summary);
    //log_turbowin_system_message("[GENERAL] JVM total designated memory = " + total_designated_memory + " MB");
    //log_turbowin_system_message("[GENERAL] JVM current allocated free memory = " + current_allocated_free_memory + " MB");
@@ -856,20 +856,10 @@ public void log_java_version()
    // called from: - read_muffin()
    //              - lees_configuratie_regels()
 
-   //String java_version = System.getProperty("java.fullversion");
-   String java_version = System.getProperty("java.version");
-   //String java_vendor = System.getProperty("java.svendor");
+   String java_version = System.getProperty("java.runtime.version");
    String java_name = System.getProperty("java.vm.name");
    
-   //if (java_vendor == null)
-   //{
-   //   java_vendor = "OpenJDK";  
-   //}
-   
-   //log_turbowin_system_message("[GENERAL] Java version: " + java_vendor + " " + java_version);
    log_turbowin_system_message("[GENERAL] Java: " + java_version + "; " + java_name);
-   
-   //jLabel1.setText("Java: " /*+ java_vendor + " "*/ + System.getProperty("java.version") + "; " + System.getProperty("java.vm.name"));
 }
    
    
