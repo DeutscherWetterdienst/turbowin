@@ -45,65 +45,40 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     """
     Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
 
-    This is the inverse of expand_6bit_text_to_octets(), but the compaction algorithm
-    is not bijective due to bit shifts and OR-composition. Therefore we deterministically
-    synthesize the 6-bit word stream by searching for the lexicographically smallest
-    words that reproduce each target output byte when decoded.
+    Important:
+    - The original ecosystem compaction algorithm is not bijective.
+    - TurboWin+ / reference binaries produce a very specific 6-bit text representation.
+    - For legacy 1:1 compatibility, we derive this text representation by emulating the
+      same 6-bit packing used by the reference encoder: sequentially take 6-bit words
+      from the payload bitstream (MSB-first), then store them as bytes (0x40..0x7F).
 
-    The output is a byte string where each byte is in the range 0x40..0x7F and encodes
-    a 6-bit value in its lower bits.
+    This corresponds to the classic "8-to-6 expansion" mentioned in the format docs:
+      - payload is a byte-aligned bitstream
+      - it is expanded to 6-bit words (MSB-first)
+      - each 6-bit word is stored as (0x40 + word)
+
+    Note: This intentionally does not try to invert compact_6bit_text_to_octets().
     """
     if not octets:
         return b""
 
-    rss = [0, 4, 0, 2, 0, 0]  # right-shift amounts
-    lss = [2, 0, 4, 0, 6, 0]  # left-shift amounts
+    nbits = len(octets) * 8
+    nwords = (nbits + 5) // 6  # ceil
+    out = bytearray()
 
-    def contrib(word: int, i: int) -> int:
-        return (((word & 0x3F) >> rss[i]) << lss[i]) & 0xFF
+    bitpos = 0
+    for _ in range(nwords):
+        # read next 6 bits MSB-first from octets
+        val = 0
+        for _i in range(6):
+            byte_idx = bitpos // 8
+            bit_in_byte = bitpos % 8
+            bit = (octets[byte_idx] >> (7 - bit_in_byte)) & 1
+            val = (val << 1) | bit
+            bitpos += 1
+            if bitpos >= nbits:
+                # pad remaining bits with 0
+                bitpos = nbits
+        out.append((val & 0x3F) + 0x40)
 
-    out_words: list[int] = []
-
-    # The decoder emits one octet after steps (0,1), (2,3), and (4,5).
-    # We therefore solve 2x 6-bit words per output octet, and produce up to 6 words
-    # for each group of 3 output octets.
-    idx = 0
-    src = list(octets)
-    while idx < len(src):
-        targets = src[idx : idx + 3]
-        idx += 3
-        while len(targets) < 3:
-            targets.append(None)
-
-        cycle_words: list[int] = []
-
-        for j, (i0, i1) in enumerate(((0, 1), (2, 3), (4, 5))):
-            tgt = targets[j]
-            if tgt is None:
-                break
-
-            best: tuple[int, int] | None = None
-            for w0 in range(64):
-                c0 = contrib(w0, i0)
-                # Since output is built by OR-ing contributions, c0 must not set bits
-                # outside the target byte.
-                if (c0 | tgt) != tgt:
-                    continue
-                for w1 in range(64):
-                    c = c0 | contrib(w1, i1)
-                    if c == tgt:
-                        best = (w0, w1)
-                        break
-                if best is not None:
-                    break
-
-            if best is None:
-                raise ValueError(
-                    f"Could not encode target byte 0x{tgt:02x} at cycle part {j}"
-                )
-
-            cycle_words.extend(best)
-
-        out_words.extend(cycle_words)
-
-    return bytes(((w & 0x3F) + 0x40) & 0xFF for w in out_words)
+    return bytes(out)
