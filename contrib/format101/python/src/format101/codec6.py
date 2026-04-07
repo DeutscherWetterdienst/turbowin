@@ -41,6 +41,15 @@ def expand_6bit_text_to_octets(text: bytes) -> bytes:
     return compact_6bit_text_to_octets(bytes(((b - 0x40) & 0x3F) for b in text))
 
 
+def decode_turbowin_text_to_octets(text: bytes) -> bytes:
+    """
+    Decode TurboWin+ half-compressed payload bytes into the full 8-bit octet stream.
+
+    Alias for expand_6bit_text_to_octets(), kept for clearer naming.
+    """
+    return expand_6bit_text_to_octets(text)
+
+
 def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     """
     Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
@@ -49,6 +58,8 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
       - payload is a byte-aligned bitstream
       - it is expanded to 6-bit words (MSB-first)
       - each 6-bit word is stored as (0x40 + word)
+
+    This is designed to match the TurboWin+ reference encoder output on the golden vectors.
 
     Note: This intentionally does not try to invert compact_6bit_text_to_octets(),
     because that compaction is not bijective.
