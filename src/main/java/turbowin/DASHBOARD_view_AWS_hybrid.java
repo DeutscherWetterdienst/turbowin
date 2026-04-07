@@ -128,8 +128,10 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       
       popup.add(new JSeparator()); // SEPARATOR
       
- 
-      JMenuItem menuItem3 = new JMenuItem("container ship");
+      //
+      //////////////////////// container ship I  /////////////////
+      //
+      JMenuItem menuItem3 = new JMenuItem("container ship I");
       menuItem3.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
@@ -152,8 +154,37 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       });
       popup.add(menuItem3);  
 
-
-      JMenuItem menuItem4 = new JMenuItem("bulk carrier");
+      //
+      //////////////////////// container ship II  /////////////////
+      //
+      JMenuItem menuItem13 = new JMenuItem("container ship II");
+      menuItem13.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.CONTAINER_SHIP_2;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem13); 
+      
+      
+      //
+      //////////////////////// bulk carrier I /////////////////
+      //
+      JMenuItem menuItem4 = new JMenuItem("bulk carrier I");
       menuItem4.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
@@ -174,9 +205,39 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             }  
          }
       });
-      popup.add(menuItem4);  
+      popup.add(menuItem4); 
       
       
+      //
+      //////////////////////// bulk carrier II /////////////////
+      //
+      JMenuItem menuItem28 = new JMenuItem("bulk carrier II");
+      menuItem28.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem28);  
+
+      
+      //
+      //////////////////////// oil tanker  /////////////////
+      //
       JMenuItem menuItem5 = new JMenuItem("oil tanker");
       menuItem5.addActionListener(new java.awt.event.ActionListener() 
       {
@@ -200,7 +261,10 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       });
       popup.add(menuItem5);  
  
-      JMenuItem menuItem6 = new JMenuItem("LNG tanker");
+      //
+      //////////////////////// LNG tanker I  /////////////////
+      //
+      JMenuItem menuItem6 = new JMenuItem("LNG tanker I");
       menuItem6.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
@@ -223,7 +287,36 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       });
       popup.add(menuItem6);  
       
-      
+      //
+      //////////////////////// LNG tanker II  /////////////////
+      //
+      JMenuItem menuItem17 = new JMenuItem("LNG tanker II");
+      menuItem17.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.LNG_TANKER_II;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem17);        
+
+
+      //
+      //////////////////////// passenger ship  /////////////////
+      //
       JMenuItem menuItem7 = new JMenuItem("passenger ship");
       menuItem7.addActionListener(new java.awt.event.ActionListener() 
       {
@@ -248,6 +341,9 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       popup.add(menuItem7); 
       
       
+      //
+      //////////////////////// neutral ship  /////////////////
+      //
       JMenuItem menuItem8 = new JMenuItem("neutral ship");
       menuItem8.addActionListener(new java.awt.event.ActionListener() 
       {
@@ -271,8 +367,10 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       });
       popup.add(menuItem8);  
       
-      
-      JMenuItem menuItem9 = new JMenuItem("general cargo ship");
+      //
+      //////////////////////// general cargo I  /////////////////
+      //
+      JMenuItem menuItem9 = new JMenuItem("general cargo I");
       menuItem9.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
@@ -293,9 +391,118 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             }  
          }
       });
-      popup.add(menuItem9);  
+      popup.add(menuItem9);
+      
+      //
+      //////////////////////// general cargo II /////////////////
+      //
+      JMenuItem menuItem16 = new JMenuItem("general cargo II");
+      menuItem16.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_2;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem16);       
+      
+      //
+      //////////////////////// general cargo III  /////////////////
+      //
+      JMenuItem menuItem124 = new JMenuItem("general cargo III");
+      menuItem124.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem124);    
+      
+
+      //
+      //////////////////////// heavy-lift I  /////////////////
+      //
+      JMenuItem menuItem125 = new JMenuItem("heavy-lift I");
+      menuItem125.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem125); 
+
+
+      //
+      //////////////////////// heavy-lift II  /////////////////
+      //
+      JMenuItem menuItem126 = new JMenuItem("heavy-lift II");
+      menuItem126.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem126);       
       
       
+      //
+      //////////////////////// research vessel  /////////////////
+      //
       JMenuItem menuItem10 = new JMenuItem("research vessel");
       menuItem10.addActionListener(new java.awt.event.ActionListener() 
       {
@@ -320,13 +527,13 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       popup.add(menuItem10);  
       
       
-      JMenuItem menuItem11 = new JMenuItem("Ro-Ro ship");
+      JMenuItem menuItem11 = new JMenuItem("Ro-Ro ship I");
       menuItem11.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
          {
-            main.ship_type_dashboard = main.RO_RO_SHIP;
+            main.ship_type_dashboard = main.RO_RO_SHIP_1;
             repaint();
             
             // write meta data to muffins or configuration files
@@ -343,6 +550,30 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       });
       popup.add(menuItem11);  
       
+     
+      JMenuItem menuItem27 = new JMenuItem("Ro-Ro ship II");
+      menuItem27.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.RO_RO_SHIP_2;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem27);  
+
       
       JMenuItem menuItem12 = new JMenuItem("ferry");
       menuItem12.addActionListener(new java.awt.event.ActionListener() 
@@ -367,28 +598,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       });
       popup.add(menuItem12);  
       
-      JMenuItem menuItem13 = new JMenuItem("container ship II");
-      menuItem13.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            main.ship_type_dashboard = main.CONTAINER_SHIP_2;
-            repaint();
-            
-            // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
-            {
-                main.schrijf_configuratie_regels();          
-            }
-            else // so offline_via_jnlp mode or online (webstart) mode
-            {
-               //main.set_muffin();
-               main.schrijf_configuratie_regels();
-            }  
-         }
-      });
-      popup.add(menuItem13); 
 
       JMenuItem menuItem14 = new JMenuItem("general cargo classic");
       menuItem14.addActionListener(new java.awt.event.ActionListener() 
@@ -436,51 +645,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       });
       popup.add(menuItem15); 
       
-      JMenuItem menuItem16 = new JMenuItem("general cargo ship II");
-      menuItem16.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_2;
-            repaint();
-            
-            // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
-            {
-                main.schrijf_configuratie_regels();          
-            }
-            else // so offline_via_jnlp mode or online (webstart) mode
-            {
-               //main.set_muffin();
-               main.schrijf_configuratie_regels();
-            }  
-         }
-      });
-      popup.add(menuItem16); 
-
-      JMenuItem menuItem17 = new JMenuItem("LNG tanker II");
-      menuItem17.addActionListener(new java.awt.event.ActionListener() 
-      {
-         @Override
-         public void actionPerformed(ActionEvent e) 
-         {
-            main.ship_type_dashboard = main.LNG_TANKER_II;
-            repaint();
-            
-            // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
-            {
-                main.schrijf_configuratie_regels();          
-            }
-            else // so offline_via_jnlp mode or online (webstart) mode
-            {
-               //main.set_muffin();
-               main.schrijf_configuratie_regels();
-            }  
-         }
-      });
-      popup.add(menuItem17);  
    
       JMenuItem menuItem18 = new JMenuItem("fruit juice tanker");
       menuItem18.addActionListener(new java.awt.event.ActionListener() 
@@ -686,6 +850,77 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
       popup.add(menuItem22);  
       
       
+      //
+      //////////////////////// chemical/product tanker /////////////////
+      //
+      JMenuItem menuItem123 = new JMenuItem("chemical / product tanker");
+      menuItem123.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem123);      
+      
+      JMenuItem menuItem29 = new JMenuItem("sailing yacht");
+      menuItem29.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.SAILING_YACHT;
+            repaint();
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem29);  
+
+      JMenuItem menuItem30 = new JMenuItem("catamaran");
+      menuItem30.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.CATAMARAN;
+            repaint();
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem30);
+      
+   
 
       popup.add(new JSeparator()); // SEPARATOR
       

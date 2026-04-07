@@ -201,9 +201,9 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
      
 
       //
-      //////////////////////// container ship /////////////////
+      //////////////////////// container ship I /////////////////
       //      
-      JMenu menuItem3 = new JMenu("container ship");
+      JMenu menuItem3 = new JMenu("container ship I");
       popup.add(menuItem3); 
 
       JMenuItem menuItem3_container_color_various = new JMenuItem("container color various");
@@ -547,9 +547,9 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
 
       
       //
-      //////////////////////// bulk carrier /////////////////
+      //////////////////////// bulk carrier I /////////////////
       //
-      JMenu menuItem4 = new JMenu("bulk carrier");
+      JMenu menuItem4 = new JMenu("bulk carrier I");
       popup.add(menuItem4); 
 
       JMenuItem menuItem4_deck_color_brown = new JMenuItem("deck color brown");
@@ -733,7 +733,195 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
          }
       });
       
+
+      //
+      //////////////////////// bulk carrier II /////////////////
+      //
+      JMenu menuItem28 = new JMenu("bulk carrier II");
+      popup.add(menuItem28); 
+
+      JMenuItem menuItem28_deck_color_brown = new JMenuItem("deck color brown");
+      menuItem28.add(menuItem28_deck_color_brown);
+
+      menuItem28_deck_color_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BROWN;                      
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+ 
+      JMenuItem menuItem28_deck_color_red_brown = new JMenuItem("deck color red-brown");
+      menuItem28.add(menuItem28_deck_color_red_brown);
+
+      menuItem28_deck_color_red_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED_BROWN;                          
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
       
+      JMenuItem menuItem28_deck_color_red = new JMenuItem("deck color red");
+      menuItem28.add(menuItem28_deck_color_red);
+
+      menuItem28_deck_color_red.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED; 
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem28_deck_color_green = new JMenuItem("deck color green");
+      menuItem28.add(menuItem28_deck_color_green);
+
+      menuItem28_deck_color_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GREEN;                                  // green-blue
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem28_deck_color_light_green = new JMenuItem("deck color light-green");
+      menuItem28.add(menuItem28_deck_color_light_green);
+
+      menuItem28_deck_color_light_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GREEN;                                                           
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem28_deck_color_orange = new JMenuItem("deck color orange");
+      menuItem28.add(menuItem28_deck_color_orange);
+
+      menuItem28_deck_color_orange.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_ORANGE; 
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem28_deck_color_yellow = new JMenuItem("deck color yellow");
+      menuItem28.add(menuItem28_deck_color_yellow);
+
+      menuItem28_deck_color_yellow.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_YELLOW;
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem28_deck_color_gray_brown = new JMenuItem("deck color gray-brown");
+      menuItem28.add(menuItem28_deck_color_gray_brown);
+
+      menuItem28_deck_color_gray_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY_BROWN;
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+
+      JMenuItem menuItem28_deck_color_gray = new JMenuItem("deck color gray");
+      menuItem28.add(menuItem28_deck_color_gray);
+
+      menuItem28_deck_color_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY;
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem28_deck_color_light_gray = new JMenuItem("deck color light-gray");
+      menuItem28.add(menuItem28_deck_color_light_gray);
+
+      menuItem28_deck_color_light_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GRAY;
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem28_deck_color_dark_gray = new JMenuItem("deck color dark-gray");
+      menuItem28.add(menuItem28_deck_color_dark_gray);
+
+      menuItem28_deck_color_dark_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_DARK_GRAY;
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem28_deck_color_blue_gray = new JMenuItem("deck color blue-gray");
+      menuItem28.add(menuItem28_deck_color_blue_gray);
+
+      menuItem28_deck_color_blue_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BLUE_GRAY; 
+            main.ship_type_dashboard = main.BULK_CARRIER_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+   
+
       //
       //////////////////////// oil tanker /////////////////
       //
@@ -923,9 +1111,9 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
 
       
       //
-      //////////////////////// LNG tanker /////////////////
+      //////////////////////// LNG tanker I /////////////////
       //
-      JMenu menuItem6 = new JMenu("LNG tanker");
+      JMenu menuItem6 = new JMenu("LNG tanker I");
       popup.add(menuItem6); 
 
       JMenuItem menuItem6_deck_color_brown_tank_color_red = new JMenuItem("deck color brown, tanks red");
@@ -1447,9 +1635,9 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
 
       
       //
-      //////////////////////// general cargo ship /////////////////
+      //////////////////////// general cargo I /////////////////
       //
-      JMenu menuItem9 = new JMenu("general cargo ship");
+      JMenu menuItem9 = new JMenu("general cargo I");
       popup.add(menuItem9); 
 
       JMenuItem menuItem9_deck_color_brown = new JMenuItem("deck color brown");
@@ -1637,7 +1825,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
       //
       //////////////////////// general cargo II /////////////////
       //
-      JMenu menuItem16 = new JMenu("general cargo ship II");
+      JMenu menuItem16 = new JMenu("general cargo II");
       popup.add(menuItem16); 
 
       JMenuItem menuItem16_deck_color_brown = new JMenuItem("deck color brown");
@@ -1820,6 +2008,570 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
             repaint();
          }
       });
+      
+
+      //
+      //////////////////////// general cargo III /////////////////
+      //
+      JMenu menuItem24 = new JMenu("general cargo III");
+      popup.add(menuItem24); 
+
+      JMenuItem menuItem24_deck_color_brown = new JMenuItem("deck color brown");
+      menuItem24.add(menuItem24_deck_color_brown);
+
+      menuItem24_deck_color_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BROWN;                      
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem24_deck_color_red_brown = new JMenuItem("deck color red-brown");
+      menuItem24.add(menuItem24_deck_color_red_brown);
+
+      menuItem24_deck_color_red_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED_BROWN;                          
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem24_deck_color_red = new JMenuItem("deck color red");
+      menuItem24.add(menuItem24_deck_color_red);
+
+      menuItem24_deck_color_red.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED; 
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem24_deck_color_green = new JMenuItem("deck color green");
+      menuItem24.add(menuItem24_deck_color_green);
+
+      menuItem24_deck_color_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GREEN;                                  // green-blue
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem24_deck_color_light_green = new JMenuItem("deck color light-green");
+      menuItem24.add(menuItem24_deck_color_light_green);
+
+      menuItem24_deck_color_light_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GREEN;                                                           
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem24_deck_color_orange = new JMenuItem("deck color orange");
+      menuItem24.add(menuItem24_deck_color_orange);
+
+      menuItem24_deck_color_orange.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_ORANGE; 
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem24_deck_color_yellow = new JMenuItem("deck color yellow");
+      menuItem24.add(menuItem24_deck_color_yellow);
+
+      menuItem24_deck_color_yellow.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_YELLOW;
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem24_deck_color_gray_brown = new JMenuItem("deck color gray-brown");
+      menuItem24.add(menuItem24_deck_color_gray_brown);
+
+      menuItem24_deck_color_gray_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY_BROWN;
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+
+      JMenuItem menuItem24_deck_color_gray = new JMenuItem("deck color gray");
+      menuItem24.add(menuItem24_deck_color_gray);
+
+      menuItem24_deck_color_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY;
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem24_deck_color_light_gray = new JMenuItem("deck color light-gray");
+      menuItem24.add(menuItem24_deck_color_light_gray);
+
+      menuItem24_deck_color_light_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GRAY;
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem24_deck_color_dark_gray = new JMenuItem("deck color dark-gray");
+      menuItem24.add(menuItem24_deck_color_dark_gray);
+
+      menuItem24_deck_color_dark_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_DARK_GRAY;
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem24_deck_color_blue_gray = new JMenuItem("deck color blue-gray");
+      menuItem24.add(menuItem24_deck_color_blue_gray);
+
+      menuItem24_deck_color_blue_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BLUE_GRAY; 
+            main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+
+      //
+      //////////////////////// heavy-lift I /////////////////
+      //
+      JMenu menuItem25 = new JMenu("heavy-lift I");
+      popup.add(menuItem25); 
+
+      JMenuItem menuItem25_deck_color_brown = new JMenuItem("deck color brown");
+      menuItem25.add(menuItem25_deck_color_brown);
+
+      menuItem25_deck_color_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BROWN;                      
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem25_deck_color_red_brown = new JMenuItem("deck color red-brown");
+      menuItem25.add(menuItem25_deck_color_red_brown);
+
+      menuItem25_deck_color_red_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED_BROWN;                          
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem25_deck_color_red = new JMenuItem("deck color red");
+      menuItem25.add(menuItem25_deck_color_red);
+
+      menuItem25_deck_color_red.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED; 
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem25_deck_color_green = new JMenuItem("deck color green");
+      menuItem25.add(menuItem25_deck_color_green);
+
+      menuItem25_deck_color_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GREEN;                                  // green-blue
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem25_deck_color_light_green = new JMenuItem("deck color light-green");
+      menuItem25.add(menuItem25_deck_color_light_green);
+
+      menuItem25_deck_color_light_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GREEN;                                                           
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem25_deck_color_orange = new JMenuItem("deck color orange");
+      menuItem25.add(menuItem25_deck_color_orange);
+
+      menuItem25_deck_color_orange.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_ORANGE; 
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem25_deck_color_yellow = new JMenuItem("deck color yellow");
+      menuItem25.add(menuItem25_deck_color_yellow);
+
+      menuItem25_deck_color_yellow.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_YELLOW;
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem25_deck_color_gray_brown = new JMenuItem("deck color gray-brown");
+      menuItem25.add(menuItem25_deck_color_gray_brown);
+
+      menuItem25_deck_color_gray_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY_BROWN;
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+
+      JMenuItem menuItem25_deck_color_gray = new JMenuItem("deck color gray");
+      menuItem25.add(menuItem25_deck_color_gray);
+
+      menuItem25_deck_color_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY;
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem25_deck_color_light_gray = new JMenuItem("deck color light-gray");
+      menuItem25.add(menuItem25_deck_color_light_gray);
+
+      menuItem25_deck_color_light_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GRAY;
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem25_deck_color_dark_gray = new JMenuItem("deck color dark-gray");
+      menuItem25.add(menuItem25_deck_color_dark_gray);
+
+      menuItem25_deck_color_dark_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_DARK_GRAY;
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem25_deck_color_blue_gray = new JMenuItem("deck color blue-gray");
+      menuItem25.add(menuItem25_deck_color_blue_gray);
+
+      menuItem25_deck_color_blue_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BLUE_GRAY; 
+            main.ship_type_dashboard = main.HEAVY_LIFT_1;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+
+      //
+      //////////////////////// heavy-lift II /////////////////
+      //
+      JMenu menuItem26 = new JMenu("heavy-lift II");
+      popup.add(menuItem26); 
+
+      JMenuItem menuItem26_deck_color_brown = new JMenuItem("deck color brown");
+      menuItem26.add(menuItem26_deck_color_brown);
+
+      menuItem26_deck_color_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BROWN;                      
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem26_deck_color_red_brown = new JMenuItem("deck color red-brown");
+      menuItem26.add(menuItem26_deck_color_red_brown);
+
+      menuItem26_deck_color_red_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED_BROWN;                          
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem26_deck_color_red = new JMenuItem("deck color red");
+      menuItem26.add(menuItem26_deck_color_red);
+
+      menuItem26_deck_color_red.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED; 
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem26_deck_color_green = new JMenuItem("deck color green");
+      menuItem26.add(menuItem26_deck_color_green);
+
+      menuItem26_deck_color_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GREEN;                                  // green-blue
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem26_deck_color_light_green = new JMenuItem("deck color light-green");
+      menuItem26.add(menuItem26_deck_color_light_green);
+
+      menuItem26_deck_color_light_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GREEN;                                                           
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem26_deck_color_orange = new JMenuItem("deck color orange");
+      menuItem26.add(menuItem26_deck_color_orange);
+
+      menuItem26_deck_color_orange.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_ORANGE; 
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem26_deck_color_yellow = new JMenuItem("deck color yellow");
+      menuItem26.add(menuItem26_deck_color_yellow);
+
+      menuItem26_deck_color_yellow.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_YELLOW;
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem26_deck_color_gray_brown = new JMenuItem("deck color gray-brown");
+      menuItem26.add(menuItem26_deck_color_gray_brown);
+
+      menuItem26_deck_color_gray_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY_BROWN;
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+
+      JMenuItem menuItem26_deck_color_gray = new JMenuItem("deck color gray");
+      menuItem26.add(menuItem26_deck_color_gray);
+
+      menuItem26_deck_color_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY;
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem26_deck_color_light_gray = new JMenuItem("deck color light-gray");
+      menuItem26.add(menuItem26_deck_color_light_gray);
+
+      menuItem26_deck_color_light_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GRAY;
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem26_deck_color_dark_gray = new JMenuItem("deck color dark-gray");
+      menuItem26.add(menuItem26_deck_color_dark_gray);
+
+      menuItem26_deck_color_dark_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_DARK_GRAY;
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem26_deck_color_blue_gray = new JMenuItem("deck color blue-gray");
+      menuItem26.add(menuItem26_deck_color_blue_gray);
+
+      menuItem26_deck_color_blue_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BLUE_GRAY; 
+            main.ship_type_dashboard = main.HEAVY_LIFT_2;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
 
       
       //
@@ -1904,15 +2656,15 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
       
       
       //
-      //////////////////////// Ro-Ro ship /////////////////
+      //////////////////////// Ro-Ro ship I /////////////////
       //
-      JMenuItem menuItem11 = new JMenuItem("Ro-Ro ship");
+      JMenuItem menuItem11 = new JMenuItem("Ro-Ro ship I");
       menuItem11.addActionListener(new java.awt.event.ActionListener() 
       {
          @Override
          public void actionPerformed(ActionEvent e) 
          {
-            main.ship_type_dashboard = main.RO_RO_SHIP;
+            main.ship_type_dashboard = main.RO_RO_SHIP_1;
             repaint();
             
             // write meta data to muffins or configuration files
@@ -1928,6 +2680,33 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
          }
       });
       popup.add(menuItem11);  
+      
+
+      //
+      //////////////////////// Ro-Ro ship II /////////////////
+      //
+      JMenuItem menuItem27 = new JMenuItem("Ro-Ro ship II");
+      menuItem27.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.RO_RO_SHIP_2;
+            repaint();
+            
+            // write meta data to muffins or configuration files
+            if (main.offline_mode_via_cmd == true)                          // also if the turbowin_launcher is present (JPMS)
+            {
+                main.schrijf_configuratie_regels();          
+            }
+            else // so offline_via_jnlp mode or online (webstart) mode
+            {
+               //main.set_muffin();
+               main.schrijf_configuratie_regels();
+            }  
+         }
+      });
+      popup.add(menuItem27);  
       
       
       //
@@ -2152,9 +2931,221 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame
             }  
          }
       });
-      popup.add(menuItem22);  
+      popup.add(menuItem22); 
       
+
+      //
+      //////////////////////// chemical / product tanker /////////////////
+      //
+      JMenu menuItem23 = new JMenu("chemical / product tanker");
+      popup.add(menuItem23); 
+
+      JMenuItem menuItem23_deck_color_brown = new JMenuItem("deck color brown");
+      menuItem23.add(menuItem23_deck_color_brown);
+
+      menuItem23_deck_color_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BROWN;                      
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+ 
+      JMenuItem menuItem23_deck_color_red_brown = new JMenuItem("deck color red-brown");
+      menuItem23.add(menuItem23_deck_color_red_brown);
+
+      menuItem23_deck_color_red_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED_BROWN;                          
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
       
+      JMenuItem menuItem23_deck_color_red = new JMenuItem("deck color red");
+      menuItem23.add(menuItem23_deck_color_red);
+
+      menuItem23_deck_color_red.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_RED; 
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem23_deck_color_green = new JMenuItem("deck color green");
+      menuItem23.add(menuItem23_deck_color_green);
+
+      menuItem23_deck_color_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GREEN;                                  // green-blue
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem23_deck_color_light_green = new JMenuItem("deck color light-green");
+      menuItem23.add(menuItem23_deck_color_light_green);
+
+      menuItem23_deck_color_light_green.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GREEN;                                                           
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem23_deck_color_orange = new JMenuItem("deck color orange");
+      menuItem23.add(menuItem23_deck_color_orange);
+
+      menuItem23_deck_color_orange.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_ORANGE; 
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem23_deck_color_yellow = new JMenuItem("deck color yellow");
+      menuItem23.add(menuItem23_deck_color_yellow);
+
+      menuItem23_deck_color_yellow.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_YELLOW;
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem23_deck_color_gray_brown = new JMenuItem("deck color gray-brown");
+      menuItem23.add(menuItem23_deck_color_gray_brown);
+
+      menuItem23_deck_color_gray_brown.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY_BROWN;
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+
+      JMenuItem menuItem23_deck_color_gray = new JMenuItem("deck color gray");
+      menuItem23.add(menuItem23_deck_color_gray);
+
+      menuItem23_deck_color_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_GRAY;
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem23_deck_color_light_gray = new JMenuItem("deck color light-gray");
+      menuItem23.add(menuItem23_deck_color_light_gray);
+
+      menuItem23_deck_color_light_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_LIGHT_GRAY;
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem23_deck_color_dark_gray = new JMenuItem("deck color dark-gray");
+      menuItem23.add(menuItem23_deck_color_dark_gray);
+
+      menuItem23_deck_color_dark_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_DARK_GRAY;
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      
+      JMenuItem menuItem23_deck_color_blue_gray = new JMenuItem("deck color blue-gray");
+      menuItem23.add(menuItem23_deck_color_blue_gray);
+
+      menuItem23_deck_color_blue_gray.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            deck_color = DECK_COLOR_BLUE_GRAY; 
+            main.ship_type_dashboard = main.CHEMICAL_TANKER;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+
+      JMenuItem menuItem29 = new JMenuItem("sailing yacht");
+      menuItem29.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.SAILING_YACHT;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      popup.add(menuItem29);  
+
+      JMenuItem menuItem30 = new JMenuItem("catamaran");
+      menuItem30.addActionListener(new java.awt.event.ActionListener() 
+      {
+         @Override
+         public void actionPerformed(ActionEvent e) 
+         {
+            main.ship_type_dashboard = main.CATAMARAN;
+            save_ship_dashboard_selection();
+            repaint();
+         }
+      });
+      popup.add(menuItem30);  
       
       // background image pop-up
       popup.add(new JSeparator()); // SEPARATOR
