@@ -73,7 +73,7 @@ def main() -> int:
     ap.add_argument(
         "--write-expected",
         action="store_true",
-        help="Write tests/vectors/<name>.expected.hpk.txt based on the input file name",
+        help="Write <name>.expected.hpk.txt next to the input vector file",
     )
     args = ap.parse_args()
 
@@ -82,7 +82,7 @@ def main() -> int:
 
     if args.write_expected:
         name = args.vector.stem.replace(".format_101", "")
-        expected_path = REPO_ROOT / "tests" / "vectors" / f"{name}.expected.hpk.txt"
+        expected_path = args.vector.parent / f"{name}.expected.hpk.txt"
         expected_path.write_text(hpk + "\n", encoding="latin1")
         print(f"Wrote: {expected_path}")
 
