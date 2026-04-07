@@ -135,7 +135,6 @@ def encode_format101_from_txt(
         present, value = values[i]
 
         if not present:
-            # MISSING is all ones for the field width
             raw = (1 << entry.nbits) - 1
         else:
             assert value is not None
