@@ -55,6 +55,19 @@ This avoids key collisions and allows explicit checks of the control bits.
 
 ---
 
+## 3) Invalid / undefined behavior inputs
+
+Some inputs can trigger output from the reference encoder that is not plausible for
+Format 101 transmission (e.g. excessively large payloads / decoded octet streams).
+
+These cases are treated as invalid/undefined behavior and are excluded from strict
+"must match reference" tests in this repository.
+
+Example:
+- `tests/vectors/experiments/exp_visual_m0_vv1_idVISM001`
+
+---
+
 ## Notes
 
 - These limitations apply to the **legacy compatibility target** and the observed
