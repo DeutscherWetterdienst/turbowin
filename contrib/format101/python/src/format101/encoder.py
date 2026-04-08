@@ -190,16 +190,18 @@ def encode_format101_from_txt(
             for i in range(idx_ice_fields_start, idx_ice_fields_end):
                 encode_entry(i)
 
+    # Canonical tail padding:
+    # 1) pad with 1-bits up to the next 6-bit boundary
+    pad6 = (-b_ofs) % 6
+    if pad6:
+        b_ofs = write_bits(out, b_ofs, pad6, (1 << pad6) - 1)
+
+    # 2) pad with 0-bits up to the next byte boundary
+    pad8 = (-b_ofs) % 8
+    if pad8:
+        b_ofs = write_bits(out, b_ofs, pad8, 0)
+
     payload_octets = bytes(out[: (b_ofs + 7) // 8])
-
-    # Fill remaining bits in the last byte with 1s (legacy all-ones padding), if not byte-aligned
-    rem = b_ofs % 8
-    if rem != 0 and payload_octets:
-        last = payload_octets[-1]
-        mask = (1 << (8 - rem)) - 1  # low (8-rem) bits
-        last = last | mask
-        payload_octets = payload_octets[:-1] + bytes([last])
-
     payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
 
     return EncodedMessage(
