@@ -30,7 +30,6 @@ class DecodedMessage:
             if f.value is None:
                 lines.append("0")
             else:
-                # Use a stable, compact formatting (TurboWin accepts floats)
                 if isinstance(f.value, int):
                     lines.append(f"1 {f.value}.0")
                 else:
@@ -115,17 +114,11 @@ def _split_pilote_into_sections(
 
     idx_vis_fields_start = idx_vis_marker + 1
     idx_vis_fields_end = idx_vis_fields_start + VISUAL_COUNT
-    if idx_vis_fields_end > len(pilote):
-        raise ValueError("Invalid pilote file: insufficient visual fields after 410000")
     vis_fields = pilote[idx_vis_fields_start:idx_vis_fields_end]
-    if vis_fields and vis_fields[0].bufr != "020001":
-        raise ValueError(
-            f"Invalid pilote file: expected 020001 after 410000, got {vis_fields[0].bufr}"
-        )
+    if len(vis_fields) != VISUAL_COUNT:
+        raise ValueError("Invalid pilote file: insufficient visual fields after 410000")
 
     idx_wave_marker = idx_vis_fields_end
-    if idx_wave_marker >= len(pilote):
-        raise ValueError("Invalid pilote file: missing first 408000 wave marker")
     wave_marker = pilote[idx_wave_marker]
     if wave_marker.bufr != "408000":
         raise ValueError(
@@ -134,19 +127,13 @@ def _split_pilote_into_sections(
 
     idx_wave_fields_start = idx_wave_marker + 1
     idx_wave_fields_end = idx_wave_fields_start + WAVE_COUNT
-    if idx_wave_fields_end > len(pilote):
+    wave_fields = pilote[idx_wave_fields_start:idx_wave_fields_end]
+    if len(wave_fields) != WAVE_COUNT:
         raise ValueError(
             "Invalid pilote file: insufficient wave fields after first 408000"
         )
-    wave_fields = pilote[idx_wave_fields_start:idx_wave_fields_end]
-    if wave_fields and wave_fields[0].bufr != "022012":
-        raise ValueError(
-            f"Invalid pilote file: expected 022012 after first 408000, got {wave_fields[0].bufr}"
-        )
 
     idx_ice_marker = idx_wave_fields_end
-    if idx_ice_marker >= len(pilote):
-        raise ValueError("Invalid pilote file: missing second 408000 ice marker")
     ice_marker = pilote[idx_ice_marker]
     if ice_marker.bufr != "408000":
         raise ValueError(
@@ -155,14 +142,10 @@ def _split_pilote_into_sections(
 
     idx_ice_fields_start = idx_ice_marker + 1
     idx_ice_fields_end = idx_ice_fields_start + ICE_COUNT
-    if idx_ice_fields_end > len(pilote):
+    ice_fields = pilote[idx_ice_fields_start:idx_ice_fields_end]
+    if len(ice_fields) != ICE_COUNT:
         raise ValueError(
             "Invalid pilote file: insufficient ice fields after second 408000"
-        )
-    ice_fields = pilote[idx_ice_fields_start:idx_ice_fields_end]
-    if ice_fields and ice_fields[0].bufr != "020031":
-        raise ValueError(
-            f"Invalid pilote file: expected 020031 after second 408000, got {ice_fields[0].bufr}"
         )
 
     return (
@@ -176,20 +159,17 @@ def _split_pilote_into_sections(
     )
 
 
-def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField]:
+def _decode_fields_variable_length(
+    octets: bytes, pilote: list[PilotEntry]
+) -> list[DecodedField]:
     """
-    Decode octets according to pilote definitions.
+    Decode a variable-length S-AWS-101 payload:
+    - main block is always present
+    - group markers (410000, 408000, 408000) control whether the subsequent blocks are present
+    - if a marker is 0, the block is not present in the bitstream and must be skipped,
+      but we still emit the corresponding fields as missing for stable output alignment
 
-    TurboWin's legacy S-AWS-101 pilote uses BUFR-style short delayed replication factors:
-    - 410000: visual group replication indicator (0/1)
-    - 408000: wave group replication indicator (0/1)
-    - 408000: ice group replication indicator (0/1)
-
-    These are control bits for a variable-length message. If a marker is 0,
-    the subsequent block is not present in the bitstream and must be skipped.
-
-    Note: The legacy "all-ones means missing" convention cannot be applied to 1-bit
-    control fields, because the value 1 would otherwise collide with MISSING.
+    Note: The legacy "all-ones means missing" convention must be disabled for 1-bit marker fields.
     """
     (
         main,
@@ -208,7 +188,7 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
     def have_bits(nbits: int) -> bool:
         return bits_offset + nbits <= n_total_bits
 
-    def decode_block_or_missing(entries: list[PilotEntry]) -> list[DecodedField]:
+    def decode_block(entries: list[PilotEntry]) -> list[DecodedField]:
         nonlocal bits_offset
         res: list[DecodedField] = []
         for e in entries:
@@ -219,68 +199,44 @@ def _decode_fields(octets: bytes, pilote: list[PilotEntry]) -> list[DecodedField
                 res.append(DecodedField(key=_field_key(e), value=None))
         return res
 
-    def to_int01(v: float | int | None) -> int | None:
-        if v is None:
+    def decode_marker(entry: PilotEntry, key: str) -> int | None:
+        nonlocal bits_offset
+        if not have_bits(entry.nbits):
+            out.append(DecodedField(key=key, value=None))
             return None
-        return int(v)
-
-    # main block
-    out.extend(decode_block_or_missing(main))
-
-    # visual marker + fields
-    vis_val: int | None = None
-    if have_bits(vis_marker.nbits):
-        bits_offset, vis_m = _decode_entry(
+        bits_offset, f = _decode_entry(
             octets,
             bits_offset,
-            vis_marker,
-            key_override="410000_visual",
+            entry,
+            key_override=key,
             treat_all_ones_as_missing=False,
         )
-        out.append(vis_m)
-        vis_val = to_int01(vis_m.value)
-    else:
-        out.append(DecodedField(key="410000_visual", value=None))
+        out.append(f)
+        if f.value is None:
+            return None
+        return int(f.value)
+
+    # main block
+    out.extend(decode_block(main))
+
+    # visual marker + fields
+    vis_val = decode_marker(vis_marker, "410000_visual")
     if vis_val == 1:
-        out.extend(decode_block_or_missing(vis_fields))
+        out.extend(decode_block(vis_fields))
     else:
         out.extend(_missing_block(vis_fields))
 
     # wave marker + fields
-    wave_val: int | None = None
-    if have_bits(wave_marker.nbits):
-        bits_offset, wave_m = _decode_entry(
-            octets,
-            bits_offset,
-            wave_marker,
-            key_override="408000_wave",
-            treat_all_ones_as_missing=False,
-        )
-        out.append(wave_m)
-        wave_val = to_int01(wave_m.value)
-    else:
-        out.append(DecodedField(key="408000_wave", value=None))
+    wave_val = decode_marker(wave_marker, "408000_wave")
     if wave_val == 1:
-        out.extend(decode_block_or_missing(wave_fields))
+        out.extend(decode_block(wave_fields))
     else:
         out.extend(_missing_block(wave_fields))
 
     # ice marker + fields
-    ice_val: int | None = None
-    if have_bits(ice_marker.nbits):
-        bits_offset, ice_m = _decode_entry(
-            octets,
-            bits_offset,
-            ice_marker,
-            key_override="408000_ice",
-            treat_all_ones_as_missing=False,
-        )
-        out.append(ice_m)
-        ice_val = to_int01(ice_m.value)
-    else:
-        out.append(DecodedField(key="408000_ice", value=None))
+    ice_val = decode_marker(ice_marker, "408000_ice")
     if ice_val == 1:
-        out.extend(decode_block_or_missing(ice_fields))
+        out.extend(decode_block(ice_fields))
     else:
         out.extend(_missing_block(ice_fields))
 
@@ -311,18 +267,15 @@ def decode_hpk_line(
     prefix = raw[:7]
     station_id = prefix.strip()
 
-    # The payload contains bytes like 0x7F (DEL), so we must treat it as raw bytes.
     payload_text = raw[7:].encode("latin1")
-
-    # TurboWin payload bytes are in the range 0x40..0x7F; convert to 6-bit values and compact.
     octets = decode_turbowin_text_to_octets(payload_text)
 
-    # TurboWin's legacy pilot CSV includes an initial '000000' (operating mode) entry.
-    # That value is not part of the encoded payload, so we skip it when decoding.
+    # Skip 000000 operating mode (not part of payload)
     if pilote and pilote[0].bufr == "000000" and pilote[0].ref == "":
         pilote = pilote[1:]
 
-    fields = _decode_fields(octets, pilote)
+    fields = _decode_fields_variable_length(octets, pilote)
+
     return DecodedMessage(
         station_id_raw=prefix,
         station_id=station_id,

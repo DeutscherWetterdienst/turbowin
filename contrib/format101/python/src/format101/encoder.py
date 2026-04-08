@@ -75,6 +75,11 @@ def _quantize(entry: PilotEntry, value: float) -> int:
     return int(raw)
 
 
+VISUAL_COUNT = 10
+WAVE_COUNT = 8
+ICE_COUNT = 8
+
+
 def encode_format101_from_txt(
     *,
     format101_txt: str | Path,
@@ -87,8 +92,8 @@ def encode_format101_from_txt(
 
     This implementation targets 1:1 compatibility with TurboWin+ legacy vectors:
     - uses the legacy pilote file (miscellaneous/format_101/config/)
-    - produces a variable-length message based on group marker bits (410000 / 408000 / 408000)
     - applies legacy MISSING convention: all bits set to 1 for a field
+    - encodes a variable-length payload based on group marker bits (410000, 408000, 408000)
     """
     station_id = station_id.strip()
     if not (1 <= len(station_id) <= 7):
@@ -107,42 +112,66 @@ def encode_format101_from_txt(
             f"Input value line count mismatch: expected {len(pilote)} entries, got {len(values)}"
         )
 
-    # Find marker indices in the legacy pilote file
-    idx_visual = next(i for i, e in enumerate(pilote) if e.bufr == "410000")
-    idx_wave = next(i for i, e in enumerate(pilote) if e.bufr == "408000")
-    idx_ice = next(
-        i for i, e in enumerate(pilote) if e.bufr == "408000" and i > idx_wave
-    )
+    # Locate section boundaries in legacy pilote (after skipping 000000)
+    idx_022042 = next(i for i, e in enumerate(pilote) if e.bufr == "022042")
+    idx_vis_marker = idx_022042 + 1
+    idx_vis_fields_start = idx_vis_marker + 1
+    idx_vis_fields_end = idx_vis_fields_start + VISUAL_COUNT
 
-    # Determine whether the optional blocks should be emitted (variable length)
-    visual_emit = bool(values[idx_visual][0] and int(values[idx_visual][1] or 0) == 1)
-    wave_emit = bool(values[idx_wave][0] and int(values[idx_wave][1] or 0) == 1)
-    ice_emit = bool(values[idx_ice][0] and int(values[idx_ice][1] or 0) == 1)
+    idx_wave_marker = idx_vis_fields_end
+    idx_wave_fields_start = idx_wave_marker + 1
+    idx_wave_fields_end = idx_wave_fields_start + WAVE_COUNT
+
+    idx_ice_marker = idx_wave_fields_end
+    idx_ice_fields_start = idx_ice_marker + 1
+    idx_ice_fields_end = idx_ice_fields_start + ICE_COUNT
+
+    def marker_is_one(idx: int) -> bool:
+        present, v = values[idx]
+        if not present or v is None:
+            return False
+        return int(float(v)) == 1
+
+    visual_emit = marker_is_one(idx_vis_marker)
+    wave_emit = marker_is_one(idx_wave_marker)
+    ice_emit = marker_is_one(idx_ice_marker)
 
     out = bytearray()
     b_ofs = 0
 
-    for i, entry in enumerate(pilote):
-        # Skip full blocks that are not present in the message bitstream
-        if i > idx_visual:
-            if idx_visual < i < idx_wave and not visual_emit:
-                continue
-            if idx_wave < i < idx_ice and not wave_emit:
-                continue
-            if i > idx_ice and not ice_emit:
-                continue
-
+    def encode_entry(i: int) -> None:
+        nonlocal b_ofs
+        entry = pilote[i]
         present, value = values[i]
-
         if not present:
             raw = (1 << entry.nbits) - 1
         else:
             assert value is not None
             raw = _quantize(entry, value)
-
         b_ofs = write_bits(out, b_ofs, entry.nbits, raw)
 
-    # Trim to the number of whole bytes actually written
+    # main block (0 .. idx_022042)
+    for i in range(0, idx_022042 + 1):
+        encode_entry(i)
+
+    # visual marker
+    encode_entry(idx_vis_marker)
+    if visual_emit:
+        for i in range(idx_vis_fields_start, idx_vis_fields_end):
+            encode_entry(i)
+
+    # wave marker
+    encode_entry(idx_wave_marker)
+    if wave_emit:
+        for i in range(idx_wave_fields_start, idx_wave_fields_end):
+            encode_entry(i)
+
+    # ice marker
+    encode_entry(idx_ice_marker)
+    if ice_emit:
+        for i in range(idx_ice_fields_start, idx_ice_fields_end):
+            encode_entry(i)
+
     payload_octets = bytes(out[: (b_ofs + 7) // 8])
     payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
 
