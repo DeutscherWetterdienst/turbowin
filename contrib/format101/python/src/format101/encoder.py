@@ -92,15 +92,26 @@ def encode_format101_from_txt(
     """
     Encode a TurboWin+ format_101.txt into a single HPK line (station id prefix + payload text).
 
-    This implementation targets 1:1 compatibility with TurboWin+ legacy vectors:
-    - uses the legacy pilote file (miscellaneous/format_101/config/)
-    - applies legacy MISSING convention: all bits set to 1 for a field
-    - encodes a variable-length payload based on a chained replication marker scheme
+    This implementation aims to match the observed behavior of the TurboWin+ legacy
+    reference encoder (`teste_hc_TW.exe`) for S-AWS-101 (format #101).
 
-    Observed behavior for legacy vectors indicates that the marker bits form a chain:
-      - 410000: visual group present
-      - first 408000: at least one group after visual is present (wave or ice)
-      - second 408000: ice group present
+    Key behavior (derived from experiments):
+    - The message is variable-length and controlled by marker bits.
+    - Marker bits are structural flags and must be taken from the input (not derived from data presence).
+    - If a marker indicates that a block is not present, the block is omitted from the bitstream
+      (no placeholder fields are written).
+
+    Layout (after skipping pilote entry 000000):
+    - main block up to 022042 (inclusive)
+    - 410000 visual marker:
+        0 => stop
+        1 => write 10 visual fields
+    - first 408000 (chain marker):
+        0 => stop
+        1 => write 8 wave fields, then second 408000 (ice marker)
+    - second 408000 (ice marker):
+        0 => stop
+        1 => write 8 ice fields
     """
     station_id = station_id.strip()
     if not (1 <= len(station_id) <= 7):
@@ -133,39 +144,28 @@ def encode_format101_from_txt(
     idx_ice_fields_start = idx_ice_marker + 1
     idx_ice_fields_end = idx_ice_fields_start + ICE_COUNT
 
-    def group_has_any_present(start: int, end: int) -> bool:
-        for i in range(start, end):
-            present, _v = values[i]
-            if present:
-                return True
-        return False
+    def read_marker(idx: int) -> int:
+        present, v = values[idx]
+        if not present or v is None:
+            return 0
+        return 1 if int(v) != 0 else 0
 
-    has_visual = group_has_any_present(idx_vis_fields_start, idx_vis_fields_end)
-    has_wave = group_has_any_present(idx_wave_fields_start, idx_wave_fields_end)
-    has_ice = group_has_any_present(idx_ice_fields_start, idx_ice_fields_end)
-
-    # Derive marker chain values (override whatever is in format_101.txt)
-    m_visual = 1 if has_visual else 0
-    m_chain = 1 if (has_wave or has_ice) else 0
-    m_ice = 1 if has_ice else 0
+    m_visual = read_marker(idx_vis_marker)
+    m_chain = read_marker(idx_chain_marker)
+    m_ice = read_marker(idx_ice_marker)
 
     out = bytearray()
     b_ofs = 0
 
-    def encode_entry(i: int, *, force_missing: bool = False) -> None:
+    def encode_entry(i: int) -> None:
         nonlocal b_ofs
         entry = pilote[i]
         present, value = values[i]
-
-        if force_missing:
+        if not present:
             raw = (1 << entry.nbits) - 1
         else:
-            if not present:
-                raw = (1 << entry.nbits) - 1
-            else:
-                assert value is not None
-                raw = _quantize(entry, value)
-
+            assert value is not None
+            raw = _quantize(entry, value)
         b_ofs = write_bits(out, b_ofs, entry.nbits, raw)
 
     def encode_marker(i: int, marker_val: int) -> None:
@@ -180,36 +180,60 @@ def encode_format101_from_txt(
 
     # visual marker (410000)
     encode_marker(idx_vis_marker, m_visual)
-    if has_visual:
-        for i in range(idx_vis_fields_start, idx_vis_fields_end):
-            encode_entry(i)
-    else:
-        # still write placeholder fields (missing) to keep bitstream aligned
-        for i in range(idx_vis_fields_start, idx_vis_fields_end):
-            encode_entry(i, force_missing=True)
+    if m_visual == 0:
+        payload_bits = b_ofs
+        payload_octets = bytes(out[: (b_ofs + 7) // 8])
+        payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
+        return EncodedMessage(
+            station_id_raw=station_id_raw,
+            station_id=station_id,
+            template=template,
+            payload_text=payload_text,
+            payload_octets=payload_octets,
+            payload_bits=payload_bits,
+        )
+
+    # visual fields
+    for i in range(idx_vis_fields_start, idx_vis_fields_end):
+        encode_entry(i)
 
     # chain marker (first 408000)
     encode_marker(idx_chain_marker, m_chain)
+    if m_chain == 0:
+        payload_bits = b_ofs
+        payload_octets = bytes(out[: (b_ofs + 7) // 8])
+        payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
+        return EncodedMessage(
+            station_id_raw=station_id_raw,
+            station_id=station_id,
+            template=template,
+            payload_text=payload_text,
+            payload_octets=payload_octets,
+            payload_bits=payload_bits,
+        )
 
-    if m_chain == 1:
-        # wave fields (may be missing)
-        if has_wave:
-            for i in range(idx_wave_fields_start, idx_wave_fields_end):
-                encode_entry(i)
-        else:
-            for i in range(idx_wave_fields_start, idx_wave_fields_end):
-                encode_entry(i, force_missing=True)
+    # wave fields
+    for i in range(idx_wave_fields_start, idx_wave_fields_end):
+        encode_entry(i)
 
-        # ice marker (second 408000)
-        encode_marker(idx_ice_marker, m_ice)
+    # ice marker (second 408000)
+    encode_marker(idx_ice_marker, m_ice)
+    if m_ice == 0:
+        payload_bits = b_ofs
+        payload_octets = bytes(out[: (b_ofs + 7) // 8])
+        payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
+        return EncodedMessage(
+            station_id_raw=station_id_raw,
+            station_id=station_id,
+            template=template,
+            payload_text=payload_text,
+            payload_octets=payload_octets,
+            payload_bits=payload_bits,
+        )
 
-        # ice fields (may be missing)
-        if has_ice:
-            for i in range(idx_ice_fields_start, idx_ice_fields_end):
-                encode_entry(i)
-        else:
-            for i in range(idx_ice_fields_start, idx_ice_fields_end):
-                encode_entry(i, force_missing=True)
+    # ice fields
+    for i in range(idx_ice_fields_start, idx_ice_fields_end):
+        encode_entry(i)
 
     payload_bits = b_ofs
     payload_octets = bytes(out[: (b_ofs + 7) // 8])
