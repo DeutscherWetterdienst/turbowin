@@ -35,8 +35,6 @@ def expand_6bit_text_to_octets(text: bytes) -> bytes:
     and encodes a 6-bit value in the lower bits, i.e.:
 
         six = (byte - 0x40) & 0x3F
-
-    This matches the observed TurboWin+ payload (lots of 0x7F bytes for missing data).
     """
     return compact_6bit_text_to_octets(bytes(((b - 0x40) & 0x3F) for b in text))
 
@@ -50,19 +48,23 @@ def decode_turbowin_text_to_octets(text: bytes) -> bytes:
     return expand_6bit_text_to_octets(text)
 
 
-def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
+def _bit_at(octets: bytes, bitpos: int) -> int:
+    byte_idx = bitpos // 8
+    bit_in_byte = bitpos % 8
+    return (octets[byte_idx] >> (7 - bit_in_byte)) & 1
+
+
+def encode_octets_to_6bit_words(octets: bytes) -> bytes:
     """
-    Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
+    Encode octets into 6-bit words (0..63) so that:
 
-    This performs an "8-to-6 expansion":
-      - payload is a byte-aligned bitstream
-      - it is expanded to 6-bit words (MSB-first)
-      - each 6-bit word is stored as (0x40 + word)
+        compact_6bit_text_to_octets(words) == octets
 
-    This is designed to match the TurboWin+ reference encoder output on the golden vectors.
+    This is the inverse operation required to reproduce TurboWin/MAWSbin payload text.
 
-    Note: This intentionally does not try to invert compact_6bit_text_to_octets(),
-    because that compaction is not bijective.
+    The compaction packs 6-bit words into bytes in a fixed MSB-first bit order, so the
+    inverse is simply splitting the octet bitstream into 6-bit groups MSB-first, while
+    padding the final group with 1-bits (legacy all-ones missing convention) if needed.
     """
     if not octets:
         return b""
@@ -73,16 +75,32 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
 
     bitpos = 0
     for _ in range(nwords):
-        val = 0
+        v = 0
         for _i in range(6):
-            if bitpos >= nbits:
-                val <<= 1
-                continue
-            byte_idx = bitpos // 8
-            bit_in_byte = bitpos % 8
-            bit = (octets[byte_idx] >> (7 - bit_in_byte)) & 1
-            val = (val << 1) | bit
+            if bitpos < nbits:
+                b = _bit_at(octets, bitpos)
+            else:
+                # pad with 1-bits to match legacy all-ones behavior at the tail
+                b = 1
+            v = (v << 1) | b
             bitpos += 1
-        out.append((val & 0x3F) + 0x40)
+        out.append(v & 0x3F)
 
     return bytes(out)
+
+
+def encode_octets_to_turbowin_text(octets: bytes) -> bytes:
+    """
+    Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
+
+    This uses the inverse of compact_6bit_text_to_octets() (via encode_octets_to_6bit_words).
+    """
+    words = encode_octets_to_6bit_words(octets)
+    return bytes(((w & 0x3F) + 0x40) for w in words)
+
+
+def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
+    """
+    Backwards-compatible alias used by encoder.py.
+    """
+    return encode_octets_to_turbowin_text(octets)
