@@ -16,6 +16,8 @@ class EncodedMessage:
     payload_text: bytes
     payload_octets: bytes
     payload_bits: int
+    unfinalized_octets: bytes
+    unfinalized_bits: int
 
     def to_hpk_line(self) -> str:
         return self.station_id_raw + self.payload_text.decode("latin1")
@@ -88,6 +90,7 @@ def encode_format101_from_txt(
     pilote_csv: str | Path,
     station_id: str,
     template: str = "S-AWS-101",
+    finalize: bool = True,
 ) -> EncodedMessage:
     """
     Encode a TurboWin+ format_101.txt into a single HPK line (station id prefix + payload text).
@@ -100,7 +103,6 @@ def encode_format101_from_txt(
     - Marker bits are structural flags and must be taken from the input (not derived from data presence).
     - If a marker indicates that a block is not present, the block is omitted from the bitstream
       (no placeholder fields are written).
-    - The bitstream is padded to a 6-bit boundary using 1-bits, then padded with 0-bits to a byte boundary.
 
     Layout (after skipping pilote entry 000000):
     - main block up to 022042 (inclusive)
@@ -113,6 +115,9 @@ def encode_format101_from_txt(
     - second 408000 (ice marker):
         0 => stop
         1 => write 8 ice fields
+
+    The `finalize` flag exists to support black-box inference of the exact reference
+    padding/termination behavior. In normal operation it should remain True.
     """
     station_id = station_id.strip()
     if not (1 <= len(station_id) <= 7):
@@ -177,24 +182,27 @@ def encode_format101_from_txt(
 
     def finalize_bitstream() -> None:
         """
-        Final padding to match the reference behavior:
-        - pad with 1-bits up to the next 6-bit boundary
-        - then pad with 0-bits up to the next byte boundary
+        Placeholder finalizer.
+
+        The exact reference padding/termination behavior is inferred using black-box
+        experiments. The solver uses `finalize=False` to access the unfinalized stream.
         """
         nonlocal b_ofs
-        pad6 = (-b_ofs) % 6
-        if pad6:
-            b_ofs = write_bits(out, b_ofs, pad6, (1 << pad6) - 1)
-
         pad8 = (-b_ofs) % 8
         if pad8:
             b_ofs = write_bits(out, b_ofs, pad8, 0)
 
     def build_message() -> EncodedMessage:
-        finalize_bitstream()
+        unfinalized_bits = b_ofs
+        unfinalized_octets = bytes(out[: (b_ofs + 7) // 8])
+
+        if finalize:
+            finalize_bitstream()
+
         payload_bits = b_ofs
         payload_octets = bytes(out[: (b_ofs + 7) // 8])
         payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
+
         return EncodedMessage(
             station_id_raw=station_id_raw,
             station_id=station_id,
@@ -202,6 +210,8 @@ def encode_format101_from_txt(
             payload_text=payload_text,
             payload_octets=payload_octets,
             payload_bits=payload_bits,
+            unfinalized_octets=unfinalized_octets,
+            unfinalized_bits=unfinalized_bits,
         )
 
     # main block (0 .. idx_022042)
