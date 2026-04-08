@@ -93,7 +93,12 @@ def encode_format101_from_txt(
     This implementation targets 1:1 compatibility with TurboWin+ legacy vectors:
     - uses the legacy pilote file (miscellaneous/format_101/config/)
     - applies legacy MISSING convention: all bits set to 1 for a field
-    - encodes a variable-length payload based on group marker bits (410000, 408000, 408000)
+    - encodes a variable-length payload based on a chained replication marker scheme
+
+    Observed behavior for legacy vectors indicates that the marker bits form a chain:
+      - 410000: visual group present
+      - first 408000: at least one group after visual is present (wave or ice)
+      - second 408000: ice group present
     """
     station_id = station_id.strip()
     if not (1 <= len(station_id) <= 7):
@@ -118,23 +123,29 @@ def encode_format101_from_txt(
     idx_vis_fields_start = idx_vis_marker + 1
     idx_vis_fields_end = idx_vis_fields_start + VISUAL_COUNT
 
-    idx_wave_marker = idx_vis_fields_end
-    idx_wave_fields_start = idx_wave_marker + 1
+    idx_chain_marker = idx_vis_fields_end  # first 408000 in legacy pilote
+    idx_wave_fields_start = idx_chain_marker + 1
     idx_wave_fields_end = idx_wave_fields_start + WAVE_COUNT
 
-    idx_ice_marker = idx_wave_fields_end
+    idx_ice_marker = idx_wave_fields_end  # second 408000 in legacy pilote
     idx_ice_fields_start = idx_ice_marker + 1
     idx_ice_fields_end = idx_ice_fields_start + ICE_COUNT
 
-    def marker_is_one(idx: int) -> bool:
-        present, v = values[idx]
-        if not present or v is None:
-            return False
-        return int(float(v)) == 1
+    def group_has_any_present(start: int, end: int) -> bool:
+        for i in range(start, end):
+            present, _v = values[i]
+            if present:
+                return True
+        return False
 
-    visual_emit = marker_is_one(idx_vis_marker)
-    wave_emit = marker_is_one(idx_wave_marker)
-    ice_emit = marker_is_one(idx_ice_marker)
+    has_visual = group_has_any_present(idx_vis_fields_start, idx_vis_fields_end)
+    has_wave = group_has_any_present(idx_wave_fields_start, idx_wave_fields_end)
+    has_ice = group_has_any_present(idx_ice_fields_start, idx_ice_fields_end)
+
+    # Derive marker chain values (override whatever is in format_101.txt)
+    m_visual = 1 if has_visual else 0
+    m_chain = 1 if (has_wave or has_ice) else 0
+    m_ice = 1 if has_ice else 0
 
     out = bytearray()
     b_ofs = 0
@@ -150,29 +161,45 @@ def encode_format101_from_txt(
             raw = _quantize(entry, value)
         b_ofs = write_bits(out, b_ofs, entry.nbits, raw)
 
+    def encode_marker(i: int, marker_val: int) -> None:
+        nonlocal b_ofs
+        entry = pilote[i]
+        raw = int(marker_val) & ((1 << entry.nbits) - 1)
+        b_ofs = write_bits(out, b_ofs, entry.nbits, raw)
+
     # main block (0 .. idx_022042)
     for i in range(0, idx_022042 + 1):
         encode_entry(i)
 
-    # visual marker
-    encode_entry(idx_vis_marker)
-    if visual_emit:
+    # visual marker (410000)
+    encode_marker(idx_vis_marker, m_visual)
+    if has_visual:
         for i in range(idx_vis_fields_start, idx_vis_fields_end):
             encode_entry(i)
 
-    # wave marker
-    encode_entry(idx_wave_marker)
-    if wave_emit:
+    # chain marker (first 408000)
+    encode_marker(idx_chain_marker, m_chain)
+    if has_wave:
         for i in range(idx_wave_fields_start, idx_wave_fields_end):
             encode_entry(i)
 
-    # ice marker
-    encode_entry(idx_ice_marker)
-    if ice_emit:
-        for i in range(idx_ice_fields_start, idx_ice_fields_end):
-            encode_entry(i)
+    # ice marker (second 408000) is only present if chain continues
+    if m_chain == 1:
+        encode_marker(idx_ice_marker, m_ice)
+        if has_ice:
+            for i in range(idx_ice_fields_start, idx_ice_fields_end):
+                encode_entry(i)
 
     payload_octets = bytes(out[: (b_ofs + 7) // 8])
+
+    # Fill remaining bits in the last byte with 1s (legacy all-ones padding), if not byte-aligned
+    rem = b_ofs % 8
+    if rem != 0 and payload_octets:
+        last = payload_octets[-1]
+        mask = (1 << (8 - rem)) - 1  # low (8-rem) bits
+        last = last | mask
+        payload_octets = payload_octets[:-1] + bytes([last])
+
     payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
 
     return EncodedMessage(
