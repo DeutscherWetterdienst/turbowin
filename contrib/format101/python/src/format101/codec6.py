@@ -66,7 +66,6 @@ def _build_compact_mapping():
         Apply the compaction algorithm to a list of bits representing 6-bit words concatenated.
         Returns output bits (octets concatenated, MSB-first).
         """
-        # Convert bits to 6-bit words
         if len(in_bits) % 6 != 0:
             raise ValueError("in_bits length must be multiple of 6")
         nwords = len(in_bits) // 6
@@ -101,87 +100,113 @@ def _build_compact_mapping():
                 out_bits.append((b >> (7 - k)) & 1)
         return out_bits
 
-    # Build mapping for a sufficiently large window: 24 input bits (4 words) -> 24 output bits (3 octets)
-    # The compaction emits 1 octet after steps 1,3,5 => 3 octets per 4 words (24 bits)
+    # Use a 24-bit window (4 words -> 3 octets)
     in_len = 24
-    mapping = [-1] * (in_len)
+    mapping = [-1] * in_len
 
     for in_pos in range(in_len):
         bits = [0] * in_len
         bits[in_pos] = 1
         out_bits = compact_bits(bits)
-        # Find where that single bit ended up (should be exactly one 1)
         ones = [i for i, v in enumerate(out_bits) if v == 1]
         if len(ones) != 1:
             raise RuntimeError(f"Unexpected mapping for in_pos={in_pos}: ones={ones}")
         mapping[in_pos] = ones[0]
 
-    # We also need out_len for this window
     out_len = max(mapping) + 1
     return mapping, out_len
 
 
-# Precompute mapping once
 _COMPACT_INBIT_TO_OUTBIT, _COMPACT_OUTLEN_BITS = _build_compact_mapping()
+
+
+def _invert_block_3octets_to_4words(block: bytes) -> bytes:
+    """
+    Invert one 3-octet (24-bit) block into 4 6-bit words using the precomputed mapping.
+    """
+    if len(block) != 3:
+        raise ValueError("block must be exactly 3 octets")
+
+    out_bits: list[int] = []
+    for b in block:
+        for k in range(8):
+            out_bits.append((b >> (7 - k)) & 1)
+
+    ib = [0] * 24
+    for in_pos, out_pos in enumerate(_COMPACT_INBIT_TO_OUTBIT):
+        ib[in_pos] = out_bits[out_pos]
+
+    words_out = bytearray()
+    for wi in range(4):
+        v = 0
+        for bi in range(6):
+            v = (v << 1) | (ib[wi * 6 + bi] & 1)
+        words_out.append(v & 0x3F)
+    return bytes(words_out)
 
 
 def encode_octets_to_6bit_words(octets: bytes) -> bytes:
     """
-    Invert compact_6bit_text_to_octets for TurboWin/MAWSbin-style compaction.
-
-    Given a byte stream (octets), produce 6-bit words (0..63) such that:
-
-        compact_6bit_text_to_octets(words) == octets
+    Invert compact_6bit_text_to_octets for TurboWin/MAWSbin-style compaction and normalize
+    to the shortest word sequence that compacts back to exactly the input octets.
 
     The inversion is performed in 3-octet blocks (24 bits) which map to 4 words (24 bits).
-    For the last partial block, remaining output bits are padded with 1-bits (legacy convention).
+    The resulting word sequence is then normalized by trimming trailing words while
+    preserving compact(words) == octets.
     """
     if not octets:
         return b""
 
-    # Convert output octets to bits (MSB-first)
-    out_bits: list[int] = []
-    for b in octets:
-        for k in range(8):
-            out_bits.append((b >> (7 - k)) & 1)
+    if _COMPACT_OUTLEN_BITS != 24:
+        raise RuntimeError("Unexpected compact mapping output length")
 
-    words_out = bytearray()
+    # Build a raw (possibly non-minimal) candidate by inverting each 3-byte block
+    words = bytearray()
+    for i in range(0, len(octets), 3):
+        block = octets[i : i + 3]
+        if len(block) < 3:
+            # pad missing bytes with 0xFF (all-ones) for legacy tail behavior
+            block = block + b"\xff" * (3 - len(block))
+        words.extend(_invert_block_3octets_to_4words(block))
 
-    # Process in 24-bit (3-octet) blocks
-    block_out_bits = _COMPACT_OUTLEN_BITS  # should be 24
-    block_in_bits = len(_COMPACT_INBIT_TO_OUTBIT)  # 24
-    if block_out_bits != 24 or block_in_bits != 24:
-        raise RuntimeError("Unexpected compact mapping dimensions")
+    # Normalize to minimal length that still compacts exactly to the original octets
+    def comp(w: bytes) -> bytes:
+        return compact_6bit_text_to_octets(w)
 
-    pos = 0
-    while pos < len(out_bits):
-        # Extract next 24 output bits, pad with 1s if needed
-        ob = out_bits[pos : pos + block_out_bits]
-        if len(ob) < block_out_bits:
-            ob = ob + [1] * (block_out_bits - len(ob))
+    # Ensure we start from something that produces at least the prefix
+    if comp(words)[: len(octets)] != octets:
+        raise RuntimeError(
+            "Internal error: decompaction candidate does not match input octets"
+        )
 
-        # Reconstruct the 24 input bits by inverse mapping
-        ib = [0] * block_in_bits
-        for in_pos, out_pos in enumerate(_COMPACT_INBIT_TO_OUTBIT):
-            ib[in_pos] = ob[out_pos]
+    # Trim trailing words while maintaining exact equality
+    while len(words) > 0:
+        cand = words[:-1]
+        if not cand:
+            break
+        out = comp(cand)
+        if out == octets:
+            words = bytearray(cand)
+            continue
+        # If output is longer, it's not minimal; but equality is required
+        # If output is shorter or differs, stop trimming
+        break
 
-        # Convert 24 input bits into 4 6-bit words
-        for wi in range(4):
-            v = 0
-            for bi in range(6):
-                v = (v << 1) | (ib[wi * 6 + bi] & 1)
-            words_out.append(v & 0x3F)
+    # After trimming to equality, ensure compaction exactly matches
+    if comp(words) != octets:
+        raise RuntimeError(
+            "Internal error: normalization failed to preserve exact compaction"
+        )
 
-        pos += block_out_bits
-
-    return bytes(words_out)
+    return bytes(words)
 
 
 def encode_octets_to_turbowin_text(octets: bytes) -> bytes:
     """
     Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
 
-    This uses the inverse of compact_6bit_text_to_octets() (via encode_octets_to_6bit_words).
+    This uses the inverse of compact_6bit_text_to_octets() (via encode_octets_to_6bit_words)
+    and emits a canonical/minimal representation.
     """
     words = encode_octets_to_6bit_words(octets)
     return bytes(((w & 0x3F) + 0x40) for w in words)
