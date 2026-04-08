@@ -89,8 +89,8 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     for a lexicographically smallest tail (within a small window) that decodes back to
     the exact same octets.
 
-    This implementation only searches over the last 1..3 6-bit characters because
-    observed differences versus the reference encoder are confined to the tail.
+    This implementation searches over the last 1..3 6-bit characters and selects the
+    globally lexicographically smallest full text among all valid candidates.
     """
     base = _encode_octets_to_6bit_text_base(octets)
     if not base:
@@ -98,13 +98,8 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
 
     target = octets
 
-    # If the base already round-trips exactly, keep it.
-    if decode_turbowin_text_to_octets(base) == target:
-        # Still canonicalize tail to match reference (base may round-trip but differ)
-        pass
-    else:
-        # Base must at least be a valid representation; otherwise we have a deeper bug.
-        # Keep base as fallback.
+    # Base must at least round-trip exactly; otherwise we have a deeper bug.
+    if decode_turbowin_text_to_octets(base) != target:
         return base
 
     best = base
@@ -115,30 +110,21 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
         if len(base) < k:
             continue
         prefix = base[:-k]
-        found_best = None
 
         # Iterate tail words in lexicographic order of resulting bytes (0x40..0x7F),
         # which corresponds to word values 0..63.
         def rec_build(pos: int, buf: bytearray) -> None:
-            nonlocal found_best
-            if found_best is not None:
-                return
+            nonlocal best
             if pos == k:
                 cand = bytes(prefix + buf)
-                if decode_turbowin_text_to_octets(cand) == target:
-                    found_best = cand
+                if decode_turbowin_text_to_octets(cand) == target and cand < best:
+                    best = cand
                 return
             for w in range(64):
                 buf.append(0x40 + w)
                 rec_build(pos + 1, buf)
                 buf.pop()
-                if found_best is not None:
-                    return
 
         rec_build(0, bytearray())
-
-        if found_best is not None:
-            best = found_best
-            break
 
     return best
