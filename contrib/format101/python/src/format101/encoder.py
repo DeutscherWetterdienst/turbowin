@@ -182,12 +182,17 @@ def encode_format101_from_txt(
 
     def finalize_bitstream() -> None:
         """
-        Placeholder finalizer.
+        Final padding to match the reference behavior (inferred by solve_padding.py).
 
-        The exact reference padding/termination behavior is inferred using black-box
-        experiments. The solver uses `finalize=False` to access the unfinalized stream.
+        Rules:
+        - If the bitstream ends at a 4-bit (nibble) boundary (b_ofs % 8 == 4),
+          append two 1-bits ("11") before byte-aligning.
+        - Then byte-align by appending 0-bits as needed.
         """
         nonlocal b_ofs
+        if (b_ofs % 8) == 4:
+            b_ofs = write_bits(out, b_ofs, 2, 0b11)
+
         pad8 = (-b_ofs) % 8
         if pad8:
             b_ofs = write_bits(out, b_ofs, pad8, 0)
