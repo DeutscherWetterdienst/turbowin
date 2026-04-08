@@ -152,15 +152,20 @@ def encode_format101_from_txt(
     out = bytearray()
     b_ofs = 0
 
-    def encode_entry(i: int) -> None:
+    def encode_entry(i: int, *, force_missing: bool = False) -> None:
         nonlocal b_ofs
         entry = pilote[i]
         present, value = values[i]
-        if not present:
+
+        if force_missing:
             raw = (1 << entry.nbits) - 1
         else:
-            assert value is not None
-            raw = _quantize(entry, value)
+            if not present:
+                raw = (1 << entry.nbits) - 1
+            else:
+                assert value is not None
+                raw = _quantize(entry, value)
+
         b_ofs = write_bits(out, b_ofs, entry.nbits, raw)
 
     def encode_marker(i: int, marker_val: int) -> None:
@@ -178,19 +183,33 @@ def encode_format101_from_txt(
     if has_visual:
         for i in range(idx_vis_fields_start, idx_vis_fields_end):
             encode_entry(i)
+    else:
+        # still write placeholder fields (missing) to keep bitstream aligned
+        for i in range(idx_vis_fields_start, idx_vis_fields_end):
+            encode_entry(i, force_missing=True)
 
     # chain marker (first 408000)
     encode_marker(idx_chain_marker, m_chain)
-    if has_wave:
-        for i in range(idx_wave_fields_start, idx_wave_fields_end):
-            encode_entry(i)
 
-    # ice marker (second 408000) is only present if chain continues
     if m_chain == 1:
+        # wave fields (may be missing)
+        if has_wave:
+            for i in range(idx_wave_fields_start, idx_wave_fields_end):
+                encode_entry(i)
+        else:
+            for i in range(idx_wave_fields_start, idx_wave_fields_end):
+                encode_entry(i, force_missing=True)
+
+        # ice marker (second 408000)
         encode_marker(idx_ice_marker, m_ice)
+
+        # ice fields (may be missing)
         if has_ice:
             for i in range(idx_ice_fields_start, idx_ice_fields_end):
                 encode_entry(i)
+        else:
+            for i in range(idx_ice_fields_start, idx_ice_fields_end):
+                encode_entry(i, force_missing=True)
 
     payload_bits = b_ofs
     payload_octets = bytes(out[: (b_ofs + 7) // 8])
