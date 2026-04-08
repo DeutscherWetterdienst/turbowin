@@ -37,7 +37,6 @@ def dump_first_diff(
     b_exp = 0
     b_got = 0
 
-    # Compare as long as both sides have enough bits for the next field
     for idx, entry in enumerate(pilote):
         key = pilote_key(entry)
         n = entry.nbits
@@ -50,12 +49,9 @@ def dump_first_diff(
             print(f"field_idx={idx} key={key} nbits={n}")
             print(f"have_expected={have_exp} have_got={have_got}")
             print(f"expected_bitpos={b_exp} got_bitpos={b_got}")
-            print(
-                "This indicates a structural/length mismatch (likely block skipping vs fixed layout)"
-            )
+            print("This indicates a structural/length mismatch")
             return 2
 
-        # For raw comparisons, we must NOT treat all-ones as missing for 1-bit control fields.
         treat_missing = True
         if entry.bufr in ("410000", "408000") and entry.nbits == 1:
             treat_missing = False
@@ -73,17 +69,6 @@ def dump_first_diff(
             print(f"expected_raw={raw_exp!r}")
             print(f"got_raw     ={raw_got!r}")
             print(f"expected_bitpos={b_exp} got_bitpos={b_got}")
-            # show surrounding bytes
-            exp_byte = b_exp // 8
-            got_byte = b_got // 8
-            print("\nexpected_octets_hex_window:")
-            start = max(0, exp_byte - 8)
-            end = min(len(exp_octets), exp_byte + 16)
-            print(" ".join(f"{b:02x}" for b in exp_octets[start:end]))
-            print("\ngot_octets_hex_window:")
-            start2 = max(0, got_byte - 8)
-            end2 = min(len(got_octets), got_byte + 16)
-            print(" ".join(f"{b:02x}" for b in got_octets[start2:end2]))
             return 1
 
         b_exp = b_exp2
@@ -111,7 +96,7 @@ def main() -> int:
     ap.add_argument(
         "--name",
         required=True,
-        help="Vector base name without extension (e.g. generated_combo_v0w0i1_01_idB)",
+        help="Vector base name without extension",
     )
     ap.add_argument(
         "--station-id",
@@ -138,45 +123,22 @@ def main() -> int:
         raise SystemExit(f"Missing expected file: {exp_hpk}")
 
     exp_line = exp_hpk.read_text(encoding="latin1").splitlines()[0]
-    exp_raw = exp_line.rstrip("\r\n")
-    exp_prefix = exp_raw[:7]
-    print(f"expected_prefix={exp_prefix!r}")
-
     exp_octets = to_payload_octets_from_hpk_line(exp_line)
 
-    # Our encoder output (current implementation)
     msg = encode_format101_from_txt(
         format101_txt=in_txt,
         pilote_csv=args.pilote,
         station_id=args.station_id,
     )
-    got_line = msg.to_hpk_line()
-    got_raw = got_line.rstrip("\r\n")
-    got_prefix = got_raw[:7]
-    print(f"got_prefix     ={got_prefix!r}")
+    got_octets = msg.payload_octets
 
-    got_octets = to_payload_octets_from_hpk_line(got_line)
-
-    # Quick check: compare octets directly
-    common = min(len(exp_octets), len(got_octets))
-    prefix_match = 0
-    for i in range(common):
-        if exp_octets[i] != got_octets[i]:
-            break
-        prefix_match += 1
-    print(f"octet_prefix_match={prefix_match}/{common}")
-
-    # Field-level diff
     rc = dump_first_diff(exp_octets, got_octets, args.pilote)
 
-    # Additionally decode both with our decoder (best-effort) to give human-readable context
     try:
         exp_dec = decode_hpk_line(exp_line, pilote_csv=args.pilote)
-        got_dec = decode_hpk_line(got_line, pilote_csv=args.pilote)
+        got_dec = decode_hpk_line(msg.to_hpk_line(), pilote_csv=args.pilote)
         exp_map = {f.key: f.value for f in exp_dec.fields}
         got_map = {f.key: f.value for f in got_dec.fields}
-
-        # Show marker values if present
         for k in ("410000_visual", "408000_wave", "408000_ice"):
             if k in exp_map or k in got_map:
                 print(

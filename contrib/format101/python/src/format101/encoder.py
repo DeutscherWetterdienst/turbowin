@@ -14,6 +14,8 @@ class EncodedMessage:
     station_id: str
     template: str
     payload_text: bytes
+    payload_octets: bytes
+    payload_bits: int
 
     def to_hpk_line(self) -> str:
         return self.station_id_raw + self.payload_text.decode("latin1")
@@ -190,17 +192,7 @@ def encode_format101_from_txt(
             for i in range(idx_ice_fields_start, idx_ice_fields_end):
                 encode_entry(i)
 
-    # Canonical tail padding:
-    # 1) pad with 1-bits up to the next 6-bit boundary
-    pad6 = (-b_ofs) % 6
-    if pad6:
-        b_ofs = write_bits(out, b_ofs, pad6, (1 << pad6) - 1)
-
-    # 2) pad with 0-bits up to the next byte boundary
-    pad8 = (-b_ofs) % 8
-    if pad8:
-        b_ofs = write_bits(out, b_ofs, pad8, 0)
-
+    payload_bits = b_ofs
     payload_octets = bytes(out[: (b_ofs + 7) // 8])
     payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
 
@@ -209,4 +201,6 @@ def encode_format101_from_txt(
         station_id=station_id,
         template=template,
         payload_text=payload_text,
+        payload_octets=payload_octets,
+        payload_bits=payload_bits,
     )
