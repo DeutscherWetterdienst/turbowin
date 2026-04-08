@@ -117,12 +117,17 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
 
     The mapping from 6-bit text to octets (compaction) is not bijective. For strict
     1:1 compatibility with the reference encoder, we canonicalize the tail by searching
-    for a lexicographically smallest tail (within a small window) that decodes back to
-    the exact same octets.
+    for a valid 1- or 2-character tail replacement that round-trips to the exact same
+    octet stream.
 
     Observations from golden vectors show that differences are confined to the last 1..2
-    characters. Therefore we only search k=1 and k=2, and select the lexicographically
-    smallest full text among the valid candidates found.
+    characters. Therefore we only search k=1 and k=2.
+
+    Selection strategy:
+    - Prefer a k=2 candidate if the k=1 candidate ends with '@' (0x40) but a k=2 candidate
+      exists that ends with a different character (e.g. '`' = 0x60 in observed vectors)
+    - Otherwise, prefer the k=1 candidate
+    - Fall back to k=2, then base
     """
     base = _encode_octets_to_6bit_text_base(octets)
     if not base:
@@ -134,26 +139,29 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     if decode_turbowin_text_to_octets(base) != target:
         return base
 
-    best = base
+    cand1 = None
+    cand2 = None
 
-    # k=1
     if len(base) >= 1:
         cand1 = _find_lexicographically_smallest_tail(
             prefix=base[:-1],
             k=1,
             target_octets=target,
         )
-        if cand1 is not None and cand1 < best:
-            best = cand1
 
-    # k=2
     if len(base) >= 2:
         cand2 = _find_lexicographically_smallest_tail(
             prefix=base[:-2],
             k=2,
             target_octets=target,
         )
-        if cand2 is not None and cand2 < best:
-            best = cand2
 
-    return best
+    if cand1 is not None:
+        if cand1[-1] == 0x40 and cand2 is not None and cand2[-1] != 0x40:
+            return cand2
+        return cand1
+
+    if cand2 is not None:
+        return cand2
+
+    return base
