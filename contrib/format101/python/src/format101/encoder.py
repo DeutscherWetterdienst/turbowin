@@ -100,6 +100,7 @@ def encode_format101_from_txt(
     - Marker bits are structural flags and must be taken from the input (not derived from data presence).
     - If a marker indicates that a block is not present, the block is omitted from the bitstream
       (no placeholder fields are written).
+    - The bitstream is terminated by appending a single `1` bit followed by `0` bits up to a byte boundary.
 
     Layout (after skipping pilote entry 000000):
     - main block up to 022042 (inclusive)
@@ -174,13 +175,20 @@ def encode_format101_from_txt(
         raw = int(marker_val) & ((1 << entry.nbits) - 1)
         b_ofs = write_bits(out, b_ofs, entry.nbits, raw)
 
-    # main block (0 .. idx_022042)
-    for i in range(0, idx_022042 + 1):
-        encode_entry(i)
+    def finalize_bitstream() -> None:
+        """
+        Terminate the bitstream:
+        - append a single 1-bit
+        - then append 0-bits up to the next byte boundary
+        """
+        nonlocal b_ofs
+        b_ofs = write_bits(out, b_ofs, 1, 1)
+        pad8 = (-b_ofs) % 8
+        if pad8:
+            b_ofs = write_bits(out, b_ofs, pad8, 0)
 
-    # visual marker (410000)
-    encode_marker(idx_vis_marker, m_visual)
-    if m_visual == 0:
+    def build_message() -> EncodedMessage:
+        finalize_bitstream()
         payload_bits = b_ofs
         payload_octets = bytes(out[: (b_ofs + 7) // 8])
         payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
@@ -192,6 +200,15 @@ def encode_format101_from_txt(
             payload_octets=payload_octets,
             payload_bits=payload_bits,
         )
+
+    # main block (0 .. idx_022042)
+    for i in range(0, idx_022042 + 1):
+        encode_entry(i)
+
+    # visual marker (410000)
+    encode_marker(idx_vis_marker, m_visual)
+    if m_visual == 0:
+        return build_message()
 
     # visual fields
     for i in range(idx_vis_fields_start, idx_vis_fields_end):
@@ -200,17 +217,7 @@ def encode_format101_from_txt(
     # chain marker (first 408000)
     encode_marker(idx_chain_marker, m_chain)
     if m_chain == 0:
-        payload_bits = b_ofs
-        payload_octets = bytes(out[: (b_ofs + 7) // 8])
-        payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
-        return EncodedMessage(
-            station_id_raw=station_id_raw,
-            station_id=station_id,
-            template=template,
-            payload_text=payload_text,
-            payload_octets=payload_octets,
-            payload_bits=payload_bits,
-        )
+        return build_message()
 
     # wave fields
     for i in range(idx_wave_fields_start, idx_wave_fields_end):
@@ -219,31 +226,10 @@ def encode_format101_from_txt(
     # ice marker (second 408000)
     encode_marker(idx_ice_marker, m_ice)
     if m_ice == 0:
-        payload_bits = b_ofs
-        payload_octets = bytes(out[: (b_ofs + 7) // 8])
-        payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
-        return EncodedMessage(
-            station_id_raw=station_id_raw,
-            station_id=station_id,
-            template=template,
-            payload_text=payload_text,
-            payload_octets=payload_octets,
-            payload_bits=payload_bits,
-        )
+        return build_message()
 
     # ice fields
     for i in range(idx_ice_fields_start, idx_ice_fields_end):
         encode_entry(i)
 
-    payload_bits = b_ofs
-    payload_octets = bytes(out[: (b_ofs + 7) // 8])
-    payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
-
-    return EncodedMessage(
-        station_id_raw=station_id_raw,
-        station_id=station_id,
-        template=template,
-        payload_text=payload_text,
-        payload_octets=payload_octets,
-        payload_bits=payload_bits,
-    )
+    return build_message()
