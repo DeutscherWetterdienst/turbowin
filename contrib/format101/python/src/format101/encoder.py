@@ -100,7 +100,7 @@ def encode_format101_from_txt(
     - Marker bits are structural flags and must be taken from the input (not derived from data presence).
     - If a marker indicates that a block is not present, the block is omitted from the bitstream
       (no placeholder fields are written).
-    - The bitstream is terminated by appending a single `1` bit followed by `0` bits up to a byte boundary.
+    - The bitstream is padded to a 6-bit boundary using 1-bits, then padded with 0-bits to a byte boundary.
 
     Layout (after skipping pilote entry 000000):
     - main block up to 022042 (inclusive)
@@ -177,12 +177,15 @@ def encode_format101_from_txt(
 
     def finalize_bitstream() -> None:
         """
-        Terminate the bitstream:
-        - append a single 1-bit
-        - then append 0-bits up to the next byte boundary
+        Final padding to match the reference behavior:
+        - pad with 1-bits up to the next 6-bit boundary
+        - then pad with 0-bits up to the next byte boundary
         """
         nonlocal b_ofs
-        b_ofs = write_bits(out, b_ofs, 1, 1)
+        pad6 = (-b_ofs) % 6
+        if pad6:
+            b_ofs = write_bits(out, b_ofs, pad6, (1 << pad6) - 1)
+
         pad8 = (-b_ofs) % 8
         if pad8:
             b_ofs = write_bits(out, b_ofs, pad8, 0)
