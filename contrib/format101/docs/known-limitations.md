@@ -55,16 +55,16 @@ This avoids key collisions and allows explicit checks of the control bits.
 
 ---
 
-## 3) Invalid / undefined behavior inputs
+## 3) Reference encoder may output messages rejected by Processing Centre validation
 
-Some inputs can trigger output from the reference encoder that is not plausible for
-Format 101 transmission (e.g. excessively large payloads / decoded octet streams).
+Some inconsistent inputs (e.g. marker bits indicating blocks are absent while many
+fields within those blocks are still marked present) can cause the reference encoder
+(`teste_hc_TW*`) to output extremely long half-compressed messages.
 
-These cases are treated as invalid/undefined behavior and are excluded from strict
-"must match reference" tests in this repository.
-
-Example:
-- `tests/vectors/experiments/exp_visual_m0_vv1_idVISM001`
+On the Processing Centre side, such messages would be rejected by a basic validator
+(e.g. length and allowed character range constraints). Therefore, the repository's
+encoder-compatibility tests skip vectors where the expected (reference) output fails
+Processing Centre validation, because such outputs are not practically usable.
 
 ---
 
