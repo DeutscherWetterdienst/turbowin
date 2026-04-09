@@ -1,3 +1,4 @@
+import argparse
 import re
 from pathlib import Path
 
@@ -5,7 +6,7 @@ from format101.encoder import encode_format101_from_txt
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
+DEFAULT_VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
 DEFAULT_PILOTE = (
     REPO_ROOT / "miscellaneous" / "format_101" / "config" / "S-AWS-101_modl_pilote.csv"
 )
@@ -33,11 +34,29 @@ def validate_obs(obs_bytes: bytes) -> bool:
 
 
 def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--dir",
+        type=Path,
+        default=DEFAULT_VECTORS_DIR,
+        help="Directory containing *.format_101.txt vectors (default: tests/vectors)",
+    )
+    ap.add_argument(
+        "--pilote",
+        type=Path,
+        default=DEFAULT_PILOTE,
+        help="Pilot CSV to use (default: TurboWin+ legacy copy)",
+    )
+    args = ap.parse_args()
+
+    vectors_dir: Path = args.dir
+    pilote_csv: Path = args.pilote
+
     ok = True
 
-    for input_path in sorted(VECTORS_DIR.glob("*.format_101.txt")):
+    for input_path in sorted(vectors_dir.glob("*.format_101.txt")):
         stem = input_path.stem.replace(".format_101", "")
-        expected_path = VECTORS_DIR / f"{stem}.expected.hpk.txt"
+        expected_path = vectors_dir / f"{stem}.expected.hpk.txt"
         if not expected_path.exists():
             print(f"[FAIL] Missing expected file: {expected_path}")
             ok = False
@@ -47,7 +66,7 @@ def main() -> int:
 
         msg = encode_format101_from_txt(
             format101_txt=input_path,
-            pilote_csv=DEFAULT_PILOTE,
+            pilote_csv=pilote_csv,
             station_id=station_id,
         )
         got = msg.to_hpk_line()

@@ -1,3 +1,4 @@
+import argparse
 import math
 import re
 from dataclasses import dataclass
@@ -8,7 +9,7 @@ from format101.spec import pilote_key, load_pilote_csv, PilotEntry
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
+DEFAULT_VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
 DEFAULT_PILOTE = (
     REPO_ROOT / "miscellaneous" / "format_101" / "config" / "S-AWS-101_modl_pilote.csv"
 )
@@ -119,7 +120,25 @@ def normalize_expected_value(entry: PilotEntry, input_value: float) -> float:
 
 
 def main() -> int:
-    pilote_all = load_pilote_csv(DEFAULT_PILOTE)
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--dir",
+        type=Path,
+        default=DEFAULT_VECTORS_DIR,
+        help="Directory containing *.format_101.txt vectors (default: tests/vectors)",
+    )
+    ap.add_argument(
+        "--pilote",
+        type=Path,
+        default=DEFAULT_PILOTE,
+        help="Pilot CSV to use (default: TurboWin+ legacy copy)",
+    )
+    args = ap.parse_args()
+
+    vectors_dir: Path = args.dir
+    pilote_path: Path = args.pilote
+
+    pilote_all = load_pilote_csv(pilote_path)
 
     # TurboWin format_101.txt does not contain a data line for the first pilote entry
     # (000000 = operating mode), because the operating mode is provided as the first
@@ -137,9 +156,9 @@ def main() -> int:
 
     ok = True
 
-    for input_path in sorted(VECTORS_DIR.glob("*.format_101.txt")):
+    for input_path in sorted(vectors_dir.glob("*.format_101.txt")):
         stem = input_path.stem.replace(".format_101", "")
-        expected_hpk = VECTORS_DIR / f"{stem}.expected.hpk.txt"
+        expected_hpk = vectors_dir / f"{stem}.expected.hpk.txt"
         if not expected_hpk.exists():
             print(f"[FAIL] Missing expected file: {expected_hpk}")
             ok = False
@@ -162,7 +181,7 @@ def main() -> int:
             print(f"[SKIP] {stem} (expected output would be rejected by validate_obs)")
             continue
 
-        msg = decode_hpk_line(hpk_line, pilote_csv=DEFAULT_PILOTE)
+        msg = decode_hpk_line(hpk_line, pilote_csv=pilote_path)
         decoded = {f.key: f.value for f in msg.fields}
 
         # Station id prefix check
