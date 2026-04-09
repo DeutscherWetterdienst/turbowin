@@ -1,6 +1,7 @@
 package format101;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public final class Codec6 {
 
@@ -75,13 +76,26 @@ public final class Codec6 {
         return out;
     }
 
+    private static byte[] minimizeTextLength(byte[] base, byte[] targetOctets) {
+        byte[] cur = base;
+        while (cur.length > 0) {
+            byte[] shorter = Arrays.copyOf(cur, cur.length - 1);
+            if (Arrays.equals(decodeTurboWinTextToOctets(shorter), targetOctets)) {
+                cur = shorter;
+                continue;
+            }
+            break;
+        }
+        return cur;
+    }
+
     private static byte[] findLexicographicallySmallestTail(byte[] prefix, int k, byte[] targetOctets) {
         if (k == 1) {
             for (int w0 = 0; w0 < 64; w0++) {
                 byte[] cand = new byte[prefix.length + 1];
                 System.arraycopy(prefix, 0, cand, 0, prefix.length);
                 cand[cand.length - 1] = (byte) (0x40 + w0);
-                if (java.util.Arrays.equals(decodeTurboWinTextToOctets(cand), targetOctets)) {
+                if (Arrays.equals(decodeTurboWinTextToOctets(cand), targetOctets)) {
                     return cand;
                 }
             }
@@ -94,7 +108,7 @@ public final class Codec6 {
                     System.arraycopy(prefix, 0, cand, 0, prefix.length);
                     cand[cand.length - 2] = (byte) (0x40 + w0);
                     cand[cand.length - 1] = (byte) (0x40 + w1);
-                    if (java.util.Arrays.equals(decodeTurboWinTextToOctets(cand), targetOctets)) {
+                    if (Arrays.equals(decodeTurboWinTextToOctets(cand), targetOctets)) {
                         return cand;
                     }
                 }
@@ -109,25 +123,30 @@ public final class Codec6 {
         if (base.length == 0) {
             return base;
         }
-        if (!java.util.Arrays.equals(decodeTurboWinTextToOctets(base), octets)) {
+
+        // Base must round-trip exactly; otherwise we have a deeper mismatch.
+        if (!Arrays.equals(decodeTurboWinTextToOctets(base), octets)) {
             return base;
         }
 
+        // 1) Minimize the payload text length while preserving decoded octets.
+        // This is required because the 6-bit text compaction is not bijective.
+        base = minimizeTextLength(base, octets);
+
+        // 2) Canonicalize the last 1..2 characters while preserving decoded octets.
+        // Prefer a 1-character tail replacement when available (matches observed reference outputs).
         byte[] cand1 = null;
         byte[] cand2 = null;
 
         if (base.length >= 1) {
-            byte[] prefix = java.util.Arrays.copyOf(base, base.length - 1);
+            byte[] prefix = Arrays.copyOf(base, base.length - 1);
             cand1 = findLexicographicallySmallestTail(prefix, 1, octets);
         }
         if (base.length >= 2) {
-            byte[] prefix = java.util.Arrays.copyOf(base, base.length - 2);
+            byte[] prefix = Arrays.copyOf(base, base.length - 2);
             cand2 = findLexicographicallySmallestTail(prefix, 2, octets);
         }
 
-        // Canonicalization strategy (TurboWin legacy compatibility):
-        // Prefer a valid 1-character tail replacement when available, otherwise fall back to 2.
-        // This matches observed reference outputs on golden vectors (e.g. ending with 'x').
         if (cand1 != null) {
             return cand1;
         }
