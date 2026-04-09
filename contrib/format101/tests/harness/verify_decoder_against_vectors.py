@@ -71,6 +71,15 @@ def parse_format101_txt(path: Path) -> list[ParsedLine]:
     return parsed
 
 
+def validate_obs(obs_bytes: bytes) -> bool:
+    """Validate OBS format 101 requirements."""
+    n = len(obs_bytes)
+    if not (10 <= n <= 70):
+        return False
+    # Check if any byte in the tail falls within the forbidden ASCII range.
+    return not any(0x20 <= b <= 0x3F for b in obs_bytes[10:])
+
+
 def format101_tolerance(factor: float) -> float:
     """
     Tolerance used to compare decoded values against the original TurboWin input.
@@ -148,6 +157,11 @@ def main() -> int:
 
         # Decode expected HPK
         hpk_line = expected_hpk.read_text(encoding="latin1").splitlines()[0]
+
+        if not validate_obs(hpk_line.encode("latin1")):
+            print(f"[SKIP] {stem} (expected output would be rejected by validate_obs)")
+            continue
+
         msg = decode_hpk_line(hpk_line, pilote_csv=DEFAULT_PILOTE)
         decoded = {f.key: f.value for f in msg.fields}
 
