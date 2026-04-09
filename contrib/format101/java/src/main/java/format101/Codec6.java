@@ -118,62 +118,42 @@ public final class Codec6 {
         throw new IllegalArgumentException("Unsupported tail length: " + k);
     }
 
-    private static String hexTail(byte[] b, int n) {
-        int start = Math.max(0, b.length - n);
-        StringBuilder sb = new StringBuilder();
-        for (int i = start; i < b.length; i++) {
-            if (sb.length() > 0) sb.append(' ');
-            sb.append(String.format("%02x", b[i] & 0xFF));
-        }
-        return sb.toString();
-    }
-
     public static byte[] encodePayloadOctetsToTurboWinText(byte[] octets) {
         byte[] base = encodeOctetsTo6BitTextBase(octets);
         if (base.length == 0) {
-            System.err.println("codec6: empty base");
             return base;
         }
 
-        boolean baseRoundTrip = Arrays.equals(decodeTurboWinTextToOctets(base), octets);
-        System.err.println("codec6: base_len=" + base.length + " base_roundtrip=" + baseRoundTrip);
-        System.err.println("codec6: base_tail16=" + hexTail(base, 16));
-
-        if (!baseRoundTrip) {
-            System.err.println("codec6: base does not round-trip, returning base");
+        // Base must round-trip exactly; otherwise we have a deeper mismatch.
+        if (!Arrays.equals(decodeTurboWinTextToOctets(base), octets)) {
             return base;
         }
 
-        byte[] minimized = minimizeTextLength(base, octets);
-        System.err.println("codec6: minimized_len=" + minimized.length);
-        System.err.println("codec6: minimized_tail16=" + hexTail(minimized, 16));
+        // 1) Minimize the payload text length while preserving decoded octets.
+        // This is required because the 6-bit text compaction is not bijective.
+        base = minimizeTextLength(base, octets);
 
+        // 2) Canonicalize the last 1..2 characters while preserving decoded octets.
+        // Prefer a 1-character tail replacement when available (matches observed reference outputs).
         byte[] cand1 = null;
         byte[] cand2 = null;
 
-        if (minimized.length >= 1) {
-            byte[] prefix = Arrays.copyOf(minimized, minimized.length - 1);
+        if (base.length >= 1) {
+            byte[] prefix = Arrays.copyOf(base, base.length - 1);
             cand1 = findLexicographicallySmallestTail(prefix, 1, octets);
         }
-        if (minimized.length >= 2) {
-            byte[] prefix = Arrays.copyOf(minimized, minimized.length - 2);
+        if (base.length >= 2) {
+            byte[] prefix = Arrays.copyOf(base, base.length - 2);
             cand2 = findLexicographicallySmallestTail(prefix, 2, octets);
         }
 
-        System.err.println("codec6: cand1=" + (cand1 != null) + " cand2=" + (cand2 != null));
-
-        byte[] chosen;
         if (cand1 != null) {
-            chosen = cand1;
-        } else if (cand2 != null) {
-            chosen = cand2;
-        } else {
-            chosen = minimized;
+            return cand1;
         }
-
-        System.err.println("codec6: chosen_len=" + chosen.length);
-        System.err.println("codec6: chosen_tail16=" + hexTail(chosen, 16));
-        return chosen;
+        if (cand2 != null) {
+            return cand2;
+        }
+        return base;
     }
 
     public static String latin1String(byte[] bytes) {
