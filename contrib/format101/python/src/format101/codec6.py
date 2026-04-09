@@ -35,8 +35,6 @@ def expand_6bit_text_to_octets(text: bytes) -> bytes:
     and encodes a 6-bit value in the lower bits, i.e.:
 
         six = (byte - 0x40) & 0x3F
-
-    This matches the observed TurboWin+ payload (lots of 0x7F bytes for missing data).
     """
     return compact_6bit_text_to_octets(bytes(((b - 0x40) & 0x3F) for b in text))
 
@@ -80,6 +78,20 @@ def _encode_octets_to_6bit_text_base(octets: bytes) -> bytes:
     return bytes(out)
 
 
+def _minimize_text_length(text: bytes, *, target_octets: bytes) -> bytes:
+    """
+    Remove as many trailing 6-bit words as possible while preserving decoded octets.
+    """
+    cur = text
+    while len(cur) > 0:
+        shorter = cur[:-1]
+        if decode_turbowin_text_to_octets(shorter) == target_octets:
+            cur = shorter
+            continue
+        break
+    return cur
+
+
 def _find_lexicographically_smallest_tail(
     *,
     prefix: bytes,
@@ -115,30 +127,32 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     """
     Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
 
-    The mapping from 6-bit text to octets (compaction) is not bijective. For strict
-    1:1 compatibility with the reference encoder, we canonicalize the tail by searching
-    for a valid 1- or 2-character tail replacement that round-trips to the exact same
-    octet stream.
+    The mapping from 6-bit text to octets (compaction) is not bijective. Therefore,
+    multiple text representations can decode to the same octet stream.
 
-    Observations from golden vectors show that differences are confined to the last 1..2
-    characters. Therefore we only search k=1 and k=2.
-
-    Selection strategy (derived from observed reference behavior):
-    - Prefer a k=2 candidate if it ends in '`' (0x60), because the reference encoder
-      appears to choose that canonical tail when available
-    - Otherwise, prefer the k=1 candidate
-    - Fall back to k=2, then base
+    This function enforces two invariants:
+    1) The returned text MUST round-trip:
+         decode_turbowin_text_to_octets(text) == octets
+    2) The returned text is canonicalized (deterministic), using:
+       - minimal possible length while preserving decoded octets
+       - lexicographically smallest tail replacement (k=1 preferred, then k=2)
     """
-    base = _encode_octets_to_6bit_text_base(octets)
+    target = octets
+    base = _encode_octets_to_6bit_text_base(target)
     if not base:
         return base
 
-    target = octets
-
-    # Base must at least round-trip exactly; otherwise we have a deeper bug.
+    # Ensure we work with a representation that round-trips; otherwise we cannot canonicalize safely.
     if decode_turbowin_text_to_octets(base) != target:
-        return base
+        raise ValueError(
+            "Internal error: base 8->6 encoding does not round-trip to target octets"
+        )
 
+    # 1) Minimize the text length while preserving decoded octets
+    base = _minimize_text_length(base, target_octets=target)
+
+    # 2) Canonicalize tail by searching for the lexicographically smallest tail replacement
+    # Prefer k=1 tail replacement when available (matches observed reference outputs).
     cand1 = None
     cand2 = None
 
@@ -156,13 +170,17 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
             target_octets=target,
         )
 
-    if cand2 is not None and cand2[-1] == 0x60:
-        return cand2
-
     if cand1 is not None:
-        return cand1
+        result = cand1
+    elif cand2 is not None:
+        result = cand2
+    else:
+        result = base
 
-    if cand2 is not None:
-        return cand2
+    # Hard gate: must round-trip exactly
+    if decode_turbowin_text_to_octets(result) != target:
+        raise ValueError(
+            "Internal error: canonicalized 6-bit text does not round-trip to target octets"
+        )
 
-    return base
+    return result

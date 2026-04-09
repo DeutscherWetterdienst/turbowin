@@ -124,17 +124,16 @@ public final class Codec6 {
             return base;
         }
 
-        // Base must round-trip exactly; otherwise we have a deeper mismatch.
+        // Hard gate: the chosen text must round-trip to the target octets.
         if (!Arrays.equals(decodeTurboWinTextToOctets(base), octets)) {
-            return base;
+            throw new IllegalStateException("Internal error: base 8->6 encoding does not round-trip to target octets");
         }
 
         // 1) Minimize the payload text length while preserving decoded octets.
-        // This is required because the 6-bit text compaction is not bijective.
         base = minimizeTextLength(base, octets);
 
         // 2) Canonicalize the last 1..2 characters while preserving decoded octets.
-        // Prefer a 1-character tail replacement when available (matches observed reference outputs).
+        // Prefer a 1-character tail replacement when available.
         byte[] cand1 = null;
         byte[] cand2 = null;
 
@@ -147,13 +146,21 @@ public final class Codec6 {
             cand2 = findLexicographicallySmallestTail(prefix, 2, octets);
         }
 
+        byte[] result;
         if (cand1 != null) {
-            return cand1;
+            result = cand1;
+        } else if (cand2 != null) {
+            result = cand2;
+        } else {
+            result = base;
         }
-        if (cand2 != null) {
-            return cand2;
+
+        // Hard gate: must still round-trip exactly
+        if (!Arrays.equals(decodeTurboWinTextToOctets(result), octets)) {
+            throw new IllegalStateException("Internal error: canonicalized 6-bit text does not round-trip to target octets");
         }
-        return base;
+
+        return result;
     }
 
     public static String latin1String(byte[] bytes) {
