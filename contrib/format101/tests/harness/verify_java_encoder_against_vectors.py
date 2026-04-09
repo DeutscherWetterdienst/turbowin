@@ -92,6 +92,8 @@ def main() -> int:
             print(f"  got_len   : {len(got)}")
             print(f"  exp_tail16: {hex_tail(exp)}")
             print(f"  got_tail16: {hex_tail(got)}")
+            print("\n  --- java output ---")
+            print(proc.stdout)
         else:
             print(f"[OK]   {stem}")
 
