@@ -98,12 +98,6 @@ def encode_format101_from_txt(
     This implementation aims to match the observed behavior of the TurboWin+ legacy
     reference encoder (`teste_hc_TW.exe`) for S-AWS-101 (format #101).
 
-    Key behavior (derived from experiments):
-    - The message is variable-length and controlled by marker bits.
-    - Marker bits are structural flags and must be taken from the input (not derived from data presence).
-    - If a marker indicates that a block is not present, the block is omitted from the bitstream
-      (no placeholder fields are written).
-
     Layout (after skipping pilote entry 000000):
     - main block up to 022042 (inclusive)
     - 410000 visual marker:

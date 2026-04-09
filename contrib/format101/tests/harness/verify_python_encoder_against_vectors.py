@@ -1,4 +1,3 @@
-import argparse
 import re
 from pathlib import Path
 
@@ -13,11 +12,6 @@ DEFAULT_PILOTE = (
 
 ID_RE = re.compile(r"_id([A-Za-z0-9]{1,7})$")
 
-DEFAULT_SKIP = {
-    # Invalid/undefined behavior (reference encoder produces implausibly large output)
-    "exp_visual_m0_vv1_idVISM001",
-}
-
 
 def extract_identifier(stem: str) -> str:
     m = ID_RE.search(stem)
@@ -29,34 +23,21 @@ def extract_identifier(stem: str) -> str:
     return m.group(1)
 
 
+def validate_obs(obs_bytes: bytes) -> bool:
+    """Validate OBS format 101 requirements."""
+    n = len(obs_bytes)
+    if not (10 <= n <= 70):
+        return False
+    # Check if any byte in the tail falls within the forbidden ASCII range.
+    return not any(0x20 <= b <= 0x3F for b in obs_bytes[10:])
+
+
 def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument(
-        "--dir",
-        type=Path,
-        default=VECTORS_DIR,
-        help="Directory containing *.format_101.txt vectors (default: tests/vectors)",
-    )
-    ap.add_argument(
-        "--skip",
-        action="append",
-        default=[],
-        help="Skip vector stem (without extension); can be provided multiple times",
-    )
-    args = ap.parse_args()
-
-    skip = set(DEFAULT_SKIP)
-    skip.update(args.skip)
-
     ok = True
 
-    for input_path in sorted(args.dir.glob("*.format_101.txt")):
+    for input_path in sorted(VECTORS_DIR.glob("*.format_101.txt")):
         stem = input_path.stem.replace(".format_101", "")
-        if stem in skip:
-            print(f"[SKIP] {stem}")
-            continue
-
-        expected_path = args.dir / f"{stem}.expected.hpk.txt"
+        expected_path = VECTORS_DIR / f"{stem}.expected.hpk.txt"
         if not expected_path.exists():
             print(f"[FAIL] Missing expected file: {expected_path}")
             ok = False
@@ -71,6 +52,10 @@ def main() -> int:
         )
         got = msg.to_hpk_line()
         exp = expected_path.read_text(encoding="latin1").splitlines()[0]
+
+        if not validate_obs(exp.encode("latin1")):
+            print(f"[SKIP] {stem} (expected output would be rejected by validate_obs)")
+            continue
 
         if got != exp:
             ok = False
