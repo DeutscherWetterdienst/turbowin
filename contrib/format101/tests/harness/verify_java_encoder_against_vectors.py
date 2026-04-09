@@ -58,6 +58,7 @@ def main() -> int:
             "cmd",
             "/c",
             "gradlew.bat",
+            "--no-daemon",
             "run",
             "--quiet",
             "--args",
