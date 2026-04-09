@@ -185,13 +185,16 @@ def encode_format101_from_txt(
         Final padding to match the reference behavior (inferred by solve_padding.py).
 
         Rules:
-        - If the bitstream ends at a 4-bit (nibble) boundary (b_ofs % 8 == 4),
-          append two 1-bits ("11") before byte-aligning.
-        - Then byte-align by appending 0-bits as needed.
+        - If b_ofs % 8 == 4, append two 1-bits ("11")
+        - If b_ofs % 8 == 2, append one 1-bit ("1")
+        - Then byte-align by appending 0-bits as needed
         """
         nonlocal b_ofs
-        if (b_ofs % 8) == 4:
+        r = b_ofs % 8
+        if r == 4:
             b_ofs = write_bits(out, b_ofs, 2, 0b11)
+        elif r == 2:
+            b_ofs = write_bits(out, b_ofs, 1, 0b1)
 
         pad8 = (-b_ofs) % 8
         if pad8:
