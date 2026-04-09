@@ -123,9 +123,9 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
     Observations from golden vectors show that differences are confined to the last 1..2
     characters. Therefore we only search k=1 and k=2.
 
-    Selection strategy:
-    - Prefer a k=2 candidate if the k=1 candidate ends with '@' (0x40) but a k=2 candidate
-      exists that ends with a different character (e.g. '`' = 0x60 in observed vectors)
+    Selection strategy (derived from observed reference behavior):
+    - Prefer a k=2 candidate if it ends in '`' (0x60), because the reference encoder
+      appears to choose that canonical tail when available
     - Otherwise, prefer the k=1 candidate
     - Fall back to k=2, then base
     """
@@ -156,9 +156,10 @@ def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
             target_octets=target,
         )
 
+    if cand2 is not None and cand2[-1] == 0x60:
+        return cand2
+
     if cand1 is not None:
-        if cand1[-1] == 0x40 and cand2 is not None and cand2[-1] != 0x40:
-            return cand2
         return cand1
 
     if cand2 is not None:
