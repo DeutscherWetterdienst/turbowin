@@ -30,6 +30,12 @@ def validate_obs(obs_bytes: bytes) -> bool:
     return not any(0x20 <= b <= 0x3F for b in obs_bytes[10:])
 
 
+def hex_tail(s: str, n: int = 16) -> str:
+    b = s.encode("latin1")
+    t = b[-n:] if len(b) >= n else b
+    return " ".join(f"{x:02x}" for x in t)
+
+
 def main() -> int:
     ok = True
 
@@ -81,6 +87,10 @@ def main() -> int:
             print(f"  station_id: {station_id!r}")
             print(f"  expected  : {exp!r}")
             print(f"  got       : {got!r}")
+            print(f"  exp_len   : {len(exp)}")
+            print(f"  got_len   : {len(got)}")
+            print(f"  exp_tail16: {hex_tail(exp)}")
+            print(f"  got_tail16: {hex_tail(got)}")
         else:
             print(f"[OK]   {stem}")
 

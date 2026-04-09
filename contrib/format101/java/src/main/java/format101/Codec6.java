@@ -125,9 +125,9 @@ public final class Codec6 {
             cand2 = findLexicographicallySmallestTail(prefix, 2, octets);
         }
 
-        if (cand2 != null && (cand2[cand2.length - 1] & 0xFF) == 0x60) {
-            return cand2;
-        }
+        // Canonicalization strategy (TurboWin legacy compatibility):
+        // Prefer a valid 1-character tail replacement when available, otherwise fall back to 2.
+        // This matches observed reference outputs on golden vectors (e.g. ending with 'x').
         if (cand1 != null) {
             return cand1;
         }
