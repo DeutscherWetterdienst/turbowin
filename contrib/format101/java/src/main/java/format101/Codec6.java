@@ -49,6 +49,36 @@ public final class Codec6 {
         return compact6BitWordsToOctets(six);
     }
 
+    public static byte[] encodePayloadBitsToTurboWinText(byte[] bitBytes, int nbits) {
+        if (nbits < 0) {
+            throw new IllegalArgumentException("nbits must be >= 0");
+        }
+        if (nbits == 0) {
+            return new byte[0];
+        }
+        int nwords = (nbits + 5) / 6;
+        byte[] out = new byte[nwords];
+
+        int bitpos = 0;
+        for (int w = 0; w < nwords; w++) {
+            int val = 0;
+            for (int i = 0; i < 6; i++) {
+                if (bitpos >= nbits) {
+                    val <<= 1;
+                } else {
+                    int byteIdx = bitpos / 8;
+                    int bitInByte = bitpos % 8;
+                    int bit = (bitBytes[byteIdx] >> (7 - bitInByte)) & 1;
+                    val = (val << 1) | bit;
+                    bitpos++;
+                }
+            }
+            out[w] = (byte) ((val & 0x3F) + 0x40);
+        }
+
+        return out;
+    }
+
     public static byte[] encodeOctetsTo6BitTextBase(byte[] octets) {
         if (octets.length == 0) {
             return new byte[0];

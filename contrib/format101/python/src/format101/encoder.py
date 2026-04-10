@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from format101.bitstream import write_bits
-from format101.codec6 import encode_payload_octets_to_turbowin_text
+from format101.codec6 import encode_payload_bits_to_turbowin_text
 from format101.spec import PilotEntry, load_pilote_csv
 
 
@@ -203,7 +203,10 @@ def encode_format101_from_txt(
 
         payload_bits = b_ofs
         payload_octets = bytes(out[: (b_ofs + 7) // 8])
-        payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
+
+        # IMPORTANT: The TurboWin+ payload is fundamentally a 6-bit word stream.
+        # Encoding via octets -> 6-bit words is ambiguous and can diverge from the reference.
+        payload_text = encode_payload_bits_to_turbowin_text(out, payload_bits)
 
         return EncodedMessage(
             station_id_raw=station_id_raw,

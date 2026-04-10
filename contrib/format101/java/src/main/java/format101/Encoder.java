@@ -168,7 +168,7 @@ public final class Encoder {
         bw.finalizeLegacyPadding();
         int payloadBits = bw.bitsOffset();
         byte[] payloadOctets = bw.toByteArrayWholeBytes();
-        byte[] payloadText = Codec6.encodePayloadOctetsToTurboWinText(payloadOctets);
+        byte[] payloadText = Codec6.encodePayloadBitsToTurboWinText(payloadOctets, payloadBits);
 
         return new EncodedMessage(
                 stationIdRaw,
