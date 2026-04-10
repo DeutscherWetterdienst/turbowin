@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from format101.bitstream import write_bits
-from format101.codec6 import encode_payload_bits_to_turbowin_text
+from format101.codec6 import encode_payload_octets_to_turbowin_text
 from format101.spec import PilotEntry, load_pilote_csv
 
 
@@ -109,9 +109,6 @@ def encode_format101_from_txt(
     - second 408000 (ice marker):
         0 => stop
         1 => write 8 ice fields
-
-    The `finalize` flag exists to support black-box inference of the exact reference
-    padding/termination behavior. In normal operation it should remain True.
     """
     station_id = station_id.strip()
     if not (1 <= len(station_id) <= 7):
@@ -204,9 +201,7 @@ def encode_format101_from_txt(
         payload_bits = b_ofs
         payload_octets = bytes(out[: (b_ofs + 7) // 8])
 
-        # IMPORTANT: The TurboWin+ payload is fundamentally a 6-bit word stream.
-        # Encoding via octets -> 6-bit words is ambiguous and can diverge from the reference.
-        payload_text = encode_payload_bits_to_turbowin_text(out, payload_bits)
+        payload_text = encode_payload_octets_to_turbowin_text(payload_octets)
 
         return EncodedMessage(
             station_id_raw=station_id_raw,

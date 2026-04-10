@@ -1,7 +1,6 @@
 package format101;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public final class Codec6 {
 
@@ -49,148 +48,62 @@ public final class Codec6 {
         return compact6BitWordsToOctets(six);
     }
 
-    public static byte[] encodePayloadBitsToTurboWinText(byte[] bitBytes, int nbits) {
-        if (nbits < 0) {
-            throw new IllegalArgumentException("nbits must be >= 0");
-        }
-        if (nbits == 0) {
-            return new byte[0];
-        }
-        int nwords = (nbits + 5) / 6;
-        byte[] out = new byte[nwords];
-
-        int bitpos = 0;
-        for (int w = 0; w < nwords; w++) {
-            int val = 0;
-            for (int i = 0; i < 6; i++) {
-                if (bitpos >= nbits) {
-                    val <<= 1;
-                } else {
-                    int byteIdx = bitpos / 8;
-                    int bitInByte = bitpos % 8;
-                    int bit = (bitBytes[byteIdx] >> (7 - bitInByte)) & 1;
-                    val = (val << 1) | bit;
-                    bitpos++;
-                }
-            }
-            out[w] = (byte) ((val & 0x3F) + 0x40);
-        }
-
-        return out;
-    }
-
-    public static byte[] encodeOctetsTo6BitTextBase(byte[] octets) {
+    public static byte[] encodeOctetsTo6BitWords(byte[] octets) {
         if (octets.length == 0) {
             return new byte[0];
         }
-        int nbits = octets.length * 8;
-        int nwords = (nbits + 5) / 6;
-        byte[] out = new byte[nwords];
 
-        int bitpos = 0;
-        for (int w = 0; w < nwords; w++) {
-            int val = 0;
-            for (int i = 0; i < 6; i++) {
-                if (bitpos >= nbits) {
-                    val <<= 1;
-                } else {
-                    int byteIdx = bitpos / 8;
-                    int bitInByte = bitpos % 8;
-                    int bit = (octets[byteIdx] >> (7 - bitInByte)) & 1;
-                    val = (val << 1) | bit;
-                    bitpos++;
-                }
-            }
-            out[w] = (byte) ((val & 0x3F) + 0x40);
+        byte[] out = new byte[((octets.length / 3) * 4) + (octets.length % 3 == 0 ? 0 : (octets.length % 3 == 1 ? 2 : 3))];
+
+        int oi = 0;
+        int wi = 0;
+
+        while (oi + 3 <= octets.length) {
+            int o0 = octets[oi] & 0xFF;
+            int o1 = octets[oi + 1] & 0xFF;
+            int o2 = octets[oi + 2] & 0xFF;
+
+            int w0 = (o0 >> 2) & 0x3F;
+            int w1 = ((o0 & 0x03) << 4) | ((o1 >> 4) & 0x0F);
+            int w2 = ((o1 & 0x0F) << 2) | ((o2 >> 6) & 0x03);
+            int w3 = o2 & 0x3F;
+
+            out[wi++] = (byte) w0;
+            out[wi++] = (byte) w1;
+            out[wi++] = (byte) w2;
+            out[wi++] = (byte) w3;
+
+            oi += 3;
         }
+
+        int rem = octets.length - oi;
+        if (rem == 1) {
+            int o0 = octets[oi] & 0xFF;
+            int w0 = (o0 >> 2) & 0x3F;
+            int w1 = ((o0 & 0x03) << 4);
+            out[wi++] = (byte) w0;
+            out[wi++] = (byte) w1;
+        } else if (rem == 2) {
+            int o0 = octets[oi] & 0xFF;
+            int o1 = octets[oi + 1] & 0xFF;
+            int w0 = (o0 >> 2) & 0x3F;
+            int w1 = ((o0 & 0x03) << 4) | ((o1 >> 4) & 0x0F);
+            int w2 = ((o1 & 0x0F) << 2);
+            out[wi++] = (byte) w0;
+            out[wi++] = (byte) w1;
+            out[wi++] = (byte) w2;
+        }
+
         return out;
     }
 
-    private static byte[] minimizeTextLength(byte[] base, byte[] targetOctets) {
-        byte[] cur = base;
-        while (cur.length > 0) {
-            byte[] shorter = Arrays.copyOf(cur, cur.length - 1);
-            if (Arrays.equals(decodeTurboWinTextToOctets(shorter), targetOctets)) {
-                cur = shorter;
-                continue;
-            }
-            break;
-        }
-        return cur;
-    }
-
-    private static byte[] findLexicographicallySmallestTail(byte[] prefix, int k, byte[] targetOctets) {
-        if (k == 1) {
-            for (int w0 = 0; w0 < 64; w0++) {
-                byte[] cand = new byte[prefix.length + 1];
-                System.arraycopy(prefix, 0, cand, 0, prefix.length);
-                cand[cand.length - 1] = (byte) (0x40 + w0);
-                if (Arrays.equals(decodeTurboWinTextToOctets(cand), targetOctets)) {
-                    return cand;
-                }
-            }
-            return null;
-        }
-        if (k == 2) {
-            for (int w0 = 0; w0 < 64; w0++) {
-                for (int w1 = 0; w1 < 64; w1++) {
-                    byte[] cand = new byte[prefix.length + 2];
-                    System.arraycopy(prefix, 0, cand, 0, prefix.length);
-                    cand[cand.length - 2] = (byte) (0x40 + w0);
-                    cand[cand.length - 1] = (byte) (0x40 + w1);
-                    if (Arrays.equals(decodeTurboWinTextToOctets(cand), targetOctets)) {
-                        return cand;
-                    }
-                }
-            }
-            return null;
-        }
-        throw new IllegalArgumentException("Unsupported tail length: " + k);
-    }
-
     public static byte[] encodePayloadOctetsToTurboWinText(byte[] octets) {
-        byte[] base = encodeOctetsTo6BitTextBase(octets);
-        if (base.length == 0) {
-            return base;
+        byte[] words = encodeOctetsTo6BitWords(octets);
+        byte[] out = new byte[words.length];
+        for (int i = 0; i < words.length; i++) {
+            out[i] = (byte) ((words[i] & 0x3F) + 0x40);
         }
-
-        // Hard gate: the chosen text must round-trip to the target octets.
-        if (!Arrays.equals(decodeTurboWinTextToOctets(base), octets)) {
-            throw new IllegalStateException("Internal error: base 8->6 encoding does not round-trip to target octets");
-        }
-
-        // 1) Minimize the payload text length while preserving decoded octets.
-        base = minimizeTextLength(base, octets);
-
-        // 2) Canonicalize the last 1..2 characters while preserving decoded octets.
-        // Prefer a 1-character tail replacement when available.
-        byte[] cand1 = null;
-        byte[] cand2 = null;
-
-        if (base.length >= 1) {
-            byte[] prefix = Arrays.copyOf(base, base.length - 1);
-            cand1 = findLexicographicallySmallestTail(prefix, 1, octets);
-        }
-        if (base.length >= 2) {
-            byte[] prefix = Arrays.copyOf(base, base.length - 2);
-            cand2 = findLexicographicallySmallestTail(prefix, 2, octets);
-        }
-
-        byte[] result;
-        if (cand1 != null) {
-            result = cand1;
-        } else if (cand2 != null) {
-            result = cand2;
-        } else {
-            result = base;
-        }
-
-        // Hard gate: must still round-trip exactly
-        if (!Arrays.equals(decodeTurboWinTextToOctets(result), octets)) {
-            throw new IllegalStateException("Internal error: canonicalized 6-bit text does not round-trip to target octets");
-        }
-
-        return result;
+        return out;
     }
 
     public static String latin1String(byte[] bytes) {

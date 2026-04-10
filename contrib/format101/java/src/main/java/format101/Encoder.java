@@ -168,7 +168,7 @@ public final class Encoder {
         bw.finalizeLegacyPadding();
         int payloadBits = bw.bitsOffset();
         byte[] payloadOctets = bw.toByteArrayWholeBytes();
-        byte[] payloadText = Codec6.encodePayloadBitsToTurboWinText(payloadOctets, payloadBits);
+        byte[] payloadText = Codec6.encodePayloadOctetsToTurboWinText(payloadOctets);
 
         return new EncodedMessage(
                 stationIdRaw,
@@ -187,6 +187,7 @@ public final class Encoder {
         } else {
             raw = (int) Math.round((value - entry.offset()) / entry.factor());
         }
+
         if (raw < 0) raw = 0;
         if (raw > entry.codmax()) raw = entry.codmax();
         return raw;

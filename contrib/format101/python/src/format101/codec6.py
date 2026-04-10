@@ -48,36 +48,66 @@ def decode_turbowin_text_to_octets(text: bytes) -> bytes:
     return expand_6bit_text_to_octets(text)
 
 
-def encode_payload_bits_to_turbowin_text(buf: bytes | bytearray, nbits: int) -> bytes:
+def encode_octets_to_6bit_words(octets: bytes) -> bytes:
     """
-    Encode a bitstream into TurboWin+ half-compressed text bytes (0x40..0x7F).
+    Inverse of compact_6bit_text_to_octets(): reconstruct the original 6-bit words
+    from octets, so that:
 
-    The bitstream is read MSB-first, i.e. bit 0 is the MSB of buf[0]. Bits are grouped
-    into 6-bit words. The last word is padded with zero bits as needed.
+        compact_6bit_text_to_octets(encode_octets_to_6bit_words(octets)) == octets
 
-    This avoids the ambiguous octets<->text canonicalization issues and matches the
-    reference encoder behavior when the message is defined as a 6-bit stream.
+    This implements the inverse mapping of the 6-step packing pattern used by the
+    ecosystem reference decoder. It yields a deterministic 6-bit word stream.
     """
-    if nbits < 0:
-        raise ValueError("nbits must be >= 0")
-    if nbits == 0:
+    if not octets:
         return b""
 
-    nwords = (nbits + 5) // 6  # ceil
     out = bytearray()
 
-    bitpos = 0
-    for _ in range(nwords):
-        val = 0
-        for _i in range(6):
-            if bitpos >= nbits:
-                val <<= 1
-                continue
-            byte_idx = bitpos // 8
-            bit_in_byte = bitpos % 8
-            bit = (buf[byte_idx] >> (7 - bit_in_byte)) & 1
-            val = (val << 1) | bit
-            bitpos += 1
-        out.append((val & 0x3F) + 0x40)
+    # For every 3 octets, we can reconstruct 4 6-bit words.
+    # Derivation follows the compacting steps:
+    #   o0 uses bits from w0 and w1
+    #   o1 uses bits from w1 and w2
+    #   o2 uses bits from w2 and w3
+    i = 0
+    n = len(octets)
+    while i + 3 <= n:
+        o0 = octets[i] & 0xFF
+        o1 = octets[i + 1] & 0xFF
+        o2 = octets[i + 2] & 0xFF
+
+        w0 = (o0 >> 2) & 0x3F
+        w1 = ((o0 & 0x03) << 4) | ((o1 >> 4) & 0x0F)
+        w2 = ((o1 & 0x0F) << 2) | ((o2 >> 6) & 0x03)
+        w3 = o2 & 0x3F
+
+        out.extend((w0, w1, w2, w3))
+        i += 3
+
+    # Handle remaining octets (1 or 2). These correspond to 2 or 3 6-bit words.
+    rem = n - i
+    if rem == 1:
+        o0 = octets[i] & 0xFF
+        w0 = (o0 >> 2) & 0x3F
+        w1 = (o0 & 0x03) << 4  # remaining 4 bits unknown -> 0
+        out.extend((w0, w1))
+    elif rem == 2:
+        o0 = octets[i] & 0xFF
+        o1 = octets[i + 1] & 0xFF
+        w0 = (o0 >> 2) & 0x3F
+        w1 = ((o0 & 0x03) << 4) | ((o1 >> 4) & 0x0F)
+        w2 = (o1 & 0x0F) << 2  # remaining 2 bits unknown -> 0
+        out.extend((w0, w1, w2))
 
     return bytes(out)
+
+
+def encode_payload_octets_to_turbowin_text(octets: bytes) -> bytes:
+    """
+    Encode payload octets into TurboWin+ half-compressed text bytes (0x40..0x7F).
+
+    This uses the inverse of the ecosystem compaction algorithm (compact_6bit_text_to_octets),
+    yielding a deterministic 6-bit word stream, then maps each 6-bit word to a text byte
+    by adding 0x40.
+    """
+    words = encode_octets_to_6bit_words(octets)
+    return bytes(((w & 0x3F) + 0x40) for w in words)
