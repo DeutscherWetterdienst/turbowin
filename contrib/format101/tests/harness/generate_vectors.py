@@ -91,15 +91,23 @@ def render_format101_txt(
 def choose_present_value(entry: PilotEntry, *, rng: random.Random) -> float:
     """
     Choose a representable physical value for an entry:
-      raw in [0..codmax] -> phys = raw*factor + offset
+      raw in [0..raw_max] -> phys = raw*factor + offset
+
+    Important:
+    Some legacy pilot CSV files contain inconsistent codmax values that exceed the
+    representable range implied by nbits (e.g. nbits=4 but codmax=360). The reference
+    encoder is constrained by the bit width (nbits), so for generating valid vectors,
+    we must also constrain raw by nbits.
     """
     if entry.nbits == 0:
         return 0.0
 
+    raw_max = min(entry.codmax, (1 << entry.nbits) - 1)
+
     # Keep values inside range, prefer a few interesting raw values
-    interesting = [0, 1, 2, 3, 5, 10, entry.codmax // 2, entry.codmax - 1, entry.codmax]
-    interesting = [x for x in interesting if 0 <= x <= entry.codmax]
-    raw = rng.choice(interesting) if interesting else rng.randint(0, entry.codmax)
+    interesting = [0, 1, 2, 3, 5, 10, raw_max // 2, raw_max - 1, raw_max]
+    interesting = [x for x in interesting if 0 <= x <= raw_max]
+    raw = rng.choice(interesting) if interesting else rng.randint(0, raw_max)
 
     phys = raw * entry.factor + entry.offset
     return float(phys)
