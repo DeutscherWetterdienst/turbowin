@@ -75,3 +75,38 @@ And then verify compatibility:
 uv run --project python python tests/harness/verify_reference_vectors_windows.py --dir tests/vectors/generated
 uv run --project python python tests/harness/verify_python_encoder_against_vectors.py --dir tests/vectors/generated
 ```
+
+## Test campaigns (Windows)
+
+The following commands are used to generate larger campaigns of vectors and verify both Python and Java
+encoders against the reference binary.
+
+### Combo campaign (marker combinations)
+
+```powershell
+uv run --project python python tests/harness/generate_vectors.py --mode combo --per-combo 10 --seed 1234 --out-dir tests/vectors/generated_combo --prefix combo
+uv run --project python python tests/harness/generate_expected_hpk_windows.py --dir tests/vectors/generated_combo
+uv run --project python python tests/harness/verify_python_encoder_against_vectors.py --dir tests/vectors/generated_combo
+uv run --project python python tests/harness/verify_java_encoder_against_vectors.py   --dir tests/vectors/generated_combo
+```
+
+Tip: you can also run the reference check first:
+
+```powershell
+uv run --project python python tests/harness/verify_reference_vectors_windows.py --dir tests/vectors/generated_combo
+```
+
+### Fuzz campaign (random)
+
+```powershell
+uv run --project python python tests/harness/generate_vectors.py --mode random --count 1000 --seed 1234 --out-dir tests/vectors/fuzz_1234 --prefix fuzz
+uv run --project python python tests/harness/generate_expected_hpk_windows.py --dir tests/vectors/fuzz_1234
+uv run --project python python tests/harness/verify_python_encoder_against_vectors.py --dir tests/vectors/fuzz_1234
+uv run --project python python tests/harness/verify_java_encoder_against_vectors.py   --dir tests/vectors/fuzz_1234
+```
+
+The Java verification script uses the Gradle `installDist` launcher if available. To force a rebuild:
+
+```powershell
+uv run --project python python tests/harness/verify_java_encoder_against_vectors.py --build --dir tests/vectors/generated_combo
+```

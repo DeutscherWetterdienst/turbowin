@@ -86,14 +86,8 @@ uv run --project python python tests/harness/debug_decode_one.py tests/vectors/m
 
 ## Generating new vectors (spec-driven)
 
-To generate new valid TurboWin+ legacy vectors (without using the TurboWin UI):
-
-```powershell
-uv run --project python python tests/harness/generate_vectors.py --mode combo --per-combo 1 --out-dir tests/vectors
-uv run --project python python tests/harness/generate_expected_hpk_windows.py --dir tests/vectors
-uv run --project python python tests/harness/verify_python_encoder_against_vectors.py --dir tests/vectors/generated
-uv run --project python python tests/harness/verify_java_encoder_against_vectors.py --dir tests/vectors/generated
-```
+To generate new valid TurboWin+ legacy vectors (without using the TurboWin UI), see:
+- `tests/vectors/README.md`
 
 ---
 
