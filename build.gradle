@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'org.beryx.jlink' version '2.26.0'
+    id 'com.diffplug.spotless' version '8.6.0'
 }
 
 group = 'turbowin'
@@ -127,4 +128,18 @@ task printVersion {
 
 test {
     jvmArgs '--add-opens', 'java.base/java.util=ALL-UNNAMED'
+}
+
+spotless {
+    java {
+        target('src/**/*.java')
+
+        googleJavaFormat()
+
+        importOrder()
+        removeUnusedImports()
+
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
