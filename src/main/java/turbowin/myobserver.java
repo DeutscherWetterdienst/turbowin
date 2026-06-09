@@ -11,20 +11,6 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * myobserver.java
- *
- * Created on 26-nov-2008, 16:46:01
- */
-
-/**
- * @author Martin
- */
 public final class myobserver extends javax.swing.JFrame {
 
   /** Creates new form myobserver */

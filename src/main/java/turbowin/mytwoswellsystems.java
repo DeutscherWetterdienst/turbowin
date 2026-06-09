@@ -2,15 +2,6 @@ package turbowin;
 
 import javax.swing.JOptionPane;
 
-/*
- * mytwoswellsystems.java
- *
- * Created on 29 oktober 2008, 8:35
- */
-
-/**
- * @author Martin
- */
 public final class mytwoswellsystems extends javax.swing.JFrame {
 
   /** Creates new form mytwoswellsystems */

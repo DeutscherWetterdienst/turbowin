@@ -2,15 +2,6 @@ package turbowin;
 
 import javax.swing.JOptionPane;
 
-/*
- * mybarometer.java
- *
- * Created on 27 augustus 2008, 7:55
- */
-
-/**
- * @author Martin
- */
 public final class mybarometer extends javax.swing.JFrame {
 
   /** Creates new form mybarometer */

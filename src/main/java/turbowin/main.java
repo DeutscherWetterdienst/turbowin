@@ -63,12 +63,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /*
- * main.java
- *
- * Created on 26 maart 2008, 8:31
- */
-
-/*
 *
 * ---------------------------------------------------------------------------------------------------------------------
 * Ive installed previous versions of jdk1.6.0_17, and then after installing netbeans 7, I upgrade jdk to version jdk1.6.0_25.
@@ -388,9 +382,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 *
 **/
 
-/**
- * @author Martin
- */
 public class main extends javax.swing.JFrame {
 
   /* inner class popupListener */

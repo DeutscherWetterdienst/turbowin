@@ -32,14 +32,6 @@ import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * @author hometrainer
- */
 public class RS232_view extends javax.swing.JFrame {
 
   /* inner class popupListener */

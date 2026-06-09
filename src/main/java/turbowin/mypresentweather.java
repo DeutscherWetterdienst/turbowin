@@ -5,15 +5,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 
-/*
- * mypresentweather.java
- *
- * Created on 10 mei 2007, 12:06
- */
-
-/**
- * @author stam
- */
 public final class mypresentweather extends javax.swing.JFrame {
 
   /** Creates new form mypresentweather */

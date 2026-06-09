@@ -29,9 +29,6 @@ import javax.swing.JPanel;
 
 // import static turbowin.DASHBOARD_view_APR_radar.jLabel20;
 
-/**
- * @author marti
- */
 public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
   /***********************************************************************************************/

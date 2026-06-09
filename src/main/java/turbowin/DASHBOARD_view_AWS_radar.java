@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package turbowin;
 
 import java.awt.AWTException;
@@ -24,9 +19,6 @@ import javax.swing.JSeparator;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/**
- * @author marti
- */
 public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
 
   /** Creates new form DASHBOARD_view_AWS_radar */

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package turbowin;
 
 // import com.sun.mail.smtp.SMTPAddressFailedException;
@@ -28,9 +24,6 @@ import org.eclipse.angus.mail.smtp.SMTPAddressSucceededException;
 import org.eclipse.angus.mail.smtp.SMTPSendFailedException;
 import org.eclipse.angus.mail.smtp.SMTPTransport;
 
-/**
- * @author marti
- */
 public class Jakarta_Email {
 
   /***********************************************************************************************/

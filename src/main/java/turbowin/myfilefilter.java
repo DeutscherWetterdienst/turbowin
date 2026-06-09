@@ -3,15 +3,6 @@ package turbowin;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * @author Martin
- */
-
 /* a Filter is e.g. used by FileChooserDemo2.java (see oracle/java web site) */
 public class myfilefilter extends FileFilter {
   // Accept all directories and fiel configuration.rxt

@@ -5,15 +5,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/*
- * mycl.java
- *
- * Created on 6 april 2007, 7:39
- */
-
-/**
- * @author stam
- */
 public final class mycl extends javax.swing.JFrame {
 
   /** Creates new form mycl */

@@ -3,20 +3,6 @@ package turbowin;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * myice1.java
- *
- * Created on 12-nov-2010, 9:46:05
- */
-
-/**
- * @author Martin
- */
 public final class myice1 extends javax.swing.JFrame {
 
   /** Creates new form myice1 */

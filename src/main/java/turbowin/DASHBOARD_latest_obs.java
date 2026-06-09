@@ -14,15 +14,6 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * @author Martin
- */
 public class DASHBOARD_latest_obs extends javax.swing.JFrame {
 
   /** Creates new form DASHBOARD_latest_obs */

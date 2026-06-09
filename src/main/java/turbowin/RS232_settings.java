@@ -5,13 +5,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- * @author hometrainer
- */
 public final class RS232_settings extends javax.swing.JFrame {
 
   /** Creates new form RS232_settings */

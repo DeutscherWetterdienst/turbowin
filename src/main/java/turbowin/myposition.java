@@ -8,15 +8,6 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/*
- * myposition.java
- *
- * Created on 6 april 2007, 6:57
- */
-
-/**
- * @author stam
- */
 public final class myposition extends javax.swing.JFrame {
 
   /** Creates new form myposition */

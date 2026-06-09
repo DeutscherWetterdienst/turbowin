@@ -2,14 +2,6 @@ package turbowin;
 
 import javax.swing.JOptionPane;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * @author hometrainer
- */
 public final class myobsformat extends javax.swing.JFrame {
 
   /** Creates new form myobsformat */

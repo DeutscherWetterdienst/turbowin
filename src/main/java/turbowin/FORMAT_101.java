@@ -13,14 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * @author hometrainer
- */
 public class FORMAT_101 {
   // for compression required:
   //                             - dir: format_101 [with file: teste_hc_TW.exe (Windows) or

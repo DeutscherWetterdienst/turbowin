@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package turbowin;
 
 import static turbowin.main_RS232_RS422.RS232_APR_AWSR_send;
@@ -35,9 +31,6 @@ import javax.swing.Timer;
 
 // import static turbowin.main_RS232_RS422.TIMEDIFF_SENSOR_DATA;
 
-/**
- * @author marti
- */
 public class RS232_vaisala {
 
   /***********************************************************************************************/

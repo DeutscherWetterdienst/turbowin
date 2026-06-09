@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package turbowin;
 
 import java.awt.Color;
@@ -18,9 +12,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.Timer;
 
-/**
- * @author marti
- */
 public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
 
   /* inner class popupListener */

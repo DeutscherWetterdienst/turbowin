@@ -3,14 +3,6 @@ package turbowin;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * @author hometrainer
- */
 public final class calculator extends javax.swing.JFrame {
 
   /** Creates new form calculator */

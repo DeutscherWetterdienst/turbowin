@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package turbowin;
 
 import java.awt.BasicStroke;
@@ -28,15 +23,6 @@ import java.util.SimpleTimeZone;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * @author marti
- */
 public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
 
   /***********************************************************************************************/

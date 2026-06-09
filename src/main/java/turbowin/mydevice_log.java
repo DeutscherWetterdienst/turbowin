@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package turbowin;
 
 import java.awt.Cursor;
@@ -16,9 +12,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.SwingWorker;
 
-/**
- * @author martin
- */
 public class mydevice_log extends javax.swing.JFrame {
 
   /** Creates new form mydevice_log */

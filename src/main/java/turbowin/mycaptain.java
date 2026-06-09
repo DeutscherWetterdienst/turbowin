@@ -10,20 +10,6 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * mycaptain.java
- *
- * Created on 22-apr-2009, 9:52:07
- */
-
-/**
- * @author Martin
- */
 public final class mycaptain extends javax.swing.JFrame {
 
   /** Creates new form mycaptain */

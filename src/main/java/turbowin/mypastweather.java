@@ -1,14 +1,5 @@
 package turbowin;
 
-/*
- * mypastweather.java
- *
- * Created on 28 mei 2008, 8:16
- */
-
-/**
- * @author Martin
- */
 public final class mypastweather extends javax.swing.JFrame {
 
   /** Creates new form mypastweather */

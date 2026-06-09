@@ -2,15 +2,6 @@ package turbowin;
 
 import javax.swing.JOptionPane;
 
-/*
- * myconfusedswell.java
- *
- * Created on 29 oktober 2008, 8:26
- */
-
-/**
- * @author Martin
- */
 public final class myconfusedswell extends javax.swing.JFrame {
 
   /** Creates new form myconfusedswell */

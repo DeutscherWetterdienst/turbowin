@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package turbowin;
 
 import java.awt.AWTException;
@@ -14,9 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/**
- * @author marti
- */
 public class pop_up_screen extends javax.swing.JFrame {
 
   /** Creates new form pop_up_screen */

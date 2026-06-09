@@ -5,15 +5,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/*
- * myCM.java
- *
- * Created on 6 april 2007, 7:39
- */
-
-/**
- * @author stam
- */
 public final class mycm extends javax.swing.JFrame {
 
   /** Creates new form myCM */

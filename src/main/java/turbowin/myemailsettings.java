@@ -22,15 +22,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-/*
- * myemailsettings.java
- *
- * Created on 12 november 2008, 9:59
- */
-
-/**
- * @author Martin
- */
 public final class myemailsettings extends javax.swing.JFrame {
 
   /* inner class popupListener (Gmail app password) */

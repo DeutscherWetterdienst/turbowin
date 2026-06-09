@@ -4,15 +4,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
-/*
- * mydatetime.java
- *
- * Created on 5 april 2007, 15:14
- */
-
-/**
- * @author stam
- */
 public final class mydatetime extends javax.swing.JFrame {
 
   /** Creates new form mydatetime */

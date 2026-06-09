@@ -5,15 +5,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/*
- * mybarograph.java
- *
- * Created on 27 augustus 2008, 7:55
- */
-
-/**
- * @author Martin
- */
 public final class mybarograph extends javax.swing.JFrame {
 
   /** Creates new form mybarograph */

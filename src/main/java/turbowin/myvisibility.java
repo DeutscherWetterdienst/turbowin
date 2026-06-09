@@ -1,14 +1,5 @@
 package turbowin;
 
-/*
- * myvisibility.java
- *
- * Created on 22 augustus 2007, 11:04
- */
-
-/**
- * @author Martin
- */
 public final class myvisibility extends javax.swing.JFrame {
 
   /** Creates new form myvisibility */

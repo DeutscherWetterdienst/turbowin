@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package turbowin;
 
 import java.awt.Component;
@@ -20,9 +15,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/**
- * @author marti
- */
 public class barometer_comparison extends javax.swing.JFrame {
 
   public static class MyOwnFocusTraversalPolicy extends FocusTraversalPolicy {

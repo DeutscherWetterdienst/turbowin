@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package turbowin;
 
 import java.awt.BasicStroke;
@@ -16,9 +12,6 @@ import java.awt.geom.Rectangle2D;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JPanel;
 
-/**
- * @author marti
- */
 public class Obs_Stats_graph extends JPanel {
 
   /***********************************************************************************************/

@@ -12,17 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SwingWorker;
 
-/*
- * mystationdata.java
- *
- * Created on 2 juli 2008, 12:30
- */
-
 /* NB max height deck cargo and diff. sll-wl can be set on this input page but also on the wind input page!   */
 
-/**
- * @author Martin
- */
 public final class mystationdata extends javax.swing.JFrame {
 
   /** Creates new form mystationdata */

@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
 package turbowin;
 
 import java.awt.Color;
@@ -27,9 +22,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
-/**
- * @author marti
- */
 public class Obs_Stats_view extends javax.swing.JFrame {
 
   /* inner class popupListener */

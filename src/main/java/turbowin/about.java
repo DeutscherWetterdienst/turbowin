@@ -10,15 +10,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/*
- * about.java
- *
- * Created on 5 november 2008, 9:12
- */
-
-/**
- * @author Martin
- */
 public final class about extends javax.swing.JFrame {
 
   /** Creates new form about */

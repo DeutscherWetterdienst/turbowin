@@ -2,20 +2,6 @@ package turbowin;
 
 import javax.swing.JOptionPane;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * mypassword.java
- *
- * Created on 28-nov-2008, 8:08:47
- */
-
-/**
- * @author Martin
- */
 public final class mypassword extends javax.swing.JFrame {
 
   /** Creates new form mypassword */

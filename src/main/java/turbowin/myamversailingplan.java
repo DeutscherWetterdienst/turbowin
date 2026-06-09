@@ -20,20 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.table.TableCellEditor;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * myamversailingplan.java
- *
- * Created on 14-mrt-2012, 9:12:46
- */
-
-/**
- * @author Martin
- */
 public final class myamversailingplan extends javax.swing.JFrame {
 
   /** Creates new form myamversailingplan */

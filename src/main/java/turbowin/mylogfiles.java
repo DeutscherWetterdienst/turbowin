@@ -4,15 +4,6 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-/*
- * mylogfiles.java
- *
- * Created on 12 november 2008, 18:27
- */
-
-/**
- * @author Martin
- */
 public final class mylogfiles extends javax.swing.JFrame {
 
   /** Creates new form mylogfiles */

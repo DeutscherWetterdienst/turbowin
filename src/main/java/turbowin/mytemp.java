@@ -6,15 +6,6 @@ import java.awt.FocusTraversalPolicy;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-/*
- * mytemp.java
- *
- * Created on 4 juni 2008, 6:46
- */
-
-/**
- * @author Martin
- */
 public final class mytemp extends javax.swing.JFrame {
 
   public static class MyOwnFocusTraversalPolicy extends FocusTraversalPolicy {

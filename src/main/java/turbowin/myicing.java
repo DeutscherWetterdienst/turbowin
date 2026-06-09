@@ -2,20 +2,6 @@ package turbowin;
 
 import javax.swing.JOptionPane;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * myicing.java
- *
- * Created on 10-nov-2010, 10:40:18
- */
-
-/**
- * @author Martin
- */
 public final class myicing extends javax.swing.JFrame {
 
   /** Creates new form myicing */

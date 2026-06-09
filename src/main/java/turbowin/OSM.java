@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package turbowin;
 
 import java.awt.Desktop;
@@ -30,9 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
-/**
- * @author marti
- */
 public class OSM {
   // NB
   // https://stackoverflow.com/questions/1441984/how-can-i-know-whether-an-instance-of-a-class-already-exists-in-memory

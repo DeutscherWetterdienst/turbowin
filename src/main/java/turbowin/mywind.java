@@ -9,15 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
-/*
- * mywind.java
- *
- * Created on 29 augustus 2007, 10:27
- */
-
-/**
- * @author Martin
- */
 public final class mywind extends javax.swing.JFrame {
 
   /** Creates new form mywind */

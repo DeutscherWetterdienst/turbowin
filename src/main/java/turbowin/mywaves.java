@@ -2,15 +2,6 @@ package turbowin;
 
 import javax.swing.JOptionPane;
 
-/*
- * mywaves.java
- *
- * Created on 3 mei 2007, 13:07
- */
-
-/**
- * @author stam
- */
 public final class mywaves extends javax.swing.JFrame {
 
   /** Creates new form mywaves */
