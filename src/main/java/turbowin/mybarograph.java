@@ -768,11 +768,6 @@ public final class mybarograph extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // FOR ACTUAL SITUATION: see main.java
     // global var: RS232_connection_mode: 0 = no instrument; serial connection or WiFi (default)
@@ -854,11 +849,6 @@ public final class mybarograph extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Barograph_Vars() {
     // scope only this module
     checks_ok = false;
@@ -874,11 +864,6 @@ public final class mybarograph extends javax.swing.JFrame {
     main.barograph_fields_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ImageIcon createImageIcon(String path_and_file) {
     URL url = null;
 
@@ -893,11 +878,6 @@ public final class mybarograph extends javax.swing.JFrame {
     return icon_glyph;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initImages() {
     String os = OSDetector.getOSString();
 
@@ -941,11 +921,6 @@ public final class mybarograph extends javax.swing.JFrame {
     }
   } // protected void initImages()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // The doInBackground method, which creates the image icon for the photograph, is invoked by the
   // background thread.
   // After the image icon is fully loaded, the done method is invoked on the event-dispatching
@@ -1030,11 +1005,6 @@ public final class mybarograph extends javax.swing.JFrame {
     }.execute();
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_straight(final String imagePath) {
     // pressure higher than 3hrs ago
     //
@@ -1082,11 +1052,6 @@ public final class mybarograph extends javax.swing.JFrame {
     }
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
     // RS232/WiFi (barometer connected)
     //
@@ -1186,11 +1151,6 @@ public final class mybarograph extends javax.swing.JFrame {
     }
   } // private void initSynopparameters()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1332,11 +1292,6 @@ public final class mybarograph extends javax.swing.JFrame {
     } // if (checks_ok == true)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPermed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPermed
     // TODO add your handling code here:
@@ -1350,22 +1305,12 @@ public final class mybarograph extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPermed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_mouseClicked(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(BAROGRAAF_HELP_DIR);
   } // GEN-LAST:event_Internet_button_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -1375,11 +1320,6 @@ public final class mybarograph extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -1389,22 +1329,12 @@ public final class mybarograph extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     mybarometer form = new mybarometer();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     mytemp form = new mytemp();
     form.setSize(800, 600);

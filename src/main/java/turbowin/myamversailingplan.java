@@ -1518,11 +1518,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void stopCellEditing() {
     TableCellEditor editor = jTable1.getCellEditor();
     if (editor != null) {
@@ -1530,11 +1525,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_AMVER_SP_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
     amver_sp_vessel = "";
@@ -1586,11 +1576,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     checks_ok = false;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1618,12 +1603,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     boolean invoke_email_program = true;
     check_and_clipboard_email_amver_report(invoke_email_program);
   }
-
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
 
   private void read_sp_data_from_amver_form() {
     //
@@ -1758,11 +1737,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     } // if ((main.amver_report.equals(main.AMVER_SP)) etc.
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void check_and_clipboard_email_amver_report(boolean invoke_email_program) {
 
     // initialisation
@@ -2995,11 +2969,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     // } // if (checks_ok == true)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void save_amver_sp() {
     boolean doorgaan;
     String amver_dir;
@@ -3237,11 +3206,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     } // if (result == JFileChooser.APPROVE_OPTION
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -3251,11 +3215,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void import_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_import_button_actionPerformed
     // TODO add your handling code here:
@@ -3323,11 +3282,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     } // if (doorgaan == true)
   } // GEN-LAST:event_import_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void save_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_save_button_actionPerformed
     // TODO add your handling code here:
@@ -3335,11 +3289,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     save_amver_sp();
   } // GEN-LAST:event_save_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void AMVER_web_link_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_AMVER_web_link_mouseClicked
     // TODO add your handling code here:
@@ -3379,11 +3328,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   } // GEN-LAST:event_AMVER_web_link_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void AMVER_web_link_mouseEntered(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_AMVER_web_link_mouseEntered
     // TODO add your handling code here:
@@ -3391,11 +3335,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
   } // GEN-LAST:event_AMVER_web_link_mouseEntered
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void AMVER_web_link_mouseExited(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_AMVER_web_link_mouseExited
     // TODO add your handling code here:
@@ -3403,11 +3342,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     setCursor(Cursor.getDefaultCursor());
   } // GEN-LAST:event_AMVER_web_link_mouseExited
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Closed_actionPerformed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_Closed_actionPerformed
     // TODO add your handling code here:
@@ -3415,11 +3349,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     main.amver_report = ""; // reset (will be checed if opening ather AMVER form)
   } // GEN-LAST:event_Closed_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Clipboard_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Clipboard_button_actionPerformed
     // TODO add your handling code here:
@@ -3446,11 +3375,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     check_and_clipboard_email_amver_report(invoke_email_program);
   } // GEN-LAST:event_Clipboard_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void read_sp_data_from_import_file(String import_record) {
     Boolean invalid = false;
     int ro = 0;
@@ -3562,11 +3486,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     } // else if (import_record.indexOf(AMVER_SP_RELAY) != -1)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void set_ship_name_and_call_sign() {
     if ((main.ship_name.compareTo("") != 0) && (main.ship_name != null)) {
       jTextField1.setText(main.ship_name);
@@ -3583,11 +3502,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initParameters() {
     // --- NB I-line will be K-line in arrival report!!! ---
 
@@ -3688,11 +3602,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     } // else if(main.amver_report.equals(main.AMVER_PR))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void insert_values_in_fields() {
     // vessel (ship name)
     if (amver_sp_vessel.compareTo("") != 0) {
@@ -3888,11 +3797,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     } // if (main.amver_report.equals(main.AMVER_PR))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_B_line() {
     jLabel4.setVisible(false);
     jLabel5.setVisible(false);
@@ -3910,11 +3814,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     jTextField22.setVisible(false);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_C_line() {
     jLabel34.setVisible(false);
     jLabel35.setVisible(false);
@@ -3923,33 +3822,18 @@ public final class myamversailingplan extends javax.swing.JFrame {
     jTextField19.setVisible(false);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_E_line() {
     jLabel8.setVisible(false);
     jLabel28.setVisible(false);
     jTextField6.setVisible(false);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_F_line() {
     jLabel9.setVisible(false);
     jLabel27.setVisible(false);
     jTextField7.setVisible(false);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_G_line() {
     jLabel10.setVisible(false);
     jLabel11.setVisible(false);
@@ -3960,11 +3844,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     jTextField10.setVisible(false);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // private void disable_I_line()
   // {
   //   jLabel14.setVisible(false);
@@ -3987,32 +3866,17 @@ public final class myamversailingplan extends javax.swing.JFrame {
   //   jTextField16.setVisible(false);
   // }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_L_line() {
     jScrollPane1.setVisible(false); // jTable1.setVisible(false); WERKT NIET
     jLabel25.setVisible(false);
     jPanel2.setVisible(false);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_M_line() {
     jLabel22.setVisible(false);
     jTextField17.setVisible(false);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_V_line() {
     jLabel23.setVisible(false);
     jCheckBox1.setVisible(false);

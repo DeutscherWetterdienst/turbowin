@@ -191,11 +191,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     */
   } // public class HitTestMouseListener extends MouseAdapter
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void save_ship_dashboard_selection() {
     // write meta data to muffins or configuration files
 
@@ -219,11 +214,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents1()
         // public static void initComponents1()
       {
@@ -3303,11 +3293,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     jPanel1.repaint();
   } // private void initComponents1()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void choose_APR_dashboard_image() {
     // called from: initComponents1() [DASHBOARD_VIEW_APR_radar.java]
 
@@ -3344,11 +3329,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     } // if (doorgaan == true)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void init_dashboard_APR_radar_timer() {
     // updating/displaying received APR sensor data (not from file), timer scheduled
     //
@@ -3374,11 +3354,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     dashboard_update_APR_timer_is_gecreeerd = true;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_view_APR_radar() {
     initComponents();
     initComponents1();
@@ -4186,11 +4161,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_APR_view_radar_componentResizedHandler(
       java.awt.event.ComponentEvent
           evt) { // GEN-FIRST:event_DASHBOARD_APR_view_radar_componentResizedHandler
@@ -4211,11 +4181,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_DASHBOARD_APR_view_radar_componentResizedHandler
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf0_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf0_itemStateChanged
     // TODO add your handling code here:
@@ -4229,11 +4194,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf0_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf1_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf1_itemStateChanged
     // TODO add your handling code here:
@@ -4247,11 +4207,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf1_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf2_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf2_itemStateChanged
     // TODO add your handling code here:
@@ -4265,11 +4220,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf2_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf3_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf3_itemStateChanged
     // TODO add your handling code here:
@@ -4284,11 +4234,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf3_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf4_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf4_itemStateChanged
     // TODO add your handling code here:
@@ -4303,11 +4248,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf4_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf5_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf5_itemStateChanged
     // TODO add your handling code here:
@@ -4322,11 +4262,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf5_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf6_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf6_itemStateChanged
     // TODO add your handling code here:
@@ -4341,11 +4276,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf6_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf7_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf7_itemStateChanged
     // TODO add your handling code here:
@@ -4360,11 +4290,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf7_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf8_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf8_itemStateChanged
     // TODO add your handling code here:
@@ -4379,11 +4304,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf8_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf9_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf9_itemStateChanged
     // TODO add your handling code here:
@@ -4398,11 +4318,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf9_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf10_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf10_itemStateChanged
     // TODO add your handling code here:
@@ -4418,11 +4333,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf10_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf11_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf11_itemStateChanged
     // TODO add your handling code here:
@@ -4437,11 +4347,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf11_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf12_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf12_itemStateChanged
     // TODO add your handling code here:
@@ -4456,11 +4361,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf12_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bf_not_determined_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Bf_not_determined_itemStateChanged
     // TODO add your handling code here:
@@ -4475,11 +4375,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Bf_not_determined_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void wind_dir_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_wind_dir_itemStateChanged
     // TODO add your handling code here:
@@ -4495,11 +4390,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_wind_dir_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // public static boolean check_wind_consistency_APR()
   private boolean check_wind_consistency_APR() {
     // called from: Bf0_itemStateChanged()
@@ -4614,11 +4504,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     return checks_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void compute_wind_APR()
         // public static void compute_wind_APR()
       {
@@ -4786,11 +4671,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void reset_APR_wind_variables()
         // private void reset_APR_variables()
       {
@@ -4828,11 +4708,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     jLabel20.setText("rel wind: -"); // calculated relative wind
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void reset_APR_wind_variables_2()
         // private void reset_APR_variables()
       {
@@ -4866,11 +4741,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     jLabel20.setText("rel wind: -"); // calculated relative wind
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void reset_APR_manual_input_variables() {
     // called from:  enable_disable_manual_input_controls_APR_radar()
     //
@@ -4913,11 +4783,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void enable_disable_manual_input_controls_APR_radar(boolean mode) {
     // called from paintComponents() [DASHBOARD_grafiek_APR_radar.java]
 
@@ -4933,11 +4798,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     jButton3.setEnabled(mode); // temp (SST)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void enable_disable_wind_controls_APR_radar(boolean mode) {
     // called from paintComponents() [DASHBOARD_grafiek_APR_radar.java]
 
@@ -5009,11 +4869,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     // (!main.wind_source.equals(main.MEASURED_TRUE)) )
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void compute_relative_wind_APR_old() {
     // called from: Bf0_itemStateChanged()
     //              Bf1_itemStateChanged()
@@ -5106,11 +4961,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
 
   } // private void compute_relative_wind()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static int convert_knots_to_bf(int wind_speed) {
     // NB see also: convert_knots_to_bf() [DASHBOARD_grafiek_AWS_radar.java]
 
@@ -5217,11 +5067,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     return bf_class;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static int convert_ms_to_bf(int wind_speed) {
     // NB see also: convert_ms_to_bf() [DASHBOARD_grafiek_AWS_radar.java]
 
@@ -5297,11 +5142,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     return bf_class;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void make_obs_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_make_obs_actionPerformed
     // TODO add your handling code here:
@@ -5325,11 +5165,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     } // if (main.mainClass != null)
   } // GEN-LAST:event_make_obs_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_view_APR_Deiconified(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_DASHBOARD_view_APR_Deiconified
     // TODO add your handling code here:
@@ -5338,11 +5173,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_DASHBOARD_view_APR_Deiconified
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_view_APR_windowClosed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_DASHBOARD_view_APR_windowClosed
     // TODO add your handling code here:
@@ -5361,11 +5191,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
         false; // reset (for option augmenation pop-up window in APR mode)
   } // GEN-LAST:event_DASHBOARD_view_APR_windowClosed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_view_APR_windowClosing(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_DASHBOARD_view_APR_windowClosing
     // TODO add your handling code here:
@@ -5387,11 +5212,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_DASHBOARD_view_APR_windowClosing
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_input_waves_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_DASHBOARD_input_waves_actionPerformed
     // TODO add your handling code here:
@@ -5406,11 +5226,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_DASHBOARD_input_waves_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_input_temperatures_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_DASHBOARD_input_temperatures_actionPerformed
@@ -5426,11 +5241,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_DASHBOARD_input_temperatures_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void write_Bf_description(int beaufort_class)
         // public static void write_Bf_description(int beaufort_class)
       {
@@ -5622,11 +5432,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     } // switch (beaufort_class)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // public static void write_Bf_error_message(int error_no)
   private void write_Bf_error_message(int error_no) {
     // System.out.println("+++++++++++ write_Bf_error_message() error_no = " + error_no);
@@ -5665,11 +5470,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void reset_Bf_text_labels() {
     // called from: - write_Bf_description()
     //              - write Bf_error_message()
@@ -5729,11 +5529,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int convert_bf_to_knots(int Bf_class)
         // public static int convert_bf_to_knots(int Bf_class)
       {
@@ -5787,11 +5582,6 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     return true_wind_speed_knots;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int convert_bf_to_m_s(int Bf_class) {
     // source: https://www.metoffice.gov.uk/weather/guides/coast-and-sea/beaufort-scale
 

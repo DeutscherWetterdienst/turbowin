@@ -743,11 +743,6 @@ public final class calculator extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // nb ook in design form kan je dit zetten maar dan blijft dit staan als APPLICATION_NAME
     // veranderd is
@@ -757,11 +752,6 @@ public final class calculator extends javax.swing.JFrame {
     jTextField2.setText("");
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Calculate_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Calculate_button_actionPerformed
     // TODO add your handling code here:
@@ -954,11 +944,6 @@ public final class calculator extends javax.swing.JFrame {
     } // if (string_inhg.length() > 0)
   } // GEN-LAST:event_Calculate_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -967,11 +952,6 @@ public final class calculator extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void feet_input_keyPressed(
       java.awt.event.KeyEvent evt) { // GEN-FIRST:event_feet_input_keyPressed
     // TODO add your handling code here:

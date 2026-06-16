@@ -1075,15 +1075,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /**
-   * ********************************************************************************************
-   */
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /**
-   * ********************************************************************************************
-   */
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1701,11 +1692,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1713,11 +1699,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void AWS_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_AWS_connected_itemStateChanged
     // TODO add your handling code here:
@@ -1766,11 +1747,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     } // else if (jRadioButton3.isSelected() == false)
   } // GEN-LAST:event_AWS_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void none_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_none_connected_itemStateChanged
     // TODO add your handling code here:
@@ -1805,11 +1781,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_none_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void PTB220_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_PTB220_connected_itemStateChanged
     // TODO add your handling code here:
@@ -1841,11 +1812,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_PTB220_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void PTB330_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_PTB330_connected_itemStateChanged
     // TODO add your handling code here:
@@ -1878,11 +1844,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_PTB330_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void Mintaka_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Mintaka_connected_itemStateChanged
     // TODO add your handling code here:
@@ -1919,11 +1880,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Mintaka_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void GPS_NMEA_0183_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_GPS_NMEA_0183_itemStateChanged
     // TODO add your handling code here:
@@ -1953,11 +1909,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_GPS_NMEA_0183_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void none_GPS_NMEA_0183_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_none_GPS_NMEA_0183_itemStateChanged
     // TODO add your handling code here:
@@ -1987,11 +1938,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_none_GPS_NMEA_0183_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void Mintaka_Star_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_Mintaka_Star_connected_itemStateChanged
     // TODO add your handling code here:
@@ -2028,11 +1974,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Mintaka_Star_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void Mintaka_Star_WiFi_connected_itenStateChanged(
       java.awt.event.ItemEvent
           evt) { // GEN-FIRST:event_Mintaka_Star_WiFi_connected_itenStateChanged
@@ -2071,11 +2012,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Mintaka_Star_WiFi_connected_itenStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void AWS_OMC_ethernet_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) // GEN-FIRST:event_AWS_OMC_ethernet_connected_itemStateChanged
       { // GEN-HEADEREND:event_AWS_OMC_ethernet_connected_itemStateChanged
@@ -2108,11 +2044,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_AWS_OMC_ethernet_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void AWS_OMC_serial_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) // GEN-FIRST:event_AWS_OMC_serial_connected_itemStateChanged
       { // GEN-HEADEREND:event_AWS_OMC_serial_connected_itemStateChanged
@@ -2163,11 +2094,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     } // else if (jRadioButton12.isSelected() == false)
   } // GEN-LAST:event_AWS_OMC_serial_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void HMP155_USB_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_HMP155_USB_connected_itemStateChanged
     // TODO add your handling code here:
@@ -2197,11 +2123,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     } // else if (jRadioButton17.isSelected() == false)
   } // GEN-LAST:event_HMP155_USB_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void none_connected_II_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_none_connected_II_itemStateChanged
     // TODO add your handling code here:
@@ -2232,11 +2153,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     } // else if (jRadioButton18.isSelected() == false)
   } // GEN-LAST:event_none_connected_II_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void StarX_WiFi_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_StarX_WiFi_connected_itemStateChanged
     // TODO add your handling code here:
@@ -2267,11 +2183,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     } // else if (jRadioButton16.isSelected() == false)
   } // GEN-LAST:event_StarX_WiFi_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void AMOS2X_connected_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_AMOS2X_connected_itemStateChanged
     // TODO add your handling code here:
@@ -2321,11 +2232,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     } // else if (jRadioButton13.isSelected() == false)
   } // GEN-LAST:event_AMOS2X_connected_itemStateChanged
 
-  /************************************************************************************************/
-  /*                                                                                              */
-  /*                                                                                              */
-  /*                                                                                              */
-  /************************************************************************************************/
   private void initComponents2() {
     // NB open the GUI form, select JList component, go to Code
     //    properties and set "Type Parameters" property to <Integer>   (or <String> etc)

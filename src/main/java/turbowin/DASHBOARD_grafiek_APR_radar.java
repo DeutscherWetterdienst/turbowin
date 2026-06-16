@@ -31,11 +31,6 @@ import javax.swing.JPanel;
 
 public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_grafiek_APR_radar() {
     color_black = Color.BLACK;
     // color_last_update             = color_black;
@@ -65,11 +60,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
         "--- Screen resolution APR Dashboard wind radar: " + width_screen + " x " + height_screen);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void setAllRenderingHints(Graphics2D g2d) {
     g2d.setRenderingHint(
         RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -88,11 +78,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
         RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
     // eg:
@@ -1232,11 +1217,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
     DASHBOARD_view_APR_radar.jLabel19.setText(update_message_bottom_screen);
   } // public void paintComponent(Graphics g)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void compute_relative_wind_APR()
         // public static void compute_relative_wind_APR()
       {
@@ -1404,11 +1384,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
      private void enable_disable_controls_APR_radar(boolean mode)
      {
@@ -1480,11 +1455,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
      }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_wind_arrow_radar_APR(
       Graphics2D g2d,
       double marker_circle_diameter_2,
@@ -1653,11 +1623,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
     } // if (true_wind_speed_ok && true_wind_dir_ok)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_wind_rose_radar(
       Graphics2D g2d,
       double wind_rose_diameter,

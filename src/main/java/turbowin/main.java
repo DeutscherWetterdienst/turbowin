@@ -4061,11 +4061,6 @@ public class main extends javax.swing.JFrame {
                     .addContainerGap()));
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void setUIFont(javax.swing.plaf.FontUIResource f) {
     java.util.Enumeration keys = UIManager.getDefaults().keys();
     while (keys.hasMoreElements()) {
@@ -4077,11 +4072,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ImageIcon createImageIcon(String path_and_file) {
     URL url = null;
 
@@ -4096,11 +4086,6 @@ public class main extends javax.swing.JFrame {
     return icon_glyph;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // The doInBackground method, which creates the image icon for the photograph, is invoked by the
   // background thread.
   // After the image icon is fully loaded, the done method is invoked on the event-dispatching
@@ -4207,11 +4192,6 @@ public class main extends javax.swing.JFrame {
     }.execute();
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_straight(final String imagePath) {
     if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png")) {
       ImageIcon toolbar_img_date_time = createImageIcon(imagePath);
@@ -4273,11 +4253,6 @@ public class main extends javax.swing.JFrame {
     }
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initImages() {
     String os = OSDetector.getOSString();
 
@@ -4331,11 +4306,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static String convert_month(int month_number) {
     String month_name = "";
 
@@ -4378,11 +4348,6 @@ public class main extends javax.swing.JFrame {
     return month_name;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void check_and_set_datetime_v2() {
     // NB Never mind the computer is set to UTC or not. SimpleTimeZone with argument UTC convert
     // system date time
@@ -4588,11 +4553,6 @@ public class main extends javax.swing.JFrame {
     // cal_systeem_datum_tijd         = null;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void specific_connection_initComponents() {
 
     // called from: - read_muffin() [main.java]
@@ -4770,11 +4730,6 @@ public class main extends javax.swing.JFrame {
     turbowin_start_up_sequence_finished = true;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void disable_and_enable_output_menu_items() {
     // initialisation (because some could be disabled before and must now enabled (see Function
     // OK_button_actionPerformed() [main_RS232_RS422.java])
@@ -4951,11 +4906,6 @@ public class main extends javax.swing.JFrame {
     } // if (APR || APTR)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void disable_dashboard_and_maps_menu_items() {
     // initialisation (because some could be disabled before and must now enabled (see Function
     // OK_button_actionPerformed() [main_RS232_RS422.java])
@@ -5075,11 +5025,6 @@ public class main extends javax.swing.JFrame {
     // }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void coded_obs_update() {
     // if (!main.obs_format.equals(main.FORMAT_AWS))            // not AWS connected mode
     if ((RS232_connection_mode != 3)
@@ -5101,11 +5046,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void bepaal_frame_location() {
     Toolkit kit = Toolkit.getDefaultToolkit();
     Dimension screenSize = kit.getScreenSize();
@@ -5154,11 +5094,6 @@ public class main extends javax.swing.JFrame {
     y_pos_immtlogperiod_frame = screenHeight / 2 - (300 / 2);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static String compose_coded_obs(String SPATIE) {
     String coded_obs_call_sign; // station ID from version 4.2
     String coded_obs_YY;
@@ -5683,11 +5618,6 @@ public class main extends javax.swing.JFrame {
     return coded_obs_total;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void fill_configuratie_array() {
     configuratie_regels[0] = main.SHIP_NAME_TXT + main.ship_name.trim();
     configuratie_regels[1] = main.IMO_NUMBER_TXT + main.imo_number.trim();
@@ -5794,11 +5724,6 @@ public class main extends javax.swing.JFrame {
         main.EUCAWS_OBS_ID_TXT + String.valueOf(main.eucaws_obs_id); // boolean
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void schrijf_configuratie_regels() {
     /* NB input/output in een GUI altijd via een SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
@@ -5893,11 +5818,6 @@ public class main extends javax.swing.JFrame {
     } // if ((logs_dir != null) && (logs_dir.compareTo("") != 0))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void lees_configuratie_regels() {
     // called from: initComponents2()
     //
@@ -6050,11 +5970,6 @@ public class main extends javax.swing.JFrame {
     } // if ((hulp_dir != null) && (hulp_dir.compareTo("") != 0))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void disable_graph_menu_items() {
     // NOTE
     // Even in the case of the settings indicate a barometer or AWS connected but the program
@@ -6125,11 +6040,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void meta_data_from_configuration_regels_into_global_vars() {
     // called from:
     //   - import_button_actionPerformed() [tmystationdata.java]
@@ -6825,11 +6735,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void check_meta_data() {
     // called from: - read_muffin() [main.java]
     //              - lees_configuratie_regels() [main.java]
@@ -6939,11 +6844,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_Obs_to_server_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Output_Obs_to_server_menu_actionPerformed
 
@@ -7051,11 +6951,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   } // GEN-LAST:event_Output_Obs_to_server_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Wind_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Wind_menu_actionPerformed
     // TODO add your handling code here:
@@ -7071,11 +6966,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Wind_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Cloudcover_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudcover_menu_actionPerformed
     // TODO add your handling code here:
@@ -7091,11 +6981,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudcover_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Presentweather_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Presentweather_menu_actionPerformed
     // TODO add your handling code here:
@@ -7111,11 +6996,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Presentweather_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_waves_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_waves_menu_actionPerformed
     // TODO add your handling code here:
@@ -7125,11 +7005,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_waves_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void observer_field_update() {
     // JOptionPane.showMessageDialog(null, myobserver.selected_observer, main.APPLICATION_NAME + "
     // test", JOptionPane.WARNING_MESSAGE);
@@ -7140,11 +7015,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void temperatures_fields_update() {
     ////// air temp
     //
@@ -7397,11 +7267,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void wind_fields_update() {
     String field17_part1 = ""; // true wind dir
     String field17_part2 = ""; // true wind speed
@@ -7602,11 +7467,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void clouds_low_fields_update() {
     if ((mycl.cl_code.compareTo("") != 0) && (mycl.cl_code != null))
       jTextField33.setText(mycl.cl_code + " (code)");
@@ -7616,11 +7476,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void clouds_middle_fields_update() {
     if ((mycm.cm_code.compareTo("") != 0) && (mycm.cm_code != null)) {
       /* take only first char (i.c.w. special cases Cm 7a, 7b, 7c -> 7) */
@@ -7631,11 +7486,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void clouds_high_fields_update() {
     if ((mych.ch_code.compareTo("") != 0) && (mych.ch_code != null))
       jTextField35.setText(mych.ch_code + " (code)");
@@ -7645,11 +7495,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void cloud_cover_fields_update() {
     if ((mycloudcover.N.compareTo("") != 0) && (mycloudcover.N != null))
       jTextField30.setText(mycloudcover.N);
@@ -7667,11 +7512,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void visibility_fields_update() {
     // visibility
     //
@@ -7683,11 +7523,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void waves_fields_update() {
     if ((mywaves.wind_waves_period.compareTo("") != 0)
         && (mywaves.wind_waves_period
@@ -7735,11 +7570,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void ID_fields_update() {
     // call sign
     //
@@ -7773,11 +7603,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void date_time_fields_update() {
 
     if (RS232_connection_mode == 3
@@ -7823,11 +7648,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void position_fields_update() {
     // position
     //
@@ -7930,11 +7750,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void present_weather_fields_update() {
     if ((mypresentweather.present_weather.compareTo("") != 0)
         && (mypresentweather.present_weather != null))
@@ -7945,11 +7760,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void past_weather_fields_update() {
     // past weather (prim. phenomena)
     //
@@ -7967,11 +7777,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void barometer_fields_update() {
     // input text color setting 'air pressure reading' and 'air pressure MSL'
     //
@@ -8035,11 +7840,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void barograph_fields_update() {
     // input text color setting 'amount of pressure tendency' and 'characteristic pressure tendency'
     //
@@ -8103,11 +7903,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void icing_fields_update() {
     if (((myicing.Is_code.compareTo("") != 0) && (myicing.Is_code != null))
         || ((myicing.EsEs_code.compareTo("") != 0) && (myicing.EsEs_code != null))
@@ -8121,11 +7916,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void ice_fields_update() {
     if (((myice1.ci_code.compareTo("") != 0) && (myice1.ci_code != null))
         || ((myice1.Si_code.compareTo("") != 0) && (myice1.Si_code != null))
@@ -8150,11 +7940,6 @@ public class main extends javax.swing.JFrame {
     coded_obs_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Cloudshigh_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudshigh_menu_actionPerformed
     // TODO add your handling code here:
@@ -8170,11 +7955,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudshigh_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Position_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Position_menu_actionPerformed
     // TODO add your handling code here:
@@ -8255,11 +8035,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Position_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_DateTime_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_DateTime_menu_actionPerformed
     // TODO add your handling code here:
@@ -8289,11 +8064,6 @@ public class main extends javax.swing.JFrame {
     } // else
   } // GEN-LAST:event_Input_DateTime_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Visibility_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Visibility_menu_actionPerformed
     // TODO add your handling code here:
@@ -8308,11 +8078,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Visibility_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void File_Exit_menu_actionPerformd(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_File_Exit_menu_actionPerformd
     // TODO add your handling code here:
@@ -8320,11 +8085,6 @@ public class main extends javax.swing.JFrame {
     main_windowClosing(null);
   } // GEN-LAST:event_File_Exit_menu_actionPerformd
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Pastweather_menu_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Pastweather_menu_actionperformed
     // TODO add your handling code here:
@@ -8340,11 +8100,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Pastweather_menu_actionperformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Cloudslow_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudslow_menu_actionPerformed
     // TODO add your handling code here:
@@ -8360,11 +8115,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudslow_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Cloudsmiddle_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudsmiddle_menu_actionPerformed
     // TODO add your handling code here:
@@ -8380,11 +8130,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudsmiddle_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Temperatures_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Temperatures_menu_actionPerformed
     // TODO add your handling code here:
@@ -8400,11 +8145,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Temperatures_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Stationdata_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Stationdata_actionPerformed
     // TODO add your handling code here:
@@ -8425,11 +8165,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Stationdata_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Barometer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barometer_menu_actionPerformed
     // TODO add your handling code here:
@@ -8445,11 +8180,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Barometer_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Barograph_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barograph_menu_actionPerformed
     // TODO add your handling code here:
@@ -8465,11 +8195,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Barograph_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_About_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_About_menu_actionPerformed
     // TODO add your handling code here:
@@ -8478,11 +8203,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Info_About_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_by_email_all_manual() {
 
     // called from:
@@ -8617,11 +8337,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_file_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Output_obs_to_file_actionPerformed
     // TODO add your handling code here:
@@ -8712,11 +8427,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   } // GEN-LAST:event_Output_obs_to_file_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Email_settings_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maintenance_Email_settings_actionPerformed
@@ -8736,11 +8446,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Email_settings_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Log_files_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Log_files_actionPerformed
     // TODO add your handling code here:
@@ -8759,11 +8464,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Log_files_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Observer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Observer_menu_actionPerformed
     // TODO add your handling code here:
@@ -8779,11 +8479,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Observer_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Move_log_files_to_disk_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maintenance_Move_log_files_to_disk_actionPerformed
@@ -8817,22 +8512,12 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Move_log_files_to_disk_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Observer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Observer_menu_actionPerformed
     // TODO add your handling code here:
     Input_Observer_menu_actionPerformed(evt);
   } // GEN-LAST:event_Maintenance_Observer_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Captains_Menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Captains_Menu_actionPerformed
     // TODO add your handling code here:
@@ -8848,11 +8533,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Maintenance_Captains_Menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Move_log_files_by_email_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maintenance_Move_log_files_by_email_actionPerformed
@@ -9200,11 +8880,6 @@ public class main extends javax.swing.JFrame {
     } // if (doorgaan == true)
   } // GEN-LAST:event_Maintenance_Move_log_files_by_email_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Next_form_automation_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Next_form_automation_menu_actionPerformed
     // TODO add your handling code here:
@@ -9255,11 +8930,6 @@ public class main extends javax.swing.JFrame {
 
   } // GEN-LAST:event_Next_form_automation_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void date_time_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_date_time_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9270,11 +8940,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_date_time_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void position_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_position_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9289,11 +8954,6 @@ public class main extends javax.swing.JFrame {
     //   form.setVisible(true);
   } // GEN-LAST:event_position_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void course_speed_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_course_speed_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9304,11 +8964,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_course_speed_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void pressure_read_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_pressure_read_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9319,11 +8974,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_pressure_read_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void pressure_msl_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_pressure_msl_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9334,11 +8984,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_pressure_msl_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void amount_pressure_tendency_mainscreen_mouseClicked(
       java.awt.event.MouseEvent
           evt) { // GEN-FIRST:event_amount_pressure_tendency_mainscreen_mouseClicked
@@ -9350,11 +8995,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_amount_pressure_tendency_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void char_pressure_tendency_mainscreen_mouseClicked(
       java.awt.event.MouseEvent
           evt) { // GEN-FIRST:event_char_pressure_tendency_mainscreen_mouseClicked
@@ -9366,11 +9006,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_char_pressure_tendency_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void present_weather_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_present_weather_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9385,187 +9020,102 @@ public class main extends javax.swing.JFrame {
     Input_Presentweather_menu_actionPerformed(null);
   } // GEN-LAST:event_present_weather_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void past_weather_1_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_past_weather_1_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Pastweather_menu_actionperformed(null);
   } // GEN-LAST:event_past_weather_1_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void past_weather_2_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_past_weather_2_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Pastweather_menu_actionperformed(null);
   } // GEN-LAST:event_past_weather_2_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void true_wind_speed_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_true_wind_speed_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Wind_menu_actionPerformed(null);
   } // GEN-LAST:event_true_wind_speed_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void true_wind_dir_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_true_wind_dir_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Wind_menu_actionPerformed(null);
   } // GEN-LAST:event_true_wind_dir_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void visibility_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_visibility_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Visibility_menu_actionPerformed(null);
   } // GEN-LAST:event_visibility_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void observer_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_observer_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Observer_menu_actionPerformed(null);
   } // GEN-LAST:event_observer_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void wind_wave_height_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_wind_wave_height_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_wind_wave_height_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void wind_wave_period_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_wind_wave_period_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_wind_wave_period_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void swell_1_dir_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_swell_1_dir_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_swell_1_dir_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void swell_1_height_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_swell_1_height_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_swell_1_height_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void swell_1_period_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_swell_1_period_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_swell_1_period_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void swell_2_dir_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_swell_2_dir_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_swell_2_dir_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void swell_2_height_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_swell_2_height_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_swell_2_height_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void swell_2_period_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_swell_2_period_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_swell_2_period_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void total_cloud_cover_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_total_cloud_cover_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Cloudcover_menu_actionPerformed(null);
   } // GEN-LAST:event_total_cloud_cover_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void amount_cl_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_amount_cl_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Cloudcover_menu_actionPerformed(null);
   } // GEN-LAST:event_amount_cl_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void height_lowest_cloud_mainscreen_mouseClicked(
       java.awt.event.MouseEvent
           evt) { // GEN-FIRST:event_height_lowest_cloud_mainscreen_mouseClicked
@@ -9573,77 +9123,42 @@ public class main extends javax.swing.JFrame {
     Input_Cloudcover_menu_actionPerformed(null);
   } // GEN-LAST:event_height_lowest_cloud_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cl_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cl_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Cloudslow_menu_actionPerformed(null);
   } // GEN-LAST:event_cl_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Cloudsmiddle_menu_actionPerformed(null);
   } // GEN-LAST:event_cm_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Cloudshigh_menu_actionPerformed(null);
   } // GEN-LAST:event_ch_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void air_temp_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_air_temp_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Temperatures_menu_actionPerformed(null);
   } // GEN-LAST:event_air_temp_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void wet_bulb_temp_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_wet_bulb_temp_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Temperatures_menu_actionPerformed(null);
   } // GEN-LAST:event_wet_bulb_temp_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void dew_point_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_dew_point_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Temperatures_menu_actionPerformed(null);
   } // GEN-LAST:event_dew_point_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ship_name_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ship_name_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9651,11 +9166,6 @@ public class main extends javax.swing.JFrame {
     Maintenance_Stationdata_actionPerformed(null);
   } // GEN-LAST:event_ship_name_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void station_ID_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_station_ID_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -9663,11 +9173,6 @@ public class main extends javax.swing.JFrame {
     Maintenance_Stationdata_actionPerformed(null);
   } // GEN-LAST:event_station_ID_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void date_time_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_date_time_toolbar_mouseClicked
     // TODO add your handling code here:
@@ -9678,11 +9183,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_date_time_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void position_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_position_toolbar_mouseClicked
     // TODO add your handling code here:
@@ -9693,33 +9193,18 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_position_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void wind_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_wind_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Wind_menu_actionPerformed(null);
   } // GEN-LAST:event_wind_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void waves_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_waves_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_waves_menu_actionPerformed(null);
   } // GEN-LAST:event_waves_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void barometer_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_barometer_toolbar_mouseClicked
     // TODO add your handling code here:
@@ -9730,11 +9215,6 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_barometer_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void barograph_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_barograph_toolbar_mouseClicked
     // TODO add your handling code here:
@@ -9745,121 +9225,66 @@ public class main extends javax.swing.JFrame {
     // }
   } // GEN-LAST:event_barograph_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void temperatures_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_temperatures_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Temperatures_menu_actionPerformed(null);
   } // GEN-LAST:event_temperatures_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void present_weather_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_present_weather_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Presentweather_menu_actionPerformed(null);
   } // GEN-LAST:event_present_weather_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void past_weather_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_past_weather_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Pastweather_menu_actionperformed(null);
   } // GEN-LAST:event_past_weather_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void visibility_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_visibility_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Visibility_menu_actionPerformed(null);
   } // GEN-LAST:event_visibility_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cl_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cl_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Cloudslow_menu_actionPerformed(null);
   } // GEN-LAST:event_cl_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Cloudsmiddle_menu_actionPerformed(null);
   } // GEN-LAST:event_cm_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Cloudshigh_menu_actionPerformed(null);
   } // GEN-LAST:event_ch_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void height_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_height_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Cloudcover_menu_actionPerformed(null);
   } // GEN-LAST:event_height_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void icing_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_icing_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Icing_menu_actionPerformed(null);
   } // GEN-LAST:event_icing_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ice_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ice_toolbar_mouseClicked
     // TODO add your handling code here:
     Input_Ice_menu_actionPerformed(null);
   } // GEN-LAST:event_ice_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void observer_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_observer_toolbar_mouseClicked
     // TODO add your handling code here:
@@ -9867,11 +9292,6 @@ public class main extends javax.swing.JFrame {
     Input_Observer_menu_actionPerformed(null);
   } // GEN-LAST:event_observer_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Themes_1_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_1_actionPerformed
     // TODO add your handling code here:
@@ -9941,11 +9361,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Themes_1_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Themes_2_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_2_actionPerformed
     // TODO add your handling code here:
@@ -10004,11 +9419,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Themes_2_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Themes_3_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_3_actionPerformed
     // TODO add your handling code here:
@@ -10100,11 +9510,6 @@ public class main extends javax.swing.JFrame {
 
   } // GEN-LAST:event_Themes_3_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Icing_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Icing_menu_actionPerformed
     // TODO add your handling code here:
@@ -10114,11 +9519,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Icing_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void icing_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_icing_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -10126,11 +9526,6 @@ public class main extends javax.swing.JFrame {
     Input_Icing_menu_actionPerformed(null);
   } // GEN-LAST:event_icing_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Input_Ice_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Ice_menu_actionPerformed
     // TODO add your handling code here:
@@ -10140,11 +9535,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Ice_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ice_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ice_mainscreen_mouseClicked
     // TODO add your handling code here:
@@ -10152,11 +9542,6 @@ public class main extends javax.swing.JFrame {
     Input_Ice_menu_actionPerformed(null);
   } // GEN-LAST:event_ice_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void captain_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_captain_toolbar_mouseClicked
     // TODO add your handling code here:
@@ -10164,11 +9549,6 @@ public class main extends javax.swing.JFrame {
     Maintenance_Captains_Menu_actionPerformed(null);
   } // GEN-LAST:event_captain_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen_toolbar_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_next_screen_toolbar_mouseClicked
     // TODO add your handling code here:
@@ -10180,11 +9560,6 @@ public class main extends javax.swing.JFrame {
     Input_Position_menu_actionPerformed(null);
   } // GEN-LAST:event_next_screen_toolbar_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_Statistics_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_Statistics_menu_actionPerformed
     // TODO add your handling code here:
@@ -10227,11 +9602,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   } // GEN-LAST:event_Info_Statistics_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Amver_SailingPlan_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_SailingPlan_actionPerformed
     // TODO add your handling code here:
@@ -10251,11 +9621,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Amver_SailingPlan_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Amver_DeviationReport_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_DeviationReport_actionPerformed
     // TODO add your handling code here:
@@ -10275,11 +9640,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Amver_DeviationReport_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Amver_ArrivalReport_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_ArrivalReport_actionPerformed
     // TODO add your handling code here:
@@ -10298,11 +9658,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Amver_ArrivalReport_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Amver_PositionReport_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_PositionReport_actionPerformed
     // TODO add your handling code here:
@@ -10321,11 +9676,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Amver_PositionReport_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Graphs_Pressure_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graphs_Pressure_Sensor_Data_actionPerformed
@@ -10362,11 +9712,6 @@ public class main extends javax.swing.JFrame {
     graph_form.setVisible(true);
   } // GEN-LAST:event_Graphs_Pressure_Sensor_Data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Serial_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Serial_actionPerformed
     // TODO add your handling code here:
@@ -10385,11 +9730,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Serial_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void main_windowClosing(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_main_windowClosing
     // TODO add your handling code here:
@@ -10511,11 +9851,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_main_windowClosing
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Graphs_Airtemp_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graphs_Airtemp_Sensor_Data_actionPerformed
@@ -10555,11 +9890,6 @@ public class main extends javax.swing.JFrame {
     graph_form.setVisible(true);
   } // GEN-LAST:event_Graphs_Airtemp_Sensor_Data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Graphs_SST_Sensor_data_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Graphs_SST_Sensor_data_actionPerformed
     // TODO add your handling code here:
@@ -10594,11 +9924,6 @@ public class main extends javax.swing.JFrame {
     graph_form.setVisible(true);
   } // GEN-LAST:event_Graphs_SST_Sensor_data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Graphs_Wind_Speed_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graphs_Wind_Speed_Sensor_Data_actionPerformed
@@ -10640,11 +9965,6 @@ public class main extends javax.swing.JFrame {
      }//GEN-LAST:event_Output_obs_to_AWS_actionPerformed
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_AWS_actionPerformed(java.awt.event.ActionEvent evt) {
     // TODO add your handling code here:
     String message_info = "";
@@ -10743,11 +10063,6 @@ public class main extends javax.swing.JFrame {
     Reset_all_meteo_parameters();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void IMMT_AWS_manual_input_preperations() {
     // On request of Meteo France also IMMT storage of extra MANUAL entered parameters in AWS mode
     // (observers are paid for these extra inserted parameters)
@@ -10991,11 +10306,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Graph_Wind_Dir_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graph_Wind_Dir_Sensor_Data_actionPerformed
@@ -11029,11 +10339,6 @@ public class main extends javax.swing.JFrame {
     graph_form.setVisible(true);
   } // GEN-LAST:event_Graph_Wind_Dir_Sensor_Data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_clipboard_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Output_obs_to_clipboard_actionPerformed
     // TODO add your handling code here:
@@ -11138,11 +10443,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   } // GEN-LAST:event_Output_obs_to_clipboard_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void main_windowIconfied(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_main_windowIconfied
     // TODO add your handling code here:
@@ -11746,11 +11046,6 @@ public class main extends javax.swing.JFrame {
     } // if (use_system_tray)
   } // GEN-LAST:event_main_windowIconfied
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_Calculator_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_Calculator_menu_actionPerformed
     // TODO add your handling code here:
@@ -11760,11 +11055,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Info_Calculator_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_obs_format_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_obs_format_actionPerformed
     // TODO add your handling code here:
@@ -11782,22 +11072,12 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_obs_format_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void seawater_temp_mainscreen_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_seawater_temp_mainscreen_mouseClicked
     // TODO add your handling code here:
     Input_Temperatures_menu_actionPerformed(null);
   } // GEN-LAST:event_seawater_temp_mainscreen_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Graph_All_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Graph_All_Sensor_Data_actionPerformed
     // TODO add your handling code here:
@@ -11836,11 +11116,6 @@ public class main extends javax.swing.JFrame {
     graph_form.setVisible(true);
   } // GEN-LAST:event_Graph_All_Sensor_Data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_WOW_settings_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_WOW_settings_actionPerformed
     // TODO add your handling code here:
@@ -11859,11 +11134,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_WOW_settings_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_System_Log_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_System_Log_menu_actionPerformed
     // TODO add your handling code here:
@@ -11873,11 +11143,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Info_System_Log_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_server_settings_actionperformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maintenance_server_settings_actionperformed
@@ -11897,11 +11162,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_server_settings_actionperformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Themes_4_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_4_actionPerformed
 
@@ -11983,12 +11243,6 @@ public class main extends javax.swing.JFrame {
       mainClass.setVisible(true);
     }
   } // GEN-LAST:event_Themes_4_actionPerformed
-
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
 
   private void Info_send_System_log_menu_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_send_System_log_menu_actionperformed
@@ -12120,11 +11374,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   } // GEN-LAST:event_Info_send_System_log_menu_actionperformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_Barometer_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_Barometer_actionPerformed
     // TODO add your handling code here:
@@ -12148,11 +11397,6 @@ public class main extends javax.swing.JFrame {
     dashboard_form.setVisible(true);
   } // GEN-LAST:event_Dashboard_Barometer_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_AWS_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_AWS_actionPerformed
     // TODO add your handling code here:
@@ -12176,11 +11420,6 @@ public class main extends javax.swing.JFrame {
     dashboard_form_AWS.setVisible(true);
   } // GEN-LAST:event_Dashboard_AWS_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_AWS_digital_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_AWS_digital_actionPerformed
     // TODO add your handling code here:
@@ -12204,11 +11443,6 @@ public class main extends javax.swing.JFrame {
     dashboard_form_AWS_digital.setVisible(true);
   } // GEN-LAST:event_Dashboard_AWS_digital_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_Latest_Obs_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_Latest_Obs_actionPerformed
     // TODO add your handling code here:
@@ -12218,11 +11452,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Dashboard_Latest_Obs_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Show_maintenance_data_actionPerformed(
       java.awt.event.ActionEvent
           evt) // GEN-FIRST:event_Maintenance_Show_maintenance_data_actionPerformed
@@ -12244,11 +11473,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Show_maintenance_data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Import_maintenance_data_actionPerformed(
       java.awt.event.ActionEvent
           evt) // GEN-FIRST:event_Maintenance_Import_maintenance_data_actionPerformed
@@ -12270,11 +11494,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Import_maintenance_data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maintenance_Export_maintenance_data_actionPerformed(
       java.awt.event.ActionEvent
           evt) // GEN-FIRST:event_Maintenance_Export_maintenance_data_actionPerformed
@@ -12296,11 +11515,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Export_maintenance_data_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_AWS_hybrid_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_AWS_hybrid_actionPerformed
     // TODO add your handling code here:
@@ -12323,11 +11537,6 @@ public class main extends javax.swing.JFrame {
     dashboard_form_AWS_hybrid.setVisible(true);
   } // GEN-LAST:event_Dashboard_AWS_hybrid_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_AWS_radar_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_AWS_radar_actionPerformed
     // TODO add your handling code here:
@@ -12349,11 +11558,6 @@ public class main extends javax.swing.JFrame {
     dashboard_form_AWS_radar.setVisible(true);
   } // GEN-LAST:event_Dashboard_AWS_radar_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void main_windowDeiconified(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_main_windowDeiconified
     // TODO add your handling code here:
@@ -12375,11 +11579,6 @@ public class main extends javax.swing.JFrame {
     main_window_updating_date_time();
   } // GEN-LAST:event_main_windowDeiconified
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_latest_AWS_measurements_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Dashboard_latest_AWS_measurements_actionPerformed
@@ -12404,11 +11603,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Dashboard_latest_AWS_measurements_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_Obs_Manual_Map_Offline_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_Obs_Manual_Map_Offline_actionPerformed
@@ -12418,11 +11612,6 @@ public class main extends javax.swing.JFrame {
     Maps_OSM();
   } // GEN-LAST:event_Maps_Obs_Manual_Map_Offline_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_Obs_Manual_Map_Online_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_Obs_Manual_Map_Online_actionPerformed
@@ -12432,11 +11621,6 @@ public class main extends javax.swing.JFrame {
     Maps_OSM();
   } // GEN-LAST:event_Maps_Obs_Manual_Map_Online_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_AWS_Sensor_Map_Offline_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_AWS_Sensor_Map_Offline_actionPerformed
@@ -12446,11 +11630,6 @@ public class main extends javax.swing.JFrame {
     Maps_OSM();
   } // GEN-LAST:event_Maps_AWS_Sensor_Map_Offline_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_AWS_Visual_Map_Offline_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_AWS_Visual_Map_Offline_actionPerformed
@@ -12460,11 +11639,6 @@ public class main extends javax.swing.JFrame {
     Maps_OSM();
   } // GEN-LAST:event_Maps_AWS_Visual_Map_Offline_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_AWS_Sensor_Map_Online_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_AWS_Sensor_Map_Online_actionPerformed
@@ -12474,11 +11648,6 @@ public class main extends javax.swing.JFrame {
     Maps_OSM();
   } // GEN-LAST:event_Maps_AWS_Sensor_Map_Online_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_AWS_Visual_Map_Online_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_AWS_Visual_Map_Online_actionPerformed
@@ -12488,11 +11657,6 @@ public class main extends javax.swing.JFrame {
     Maps_OSM();
   } // GEN-LAST:event_Maps_AWS_Visual_Map_Online_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_by_email_default_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Output_obs_by_email_default_actionPerformed
@@ -12502,11 +11666,6 @@ public class main extends javax.swing.JFrame {
     Output_obs_by_email_all_manual();
   } // GEN-LAST:event_Output_obs_by_email_default_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_barometer_comparison_menu_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Info_barometer_comparison_menu_actionPerformed
@@ -12517,11 +11676,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Info_barometer_comparison_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Themes_5_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_5_actionPerformed
     // TODO add your handling code here:
@@ -12551,11 +11705,6 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Themes_5_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void APR_toolbar_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_APR_toolbar_itemStateChanged
     // TODO add your handling code here:
@@ -12702,11 +11851,6 @@ public class main extends javax.swing.JFrame {
     // turbowin_start_up_sequence_finished = true;
   } // GEN-LAST:event_APR_toolbar_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void AWSR_toolbar_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_AWSR_toolbar_itemStateChanged
     // TODO add your handling code here:
@@ -12839,11 +11983,6 @@ public class main extends javax.swing.JFrame {
     // turbowin_start_up_sequence_finished = true;
   } // GEN-LAST:event_AWSR_toolbar_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_APR_radar_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_APR_radar_actionperformed
     // TODO add your handling code here:
@@ -12865,11 +12004,6 @@ public class main extends javax.swing.JFrame {
     dashboard_form_APR_radar.setVisible(true);
   } // GEN-LAST:event_Dashboard_APR_radar_actionperformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_satellite_image_IR_SSEC_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_satellite_image_IR_SSEC_actionPerformed
@@ -12879,11 +12013,6 @@ public class main extends javax.swing.JFrame {
     support_class.determine_satellite_image_url_SSEC(satellite_image_mode);
   } // GEN-LAST:event_Maps_satellite_image_IR_SSEC_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_by_email_Custom_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Output_obs_by_email_Custom_actionPerformed
@@ -12893,11 +12022,6 @@ public class main extends javax.swing.JFrame {
     Output_obs_by_email_all_manual();
   } // GEN-LAST:event_Output_obs_by_email_Custom_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_pilot_charts(final String chart) {
     new SwingWorker<Integer, Void>() {
       @Override
@@ -12966,11 +12090,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_pilot_charts_SA_january_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_pilot_charts_SA_january_actionPerformed
@@ -13436,11 +12555,6 @@ public class main extends javax.swing.JFrame {
     Maps_pilot_charts(pilot_charts_mode);
   } // GEN-LAST:event_Maps_pilot_charts_IN_december_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_Obs_Stats_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_Obs_Stats_actionPerformed
     // TODO add your handling code here:
@@ -13452,11 +12566,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Dashboard_Obs_Stats_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_Observations_Stats_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Dashboard_Observations_Stats_actionPerformed
@@ -13478,11 +12587,6 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Info_device_log_menu_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_satellite_image_IR_NOAA_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_satellite_image_IR_NOAA_actionPerformed
@@ -13492,11 +12596,6 @@ public class main extends javax.swing.JFrame {
     support_class.determine_satellite_image_url_NOAA(satellite_image_mode);
   } // GEN-LAST:event_Maps_satellite_image_IR_NOAA_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_satellite_image_SST_NOAA_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maps_satellite_image_SST_NOAA_actionPerformed
@@ -13506,11 +12605,6 @@ public class main extends javax.swing.JFrame {
     support_class.determine_satellite_image_url_NOAA(satellite_image_mode);
   } // GEN-LAST:event_Maps_satellite_image_SST_NOAA_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Maps_OSM() {
     // called from: - Maps_Obs_Manual_Map_Online_actionPerformed() [main.java]
     //              - Maps_Obs_Manual_Map_Offline_actionPerformed() [main.java]
@@ -13598,11 +12692,6 @@ public class main extends javax.swing.JFrame {
     } // else
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void main_window_updating_date_time() {
     // TODO add your handling code here:
 
@@ -13651,11 +12740,6 @@ public class main extends javax.swing.JFrame {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   protected static Image createImage(String path) {
     // URL imageURL = TrayIconDemo.class.getResource(path);
     URL imageURL = main.class.getResource(path);
@@ -13668,11 +12752,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_clipboard_FM13() {
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     StringSelection selection = new StringSelection(obs_write);
@@ -13683,11 +12762,6 @@ public class main extends javax.swing.JFrame {
     Reset_all_meteo_parameters();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_clipboard_format_101() {
     boolean doorgaan = true;
     String clipboard_format_101_line = "";
@@ -13709,11 +12783,6 @@ public class main extends javax.swing.JFrame {
     Reset_all_meteo_parameters();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private String compile_obs_for_AWS() {
     String AWS_obs = "";
     String AWS_id = "";
@@ -14411,11 +13480,6 @@ public class main extends javax.swing.JFrame {
     return AWS_obs;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void set_APR_toolbar() {
     // check APR
     if (APR) {
@@ -14425,11 +13489,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void set_AWSR_toolbar() {
     // check AWSR
     if (AWSR) {
@@ -14439,11 +13498,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // functions additional/supporting to this main class
     support_class = new main_support();
@@ -14755,11 +13809,6 @@ public class main extends javax.swing.JFrame {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void create_popup_menu() {
     /* create pop-up menu (right mouse button) */
     popup_input = new JPopupMenu();
@@ -15004,11 +14053,6 @@ public class main extends javax.swing.JFrame {
     // }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // private void IMMT_log()
   public static void IMMT_log() {
     final String SPATIE_1 = " ";
@@ -16031,11 +15075,6 @@ public class main extends javax.swing.JFrame {
     schrijven_IMMT_log(immt_rec);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void schrijven_IMMT_log(final String immt_rec) {
     // called from: IMMT_log() [main.java]
 
@@ -16164,11 +15203,6 @@ public class main extends javax.swing.JFrame {
     } // if (doorgaan == true)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
      public static void internet_mouseClicked(final String help_dir) {
         // TODO add your handling code here:
@@ -16306,11 +15340,6 @@ public class main extends javax.swing.JFrame {
      }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void help_mouseClicked(final String help_page) {
     // TODO add your handling code here:
 
@@ -16499,11 +15528,6 @@ public class main extends javax.swing.JFrame {
     */
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void check_immt_size() {
     // TODO add your handling code here:
 
@@ -16543,11 +15567,6 @@ public class main extends javax.swing.JFrame {
     }.execute();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_file_FM13() {
     // JOptionPane.showMessageDialog(null, "test output obs to file", main.APPLICATION_NAME + "
     // info", JOptionPane.INFORMATION_MESSAGE);
@@ -16611,11 +15630,6 @@ public class main extends javax.swing.JFrame {
     } // if (result == JFileChooser.APPROVE_OPTION
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_file_format_101() {
     // pop-up the file chooser dialog box
     JFileChooser chooser = new JFileChooser();
@@ -16682,11 +15696,6 @@ public class main extends javax.swing.JFrame {
     } // if (result == JFileChooser.APPROVE_OPTION
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void Output_obs_by_email_jakarta_FM13_format_101(
       boolean manual_send) // NB also for Custom email !
       {
@@ -17057,11 +16066,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(
       boolean manual_send) // NB also for Custom email !
       {
@@ -17579,11 +16583,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_by_email_FM13() {
     // This function called by: Output_obs_by_email_all()
 
@@ -17796,11 +16795,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static String urlEncode(String s) {
     // NB
     // http://stackoverflow.com/questions/17373/how-do-i-open-the-default-mail-program-with-a-subject-and-body-in-a-cross-platfo
@@ -17818,11 +16812,6 @@ public class main extends javax.swing.JFrame {
     return sb.toString();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_by_email_format_101() {
     // This function called by: Output_obs_by_email_all()
 
@@ -17969,11 +16958,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static String get_format_101_obs_from_file() {
     String format_101_obs = "";
 
@@ -18019,11 +17003,6 @@ public class main extends javax.swing.JFrame {
     return format_101_obs;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_server_FM13_TurboWin_stand_alone() {
     // http://stackoverflow.com/questions/2793150/using-java-net-urlconnection-to-fire-and-handle-http-requests
     //
@@ -18253,11 +17232,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Output_obs_to_server_format_101_V2() {
     // http://stackoverflow.com/questions/2793150/using-java-net-urlconnection-to-fire-and-handle-http-requests
     //
@@ -18571,11 +17545,6 @@ public class main extends javax.swing.JFrame {
 
   ///////
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void bepaal_last_record_uit_immt() {
     // NB This function will be called from within a swingworker e.g. see
     // Output_obs_by_email_actionPerformed()
@@ -18603,11 +17572,6 @@ public class main extends javax.swing.JFrame {
     } // if (immt_file.exists() && immt_file.length() > 0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void Reset_all_meteo_parameters() {
     System.out.println(
         "--- " + "Resetting all meteo parameters and clearing all fields main screen");
@@ -18819,11 +17783,6 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void delete_logs_turbowin_system() {
     // NB    sdf_tsl_1 = new SimpleDateFormat("MMM_yyyy");                                // e.g.
     // JAN_2016 (part of the file name)
@@ -18860,11 +17819,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void log_turbowin_system_message(final String message) {
     // NB for logging path e.g. .../logs/turbowin_system_Jan_2016.txt
     //    message e.g. : [WOW] barometer height above MSL not available (Maintenance -> Station
@@ -18935,11 +17889,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void satellite_link_mouse_clicked(String url_satellite_image) {
     new SwingWorker<Integer, Void>() {
       @Override
@@ -18979,11 +17928,6 @@ public class main extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /**
    * @param args the command line arguments
    */

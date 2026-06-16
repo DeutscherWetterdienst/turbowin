@@ -231,11 +231,6 @@ public final class mycaptain extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void lees_captain_log_en_vul_table() {
     /* NB input/output GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
@@ -303,11 +298,6 @@ public final class mycaptain extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
 
     if (main.offline_mode == true) {
@@ -347,11 +337,6 @@ public final class mycaptain extends javax.swing.JFrame {
     lees_captain_log_en_vul_table();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void stopCellEditing() {
     TableCellEditor editor = jTable1.getCellEditor();
     if (editor != null) {
@@ -359,11 +344,6 @@ public final class mycaptain extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void clear_captain_data_array() {
     for (int r = 0; r < CAPTAIN_ROWS; r++) {
       for (int c = 0; c < CAPTAIN_COLUMNS; c++) {
@@ -372,11 +352,6 @@ public final class mycaptain extends javax.swing.JFrame {
     } // for (int r = 0; r < CAPTAIN_ROWS; r++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -475,11 +450,6 @@ public final class mycaptain extends javax.swing.JFrame {
     } // if (doorgaan)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void schrijf_captain_log() {
     /* NB input/output in a GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
     boolean doorgaan = true;
@@ -541,11 +511,6 @@ public final class mycaptain extends javax.swing.JFrame {
     } // if (doorgaan == true)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -555,11 +520,6 @@ public final class mycaptain extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:

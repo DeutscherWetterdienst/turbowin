@@ -588,11 +588,6 @@ public final class mych extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // hide Back/Stop buttons if not in next_screen_mode
     if (main.in_next_sequence == false) {
@@ -606,11 +601,6 @@ public final class mych extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ImageIcon createImageIcon(String path_and_file) {
     URL url = null;
 
@@ -625,11 +615,6 @@ public final class mych extends javax.swing.JFrame {
     return icon_glyph;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initImages() {
     String os = OSDetector.getOSString();
 
@@ -663,11 +648,6 @@ public final class mych extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // The doInBackground method, which creates the image icon for the photograph, is invoked by the
   // background thread.
   // After the image icon is fully loaded, the done method is invoked on the event-dispatching
@@ -738,11 +718,6 @@ public final class mych extends javax.swing.JFrame {
     }.execute();
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_straight(final String imagePath) {
     if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_ch_1.jpg")) {
       ImageIcon img_ch1 = createImageIcon(imagePath);
@@ -774,11 +749,6 @@ public final class mych extends javax.swing.JFrame {
     }
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
 
     if (ch_code.compareTo("") != 0) {
@@ -798,22 +768,12 @@ public final class mych extends javax.swing.JFrame {
     else jRadioButton11.setSelected(true); // not determined
   } // private void initSynopparameters()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(CH_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -826,11 +786,6 @@ public final class mych extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -860,110 +815,60 @@ public final class mych extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch1_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch1_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH1_HELP_DIR);
   } // GEN-LAST:event_ch1_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch2_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch2_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH2_HELP_DIR);
   } // GEN-LAST:event_ch2_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch3_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch3_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH3_HELP_DIR);
   } // GEN-LAST:event_ch3_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch4_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch4_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH4_HELP_DIR);
   } // GEN-LAST:event_ch4_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch5_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch5_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH5_HELP_DIR);
   } // GEN-LAST:event_ch5_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch6_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch6_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH6_HELP_DIR);
   } // GEN-LAST:event_ch6_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch7_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch7_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH7_HELP_DIR);
   } // GEN-LAST:event_ch7_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch8_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch8_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH8_HELP_DIR);
   } // GEN-LAST:event_ch8_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void ch9_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_ch9_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CH9_HELP_DIR);
   } // GEN-LAST:event_ch9_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -973,11 +878,6 @@ public final class mych extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -987,22 +887,12 @@ public final class mych extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     mycm form = new mycm();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     mycloudcover form = new mycloudcover();
     form.setSize(800, 600);

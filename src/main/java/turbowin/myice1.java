@@ -292,22 +292,12 @@ public final class myice1 extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     if (main.offline_mode == true) {
       jButton3.setText("Help");
     }
   } // private void initComponents2()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Ice_Vars() {
     ci_code = "";
     Si_code = "";
@@ -318,11 +308,6 @@ public final class myice1 extends javax.swing.JFrame {
     checks_ok = false;
   } // private void Reset_All_Icing_Vars()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
     // put back earlier inserted values (if applicable)
     //
@@ -415,11 +400,6 @@ public final class myice1 extends javax.swing.JFrame {
     }
   } // private void initSynopparameters()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -537,11 +517,6 @@ public final class myice1 extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -550,11 +525,6 @@ public final class myice1 extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:

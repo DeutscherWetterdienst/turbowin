@@ -105,11 +105,6 @@ public final class myemailsettings extends javax.swing.JFrame {
     setLocation(main.x_pos_main_frame, main.y_pos_main_frame);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initEmailComponents() {
     ////////////////////// initialise /////////////////////////
 
@@ -1150,11 +1145,6 @@ public final class myemailsettings extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1319,11 +1309,6 @@ public final class myemailsettings extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1333,11 +1318,6 @@ public final class myemailsettings extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static String encrypt(String plainText) {
     String encryptedText = "";
     try {
@@ -1372,11 +1352,6 @@ public final class myemailsettings extends javax.swing.JFrame {
     return encryptedText;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static String decrypt(String encryptedText) {
     String decryptedText = "";
     try {

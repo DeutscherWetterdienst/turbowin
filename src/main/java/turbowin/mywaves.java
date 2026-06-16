@@ -946,11 +946,6 @@ public final class mywaves extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     jTextField1.setName("wave_1");
     jTextField2.setName("wave_2");
@@ -966,11 +961,6 @@ public final class mywaves extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
 
     // put back earlier inserted values
@@ -1012,11 +1002,6 @@ public final class mywaves extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1028,11 +1013,6 @@ public final class mywaves extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Waves_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
     wind_waves_period = "";
@@ -1286,22 +1266,12 @@ public final class mywaves extends javax.swing.JFrame {
     */
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(WAVES_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -1312,11 +1282,6 @@ public final class mywaves extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -1327,22 +1292,12 @@ public final class mywaves extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     myvisibility form = new myvisibility();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     mywind form = new mywind();
     form.setSize(800, 600);

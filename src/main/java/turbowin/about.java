@@ -403,11 +403,6 @@ public final class about extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     String os = OSDetector.getOSString();
 
@@ -536,11 +531,6 @@ public final class about extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_about_logo(final String imagePath) {
     new SwingWorker<ImageIcon, Object>() {
       @Override
@@ -574,11 +564,6 @@ public final class about extends javax.swing.JFrame {
     }.execute();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_about_logo_straight(final String imagePath) {
     // NB
     //    on Fedora linux approx. every 5-10 times when activating the form the glyphs are not
@@ -591,11 +576,6 @@ public final class about extends javax.swing.JFrame {
     jLabel9.setIcon(logo_icon);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_GPL_logo(final String imagePath) {
     new SwingWorker<ImageIcon, Object>() {
       @Override
@@ -629,11 +609,6 @@ public final class about extends javax.swing.JFrame {
     }.execute();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_GPL_logo_straight(final String imagePath) {
     // NB
     //    on Fedora linux approx. every 5-10 times when activating the form the glyphs are not
@@ -646,11 +621,6 @@ public final class about extends javax.swing.JFrame {
     jLabel10.setIcon(logo_icon);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ImageIcon createImageIcon(String path_and_file) {
     URL url = null;
 
@@ -665,11 +635,6 @@ public final class about extends javax.swing.JFrame {
     return icon_glyph;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -677,22 +642,12 @@ public final class about extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_About_SOT_link_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_Info_About_SOT_link_mouseClicked
     // TODO add your handling code here:
     link_mouse_clicked(LINK_SOT_VOS);
   } // GEN-LAST:event_Info_About_SOT_link_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_About_SOT_link_mouseEntered(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_Info_About_SOT_link_mouseEntered
     // TODO add your handling code here:
@@ -700,11 +655,6 @@ public final class about extends javax.swing.JFrame {
     link_mouse_entered();
   } // GEN-LAST:event_Info_About_SOT_link_mouseEntered
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_About_SOT_link_mouseExited(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_Info_About_SOT_link_mouseExited
     // TODO add your handling code here:
@@ -712,62 +662,32 @@ public final class about extends javax.swing.JFrame {
     link_mouse_exited();
   } // GEN-LAST:event_Info_About_SOT_link_mouseExited
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_about_GPL_link_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_Info_about_GPL_link_mouseClicked
     // TODO add your handling code here:
     link_mouse_clicked(LINK_GITLAB);
   } // GEN-LAST:event_Info_about_GPL_link_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_about_GPL_link_mouseEntered(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_Info_about_GPL_link_mouseEntered
     // TODO add your handling code here:
     link_mouse_entered();
   } // GEN-LAST:event_Info_about_GPL_link_mouseEntered
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Info_about_GPL_link_mouseExited(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_Info_about_GPL_link_mouseExited
     // TODO add your handling code here:
     link_mouse_exited();
   } // GEN-LAST:event_Info_about_GPL_link_mouseExited
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void link_mouse_entered() {
     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void link_mouse_exited() {
     setCursor(Cursor.getDefaultCursor());
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void link_mouse_clicked(String link_subject) {
 
     new SwingWorker<Integer, Void>() {

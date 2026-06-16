@@ -346,11 +346,6 @@ public final class myobsformat extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -473,11 +468,6 @@ public final class myobsformat extends javax.swing.JFrame {
     } // if (doorgaan == true)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -485,11 +475,6 @@ public final class myobsformat extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void FM13_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_FM13_itemStateChanged
     // TODO add your handling code here
@@ -507,11 +492,6 @@ public final class myobsformat extends javax.swing.JFrame {
     } // if (jRadioButton1.isSelected() == true)
   } // GEN-LAST:event_FM13_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void format_101_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_format_101_itemStateChanged
     // TODO add your handling code here:
@@ -529,11 +509,6 @@ public final class myobsformat extends javax.swing.JFrame {
     } // if (jRadioButton2.isSelected() == true)
   } // GEN-LAST:event_format_101_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void AWS_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_AWS_itemStateChanged
     // TODO add your handling code here:
@@ -551,11 +526,6 @@ public final class myobsformat extends javax.swing.JFrame {
     } // if (jRadioButton7.isSelected() == true)
   } // GEN-LAST:event_AWS_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void EUCAWS_uploads_via_turbowin_itemStateChanged(
       java.awt.event.ItemEvent
           evt) { // GEN-FIRST:event_EUCAWS_uploads_via_turbowin_itemStateChanged
@@ -568,11 +538,6 @@ public final class myobsformat extends javax.swing.JFrame {
     jCheckBox1.setEnabled(false); // add OBS_ID to SMD input
   } // GEN-LAST:event_EUCAWS_uploads_via_turbowin_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void EUCAWS_uploads_via_AWS_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_EUCAWS_uploads_via_AWS_itemStateChanged
     // TODO add your handling code here:
@@ -580,11 +545,6 @@ public final class myobsformat extends javax.swing.JFrame {
     jCheckBox1.setEnabled(true); // add OBS_ID to SMD input
   } // GEN-LAST:event_EUCAWS_uploads_via_AWS_itemStateChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // initialisation
     jRadioButton1.setSelected(false); // FM13

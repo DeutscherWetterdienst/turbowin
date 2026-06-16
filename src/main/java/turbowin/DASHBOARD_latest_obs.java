@@ -23,11 +23,6 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
     setLocation(main.x_pos_small_frame, main.y_pos_small_frame);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     Boolean doorgaan = true;
 
@@ -79,11 +74,6 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
     } //  if (doorgaan)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void set_latest_obs_values(String latest_obs) {
     // called from: initComponents2() [DASHBOARD_latest_obs.java]
 
@@ -771,11 +761,6 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:

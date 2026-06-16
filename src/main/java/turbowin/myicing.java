@@ -407,11 +407,6 @@ public final class myicing extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
     //  icing from               radio button     Is code FM13      (Is) code format 101 and AWS
     // (bufr 020033 equivalent)
@@ -553,22 +548,12 @@ public final class myicing extends javax.swing.JFrame {
     }
   } // private void initSynopparameters()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     if (main.offline_mode == true) {
       jButton3.setText("Help");
     }
   } // private void initComponents2()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Icing_Vars() {
     Is_code = "";
     EsEs_code = "";
@@ -577,11 +562,6 @@ public final class myicing extends javax.swing.JFrame {
     checks_ok = false;
   } // private void Reset_All_Icing_Vars()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -780,11 +760,6 @@ public final class myicing extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -792,11 +767,6 @@ public final class myicing extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:

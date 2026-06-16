@@ -56,18 +56,8 @@ public class OSM {
   //   return instance;
   // }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public OSM() {}
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public boolean OSM_control_center() {
     // called from: Maps_OSM() [main.java]
 
@@ -94,11 +84,6 @@ public class OSM {
     return doorgaan;
   } // public void OSM_control_center()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int check_OSM_module() {
     // called from OSM_control_center()[OSM.java]
 
@@ -133,11 +118,6 @@ public class OSM {
     return OSM_module_status;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int copy_OSM_module() {
     // called from OSM_control_center()[OSM.java]
 
@@ -677,11 +657,6 @@ public class OSM {
     return OSM_module_status;
   } // copy_OSM_module()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void OSM_IMMT_on_leaflet_map() {
     // called from: Maps_OSM() [main.java]
 
@@ -898,11 +873,6 @@ public class OSM {
     } //  if (doorgaan)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void OSM_AWS_Sensor_data_on_leaflet_map() {
     // called from: Maps_OSM() [main.java]
 
@@ -931,11 +901,6 @@ public class OSM {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OSM_display_IMMT_on_online_map(List<String> immt_list) {
     // called from: OSM_IMMT_on_leaflet_map() [OSM.java]
     //
@@ -1119,11 +1084,6 @@ public class OSM {
     } // else (Windows etc.)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OSM_IMMT_Obsen_on_Map(
       List<String> immt_list, String full_path_leaflet_maps_html_file) {
     // called from: OSM_display_IMMT_on_online_map() [OSM.java]
@@ -1644,11 +1604,6 @@ public class OSM {
     } // catch
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OSM_display_IMMT_on_offline_map(List<String> immt_list) {
     // called from: OSM_IMMT_on_leaflet_map() [OSM.java]
     //
@@ -1691,11 +1646,6 @@ public class OSM {
     } // if ((Desktop.isDesktopSupported()) && etc.
   } // private void OSM_display_IMMT_on_offline_map(List<String> immt_list)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OSM_display_AWS_Sensor_on_online_map() {
     // called from: OSM_AWS_Sensor_data_on_leaflet_map() [OSM.java]
     //
@@ -1768,11 +1718,6 @@ public class OSM {
     } // if ((Desktop.isDesktopSupported()) && etc.
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OSM_display_AWS_Sensor_on_offline_map() {
     // called from: called from: OSM_AWS_Sensor_data_on_leaflet_map() [OSM.java]
     //
@@ -1815,11 +1760,6 @@ public class OSM {
     } // if ((Desktop.isDesktopSupported()) && etc.
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OSM_AWS_Sensor_Obsen_on_Map(String full_path_leaflet_maps_html_file) {
     // called from: - OSM_display_AWS_Sensor_on_offline_map()
     //              - OSM_display_AWS_Sensor_on_online_map()

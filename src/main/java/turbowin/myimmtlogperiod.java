@@ -258,11 +258,6 @@ public class myimmtlogperiod extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     if (main.obs_stats_mode.equals(main.OBSERVERS_STATS)) {
       setTitle("statistics observers");
@@ -275,11 +270,6 @@ public class myimmtlogperiod extends javax.swing.JFrame {
     jRadioButton1.setSelected(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) // GEN-FIRST:event_OK_button_actionPerformed
       { // GEN-HEADEREND:event_OK_button_actionPerformed

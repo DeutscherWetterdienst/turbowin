@@ -17,11 +17,6 @@ import javax.swing.JPanel;
 
 public class RS232_grafiek extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                RS232_AWS_grafiek()                                          */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public RS232_grafiek() {
     // initialisation
     for (int i = 0; i < RS232_view.AANTAL_PLOT_POINTS; i++) {
@@ -39,11 +34,6 @@ public class RS232_grafiek extends JPanel {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
     super.paintComponent(g);

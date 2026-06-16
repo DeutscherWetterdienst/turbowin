@@ -715,11 +715,6 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // hide Back/Stop buttons if not in next_screen_mode
     if (main.in_next_sequence == false) {
@@ -732,11 +727,6 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1052,11 +1042,6 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     } // if (checks_ok == true)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1068,22 +1053,12 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(WAVES_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -1093,11 +1068,6 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -1107,11 +1077,6 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Two_Swell_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
     mywaves.swell_1_dir = "";
@@ -1140,11 +1105,6 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     main.waves_fields_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
     // put back earlier inserted values (but not 'confused' which could be inserted before on the
     // confused swell input page and 'no swell')
@@ -1176,22 +1136,12 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
     if (mywaves.swell_2_height.compareTo("") != 0) jTextField6.setText(mywaves.swell_2_height);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     myvisibility form = new myvisibility();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     mywaves form = new mywaves();
     form.setSize(800, 600);

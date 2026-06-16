@@ -44,11 +44,6 @@ import javax.swing.Timer;
 
 public class RS232_mintaka {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_GPS_For_Obs(
       final String mode, final boolean StarX) {
     // called from: - initSynopparameters() [myposition.java]
@@ -1248,11 +1243,6 @@ public class RS232_mintaka {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_PPPP_For_Obs(
       boolean local_tray_icon_clicked, final boolean StarX) {
     // called from: - initSynopparameters() [mybarometer.java]
@@ -1713,11 +1703,6 @@ public class RS232_mintaka {
     }.execute(); // new SwingWorker<String, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_a_ppp_Data_Files_For_Obs(
       final boolean StarX) {
     // called from: - initSynopparameters() [mybarograph.java]
@@ -1898,7 +1883,6 @@ public class RS232_mintaka {
 
                 /**** TEST BEGIN *****/
                 // computed_checksum = record_checksum;
-                /****** TEST END *********/
 
                 if (computed_checksum.equals(record_checksum)) {
                   if (StarX == false) {
@@ -2343,11 +2327,6 @@ public class RS232_mintaka {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS232_Mintaka_Star_And_StarX_Determine_Position_Earlier_For_Wind(
       String date_time_SOG_COG_end, final boolean StarX) {
 
@@ -2575,11 +2554,6 @@ public class RS232_mintaka {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS232_Mintaka_Star_And_StarX_Write_Error_Info(
       final String destination, final String error_info) {
     // called from: RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
@@ -2652,11 +2626,6 @@ public class RS232_mintaka {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR(
       final String destination, final boolean retry, final boolean StarX) {
     // called from: - class RS232_Class_Receive_Sensor_Data() [main_RS232_RS422.java]
@@ -5049,11 +5018,6 @@ public class RS232_mintaka {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static boolean RS232_Mintaka_Star_And_StarX_Check_Record_GPS(
       final String check_record, final boolean StarX) {
     // called from: RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
@@ -5149,11 +5113,6 @@ public class RS232_mintaka {
     return record_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_StarX_Read_Sensor_Data_Air_Temp_et_al_For_Obs() {
     // called from: - initSynopparameters() [mytemp.java]
 
@@ -5574,11 +5533,6 @@ public class RS232_mintaka {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*               RS232_Mintaka_Duo_Read_Sensor_Data_a_ppp_Data_Files_For_Obs                   */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_Duo_Read_Sensor_Data_a_ppp_Data_Files_For_Obs() {
     // called from: - initSynopparameters() [mybarograph.java]
 
@@ -5852,11 +5806,6 @@ public class RS232_mintaka {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                       RS232_Mintaka_Duo_Read_Sensor_Data_PPPP_For_Obs                       */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_Duo_Read_Sensor_Data_PPPP_For_Obs(
       boolean local_tray_icon_clicked) {
     // called from: - initSynopparameters() [mybarometer.java]
@@ -6144,11 +6093,6 @@ public class RS232_mintaka {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR(
       final String destination, final boolean retry) {
 

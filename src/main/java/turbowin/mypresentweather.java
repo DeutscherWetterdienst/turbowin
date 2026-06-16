@@ -15,11 +15,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     setLocation(main.x_pos_frame, main.y_pos_frame);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     jList1.setName("present_weather_list_1");
     jList2.setName("present_weather_list_2");
@@ -36,11 +31,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
 
     // no precip. present weather
@@ -702,11 +692,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -718,11 +703,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_PresentWeather_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
     ww_code = "";
@@ -739,11 +719,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     main.present_weather_fields_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -919,11 +894,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     } //   if (checks_ok == true)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void precip_valueChanged(
       javax.swing.event.ListSelectionEvent evt) { // GEN-FIRST:event_precip_valueChanged
     // TODO add your handling code here:
@@ -933,11 +903,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     general_weather_condition_selected = true;
   } // GEN-LAST:event_precip_valueChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void no_precip_valueChanged(
       javax.swing.event.ListSelectionEvent evt) { // GEN-FIRST:event_no_precip_valueChanged
     // TODO add your handling code here:
@@ -947,22 +912,12 @@ public final class mypresentweather extends javax.swing.JFrame {
     general_weather_condition_selected = true;
   } // GEN-LAST:event_no_precip_valueChanged
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(PRESENTWEATHER_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -972,11 +927,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -986,33 +936,18 @@ public final class mypresentweather extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     myvisibility form = new myvisibility();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     mypastweather form = new mypastweather();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Fill_specific_weather_listbox_from_precip() {
     // first remove all -not suitable for this obs- selections
     jList1.clearSelection(); // no precip general weather
@@ -1092,11 +1027,6 @@ public final class mypresentweather extends javax.swing.JFrame {
     } // else if (jList2.isSelectedIndex(6))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Fill_specific_weather_listbox_from_no_precip() {
     // first remove all -not suitable for this obs- selections
     jList2.clearSelection(); // precip general weather

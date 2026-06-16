@@ -918,11 +918,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // initialise
     jCheckBox1.setSelected(false); // pop-up screen
@@ -1132,11 +1127,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1529,11 +1519,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     main.set_AWSR_toolbar(); // invokes indirect also AWSR_toolbar_itemStateCanged() [main.java]
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static boolean APR_additional_requirements_checks() {
     // called from: - OK_button_actionPerformed() [WOW_APR_settings.java]
     //              - APR_toolbar_itemStateChanged [main.java]
@@ -1642,11 +1627,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     return additional_APR_requirements_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static boolean AWSR_additional_requirements_checks() {
     // called from: OK_button_actionPerformed() [WOW_APR_settings.java]
     //
@@ -1762,11 +1742,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     return additional_AWSR_requirements_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_WOW_Vars() {
     // checks_ok                           = false;
 
@@ -1777,11 +1752,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     // main.WOW_average_height_barometer   = "";
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_pop_up_screen_Vars() // private void Reset_All_pop_up_dashboard_Vars()
       {
     // pop-up screen used by APR and AWS
@@ -1790,11 +1760,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     main.pop_up_screen_interval = ""; //  main.pop_up_dashboard_interval       = "";
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_APR_Vars() {
     checks_ok = false;
 
@@ -1803,11 +1768,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     main.APTR_AWSR_send_method = "";
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_AWSR_Vars() {
     checks_ok = false;
 
@@ -1816,11 +1776,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     main.APTR_AWSR_send_method = "";
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_common_WOW_APR_AWSR_Vars() {
     checks_ok = false;
 
@@ -1828,11 +1783,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     main.barometer_instrument_correction = "";
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:

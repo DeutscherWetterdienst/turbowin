@@ -18,11 +18,6 @@ import java.awt.geom.RoundRectangle2D;
 
 public class ship {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ship() {
     color_white = Color.WHITE;
     color_black = Color.BLACK;
@@ -103,11 +98,6 @@ public class ship {
     color_cranes = new Color(255, 255, 204); // light yellow/pink
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_general_cargo_ship(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -430,11 +420,6 @@ public class ship {
     } // for (int p = 0; p < 3; p++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_tall_ship(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //
@@ -770,11 +755,6 @@ public class ship {
     } // if (category.equals(FULL_RIGGED) || category.equals(BARQUE))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_yacht(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //
@@ -1144,11 +1124,6 @@ public class ship {
     g2d.setStroke(new BasicStroke(1.0f));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_general_cargo_ship_II(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -1476,11 +1451,6 @@ public class ship {
     } // for (int p = 0; p < 4; p++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_general_cargo_ship_III(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -1891,11 +1861,6 @@ public class ship {
     } // for (int p = 0; p < 4; p++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_bulk_carrier_II(
       Graphics2D g2d,
       double wind_rose_diameter,
@@ -2331,11 +2296,6 @@ public class ship {
     } // for (int p = 0; p < 4; p++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_sailing_yacht(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //
@@ -2703,11 +2663,6 @@ public class ship {
             attachment_radius * 2));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_catamaran(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     double ship_beam = wind_rose_diameter / 10.5;
     double hull_beam = ship_beam * 0.3;
@@ -3006,11 +2961,6 @@ public class ship {
     g2d.draw(new Line2D.Double(bridgedeck_left_x + 4, net_y2, bridgedeck_right_x - 4, net_y2));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_heavy_lift_I(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -3422,11 +3372,6 @@ public class ship {
     } // for (int p = 0; p < 2; p++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_heavy_lift_II(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -3814,11 +3759,6 @@ public class ship {
      }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ship(
       Color color_white,
       Color color_black,
@@ -3955,11 +3895,6 @@ public class ship {
     this.color_cranes = color_cranes;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_neutral_ship(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //          (x,y).
@@ -4072,11 +4007,6 @@ public class ship {
     // System.out.println("y2 = "  + y2);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_research_vessel(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //          (x,y).
@@ -4559,11 +4489,6 @@ public class ship {
     g2d.draw(polygon_hoist);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_container_ship_II(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -4911,11 +4836,6 @@ public class ship {
     } // for (int i = 0; i < max_number_containers_rows; i++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_general_cargo_classic(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
@@ -5270,11 +5190,6 @@ public class ship {
     } // if (y_bridge_aft < y3)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_reefer_ship(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //          (x,y).
@@ -5458,11 +5373,6 @@ public class ship {
     } // for (int i = 0; i < MAX_HATCHES; i++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_lng_tanker_II(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -5805,11 +5715,6 @@ public class ship {
     } // if (((y4 / 2) + platform_length) < (dist_origin_bridge - bridge_height))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_fruit_juice_tanker(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
@@ -6309,11 +6214,6 @@ public class ship {
     g2d.fill(cylinder);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_crane(
       Graphics2D g2d,
       boolean night_mode,
@@ -6403,11 +6303,6 @@ public class ship {
     g2d.draw(new Line2D.Double(x1_sub, y1_sub, x2_sub, y2_sub));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_ro_ro_ship_I(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //          (x,y).
@@ -6747,11 +6642,6 @@ public class ship {
     g2d.draw(new Line2D.Double(x1_ramp, y6, x2_ramp, y5));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_ro_ro_ship_II(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, int relativeLightDir) {
     //
@@ -7042,11 +6932,6 @@ public class ship {
     g2d.draw(new Line2D.Double(x1_ramp, y6, x2_ramp, y5));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_ferry(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     //
     //          (x,y).
@@ -7433,11 +7318,6 @@ public class ship {
     g2d.draw(new Line2D.Double(x1_ramp, y6, x2_ramp, y5));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_container_ship(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     // ship_breadth (= ship width) is leading for scaling
@@ -7739,11 +7619,6 @@ public class ship {
         night_mode);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_oil_tanker(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -8041,11 +7916,6 @@ public class ship {
     g2d.setStroke(new BasicStroke(1.0f));
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_lng_tanker(
       Graphics2D g2d,
       double wind_rose_diameter,
@@ -8237,11 +8107,6 @@ public class ship {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_bulk_carrier(
       Graphics2D g2d,
       double wind_rose_diameter,
@@ -8408,11 +8273,6 @@ public class ship {
     } // for (int i = 0; i < 20; i++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_ship_bridge(
       Graphics2D g2d,
       double ship_breadth,
@@ -8512,11 +8372,6 @@ public class ship {
     g2d.draw(polygon);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_ship_bridge_II(
       Graphics2D g2d,
       double ship_beam,
@@ -8683,11 +8538,6 @@ public class ship {
     } //  if (red_orange_bridge_top)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private double draw_ship_bridge_classic(
       Graphics2D g2d,
       double ship_breadth,
@@ -8813,11 +8663,6 @@ public class ship {
     return y6_bridge;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_passenger_ship(Graphics2D g2d, double wind_rose_diameter, boolean night_mode) {
     double x_control = 0;
     double y_control = 0;
@@ -9309,11 +9154,6 @@ public class ship {
     } // for (int h = 0; h < 2; h++)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static Color tint(Color color, float factor) {
     float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
 
@@ -9337,11 +9177,6 @@ public class ship {
     return Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void draw_chemical_tanker(
       Graphics2D g2d, double wind_rose_diameter, boolean night_mode, Color deck_color) {
     //
@@ -9561,11 +9396,6 @@ public class ship {
         red_orange_bridge_top);
   } // chemical tanker
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void fill3DRectImproved(
       Graphics2D g2d,
       int x,
@@ -9638,11 +9468,6 @@ public class ship {
     g2d.setStroke(oldStroke);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static Color adjustBrightness(Color color, float factor) {
     // Adjusts color brightness by a factor (e.g. 1.2 = 20% brighter)
     int r = Math.min(255, Math.max(0, (int) (color.getRed() * factor)));

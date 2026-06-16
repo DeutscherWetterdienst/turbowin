@@ -846,11 +846,6 @@ public final class myposition extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     jTextField1.setName("lat_degree");
     jTextField2.setName("lat_minute");
@@ -992,11 +987,6 @@ public final class myposition extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Position_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
     latitude_degrees = "";
@@ -1025,22 +1015,12 @@ public final class myposition extends javax.swing.JFrame {
     main.position_fields_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(POSITION_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1060,11 +1040,6 @@ public final class myposition extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1595,11 +1570,6 @@ public final class myposition extends javax.swing.JFrame {
     } // if (checks_ok == true)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
      private void Position_In_Google_Maps(String full_path_google_maps_html_file, boolean AIS_map_also)
      {
@@ -1849,11 +1819,6 @@ public final class myposition extends javax.swing.JFrame {
      }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Position_In_leaflet_Maps(String full_path_leaflet_maps_html_file) {
     // called from: OK_button_actionPerformed() --doInBackground--- [myposition.java]
 
@@ -2066,11 +2031,6 @@ public final class myposition extends javax.swing.JFrame {
     } // catch
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
      private void Position_In_OL_Maps(String full_path_OL_maps_html_file, boolean AIS_map_also)
      {
@@ -2288,11 +2248,6 @@ public final class myposition extends javax.swing.JFrame {
      }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -2303,11 +2258,6 @@ public final class myposition extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -2318,11 +2268,6 @@ public final class myposition extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void myposition_windowClosing(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_myposition_windowClosing
     // TODO add your handling code here:
@@ -2340,22 +2285,12 @@ public final class myposition extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_myposition_windowClosing
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     mybarometer form = new mybarometer();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     myobserver form = new myobserver();
     form.setSize(800, 600);
@@ -2375,11 +2310,6 @@ public final class myposition extends javax.swing.JFrame {
         });
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
     // initialisation
     GPS_ok = true;

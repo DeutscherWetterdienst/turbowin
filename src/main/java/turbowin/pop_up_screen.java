@@ -157,11 +157,6 @@ public class pop_up_screen extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) // GEN-FIRST:event_Cancel_button_actionPerformed
       { // GEN-HEADEREND:event_Cancel_button_actionPerformed
@@ -170,11 +165,6 @@ public class pop_up_screen extends javax.swing.JFrame {
     pop_up_screen_windowClosing(null);
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void pop_up_screen_windowClosing(
       java.awt.event.WindowEvent evt) // GEN-FIRST:event_pop_up_screen_windowClosing
       { // GEN-HEADEREND:event_pop_up_screen_windowClosing
@@ -184,11 +174,6 @@ public class pop_up_screen extends javax.swing.JFrame {
     dispose(); // NB this will NOT set implicit main.pop_up_form = null
   } // GEN-LAST:event_pop_up_screen_windowClosing
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -214,11 +199,6 @@ public class pop_up_screen extends javax.swing.JFrame {
     pop_up_screen_windowClosing(null); // delete thid pop-up screen
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void pop_up_screen_windowClosed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_pop_up_screen_windowClosed
     // TODO add your handling code here:
@@ -236,11 +216,6 @@ public class pop_up_screen extends javax.swing.JFrame {
     main.pop_up_form = null;
   } // GEN-LAST:event_pop_up_screen_windowClosed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // nb could also be set in design mode but then this will be a fixed char string even if the
     // APPLICATION_NAME was changed
@@ -299,11 +274,6 @@ public class pop_up_screen extends javax.swing.JFrame {
     System.out.println("pop-up screen was opened");
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_pop_up_logo(final String imagePath) {
     new SwingWorker<ImageIcon, Object>() {
       @Override
@@ -337,11 +307,6 @@ public class pop_up_screen extends javax.swing.JFrame {
     }.execute();
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ImageIcon createImageIcon(String path_and_file) {
     URL url = null;
 

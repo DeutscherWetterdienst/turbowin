@@ -16,11 +16,6 @@ import javax.swing.JPanel;
 
 public class DASHBOARD_grafiek extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_grafiek() {
     // colors
     color_black = Color.BLACK;
@@ -44,11 +39,6 @@ public class DASHBOARD_grafiek extends JPanel {
     stroke_main_hand = new BasicStroke(1.0f);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
     // eg:
@@ -209,11 +199,6 @@ public class DASHBOARD_grafiek extends JPanel {
     draw_instrument_face_central_knob(g2d);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_instrument_face_central_knob(Graphics2D g2d) {
     // centre knob
     g2d.setColor(color_black);
@@ -227,11 +212,6 @@ public class DASHBOARD_grafiek extends JPanel {
     // correctly center it
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_instrument_face(Graphics2D g2d) {
     // eg:
     // https://www.google.nl/search?q=barometer&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJ78PZg8_UAhWEJMAKHZA3AsAQ_AUICigB&biw=1920&bih=950#imgrc=hE2asDauQrhr6M:
@@ -450,11 +430,6 @@ public class DASHBOARD_grafiek extends JPanel {
             -92, -92, 184, 184, 300, 300, Arc2D.OPEN)); // point East = 0 degrees -> to the left
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_barometer_hands(Graphics2D g2d) {
 
     //
@@ -679,11 +654,6 @@ public class DASHBOARD_grafiek extends JPanel {
     } // if (reading > 900.0 && reading < 1100.0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void setAllRenderingHints(Graphics2D g2d) {
     g2d.setRenderingHint(
         RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

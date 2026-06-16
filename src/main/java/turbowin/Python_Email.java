@@ -16,18 +16,8 @@ import javax.swing.JOptionPane;
 
 public class Python_Email {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public Python_Email() {}
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static Map<String, String> parseOsRelease() {
     File osReleaseFile = new File("/etc/os-release");
     Map<String, String> osInfo = new HashMap<>();
@@ -54,11 +44,6 @@ public class Python_Email {
     return null;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static boolean isDebianBased() // NB = also Ubuntu based
       {
     // Updated Debian-based check: combines modern and legacy methods
@@ -81,11 +66,6 @@ public class Python_Email {
     return new File("/etc/debian_version").exists();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static boolean isRedHatBased() {
     // Combined check for Red Hat-based systems (legacy and modern)
 
@@ -106,11 +86,6 @@ public class Python_Email {
     return new File("/etc/redhat-release").exists();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public boolean python_email_control_center() {
     // called from: Output_obs_by_email_Localhost_Gmail_Yahoo_FM13() [main.java]
 
@@ -159,11 +134,6 @@ public class Python_Email {
     return doorgaan;
   } //  public boolean python_email_control_center()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int check_python_email_module() {
     // called from python_email_control_center()[Python_Email.java]
 
@@ -201,11 +171,6 @@ public class Python_Email {
     return python_email_module_status;
   } // private int check_python_email_module()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int copy_python_email_module() {
     // called from python_email_control_center()[Python_Email.java]
 
@@ -321,11 +286,6 @@ public class Python_Email {
     return python_email_module_status;
   } // private int copy_python_email_module()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public int send_python_email(
       final String smtp_mode,
       final String smtp_host_local,
@@ -468,11 +428,6 @@ public class Python_Email {
     return exitStatus;
   } // public int send_python_email()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public final String python_email_exe_return_status_to_text(int exit_status) {
     String exit_status_text = null;
 

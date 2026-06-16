@@ -43,11 +43,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void save_ship_dashboard_selection() {
     // write meta data to configuration file
     // main.ship_deck_color_String = Integer.toString(deck_color.getRGB());   // save color as
@@ -71,11 +66,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents1() {
     // this dashboard could be set to automatically (by the system) opening
     if (isAlwaysOnTopSupported() && (main.dashboard_was_automatically_opened == true)) {
@@ -2981,11 +2971,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     jPanel1.repaint();
   } // private void initComponents1()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void choose_dashboard_image() {
     boolean doorgaan = true;
     String info = "please select first day colours and then try again";
@@ -3020,11 +3005,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     } // if (doorgaan == true)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void init_dashboard_AWS_radar_timer() {
     // updating/displaying received AWS sensor data (not from file), timer scheduled
     //
@@ -3050,11 +3030,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     dashboard_update_timer_AWS_radar_is_gecreeerd = true;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_view_AWS_radar() {
     initComponents();
     initComponents1();
@@ -3256,11 +3231,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_view_radar_componentResizedHandler(
       java.awt.event.ComponentEvent
           evt) { // GEN-FIRST:event_DASHBOARD_view_radar_componentResizedHandler
@@ -3275,11 +3245,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_DASHBOARD_view_radar_componentResizedHandler
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void make_obs_actionPerformed(
       java.awt.event.ActionEvent evt) // GEN-FIRST:event_make_obs_actionPerformed
       { // GEN-HEADEREND:event_make_obs_actionPerformed
@@ -3303,11 +3268,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     } // if (main.mainClass != null)
   } // GEN-LAST:event_make_obs_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_AWS_radar_windowDeiconified(
       java.awt.event.WindowEvent evt) // GEN-FIRST:event_Dashboard_AWS_radar_windowDeiconified
       { // GEN-HEADEREND:event_Dashboard_AWS_radar_windowDeiconified
@@ -3317,11 +3277,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_Dashboard_AWS_radar_windowDeiconified
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_view_AWS_radar_windowClosed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_Dashboard_view_AWS_radar_windowClosed
     // TODO add your handling code here:
@@ -3340,11 +3295,6 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
         false; // reset; related to AlwaysOnTop yes/no [DASHBOARD_view_AWS_radar.java]
   } // GEN-LAST:event_Dashboard_view_AWS_radar_windowClosed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_view_AWS_radar_windowClosing(
       java.awt.event.WindowEvent evt) // GEN-FIRST:event_Dashboard_view_AWS_radar_windowClosing
       { // GEN-HEADEREND:event_Dashboard_view_AWS_radar_windowClosing

@@ -59,11 +59,6 @@ import javax.swing.Timer;
 
 public class main_RS232_RS422 {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS422_Check_Default_Serial_Port() {
     // called from: RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
     //
@@ -151,11 +146,6 @@ public class main_RS232_RS422 {
     */
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS422_Check_Serial_Ports(int completed_checks_serial_ports) {
     // called from - main_RS232_RS422.RS422_initComponents() [main_RS232_RS422.java]
     //             - RS422_init_new_aws_data_received_check_timer() [main_RS232_RS422.java]
@@ -621,11 +611,6 @@ public class main_RS232_RS422 {
     } // else (fixed COM port selected)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_GPS_NMEA_0183_Check_Default_Serial_Port() {
     // called from: RS232_GPS_NMEA_0183_init_new_data_received_check_timer() [main_RS232_RS422.java]
     //
@@ -662,11 +647,6 @@ public class main_RS232_RS422 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Check_Default_Serial_Port_II() {
     String info = "";
 
@@ -701,11 +681,6 @@ public class main_RS232_RS422 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Check_Default_Serial_Port() {
     // called from: RS232_And_WiFi_init_new_sensor_data_received_check_timer()
     // [main_RS232_RS422.java]
@@ -907,11 +882,6 @@ public class main_RS232_RS422 {
     */
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports) {
     // called from: main_RS232_RS424.RS232_initComponents()
     //
@@ -1445,11 +1415,6 @@ public class main_RS232_RS422 {
     } // else (fixed COM port selected)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Check_Serial_Ports_8_II(int completed_checks_serial_ports_II) {
     // called from: main_RS232_RS424.RS232_initComponents_II()
     //
@@ -1880,18 +1845,8 @@ public class main_RS232_RS422 {
     } // else (fixed COM port selected)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public main_RS232_RS422() {}
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Delete_Sensor_Data_Files_II() {
     // NB file name e.g. sensor_data_II_2019080301.txt  (for the second meteo sensor eg thermometer,
     // never for an AWS)
@@ -1933,11 +1888,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Delete_Sensor_Data_Files() {
     // NB file name e.g. sensor_data_2019080301.txt (note there is also
     // sensor_data_II_2019080301.txt)
@@ -2031,11 +1981,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_write_sensor_data_to_file_II() {
     // called from: class RS232_Class_Receive_Sensor_Data_II() [main_RS232_RS422.java]
     //
@@ -2106,11 +2051,6 @@ public class main_RS232_RS422 {
     } // if (doorgaan)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_write_sensor_data_to_file() {
     // called from: class RS232_Class_Receive_Sensor_Data() [main_RS232_RS422.java]
     //              class WiFi_Class_Receive_UDP() [main_RS232_RS422.java]
@@ -2197,11 +2137,6 @@ public class main_RS232_RS422 {
     // } // if (total_string_ok)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_read_dasboard_values() {
     // called from: init_dasboard_timer() [DASHBOARD_view.java]
 
@@ -2310,11 +2245,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS232_compute_dasboard_values(
       final String date_time_last_update, final String last_update_record) {
     // called from: RS232_read_dasboard_values() [main_RS232_RS422.java]
@@ -2624,11 +2554,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // private static String Mintaka_Star_Checksum(String record
   public static String Mintaka_Star_Checksum(String record) {
     // called from: - RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_GPS_For_Obs()
@@ -2671,11 +2596,6 @@ public class main_RS232_RS422 {
     return computed_checksum = computed_checksum.toUpperCase();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS422_write_sensor_data_to_file() {
     ///// EUCAWS ONLY //////
 
@@ -2796,12 +2716,6 @@ public class main_RS232_RS422 {
       }
     } // if (doorgaan)
   }
-
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
 
   public void RS422_V3_write_sensor_data_to_file() {
     ///// EUCAWS serial and OMC-140 serial and OMC-140 LAN  //////
@@ -3084,11 +2998,6 @@ public class main_RS232_RS422 {
     } // if (peumb_update)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Format_Thermometer_Output() {
     SerialPort serialPort_form = null;
     String hulp_parity = ""; // only for message writing in java console
@@ -3225,11 +3134,6 @@ public class main_RS232_RS422 {
     } // if (main.defaultPort_II != null)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_Format_Barometer_Output_3() {
 
     // NB Indien Vaisala barometer in POLL mode dan moeilijk deze hier uit te halen (zie manual
@@ -3474,11 +3378,6 @@ public class main_RS232_RS422 {
     } // if (defaultPort != null)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS422_init_new_aws_data_received_check_timer() {
     /////// NB AWS (EUCAWS and OMC-140) only (not for APR ////////
     //
@@ -3814,11 +3713,6 @@ public class main_RS232_RS422 {
     check_new_data_timer.start();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS422_initComponents() {
     /////// NB EUCAWS serial or OMC-140 serial only ////////
     //
@@ -3910,11 +3804,6 @@ public class main_RS232_RS422 {
     } // if (main.defaultPort != null)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private class RS422_Class_Receive_Sensor_Data extends SwingWorker<String, String>
   {
@@ -4083,11 +3972,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private class RS422_V2_Class_Receive_Sensor_Data extends SwingWorker<String, String>
   {
@@ -4260,11 +4144,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private class RS422_V3_Class_Receive_Sensor_Data extends SwingWorker<String, String> {
     /////////////////// AWS serial only /////////////////
     //
@@ -4438,11 +4317,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   public void RS422_initComponents()
   {
@@ -4674,11 +4548,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_GPS_NMEA_0183_Check_Serial_Ports(int completed_checks_serial_ports) {
     int teller = -1;
     // String[] serial_ports_portid_array                = new String[main.NUMBER_COM_PORTS];
@@ -4968,11 +4837,6 @@ public class main_RS232_RS422 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static boolean RS232_GPS_NMEA_0183_Date_Position_Parsing(String mode) {
     // mode options: - MINUTE_UPDATE
     //               - "APR"
@@ -5603,11 +5467,6 @@ public class main_RS232_RS422 {
     return GPS_date_time_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static double[] RS232_GPS_NMEA_0183_Array_Retrieval(String mode_retrieval) {
     // private void RS232_compute_APR_COG_SOG(double double_lat_start, double double_lon_start,
     // double double_lat_end, double double_lon_end)
@@ -5682,11 +5541,6 @@ public class main_RS232_RS422 {
     return new double[] {double_lat_start, double_lon_start, double_lat_end, double_lon_end};
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS232_GPS_NMEA_0183_Array_Store(
       final double store_fix_lat, final double store_fix_lon, final long store_fix_date_minutes) {
     // called from: RS232_GPS_NMEA_0183_Date_Position_Parsing() [main_RS232_RS422.java]
@@ -5766,11 +5620,6 @@ public class main_RS232_RS422 {
     } // if ( (store_fix_lat < (Double.MAX_VALUE - 1)) etc.
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_GPS_NMEA_0183_GGA(String ontvangen_GPS_string) {
     // called from: RS232_GPS_Class_Receive_Data
 
@@ -5955,11 +5804,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private String RS232_GPS_NMEA_Checksum(String ontvangen_GPS_string) {
     // called from: - RS232_GPS_NMEA_0183_RMC()
     //              - RS232_GPS_NMEA_0183_GGA()
@@ -5987,11 +5831,6 @@ public class main_RS232_RS422 {
     return computed_checksum = computed_checksum.toUpperCase();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_GPS_NMEA_0183_storage_device_log(String ontvangen_GPS_string) {
     // memory storage only for the device log
     //
@@ -6062,11 +5901,6 @@ public class main_RS232_RS422 {
     GPS_array_device_log[0] = ontvangen_GPS_string + timestamp;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_GPS_NMEA_0183_RMC(String ontvangen_GPS_string) {
     // called from: RS232_GPS_Class_Receive_Data
 
@@ -6267,11 +6101,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_GPS_NMEA_0183_initComponents() {
     // called from: - specific_connection_initComponents()
 
@@ -6319,11 +6148,6 @@ public class main_RS232_RS422 {
     } // if (GPS_defaultPort != null)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private class RS232_GPS_Class_Receive_Data extends SwingWorker<String, String> {
     // called from: - RS232_GPS_NMEA_0183_initComponents()
     //              - RS232_GPS_NMEA_0183_init_new_data_received_check_timer()
@@ -6494,11 +6318,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /* NB DEZE WERKT OOK GOED !!! [hier wordt niet alles in de achtergroond afgehandeld)
   private class RS232_GPS_Class_Receive_Data_2 extends SwingWorker<String, String>
   {
@@ -6679,11 +6498,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   public void RS232_GPS_NMEA_0183_initComponents()
   {
@@ -6883,11 +6697,6 @@ public class main_RS232_RS422 {
   } // public void RS232_GPS_initComponents()
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void WiFi_Check_Connection_b()
   {
@@ -6933,11 +6742,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void WiFi_Check_Connection_UDP_c()
   {
@@ -6947,11 +6751,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void WiFi_Check_Connection_UDP_b()
   {
@@ -7003,11 +6802,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private class WiFi_Class_Receive_UDP extends SwingWorker<String, String> {
     // called from: WiFi_initComponents() [main_RS232_RS422.java]
     //
@@ -7558,11 +7352,6 @@ public class main_RS232_RS422 {
     } // protected void done()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private class Ethernet_Class_Receive_UDP extends SwingWorker<Void, String> {
     // AWS ethernet (LAN) only
     //
@@ -7687,11 +7476,6 @@ public class main_RS232_RS422 {
     protected void done() {} // protected void done()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void WiFi_Receive_UDP()
   {
@@ -7985,11 +7769,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void WiFi_Check_Connection_UDP()
   {
@@ -8095,11 +7874,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void WiFi_Check_Connection()
   {
@@ -8252,11 +8026,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_GPS_NMEA_0183_init_new_data_received_check_timer() {
     // called from: RS232_GPS_NMEA_0183_initComponents() [main_RS232_RS422.java]
 
@@ -8401,11 +8170,6 @@ public class main_RS232_RS422 {
     check_new_GPS_data_timer.start();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_And_WiFi_init_new_sensor_data_received_check_timer_II() {
     /////// for serial link/USB and WiFi connected thermometer  ///////
 
@@ -8586,11 +8350,6 @@ public class main_RS232_RS422 {
     check_new_data_timer_II.start();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_And_WiFi_init_new_sensor_data_received_check_timer() {
     /////// for serial link and WiFi connected barometers (NB not EUCAWS) ////////
 
@@ -9065,11 +8824,6 @@ public class main_RS232_RS422 {
     check_new_data_timer.start();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Activate_Pop_Up_Screen_APR_AWS() {
     // called from: RS232_And_WiFi_init_new_sensor_data_received_check_timer()
     // [main_RS232_RS422.java]
@@ -9135,11 +8889,6 @@ public class main_RS232_RS422 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void WiFi_initComponents() {
     // called from specific_connection_initComponents() [main.java]
 
@@ -9198,11 +8947,6 @@ public class main_RS232_RS422 {
     RS232_And_WiFi_init_new_sensor_data_received_check_timer();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void Ethernet_initComponents() {
     // called from specific_connection_initComponents() [main.java]
 
@@ -9251,11 +8995,6 @@ public class main_RS232_RS422 {
     RS422_init_new_aws_data_received_check_timer();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private class RS232_Class_Receive_Sensor_Data_II extends SwingWorker<String, String> {
     boolean retry = false;
 
@@ -9612,11 +9351,6 @@ public class main_RS232_RS422 {
     } // protected void process(List<String> data)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private class RS232_Class_Receive_Sensor_Data extends SwingWorker<String, String> {
     // called from RS232_initComponents()
 
@@ -10100,11 +9834,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_initComponents() {
     // called from specific_connection_initComponents() [main.java] which is called from
     // read_muffin() [main.java] or lees_configuratie_regels() [main.java]
@@ -10238,11 +9967,6 @@ public class main_RS232_RS422 {
     } // if (main.defaultPort != null)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void RS232_initComponents_II() {
     // called from specific_connection_initComponents() [main.java] which is called from
     // read_muffin() [main.java] or lees_configuratie_regels() [main.java]
@@ -10330,11 +10054,6 @@ public class main_RS232_RS422 {
     } // if (main.defaultPort != null)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
      public void RS232_initComponents()
      {
@@ -10796,11 +10515,6 @@ public class main_RS232_RS422 {
      } // private void initComponents2()
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean RS422_check_AWSR_settings() {
     // called from: RS422_V3_write_sensor_data_to_file() [main.java]
     //
@@ -10938,11 +10652,6 @@ public class main_RS232_RS422 {
     return message.equals("");
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean RS232_check_APR_settings(final boolean only_2nd_instrument) {
     // called from: - class RS232_Class_Receive_Sensor_Data()
     //              - class WiFi_Class_Receive_UDP()
@@ -11095,11 +10804,6 @@ public class main_RS232_RS422 {
     return message.equals("");
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean RS232_check_WOW_settings() {
     String message = "";
 
@@ -11162,11 +10866,6 @@ public class main_RS232_RS422 {
     return message.equals("");
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void RS232_Vaisala_Extract_Sensor_Data_For_Main_Screen_APR(final String laatste_record)
   {
@@ -11296,11 +10995,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_APR_AWSR_send(final boolean retry) {
     // called from: - RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
     //              - RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR()
@@ -11361,11 +11055,6 @@ public class main_RS232_RS422 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // private void RS232_compute_APR_COG_SOG_wind(double double_lat_start, double double_lon_start,
   // double double_lat_end, double double_lon_end)
   public static void RS232_compute_APR_COG_SOG_wind(
@@ -11427,11 +11116,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_compute_APR_COG_SOG(
       double double_lat_start,
       double double_lon_start,
@@ -11610,11 +11294,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS232_Send_Sensor_Data_to_APR_FM13_Server(final boolean retry) {
     // NB see also: Output_obs_to_server_FM13() [main.java] and
 
@@ -11829,11 +11508,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_make_pressure_APR_FM13_IMMT_ready() {
     // NB also for making IMMT ready
 
@@ -11869,11 +11543,6 @@ public class main_RS232_RS422 {
     } // if (mybarometer.pressure_msl_corrected.compareTo("") != 0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_make_pressure_ppp_APR_FM13_IMMT_ready() {
     // called from: - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
 
@@ -11921,11 +11590,6 @@ public class main_RS232_RS422 {
     } // if (doorgaan)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_make_pressure_a_APR_FM13_IMMT_ready() {
     // called from: - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
 
@@ -11936,11 +11600,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_make_RH_APR_FM13_IMMT_ready() {
     // called from - RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
     //             -
@@ -11960,11 +11619,6 @@ public class main_RS232_RS422 {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_make_air_temp_APR_FM13_IMMT_ready() {
     // NB also for making IMMT ready
 
@@ -12000,11 +11654,6 @@ public class main_RS232_RS422 {
     } // if (mytemp.air_temp.compareTo("") != 0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_make_wet_bulb_temp_APR_FM13_IMMT_ready() {
     // NB also for making IMMT ready
 
@@ -12045,11 +11694,6 @@ public class main_RS232_RS422 {
     } // if (mytemp.wet_bulb_temp.compareTo("") != 0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_make_dew_point_APR_FM13_IMMT_ready() {
     // NB also for making IMMT ready
 
@@ -12079,11 +11723,6 @@ public class main_RS232_RS422 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS232_Output_obs_by_email_all_APR() {
     // called from: - RS232_APR_AWSR_send()
 
@@ -12218,11 +11857,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void RS232_Send_Sensor_Data_to_APR_OLD(String sensor_data_record_APR_pressure_MSL_hpa, double hulp_double_APR_pressure_reading, final boolean retry)
   {
@@ -12462,11 +12096,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private static void RS232_Send_Sensor_Data_to_APR_format101_Server(final boolean retry)
   {
@@ -12685,11 +12314,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS232_Send_Sensor_Data_to_APR_format101_Server_V2(final boolean retry) {
     // NB see also: Output_obs_to_server_FM13() [main.java]
 
@@ -13051,11 +12675,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker<String, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
 
   public static void RS232_make_APR_IMMT_ready()
@@ -13159,11 +12778,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static double RS232_WOW_APR_compute_air_pressure_height_correction(
       double double_pressure_reading) {
     // NB this function is used for height air pressure conversion from station level to mean sea
@@ -13296,11 +12910,6 @@ public class main_RS232_RS422 {
     return height_correction_pressure;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static double check_at_Great_Lakes() {
     double north_limit_great_lakes = 49;
     double south_limit_great_lakes = 41;
@@ -13446,11 +13055,6 @@ public class main_RS232_RS422 {
     return extra_great_lakes_pressure_height_correction;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   public static void RS232_Send_Sensor_Data_to_WOW(String sensor_data_record_WOW_pressure_MSL_inhg)
   {
@@ -13546,11 +13150,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void set_datetime_while_collecting_sensor_data() {
     // called from: class RS232_Class_Receive_Sensor_Data [file main_RS232_RS422.java]
     //              class Ethernet_Class_Receive_UDP [file main_RS232_RS422.java]
@@ -13670,11 +13269,6 @@ public class main_RS232_RS422 {
     } // if (system_minute_local % 5 == 0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS422_initialise_AWS_Sensor_Data_For_Display() {
     // initialisation
     main.date_from_AWS_present = false;
@@ -13772,11 +13366,6 @@ public class main_RS232_RS422 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS422_Read_AWS_Sensor_Data_For_Display() {
     // check the presence of the various meteo parameters in the data received from AWS (data stored
     // by TurboWin+ in sensor data files)
@@ -14785,11 +14374,6 @@ public class main_RS232_RS422 {
     } // if (system_minute % 1 == 0)
   } // private void RS422_Read_AWS_Sensor_Data_For_Display()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private static void RS422_initialise_AWS_Sensor_Data_For_AWSR() {
     // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
 
@@ -14855,11 +14439,6 @@ public class main_RS232_RS422 {
     mywind.hh_code = "";
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean RS422_Check_Date_Time_Last_Saved_Record_For_AWSR(
       final String record_aws_date, final String record_aws_time) {
     // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
@@ -14923,11 +14502,6 @@ public class main_RS232_RS422 {
     return record_date_time_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void RS422_Send_Sensor_Data_To_AWSR(final boolean retry)
   {
@@ -15130,11 +14704,6 @@ public class main_RS232_RS422 {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean RS422_Set_Date_Time_Obs_And_IMMT_For_AWSR(
       String record_aws_date, String record_aws_time) {
     // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
@@ -15231,11 +14800,6 @@ public class main_RS232_RS422 {
     return record_date_time_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS422_Read_And_Send_Sensor_Data_For_AWSR(final boolean retry) {
     // check the presence of the various meteo parameters in the data received from an AWS (data
     // stored by TurboWin+ in sensor data files)
@@ -16577,11 +16141,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker <Void, Void>()
   } // private void RS422_Read_And_Send_Sensor_Data_For_AWSR(final boolean retry)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS422_update_AWS_dasboard_values() {
     // called from: RS422_Read_AWS_Sensor_Data_For_Display() [main_RS232_RS422.java]
 
@@ -16968,11 +16527,6 @@ public class main_RS232_RS422 {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private double RS422_convert_wind_speed_to_10m(double wind_speed_at_anemometer_height) {
     // double num_hoogte_anemometer_ship;
     // char* endptr;

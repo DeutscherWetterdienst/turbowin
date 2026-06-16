@@ -64,11 +64,6 @@ public class mydevice_log extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private String connected_devices_in_plain_language() {
     String connected_devices = null;
 
@@ -128,11 +123,6 @@ public class mydevice_log extends javax.swing.JFrame {
     return connected_devices;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private String log_separator() {
     String log_separator =
         "\n====================================================================================================================================\n";
@@ -140,11 +130,6 @@ public class mydevice_log extends javax.swing.JFrame {
     return log_separator;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     final String newline = System.getProperty("line.separator");
 

@@ -632,11 +632,6 @@ public final class mycm extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     // hide Back/Stop buttons if not in next_screen_mode
     if (main.in_next_sequence == false) {
@@ -650,11 +645,6 @@ public final class mycm extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ImageIcon createImageIcon(String path_and_file) {
     URL url = null;
 
@@ -669,11 +659,6 @@ public final class mycm extends javax.swing.JFrame {
     return icon_glyph;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initImages() {
     String os = OSDetector.getOSString();
 
@@ -711,11 +696,6 @@ public final class mycm extends javax.swing.JFrame {
     }
   } // protected void initImages()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // The doInBackground method, which creates the image icon for the photograph, is invoked by the
   // background thread.
   // After the image icon is fully loaded, the done method is invoked on the event-dispatching
@@ -791,11 +771,6 @@ public final class mycm extends javax.swing.JFrame {
     }.execute();
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void loadImage_straight(final String imagePath) {
     if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cm_1.jpg")) {
       ImageIcon img_cm1 = createImageIcon(imagePath);
@@ -833,11 +808,6 @@ public final class mycm extends javax.swing.JFrame {
     }
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
 
     if (cm_code.compareTo("") != 0) {
@@ -859,22 +829,12 @@ public final class mycm extends javax.swing.JFrame {
     else jRadioButton11.setSelected(true); // not determined
   } // private void initSynopparameters()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(CM_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -887,11 +847,6 @@ public final class mycm extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -924,132 +879,72 @@ public final class mycm extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm1_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm1_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM1_HELP_DIR);
   } // GEN-LAST:event_cm1_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm2_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm2_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM2_HELP_DIR);
   } // GEN-LAST:event_cm2_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm3_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm3_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM3_HELP_DIR);
   } // GEN-LAST:event_cm3_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm4_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm4_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM4_HELP_DIR);
   } // GEN-LAST:event_cm4_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm5_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm5_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM5_HELP_DIR);
   } // GEN-LAST:event_cm5_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm6_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm6_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM6_HELP_DIR);
   } // GEN-LAST:event_cm6_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm7a_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm7a_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM7_HELP_DIR);
   } // GEN-LAST:event_cm7a_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm7b_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm7b_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM7_HELP_DIR);
   } // GEN-LAST:event_cm7b_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm7c_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm7c_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM7_HELP_DIR);
   } // GEN-LAST:event_cm7c_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm8_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm8_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM8_HELP_DIR);
   } // GEN-LAST:event_cm8_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void cm9_image_mouseClicked(
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_cm9_image_mouseClicked
     // TODO add your handling code here:
     main.help_mouseClicked(CM9_HELP_DIR);
   } // GEN-LAST:event_cm9_image_mouseClicked
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -1059,11 +954,6 @@ public final class mycm extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -1073,22 +963,12 @@ public final class mycm extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     mycl form = new mycl();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     mych form = new mych();
     form.setSize(800, 600);

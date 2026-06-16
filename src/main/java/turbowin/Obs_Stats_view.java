@@ -182,11 +182,6 @@ public class Obs_Stats_view extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents1() {
     // title
     if (main.obs_stats_mode.equals(main.OBSERVERS_STATS)) {
@@ -254,11 +249,6 @@ public class Obs_Stats_view extends javax.swing.JFrame {
     addMouseListener(popupListener);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void prepare_immt_log() {
     Boolean doorgaan = true;
 
@@ -470,11 +460,6 @@ public class Obs_Stats_view extends javax.swing.JFrame {
     } // if doorgaan
   } // private void initComponents1()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean check_record_log_period(String record) {
     boolean date_log_period_ok = true;
     boolean continue_checking = true;

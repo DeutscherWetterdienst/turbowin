@@ -34,11 +34,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents1() {
     /* background color main panel (set by main menu theme option) */
     if (main.theme_mode.equals(main.THEME_NIMBUS_NIGHT)) {
@@ -1103,11 +1098,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASHBOARD_AWS_hybrid_componentResizedHandler(
       java.awt.event.ComponentEvent
           evt) { // GEN-FIRST:event_DASHBOARD_AWS_hybrid_componentResizedHandler
@@ -1121,11 +1111,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_DASHBOARD_AWS_hybrid_componentResizedHandler
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void make_obs_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_make_obs_actionPerformed
     // TODO add your handling code here:
@@ -1143,11 +1128,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
     } // if (main.mainClass != null)
   } // GEN-LAST:event_make_obs_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_view_AWS_hybrid_windowDeiconified(
       java.awt.event.WindowEvent
           evt) { // GEN-FIRST:event_Dashboard_view_AWS_hybrid_windowDeiconified
@@ -1157,11 +1137,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_Dashboard_view_AWS_hybrid_windowDeiconified
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_view_AWS_hybrid_windowClosed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_Dashboard_view_AWS_hybrid_windowClosed
     // TODO add your handling code here:
@@ -1177,11 +1152,6 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
     dashboard_update_timer_AWS_hybrid_is_gecreeerd = false;
   } // GEN-LAST:event_Dashboard_view_AWS_hybrid_windowClosed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void init_dasboard_AWS_hybrid_timer() {
     // updating/displaying received AWS sensor data (not from file), timer scheduled
     //

@@ -222,11 +222,6 @@ public class DASHBOARD_view_AWS extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_view_AWS_windowClosed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_Dashboard_view_AWS_windowClosed
     // TODO add your handling code here:
@@ -241,11 +236,6 @@ public class DASHBOARD_view_AWS extends javax.swing.JFrame {
     dashboard_update_AWS_timer_is_gecreeerd = false;
   } // GEN-LAST:event_Dashboard_view_AWS_windowClosed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_AWS_componentResizedHandler(
       java.awt.event.ComponentEvent evt) { // GEN-FIRST:event_Dashboard_AWS_componentResizedHandler
     // TODO add your handling code here:
@@ -258,11 +248,6 @@ public class DASHBOARD_view_AWS extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_Dashboard_AWS_componentResizedHandler
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void make_observation_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_make_observation_actionPerformed
     // TODO add your handling code here:
@@ -281,11 +266,6 @@ public class DASHBOARD_view_AWS extends javax.swing.JFrame {
     } // if (main.mainClass != null)
   } // GEN-LAST:event_make_observation_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_view_AWS_windowDeiconified(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_Dashboard_view_AWS_windowDeiconified
     // TODO add your handling code here:
@@ -294,11 +274,6 @@ public class DASHBOARD_view_AWS extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_Dashboard_view_AWS_windowDeiconified
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents1() {
     /* background color main panel (set by main menu theme option) */
     if (main.theme_mode.equals(main.THEME_NIMBUS_NIGHT)) {
@@ -377,11 +352,6 @@ public class DASHBOARD_view_AWS extends javax.swing.JFrame {
     jPanel1.repaint();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void init_dasboard_AWS_timer() {
     // updating/displaying received AWS sensor data (not from file), timer scheduled
     //

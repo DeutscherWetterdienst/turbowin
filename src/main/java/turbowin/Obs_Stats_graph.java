@@ -14,18 +14,8 @@ import javax.swing.JPanel;
 
 public class Obs_Stats_graph extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public Obs_Stats_graph() {}
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
 
@@ -216,11 +206,6 @@ public class Obs_Stats_graph extends JPanel {
     } // if (Obs_Stats_view.immt_log_ok)
   } // public void paintComponent(Graphics g)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_Observations_Bars(
       final Graphics2D g2d,
       Point2D left_below_graph,
@@ -551,11 +536,6 @@ public class Obs_Stats_graph extends JPanel {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_Observers_Bars(
       final Graphics2D g2d,
       Point2D left_below_graph,
@@ -765,11 +745,6 @@ public class Obs_Stats_graph extends JPanel {
     }
   } // private void draw_Obs_Bars(final Graphics g)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void write_period_log_line(
       final String log_line_1,
       final String log_line_last,
@@ -850,11 +825,6 @@ public class Obs_Stats_graph extends JPanel {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private String convert_month(final String month) {
     // convert month (from -String-numbers e.g. "01") to month_let (month in 3 characters e.g.
     // "Jan")

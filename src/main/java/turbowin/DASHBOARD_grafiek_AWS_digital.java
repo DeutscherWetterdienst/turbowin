@@ -20,11 +20,6 @@ import javax.swing.JPanel;
 
 public class DASHBOARD_grafiek_AWS_digital extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_grafiek_AWS_digital() {
     color_black = Color.BLACK;
     color_gray = Color.GRAY;
@@ -44,11 +39,6 @@ public class DASHBOARD_grafiek_AWS_digital extends JPanel {
         "--- Screen resolution AWS Dashboard digital: " + width_screen + " x " + height_screen);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
     // eg:
@@ -495,11 +485,6 @@ public class DASHBOARD_grafiek_AWS_digital extends JPanel {
     } // else (no VOT_from_aws_present )
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_digital_instrument(
       Graphics2D g2d,
       double low_limit,
@@ -613,11 +598,6 @@ public class DASHBOARD_grafiek_AWS_digital extends JPanel {
     } // if (main.air_temp_from_AWS_present)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void setAllRenderingHints(Graphics2D g2d) {
     g2d.setRenderingHint(
         RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

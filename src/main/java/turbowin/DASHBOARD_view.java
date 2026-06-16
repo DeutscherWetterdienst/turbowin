@@ -232,11 +232,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents1() {
     /* background color main panel (set by main menu theme option) */
     if (main.theme_mode.equals(main.THEME_NIMBUS_NIGHT)) {
@@ -366,11 +361,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
     jPanel1.repaint(); // main panel
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void choose_dashboard_image_barometer() {
     boolean doorgaan = true;
     String info = "please select first day colours and then try again";
@@ -405,11 +395,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
     } // if (doorgaan == true)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void DASBOARD_view_windowClosed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_DASBOARD_view_windowClosed
     // TODO add your handling code here:
@@ -425,11 +410,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
     dashboard_update_timer_is_gecreeerd = false;
   } // GEN-LAST:event_DASBOARD_view_windowClosed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_componentResizedHandler(
       java.awt.event.ComponentEvent evt) { // GEN-FIRST:event_Dashboard_componentResizedHandler
     // TODO add your handling code here:
@@ -441,11 +421,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_Dashboard_componentResizedHandler
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Dashboard_view_windowDeiconified(
       java.awt.event.WindowEvent evt) // GEN-FIRST:event_Dashboard_view_windowDeiconified
       { // GEN-HEADEREND:event_Dashboard_view_windowDeiconified
@@ -455,11 +430,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
     jPanel1.repaint();
   } // GEN-LAST:event_Dashboard_view_windowDeiconified
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void init_dasboard_timer() {
     // updating/displaying received sensor data (not from file), timer scheduled
     //

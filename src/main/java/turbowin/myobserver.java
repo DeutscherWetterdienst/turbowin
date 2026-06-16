@@ -328,11 +328,6 @@ public final class myobserver extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
 
     if (main.offline_mode == true) {
@@ -435,11 +430,6 @@ public final class myobserver extends javax.swing.JFrame {
     lees_observer_log_en_vul_table();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void stopCellEditing() {
     TableCellEditor editor = jTable1.getCellEditor();
     if (editor != null) {
@@ -447,11 +437,6 @@ public final class myobserver extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -615,11 +600,6 @@ public final class myobserver extends javax.swing.JFrame {
     } // else (NOT obs_id)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean compute_OBS_IDs() {
     boolean checks_ok = true;
 
@@ -726,11 +706,6 @@ public final class myobserver extends javax.swing.JFrame {
     return checks_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private String compute_alternative_OBS_ID(StringBuilder obs_id_raw) {
     String obs_id_raw_alternative = "";
     int MAX_DIGIT = 9;
@@ -788,11 +763,6 @@ public final class myobserver extends javax.swing.JFrame {
     // coulnot be performed becuse > 9 options
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean check_data_observer_log() {
     // check 'full initials' [1], must be present (if surname is not present the record will be
     // never saved (same result as the complete record is deleted)
@@ -832,11 +802,6 @@ public final class myobserver extends javax.swing.JFrame {
     return true;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void clear_observer_data_array() {
     for (int r = 0; r < OBSERVER_ROWS; r++) {
       for (int c = 0; c < OBSERVER_COLUMNS; c++) {
@@ -845,11 +810,6 @@ public final class myobserver extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void lees_observer_log_en_vul_table() {
     /* NB input/output GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
@@ -930,11 +890,6 @@ public final class myobserver extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void schrijf_observer_log() {
     /* NB input/output in a GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
     boolean doorgaan = true;
@@ -1008,11 +963,6 @@ public final class myobserver extends javax.swing.JFrame {
     } // if (doorgaan == true)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1028,22 +978,12 @@ public final class myobserver extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(OBSERVER_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -1053,11 +993,6 @@ public final class myobserver extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionParformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionParformed
     // TODO add your handling code here:
@@ -1067,11 +1002,6 @@ public final class myobserver extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionParformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     // if (main.GUI_mode.equals(main.GUI_LIGHT))
     // {
@@ -1087,11 +1017,6 @@ public final class myobserver extends javax.swing.JFrame {
     // }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   // private void next_screen()
   // {
   //   myposition form = new myposition();

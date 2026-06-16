@@ -28,11 +28,6 @@ import javax.swing.JPanel;
 
 public class DASHBOARD_grafiek_AWS_radar extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_grafiek_AWS_radar() {
     color_black = Color.BLACK;
     color_gray = Color.GRAY;
@@ -59,11 +54,6 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
         "--- Screen resolution AWS Dashboard wind radar: " + width_screen + " x " + height_screen);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void setAllRenderingHints(Graphics2D g2d) {
     g2d.setRenderingHint(
         RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -85,11 +75,6 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
         RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
     // eg:
@@ -1577,11 +1562,6 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
     DASHBOARD_view_AWS_radar.jLabel3.setText(update_message_bottom_screen);
   } // public void paintComponent(Graphics g)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int convert_knots_to_bf(int true_wind_speed_reading) {
     int bf_class = Integer.MAX_VALUE;
 
@@ -1686,11 +1666,6 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
     return bf_class;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int convert_ms_to_bf(int true_wind_speed_reading) {
     int bf_class = Integer.MAX_VALUE;
 
@@ -1764,11 +1739,6 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
     return bf_class;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_wind_arrow_radar(
       Graphics2D g2d,
       double marker_circle_diameter_2,
@@ -1975,11 +1945,6 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
     } // if (true_wind_speed_ok && true_wind_dir_ok)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_wind_rose_radar(
       Graphics2D g2d,
       double wind_rose_diameter,

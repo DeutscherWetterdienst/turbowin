@@ -25,11 +25,6 @@ import javax.swing.JPanel;
 
 public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_grafiek_AWS_hybrid() {
     color_black = Color.BLACK;
     color_gray = Color.GRAY;
@@ -53,11 +48,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
         "--- Screen resolution AWS Dashboard hybrid: " + width_screen + " x " + height_screen);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
     // eg:
@@ -1631,11 +1621,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
     DASHBOARD_view_AWS_hybrid.jLabel3.setText(update_message_bottom_screen);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_wind_rose(
       Graphics2D g2d,
       double wind_rose_diameter,
@@ -1975,11 +1960,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void draw_oil_tanker(Graphics2D g2d, double wind_rose_diameter)
   {
@@ -2208,11 +2188,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void draw_lng_tanker(Graphics2D g2d, double wind_rose_diameter)
   {
@@ -2375,11 +2350,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void draw_bulk_carrier(Graphics2D g2d, double wind_rose_diameter)
   {
@@ -2532,11 +2502,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void draw_container_ship(Graphics2D g2d, double wind_rose_diameter)
   {
@@ -2743,11 +2708,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void draw_neutral_ship(Graphics2D g2d, double wind_rose_diameter)
   {
@@ -2854,11 +2814,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void draw_passenger_ship(Graphics2D g2d, double wind_rose_diameter)
   {
@@ -3309,11 +3264,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   private void draw_ship_bridge(Graphics2D g2d, double ship_breadth, double bridge_height, double acc_height, double dist_origin_bridge, double bridge_indention)
   {
@@ -3400,11 +3350,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_wind_arrow(
       Graphics2D g2d, double marker_circle_diameter_2, double bf_per_class_radius) {
     boolean true_wind_dir_ok = false;
@@ -3729,11 +3674,6 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
     } // if (true_wind_speed_ok && true_wind_dir_ok)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void setAllRenderingHints(Graphics2D g2d) {
     g2d.setRenderingHint(
         RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

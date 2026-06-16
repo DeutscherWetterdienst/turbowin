@@ -17,11 +17,6 @@ import javax.swing.JPanel;
 
 public class DASHBOARD_grafiek_AWS extends JPanel {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public DASHBOARD_grafiek_AWS() {
     color_gray = Color.GRAY;
     color_black = Color.BLACK;
@@ -102,11 +97,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     text_base_digits = units_5_start; // eg 89
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   @Override
   public void paintComponent(Graphics g) {
     // eg:
@@ -431,11 +421,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     } // else (no VOT_from_aws_present )
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_instrument_face_central_knob(Graphics2D g2d) {
     // centre knob
     // g2d.draw(new Arc2D.Double(-5, -5, 10, 10, 360, 360, Arc2D.CHORD));   // East = 0 degrees ->
@@ -451,11 +436,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     // correctly center it
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_instrument_face_wind_dir(Graphics2D g2d, int wind_mode) {
     // eg:
     // https://www.google.nl/search?q=barometer&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJ78PZg8_UAhWEJMAKHZA3AsAQ_AUICigB&biw=1920&bih=950#imgrc=hE2asDauQrhr6M:
@@ -775,11 +755,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
             Arc2D.OPEN)); // point East = 0 degrees -> to the left
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_instrument_face_barometer(Graphics2D g2d, boolean pressure_mode_msl) {
     // eg:
     // https://www.google.nl/search?q=barometer&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJ78PZg8_UAhWEJMAKHZA3AsAQ_AUICigB&biw=1920&bih=950#imgrc=hE2asDauQrhr6M:
@@ -1105,11 +1080,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
             Arc2D.OPEN)); // point East = 0 degrees -> to the left
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_instrument_face_thermometer(Graphics2D g2d) {
     // eg:
     // https://www.google.nl/search?q=barometer&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJ78PZg8_UAhWEJMAKHZA3AsAQ_AUICigB&biw=1920&bih=950#imgrc=hE2asDauQrhr6M:
@@ -1287,11 +1257,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
             Arc2D.OPEN)); // point East = 0 degrees -> to the left
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_instrument_face_rh(Graphics2D g2d) {
     // eg:
     // https://www.google.nl/search?q=barometer&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJ78PZg8_UAhWEJMAKHZA3AsAQ_AUICigB&biw=1920&bih=950#imgrc=hE2asDauQrhr6M:
@@ -1458,11 +1423,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
             Arc2D.OPEN)); // point East = 0 degrees -> to the left
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_instrument_face_wind_speed(Graphics2D g2d, int wind_mode) {
     // eg:
     // https://www.google.nl/search?q=barometer&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJ78PZg8_UAhWEJMAKHZA3AsAQ_AUICigB&biw=1920&bih=950#imgrc=hE2asDauQrhr6M:
@@ -1735,11 +1695,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
             Arc2D.OPEN)); // point East = 0 degrees -> to the left
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_instrument_face_sst(Graphics2D g2d) {
     // eg:
     // https://www.google.nl/search?q=barometer&source=lnms&tbm=isch&sa=X&ved=0ahUKEwjJ78PZg8_UAhWEJMAKHZA3AsAQ_AUICigB&biw=1920&bih=950#imgrc=hE2asDauQrhr6M:
@@ -1889,11 +1844,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
             Arc2D.OPEN)); // point East = 0 degrees -> to the left
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void setAllRenderingHints(Graphics2D g2d) {
     g2d.setRenderingHint(
         RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -1910,11 +1860,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_barometer_hands(Graphics2D g2d, boolean pressure_mode_msl) {
 
     //
@@ -2065,11 +2010,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_thermometer_hand(Graphics2D g2d) {
 
     //
@@ -2156,11 +2096,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     } // if (main.air_temp_from_AWS_present)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_hygrometer_hand(Graphics2D g2d) {
 
     //
@@ -2245,11 +2180,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     } // if (main.rh_from_AWS_present)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_anemometer_hand(Graphics2D g2d, int wind_mode) {
 
     //
@@ -2362,11 +2292,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     } // if (main.true_wind_dir_from_AWS_present)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_wind_dir_hand(Graphics2D g2d, int wind_mode) {
 
     //
@@ -2476,11 +2401,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     } //  if (main.true_wind_dir_from_AWS_present)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void draw_AWS_sst_hand(Graphics2D g2d) {
 
     //
@@ -2566,11 +2486,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     } // if (main.SST_from_AWS_present)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void make_arrow(Graphics2D g2d, double m) {
     double xm_a;
     double ym_a;

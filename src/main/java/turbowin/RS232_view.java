@@ -247,11 +247,6 @@ public class RS232_view extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void day_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_day_button_actionPerformed
     // TODO add your handling code here:
@@ -326,11 +321,6 @@ public class RS232_view extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_day_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void week_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_week_button_actionPerformed
     // TODO add your handling code here:
@@ -405,11 +395,6 @@ public class RS232_view extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_week_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void RS232_graph_windowClosed(
       java.awt.event.WindowEvent evt) { // GEN-FIRST:event_RS232_graph_windowClosed
     // TODO add your handling code here:
@@ -440,11 +425,6 @@ public class RS232_view extends javax.swing.JFrame {
     main.sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
   } // GEN-LAST:event_RS232_graph_windowClosed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                sensor_data_uit_file_ophalen                                 */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void sensor_data_uit_file_ophalen() {
     // called from: day_button_actionPerformed() [RS232_view.java]
     //              week_button_actionPerformed() [RS232_view.java]
@@ -505,11 +485,6 @@ public class RS232_view extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                           init_sensor_data_uit_file_ophalen_timer                           */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void init_sensor_data_uit_file_ophalen_timer() {
     // retrieving sensor data from file, timer scheduled [1st meteo instrument]
     //
@@ -618,11 +593,6 @@ public class RS232_view extends javax.swing.JFrame {
     main.sensor_data_file_ophalen_timer_is_gecreeerd = true;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                           init_sensor_data_uit_file_ophalen_timer_II                        */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void init_sensor_data_uit_file_ophalen_timer_II() {
     // retrieving sensor data from file (2nd instrument), timer scheduled [2nd meteo instrument]
     //
@@ -675,11 +645,6 @@ public class RS232_view extends javax.swing.JFrame {
     main.sensor_data_file_ophalen_timer_is_gecreeerd_II = true;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155() {
     // called from: init_sensor_data_uit_file_ophalen_timer_II() [RS232_view.java]
     //
@@ -959,11 +924,6 @@ public class RS232_view extends javax.swing.JFrame {
     } // if (wrong_record_length_counter > 10)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                             Read_Sensor_Data_Files_For_Barograph                            */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Read_Sensor_Data_Files_For_Barograph() {
     // NB this function reads sensor data from an individual Vaisala barometer (not from an AWS)
     // stored in files
@@ -1287,11 +1247,6 @@ public class RS232_view extends javax.swing.JFrame {
     } // if (wrong_record_length_counter > 10)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                             Read_Sensor_Data_Files_For_Graphs                               */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Read_Sensor_Data_Files_For_Graphs() {
     // NB this function reads sensor data from an AWS (not from an individual Vaisala or Mintaka
     // barometer) stored in files
@@ -1570,11 +1525,6 @@ public class RS232_view extends javax.swing.JFrame {
     // cal_file_datum_tijd = null;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*      Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star()                     */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX() {
     // called from: sensor_data_uit_file_ophalen() [RS232_view.java]
     //              init_sensor_data_uit_file_ophalen() [RS232_view.java]
@@ -1938,11 +1888,6 @@ public class RS232_view extends javax.swing.JFrame {
     // cal_file_datum_tijd = null;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                 Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX()                   */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX() {
     // called from: sensor_data_uit_file_ophalen() [RS232_view.java]
     //              init_sensor_data_uit_file_ophalen() [RS232_view.java]
@@ -2274,11 +2219,6 @@ public class RS232_view extends javax.swing.JFrame {
     super(title);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                             Read_Sensor_Data_Files_For_Graphs_4                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Read_Sensor_Data_Files_For_Graphs_4() {
     // NB 4 graphs on same page
     // NB this function reads sensor data from an AWS (not from an individual Vaisala barometer)
@@ -2603,11 +2543,6 @@ public class RS232_view extends javax.swing.JFrame {
     super(gc);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents1() {
 
     /* background color main panel (set by main menu theme option) */

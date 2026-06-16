@@ -33,11 +33,6 @@ import javax.swing.Timer;
 
 public class RS232_vaisala {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                       RS232_Read_Sensor_Data_a_ppp_Data_Files_For_Obs                       */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Read_Sensor_Data_a_ppp_For_Obs() {
     // Vaisala PTB220 or PTB330 (NOT AWS and NOT Mintaka Duo/Star)
 
@@ -266,11 +261,6 @@ public class RS232_vaisala {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                            RS232_Read_Sensor_Data_PPPP_For_Obs                              */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Read_Sensor_Data_PPPP_For_Obs(boolean local_tray_icon_clicked) {
     // Vaisala PTB220 or PTB330 (NOT AWS and NOT Mintaka Duo and NOT Mintaka Star)
 
@@ -523,11 +513,6 @@ public class RS232_vaisala {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR(
       final String destination, final boolean retry) {
     // PTB220 or PTB330
@@ -1036,11 +1021,6 @@ public class RS232_vaisala {
     }.execute(); // new SwingWorker <String, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs() {
     // NB this function for manual obs (inserting data on the temperatures input form)
     // called from: initSynopparameters() [mytemp.java]
@@ -1346,11 +1326,6 @@ public class RS232_vaisala {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR(
       final String destination, final boolean retry) {
     // NB this function for temperatures via APR WITH NO 1ST INSTRUMENT (BAROMETER) CONNECTED!
@@ -1665,11 +1640,6 @@ public class RS232_vaisala {
     }.execute(); // new SwingWorker <Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument(
       final String destination) {
     // called from: - RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR()

@@ -523,11 +523,6 @@ public final class mywind extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     jTextField1.setName("wind_1");
     jTextField2.setName("wind_2");
@@ -647,11 +642,6 @@ public final class mywind extends javax.swing.JFrame {
     } // if (main.wind_source.equals(main.ESTIMATED_TRUE))
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
     // AWS
     // if (!(main.wind_source.equals(main.MEASURED_OFF_BOW)) && (main.RS232_connection_mode == 3 ||
@@ -752,11 +742,6 @@ public final class mywind extends javax.swing.JFrame {
     // (main.wind_source.equals(main.MEASURED_TRUE)) )
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Wind_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
     // source                    = "";
@@ -801,22 +786,12 @@ public final class mywind extends javax.swing.JFrame {
     main.wind_fields_update();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(WIND_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1552,11 +1527,6 @@ public final class mywind extends javax.swing.JFrame {
     } // if (checks_ok == true)
   } // GEN-LAST:event_OK_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void update_APR_dashboard() {
     DASHBOARD_view_APR_radar.wind_input_APR_from_main_form_or_previous = true;
 
@@ -1639,11 +1609,6 @@ public final class mywind extends javax.swing.JFrame {
     DASHBOARD_view_APR_radar.wind_input_APR_from_main_form_or_previous = false;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bereken_True_Wind2() {
     /* int_ship_ground_course  : hele graden */
     /* float_ship_ground_speed : hele + tienden knopen */
@@ -1764,11 +1729,6 @@ public final class mywind extends javax.swing.JFrame {
     } // if (wind_dir.trim().compareTo("variable") != 0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_ActionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_ActionPerformed
     // TODO add your handling code here:
@@ -1780,11 +1740,6 @@ public final class mywind extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_ActionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -1795,11 +1750,6 @@ public final class mywind extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -1810,11 +1760,6 @@ public final class mywind extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void wind_speed_textfield_focusLost(
       java.awt.event.FocusEvent evt) { // GEN-FIRST:event_wind_speed_textfield_focusLost
     // TODO add your handling code here:
@@ -1832,11 +1777,6 @@ public final class mywind extends javax.swing.JFrame {
     // (main.wind_source.equals(main.MEASURED_TRUE)) )
   } // GEN-LAST:event_wind_speed_textfield_focusLost
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void set_wind_speed_picture(String hulp_wind_speed) {
     // String hulp_wind_speed  = jTextField2.getText().trim();
     // int int_hulp_wind_speed = Integer.parseInt(hulp_wind_speed);
@@ -1909,11 +1849,6 @@ public final class mywind extends javax.swing.JFrame {
     } // else (so knots)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     // if (main.GUI_mode.equals(main.GUI_LIGHT))
     // {
@@ -1929,22 +1864,12 @@ public final class mywind extends javax.swing.JFrame {
     // }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     mytemp form = new mytemp();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public ImageIcon createImageIcon(String path_and_file) {
     URL url = null;
 
@@ -1958,12 +1883,6 @@ public final class mywind extends javax.swing.JFrame {
 
     return icon_glyph;
   }
-
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
 
   // The doInBackground method, which creates the image icon for the photograph, is invoked by the
   // background thread.
@@ -2007,11 +1926,6 @@ public final class mywind extends javax.swing.JFrame {
     }.execute();
   } // private void loadImage(final String imagePath, final int index)
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
      private class MyDocumentListener implements DocumentListener
      {

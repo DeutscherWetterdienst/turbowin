@@ -54,11 +54,6 @@ import javax.swing.Timer;
 
 public class main_support {
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
   public static boolean determine_screen_size()
   {
@@ -79,11 +74,6 @@ public class main_support {
   }
   */
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static String getLinuxFlavor() {
     String flavor = readOsRelease();
     if (flavor == null) {
@@ -129,11 +119,6 @@ public class main_support {
   //     System.out.println("Linux Flavor: " + getLinuxFlavor());
   // }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static String print_libraries_name_and_version() {
     String library_log_string = "";
 
@@ -171,11 +156,6 @@ public class main_support {
     return library_log_string;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void log_integrated_libraries() {
     log_turbowin_system_message(
         "[GENERAL] libraries: "
@@ -184,11 +164,6 @@ public class main_support {
             + print_libraries_name_and_version());
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void password_timer_task() {
     /*
        TimerTask task = new TimerTask()
@@ -238,11 +213,6 @@ public class main_support {
 
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void open_browser_on_not_linux(final String subject_address) {
     // none-LINUX: first try desktop procedure
     //             second try runtime procedure
@@ -393,11 +363,6 @@ public class main_support {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void open_browser_on_linux(final String subject_address) {
     // LINUX: first try runtime procedure
     //        second try Desktop procedure
@@ -571,11 +536,6 @@ public class main_support {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void response_warning_pop_up() {
     // Temporary message box, (pop-up for only a short time) automatically disappears
     //
@@ -607,11 +567,6 @@ public class main_support {
     response_warning_dialog.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   /*
      public void determine_satellite_image_url_SSEC(String satellite_image_mode)
      {
@@ -785,11 +740,6 @@ public class main_support {
     main.satellite_link_mouse_clicked(url_satellite_image);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void determine_satellite_image_url_NOAA(String satellite_image_mode) {
     //
     // Build a Worldview URL.
@@ -922,11 +872,6 @@ public class main_support {
     main.satellite_link_mouse_clicked(url.toString());
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void log_memory_statistics() {
     // called from: - read_muffin() [main.java]
     //              - lees_configuratie_regels()[main.java]
@@ -984,11 +929,6 @@ public class main_support {
     // MB");
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void log_java_version() {
     // called from: - read_muffin()
     //              - lees_configuratie_regels()
@@ -999,11 +939,6 @@ public class main_support {
     log_turbowin_system_message("[GENERAL] Java: " + java_version + "; " + java_name);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public boolean position_sequence_check() {
     // initialisation
     boolean time_sequence_checks_ok = true;
@@ -1247,11 +1182,6 @@ public class main_support {
     return time_sequence_checks_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int bepaal_afstand_huidige_obs_pos_tot_vorige_obs_pos(
       double num_vorige_obs_breedte, double num_vorige_obs_lengte) {
     /* used formula :                                                  */
@@ -1346,11 +1276,6 @@ public class main_support {
     return afstand;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public boolean Move_log_files(final String move_mode_logs) {
     // called from: - Maintenance_Move_log_files_to_disk_actionPerformed() [main.java]
     //              - Maintenance_Move_log_files_by_email_actionPerformed()[main.java]
@@ -1953,11 +1878,6 @@ public class main_support {
     return doorgaan;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void zip_log_files() {
     File file_logs_dir = new File(temp_logs_dir /*+ java.io.File.separator*/);
     String[] filenames =
@@ -2036,11 +1956,6 @@ public class main_support {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void Kopieeren_Waarnemers_En_Aantallen() {
     // called from: Move_log_files()-- doInbackground---  [main_support.java]
 
@@ -2479,11 +2394,6 @@ public class main_support {
     } // if (moved_observername_file_array[4].compareTo("") != 0)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public boolean checking_level_2() {
     boolean doorgaan = true;
     boolean level_2_ok = true;
@@ -3151,11 +3061,6 @@ public class main_support {
     return level_2_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public boolean checking_level_3() {
     boolean doorgaan = true;
     boolean level_3_ok = true;
@@ -3950,11 +3855,6 @@ public class main_support {
     return level_3_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public boolean Check_Land_Sea_Mask() {
     // called from doInBackground() 4x
     //    - Output_Obs_to_server_menu_actionPerformed() [main.java]

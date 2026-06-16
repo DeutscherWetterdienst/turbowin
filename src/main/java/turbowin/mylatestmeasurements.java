@@ -59,11 +59,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     initComponents2();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                  initComponents2()                                          */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     jTable1.setModel(
         new javax.swing.table.DefaultTableModel(
@@ -130,11 +125,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     import_AWS_measurements();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                reset_all_table_cells()                                      */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void reset_all_table_cells() {
     for (int i = 0; i < AANTAL_AWS_MEASUREMENTS; i++) // rows
     {
@@ -145,11 +135,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                               import_AWS_measurements()                                     */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void import_AWS_measurements() {
     // called from: - initComponents2()
     //              - Refresh_button_actionPerformed()
@@ -170,11 +155,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                             insert_AWS_values_in_table_fields                               */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void insert_AWS_values_in_table_fields() {
 
     // NB AWS_array[i][c]: rows i -> highest i-index numbers = most recent in time; i = 0 -> record
@@ -246,11 +226,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     jLabel2.setText(main.sdf_tsl_2.format(new Date()) + " UTC"); //  new Date() -> always in UTC
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                          Read_Sensor_Data_Files_For_Latest_AWS_Measurements                 */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public static void Read_Sensor_Data_Files_For_Latest_AWS_Measurements() {
     // called from: - import_AWS_measurements() [mylatestmeasurements.java]
     //              - OSM_AWS_Sensor_data_on_leaflet_map() [OSM.java]
@@ -941,11 +916,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -954,11 +924,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Refresh_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Refresh_button_actionPerformed
     // TODO add your handling code here:
@@ -966,11 +931,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     import_AWS_measurements();
   } // GEN-LAST:event_Refresh_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Export_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Export_button_actionPerformed
     // TODO add your handling code here:
@@ -978,11 +938,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     export_latest_AWS_measurements();
   } // GEN-LAST:event_Export_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void export_latest_AWS_measurements() {
     boolean doorgaan = true;
     final String latest_AWS_measurements_export_file;
@@ -1081,11 +1036,6 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private String write_export_file(final String latest_AWS_measurements_export_file) {
     // called from: export_latest_AWS_measurements() [within swingworker]
 

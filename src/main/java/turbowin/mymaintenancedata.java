@@ -67,11 +67,6 @@ public class mymaintenancedata extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     if (main.mode.equals(main.MAINTENANCE_SHOW_DATA)) {
       show_data();
@@ -82,11 +77,6 @@ public class mymaintenancedata extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void show_data() {
     final String newline = System.getProperty("line.separator");
 
@@ -144,11 +134,6 @@ public class mymaintenancedata extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void export_data() {
     boolean doorgaan = true;
 
@@ -257,11 +242,6 @@ public class mymaintenancedata extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void import_data() {
     // TODO add your handling code here:
 

@@ -1110,11 +1110,6 @@ public final class mystationdata extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void lees_iso_landen_codes() {
     /* NB input/output GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
@@ -1501,11 +1496,6 @@ public final class mystationdata extends javax.swing.JFrame {
     }.execute(); // new SwingWorker<Void, Void>()
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
     // TODO add your handling code here:
@@ -1967,11 +1957,6 @@ public final class mystationdata extends javax.swing.JFrame {
     jTextField10.setName("station_id");
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1981,11 +1966,6 @@ public final class mystationdata extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void import_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_import_button_actionPerformed
     // TODO add your handling code here:
@@ -2107,11 +2087,6 @@ public final class mystationdata extends javax.swing.JFrame {
     } // if (doorgaan == true)
   } // GEN-LAST:event_import_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initStationComponents() {
     // method determing waves
     // jList1.setModel(new javax.swing.AbstractListModel()

@@ -32,11 +32,6 @@ public class FORMAT_101 {
   // format_101/config, WILL ALWAYS BE RECREATED BY TURBOWIN+
   //
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void compress_and_decompress_101_control_center() {
     int return_status = 0;
     boolean doorgaan = true;
@@ -131,11 +126,6 @@ public class FORMAT_101 {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int check_format_101_module() {
     int format_101_module_status = 0;
     // String info = "";
@@ -177,11 +167,6 @@ public class FORMAT_101 {
     return format_101_module_status;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int copy_format_101_module() {
     int format_101_module_status = 0;
     boolean doorgaan = true;
@@ -650,11 +635,6 @@ public class FORMAT_101 {
     return format_101_module_status;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int write_HC_identification_file(String identifier) {
     // NB this function is only necessary for decompression
     // NB the file (HC_IDENT_FILE) created by this function must be placed in the config dir
@@ -712,11 +692,6 @@ public class FORMAT_101 {
     return exit_status;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private int check_and_clear_format_101_temp_folder() {
     // NB in logs_dir always 'data_dir' already present (so a complete path)
 
@@ -768,11 +743,6 @@ public class FORMAT_101 {
     return exit_status;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void decompress_101() {
     // e.g.: MAWSbin_TW.exe -n 1234567 -f temp/HPK_format_101.txt -i HC_ident.txt -h -r config -l -o
     // temp/decompressed_FM13_message.txt > temp/decompressed.txt
@@ -899,11 +869,6 @@ public class FORMAT_101 {
     } // catch
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void compress_101(String identifier) {
     // NB in logs_dir always 'data_dir' already present (so a complete path)
 
@@ -1020,11 +985,6 @@ public class FORMAT_101 {
     } // catch
   } // public void compress()
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   public void write_input_for_101_compression() {
     double compressed_format_identifier; // new in format 101
     double compressed_call_sign_encryption_indicator; // new in format 101

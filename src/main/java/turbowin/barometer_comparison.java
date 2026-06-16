@@ -752,11 +752,6 @@ public class barometer_comparison extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Compute_button_actionPerformed(
       java.awt.event.ActionEvent evt) // GEN-FIRST:event_Compute_button_actionPerformed
       { // GEN-HEADEREND:event_Compute_button_actionPerformed
@@ -979,11 +974,6 @@ public class barometer_comparison extends javax.swing.JFrame {
     } // if (doorgaan)
   } // GEN-LAST:event_Compute_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -993,11 +983,6 @@ public class barometer_comparison extends javax.swing.JFrame {
     dispose();
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Export_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Export_button_actionPerformed
     // TODO add your handling code here:
@@ -1144,11 +1129,6 @@ public class barometer_comparison extends javax.swing.JFrame {
     } // if (result == JFileChooser.APPROVE_OPTION
   } // GEN-LAST:event_Export_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private double round(final double value, final int places) {
     if (places < 0) throw new IllegalArgumentException();
 
@@ -1158,11 +1138,6 @@ public class barometer_comparison extends javax.swing.JFrame {
     return bd.doubleValue();
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private boolean Compute_Barometer_Comparison_Results() {
     boolean computation_ok = true;
     double height_corr;
@@ -1196,11 +1171,6 @@ public class barometer_comparison extends javax.swing.JFrame {
     return computation_ok;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initBarometerComparisonComponents() {
     ////////////////////// initialise /////////////////////////
     jTextField1.setText("");

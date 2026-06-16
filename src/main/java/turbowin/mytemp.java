@@ -650,11 +650,6 @@ public final class mytemp extends javax.swing.JFrame {
     pack();
   } // </editor-fold>//GEN-END:initComponents
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initComponents2() {
     jTextField1.setName("air_temp");
     jTextField2.setName("wet_bulb_temp");
@@ -786,11 +781,6 @@ public final class mytemp extends javax.swing.JFrame {
     }
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Compute_Dewpoint_From_RH(double num_RH, double temp) {
     /* bij bereken met onderstaande formule: */
     /* het kan zijn dat num_Tdew = b.v. -0.0000000258 bij Tdry = 0.0 C en r.v. = 100 % */
@@ -837,11 +827,6 @@ public final class mytemp extends javax.swing.JFrame {
     // System.out.println("double_dew_point = " + double_dew_point);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private double SVP(double temp) {
     // double f_p = 1.0016 + 0.00000315 * SP - 0.074 / SP;
     // JOptionPane.showMessageDialog(null, "f_p zonder haakjes = " + f_p, main.APPLICATION_NAME + "
@@ -858,22 +843,12 @@ public final class mytemp extends javax.swing.JFrame {
     return ew;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private double SVP_ijs(double temp) {
     double ei = f_p * c1_ijs * Math.exp(c2_ijs * temp / (c3_ijs + temp));
 
     return ei;
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Bereken_Dauwpunt_en_RV() {
     double A_water;
     double A_ice;
@@ -966,11 +941,6 @@ public final class mytemp extends javax.swing.JFrame {
     } // else (dus ijs aan de nattebol)
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void OK_button_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionperformed
     // TODO add your handling code here:
@@ -1322,11 +1292,6 @@ public final class mytemp extends javax.swing.JFrame {
     } // if (checks_ok == true)
   } // GEN-LAST:event_OK_button_actionperformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1338,22 +1303,12 @@ public final class mytemp extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Cancel_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Internet_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Internet_button_actionPerformed
     // TODO add your handling code here:
     main.help_mouseClicked(TEMPERATURE_HELP_DIR);
   } // GEN-LAST:event_Internet_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Back_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Back_button_actionPerformed
     // TODO add your handling code here:
@@ -1363,11 +1318,6 @@ public final class mytemp extends javax.swing.JFrame {
     previous_screen();
   } // GEN-LAST:event_Back_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Stop_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Stop_button_actionPerformed
     // TODO add your handling code here:
@@ -1377,32 +1327,17 @@ public final class mytemp extends javax.swing.JFrame {
     main.in_next_sequence = false;
   } // GEN-LAST:event_Stop_button_actionPerformed
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void previous_screen() {
     mybarograph form = new mybarograph();
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void next_screen() {
     mywind form = new mywind();
     form.setSize(800, 600);
     form.setVisible(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void initSynopparameters() {
     if (local_thermometer_StarX_connected) {
       RS232_mintaka
@@ -1447,11 +1382,6 @@ public final class mytemp extends javax.swing.JFrame {
       jRadioButton12.setSelected(true);
   }
 
-  /***********************************************************************************************/
-  /*                                                                                             */
-  /*                                                                                             */
-  /*                                                                                             */
-  /***********************************************************************************************/
   private void Reset_All_Temperatures_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
     //
