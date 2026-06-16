@@ -12922,13 +12922,13 @@ public class main extends javax.swing.JFrame {
         sub_url_chart_month = chart.substring(15, 18).toLowerCase();
 
         // e.g.,
-        // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/pilot_charts/105jan.pdf?inline=true
+        // https://download.dwd.de/pub/turbowin/archive/knmi/pilot_charts/105jan.pdf
         String link_url = "";
         link_url =
-            "https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/pilot_charts/"
+            "https://download.dwd.de/pub/turbowin/archive/knmi/pilot_charts/"
                 + sub_url_chart_number
                 + sub_url_chart_month
-                + ".pdf?inline=true";
+                + ".pdf";
 
         return DesktopUtils.openLink(link_url, os);
       } // protected Integer doInBackground() throws Exception
@@ -16340,8 +16340,8 @@ public class main extends javax.swing.JFrame {
 
     if (!local_help_file_exists) {
       // e.g.
-      // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files/barometer.pdf?inline=true
-      String http_adres = main.URL_INTERNET_HELP + help_page + "?inline=true";
+      // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
+      String http_adres = main.URL_INTERNET_HELP + help_page + "";
       try {
         uri = new URI(http_adres);
       } catch (URISyntaxException ex) {
@@ -16396,8 +16396,8 @@ public class main extends javax.swing.JFrame {
                       }
                       else
                       {
-                         // e.g. https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files/barometer.pdf?inline=true
-                         String http_adres = main.URL_INTERNET_HELP + help_page + "?inline=true"; // help_dir was set in java input page file e.g. mycm.java; ch1_image_mouseClicked()
+                         // e.g. https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
+                         String http_adres = main.URL_INTERNET_HELP + help_page + ""; // help_dir was set in java input page file e.g. mycm.java; ch1_image_mouseClicked()
                          uri = new URI(http_adres);
                          desktop.browse(uri);
                       }
@@ -16424,8 +16424,8 @@ public class main extends javax.swing.JFrame {
 
                    if (!local_help_file_exists)
                    {
-                      // e.g. https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files/barometer.pdf?inline=true
-                      String http_adres = main.URL_INTERNET_HELP + help_page + "?inline=true";
+                      // e.g. https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
+                      String http_adres = main.URL_INTERNET_HELP + help_page + "";
                       uri = new URI(http_adres);
                       te_open_help_file = uri.toString();
                       // NB Maybe uri.toString() is maybe(?)not necassary in case "xdg-open" this should be tested (see also manual on "xdg-open")
@@ -19670,7 +19670,7 @@ public class main extends javax.swing.JFrame {
   // public static final String URL_TURBOWIN                  =
   // "https://projects.knmi.nl/turbowin/";
   public static final String URL_INTERNET_HELP =
-      "https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/raw/master/help_files/"; // "https://projects.knmi.nl/turbowin/webstart101/help/";
+      "https://download.dwd.de/pub/turbowin/archive/knmi/help_files/"; // "https://projects.knmi.nl/turbowin/webstart101/help/";
   public static final String OFFLINE_HELP_DIR =
       "help"; // wordt alleeen gebruikt indien in offline_mode
   public static final String KNOTS = "knots";

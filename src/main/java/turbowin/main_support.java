@@ -264,8 +264,8 @@ public class main_support {
               desktop.open(new File(subject_address));
             } else {
               // e.g.
-              // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files/barometer.pdf?inline=true
-              // String http_adres = main.URL_INTERNET_HELP + help_page + "?inline=true"; //
+              // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
+              // String http_adres = main.URL_INTERNET_HELP + help_page; //
               // help_dir was set in java input page file e.g. mycm.java; ch1_image_mouseClicked()
 
               // so must be an internet address (http)
@@ -303,8 +303,8 @@ public class main_support {
           // if (browser_address.contains("http"))
           // {
           //   // e.g.
-          // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files/barometer.pdf?inline=true
-          //  //String http_adres = main.URL_INTERNET_HELP + help_page + "?inline=true";
+          // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
+          //  //String http_adres = main.URL_INTERNET_HELP + help_page;
           //   uri = new URI(browser_address);
           //   te_open_help_file = uri.toString();
           //   // NB Maybe uri.toString() is maybe(?)not necassary in case "xdg-open" this should be
@@ -453,8 +453,8 @@ public class main_support {
         // if (!local_help_file_exists)
         // {
         //   // e.g.
-        // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files/barometer.pdf?inline=true
-        //   String http_adres = main.URL_INTERNET_HELP + help_page + "?inline=true";
+        // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
+        //   String http_adres = main.URL_INTERNET_HELP + help_page;
         //   uri = new URI(http_adres);
         //   te_open_help_file = uri.toString();
         //   // NB Maybe uri.toString() is maybe(?)not necassary in case "xdg-open" this should be
@@ -522,8 +522,8 @@ public class main_support {
                 desktop.open(new File(subject_address));
               } else {
                 // e.g.
-                // https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/tree/master/help_files/barometer.pdf?inline=true
-                // String http_adres = main.URL_INTERNET_HELP + help_page + "?inline=true"; //
+                // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
+                // String http_adres = main.URL_INTERNET_HELP + help_page; //
                 // help_dir was set in java input page file e.g. mycm.java; ch1_image_mouseClicked()
 
                 // so must be an internet address (http)
