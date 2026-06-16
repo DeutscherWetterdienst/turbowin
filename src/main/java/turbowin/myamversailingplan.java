@@ -4130,7 +4130,7 @@ public final class myamversailingplan extends javax.swing.JFrame {
   // constants
   private static final int AMVER_TRACK_ROWS = 100; // static !!
   private static final int AMVER_TRACK_COLUMNS = 9; // static !!
-  private static final String AMVER_EMAIL_ADDRESS = "amvermsg@amver.org"; // "martin.stam@knmi.nl";
+  private static final String AMVER_EMAIL_ADDRESS = "amvermsg@amver.org"; // "user@example.org";
   private static final int SP_IMPORT_FILE_POS_INHOUD = 21;
   private static final String NONE = "NONE";
   private static final String NURSE = "NURSE";

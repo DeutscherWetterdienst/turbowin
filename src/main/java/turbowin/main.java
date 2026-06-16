@@ -8878,7 +8878,7 @@ public class main extends javax.swing.JFrame {
       doorgaan = false;
     }
 
-    /* logs dir must be set before (e.g. C:/Users/Martin/Downloads/logs) */
+    /* logs dir must be set before (e.g. C:/Users/User/Downloads/logs) */
     if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2) {
       doorgaan = false;
       info = "Logs folder unknown, select: Maintenance -> Log files settings and retry";
@@ -8930,7 +8930,7 @@ public class main extends javax.swing.JFrame {
                 + "to: "
                 + logs_email_recipient
                 + "\n"
-                + // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+                + // eg "user@example.com,user@example.org";
                 "from: "
                 + your_custom_address
                 + "\n"
@@ -8968,7 +8968,7 @@ public class main extends javax.swing.JFrame {
       final File dirs = new File(temp_logs_dir);
 
       if (dirs.exists() == false) {
-        //// * create subdir 'temp' (e.g. C:\Users\Martin\Downloads\logs/temp) */
+        //// * create subdir 'temp' (e.g. C:\Users\User\Downloads\logs/temp) */
         /// temp_logs_dir = logs_dir + java.io.File.separator + "temp";
 
         final boolean success = dirs.mkdirs();
@@ -9009,7 +9009,7 @@ public class main extends javax.swing.JFrame {
       } // else
     } // if (doorgaan)
 
-    /* move log files from logs_dir (e.g. C:\Users\Martin\Downloads\logs) to temp_logs_dir (e.g. C:\Users\Martin\Downloads\logs/temp) */
+    /* move log files from logs_dir (e.g. C:\Users\User\Downloads\logs) to temp_logs_dir (e.g. C:\Users\User\Downloads\logs/temp) */
     if (doorgaan) {
       String move_mode_logs = MOVE_TO_EMAIL;
       doorgaan = support_class.Move_log_files(move_mode_logs); // and zip the moved log files
@@ -9037,7 +9037,7 @@ public class main extends javax.swing.JFrame {
             // CUSTOM_SSL
             String smtp_host_local = custom_email_server; // eg "smtp.mail.special.com";
             String smtp_password_local = custom_password;
-            String send_to = logs_email_recipient; // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+            String send_to = logs_email_recipient; // eg "user@example.com,user@example.org";
             String send_from = your_custom_address; // eg nedlloyd_ebro@nedlloyd.nl
             String email_subject = METEO_LOGS + " " + ship_name; // fixed
             String email_body = "see attachment"; // fixed (logs always as attachment)
@@ -16705,13 +16705,13 @@ public class main extends javax.swing.JFrame {
 
       // :: GMAIL_TLS (with app password)
       // ::.\dist\email_tbw.exe "GMAIL_TLS" "smtp.gmail.com" "xxxineinjletryoohdq"
-      // "martin.stam@home.nl" "turbowin.observations@gmail.com" "dit is een test via GMAIL_TLS with
+      // "user@example.com" "turbowin.observations@gmail.com" "dit is een test via GMAIL_TLS with
       // app password" "This is an obs test body line"
       //      String smtp_mode = "GMAIL_TLS";
       //      String smtp_host_local = "smtp.gmail.com";
       //      String smtp_password_local = "xxxineinjletryooxxx";
       //      String send_to = obs_email_recipient;
-      // //"martin.stam@home.nl,martin.stam@knmi.nl";
+      // //"user@example.com,user@example.org";
       //      String send_from = "turbowin.observations@gmail.com";
       //      String email_subject = obs_email_subject;                //"dit is een test2 via
       // GMAIL_TLS with app password";
@@ -16795,7 +16795,7 @@ public class main extends javax.swing.JFrame {
           // CUSTOM_SSL
           smtp_host_local = custom_email_server; // eg "smtp.mail.special.com";
           smtp_password_local = custom_password;
-          send_to = obs_email_recipient; // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+          send_to = obs_email_recipient; // eg "user@example.com,user@example.org";
           send_from = your_custom_address; // eg nedlloyd_ebro@nedlloyd.nl
           email_subject = obs_email_subject; // nb can be overwritten in case of FM13 "ddhhmm"
           email_body = "null"; // nb can be overwritten, see below
@@ -17079,13 +17079,13 @@ public class main extends javax.swing.JFrame {
 
       // :: GMAIL_TLS (with app password)
       // ::.\dist\email_tbw.exe "GMAIL_TLS" "smtp.gmail.com" "xxxineinjletryoohdq"
-      // "martin.stam@home.nl" "turbowin.observations@gmail.com" "dit is een test via GMAIL_TLS with
+      // "user@example.com" "turbowin.observations@gmail.com" "dit is een test via GMAIL_TLS with
       // app password" "This is an obs test body line"
       //      String smtp_mode = "GMAIL_TLS";
       //      String smtp_host_local = "smtp.gmail.com";
       //      String smtp_password_local = "xxxineinjletryooxxx";
       //      String send_to = obs_email_recipient;
-      // //"martin.stam@home.nl,martin.stam@knmi.nl";
+      // //"user@example.com,user@example.org";
       //      String send_from = "turbowin.observations@gmail.com";
       //      String email_subject = obs_email_subject;                //"dit is een test2 via
       // GMAIL_TLS with app password";
@@ -17145,7 +17145,7 @@ public class main extends javax.swing.JFrame {
              smtp_mode           = SMTP_HOST_SHIP;                         //
              smtp_host_local     = local_email_server;                     // eg "smtp.ziggo.nl";
              //smtp_password_local = "null";
-             send_to             = obs_email_recipient;                    // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+             send_to             = obs_email_recipient;                    // eg "user@example.com,user@example.org";
              send_from           = your_ship_address;
              email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"
              email_body          = "null";                                 // nb can be overwritten, see below
@@ -17193,7 +17193,7 @@ public class main extends javax.swing.JFrame {
              smtp_mode           = gmail_security;                         // eg GMAIL_TLS";
              smtp_host_local     = "smtp.gmail.com";
              smtp_password_local = gmail_app_password;
-             send_to             = obs_email_recipient;                    // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+             send_to             = obs_email_recipient;                    // eg "user@example.com,user@example.org";
              send_from           = your_gmail_address;
              email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"
              email_body          = "null";                                 // nb can be overwritten, see below
@@ -17231,7 +17231,7 @@ public class main extends javax.swing.JFrame {
              smtp_mode           = yahoo_security;                         // eg YAHOO_TLS";
              smtp_host_local     = "smtp.mail.yahoo.com";
              smtp_password_local = yahoo_app_password;
-             send_to             = obs_email_recipient;                    // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+             send_to             = obs_email_recipient;                    // eg "user@example.com,user@example.org";
              send_from           = your_yahoo_address;
              email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"
              email_body          = "null";                                 // nb can be overwritten, see below
@@ -17264,7 +17264,7 @@ public class main extends javax.swing.JFrame {
           // CUSTOM_SSL
           smtp_host_local = custom_email_server; // eg "smtp.mail.special.com";
           smtp_password_local = custom_password;
-          send_to = obs_email_recipient; // eg "martin.stam@home.nl,martin.stam@knmi.nl";
+          send_to = obs_email_recipient; // eg "user@example.com,user@example.org";
           send_from = your_custom_address; // eg nedlloyd_ebro@nedlloyd.nl
           email_subject = obs_email_subject; // nb can be overwritten in case of FM13 "ddhhmm"
           email_body = "null"; // nb can be overwritten, see below

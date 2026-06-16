@@ -760,7 +760,7 @@ public class RS232_view extends javax.swing.JFrame {
       // first check if there is a sensor data file present (and not empty)
       volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
       // bv volledig_path_sensor_data =
-      // C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
 
       // System.out.println("--- " +  sdf2.format(new Date()) + " UTC " + "proberen te openen file:
       // " + volledig_path_sensor_data);
@@ -1049,7 +1049,7 @@ public class RS232_view extends javax.swing.JFrame {
       // first check if there is a sensor data file present (and not empty)
       volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
       // bv volledig_path_sensor_data =
-      // C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
 
       // System.out.println("--- " +  RS232_AWS_1View.sdf2.format(new Date()) + " UTC " + "proberen
       // te openen file: " + volledig_path_sensor_data);
@@ -1384,7 +1384,7 @@ public class RS232_view extends javax.swing.JFrame {
       // first check if there is a sensor data file present (and not empty)
       volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
       // bv volledig_path_sensor_data =
-      // C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
 
       // System.out.println("+++ " +  "i = : " + i);
       // System.out.println("+++ " +  "proberen te openen file: " + volledig_path_sensor_data);
@@ -1649,7 +1649,7 @@ public class RS232_view extends javax.swing.JFrame {
       // first check if there is a sensor data file present (and not empty)
       volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
       // bv volledig_path_sensor_data =
-      // C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
 
       // System.out.println("+++ " +  "i = : " + i);
       // System.out.println("+++ " +  "proberen te openen file: " + volledig_path_sensor_data);
@@ -2028,7 +2028,7 @@ public class RS232_view extends javax.swing.JFrame {
       // first check if there is a sensor data file present (and not empty)
       volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
       // bv volledig_path_sensor_data =
-      // C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
 
       // System.out.println("+++ " +  "i = : " + i);
       // System.out.println("+++ " +  "proberen te openen file: " + volledig_path_sensor_data);
@@ -2359,7 +2359,7 @@ public class RS232_view extends javax.swing.JFrame {
       // first check if there is a sensor data file present (and not empty)
       volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
       // bv volledig_path_sensor_data =
-      // C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
 
       // System.out.println("+++ " +  "i = : " + i);
       // System.out.println("+++ " +  "proberen te openen file: " + volledig_path_sensor_data);
@@ -2980,7 +2980,7 @@ public class RS232_view extends javax.swing.JFrame {
   private javax.swing.JRadioButton jRadioButton2;
   // End of variables declaration//GEN-END:variables
 
-  // martin constanten
+  // Custom variables
   private final int DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP =
       300000; // 5 min                          // time in millisec to wait after timer is started
   // to fire first event (10 min = 10 * 1000 * 60 * 10 = 600000)
@@ -2999,7 +2999,7 @@ public class RS232_view extends javax.swing.JFrame {
       2088; // om de 5 minuten 7 * 24 uur lang 7 * 12 * 24 + (6 * 12) = 2088 bv van 14.00 7 dagen
   // geleden t/m 14.59 deze dag!!)
 
-  // martin var's
+  // Custom variables
   private BufferedImage bi;
   JPopupMenu popup;
   private String saved_trace_image;

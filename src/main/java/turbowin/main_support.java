@@ -1973,14 +1973,14 @@ public class main_support {
 
     try {
       // Create the ZIP file
-      // String outFilename = "C:/Users/Martin/Downloads/logs/temp/logs.zip";
-      // String outFilename = "C:/Users/Martin/Documents/logs.zip";
+      // String outFilename = "C:/Users/User/Downloads/logs/temp/logs.zip";
+      // String outFilename = "C:/Users/User/Documents/logs.zip";
       String outFilename =
           temp_logs_dir
               + java.io.File.separator
               + ship_name
               + " "
-              + main.LOGS_ZIP; // e.g. "C:/Users/Martin/Downloads/logs/temp/happy sailor logs.zip";
+              + main.LOGS_ZIP; // e.g. "C:/Users/User/Downloads/logs/temp/happy sailor logs.zip";
       ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
 
       // Compress the files

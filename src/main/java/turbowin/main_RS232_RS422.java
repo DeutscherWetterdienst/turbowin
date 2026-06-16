@@ -4022,7 +4022,7 @@ public class main_RS232_RS422 {
               for (String ontvangen_SMD_string: data)
               {
                  // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
-                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
                  main.total_string = ontvangen_SMD_string;
 
@@ -4199,7 +4199,7 @@ public class main_RS232_RS422 {
               for (String ontvangen_SMD_string: data)
               {
                  // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
-                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
                  main.total_string = ontvangen_SMD_string;
 
@@ -4371,7 +4371,7 @@ public class main_RS232_RS422 {
       for (String ontvangen_SMD_string : data) {
         // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn
         // voordat het hier procesed wordt(inherent aan SwingWorker)
-        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
         main.total_string = ontvangen_SMD_string;
 
@@ -4611,7 +4611,7 @@ public class main_RS232_RS422 {
               for (String ontvangen_SMD_string: data)
               {
                  // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
-                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
                  main.total_string = ontvangen_SMD_string;
 
@@ -6637,7 +6637,7 @@ public class main_RS232_RS422 {
               for (String ontvangen_GPS_string: data)
               {
                  // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
-                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+                 //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
                  total_GPS_string = ontvangen_GPS_string;
 
@@ -7144,7 +7144,7 @@ public class main_RS232_RS422 {
       for (String ontvangen_SMD_string : data) {
         // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn
         // voordat het hier procesed wordt(inherent aan SwingWorker)
-        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
         main.total_string = ontvangen_SMD_string;
 
@@ -7646,7 +7646,7 @@ public class main_RS232_RS422 {
       for (String ontvangen_SMD_string : data) {
         // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn
         // voordat het hier procesed wordt(inherent aan SwingWorker)
-        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
         main.total_string = ontvangen_SMD_string;
 
@@ -7779,7 +7779,7 @@ public class main_RS232_RS422 {
            for (String ontvangen_SMD_string: data)
            {
               // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
-              //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+              //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
               main.total_string = ontvangen_SMD_string;
 
@@ -9417,7 +9417,7 @@ public class main_RS232_RS422 {
       for (String ontvangen_SMD_string : data) {
         // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn
         // voordat het hier procesed wordt(inherent aan SwingWorker)
-        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
         main.total_string_II = ontvangen_SMD_string;
         System.out.print(main.total_string_II);
@@ -9769,7 +9769,7 @@ public class main_RS232_RS422 {
       for (String ontvangen_SMD_string : data) {
         // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn
         // voordat het hier procesed wordt(inherent aan SwingWorker)
-        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+        // System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
         main.total_string = ontvangen_SMD_string;
 
@@ -10549,7 +10549,7 @@ public class main_RS232_RS422 {
                  for (String ontvangen_SMD_string: data)
                  {
                     // NB altijd in for loop omdat meerdere ontbvangen_SMD_string's verzameld kunnen zijn voordat het hier procesed wordt(inherent aan SwingWorker)
-                    //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);   // bv martin
+                    //System.out.println("ontvangen_SMD_string = " + ontvangen_SMD_string);
 
                     main.total_string = ontvangen_SMD_string;
 

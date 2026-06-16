@@ -459,7 +459,7 @@ public class DASHBOARD_view_AWS extends javax.swing.JFrame {
   private javax.swing.JPanel jPanel5;
   // End of variables declaration//GEN-END:variables
 
-  // Martin var's
+  // Custom variables
   private final int DELAY_UPDATE_AWS_SENSOR_LOOP =
       60000; // 1 min                          // time in millisec to wait after timer is started to
   // fire first event (10 min = 10 * 1000 * 60 * 10 = 600000)

@@ -317,7 +317,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
       // first check if there is a sensor data file present (and not empty)
       volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
       // bv volledig_path_sensor_data =
-      // C:\Users\Martin\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
+      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
 
       File sensor_data_file = new File(volledig_path_sensor_data);
       if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
