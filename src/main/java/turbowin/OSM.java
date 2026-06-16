@@ -1059,14 +1059,6 @@ public class OSM {
           && ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))) {
         desktop = Desktop.getDesktop();
 
-        // try
-        // {
-        // check internet connection available
-        // URL url = new URL("http://www.google.com");              // arbitray address could also
-        // take www.knmi.nl or etc.
-        // URLConnection con = url.openConnection();
-        // con.connect();
-
         // it is possible that the OSM dir do not exist, if not create the OSM dir first
         String str_OSM_dir = main.logs_dir + java.io.File.separator + OSM_ROOT_DIR;
         final File OSM_dir = new File(str_OSM_dir);
@@ -1721,11 +1713,7 @@ public class OSM {
 
       try {
         // check internet connection available
-        // URL url = new URL("http://www.google.com");              // deprecated in Java 20 //
-        // arbitray address could also take www.knmi.nl or etc.
-        URL url =
-            new URI("http://www.google.com")
-                .toURL(); // arbitray address could also take www.knmi.nl or etc.
+        URL url = new URI("http://www.google.com/generate_204").toURL();
         URLConnection con = url.openConnection();
         con.connect();
 

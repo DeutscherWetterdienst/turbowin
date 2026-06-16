@@ -11708,7 +11708,6 @@ public class main_RS232_RS422 {
 
               URL obj = null;
               try {
-                // obj = new URL(url);  deprecated in Java 20
                 obj = new URI(url).toURL();
                 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -12585,7 +12584,6 @@ public class main_RS232_RS422 {
                     URL obj = null;
                     try
                     {
-                       //obj = new URL(url);         // deprecated in Java 20
                        obj = new URI(url).toURL();
                        HttpURLConnection con = (HttpURLConnection)obj.openConnection();
 
@@ -12848,7 +12846,6 @@ public class main_RS232_RS422 {
 
                   attempt++;
                   try {
-                    // obj = new URL(url);   // deprecated in Java 20
                     obj = new URI(url).toURL();
 
                     if (isHttps) {

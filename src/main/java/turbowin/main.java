@@ -18085,7 +18085,6 @@ public class main extends javax.swing.JFrame {
 
           URL obj = null;
           try {
-            // obj = new URL(url);        // deprecated in Java 20
             obj = new URI(url).toURL();
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -18348,7 +18347,6 @@ public class main extends javax.swing.JFrame {
 
                 attempt++;
                 try {
-                  // obj = new URL(url);   // deprecated in Java 20
                   obj = new URI(url).toURL();
 
                   if (isHttps) {

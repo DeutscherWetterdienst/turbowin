@@ -1418,8 +1418,6 @@ public final class myposition extends javax.swing.JFrame {
           protected Void doInBackground() throws Exception {
             String os = OSDetector.getOSString();
 
-            // String link_url = "https://www.google.com";             // arbitray address could
-            // also take www.knmi.nl or etc.
             Desktop desktop = null;
             Integer code = 0;
 
@@ -1515,14 +1513,6 @@ public final class myposition extends javax.swing.JFrame {
                   && ((main.logs_dir != null)
                       && (main.logs_dir.compareTo("") != 0)) /*&& (main.offline_mode == false)*/) {
                 desktop = Desktop.getDesktop();
-
-                // try
-                // {
-                // check internet connection available
-                // URL url = new URL("http://www.google.com");              // arbitray address
-                // could also take www.knmi.nl or etc.
-                // URLConnection con = url.openConnection();
-                // con.connect();
 
                 String full_path_leaflet_maps_html_file =
                     main.logs_dir + java.io.File.separator + main.LEAFLET_MAPS_HTML_FILE;
