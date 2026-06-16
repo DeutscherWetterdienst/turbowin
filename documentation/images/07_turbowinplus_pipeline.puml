@@ -5,7 +5,7 @@ skinparam rectangle {
     BackgroundColor<<Optional Signing>> LightGray
 }
 
-title GitLab CI Pipeline for TurboWinPlus
+title CI Pipeline for TurboWinPlus
 
 :Code change pushed to repository;
 

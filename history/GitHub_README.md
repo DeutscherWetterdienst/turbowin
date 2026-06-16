@@ -1,7 +1,7 @@
 # turbowin_plus
 
 
-TO BE CONTINUED ON : https://gitlab.com/KNMI-OSS/turbowin/turbowin
+TO BE CONTINUED ON : https://github.com/DeutscherWetterdienst/turbowin
 
 
 

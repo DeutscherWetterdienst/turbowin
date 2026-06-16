@@ -7,7 +7,7 @@
 
 ### Continuous Integration (CI) Pipeline
 
-A GitLab CI pipeline is used to automate building, testing, and packaging TurboWin+ across multiple platforms.
+A CI pipeline is used to automate building, testing, and packaging TurboWin+ across multiple platforms.
 
 #### Pipeline Overview
 

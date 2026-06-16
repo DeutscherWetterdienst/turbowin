@@ -780,7 +780,7 @@ public final class about extends javax.swing.JFrame {
         if (link_subject.equals(LINK_SOT_VOS)) {
           link_url = "https://www.ocean-ops.org/sot/vos/";
         } else if (link_subject.equals(LINK_GITLAB)) {
-          link_url = "https://gitlab.com/KNMI-OSS/turbowin/turbowin";
+          link_url = "https://github.com/DeutscherWetterdienst/turbowin";
         }
 
         return DesktopUtils.openLink(link_url, os);
@@ -848,9 +848,6 @@ public final class about extends javax.swing.JFrame {
   private javax.swing.JSeparator jSeparator1;
   // End of variables declaration//GEN-END:variables
 
-  // private final String LINK_ESURFMAR       =    "link_esurfmar";
-  // private final String LINK_GITHUB         =    "link_github";
-  // private final String LINK_WEATHER_AT_SEA =    "link_weather_at_sea";
   private final String LINK_GITLAB = "link_gitlab";
   private final String LINK_SOT_VOS = "link_sot_vos";
 }
