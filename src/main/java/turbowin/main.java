@@ -410,22 +410,8 @@ public class main extends javax.swing.JFrame {
       // always at first start-up of this application
       try {
         for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-          if ("Nimbus".equals(info.getName()))
-          // if ("Metal".equals(info.getName()))
-          {
+          if ("Nimbus".equals(info.getName())) {
             UIManager.setLookAndFeel(info.getClassName());
-
-            // UIManager.setLookAndFeel(new MetalLookAndFeel());
-            // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-
-            // NB onderstaande hier nog niet nodig omdat de componenten nog niet aangemaakt zijn
-            // (initComponents();)
-            // SwingUtilities.updateComponentTreeUI(main.this);
-
-            // NB onderstaande kan niet omdat jTextField4 nog niet gecreeerd
-            // jTextField4.setBackground(new java.awt.Color(204, 255, 255));
-
-            // theme_mode = THEME_NIMBUS_DAY;
 
             break;
           }
@@ -509,21 +495,7 @@ public class main extends javax.swing.JFrame {
     Font f = jLabel1.getFont();
     String fontName = f.getFontName();
     System.out.println("--- current font = " + fontName);
-  } //  public main()
-
-  /*
-     // Implement the SingleInstanceListener for your application
-     class SISListener implements SingleInstanceListener
-     {
-        @Override
-        public void newActivation(String[] params)
-        {
-
-           // your code to handle the new arguments here
-           JOptionPane.showMessageDialog(null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
-        }
-     }  // class SISListener implements SingleInstanceListener
-  */
+  }
 
   /**
    * This method is called from within the init() method to initialize the form. WARNING: Do NOT
@@ -4807,38 +4779,6 @@ public class main extends javax.swing.JFrame {
           jMenuItem23.setEnabled(true); // Obs by E-mail (default)
         }
 
-        // [SMTP HOST]
-        // if ( (local_email_server.equals("")) || (your_ship_address.equals("")) )
-        // {
-        //   jMenuItem74.setEnabled(false);                           // Obs by E-mail (local host)
-        // }
-        // else
-        // {
-        //   jMenuItem74.setEnabled(true);                            // Obs by E-mail (local host)
-        // } // else
-
-        // [GMAIl]
-        // if ( (your_gmail_address.equals("")) || (gmail_app_password.equals("")) ||
-        // (gmail_security.equals("")) )
-        // {
-        //   jMenuItem72.setEnabled(false);                           // Obs by E-mail (Gmail)
-        // }
-        // else
-        // {
-        //   jMenuItem72.setEnabled(true);                            // Obs by E-mail (Gmail)
-        // } // else
-
-        // [YAHOO]
-        // if ( (your_yahoo_address.equals("")) || (yahoo_app_password.equals("")) ||
-        // (yahoo_security.equals("")) )
-        // {
-        //   jMenuItem73.setEnabled(false);                           // Obs by E-mail (Yahoo)
-        // }
-        // else
-        // {
-        //   jMenuItem73.setEnabled(true);                            // Obs by E-mail (Yahoo)
-        // } // else
-
         // [CUSTOM]
         // if ( (your_custom_address.equals("")) || (custom_password.equals("")) ||
         // (custom_security.equals("")) || (custom_email_server.equals("")) ||
@@ -4853,26 +4793,6 @@ public class main extends javax.swing.JFrame {
         }
       } // else (recipient and subject ok)
     } // if (RS232_connection_mode != 3)
-
-    /*
-       // Obs to server
-       //
-       // check if upload URL was entered
-       if ( (upload_URL.equals("") || upload_URL == null) )
-       {
-          // no upload URL entered
-          jMenuItem20.setEnabled(false);
-       }
-       else // upload URL ok
-       {
-          if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
-          {
-             // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an output option in both modes (online/web and offline)
-             // gray (disable) the "output -> obs to server (internet)" menu selection option
-             jMenuItem20.setEnabled(false);
-          }
-       } // upload URL ok
-    */
 
     // Obs to server
     //
@@ -5145,16 +5065,7 @@ public class main extends javax.swing.JFrame {
     //
     if ((station_ID != null) && (station_ID.trim().length() > 0)) {
       coded_obs_call_sign = station_ID;
-    }
-    // else if ((masked_call_sign != null) && (masked_call_sign.trim().length() > 0))
-    // {
-    //   coded_obs_call_sign = masked_call_sign;
-    // }
-    // else if ((call_sign != null) && (call_sign.trim().length() > 0))
-    // {
-    //   coded_obs_call_sign = call_sign;
-    // }
-    else {
+    } else {
       coded_obs_call_sign = "unknown";
     }
 
@@ -6411,74 +6322,6 @@ public class main extends javax.swing.JFrame {
           obs_email_cc = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
         }
 
-        // obs email local host
-        // if (configuratie_regels[teller].indexOf(LOCAL_EMAIL_SERVER_TXT) != -1)
-        // {
-        //   local_email_server =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);   // NB also called
-        // SMTP host
-        // }
-
-        // your Gmail address
-        // if (configuratie_regels[teller].indexOf(YOUR_GMAIL_ADDRESS_TXT) != -1)
-        // {
-        //   your_gmail_address =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // Gmail app password
-        // if (configuratie_regels[teller].indexOf(GMAIL_APP_PASSWORD_TXT) != -1)
-        // {
-        //   gmail_app_password =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // Gmail security
-        // if (configuratie_regels[teller].indexOf(GMAIL_SECURITY_TXT) != -1)
-        // {
-        //   gmail_security = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // your Yahoo address
-        // if (configuratie_regels[teller].indexOf(YOUR_YAHOO_ADDRESS_TXT) != -1)
-        // {
-        //   your_yahoo_address =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // Yahoo app password
-        // if (configuratie_regels[teller].indexOf(YAHOO_APP_PASSWORD_TXT) != -1)
-        // {
-        //   yahoo_app_password =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // Yahoo security
-        // if (configuratie_regels[teller].indexOf(YAHOO_SECURITY_TXT) != -1)
-        // {
-        //   yahoo_security = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // your ship address
-        // if (configuratie_regels[teller].indexOf(YOUR_SHIP_ADDRESS_TXT) != -1)
-        // {
-        //   your_ship_address =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // SMTP host password
-        // if (configuratie_regels[teller].indexOf(SMTP_HOST_PASSWORD_TXT) != -1)
-        // {
-        //   smtp_host_password =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // SMTP host port
-        // if (configuratie_regels[teller].indexOf(SMTP_HOST_PORT_TXT) != -1)
-        // {
-        //   smtp_host_port = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
         // RS232 2nd meteo instrument connection mode (= RS232 connected instrument II type: none,
         // StarX, HMP155)
         if (configuratie_regels[teller].indexOf(RS232_INSTRUMENT_TYPE_TXT_II) != -1) {
@@ -7309,20 +7152,6 @@ public class main extends javax.swing.JFrame {
       jTextField17.setForeground(main.input_color_from_observer);
     }
 
-    /*
-          if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE)
-          {
-             jTextField17.setText("variable");
-          }
-          else if ((mywind.int_true_wind_dir != INVALID) && (mywind.int_true_wind_dir != mywind.WIND_DIR_VARIABLE))
-          {
-             jTextField17.setText(Integer.toString(mywind.int_true_wind_dir) + " degr");
-          }
-          else
-          {
-             jTextField17.setText("");
-          }
-    */
     // true wind dir
 
     if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
@@ -10588,16 +10417,6 @@ public class main extends javax.swing.JFrame {
                       int int_day = Integer.parseInt(mydatetime.day);
 
                       if ((int_day >= 1) && (int_day <= 31)) {
-                        // String wind_speed_units = "";
-                        //
-                        // if (main.wind_units.indexOf(main.M_S) == -1)  // so knots
-                        // {
-                        //   wind_speed_units = "kts";
-                        // }
-                        // else
-                        // {
-                        //   wind_speed_units = "m/s";
-                        // }
 
                         info = "";
                         info =
@@ -10991,21 +10810,6 @@ public class main extends javax.swing.JFrame {
             new ActionListener() {
               @Override
               public void actionPerformed(ActionEvent e) {
-                /*
-                               String info = "Are you sure you want to exit this application?";
-                               if ( ((RS232_connection_mode == 1) || (RS232_connection_mode == 2) || (RS232_connection_mode == 3)) && (defaultPort != null) )
-                               {
-                                  info += "\n (TurboWin+ will stop with monitoring and collecting of the sensor data)";
-                               }
-
-                               int result = JOptionPane.showConfirmDialog(main.this, info, "Exit " + APPLICATION_NAME, JOptionPane.YES_NO_OPTION);
-
-                               if (result == JOptionPane.YES_OPTION)
-                               {
-                                  tray.remove(trayIcon);
-                                  System.exit(0);
-                               }
-                */
                 main_windowClosing(null);
               } // public void actionPerformed(ActionEvent e)
             });
@@ -11896,55 +11700,6 @@ public class main extends javax.swing.JFrame {
         AWSR = false;
         jCheckBox2.setSelected(false);
       }
-      /*
-               // AWSR draught
-               if (checks_ok)
-               {
-                  try
-                  {
-                     double double_WOW_APR_average_draught = Double.parseDouble(main.WOW_APR_average_draught);
-
-                     if (main.WOW_APR_average_draught.equals("") || !(double_WOW_APR_average_draught >= 0 && double_WOW_APR_average_draught <= 50))
-                     {
-                        JOptionPane.showMessageDialog(null, "normal steaming draft not in range 0.0 - 50.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                        checks_ok = false;
-                        AWSR = false;
-                        jCheckBox2.setSelected(false);
-                     }
-                  }
-                  catch (NumberFormatException e)
-                  {
-                     JOptionPane.showMessageDialog(null, "normal steaming draft not in range 0.0 - 50.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                     checks_ok = false;
-                     AWSR = false;
-                     jCheckBox2.setSelected(false);
-                  }
-               } // if (checks_ok)
-
-               // AWSR barometer ic
-               if (checks_ok)
-               {
-                  try
-                  {
-                     double double_barometer_instrument_correction = Double.parseDouble(main.barometer_instrument_correction.trim());
-
-                     if (main.barometer_instrument_correction.equals("") || !(double_barometer_instrument_correction >= -4.0 || double_barometer_instrument_correction <= 4.0))
-                     {
-                        JOptionPane.showMessageDialog(null, "barometer instrument correction not in range -4.0 - 4.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                        checks_ok = false;
-                        AWSR = false;
-                        jCheckBox2.setSelected(false);
-                     }
-                  }
-                  catch (NumberFormatException e)
-                  {
-                     JOptionPane.showMessageDialog(null, "barometer_instrument_correction not in range -4.0 - 4.0 (Maintenance -> WOW/APR/APTR/AWSR settings)", main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                     checks_ok = false;
-                     AWSR = false;
-                     jCheckBox2.setSelected(false);
-                  }
-               } // if (checks_ok)
-      */
       // warning checks
       if (checks_ok) {
         additional_checks_ok = WOW_APR_settings.AWSR_additional_requirements_checks();
@@ -15203,143 +14958,6 @@ public class main extends javax.swing.JFrame {
     } // if (doorgaan == true)
   }
 
-  /*
-     public static void internet_mouseClicked(final String help_dir) {
-        // TODO add your handling code here:
-
-        new SwingWorker<Void, Void>()
-        {
-           @Override
-           protected Void doInBackground() throws Exception
-           {
-              Desktop desktop = null;
-              boolean local_help_file_exists = false;
-
-              // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
-              //
-              String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
-              File f = new File(help_file_path);
-              if (f.isFile())
-              {
-                 local_help_file_exists = true;
-              }
-
-
-              // Before more Desktop API is used, first check
-              // whether the API is supported by this particular
-              // virtual machine (VM) on this particular host.
-              if (Desktop.isDesktopSupported())
-              {
-                 desktop = Desktop.getDesktop();
-                 URI uri = null;
-                 try
-                 {
-                    //if (offline_mode == false)
-                    //{
-                    //   String http_adres = main.URL_INTERNET_HELP + help_dir; // help_dir set in e.g. ch1_image_mouseClicked()
-                    //   uri = new URI(http_adres);
-                    //   desktop.browse(uri);
-                    //}
-                    //else if (offline_mode == true)
-                    //{
-                    //   String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
-                    //   desktop.open(new File(help_file_path));
-                    //}
-
-                    // First always try the local help dir
-                    // if no help file was found, secondly always try the internet
-                    //
-                    //
-                    //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
-                    //File f = new File(help_file_path);
-                    //if (f.isFile())
-                    if (local_help_file_exists)
-                    {
-                       desktop.open(new File(help_file_path));
-                    }
-                    else
-                    {
-                       String http_adres = main.URL_INTERNET_HELP + help_dir; // help_dir set in e.g. ch1_image_mouseClicked()
-                       uri = new URI(http_adres);
-                       desktop.browse(uri);
-                    }
-
-                 } // try
-                 catch (IOException | URISyntaxException ioe) { }
-              } // if (Desktop.isDesktopSupported())
-              else // Destop method not supported trying alternatives
-              {
-                 // Desktop method failed
-                 // now trying to open with system-specific commands
-                 //
-                 // KDE:     kde-open
-                 // GNOME:   gnome-open
-                 // Any X-server system: xdg-open
-                 // MAC:     open
-                 // Windows: explorer
-                 //
-                 // e.g. see: http://stackoverflow.com/questions/18004150/desktop-api-is-not-supported-on-the-current-platform
-
-                 URI uri = null;
-                 String te_open_help_file = null;
-                 Runtime runtime;
-
-                 //if (offline_mode == false)
-                 if (!local_help_file_exists)
-                 {
-                    String http_adres = main.URL_INTERNET_HELP + help_dir;
-                    uri = new URI(http_adres);
-                    te_open_help_file = uri.toString();
-                    // NB Maybe uri.toString() is maybe(?)not necassary in case "xdg-open" this should be tested (see also manual on "xdg-open")
-                 }
-                 else if (offline_mode == true)
-                 {
-                    //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is pecifiek per parameter bv wind, waves etc.
-                    te_open_help_file = help_file_path;
-                 }
-
-                 runtime = Runtime.getRuntime();
-
-                 // Microsoft Windows
-                 // --- NB Desktop method will always succeed
-
-                 // Linux (Gnome)
-                 // --- NB Desktop method will succeed (Desktop is based on Gnome) so not necessary to try a customised open command ---
-
-                 // Linux (KDE)
-                 try
-                 {
-                    runtime.exec("kde-open " + te_open_help_file);
-                 }
-                 catch (IOException e)
-                 {
-                    // Linux (RaspBerry) [14-11-2014: tested on stand-alone RaspBerry succesfully]
-                    try
-                    {
-                       runtime.exec("xdg-open " + te_open_help_file);
-                    }
-                    catch (IOException e2)
-                    {
-                       // Mac
-                       try
-                       {
-                          runtime.exec("open " + te_open_help_file);
-                       }
-                       catch (IOException e3)
-                       {
-                          JOptionPane.showMessageDialog(null, "Error invoking default web browser (-Desktop-method not supported on this computer system and Runtime alternatives failed)" , main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                       } // catch
-                    } // catch
-                 } // catch
-              } // else (// Destop method not supported)
-
-              return null;
-
-           } // protected Void doInBackground() throws Exception
-        }.execute(); // new SwingWorker<Void, Void>()
-     }
-  */
-
   public static void help_mouseClicked(final String help_page) {
     // TODO add your handling code here:
 
@@ -15390,142 +15008,6 @@ public class main extends javax.swing.JFrame {
     else {
       support_class.open_browser_on_not_linux(te_openen_help_file);
     }
-
-    /*
-          new SwingWorker<Void, Void>()
-          {
-             @Override
-             protected Void doInBackground() throws Exception
-             {
-                Desktop desktop = null;
-                boolean local_help_file_exists = false;
-
-                // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
-                //
-                String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
-                File f = new File(help_file_path);
-                if (f.isFile())
-                {
-                   local_help_file_exists = true;
-                }
-
-
-                // Before more Desktop API is used, first check
-                // whether the API is supported by this particular
-                // virtual machine (VM) on this particular host.
-                if (Desktop.isDesktopSupported())
-                {
-                   desktop = Desktop.getDesktop();
-                   URI uri = null;
-                   try
-                   {
-                      if (local_help_file_exists)
-                      {
-                         desktop.open(new File(help_file_path));
-                      }
-                      else
-                      {
-                         // e.g. https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
-                         String http_adres = main.URL_INTERNET_HELP + help_page + ""; // help_dir was set in java input page file e.g. mycm.java; ch1_image_mouseClicked()
-                         uri = new URI(http_adres);
-                         desktop.browse(uri);
-                      }
-
-                   } // try
-                   catch (IOException | URISyntaxException ioe) { }
-                } // if (Desktop.isDesktopSupported())
-                else // Destop method not supported trying alternatives
-                {
-                   // Desktop method failed
-                   // now trying to open with system-specific commands
-                   //
-                   // KDE:     kde-open
-                   // GNOME:   gnome-open
-                   // Any X-server system: xdg-open
-                   // MAC:     open
-                   // Windows: explorer
-                   //
-                   // e.g. see: http://stackoverflow.com/questions/18004150/desktop-api-is-not-supported-on-the-current-platform
-
-                   URI uri = null;
-                   String te_open_help_file = null;
-                   //Runtime runtime;
-
-                   if (!local_help_file_exists)
-                   {
-                      // e.g. https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
-                      String http_adres = main.URL_INTERNET_HELP + help_page + "";
-                      uri = new URI(http_adres);
-                      te_open_help_file = uri.toString();
-                      // NB Maybe uri.toString() is maybe(?)not necassary in case "xdg-open" this should be tested (see also manual on "xdg-open")
-                   }
-                   else if (offline_mode == true)
-                   {
-                      //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR + java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind, waves etc.
-                      te_open_help_file = help_file_path;
-                   }
-
-                   //runtime = Runtime.getRuntime();
-
-                   // Microsoft Windows
-                   // --- NB Desktop method will always succeed
-
-                   // Linux (Gnome)
-                   // --- NB Desktop method will succeed (Desktop is based on Gnome) so not necessary to try a customised open command ---
-
-                   // Linux (KDE)
-                   try
-                   {
-                      // deprecated from JDK19
-                      //runtime.exec("kde-open " + te_open_help_file);
-
-                      // create cmd array
-                      String[] cmdArray = {"kde-open", te_open_help_file};
-
-                      // create a process and execute cmdArray
-                      Process process = Runtime.getRuntime().exec(cmdArray);
-                   }
-                   catch (IOException e)
-                   {
-                      // Linux (RaspBerry) [14-11-2014: tested on stand-alone RaspBerry succesfully]
-                      try
-                      {
-                         // deprecated from JDK19
-                         //runtime.exec("xdg-open " + te_open_help_file);
-
-                         // create cmd array
-                         String[] cmdArray = {"xdg-open", te_open_help_file};
-
-                         // create a process and execute cmdArray
-                         Process process = Runtime.getRuntime().exec(cmdArray);
-                      }
-                      catch (IOException e2)
-                      {
-                         // Mac
-                         try
-                         {
-                            // deprecated from JDK19
-                            //runtime.exec("open " + te_open_help_file);
-
-                            // create cmd array
-                            String[] cmdArray = {"open", te_open_help_file};
-
-                            // create a process and execute cmdArray
-                            Process process = Runtime.getRuntime().exec(cmdArray);
-                         }
-                         catch (IOException e3)
-                         {
-                            JOptionPane.showMessageDialog(null, "Error invoking default web browser (-Desktop-method not supported on this computer system and Runtime alternatives failed)" , main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                         } // catch
-                      } // catch
-                   } // catch
-                } // else (// Destop method not supported)
-
-                return null;
-
-             } // protected Void doInBackground() throws Exception
-          }.execute(); // new SwingWorker<Void, Void>()
-    */
   }
 
   private void check_immt_size() {
@@ -15709,24 +15191,6 @@ public class main extends javax.swing.JFrame {
     // made!
 
     new SwingWorker<Integer, Void>() {
-
-      // /***************** TEST BEGIN *********/
-
-      // :: GMAIL_TLS (with app password)
-      // ::.\dist\email_tbw.exe "GMAIL_TLS" "smtp.gmail.com" "xxxineinjletryoohdq"
-      // "user@example.com" "turbowin.observations@gmail.com" "dit is een test via GMAIL_TLS with
-      // app password" "This is an obs test body line"
-      //      String smtp_mode = "GMAIL_TLS";
-      //      String smtp_host_local = "smtp.gmail.com";
-      //      String smtp_password_local = "xxxineinjletryooxxx";
-      //      String send_to = obs_email_recipient;
-      // //"user@example.com,user@example.org";
-      //      String send_from = "turbowin.observations@gmail.com";
-      //      String email_subject = obs_email_subject;                //"dit is een test2 via
-      // GMAIL_TLS with app password";
-      //      String email_body = "This is an obs test body line";
-
-      // /***************** TEST END **********/
 
       @Override
       protected Integer doInBackground() throws Exception {
@@ -16079,24 +15543,6 @@ public class main extends javax.swing.JFrame {
 
     new SwingWorker<Integer, Void>() {
 
-      // /***************** TEST BEGIN *********/
-
-      // :: GMAIL_TLS (with app password)
-      // ::.\dist\email_tbw.exe "GMAIL_TLS" "smtp.gmail.com" "xxxineinjletryoohdq"
-      // "user@example.com" "turbowin.observations@gmail.com" "dit is een test via GMAIL_TLS with
-      // app password" "This is an obs test body line"
-      //      String smtp_mode = "GMAIL_TLS";
-      //      String smtp_host_local = "smtp.gmail.com";
-      //      String smtp_password_local = "xxxineinjletryooxxx";
-      //      String send_to = obs_email_recipient;
-      // //"user@example.com,user@example.org";
-      //      String send_from = "turbowin.observations@gmail.com";
-      //      String email_subject = obs_email_subject;                //"dit is een test2 via
-      // GMAIL_TLS with app password";
-      //      String email_body = "This is an obs test body line";
-
-      // /***************** TEST END **********/
-
       @Override
       protected Integer doInBackground() throws Exception {
         //
@@ -16144,125 +15590,21 @@ public class main extends javax.swing.JFrame {
               "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
               main.APPLICATION_NAME + " error",
               JOptionPane.WARNING_MESSAGE);
-
-          /*
-             smtp_mode           = SMTP_HOST_SHIP;                         //
-             smtp_host_local     = local_email_server;                     // eg "smtp.ziggo.nl";
-             //smtp_password_local = "null";
-             send_to             = obs_email_recipient;                    // eg "user@example.com,user@example.org";
-             send_from           = your_ship_address;
-             email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"
-             email_body          = "null";                                 // nb can be overwritten, see below
-             attachment          = "null";                                 // nb can be overwritten, FM13 never in body; format101 only if indicated by the user
-
-             if (obs_email_cc.length() > 3)                                // now we are sure it is a valid email address
-             {
-                send_cc = obs_email_cc;
-             }
-             else
-             {
-                send_cc = "null";
-             }
-
-             if (smtp_host_password.length() > 3)
-             {
-                smtp_password_local = smtp_host_password;
-                smtp_port_local     = smtp_host_port;                      // port only used if password was also available/inserted
-             }
-             else
-             {
-                smtp_password_local = "null";
-                smtp_port_local     = "null";
-             }
-
-             if (obs_format.equals(FORMAT_101))
-             {
-                if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
-                {
-                   attachment = "yes";
-                }
-             }
-          */
-        } // else if (email_send_mode.equals(EMAIL_SEND_LOCAL_HOST)) etc.
-
-        ///////////////////////// EMAIL VIA GMAIL (disabled from version 4.2) //////////////////////
-        else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_GMAIL))
+        } else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_GMAIL))
             || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_GMAIL))) {
           JOptionPane.showMessageDialog(
               null,
               "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
               main.APPLICATION_NAME + " error",
               JOptionPane.WARNING_MESSAGE);
-          /*
-             smtp_mode           = gmail_security;                         // eg GMAIL_TLS";
-             smtp_host_local     = "smtp.gmail.com";
-             smtp_password_local = gmail_app_password;
-             send_to             = obs_email_recipient;                    // eg "user@example.com,user@example.org";
-             send_from           = your_gmail_address;
-             email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"
-             email_body          = "null";                                 // nb can be overwritten, see below
-             smtp_port_local     = "null";                                 // port not used
-             attachment          = "null";                                 // nb can be overwritten, FM13 never in attachment; format101 only if indicated by the user
-
-             if (obs_email_cc.length() > 3)
-             {
-                send_cc = obs_email_cc;
-             }
-             else
-             {
-                send_cc = "null";
-             }
-
-             if (obs_format.equals(FORMAT_101))
-             {
-                if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
-                {
-                   attachment = "yes";
-                }
-             }
-          */
-        } // else if (email_send_mode.equals(EMAIL_SEND_GMAIL)) etc.
-
-        ///////////////////////// EMAIL VIA YAHOO (disabled from version 4.2) //////////////////////
-        else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_YAHOO))
+        } else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_YAHOO))
             || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_YAHOO_MAIL))) {
           JOptionPane.showMessageDialog(
               null,
               "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
               main.APPLICATION_NAME + " error",
               JOptionPane.WARNING_MESSAGE);
-          /*
-             smtp_mode           = yahoo_security;                         // eg YAHOO_TLS";
-             smtp_host_local     = "smtp.mail.yahoo.com";
-             smtp_password_local = yahoo_app_password;
-             send_to             = obs_email_recipient;                    // eg "user@example.com,user@example.org";
-             send_from           = your_yahoo_address;
-             email_subject       = obs_email_subject;                      // nb can be overwritten in case of FM13 "ddhhmm"
-             email_body          = "null";                                 // nb can be overwritten, see below
-             smtp_port_local     = "null";                                 // port not used
-             attachment          = "null";                                 // nb can be overwritten, FM13 never in attachment; format101 only if indicated by the user
-
-             if (obs_email_cc.length() > 3)
-             {
-                send_cc = obs_email_cc;
-             }
-             else
-             {
-                send_cc = "null";
-             }
-
-             if (obs_format.equals(FORMAT_101))
-             {
-                if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
-                {
-                   attachment = "yes";
-                }
-             }
-          */
-        } // else if (email_send_mode.equals(EMAIL_SEND_YAHOO)) etc.
-
-        ///////////////////////// EMAIL VIA CUSTOM //////////////////////
-        else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM))
+        } else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM))
             || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL))) {
           smtp_mode = custom_security; // CUSTOM_TLS_STARTTLS / CUSTOM_TLS / CUSTOM_SSL_STARTTLS /
           // CUSTOM_SSL

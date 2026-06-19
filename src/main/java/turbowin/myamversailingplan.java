@@ -2940,34 +2940,10 @@ public final class myamversailingplan extends javax.swing.JFrame {
         } // protected Void doInBackground() throws Exception
 
         @Override
-        protected void done() {
-          // nothing
-        } // protected void done()
-      }.execute(); // new SwingWorker<Void, Void>()
-    } // if (checks_ok == true)
-
-    //
-    /////////////// save sailing plan to logs dir
-    //
-    // if ((checks_ok == true) && (main.amver_report.equals(main.AMVER_SP)))
-    // {
-    //   String info = "Do you want to save this sailingplan for future use?";
-    //   int reply = JOptionPane.showConfirmDialog(null, info, main.APPLICATION_NAME,
-    // JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-    //   if (reply == JOptionPane.YES_OPTION)
-    //   {
-    //      //doorgaan = false;
-    //      save_amver_sp();
-    //   }
-    // } // if ((checks_ok == true) etc.
-
-    // ALLEEN BIJ TESTEN COMMENTEN
-    // if (checks_ok == true)
-    // {
-    //   setVisible(false);
-    //   dispose();
-    // } // if (checks_ok == true)
-  } // GEN-LAST:event_OK_button_actionPerformed
+        protected void done() {}
+      }.execute();
+    }
+  }
 
   private void save_amver_sp() {
     boolean doorgaan;
@@ -3434,15 +3410,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
       String str_index_1 = hulp_track.substring(index_1_links + 1, index_1_rechts);
       String str_index_2 = hulp_track.substring(index_2_links + 1, index_2_rechts);
 
-      /////////////////////////////
-
-      // JOptionPane.showMessageDialog(null, str_index_1, main.APPLICATION_NAME + " TEST",
-      // JOptionPane.INFORMATION_MESSAGE);
-      // JOptionPane.showMessageDialog(null, str_index_2, main.APPLICATION_NAME + " TEST",
-      // JOptionPane.INFORMATION_MESSAGE);
-
-      ///////////////////////////////
-
       try {
         ro = Integer.parseInt(str_index_1);
       } catch (NumberFormatException e) {
@@ -3490,12 +3457,6 @@ public final class myamversailingplan extends javax.swing.JFrame {
     if ((main.ship_name.compareTo("") != 0) && (main.ship_name != null)) {
       jTextField1.setText(main.ship_name);
     }
-
-    // from version 4.2 call sign is no longer part of the inserted required meteo data
-    // if ((main.call_sign.compareTo("") != 0) && (main.call_sign != null))
-    // {
-    //   jTextField2.setText(main.call_sign);
-    // }
 
     if ((main.imo_number.compareTo("") != 0) && (main.imo_number != null)) {
       jTextField20.setText(main.imo_number);

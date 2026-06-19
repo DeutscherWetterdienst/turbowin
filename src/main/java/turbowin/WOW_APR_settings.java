@@ -975,26 +975,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     // AP[&T]R / AWSR send method
     if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_SERVER)) {
       jRadioButton12.setSelected(true);
-    }
-    // else if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_SMTP_HOST))       // will not reach
-    // this branch from version 4.2, see Function
-    // meta_data_from_configuration_regels_into_global_vars() [main.java]
-    // {
-    //   jRadioButton13.setSelected(true);
-    // }
-    // else if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_GMAIL))           // will not reach
-    // this branch from version 4.2, see Function
-    // meta_data_from_configuration_regels_into_global_vars() [main.java]
-    // {
-    //   jRadioButton14.setSelected(true);
-    // }
-    // else if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_YAHOO_MAIL))      // will not reach
-    // this branch from version 4.2, see Function
-    // meta_data_from_configuration_regels_into_global_vars() [main.java]
-    // {
-    //   jRadioButton15.setSelected(true);
-    // }
-    else if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_CUSTOM_MAIL)) {
+    } else if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_CUSTOM_MAIL)) {
       jRadioButton1.setSelected(true);
     }
 
@@ -1077,29 +1058,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
           jRadioButton1.setSelected(false); // Custom Mail
           jRadioButton1.setEnabled(false); // Custom Mail
         }
-      } // if (obs_format.equals(main.FORMAT_101))
-
-      // [SMTP HOST]
-      // if ( (main.local_email_server.equals("")) || (main.your_ship_address.equals("")) )
-      // {
-      //   jRadioButton13.setEnabled(false);                                 // SMTP host send
-      // method
-      // }
-
-      // [GMAIl]
-      // if ( (main.your_gmail_address.equals("")) || (main.gmail_app_password.equals("")) ||
-      // (main.gmail_security.equals("")) )
-      // {
-      //   jRadioButton14.setEnabled(false);                                // GMail send method
-      // }
-
-      // [YAHOO]
-      // if ( (main.your_yahoo_address.equals("")) || (main.yahoo_app_password.equals("")) ||
-      // (main.yahoo_security.equals("")) )
-      // {
-      //   jRadioButton15.setEnabled(false);                                // Yahoo Mail send
-      // method
-      // }
+      }
 
       // [CUSTOM]
       if ((main.your_custom_address.equals(""))
@@ -1168,20 +1127,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     // AP(T)R and AWSR send method
     if (jRadioButton12.isSelected()) {
       main.APTR_AWSR_send_method = main.APTR_AWSR_SERVER;
-    }
-    // else if (jRadioButton13.isSelected())
-    // {
-    //   main.APTR_AWSR_send_method = main.APTR_AWSR_SMTP_HOST;
-    // }
-    // else if (jRadioButton14.isSelected())
-    // {
-    //   main.APTR_AWSR_send_method = main.APTR_AWSR_GMAIL;
-    // }
-    // else if (jRadioButton15.isSelected())
-    // {
-    //   main.APTR_AWSR_send_method = main.APTR_AWSR_YAHOO_MAIL;
-    // }
-    else if (jRadioButton1.isSelected()) {
+    } else if (jRadioButton1.isSelected()) {
       main.APTR_AWSR_send_method = main.APTR_AWSR_CUSTOM_MAIL;
     }
 
@@ -1450,22 +1396,6 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     ///////////// save the new settings and close the input screen /////////////
     //
     if (checks_ok) {
-      // if (main.offline_mode_via_cmd == true)     // after installation as standalone program this
-      // will always be the case
-      // {
-      //  main.schrijf_configuratie_regels();
-      // }
-      // else // so offline_via_jnlp mode or online (webstart) mode
-      // {
-      //   main.set_muffin();
-      //   main.schrijf_configuratie_regels();
-      //
-
-      // message
-      // String info = "Changes will take effect inmediatelly. Not necessary to restart";
-      // JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info",
-      // JOptionPane.INFORMATION_MESSAGE);
-
       // close this WOW/APR settings input page
       setVisible(false);
       dispose();

@@ -3698,67 +3698,6 @@ public class ship {
     } // for (int p = 0; p < 2; p++)
   }
 
-  /*
-     public ship(Color color_white, Color color_black, Color color_deck_passenger_ship, Color color_pool_1, Color color_pool_2, Color color_pool_3, Color color_pool_4, Color color_acc_passenger_ship, Color color_life_boat, Color color_funnel_passenger_ship, Color color_funnel_ferry, Color color_bridge_lng_tanker_II, Color color_bridge_oil_tanker, Color color_bridge_container_ship, Color color_bridge_ro_ro_ship, Color color_bridge_fruit_juice, Color color_pipes_oil_tanker, Color color_deck_steel_blue, Color color_deck_reefer_ship, Color color_deck_general_cargo_classic, Color color_deck_research_vessel, Color color_crane_research_vessel, Color color_hoist_research_vessel, Color color_cradle_research_vessel, Color color_bridge_research_vessel, Color color_night_crane_research_vessel, Color color_night_hoist_research_vessel, Color color_night_cradle_research_vessel, Color color_deck_container_ship_II, Color color_deck1_ferry, Color color_deck2_ferry, Color color_deck3_ferry, Color color_deck_ro_ro, Color color_tank_deck_fruit_juice_tanker, Color color_lanes_ro_ro, Color color_hatches_general_cargo_ship, Color color_hatches_general_cargo_ship_II, Color color_medium_gray, Color color_container_1, Color color_container_2, Color color_container_3, Color color_container_4, Color color_container_5, Color color_container_6, Color color_container_7, Color color_container_8, Color color_container_9, Color color_container_10, Color color_derricks, Color color_tanks_fruit_juice, Color color_aft_deck_fruit_juice_tanker, Color color_deck_tall_ship, Color color_masts_tall_ship, Color color_deck_yacht, Color color_cranes)
-     {
-        this.color_white = color_white;
-        this.color_black = color_black;
-        this.color_deck_passenger_ship = color_deck_passenger_ship;
-        this.color_pool_1 = color_pool_1;
-        this.color_pool_2 = color_pool_2;
-        this.color_pool_3 = color_pool_3;
-        this.color_pool_4 = color_pool_4;
-        this.color_acc_passenger_ship = color_acc_passenger_ship;
-        this.color_life_boat = color_life_boat;
-        this.color_funnel_passenger_ship = color_funnel_passenger_ship;
-        this.color_funnel_ferry = color_funnel_ferry;
-        this.color_bridge_lng_tanker_II = color_bridge_lng_tanker_II;
-        this.color_bridge_oil_tanker = color_bridge_oil_tanker;
-        this.color_bridge_container_ship = color_bridge_container_ship;
-        this.color_bridge_ro_ro_ship = color_bridge_ro_ro_ship;
-        this.color_bridge_fruit_juice = color_bridge_fruit_juice;
-        this.color_pipes_oil_tanker = color_pipes_oil_tanker;
-        this.color_deck_steel_blue = color_deck_steel_blue;
-        this.color_deck_reefer_ship = color_deck_reefer_ship;
-        this.color_deck_general_cargo_classic = color_deck_general_cargo_classic;
-        this.color_deck_research_vessel = color_deck_research_vessel;
-        this.color_crane_research_vessel = color_crane_research_vessel;
-        this.color_hoist_research_vessel = color_hoist_research_vessel;
-        this.color_cradle_research_vessel = color_cradle_research_vessel;
-        this.color_bridge_research_vessel = color_bridge_research_vessel;
-        this.color_night_crane_research_vessel = color_night_crane_research_vessel;
-        this.color_night_hoist_research_vessel = color_night_hoist_research_vessel;
-        this.color_night_cradle_research_vessel = color_night_cradle_research_vessel;
-        this.color_deck_container_ship_II = color_deck_container_ship_II;
-        this.color_deck1_ferry = color_deck1_ferry;
-        this.color_deck2_ferry = color_deck2_ferry;
-        this.color_deck3_ferry = color_deck3_ferry;
-        this.color_deck_ro_ro = color_deck_ro_ro;
-        this.color_tank_deck_fruit_juice_tanker = color_tank_deck_fruit_juice_tanker;
-        this.color_lanes_ro_ro = color_lanes_ro_ro;
-        this.color_hatches_general_cargo_ship = color_hatches_general_cargo_ship;
-        this.color_hatches_general_cargo_ship_II = color_hatches_general_cargo_ship_II;
-        this.color_medium_gray = color_medium_gray;
-        this.color_container_1 = color_container_1;
-        this.color_container_2 = color_container_2;
-        this.color_container_3 = color_container_3;
-        this.color_container_4 = color_container_4;
-        this.color_container_5 = color_container_5;
-        this.color_container_6 = color_container_6;
-        this.color_container_7 = color_container_7;
-        this.color_container_8 = color_container_8;
-        this.color_container_9 = color_container_9;
-        this.color_container_10 = color_container_10;
-        this.color_derricks = color_derricks;
-        this.color_tanks_fruit_juice = color_tanks_fruit_juice;
-        this.color_aft_deck_fruit_juice_tanker = color_aft_deck_fruit_juice_tanker;
-        this.color_deck_tall_ship = color_deck_tall_ship;
-        this.color_masts_tall_ship = color_masts_tall_ship;
-        this.color_deck_yacht = color_deck_yacht;
-        this.color_cranes = color_cranes;
-     }
-  */
-
   public ship(
       Color color_white,
       Color color_black,
@@ -4417,24 +4356,6 @@ public class ship {
     double y7_container = y5_container;
     double y8_container = y4_container;
 
-    // NB drawing the cradle lines via GeneralPath is also ok
-    //
-    // GeneralPath container_cradle = new GeneralPath();
-    // container_cradle.moveTo(x5_container, y5_container);
-    // container_cradle.lineTo(x6_container, y6_container);
-    //
-    // container_cradle.moveTo(x7_container, y7_container);
-    // container_cradle.lineTo(x8_container, y8_container);
-    //
-    // container_cradle.moveTo(x4_container, y4_container);
-    // container_cradle.lineTo(x3_container, y3_container);
-    //
-    // container_cradle.closePath();
-    //
-    // g2d.setStroke(new BasicStroke(2.0f));
-    // g2d.setColor(Color.ORANGE);
-    // g2d.draw(container_cradle);
-
     g2d.setStroke(new BasicStroke(2.0f));
     if (night_mode) {
       g2d.setColor(color_night_cradle_research_vessel);
@@ -4684,31 +4605,6 @@ public class ship {
                   y_container - y_container_offset,
                   container_breadth,
                   container_length);
-          /*
-                         if (night_mode)
-                         {
-                            g2d.setPaint(CONTAINER_COLOR_NIGHT);
-                         }
-                         else // day mode
-                         {
-                            int random = (int)(Math.random() * 10 + 1);    // 1 - 10 return value
-
-                            switch (random)
-                            {
-                               case 1:  g2d.setPaint(color_container_1); break;
-                               case 2:  g2d.setPaint(color_container_2); break;
-                               case 3:  g2d.setPaint(color_container_3); break;
-                               case 4:  g2d.setPaint(color_container_4); break;
-                               case 5:  g2d.setPaint(color_container_5); break;
-                               case 6:  g2d.setPaint(color_container_6); break;
-                               case 7:  g2d.setPaint(color_container_7); break;
-                               case 8:  g2d.setPaint(color_container_8); break;
-                               case 9:  g2d.setPaint(color_container_9); break;
-                               case 10: g2d.setPaint(color_container_10); break;
-                               default: g2d.setPaint(color_container_1); break;
-                            }
-                         } // else (day mode)
-          */
           if (night_mode) {
             g2d.setPaint(CONTAINER_COLOR_NIGHT);
           } else // day mode

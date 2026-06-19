@@ -529,43 +529,6 @@ public class RS232_grafiek extends JPanel {
             hulp_lijn = new Line2D.Double(horizontaal_hulp_lijn_begin, horizontaal_hulp_lijn_eind);
             g2.draw(hulp_lijn);
           } // if (i != 0)
-
-          /*
-          				// horizontal secondary lines
-          				//
-                      g2.setStroke(new BasicStroke(1f));
-
-                      if (i != aantal_parameter_markers_y_as)
-                      {
-                         // horizontal sec. lines (eg 10 secondary help lines between 2 lines)
-                         if (k == 1)                           // graph b; top right; wind dir
-                         {
-                            aantal_secondary_lines = 0;              // otherwise to crowdy
-                         }
-                         else
-                         {
-                            aantal_secondary_lines = aantal_units_tussen_2_markers;
-                         }
-
-                         for (int j = 0; j < aantal_secondary_lines; j++)
-                         {
-                            if (lo_grafiek != null)
-          						{
-          						   y_pos_sub_marker = (lo_grafiek.getY() - (i * schaling)) - (j * (schaling / aantal_units_tussen_2_markers));
-          						}
-
-          						if (lo_grafiek != null && ro_grafiek != null)
-          						{
-          						   horizontaal_hulp_lijn_begin  = new Point2D.Double(lo_grafiek.getX(), y_pos_sub_marker);
-          						   horizontaal_hulp_lijn_eind   = new Point2D.Double(ro_grafiek.getX(), y_pos_sub_marker);
-          						}
-
-                            hulp_lijn = new Line2D.Double(horizontaal_hulp_lijn_begin, horizontaal_hulp_lijn_eind);
-                            g2.draw(hulp_lijn);
-
-                         } // for (int j = 0; j < aantal_units_tussen_2_markers; j++)
-                      } // if (i != aantal_parameter_markers_y_as)
-          */
         } // for (int i = 0; i <= aantal_markers_y_as; i++)
 
         ////// meta informatie
@@ -621,13 +584,6 @@ public class RS232_grafiek extends JPanel {
         if (k == 0) // graph a; top left; air pressure
         {
           for (int i = 0; i < RS232_view.AANTAL_PLOT_POINTS; i++) {
-            // System.out.println("--- " + "sensor_waarde_array[" + i + "] = " +
-            // sensor_waarde_array[i]);
-            // if (i == 0)
-            // {
-            // System.out.println("--- " + "RS232_view.sensor_waarde_array_2[" + i + "] = " +
-            // RS232_view.sensor_waarde_array_2[i]);
-            // }
 
             if (!RS232_view.sensor_waarde_array[i].equals("")) {
               try {
@@ -720,15 +676,8 @@ public class RS232_grafiek extends JPanel {
         else if (k == 2) // graph c; bottom left; air temp
         {
           for (int i = 0; i < RS232_view.AANTAL_PLOT_POINTS; i++) {
-            // if (i == 0)
-            // {
-            // System.out.println("--- " + "RS232_view.sensor_waarde_array_c[" + i + "] = " +
-            // RS232_view.sensor_waarde_array_c[i]);
-            // }
 
-            if (!RS232_view.sensor_waarde_array_c[i].equals(""))
-            // if (RS232_view.sensor_waarde_array_c[i] != null)
-            {
+            if (!RS232_view.sensor_waarde_array_c[i].equals("")) {
               try {
                 double sensor_waarde;
                 sensor_waarde = Double.parseDouble(RS232_view.sensor_waarde_array_c[i].trim());
@@ -1191,13 +1140,6 @@ public class RS232_grafiek extends JPanel {
             main.APPLICATION_NAME,
             JOptionPane.WARNING_MESSAGE);
       }
-
-      // NB getWidth() en getHeight() zijn van jPanel1 (centrum panel)
-      // NB onderstaande werkt ook, maar minder veilig (ivm het vierkant mooi te sluiten)
-      //    Rectangle2D recta = new Rectangle2D.Double(linker_kantlijn_margin,
-      // boven_kantlijn_margin, (getWidth() - linker_kantlijn_margin) - rechter_kantlijn_margin,
-      // (getHeight() - boven_kantlijn_margin) - onder_kantlijn_margin);
-      //    g2.draw(recta);
 
       //
       // safe method for constructing a square

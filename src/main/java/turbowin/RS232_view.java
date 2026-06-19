@@ -496,31 +496,6 @@ public class RS232_view extends javax.swing.JFrame {
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
-            // cal_systeem_datum_tijd = new GregorianCalendar(new SimpleTimeZone(0, "UTC")); //
-            // geeft systeem datum tijd in UTC van dit moment
-            // cal_systeem_datum_tijd.getTime();                                 // effectueren
-
-            // RS232_AWS_1View.sdf2.setTimeZone(TimeZone.getTimeZone("UTC"));
-            // System.out.println(RS232_AWS_1View.sdf2.format(new Date()));
-
-            // event schrijven naar java console
-            //         if (JAVA_CONSOLE_OUTPUT == true)
-            //         {
-            //            // NB ONDERSTAANDE GEEFT NIET UTC MAAR DE LOKALE TIJD!!!
-            //            // DIT VOORAL OMDAT DIT ER TOEN NOG NIET AS:
-            // sdf2.setTimeZone(TimeZone.getTimeZone("UTC"));
-            //            //String systeem_date_time =
-            // RS232_AWS_1View.sdf2.format(cal_systeem_datum_tijd.getTime());
-            //            //System.out.println("--- " + RS232_AWS_1View.APPLICATION_NAME + " " +
-            // systeem_date_time.substring(6, 8) + "-" + systeem_date_time.substring(4, 6) + "-" +
-            // systeem_date_time.substring(0, 4) + " " + systeem_date_time.substring(8, 10) + "." +
-            // systeem_date_time.substring(10) + " UTC" + ": inlezen sensor data uit file via via
-            // Timer");
-            //
-            //            // DEZE ONDERSTAANDE GEEFT WEL UTC!!!! (door Date() te gebruiken)
-            //            System.out.println("--- " + main.sdf2.format(new Date()) + " UTC" + ":
-            // inlezen sensor data uit file via Timer");
-            //         }
 
             new SwingWorker<Void, Void>() {
               @Override
@@ -1148,42 +1123,6 @@ public class RS232_view extends javax.swing.JFrame {
                 + MAX_WRONG_PRESSURE_IN_RECORDS
                 + " Function Read_Sensor_Data_Files_For_Barograph()");
       }
-
-      /*
-      *  ------- ONDERSTAANDE DOET HET WEL GOED (EEN SOORT AUTOMATISCHE RESTART) ---------
-      *
-           // verwijderen van de laatse file waar zoveel foutieve records in staan (anders valt programma bij de volgende check er direct weer over)
-           new SwingWorker<Void, Void>()
-           {
-              @Override
-              protected Void doInBackground() throws Exception
-              {
-                 File file_sensor_data = new File(last_sensor_data_file);
-                 if (file_sensor_data.exists())
-                 {
-                    file_sensor_data.delete();
-                 }
-
-                 return null;
-              } // protected Void doInBackground() throws Exception
-           }.execute(); // new SwingWorker<Void, Void>()
-
-           // sluiten openstaande com port!
-           if (serialPort != null)
-           {
-              serialPort.close();
-           }
-
-           // sluiten timer??
-           if (sensor_data_file_ophalen_timer != null)
-           {
-              sensor_data_file_ophalen_timer = null;
-           }
-
-           //Format_Barometer_Output_3();
-           initComponents2();
-
-      */
 
       if (dialog_sensor_data_error_present == false) {
         // private JDialog optionPaneDialog;

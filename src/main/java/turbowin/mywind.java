@@ -643,24 +643,6 @@ public final class mywind extends javax.swing.JFrame {
   }
 
   private void initSynopparameters() {
-    // AWS
-    // if (!(main.wind_source.equals(main.MEASURED_OFF_BOW)) && (main.RS232_connection_mode == 3 ||
-    // main.RS232_connection_mode == 9 || main.RS232_connection_mode == 10 ||
-    // main.RS232_connection_mode == 11))
-    // {
-    //   String info = "On the wind input form TurboWin+ always display the measured apparent wind
-    // of the connected AWS\n";
-    //   info += "Please change the appropriate setting\n";
-    //   info += "check: Maintenance -> Station data -> wind meta data -> \"measured; apparent speed
-    // and app. dir (OFF THE BOW, clockwise)\"";
-    //
-    //   JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " warning",
-    // JOptionPane.WARNING_MESSAGE);
-    // }
-
-    // put back earlier inserted values (of, voor source, de waarde uit de configuratie file als die
-    // later niet veranderd is)
-    //
 
     if (main.wind_source.equals(main.ESTIMATED_TRUE)) jRadioButton1.setSelected(true);
     else if (main.wind_source.equals(main.MEASURED_OFF_BOW)) jRadioButton2.setSelected(true);
@@ -1028,16 +1010,6 @@ public final class mywind extends javax.swing.JFrame {
               JOptionPane.WARNING_MESSAGE);
           Reset_All_Wind_Vars();
         }
-
-        /* if wind richting = variable than wind speed may not be too high */
-        // if wind dir = variable -> wind speed must be < 5 knots / m/s
-        // else if ( (wind_dir.trim().equals("variable")) && (int_wind_speed >= 5) )
-        // {
-        //   JOptionPane.showMessageDialog(null, "if wind dir. is variable, wind speed must be < 5",
-        // main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-        //   Reset_All_Wind_Vars();
-        // }
-
         /* if wind richting = variable than wind speed may not be too high */
         else if ((main.wind_units.trim().indexOf(main.M_S) != -1)
             && (wind_dir.trim().equals("variable"))
@@ -1454,53 +1426,6 @@ public final class mywind extends javax.swing.JFrame {
 
       /* update wind fields on main screen */
       main.wind_fields_update();
-
-      ///////////////////////////////////////////////////////////////////////////////////////////////
-      /*
-            //System.out.println("+++ main.dashboard_form_APR_radar = "+ main.dashboard_form_APR_radar);
-
-            // if APR Dashboard was sopened, reset the APR Dashboard
-            //
-            boolean APR_screen_required = false;
-            if (main.dashboard_form_APR_radar != null)
-            {
-               if (DASHBOARD_view_APR_radar.dashboard_update_APR_timer_is_gecreeerd == true)
-               {
-                  if (DASHBOARD_view_APR_radar.dashboard_update_APR_timer.isRunning())
-                  {
-                     DASHBOARD_view_APR_radar.dashboard_update_APR_timer.stop();
-                  }
-               }
-               DASHBOARD_view_APR_radar.dashboard_update_APR_timer = null;
-
-               DASHBOARD_view_APR_radar.dashboard_update_APR_timer_is_gecreeerd = false;
-
-               main.dashboard_form_APR_radar.setVisible(false);
-
-               main.dashboard_form_APR_radar = null;
-
-               APR_screen_required = true;
-            }
-            else
-            {
-               APR_screen_required = false;
-            }
-
-            if (APR_screen_required)
-            {
-               main.dashboard_form_APR_radar = new DASHBOARD_view_APR_radar();
-               main.dashboard_form_APR_radar.setExtendedState(MAXIMIZED_BOTH);
-               main.dashboard_form_APR_radar.setVisible(true);
-            }
-      */
-      // DASHBOARD_view_APR_radar.jRadioButton2.setSelected(true);
-
-      // System.out.println("++++++++++++++++++ int_true_wind_speed 1 = "+ int_true_wind_speed);
-
-      // main.dashboard_form_APR_radar = new DASHBOARD_view_APR_radar();   // necessary otherwise
-      // nullpointer exceptions with update_APR_dashboard() etc.
-
-      // main.Dashboard_APR_radar_actionperformed(null);
 
       if (main.dashboard_form_APR_radar
           != null) // otherwise the first time (if APR dashboard was never opened before) an
@@ -1925,55 +1850,6 @@ public final class mywind extends javax.swing.JFrame {
       } //  public void done()
     }.execute();
   } // private void loadImage(final String imagePath, final int index)
-
-  /*
-     private class MyDocumentListener implements DocumentListener
-     {
-        //final String newline = "\n";
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            updateLog(e, "inserted into");
-        }
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            updateLog(e, "removed from");
-        }
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            //Plain text components don't fire these events.
-        }
-
-        public void updateLog(DocumentEvent e, String action)
-        {
-
-
-           Document doc = (Document) e.getDocument();
-           try
-           {
-              String currText = doc.getText(0, doc.getLength());
-
-              int int_speed = Integer.parseInt(currText);
-
-              if (int_speed == 0)
-              {
-                 loadImage(main.ICONS_DIRECTORY + "glyph_bf_0.jpg");
-              }
-              else if (int_speed > 0 && int_speed < 10)
-              {
-                 loadImage(main.ICONS_DIRECTORY + "glyph_bf_4.jpg");
-                 //loadImage(main.ICONS_DIRECTORY + "A_1.jpg");
-                 //loadImage(main.ICONS_DIRECTORY + "A_1.jpg");
-              }
-           }
-           catch (BadLocationException ex)
-           {
-              Logger.getLogger(mywind.class.getName()).log(Level.SEVERE, null, ex);
-           }
-
-        }
-     }
-  */
 
   /**
    * @param args the command line arguments

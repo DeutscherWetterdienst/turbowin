@@ -1630,83 +1630,13 @@ public final class mystationdata extends javax.swing.JFrame {
     } else if (main.sst_exposure.trim().equals("") == true
         || main.sst_exposure.trim().length() < 2) {
       info = "Sea water temp exposure: unknown/not valid";
-    }
-    // else if ( (main.pressure_reading_msl_yes_no.trim().equals(main.PRESSURE_READING_MSL_YES) ==
-    // true) &&
-    //           (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2 ||
-    // main.RS232_connection_mode == 4 ||
-    //            main.RS232_connection_mode == 5 || main.RS232_connection_mode == 6 ||
-    // main.RS232_connection_mode == 7
-    //         ) )   // PTB220 or PTB330 or MintakaDuo or Mintaka Star USB or Mintaka Star WiFi AP
-    // or Mintaka Star WiFi station
-    // {
-    //    info = "TurboWin+ will always retrieve the pressure at instrument level (never at MSL) of
-    // the connected barometer\n";
-    //    info += "If the reading indicates MSL pressure and there is no barometer connected to
-    // TurboWin+ please deselect first \n";
-    //
-    //    if (main.RS232_connection_mode == 6 || main.RS232_connection_mode == 7)  // Mintaka Star
-    // WiFi AP or Mintaka Star WiFi station
-    //    {
-    //       info += "the instrument connected (Maintenance -> Serial/USB/LAN connection settings)";
-    //    }
-    //    else
-    //    {
-    //       info += "the instrument connected (Maintenance -> Serial/USB/LAN connection settings)";
-    //    }
-    // }
-    // else if ( (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_YES) == true) &&
-    //           (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 ||
-    // main.RS232_connection_mode == 10 || main.RS232_connection_mode == 11) )            // AWS
-    // connected
-    // {
-    //    info = "If AWS connected please select: \"does the reading indicate MSL pressure =
-    // no\"\n";
-    //    info += "If the reading indicates MSL pressure and there is no AWS connected to TurboWin+
-    // please deselect first \n";
-    //    info += "the AWS instrument connected (Maintenance -> Serial/USB/LAN connection
-    // settings)";
-    // }
-
-    else if ((main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_YES) == true)
+    } else if ((main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_YES) == true)
         && (main.RS232_connection_mode != 0)) // AWS or barometer connected
     {
       info =
           "If AWS or barometer connected (Maintenance -> Serial/USB/LAN connection settings) please select: \"does the reading indicate MSL pressure = no\"\n";
     }
-
-    // else if ( (main.wind_units.equals(main.M_S) == false) &&
-    //           (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 ||
-    // main.RS232_connection_mode == 10 || main.RS232_connection_mode == 11) )            // AWS
-    // connected
-    // {
-    //    info = "If AWS connected please select: \"wind speed units estimated/measured = m/s\"\n";
-    // }
-
-    // extra check 'wind source' and AWS connected
-    // else if ((main.wind_source.equals(main.MEASURED_OFF_BOW) == false) &&
-    // ((main.RS232_connection_mode == 3) || (main.RS232_connection_mode == 9) ||
-    // (main.RS232_connection_mode == 10) || (main.RS232_connection_mode == 11)))
-    // {
-    //    info = "If AWS connected please select: wind source = \"measured speed + app. dir. (OFF
-    // THE BOW, clockwise)\"\n";
-    // }
-
-    // if AWS thean anemomter height must be inserted
-    //
-    // NB it is possible that there is no anemometer at all is connected...
-    //
-    // else if (  (main.height_anemometer.trim().equals("")) &&
-    //        (main.RS232_connection_mode == 3 || main.RS232_connection_mode == 9 ||
-    // main.RS232_connection_mode == 10 || main.RS232_connection_mode == 11) )            // AWS
-    // connected
-    // {
-    //   info = "If AWS connected please insert also the \"average height of the anemometer above
-    // WL\"\n";
-    // }
-
     /////// if info/warning available -> pop-up message //////
-    //
     if (info.compareTo("") != 0) {
       doorgaan = false;
       JOptionPane.showMessageDialog(
@@ -1714,24 +1644,7 @@ public final class mystationdata extends javax.swing.JFrame {
     } else {
       doorgaan = true;
     }
-
-    // call sign extra check (all char in range a-z or A-Z or 0-9)
-    //
-    // if (doorgaan == true)
-    // {
-    //  badChar = Pattern.compile("[^A-Za-z0-9]");
-    //  if (badChar.matcher(main.call_sign.trim()).find())
-    //  {
-    //      info = "Call sign: invalid character(s)";
-    //      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error",
-    // JOptionPane.WARNING_MESSAGE);
-    //      doorgaan = false;
-    //      main.call_sign = "";
-    //   }
-    // }
-
     // station ID (SOT ID) extra check (all char in range a-z or A-Z or 0-9)
-    //
     if (doorgaan == true) {
       if (main.station_ID.trim().equals("") == false) {
         badChar = Pattern.compile("[^A-Za-z0-9]");
@@ -1761,22 +1674,6 @@ public final class mystationdata extends javax.swing.JFrame {
         }
       }
     }
-
-    // masked station ID (masked call sign) and station ID (SOT ID) can't be both present
-    //
-    // if (doorgaan == true)
-    // {
-    //   if ( (main.station_ID.trim().equals("") == false) &&
-    // (main.masked_call_sign.trim().equals("") == false) )
-    //   {
-    //      info = "Only 'masked station ID' or 'station ID' can be inserted (not both)";
-    //      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error",
-    // JOptionPane.WARNING_MESSAGE);
-    //      doorgaan = false;
-    //      main.station_ID = "";                  // station ID (SOT ID)
-    //      main.masked_call_sign = "";            // masked station ID
-    //   }
-    // }
 
     if (doorgaan == true) {
       // max. height deck cargo
@@ -1872,10 +1769,6 @@ public final class mystationdata extends javax.swing.JFrame {
       try {
         double double_barometer_instrument_correction =
             Double.parseDouble(main.barometer_instrument_correction.trim());
-
-        // if ( (main.barometer_instrument_correction.trim().length() > 0) &&
-        // (double_barometer_instrument_correction < -4.0 || double_barometer_instrument_correction
-        // > 4.0) )
         if (double_barometer_instrument_correction < -4.0
             || double_barometer_instrument_correction > 4.0) {
           JOptionPane.showMessageDialog(
@@ -1907,22 +1800,9 @@ public final class mystationdata extends javax.swing.JFrame {
         // recruited ships
         main.obs_email_subject = main.UK_OBS_EMAIL_SUBJECT;
       }
-      // else // all other countries
-      // {
-      //   main.obs_email_subject = main.GENERAL_OBS_EMAIL_SUBJECT;
-      // }
-
-    } // if (doorgaan == true)
+    }
 
     if (doorgaan == true) {
-      // System.out.println("++++ gepasseerd");
-
-      /* write to configuration file in logs dir (backup for muffin) and data dir */
-      // main.schrijf_configuratie_regels();
-      //
-      /* write to muffin */
-      // main.set_muffin();
-      //
       // write meta (station) data to muffins or configuration files
       if (main.offline_mode_via_cmd == true) {
         main.schrijf_configuratie_regels();
@@ -1978,20 +1858,6 @@ public final class mystationdata extends javax.swing.JFrame {
     info += "The location of the station data file depends on the TurboWin+ installation folder\n";
     info +=
         "If the location of the station data file (configuration.txt) is not known you can do, before importing, a file search on your disk outside TurboWin+";
-
-    // ONDERSTAANDE KAN NIET OMDAT LOG DIR DAN OOK NIET BEKEND IS
-    // if (main.offline_mode == true)
-    // {
-    //    // e.g. in offline mode: main.logs_dir = c:\meteo\turboweb\log -> dir of configuration.txt
-    // = c:\meteo\turboweb
-    //   int pos = main.logs_dir.lastIndexOf(java.io.File.separator);
-    //    configuration_dir = main.logs_dir.substring(0, pos);
-    // }
-    // else
-    // {
-    //   configuration_dir = main.logs_dir;
-    // }
-    // info += configuration_dir;
 
     int reply =
         JOptionPane.showConfirmDialog(
@@ -2088,85 +1954,15 @@ public final class mystationdata extends javax.swing.JFrame {
   } // GEN-LAST:event_import_button_actionPerformed
 
   private void initStationComponents() {
-    // method determing waves
-    // jList1.setModel(new javax.swing.AbstractListModel()
-    // ListModel<String> waves_model = new AbstractListModel<String>()
-    // {
-    //   String[] strings = {
-    //                        main.SEA_AND_SWELL_ESTIMATED,//"wind sea and swell estimated",
-    //
-    //                        // NOTE
-    //                        // SO ONLY ESTIMEATED WAVES POSSIBLE
-    //                        // IF STATEMENTS BELOW ARE ENABLED AGAIN ALSO CHANGE CODE FOR IMMT
-    // STORAGE
-    //                        // (CHAR 56 etc IN IMMT-3, SEE MAIN.JAVA FUNCTION IMMT_log())
-    //
-    //                        //main.WAVES_MEASURED_SHIPBORNE,//"waves measured (shipborne wave
-    // recorder)",
-    //                        //main.WAVES_MEASURED_BUOY,//"waves measured (buoy)",
-    //                        //main.WAVES_MEASURED_OTHER//"waves measured (other measurement
-    // system)"
-    //                      };
-    //   @Override
-    //   public int getSize() { return strings.length; }
-    //   @Override
-    //   public String getElementAt(int i) { return strings[i]; }
-    // };
-    //
-    // set model
-    // jList1.setModel(waves_model);
-
     // recruiting country (NB in java not possible to sort directly)
-    //
     lees_iso_landen_codes(); // in this function jList2 is populated, not possible to fill List2
-    // here
-    // because swingworker not finished with reading country names and codes,
-    // so must be done in the swingworker done method
-
-    // NB when created, arrays are automatically initialized with the default value of their type
-
-    /* put global meta data vars from configuration file into appropriate components */
-
     // ship name
-    //
     jTextField1.setText(main.ship_name.trim());
-
     // IMO nummer
-    //
     jTextField2.setText(main.imo_number.trim());
-
-    // call sign
-    //
-    // jTextField3.setText(main.call_sign.trim());
-
-    // masked call sign
-    //
-    // jTextField4.setText(main.masked_call_sign.trim());
-
     // station ID (SOT ID)
-    //
     jTextField10.setText(main.station_ID.trim());
-
-    // time zone computer
-    //
-    // uitgeschakeld, wellicht in de toekomst weer gebruiken (function check_and_set_datetime() in
-    // main.java)
-    //
-    // if (main.time_zone_computer.trim().equals(main.TIME_ZONE_COMPUTER_UTC))
-    //   jRadioButton9.setSelected(true);
-    // else if (main.time_zone_computer.trim().equals(main.TIME_ZONE_COMPUTER_OTHER))
-    //   jRadioButton10.setSelected(true);
-
-    // recruiting country
-    //
-    // NB see function lees_iso_landen_codes()
-
-    // method determining waves
-    //
-    // jList1.setSelectedValue(main.method_waves.trim(), true);
-
     // wind meta data
-    //
     if (main.wind_source.trim().indexOf("estimated") != -1) jRadioButton1.setSelected(true);
     else if ((main.wind_source.trim().indexOf("measured") != -1)
         && (main.wind_source.trim().indexOf("apparent") != -1)) jRadioButton2.setSelected(true);

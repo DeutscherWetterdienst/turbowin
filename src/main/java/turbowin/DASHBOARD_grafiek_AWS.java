@@ -145,36 +145,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
     // general
     Graphics2D g2d = (Graphics2D) g;
 
-    /*
-       // background image(not in night vision mode and not if transparent)
-       //
-       //if (DASHBOARD_view_AWS.night_vision == false)
-       if ((DASHBOARD_view.night_vision == false) && (!main.theme_mode.equals(main.THEME_TRANSPARENT)) )
-       {
-          //  NB the line below (Image img1 = ... etc.)  didn't work anymore from 2022 why   ???????
-          //
-          //        work arround: only when the following lines were added it was ok again
-          //        System.out.println("+++ " + "this.getClass() = " + this.getClass());
-          //        System.out.println("+++ " + "this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO)) = " + this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO));
-          //
-          // Image img1 = new ImageIcon(this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO)).getImage();
-          //
-          // to be sure code was changed to the following line:
-          Image img1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO));
-
-          //scale the image to cover a the complete area of the drawing surface
-          //g2d.drawImage(img1, 0, 0,getWidth(), getHeight(), 0, 0, img1.getWidth(null), img1.getHeight(null), null);
-          int width = getWidth();
-          int height = getHeight();
-          for (int x = 0; x < width; x += img1.getWidth(null))
-          {
-             for (int y = 0; y < height; y += img1.getHeight(null))
-             {
-                g2d.drawImage(img1, x, y, this);
-             }
-          }
-       }
-    */
     // set the new origin
     g2d.translate(getWidth() / 2, getHeight() / 2);
 
@@ -1971,43 +1941,6 @@ public class DASHBOARD_grafiek_AWS extends JPanel {
       width_c1 = g2d.getFontMetrics().stringWidth(update_message);
       g2d.drawString(update_message, (int) xm_a - width_c1 / 2, (int) ym_a + 10);
     } // if (main.pressure_MSL_from_AWS_present)
-
-    /*
-       ///////////// pressure at sensor height (ic corrected) 3 hours before last update
-       //
-       // (second pointer/hand)
-       //
-       if (reading > 900.0 && reading < 1100.0)                               // reading must be a valid value
-       {
-          reading_ppp = reading - main_RS232_RS422.dashboard_double_last_update_record_ppp; // eg reading = 1020.0 and ppp = 0.7 -> reading_ppp (reading 3 hours before) = 1019.3
-          //reading_ppp = reading - main_RS232_RS422.dashboard_AWS_double_last_update_record_ppp; // eg reading = 1020.0 and ppp = 0.7 -> reading_ppp (reading 3 hours before) = 1019.3
-
-          if (reading_ppp >= 950 && reading_ppp <= 1050)
-          {
-             if (reading_ppp >= 1000 && reading_ppp < 1060)
-             {
-                h = (reading_ppp - 1000.0) / 2;                                // h = 0 if pointer precisly pointing North; m = 15 if East; m = 30 = South; m = 45 = West
-             }
-             else // reading < 1000
-             {
-                h = (1020.0 + ((reading_ppp - 950.0) * 2) - reading_ppp) / 2;  // eg 970 hPa: (1020 + ((970 - 950) * 2) - 970)  / 2= 45
-             }
-
-             xh_a = Math.cos(h * Math.PI / 30 - Math.PI / 2) * 84 + 0;         // 90 = length hand
-             yh_a = Math.sin(h * Math.PI / 30 - Math.PI / 2) * 84 + 0;
-
-             g2d.setColor(color_set_hand);
-             g2d.setStroke(new BasicStroke(1.0f));
-             g2d.drawLine(0, 0, (int)xh_a, (int)yh_a);
-          }
-          else // outside range
-          {
-             //h = 30; // South (hand pointing to nowhere)
-             // do nothing!! (so in that case the white set hand will not be visible)
-          }
-       } // if (reading > 900.0 && reading < 1100.0)
-    */
-
   }
 
   private void draw_AWS_thermometer_hand(Graphics2D g2d) {

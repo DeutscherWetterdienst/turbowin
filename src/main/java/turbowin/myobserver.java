@@ -652,30 +652,11 @@ public final class myobserver extends javax.swing.JFrame {
         //
 
         boolean duplicate = false;
-        for (int x = 0; x < OBSERVER_ROWS; x++) // do not use r as iterator!
-        {
-          // duplicate
-          // String r_num = String.valueOf(r);
-          // String x_num = String.valueOf(x);
-          //
-          // String info7 = "compute_OBS_IDs(): " + "r_num=" + r_num + " x_num=" + x_num;
-          // JOptionPane.showMessageDialog(null, info7, main.APPLICATION_NAME + " error",
-          // JOptionPane.WARNING_MESSAGE);
-
-          // if (r != x)
-          // {
+        for (int x = 0; x < OBSERVER_ROWS; x++) {
           String existing_obs_id = observer_data[x][2]; // column 3 = index 2 = OBS_ID
 
           if ((!obs_id_raw.toString().equals("111"))
               && (existing_obs_id.equals(obs_id_raw.toString()))) {
-            // duplicate
-            // String r_num2 = String.valueOf(r);
-            // String x_num2 = String.valueOf(x);
-            // String info2 = "compute_OBS_IDs() duplicate found: " + "r_num=" + r_num2 + " x_num="
-            // + x_num2 + "\n" + "existing_obs_id=" + existing_obs_id + " ;obs_id_raw=" +
-            // obs_id_raw;
-            // JOptionPane.showMessageDialog(null, info2, main.APPLICATION_NAME + " error",
-            // JOptionPane.WARNING_MESSAGE);
 
             duplicate = true; // Duplicate found
             break;
@@ -736,12 +717,6 @@ public final class myobserver extends javax.swing.JFrame {
 
       obs_id_raw.setCharAt(2, (char) ('0' + digit)); // Convert back to char and set
 
-      // String row_num = String.valueOf(y);
-      // String info2 = "compute_alternative_OBS_ID; increasing for duplicate (" + "y " + row_num +
-      // ")" + "\n" + "obs_id_raw=" + obs_id_raw;
-      // JOptionPane.showMessageDialog(null, info2, main.APPLICATION_NAME + " error",
-      // JOptionPane.WARNING_MESSAGE);
-
       boolean duplicate = false;
       for (int x = 0; x < OBSERVER_ROWS; x++) // do not use r as iterator!
       {
@@ -771,16 +746,6 @@ public final class myobserver extends javax.swing.JFrame {
         return true;
       } else {
         for (int r = 0; r < OBSERVER_ROWS; r++) {
-          /*
-                         if (("".equals(observer_data[r][0])) && (!"".equals(observer_data[r][1])))
-                         {
-                            // name empty but initials not empty
-                            String row_num = String.valueOf(r + 1);
-                            String info = "surname empty (" + "row " + row_num + ")" + "\n" + "observer data changes will not be saved";
-                            JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-                            return false;
-                         }
-          */
           if ((!"".equals(observer_data[r][0])) && ("".equals(observer_data[r][1]))) {
             // name not empty but initials empty
             String row_num = String.valueOf(r + 1);

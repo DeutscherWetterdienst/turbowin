@@ -533,34 +533,6 @@ public final class myice1 extends javax.swing.JFrame {
   } // GEN-LAST:event_Internet_button_actionPerformed
 
   private void initListComponents() {
-    // NB open the GUI form, select JList component, go to Code
-    //    properties and set "Type Parameters" property to <Integer>   (or <String> etc)
-    //    (https://netbeans.org/bugzilla/show_bug.cgi?id=227943)
-
-    // concentration or arrangement of sea ice
-    //
-    /*
-         jList1.setModel(new javax.swing.AbstractListModel()
-         {
-            String[] strings = {
-                                 "No ice",
-                                 "Ship in ice or within 0.5 n mile of ice. Ship in open lead more than 1 n mile wide or ship in fast ice with boundary beyond limit of visibility",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration uniform. Open water or very open pack ice, <3/8 concentration",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration uniform. Open pack ice 3/8 to <6/8 concentration",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration uniform. Close pack ice 6/8 to <7/8 concentration",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration uniform. Very close pack ice 7/8 to <8/8 concentration",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration not uniform. Strips and patches of pack ice with open water between",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration not uniform. Strips and patches of close or very close pack ice with areas of lesser concentration between",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration not uniform. Fast ice with open water, very open or open pack ice to seaward of the ice boundary",
-                                 "Ship in ice or within 0.5 n mile of ice. Ice concentration not uniform. Fast ice with close or very close pack ice to seaward of the ice boundary",
-                                 "Unable to report, because of darkness, poor visibility or because ship is more than 0.5 n mile away from ice edge",
-                               };
-            @Override
-            public int getSize() { return strings.length; }
-            @Override
-            public Object getElementAt(int i) { return strings[i]; }
-         });
-    */
 
     ComboBoxModel<String> concentration_model =
         new DefaultComboBoxModel<String>() {

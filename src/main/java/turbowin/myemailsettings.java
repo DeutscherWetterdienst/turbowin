@@ -24,60 +24,6 @@ import javax.swing.JPopupMenu;
 
 public final class myemailsettings extends javax.swing.JFrame {
 
-  /* inner class popupListener (Gmail app password) */
-  /*
-  class PopupListener extends MouseAdapter
-  {
-     @Override
-     public void mousePressed(MouseEvent e)
-     {
-        ShowPopup(e);
-        //System.out.println("Popup menu will be visible!");
-     }
-
-     @Override
-     public void mouseReleased(MouseEvent e)
-     {
-        ShowPopup(e);
-     }
-
-     private void ShowPopup(MouseEvent e)
-     {
-        if (e.isPopupTrigger())
-        {
-           popup.show(e.getComponent(), e.getX(), e.getY());
-        }
-     }
-  }
-  */
-
-  /* inner class popupListener2 (Yahoo app password) */
-  /*
-  class PopupListener2 extends MouseAdapter
-  {
-     @Override
-     public void mousePressed(MouseEvent e)
-     {
-        ShowPopup(e);
-        //System.out.println("Popup menu will be visible!");
-     }
-
-     @Override
-     public void mouseReleased(MouseEvent e)
-     {
-        ShowPopup(e);
-     }
-
-     private void ShowPopup(MouseEvent e)
-     {
-        if (e.isPopupTrigger())
-        {
-           popup2.show(e.getComponent(), e.getX(), e.getY());
-        }
-     }
-  }
-  */
-
   /* inner class popupListener3 (Custom -app- password) */
   class PopupListener3 extends MouseAdapter {
     @Override
@@ -158,81 +104,9 @@ public final class myemailsettings extends javax.swing.JFrame {
       // ship name was inserted and is available
       jTextField5.setText(main.METEO_LOGS + " " + main.ship_name);
     }
-    jTextField5.setEnabled(
-        false); // defualt, alsways disabled (only for showing the user want will be the subject)
-
-    /////////////////////// pop up menu /////////////////////////
-
-    // NB only for the Gmail and Yahoo app password field
-
-    /*
-    // pop up menu Gmail app password
-    popup = new JPopupMenu();
-
-    JMenuItem menuItem_a = new JMenuItem("copy");
-    menuItem_a.addActionListener(new java.awt.event.ActionListener()
-    {
-       @Override
-       public void actionPerformed(ActionEvent e)
-       {
-          jTextField7.copy();
-       }
-    });
-    popup.add(menuItem_a);
-
-    JMenuItem menuItem_b = new JMenuItem("paste");
-    menuItem_b.addActionListener(new java.awt.event.ActionListener()
-    {
-       @Override
-       public void actionPerformed(ActionEvent e)
-       {
-          jTextField7.paste();
-       }
-    });
-    popup.add(menuItem_b);
-
-    MouseListener popupListener = new myemailsettings.PopupListener();
-    jTextField7.addMouseListener(popupListener);
-
-    // tool tip text
-    jTextField7.setToolTipText("right click for copy or paste");
-    */
-
-    /*
-    // pop up menu Yahoo app password
-    popup2 = new JPopupMenu();
-
-    JMenuItem menuItem_c = new JMenuItem("copy");
-    menuItem_c.addActionListener(new java.awt.event.ActionListener()
-    {
-       @Override
-       public void actionPerformed(ActionEvent e)
-       {
-          jTextField9.copy();
-       }
-    });
-    popup2.add(menuItem_c);
-
-    JMenuItem menuItem_d = new JMenuItem("paste");
-    menuItem_d.addActionListener(new java.awt.event.ActionListener()
-    {
-       @Override
-       public void actionPerformed(ActionEvent e)
-       {
-          jTextField9.paste();
-       }
-    });
-    popup2.add(menuItem_d);
-
-    MouseListener popupListener2 = new myemailsettings.PopupListener2();
-    jTextField9.addMouseListener(popupListener2);
-
-    // tool tip text
-    jTextField9.setToolTipText("right click for copy or paste");
-    */
+    jTextField5.setEnabled(false);
 
     // pop up menu Custom (app) password
-    //
     popup3 = new JPopupMenu();
 
     JMenuItem menuItem_e = new JMenuItem("copy");
@@ -280,69 +154,6 @@ public final class myemailsettings extends javax.swing.JFrame {
       jRadioButton5.setSelected(false); // format 101 obs in body
       jRadioButton6.setSelected(true); // format 101 obs in attachment
     }
-
-    /*
-    // [SMTP HOST]
-    jTextField5.setText(main.local_email_server);
-    jTextField10.setText(main.your_ship_address);
-
-    if (main.smtp_host_password.equals("") == false)
-    {
-       jTextField11.setText(password_stars);
-    }
-
-    jTextField12.setText(main.smtp_host_port);
-    */
-
-    /*
-    // [GMAIL]
-    jTextField6.setText(main.your_gmail_address);
-    if (main.gmail_app_password.equals("") == false)
-    {
-       jTextField7.setText(password_stars);
-    }
-
-    if (main.gmail_security.equals(main.GMAIL_TLS))
-    {
-       jRadioButton1.setSelected(true);
-       jRadioButton2.setSelected(false);
-    }
-    else if (main.gmail_security.equals(main.GMAIL_SSL))
-    {
-       jRadioButton1.setSelected(false);
-       jRadioButton2.setSelected(true);
-    }
-    else // default = TLS
-    {
-       jRadioButton1.setSelected(true);
-       jRadioButton2.setSelected(false);
-    }
-    */
-
-    /*
-    // [YAHOO]
-    jTextField8.setText(main.your_yahoo_address);
-    if (main.yahoo_app_password.equals("") == false)
-    {
-       jTextField9.setText(password_stars);
-    }
-
-    if (main.yahoo_security.equals(main.YAHOO_TLS))
-    {
-       jRadioButton3.setSelected(true);
-       jRadioButton4.setSelected(false);
-    }
-    else if (main.yahoo_security.equals(main.YAHOO_SSL))
-    {
-       jRadioButton3.setSelected(false);
-       jRadioButton4.setSelected(true);
-    }
-    else // default = TLS
-    {
-       jRadioButton3.setSelected(true);
-       jRadioButton4.setSelected(false);
-    }
-    */
 
     // [CUSTOM]
     jTextField13.setText(main.your_custom_address);
@@ -1164,76 +975,6 @@ public final class myemailsettings extends javax.swing.JFrame {
     {
       main.obs_101_email = main.FORMAT_101_ATTACHEMENT;
     }
-
-    /*
-    // [SMTP HOST]
-    main.local_email_server          = jTextField5.getText().trim();
-    main.your_ship_address           = jTextField10.getText().trim();
-
-    smtp_host_password_plain         = jTextField11.getText().trim();
-
-    // save password (in encrypted mode) only if something was changed
-    if ((smtp_host_password_plain.equals(password_stars) == false) && (smtp_host_password_plain.equals("") == false) && (smtp_host_password_plain.length() >= 4))
-    {
-       main.smtp_host_password       = encrypt(smtp_host_password_plain);
-    }
-    if (smtp_host_password_plain.equals("") == true)
-    {
-       main.smtp_host_password       = "";
-    }
-
-    main.smtp_host_port              = jTextField12.getText().trim();
-    */
-
-    /*
-    // {GMAIL]
-    main.your_gmail_address          = jTextField6.getText().trim();
-    gmail_app_password_plain         = jTextField7.getText().trim();
-
-    // save password (in encrypted mode) only if something was changed
-    if ((gmail_app_password_plain.equals(password_stars) == false) && (gmail_app_password_plain.equals("") == false) && (gmail_app_password_plain.length() >= 8))
-    {
-       main.gmail_app_password       = encrypt(gmail_app_password_plain);
-    }
-    if (gmail_app_password_plain.equals(""))
-    {
-       main.gmail_app_password       = "";
-    }
-
-    if (jRadioButton1.isSelected() == true)
-    {
-       main.gmail_security           = main.GMAIL_TLS;
-    }
-    else if (jRadioButton2.isSelected() == true)
-    {
-       main.gmail_security           = main.GMAIL_SSL;
-    }
-    */
-
-    /*
-    // [YAHOO]
-    main.your_yahoo_address          = jTextField8.getText().trim();
-    yahoo_app_password_plain         = jTextField9.getText().trim();
-
-    // save password (in encrypted mode) only if something was changed
-    if ((yahoo_app_password_plain.equals(password_stars) == false) && (yahoo_app_password_plain.equals("") == false) && (yahoo_app_password_plain.length() >= 8))
-    {
-       main.yahoo_app_password       = encrypt(yahoo_app_password_plain);
-    }
-    if (yahoo_app_password_plain.equals(""))
-    {
-       main.yahoo_app_password       = "";
-    }
-
-    if (jRadioButton3.isSelected() == true)
-    {
-       main.yahoo_security           = main.YAHOO_TLS;
-    }
-    else if (jRadioButton4.isSelected() == true)
-    {
-       main.yahoo_security           = main.YAHOO_SSL;
-    }
-    */
 
     // [CUSTOM]
     main.your_custom_address = jTextField13.getText().trim();

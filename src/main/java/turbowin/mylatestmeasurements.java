@@ -23,33 +23,6 @@ import javax.swing.table.TableColumnModel;
 
 public class mylatestmeasurements extends javax.swing.JFrame {
 
-  /*
-     private class jsonfilefilter extends FileFilter
-     {
-
-        @Override
-        public String getDescription()
-        {
-           return "JSON files (*.json)";
-        }
-
-        @Override
-        public boolean accept(File f)
-        {
-           if (f.isDirectory())
-           {
-              return true;
-           }
-           else
-           {
-              return f.getName().toLowerCase().endsWith(".json");
-           }
-
-
-        } // public boolean accept(File f)
-     }
-  */
-
   /** Creates new form mylatestmeasurements */
   public mylatestmeasurements() {
     initComponents();
@@ -376,34 +349,10 @@ public class mylatestmeasurements extends javax.swing.JFrame {
                           // System.out.println("+++ geselecteerd 00 min record: " + record);
                           doorgaan_in_record = true;
                         }
-                      } // if (pos > 0)
-                    } // if (pos > 0)
-                  } // if (record.length() > pos + 1 + 12)
-
-                  //   record_minuten = record.substring(pos + 1 + 10, pos + 1 + 12);         // mm
-                  // from YYYYMMDDHHmm
-                  //
-                  //   // initialisation
-                  //   int_record_minuten = 9999;
-                  //
-                  //   try
-                  //   {
-                  //      int_record_minuten = Integer.parseInt(record_minuten.trim());
-                  //   }
-                  //   catch (NumberFormatException e)
-                  //   {
-                  //      doorgaan_in_record = false;
-                  //   }
-                  //
-                  //   // only parameter value (eg pressure) every 5 minutes (00, 05, 10, 15 etc
-                  // minutes) !
-                  //   //if (!(int_record_minuten >= 0 && int_record_minuten <= 59 &&
-                  // (int_record_minuten % 5 == 0)))
-                  //   if (!(int_record_minuten == 0))
-                  //   {
-                  //      doorgaan_in_record = false;
-                } // if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel))
-                else {
+                      }
+                    }
+                  }
+                } else {
                   doorgaan_in_record = false;
                 }
               } // if (pos > 0) -> so "," NOT found

@@ -88,21 +88,6 @@ public final class mypresentweather extends javax.swing.JFrame {
         };
     jList2.setModel(precip_model);
 
-    // specific present weather
-    // model3 = new javax.swing.DefaultListModel();
-    // jList3.setModel(model3);
-
-    // jList3.setModel(model3);
-    // ListModel<String> specific_weather_model = new AbstractListModel<String>()
-    // {
-    //   String[] strings = { };
-    //   @Override
-    //   public int getSize() { return strings.length; }
-    //   @Override
-    //   public String getElementAt(int i) { return strings[i]; }
-    // };
-    // jList3.setModel(specific_weather_model);
-
     model3 = new DefaultListModel<>();
     jList3.setModel(model3);
 
@@ -719,34 +704,7 @@ public final class mypresentweather extends javax.swing.JFrame {
     main.present_weather_fields_update();
   }
 
-  private void OK_button_actionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
-    // TODO add your handling code here:
-
-    //      present_weather = (String)jList3.getSelectedValue();
-    //      //JOptionPane.showMessageDialog(null, ww , "ww", JOptionPane.INFORMATION_MESSAGE);
-    //
-    //
-    //      if ((present_weather == null) && (general_weather_condition_selected == true))
-    //      {
-    //          // if a GENERAL weather condition was selected but not a specific wether condition
-    // -> warning
-    //          JOptionPane.showMessageDialog(null, "specific weather condition not selected",
-    // main.APPLICATION_NAME + " warning", JOptionPane.WARNING_MESSAGE);
-    //          Reset_All_PresentWeather_Vars();
-    //      }
-    //     else if ((present_weather == null) && (general_weather_condition_selected == false))
-    //      {
-    //          // nothing at all selected -> no warning
-    //          Reset_All_PresentWeather_Vars();
-    //      }
-    //      else
-    //      {
-    //          checks_ok = true;
-    //      }
-
-    //////////////
-    /* initialisation */
+  private void OK_button_actionPerformed(java.awt.event.ActionEvent evt) {
     Reset_All_PresentWeather_Vars();
 
     /* initialisation */

@@ -2351,67 +2351,6 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
       g2d.rotate(-Math.toRadians(90));
       g2d.translate(-(float) x_bf_label2, -(float) y_bf_label2);
     } // for (int i = 3; i <= 9; i+=3)
-
-    /*
-       // Labels (left below wind rose)
-       //
-       g2d.setColor(color_black);
-       //g2d.setColor(color_wind_rose_additional);
-       g2d.setFont(font_f);
-       //g2d.drawString("True wind", (int)(-wind_rose_diameter / 2), (int)(wind_rose_diameter / 2));
-
-
-
-       //
-       int height_letter = g2d.getFontMetrics().stringWidth("M");
-
-
-       // insert MSLP
-       //
-
-
-       //y = 0 - width_letter / 2
-
-       int x_mslp = (int)((-wind_rose_diameter / 2) - (DASHBOARD_view_AWS_radar.width_AWS_radar_dashboard * 0.1 / 2));
-       int y_mslp = (int)(wind_rose_diameter / 2) - (height_letter * 2);
-
-       g2d.drawString("", x_mslp, y_mslp);
-       if (main.pressure_MSL_from_AWS_present)
-       {
-          double reading_mslp = main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic;         // see: RS422_update_AWS_dasboard_values()
-          if (reading_mslp > 900.0 && reading_mslp < 1100.0)
-          {
-             String digits = Double.toString(reading_mslp) + " hPa";
-             g2d.drawString("MSLP: " + digits, x_mslp, y_mslp);
-          }
-       }
-       else
-       {
-          g2d.drawString("MSLP: -", x_mslp, y_mslp);
-       }
-
-       // insert barometric tendency
-       //
-       int x_tendency = (int)((-wind_rose_diameter / 2) - (DASHBOARD_view_AWS_radar.width_AWS_radar_dashboard * 0.1 / 2));
-       int y_tendency = (int)(wind_rose_diameter / 2);
-       //
-       g2d.drawString("", x_tendency, y_tendency);
-       if (main.pressure_tendency_from_AWS_present)
-       {
-       //
-          double tendency_reading = main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency; // see: RS422_update_AWS_dasboard_values()
-          if (tendency_reading >= -99.9 && tendency_reading <= 99.9)
-          {
-             String digits = Double.toString(tendency_reading) + " hPa / 3 hrs";
-             g2d.drawString("tendency: " + digits, x_tendency, y_tendency);
-          }
-       }
-       else
-       {
-          g2d.drawString("tendency: -", x_tendency, y_tendency);
-       }
-    */
-
   }
 
   private GregorianCalendar cal_AWSR_system_d_time;

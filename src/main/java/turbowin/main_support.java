@@ -54,26 +54,6 @@ import javax.swing.Timer;
 
 public class main_support {
 
-  /*
-  public static boolean determine_screen_size()
-  {
-     boolean display_resolution_greather_than_HD  = false;
-     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-     double width_screen = screenSize.getWidth();
-     double height_screen = screenSize.getHeight();
-
-     System.out.println("--- screen resolution: " + width_screen + "x" + height_screen);
-
-     if ((width_screen > 1920) && (height_screen < 1080))
-     {
-        display_resolution_greather_than_HD = true;
-     }
-
-
-     return display_resolution_greather_than_HD;
-  }
-  */
-
   public static String getLinuxFlavor() {
     String flavor = readOsRelease();
     if (flavor == null) {
@@ -165,34 +145,6 @@ public class main_support {
   }
 
   public static void password_timer_task() {
-    /*
-       TimerTask task = new TimerTask()
-       {
-          @Override
-          public void run()
-          {
-             System.out.println("Task performed on: " + new Date() + "n" + "Thread's name: " + Thread.currentThread().getName());
-          }
-       };
-
-       Timer timer = new Timer();
-
-       long delay = 1000L;
-       timer.schedule(task, delay);
-    */
-    /////////////
-
-    /*
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask()
-        {
-           @Override
-           public void run()
-           {
-         // Your database code here
-           }
-         }, 2*60*1000);
-    */
 
     ActionListener update_password_action =
         new ActionListener() {
@@ -255,48 +207,6 @@ public class main_support {
         if (code == -1) {
           // Desktop method failed
           // now trying to open with system-specific commands
-          //
-          // KDE:     kde-open
-          // GNOME:   gnome-open
-          // Any X-server system: xdg-open
-          // MAC:     open
-          // Windows: explorer
-          //
-          // e.g. see:
-          // http://stackoverflow.com/questions/18004150/desktop-api-is-not-supported-on-the-current-platform
-
-          // URI uri = null;
-          // String te_open_help_file = null;
-          // Runtime runtime;
-
-          // if (!local_help_file_exists)
-          // if (browser_address.contains("http"))
-          // {
-          //   // e.g.
-          // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
-          //  //String http_adres = main.URL_INTERNET_HELP + help_page;
-          //   uri = new URI(browser_address);
-          //   te_open_help_file = uri.toString();
-          //   // NB Maybe uri.toString() is maybe(?)not necassary in case "xdg-open" this should be
-          // tested (see also manual on "xdg-open")
-          // }
-          // else if (offline_mode == true)
-          // else
-          // {
-          //   //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR +
-          // java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind,
-          // waves etc.
-          //   te_open_help_file = browser_address;
-          // }
-
-          // runtime = Runtime.getRuntime();
-
-          // Microsoft Windows
-          // --- NB Desktop method will always succeed
-
-          // Linux (Gnome)
-          // --- NB Desktop method will succeed (Desktop is based on Gnome) so not necessary to try
-          // a customised open command ---
 
           // Linux (KDE)
           try {
@@ -386,63 +296,8 @@ public class main_support {
       @Override
       protected Integer doInBackground() throws Exception {
         int code = 0;
-        // boolean local_help_file_exists = false;
-
-        // Are the help files stored locally? (installed as part of the complete TurboWin+
-        // installation)
-        //
-        // String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR +
-        // java.io.File.separator + help_page; // nb help_page is parameter specific e.g. wind.pdf,
-        // waves.pdf etc.
-        // File f = new File(help_file_path);
-        // if (f.isFile())
-        // {
-        //   local_help_file_exists = true;
-        // }
-
-        // trying to open with system-specific commands
-        //
-        // KDE:     kde-open
-        // GNOME:   gnome-open
-        // Any X-server system: xdg-open
-        // MAC:     open
-        // Windows: explorer
-        //
-        // e.g. see:
-        // http://stackoverflow.com/questions/18004150/desktop-api-is-not-supported-on-the-current-platform
 
         URI uri = null;
-        // String te_open_help_file = null;
-        // Runtime runtime;
-
-        // if (!local_help_file_exists)
-        // {
-        //   // e.g.
-        // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
-        //   String http_adres = main.URL_INTERNET_HELP + help_page;
-        //   uri = new URI(http_adres);
-        //   te_open_help_file = uri.toString();
-        //   // NB Maybe uri.toString() is maybe(?)not necassary in case "xdg-open" this should be
-        // tested (see also manual on "xdg-open")
-        // }
-        // else if (offline_mode == true)
-        // {
-        //   //String help_file_path = data_dir + java.io.File.separator + OFFLINE_HELP_DIR +
-        // java.io.File.separator + help_dir; // nb help_dir is specific per parameter eg wind,
-        // waves etc.
-        //   te_open_help_file = help_file_path;
-        // }
-
-        // runtime = Runtime.getRuntime();
-
-        // Microsoft Windows
-        // --- NB Desktop method will always succeed
-
-        // Linux (Gnome)
-        // --- NB Desktop method will succeed (Desktop is based on Gnome) so not necessary to try a
-        // customised open command ---
-
-        // Linux (KDE)
         try {
           // create cmd array
           String[] cmdArray = {"kde-open", subject_address};
@@ -567,120 +422,6 @@ public class main_support {
     response_warning_dialog.setVisible(true);
   }
 
-  /*
-     public void determine_satellite_image_url_SSEC(String satellite_image_mode)
-     {
-        // defaults
-        String products = "";
-        String url_satellite_image = "";
-        String url_lat_hemisphere_sign = "";
-        String url_lon_hemisphere_sign = "";
-        boolean url_lat_ok = false;
-        boolean url_lon_ok = false;
-
-
-        // determine type of satellite image
-        //
-        if (satellite_image_mode.equals(main.SATELLITE_IR_IMAGE))
-        {
-           products = "globalir";
-        }
-        else if (satellite_image_mode.equals(main.SATELLITE_VIS_IMAGE))
-        {
-           products = "global1kmvis";
-        }
-        else if (satellite_image_mode.equals(main.SATELLITE_SST_IMAGE))
-        {
-           products = "NESDIS-SST";
-        }
-        else // default
-        {
-           products = "";
-        }
-
-
-        // Latitude
-        //
-        if (myposition.latitude_degrees.compareTo("") != 0 && myposition.latitude_hemisphere.compareTo("") != 0 &&
-            myposition.latitude_degrees != null && myposition.latitude_hemisphere != null)
-        {
-           if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true))
-           {
-              url_lat_hemisphere_sign = "-";
-           }
-           else
-           {
-              url_lat_hemisphere_sign = "";
-           }
-
-           // String latitude convert to integer
-           try
-           {
-              int int_lat_degrees = Integer.parseInt(myposition.latitude_degrees.trim());
-
-              if ((int_lat_degrees >= 0) && (int_lat_degrees <= 90))
-              {
-                 url_lat_ok = true;
-              }
-           }
-           catch (NumberFormatException ex){// ... //}
-
-        } // if (myposition.latitude_degrees.compareTo("") != 0 etc.
-
-
-        // Longitude
-        //
-        if (myposition.longitude_degrees.compareTo("") != 0 && myposition.longitude_hemisphere.compareTo("") != 0 &&
-            myposition.longitude_degrees != null && myposition.longitude_hemisphere != null)
-        {
-           if ((myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true))
-           {
-              url_lon_hemisphere_sign = "-";  // West negative (http://realearth.ssec.wisc.edu/doc/ : API usage)
-           }
-           else
-           {
-              url_lon_hemisphere_sign = "";
-           }
-
-           // String longitude convert to integer
-           try
-           {
-              int int_lon_degrees = Integer.parseInt(myposition.longitude_degrees.trim());
-
-              if ((int_lon_degrees >= 0) && (int_lon_degrees <= 180))
-              {
-                 url_lon_ok = true;
-              }
-           }
-           catch (NumberFormatException ex){// ... //}
-
-        } // if (myposition.longitude_degrees.compareTo("") != 0 etc.
-
-
-        /// Determine complete URL
-        //
-        if (url_lat_ok && url_lon_ok)
-        {
-           url_satellite_image = "https://realearth.ssec.wisc.edu/?products=" + products + "&time=latest&center=" +
-                                 url_lat_hemisphere_sign +               // "-" or ""
-                                 myposition.latitude_degrees +
-                                 "," +
-                                 url_lon_hemisphere_sign +               // "-" or ""
-                                 myposition.longitude_degrees +
-                                 "&zoom=4";
-        }
-        else
-        {
-           // something went wrong so take the default (0,0 as center of map and zoom level 3)
-           url_satellite_image = "https://realearth.ssec.wisc.edu/?products=" + products + "&time=latest&center=0,0&zoom=3";
-        }
-
-        // invoke, in the default web browser, the url to the satellite image
-        //
-        main.satellite_link_mouse_clicked(url_satellite_image);
-
-     }
-  */
   public void determine_satellite_image_url_SSEC(String satellite_image_mode) {
     // defaults
     String products = "";

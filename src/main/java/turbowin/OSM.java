@@ -1066,20 +1066,6 @@ public class OSM {
                   + ")");
           main.log_turbowin_system_message("[OSM] error creating online Obs's Map html file");
         }
-
-        // } // try
-        // catch (MalformedURLException ex)
-        // {
-        //   System.out.println("+++ unable to create dynamic (online) html file for leaflet Maps
-        // plot [function: OSM_display_IMMT_on_online_map()] (" + ex + ")");
-        //   main.log_turbowin_system_message("[OSM] error creating online Obs's Map html file");
-        // }
-        // catch (IOException ioe)
-        // {
-        //   System.out.println("+++ unable to create dynamic (online) html file for leaflet Maps
-        // plot [function: OSM_display_IMMT_on_online_map()] (" + ioe + ")");
-        //   main.log_turbowin_system_message("[OSM] error creating online Obs's Map html file");
-        // }
       } // if ((Desktop.isDesktopSupported()) && etc.
     } // else (Windows etc.)
   }
@@ -2152,28 +2138,6 @@ public class OSM {
           // } // if (main.OSM_mode.contains(main.OSM_ONLINE_MANUAL) ||
           // main.OSM_mode.contains(main.OSM_OFFLINE_MANUAL))
 
-          /*
-                         // test the validity of the marker position (other wise even with one single marker position error nothing will be dispayed)
-                         Boolean marker_position_ok = false;
-                         if (lat_degrees.length() >= 3 && lon_degrees.length() >= 3)   // so at least something like "3.8"
-                         {
-                            // check the first char before and after the found "."
-                            int pos_point_lat = lat_degrees.indexOf(".");
-                            char lat_a  = lat_degrees.charAt(pos_point_lat - 1);
-                            char lat_b  = lat_degrees.charAt(pos_point_lat + 1);
-
-                            int pos_point_lon = lon_degrees.indexOf(".");
-                            char lon_a  = lon_degrees.charAt(pos_point_lon - 1);
-                            char lon_b  = lon_degrees.charAt(pos_point_lon + 1);
-
-                            if ( Character.isDigit(lat_a) && Character.isDigit(lat_b) &&
-                                 Character.isDigit(lon_a) && Character.isDigit(lon_b) )
-                            {
-                               marker_position_ok = true;
-                            }
-                         } // if (lat_degrees.length() >= 3 && lon_degrees.length() >= 3)
-          */
-
           if (marker_position_ok) {
             out.write(
                 "  L.marker(["
@@ -2204,21 +2168,6 @@ public class OSM {
       main.log_turbowin_system_message(info);
     } // catch
   }
-
-  // public static final String LEAFLET_CSS_URL                = "  <link rel=\"stylesheet\"
-  // href=\"https://unpkg.com/leaflet@1.3.1/dist/leaflet.css\"";
-  // public static final String LEAFLET_JS_URL                 = "  <script
-  // src=\"https://unpkg.com/leaflet@1.3.1/dist/leaflet.js\"";
-  // public static final String LEAFLET_ESRI_URL               = "  <script
-  // src=\"https://unpkg.com/esri-leaflet@2.1.4/dist/esri-leaflet.js\"";
-  // public static final String LEAFLET_CSS_INTEGRITY          = "
-  // integrity=\"sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==\"";
-  // public static final String LEAFLET_JS_INTEGRITY           = "
-  // integrity=\"sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==\"";
-  // public static final String LEAFLET_ESRI_INTEGRITY         = "
-  // integrity=\"sha512-m+BZ3OSlzGdYLqUBZt3u6eA0sH+Txdmq7cqA1u8/B2aTXviGMMLOfrKyiIW7181jbzZAY0u+3jWoiL61iLcTKQ==\"";
-  // public static final String LEAFLET_MAPS_HTML_FILE         = "position_leaflet_maps.html";
-  // // leaflet maps file
 
   public static final String OBS_OFFLINE_MAP_HTML_FILE =
       "obs_offline_map.html"; // leaflet maps file

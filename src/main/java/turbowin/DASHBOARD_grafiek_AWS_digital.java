@@ -142,40 +142,6 @@ public class DASHBOARD_grafiek_AWS_digital extends JPanel {
     // general
     final Graphics2D g2d = (Graphics2D) g;
 
-    /*
-       // background image(not in night vision mode and not if transparent)
-       //
-       //if (DASHBOARD_view_AWS_digital.night_vision == false)
-       if ( (DASHBOARD_view.night_vision == false) && (!main.theme_mode.equals(main.THEME_TRANSPARENT)) )
-       {
-          //  NB the line below (Image img1 = ... etc.)  didn't work anymore from 2022 why   ???????
-          //
-          //        work arround: only when the following lines were added it was ok again
-          //        System.out.println("+++ " + "this.getClass() = " + this.getClass());
-          //        System.out.println("+++ " + "this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO)) = " + this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO));
-          //
-          // Image img1 = new ImageIcon(this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO)).getImage();
-          //
-          // to be sure code was changed to the following line:
-          Image img1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource(main.ICONS_DIRECTORY + main.DASHBOARD_LOGO));
-
-          //scale the image to cover a the complete area of the drawing surface
-          //g2d.drawImage(img1, 0, 0,getWidth(), getHeight(), 0, 0, img1.getWidth(null), img1.getHeight(null), null);
-          int width = getWidth();
-          int height = getHeight();
-          for (int x = 0; x < width; x += img1.getWidth(null))
-          {
-             for (int y = 0; y < height; y += img1.getHeight(null))
-             {
-                g2d.drawImage(img1, x, y, this);
-             }
-          }
-       } // if (DASHBOARD_view_AWS.night_vision == false)
-    */
-
-    // int side = getWidth() > getHeight() ? getHeight() : getWidth();
-    // g2d.scale((side / 2) / 200, (side / 2) / 200);
-
     setAllRenderingHints(g2d);
 
     // colors depending night or day vision

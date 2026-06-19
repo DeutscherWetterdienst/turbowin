@@ -210,47 +210,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
       color_update_message_south_panel = color_black;
     }
 
-    // obsolete data (no cummunication for roughly > 2 minutes with the APR sensor(s))
-    //   ,,,,,
-    //   if (main.displayed_aws_data_obsolate == true)                        // valid for analog
-    // and digital dashboard
-    //   {
-    //      color_digits = main.obsolate_color_data_from_aws;                 // inserted data e.g.
-    // 12.3 C
-    //      color_last_update = main.obsolate_color_data_from_aws;
-    //
-    //      main_RS232_RS422.RS422_initialise_AWS_Sensor_Data_For_Display();  // NB see also:
-    // main_RS232_RS422.MAX_AGE_AWS_DATA
-    //   }
-
-    /*
-          // GPS data obsolete
-          if (main.obsolate_GPS_data_flag == true)
-          {
-             // e.g. see function position_fields_update() [main.java]
-             color_digits_GPS = main.obsolete_input_color_from_apr;
-          }
-          else
-          {
-             color_digits_GPS = color_black;
-          }
-
-          // air pressure data obsolete
-          if (main.obsolate_data_flag == true)
-          {
-             //color_digits_air_pressure = main.obsolete_input_color_from_apr;
-             //color_last_update = main.obsolate_color_data_from_aws;
-          }
-
-          // temperature data obsolete
-          if ( (main.obsolate_data_flag_II == true) || ((main.obsolate_data_flag == true) && (main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8)) ) // NB 7/8 : Mintaka StarX (temp) linked
-          {
-          //   jTextField36.setForeground(main.obsolete_input_color_from_apr);
-          //   RS232_initialise_APR_Sensor_Data_For_Display();  // NB see also: main_RS232_RS422.MAX_AGE_AWS_DATA
-             //color_digits_themperature = main.obsolete_input_color_from_apr;                 // inserted data e.g. 12.3 C
-          }
-    */
-
     //////// measured at: ///////
     //
     String measured_at_line = "";
@@ -1165,33 +1124,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
       x_line = (int) DASHBOARD_view_APR_radar.x1_block + height_letter;
       y_line = (int) DASHBOARD_view_APR_radar.y1_block + height_letter * 48;
       g2d.drawString(visual_obs_line, x_line, y_line);
-
-      /*
-               // disabled from version 4.7
-               // but left the source code here for possible future ideas
-               //
-               ////////// left: satellite image link //////
-               //
-               String satellite_link_txt = "satellite image (internet)";
-               DASHBOARD_view_APR_radar.x_line_satellite_link = (int)(DASHBOARD_view_APR_radar.x1_block + height_letter);
-               DASHBOARD_view_APR_radar.y_line_satellite_link = (int)(DASHBOARD_view_APR_radar.y1_block + height_letter * 54);
-               FontRenderContext frc = g2d.getFontRenderContext();
-               DASHBOARD_view_APR_radar.layout_satellite_link = new TextLayout(satellite_link_txt, font_k, frc);
-
-               // for underlining the "satellite image (internet)" string
-               AttributedString as = new AttributedString(satellite_link_txt);
-               as.addAttribute(TextAttribute.FONT, font_k);
-               as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, 0, satellite_link_txt.length());
-
-               //DASHBOARD_view_APR_radar.layout_satellite_link.draw(g2d, DASHBOARD_view_APR_radar.x_line_satellite_link, DASHBOARD_view_APR_radar.y_line_satellite_link);  // https://cr.openjdk.java.net/~iris/se/10/build/latest/api/java/awt/font/TextLayout.html
-               g2d.setPaint(color_dark_blue);
-               g2d.drawString(as.getIterator(), DASHBOARD_view_APR_radar.x_line_satellite_link, DASHBOARD_view_APR_radar.y_line_satellite_link);
-
-               // define bounding box for mouse click (note coordinate system is here still with 0,0 as middle screen -after translate-)!
-               DASHBOARD_view_APR_radar.bounds = DASHBOARD_view_APR_radar.layout_satellite_link.getBounds();
-               DASHBOARD_view_APR_radar.bounds.setRect(DASHBOARD_view_APR_radar.bounds.getX()+ DASHBOARD_view_APR_radar.x_line_satellite_link, DASHBOARD_view_APR_radar.bounds.getY()+ DASHBOARD_view_APR_radar.y_line_satellite_link, DASHBOARD_view_APR_radar.bounds.getWidth(), DASHBOARD_view_APR_radar.bounds.getHeight());
-               //NB for completely outlined: g2d.draw(DASHBOARD_view_APR_radar.bounds);
-      */
     } // if (draw_info_blocks)
 
     ///////////////////// "last updated date and time" bottom left screen [South panel]
@@ -1361,12 +1293,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
         DASHBOARD_view_APR_radar.relative_beaufort_class_APR = main.INVALID;
         DASHBOARD_view_APR_radar.relative_wind_dir_APR = "";
       }
-      // voor consistentie
-      // if (num_apparent_wind_speed == 0)
-      //   num_apparent_wind_direction = 0;
-      ///
-      // if ((num_apparent_wind_speed != 0) && (num_apparent_wind_direction == 0))
-      //   num_apparent_wind_direction = 360;
     } else {
       DASHBOARD_view_APR_radar.relative_beaufort_class_APR = main.INVALID;
       DASHBOARD_view_APR_radar.relative_wind_dir_APR = "";
@@ -1374,86 +1300,7 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
       DASHBOARD_view_APR_radar.jLabel20.setForeground(color_rel_wind_arrow_actual);
       DASHBOARD_view_APR_radar.jLabel20.setText("rel wind: -");
     }
-    ///// ONDERSTAANDE NOG NAKIJKEN /////
-    /* n.b. num_true_wind_direction = 0 - 4 (Noord) wordt in aanroepende programma op 360 gezet */
-
-    // System.out.println("+++++++++++ relative_wind_dir_APR [deg] = " +
-    // DASHBOARD_view_APR_radar.relative_wind_dir_APR);
-    // System.out.println("+++++++++++ relative_beaufort_class_APR [Bf] = " +
-    // DASHBOARD_view_APR_radar.relative_beaufort_class_APR);
-
   }
-
-  /*
-     private void enable_disable_controls_APR_radar(boolean mode)
-     {
-        // called from paintComponents() [DASBOARD_grafiek_APR_radar.java]
-
-        // NB mode = false: no visual obs yet
-        //    mode = true: visual obs possible
-
-        //////////// TESTING ///////////
-        //mode = true;
-        //////////////////////////////
-
-        DASHBOARD_view_APR_radar.reset_APR_variables();
-
-
-        // NB if wind is not estimated or not measured TRUE then make no changes to the default (see initComponents1()[DASHBOARD_view_APR_radar.java]) disabled situation
-        if ( (main.wind_source.equals(main.ESTIMATED_TRUE)) || (main.wind_source.equals(main.MEASURED_TRUE)) )
-        {
-           if (mode == false)   // no visual obs (xx.00 hr - xx.30 hr)
-           {
-              DASHBOARD_view_APR_radar.relative_beaufort_class_APR = Integer.MAX_VALUE;
-              DASHBOARD_view_APR_radar.relative_wind_dir_APR = "";
-
-              DASHBOARD_view_APR_radar.beaufort_class_APR = Integer.MAX_VALUE;
-              DASHBOARD_view_APR_radar.wind_dir_APR = "";
-
-              DASHBOARD_view_APR_radar.jLabel5.setText("");
-              DASHBOARD_view_APR_radar.jLabel6.setText("");
-              DASHBOARD_view_APR_radar.jLabel7.setText("");
-              DASHBOARD_view_APR_radar.jLabel8.setText("");
-              DASHBOARD_view_APR_radar.jLabel9.setText("");
-              DASHBOARD_view_APR_radar.jLabel10.setText("");
-              DASHBOARD_view_APR_radar.jLabel11.setText("");
-              DASHBOARD_view_APR_radar.jLabel12.setText("");
-              DASHBOARD_view_APR_radar.jLabel13.setText("");
-              DASHBOARD_view_APR_radar.jLabel14.setText("");
-              DASHBOARD_view_APR_radar.jLabel15.setText("");
-              DASHBOARD_view_APR_radar.jLabel16.setText("");
-              DASHBOARD_view_APR_radar.jLabel17.setText("");
-              DASHBOARD_view_APR_radar.jLabel18.setText("");
-
-              DASHBOARD_view_APR_radar.jComboBox1.setSelectedItem("");                    // NB -1 doesn't work
-
-              DASHBOARD_view_APR_radar.buttonGroup1.clearSelection();
-
-              DASHBOARD_view_APR_radar.jLabel20.setForeground(color_rel_wind_arrow_actual);
-              DASHBOARD_view_APR_radar.jLabel20.setText("rel wind: -");                   // calculated relative wind
-
-           } // if (mode == false)
-
-           DASHBOARD_view_APR_radar.jButton1.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jComboBox1.setEnabled(mode);
-
-           DASHBOARD_view_APR_radar.jRadioButton1.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton2.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton3.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton4.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton5.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton6.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton7.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton8.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton9.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton10.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton11.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton12.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton13.setEnabled(mode);
-           DASHBOARD_view_APR_radar.jRadioButton14.setEnabled(mode);
-        } //  if ( (!main.wind_source.equals(main.ESTIMATED_TRUE)) && (!main.wind_source.equals(main.MEASURED_TRUE)) )
-     }
-  */
 
   private void draw_wind_arrow_radar_APR(
       Graphics2D g2d,
@@ -1488,35 +1335,7 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
       {
         wind_dir_ok = true;
       }
-    } // if (main.true_wind_dir_from_AWS_present)
-
-    /*
-       // insert wind speed as Bf
-       if (wind_speed_present)
-       {
-          int wind_speed_reading = wind_speed; // NB could by kts or m/s
-          if (wind_speed_reading >= 0.0 && wind_speed_reading <= 400.0)
-          {
-             // so the digit indication is up to 400 kts/m/s and the analogue up to 110 kts/m/s
-             if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)                        // units is knots
-             {
-
-                Bf_class = convert_knots_to_bf(wind_speed_reading);
-             } //  if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1)
-
-             else if (main.wind_units_dashboard.indexOf(main.M_S) != -1)                      // units is m/s
-             {
-                Bf_class = convert_ms_to_bf(wind_speed_reading);
-             } // else if (main.wind_units_dashboard.indexOf(main.M_S) != -1)
-
-
-
-
-             wind_speed_ok = Bf_class <= 12;
-
-          } // if (wind_speed_reading >= 0.0 && wind_speed_reading <= 400.0)
-       } //if (main.true_wind_speed_from_AWS_present)
-    */
+    }
     if (wind_force_present) {
       Bf_class = wind_force; // DASHBOARD_view_APR_radar.beaufort_class_APR;
     }
@@ -2032,66 +1851,6 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
       g2d.rotate(-Math.toRadians(90));
       g2d.translate(-(float) x_bf_label2, -(float) y_bf_label2);
     } // for (int i = 3; i <= 9; i+=3)
-
-    /*
-    // Labels (left below wind rose)
-    //
-    g2d.setColor(color_black);
-    //g2d.setColor(color_wind_rose_additional);
-    g2d.setFont(font_f);
-    //g2d.drawString("True wind", (int)(-wind_rose_diameter / 2), (int)(wind_rose_diameter / 2));
-
-
-
-    //
-    int height_letter = g2d.getFontMetrics().stringWidth("M");
-
-
-    // insert MSLP
-    //
-
-
-    //y = 0 - width_letter / 2
-
-    int x_mslp = (int)((-wind_rose_diameter / 2) - (DASHBOARD_view_AWS_radar.width_AWS_radar_dashboard * 0.1 / 2));
-    int y_mslp = (int)(wind_rose_diameter / 2) - (height_letter * 2);
-
-    g2d.drawString("", x_mslp, y_mslp);
-    if (main.pressure_MSL_from_AWS_present)
-    {
-       double reading_mslp = main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic;         // see: RS422_update_AWS_dasboard_values()
-       if (reading_mslp > 900.0 && reading_mslp < 1100.0)
-       {
-          String digits = Double.toString(reading_mslp) + " hPa";
-          g2d.drawString("MSLP: " + digits, x_mslp, y_mslp);
-       }
-    }
-    else
-    {
-       g2d.drawString("MSLP: -", x_mslp, y_mslp);
-    }
-
-    // insert barometric tendency
-    //
-    int x_tendency = (int)((-wind_rose_diameter / 2) - (DASHBOARD_view_AWS_radar.width_AWS_radar_dashboard * 0.1 / 2));
-    int y_tendency = (int)(wind_rose_diameter / 2);
-    //
-    g2d.drawString("", x_tendency, y_tendency);
-    if (main.pressure_tendency_from_AWS_present)
-    {
-    //
-       double tendency_reading = main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency; // see: RS422_update_AWS_dasboard_values()
-       if (tendency_reading >= -99.9 && tendency_reading <= 99.9)
-       {
-          String digits = Double.toString(tendency_reading) + " hPa / 3 hrs";
-          g2d.drawString("tendency: " + digits, x_tendency, y_tendency);
-       }
-    }
-    else
-    {
-       g2d.drawString("tendency: -", x_tendency, y_tendency);
-    }
-        */
   }
 
   private GregorianCalendar cal_APR_system_date_time_db;

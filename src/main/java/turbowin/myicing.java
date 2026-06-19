@@ -441,71 +441,6 @@ public final class myicing extends javax.swing.JFrame {
     }
 
     // Is (cause ice accretion)
-    //
-    /*
-          if ( (main.RS232_connection_mode == 3) || (main.obs_format.equals(main.FORMAT_101) == true) ) // EUCAWS AWS linked (RS232_connection_mode = 3)
-          {
-             if (Is_code.equals("8"))                  // icing from spray (bufr table 020033-equivalent)
-             {
-                jRadioButton1.setSelected(true);
-             }
-             else if (Is_code.equals("4"))             // icing from fog (bufr table 020033-equivalent)
-             {
-                jRadioButton2.setSelected(true);
-             }
-             else if (Is_code.equals("12"))            // icing from spray and fog (bufr table 020033-equivalent)
-             {
-                jRadioButton3.setSelected(true);
-             }
-             else if (Is_code.equals("2"))             // icing from rain (bufr table 020033-equivalent)
-             {
-                jRadioButton4.setSelected(true);
-             }
-             else if (Is_code.equals("10"))            // icing from spray and rain (bufr table 020033-equivalent)
-             {
-                jRadioButton5.setSelected(true);
-             }
-             else if (Is_code.equals("6"))             // icing from fog and rain (bufr table 020033-equivalent; not present in FM13 code)
-             {
-                jRadioButton13.setSelected(true);
-             }
-              else if (Is_code.equals("14"))           // icing from spray and fog and rain (bufr table 020033-equivalent; not present in FM13 code)
-             {
-                jRadioButton14.setSelected(true);
-             }
-             else
-             {
-                jRadioButton6.setSelected(true);       // not determined
-             }
-          }
-          else // not AWS connected and not format_101
-          {
-             if (Is_code.equals("1"))                  // icing from sea spray (FM13 code)
-             {
-                jRadioButton1.setSelected(true);
-             }
-             else if (Is_code.equals("2"))             // icing from fog (FM13 code)
-             {
-                jRadioButton2.setSelected(true);
-             }
-             else if (Is_code.equals("3"))             // icing from spray and fog (FM13 code)
-             {
-                jRadioButton3.setSelected(true);
-             }
-             else if (Is_code.equals("4"))             // icing from rain (FM13 code)
-             {
-                jRadioButton4.setSelected(true);
-             }
-             else if (Is_code.equals("5"))             // icing from spray and rain (FM13 code)
-             {
-                jRadioButton5.setSelected(true);
-             }
-             else
-             {
-                jRadioButton6.setSelected(true);       // not determined
-             }
-          } // else (not AWS connected and not format_101)
-    */
     if (Is_code.equals("1")) // icing from sea spray (FM13 code)
     {
       jRadioButton1.setSelected(true);
@@ -570,86 +505,9 @@ public final class myicing extends javax.swing.JFrame {
     Reset_All_Icing_Vars();
 
     // ice accration thickness
-    //
     thickness = jTextField1.getText().trim();
 
-    // JOptionPane.showMessageDialog(null, thickness,  main.APPLICATION_NAME + " TEST",
-    // JOptionPane.WARNING_MESSAGE);
-
     // cause icing (Is)
-    //
-    /*
-           if ( (main.RS232_connection_mode == 3) || (main.obs_format.equals(main.FORMAT_101) == true) ) // EUCAWS AWS linked (RS232_connection_mode = 3)
-           {
-              if (jRadioButton1.isSelected() == true)        // icing from sea spray
-              {
-                 Is_code = "8";
-              }
-              else if (jRadioButton2.isSelected() == true)   // icing from fog
-              {
-                 Is_code = "4";
-              }
-              else if (jRadioButton3.isSelected() == true)   // icing from spray and fog
-              {
-                 Is_code = "12";
-              }
-              else if (jRadioButton4.isSelected() == true)   // icing from rain
-              {
-                 Is_code = "2";
-              }
-              else if (jRadioButton5.isSelected() == true)   // icing from spray and rain
-              {
-                 Is_code = "10";
-              }
-              else if (jRadioButton13.isSelected() == true)  // icing from fog and rain (AWS and format 101 only)
-              {
-                 Is_code = "6";
-              }
-              else if (jRadioButton14.isSelected() == true)  // icing from spray and fog and rain (AWS and format 101 only)
-              {
-                 Is_code = "14";
-              }
-              else if (jRadioButton6.isSelected() == true)  // not determined
-              {
-                 Is_code = "";                              // NB hier nog geen "/" zetten
-              }
-              else
-              {
-                 Is_code = "";
-              }
-           }
-           else // no AWS and not format 101
-           {
-              if (jRadioButton1.isSelected() == true)        // icing from sea spray
-              {
-                 Is_code = "1";
-              }
-              else if (jRadioButton2.isSelected() == true)   // icing from fog
-              {
-                 Is_code = "2";
-              }
-              else if (jRadioButton3.isSelected() == true)   // icing from spray and
-              {
-                 Is_code = "3";
-              }
-              else if (jRadioButton4.isSelected() == true)   // icing from rain
-              {
-                 Is_code = "4";
-              }
-              else if (jRadioButton5.isSelected() == true)   // icing from spray and rain
-              {
-                 Is_code = "5";
-              }
-              else if (jRadioButton6.isSelected() == true)  // not determined
-              {
-                 Is_code = "";                              // NB hier nog geen "/" zetten
-              }
-              else
-              {
-                 Is_code = "";
-              }
-           } // else (no AWS and not format 101)
-    */
     if (jRadioButton1.isSelected() == true) // icing from sea spray
     {
       Is_code = "1";

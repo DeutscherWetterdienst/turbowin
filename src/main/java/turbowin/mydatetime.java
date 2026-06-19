@@ -558,30 +558,6 @@ public final class mydatetime extends javax.swing.JFrame {
     if (day.compareTo("") != 0) jList3.setSelectedValue(day, true);
 
     if (hour.compareTo("") != 0) jList4.setSelectedValue(hour, true);
-
-    /*
-          // NB in serial connection mose (AWS or barometer connected) after an obs was send all parameters will be set to blank,
-          //    the "date & time obs" will be automatically updated/shown again (in case AWS every minute and in case barometer every 5 minutes)
-          //    but in "no serial connection mode" we have to ask the observer again
-          if ( (year.compareTo("") == 0) && (month.compareTo("") == 0) && (day.compareTo("") == 0) && (hour.compareTo("") == 0) &&
-               (main.RS232_connection_mode == 0)  )                  // no serial connection
-          {
-             // ask the observer if this is the correct UTC date and time of the observation (and if yes set accordingly)
-             main.check_and_set_datetime();
-
-            if (year.compareTo("") != 0)
-               jList1.setSelectedValue(year, true);
-
-            if (month.compareTo("") != 0)
-               jList2.setSelectedValue(month, true);
-
-            if (day.compareTo("") != 0)
-               jList3.setSelectedValue(day, true);
-
-            if (hour.compareTo("") != 0)
-               jList4.setSelectedValue(hour, true);
-          }
-    */
   } // private void initSynopparameters()
 
   /**
