@@ -72,10 +72,10 @@ task generateAppInfoJava {
 }
 
 task generateEmailSettingsJava {
-    inputs.property("encryptionKey", System.getenv('TURBOWIN_EMAIL_ENCRYPTION_KEY'))
-    inputs.property("characterEncoding", System.getenv('TURBOWIN_EMAIL_CHARACTER_ENCODING'))
-    inputs.property("cipherTransformation", System.getenv('TURBOWIN_EMAIL_CIPHER_TRANSFORMATION'))
-    inputs.property("aesEncryptionAlgorithm", System.getenv('TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM'))
+    inputs.property("encryptionKey", System.getenv('TURBOWIN_EMAIL_ENCRYPTION_KEY') ?: "")
+    inputs.property("characterEncoding", System.getenv('TURBOWIN_EMAIL_CHARACTER_ENCODING') ?: "")
+    inputs.property("cipherTransformation", System.getenv('TURBOWIN_EMAIL_CIPHER_TRANSFORMATION') ?: "")
+    inputs.property("aesEncryptionAlgorithm", System.getenv('TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM') ?: "")
 
     def generatedSourceDir = file("$buildDir/generated/source/emailsettings/java")
     outputs.dir(generatedSourceDir)
@@ -86,8 +86,11 @@ task generateEmailSettingsJava {
         def cipherTransformation = inputs.properties.cipherTransformation
         def aesEncryptionAlgorithm = inputs.properties.aesEncryptionAlgorithm
 
-        if (encryptionKey == null || characterEncoding == null || cipherTransformation == null || aesEncryptionAlgorithm == null) {
-            throw new GradleException("One or more TURBOWIN_EMAIL_* environment variables are not set.")
+        if (!encryptionKey?.trim() ||
+                !characterEncoding?.trim() ||
+                !cipherTransformation?.trim() ||
+                !aesEncryptionAlgorithm?.trim()) {
+            throw new GradleException("One or more TURBOWIN_EMAIL_* environment variables are not set or are empty.")
         }
 
         generatedSourceDir.mkdirs()
