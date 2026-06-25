@@ -1938,9 +1938,6 @@ public final class mystationdata extends javax.swing.JFrame {
           }
         }.execute(); // new SwingWorker<Void, Void>()
 
-        /* Also muffin / configuration file writing */
-        // main.set_muffin();
-        //
         // write meta (station) data to muffins or configuration files
         if (main.offline_mode_via_cmd == true) {
           main.schrijf_configuratie_regels();

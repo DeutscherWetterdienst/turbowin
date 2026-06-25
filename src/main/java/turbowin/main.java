@@ -5867,17 +5867,6 @@ public class main extends javax.swing.JFrame {
 
         }
       }.execute(); // new SwingWorker<Void, Void>()
-
-      /* Hij komt alleen in deze functie als het lezen van de muffin niet gelukt was */
-      /* het kan zijn dat de muffin er niet was omdat de temporary internet files net verwijderd waren */
-      /* (via java control panel) */
-      /* Daarom dan nu proberen weer naar muffin te schrijven */
-      // set_muffin();
-      // if (offline_mode_via_cmd == false)   // so offline_via_jnlp mode or online (webstart) mode
-      // {
-      //   set_muffin();
-      // }
-
     } // if ((hulp_dir != null) && (hulp_dir.compareTo("") != 0))
   }
 
