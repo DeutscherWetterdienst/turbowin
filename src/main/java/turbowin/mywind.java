@@ -1416,13 +1416,7 @@ public final class mywind extends javax.swing.JFrame {
       main.configuratie_regels[14] = main.DIFF_SLL_WL_TXT + main.diff_sll_wl.trim();
 
       // write meta (station) data to muffins or configuration files
-      if (main.offline_mode_via_cmd == true) {
-        main.schrijf_configuratie_regels();
-      } else // so offline via turbowin_jws_offline.jnlp or online (webstart) mode
-      {
-        // main.set_muffin();
-        main.schrijf_configuratie_regels(); // backup for muffin
-      }
+      main.schrijf_configuratie_regels();
 
       /* update wind fields on main screen */
       main.wind_fields_update();

@@ -1430,14 +1430,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
       // fields from a previous setting eg APR = true) and enable the output menu items again
       main.Reset_all_meteo_parameters();
 
-      if (main.offline_mode_via_cmd
-          == true) // after installation as standalone program this will always be the case
-      {
-        main.schrijf_configuratie_regels();
-      } else // so offline_via_jnlp mode or online (webstart) mode
-      {
-        main.schrijf_configuratie_regels();
-      }
+      main.schrijf_configuratie_regels();
     } // if (checks_ok && additional_APR_checks_ok && additional_AWSR_checks_ok &&
     // additional_WOW_checks_ok)
 

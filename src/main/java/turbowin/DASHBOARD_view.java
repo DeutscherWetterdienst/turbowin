@@ -333,15 +333,7 @@ public class DASHBOARD_view extends javax.swing.JFrame {
               repaint();
 
               // write meta data to muffins or configuration files
-              if (main.offline_mode_via_cmd
-                  == true) // also if the turbowin_launcher is present (JPMS)
-              {
-                main.schrijf_configuratie_regels();
-              } else // so offline_via_jnlp mode or online (webstart) mode
-              {
-                // main.set_muffin();
-                main.schrijf_configuratie_regels();
-              }
+              main.schrijf_configuratie_regels();
             } // if (result == JOptionPane.YES_OPTION)
           }
         });
@@ -383,14 +375,7 @@ public class DASHBOARD_view extends javax.swing.JFrame {
         main.dashboard_background_image = chooser.getSelectedFile().getPath();
 
         // write meta data to muffins or configuration files
-        if (main.offline_mode_via_cmd == true) // also if the turbowin_launcher is present (JPMS)
-        {
-          main.schrijf_configuratie_regels();
-        } else // so offline_via_jnlp mode or online (webstart) mode
-        {
-          // main.set_muffin();
-          main.schrijf_configuratie_regels();
-        }
+        main.schrijf_configuratie_regels();
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)
   }

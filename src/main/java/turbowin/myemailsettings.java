@@ -1029,13 +1029,7 @@ public final class myemailsettings extends javax.swing.JFrame {
       main.log_files_email_send_method = main.LOGS_CUSTOM_EMAIL;
     }
 
-    if (main.offline_mode_via_cmd == true) {
-      main.schrijf_configuratie_regels();
-    } else // so offline_via_jnlp mode or online (webstart) mode
-    {
-      // main.set_muffin();
-      main.schrijf_configuratie_regels();
-    }
+    main.schrijf_configuratie_regels();
 
     // pop-up info message
     //

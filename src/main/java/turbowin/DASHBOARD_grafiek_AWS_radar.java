@@ -157,14 +157,7 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
             null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
         main.dashboard_background_image = "";
 
-        if (main.offline_mode_via_cmd == true) // also if the turbowin_launcher is present (JPMS)
-        {
-          main.schrijf_configuratie_regels();
-        } else // so offline_via_jnlp mode or online (webstart) mode
-        {
-          // main.set_muffin();
-          main.schrijf_configuratie_regels();
-        }
+        main.schrijf_configuratie_regels();
       }
     } // if (DASHBOARD_view_AWS.night_vision == false) etc.
 

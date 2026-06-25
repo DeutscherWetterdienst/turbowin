@@ -57,13 +57,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
           Integer.toString(DASHBOARD_view_AWS_radar.tank_color.getRGB()); // save color as String
     }
 
-    if (main.offline_mode_via_cmd == true) // also if the turbowin_launcher is present (JPMS)
-    {
-      main.schrijf_configuratie_regels();
-    } else // so offline_via_jnlp mode or online (webstart) mode
-    {
-      main.schrijf_configuratie_regels();
-    }
+    main.schrijf_configuratie_regels();
   }
 
   private void initComponents1() {
@@ -2388,15 +2382,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem7);
@@ -2413,15 +2399,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem8);
@@ -2438,15 +2416,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem10);
@@ -2463,15 +2433,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem11);
@@ -2488,15 +2450,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem27);
@@ -2513,15 +2467,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem12);
@@ -2538,15 +2484,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem14);
@@ -2563,15 +2501,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem15);
@@ -2588,15 +2518,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem18);
@@ -2697,14 +2619,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
             repaint();
 
             // write meta data to muffins or configuration files
-            if (main.offline_mode_via_cmd
-                == true) // also if the turbowin_launcher is present (JPMS)
-            {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
           }
         });
     popup.add(menuItem22);
@@ -2944,15 +2859,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
               repaint();
 
               // write meta data to muffins or configuration files
-              if (main.offline_mode_via_cmd
-                  == true) // also if the turbowin_launcher is present (JPMS)
-              {
-                main.schrijf_configuratie_regels();
-              } else // so offline_via_jnlp mode or online (webstart) mode
-              {
-                // main.set_muffin();
-                main.schrijf_configuratie_regels();
-              }
+              main.schrijf_configuratie_regels();
             } // if (result == JOptionPane.YES_OPTION)
           }
         });
@@ -2993,14 +2900,7 @@ public class DASHBOARD_view_AWS_radar extends javax.swing.JFrame {
         main.dashboard_background_image = chooser.getSelectedFile().getPath();
 
         // write meta data to muffins or configuration files
-        if (main.offline_mode_via_cmd == true) // also if the turbowin_launcher is present (JPMS)
-        {
-          main.schrijf_configuratie_regels();
-        } else // so offline_via_jnlp mode or online (webstart) mode
-        {
-          // main.set_muffin();
-          main.schrijf_configuratie_regels();
-        }
+        main.schrijf_configuratie_regels();
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)
   }

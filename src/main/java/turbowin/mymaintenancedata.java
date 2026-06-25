@@ -332,13 +332,7 @@ public class mymaintenancedata extends javax.swing.JFrame {
             main.meta_data_from_configuration_regels_into_global_vars();
 
             // write meta (station) data to muffins or configuration files
-            if (main.offline_mode_via_cmd == true) {
-              main.schrijf_configuratie_regels();
-            } else // so offline_via_jnlp mode or online (webstart) mode
-            {
-              // main.set_muffin();
-              main.schrijf_configuratie_regels();
-            }
+            main.schrijf_configuratie_regels();
 
             // user feedback string
             import_maintenance_data_ok =

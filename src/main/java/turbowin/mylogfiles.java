@@ -262,13 +262,7 @@ public final class mylogfiles extends javax.swing.JFrame {
 
     if (doorgaan) {
       // write meta (station) data to muffins or configuration files
-      if (main.offline_mode_via_cmd == true) {
-        main.schrijf_configuratie_regels();
-      } else // so offline_via_jnlp mode or online (webstart) mode
-      {
-        // main.set_muffin();
-        main.schrijf_configuratie_regels();
-      }
+      main.schrijf_configuratie_regels();
 
       /* message */
       info = "Changes will take effect inmediatelly. Not necessary to restart";

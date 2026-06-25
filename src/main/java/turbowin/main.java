@@ -11630,15 +11630,7 @@ public class main extends javax.swing.JFrame {
     // true
 
     // save the change
-    if (main.offline_mode_via_cmd
-        == true) // after installation as standalone program this will always be the case
-    {
-      main.schrijf_configuratie_regels();
-    } else // so offline_via_jnlp mode or online (webstart) mode
-    {
-      // main.set_muffin();
-      main.schrijf_configuratie_regels();
-    }
+    main.schrijf_configuratie_regels();
 
     // set start-up sequence finished flag
     // turbowin_start_up_sequence_finished = true;
@@ -11714,14 +11706,7 @@ public class main extends javax.swing.JFrame {
     // = true
 
     // save the change
-    if (main.offline_mode_via_cmd
-        == true) // after installation as standalone program this will always be the case
-    {
-      main.schrijf_configuratie_regels();
-    } else // so offline_via_jnlp mode or online (webstart) mode
-    {
-      main.schrijf_configuratie_regels();
-    }
+    main.schrijf_configuratie_regels();
 
     // set start-up sequence finished flag
     // turbowin_start_up_sequence_finished = true;

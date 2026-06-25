@@ -1804,13 +1804,7 @@ public final class mystationdata extends javax.swing.JFrame {
 
     if (doorgaan == true) {
       // write meta (station) data to muffins or configuration files
-      if (main.offline_mode_via_cmd == true) {
-        main.schrijf_configuratie_regels();
-      } else // so offline_via_jnlp mode or online (webstart) mode
-      {
-        // main.set_muffin();
-        main.schrijf_configuratie_regels();
-      }
+      main.schrijf_configuratie_regels();
 
       /* update station ID and ship name on main screen progress */
       main.ID_fields_update();
@@ -1939,13 +1933,7 @@ public final class mystationdata extends javax.swing.JFrame {
         }.execute(); // new SwingWorker<Void, Void>()
 
         // write meta (station) data to muffins or configuration files
-        if (main.offline_mode_via_cmd == true) {
-          main.schrijf_configuratie_regels();
-        } else // so offline_via_jnlp mode or online (webstart) mode
-        {
-          // main.set_muffin();
-          main.schrijf_configuratie_regels();
-        }
+        main.schrijf_configuratie_regels();
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)
   } // GEN-LAST:event_import_button_actionPerformed

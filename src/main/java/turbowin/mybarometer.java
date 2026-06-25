@@ -1033,13 +1033,7 @@ public final class mybarometer extends javax.swing.JFrame {
       if (local_AWS_connected == false) // NOT AWS connected mode
       {
         // write meta (station) data to muffins or configuration files
-        if (main.offline_mode_via_cmd == true) {
-          main.schrijf_configuratie_regels();
-        } else // so offline via turbowin_jws_offline.jnlp or online (webstart) mode
-        {
-          // main.set_muffin();
-          main.schrijf_configuratie_regels(); // backup for muffin
-        }
+        main.schrijf_configuratie_regels();
       } // if (local_AWS_connected == false)
 
       /* update progress fields on main screen */
