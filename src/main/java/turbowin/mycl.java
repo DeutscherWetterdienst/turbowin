@@ -1,6 +1,5 @@
 package turbowin;
 
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;

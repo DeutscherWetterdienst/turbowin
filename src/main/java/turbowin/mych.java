@@ -3,7 +3,6 @@ package turbowin;
 // import java.awt.Toolkit;
 // import java.io.BufferedInputStream;
 // import java.io.IOException;
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;

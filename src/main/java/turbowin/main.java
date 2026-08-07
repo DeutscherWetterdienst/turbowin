@@ -4033,7 +4033,9 @@ public class main extends javax.swing.JFrame {
                     .addContainerGap()));
   } // </editor-fold>//GEN-END:initComponents
 
-  /** @deprecated Use {@link DateTimeUtils#convert_month(int)} in new code. */
+  /**
+   * @deprecated Use {@link DateTimeUtils#convert_month(int)} in new code.
+   */
   @Deprecated
   public static String convert_month(int month_number) {
     return DateTimeUtils.convert_month(month_number);
@@ -5606,19 +5608,9 @@ public class main extends javax.swing.JFrame {
 
           // JOptionPane.showMessageDialog(null, hulp_dir, APPLICATION_NAME + " hulp_dir",
           // JOptionPane.WARNING_MESSAGE);
-          try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path, false))) {
-            for (int i = 0; i < MAX_AANTAL_CONFIGURATIEREGELS; i++) {
-              if ((configuratie_regels[i] != null) && (configuratie_regels[i].compareTo("") != 0)) {
-                // System.out.println("+++ configuratie_regels[" + i + "] = " +
-                // configuratie_regels[i]);
-
-                out.write(configuratie_regels[i]);
-                out.newLine(); // newLine(): write a line separator. The line separator string is
-                // defined by the system property line.separator, and is not
-                // necessarily a single newline ('\n') character.
-              }
-            } // for (int i = 0; i < MAX_AANTAL_CONFIGURATIEREGELS; i++)
-
+          try {
+            ConfigurationFileStore.write(
+                new File(volledig_path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
           } // try
           // catch (Exception e)
           // {
@@ -5651,16 +5643,9 @@ public class main extends javax.swing.JFrame {
 
           // JOptionPane.showMessageDialog(null, hulp_dir, APPLICATION_NAME + " hulp_dir",
           // JOptionPane.WARNING_MESSAGE);
-          try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path, false))) {
-            for (int i = 0; i < MAX_AANTAL_CONFIGURATIEREGELS; i++) {
-              if ((configuratie_regels[i] != null) && (configuratie_regels[i].compareTo("") != 0)) {
-                out.write(configuratie_regels[i]);
-                out.newLine(); // newLine(): write a line separator. The line separator string is
-                // defined by the system property line.separator, and is not
-                // necessarily a single newline ('\n') character.
-              }
-            } // for (int i = 0; i < MAX_AANTAL_CONFIGURATIEREGELS; i++)
-
+          try {
+            ConfigurationFileStore.write(
+                new File(volledig_path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
           } // try
           catch (IOException e) {
             JOptionPane.showMessageDialog(
@@ -5706,26 +5691,12 @@ public class main extends javax.swing.JFrame {
         protected Void doInBackground() throws Exception {
           // NB e.g. configuratie_regels[2]  = "wind source        : estimated; true speed and true
           // direction"
-          int teller;
-          String file_line;
           String volledig_path = hulp_dir + java.io.File.separator + CONFIGURATION_FILE;
 
-          for (teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++) {
-            configuratie_regels[teller] = "";
-          }
-
           /* read all lines from configuration file */
-          try (BufferedReader in = new BufferedReader(new FileReader(volledig_path))) {
-            teller = 0;
-            while ((file_line = in.readLine()) != null) {
-              configuratie_regels[teller] = file_line;
-              teller++;
-
-              /* for safety */
-              if (teller >= MAX_AANTAL_CONFIGURATIEREGELS) {
-                break;
-              }
-            } // while((file_line = in.readLine()) != null)
+          try {
+            ConfigurationFileStore.read(
+                new File(volledig_path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
           } // try
           catch (IOException e) {
             // do nothing, it is possible (at first use) that the file was never created

@@ -2,7 +2,6 @@ package turbowin;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
