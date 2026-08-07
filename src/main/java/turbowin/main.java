@@ -13880,7 +13880,7 @@ public class main extends javax.swing.JFrame {
               // partially (the body contents wasn't copied to the amial client)
 
               // create cmd array
-              String[] cmdArray = {"cmd", "/c", "start", "mailto:", mail_txt};
+              String[] cmdArray = MailtoCommandBuilder.forWindows(mail_txt);
 
               // create a process and execute cmdArray
               Process process = Runtime.getRuntime().exec(cmdArray);
@@ -13898,7 +13898,7 @@ public class main extends javax.swing.JFrame {
               // runtime.exec("open " + "mailto:" + mail_txt);
 
               // create cmd array
-              String[] cmdArray = {"open", "mailto:", mail_txt};
+              String[] cmdArray = MailtoCommandBuilder.forMacOs(mail_txt);
 
               // create a process and execute cmdArray
               Process process = Runtime.getRuntime().exec(cmdArray);
@@ -13917,7 +13917,7 @@ public class main extends javax.swing.JFrame {
               // runtime.exec("xdg-open " + "mailto:" + mail_txt);
 
               // create cmd array
-              String[] cmdArray = {"xdg-open", "mailto:", mail_txt};
+              String[] cmdArray = MailtoCommandBuilder.forLinux(mail_txt);
 
               // create a process and execute cmdArray
               Process process = Runtime.getRuntime().exec(cmdArray);
@@ -13927,7 +13927,7 @@ public class main extends javax.swing.JFrame {
                 // runtime.exec("kde-open " + "mailto:" + mail_txt);
 
                 // create cmd array
-                String[] cmdArray = {"kde-open", "mailto:", mail_txt};
+                String[] cmdArray = MailtoCommandBuilder.forKde(mail_txt);
 
                 // create a process and execute cmdArray
                 Process process = Runtime.getRuntime().exec(cmdArray);
