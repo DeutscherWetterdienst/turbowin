@@ -13,6 +13,12 @@ public class ConfigurationCharacterizationTest {
   private String originalImoNumber;
   private String originalWindSource;
   private String originalStationId;
+  private boolean originalWow;
+  private boolean originalAmosMail;
+  private int originalGpsSentence;
+  private String originalDashboardFont;
+  private String originalServerComProtocol;
+  private boolean originalEucawsObsId;
 
   @Before
   public void resetConfigurationLines() {
@@ -20,6 +26,12 @@ public class ConfigurationCharacterizationTest {
     originalImoNumber = main.imo_number;
     originalWindSource = main.wind_source;
     originalStationId = main.station_ID;
+    originalWow = main.WOW;
+    originalAmosMail = main.amos_mail;
+    originalGpsSentence = main.RS232_GPS_sentence;
+    originalDashboardFont = main.dashboard_font;
+    originalServerComProtocol = main.server_com_protocol;
+    originalEucawsObsId = main.eucaws_obs_id;
     Arrays.fill(main.configuratie_regels, "");
   }
 
@@ -29,6 +41,12 @@ public class ConfigurationCharacterizationTest {
     main.imo_number = originalImoNumber;
     main.wind_source = originalWindSource;
     main.station_ID = originalStationId;
+    main.WOW = originalWow;
+    main.amos_mail = originalAmosMail;
+    main.RS232_GPS_sentence = originalGpsSentence;
+    main.dashboard_font = originalDashboardFont;
+    main.server_com_protocol = originalServerComProtocol;
+    main.eucaws_obs_id = originalEucawsObsId;
     Arrays.fill(main.configuratie_regels, "");
   }
 
@@ -58,5 +76,24 @@ public class ConfigurationCharacterizationTest {
     assertEquals("Parsed Ship", main.ship_name);
     assertEquals("7654321", main.imo_number);
     assertEquals("PARSED-1", main.station_ID);
+  }
+
+  @Test
+  public void fillConfigurationArrayPreservesTypedAndLegacyFieldEncodings() {
+    main.WOW = true;
+    main.amos_mail = true;
+    main.RS232_GPS_sentence = 2;
+    main.dashboard_font = "hybrid-font";
+    main.server_com_protocol = "HTTPS_protocol";
+    main.eucaws_obs_id = true;
+
+    main.fill_configuratie_array();
+
+    assertEquals(main.WOW_PUBLISH_TXT + "true", main.configuratie_regels[31]);
+    assertEquals(main.AMOS_MAIL_TXT + "true", main.configuratie_regels[36]);
+    assertEquals(main.RS232_GPS_SENTENCE_TXT + "2", main.configuratie_regels[41]);
+    assertEquals(main.DASHBOARD_FONT_TXT + "hybrid-font", main.configuratie_regels[86]);
+    assertEquals(main.COM_PROTOCOL_TXT + "HTTPS_protocol", main.configuratie_regels[87]);
+    assertEquals(main.EUCAWS_OBS_ID_TXT + "true", main.configuratie_regels[88]);
   }
 }
