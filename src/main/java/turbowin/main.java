@@ -13183,49 +13183,21 @@ public class main extends javax.swing.JFrame {
             smtp_password_local_plain = "null";
           }
 
-          //
-          // invoke the (jakarta)email send function
-          //
-
-          //// TEST ///
-          // System.out.println("--- smtp_host_local = " + smtp_host_local);
-          // System.out.println("--- send_to = " + send_to);
-
-          // int exit_status = jakarta_email_class.send_jakarta_email_obs(smtp_mode,
-          // smtp_host_local, smtp_password_local_plain, send_to, send_from, email_subject,
-          // email_body, send_cc, smtp_port_local, attachment);
-          // jakarta_email_status = exit_status;
-
-          // freeze parameters before executing on a virtual thread
-          final String smtp_mode_f = smtp_mode;
-          final String smtp_host_local_f = smtp_host_local;
-          final String smtp_password_local_plain_f = smtp_password_local_plain;
-          final String send_to_f = send_to;
-          final String send_from_f = send_from;
-          final String email_subject_f = email_subject;
-          final String email_body_f = email_body;
-          final String send_cc_f = send_cc;
-          final String smtp_port_local_f = smtp_port_local;
-          final String attachment_f = attachment;
-          try (var executor = java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
-            int exit_status =
-                executor
-                    .submit(
-                        () ->
-                            jakarta_email_class.send_jakarta_email_obs(
-                                smtp_mode_f,
-                                smtp_host_local_f,
-                                smtp_password_local_plain_f,
-                                send_to_f,
-                                send_from_f,
-                                email_subject_f,
-                                email_body_f,
-                                send_cc_f,
-                                smtp_port_local_f,
-                                attachment_f))
-                    .get();
-            jakarta_email_status = exit_status;
-          }
+          ObservationEmailRequest request =
+              new ObservationEmailRequest(
+                  smtp_mode,
+                  smtp_host_local,
+                  smtp_password_local_plain,
+                  send_to,
+                  send_from,
+                  email_subject,
+                  email_body,
+                  send_cc,
+                  smtp_port_local,
+                  attachment);
+          jakarta_email_status =
+              ObservationEmailTransportExecutor.execute(
+                  new JakartaObservationEmailSender(jakarta_email_class), request);
         } //  if (doorgaan)
 
         return jakarta_email_status;
@@ -13484,56 +13456,21 @@ public class main extends javax.swing.JFrame {
               smtp_password_local_plain = "null";
             }
 
-            // invoke the (python)email exe
-            // int exit_status = python_email_class.send_python_email(smtp_mode, smtp_host_local,
-            // smtp_password_local_plain, send_to, send_from, email_subject, email_body, send_cc,
-            // smtp_port_local, attachment);
-
-            ////////////////////////////////
-            // freeze parameters before executing on a virtual thread
-            final String smtp_mode_f = smtp_mode;
-            final String smtp_host_local_f = smtp_host_local;
-            final String smtp_password_local_plain_f = smtp_password_local_plain;
-            final String send_to_f = send_to;
-            final String send_from_f = send_from;
-            final String email_subject_f = email_subject;
-            final String email_body_f = email_body;
-            final String send_cc_f = send_cc;
-            final String smtp_port_local_f = smtp_port_local;
-            final String attachment_f = attachment;
-            try (var executor = java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()) {
-              int exit_status =
-                  executor
-                      .submit(
-                          () ->
-                              python_email_class.send_python_email(
-                                  smtp_mode_f,
-                                  smtp_host_local_f,
-                                  smtp_password_local_plain_f,
-                                  send_to_f,
-                                  send_from_f,
-                                  email_subject_f,
-                                  email_body_f,
-                                  send_cc_f,
-                                  smtp_port_local_f,
-                                  attachment_f))
-                      .get();
-
-              // convert the numerical return status to text line return status + write to system
-              // log
-              String exit_status_text =
-                  python_email_class.python_email_exe_return_status_to_text(exit_status);
-              main.log_turbowin_system_message("[EMAIL] " + exit_status_text);
-
-              python_email_status = exit_status;
-            }
-
-            // convert the numerical return status to text line return status + write to system log
-            // String exit_status_text =
-            // python_email_class.python_email_exe_return_status_to_text(exit_status);
-            // main.log_turbowin_system_message("[EMAIL] " + exit_status_text);
-
-            // python_email_status = exit_status;
+            ObservationEmailRequest request =
+                new ObservationEmailRequest(
+                    smtp_mode,
+                    smtp_host_local,
+                    smtp_password_local_plain,
+                    send_to,
+                    send_from,
+                    email_subject,
+                    email_body,
+                    send_cc,
+                    smtp_port_local,
+                    attachment);
+            python_email_status =
+                ObservationEmailTransportExecutor.execute(
+                    new PythonObservationEmailSender(python_email_class), request);
           } else // python module not found / copy-error
           {
             python_email_status = 1000; // python module not found / copy-error
