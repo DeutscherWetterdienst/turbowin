@@ -13172,16 +13172,9 @@ public class main extends javax.swing.JFrame {
             jakarta_email_class = new Jakarta_Email();
           }
 
-          String smtp_password_local_plain = "";
-          if (smtp_password_local.equals("null") == false) {
-            // NB smtp_password_local = encrypted -> decrypt it before passing it to the jakarta
-            // email module
-            smtp_password_local_plain = myemailsettings.decrypt(smtp_password_local);
-          } else {
-            // NB so a null value was not encrypted so do also not decrypt (?? mode:
-            // EMAIL_SEND_LOCAL_HOST)
-            smtp_password_local_plain = "null";
-          }
+          String smtp_password_local_plain =
+              ObservationEmailPasswordResolver.resolve(
+                  smtp_password_local, myemailsettings::decrypt);
 
           ObservationEmailRequest request =
               new ObservationEmailRequest(
@@ -13445,16 +13438,9 @@ public class main extends javax.swing.JFrame {
           if (python_email_found_ok) // 'python email exe' copied sucessfully (this time or already
           // in the past) from jar to destination or was already present
           {
-            String smtp_password_local_plain = "";
-            if (smtp_password_local.equals("null") == false) {
-              // NB smtp_password_local = encrypted -> decrypt it before passing it to the python
-              // email module
-              smtp_password_local_plain = myemailsettings.decrypt(smtp_password_local);
-            } else {
-              // NB so a null value was not encrypted so do also not decrypt (mode:
-              // EMAIL_SEND_LOCAL_HOST)
-              smtp_password_local_plain = "null";
-            }
+            String smtp_password_local_plain =
+                ObservationEmailPasswordResolver.resolve(
+                    smtp_password_local, myemailsettings::decrypt);
 
             ObservationEmailRequest request =
                 new ObservationEmailRequest(
