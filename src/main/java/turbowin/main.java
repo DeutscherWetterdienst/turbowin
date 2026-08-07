@@ -4033,15 +4033,14 @@ public class main extends javax.swing.JFrame {
                     .addContainerGap()));
   } // </editor-fold>//GEN-END:initComponents
 
+  /** @deprecated Use {@link DateTimeUtils#convert_month(int)} in new code. */
+  @Deprecated
+  public static String convert_month(int month_number) {
+    return DateTimeUtils.convert_month(month_number);
+  }
+
   public static void setUIFont(javax.swing.plaf.FontUIResource f) {
-    java.util.Enumeration keys = UIManager.getDefaults().keys();
-    while (keys.hasMoreElements()) {
-      Object key = keys.nextElement();
-      Object value = UIManager.get(key);
-      if (value instanceof javax.swing.plaf.FontUIResource) {
-        UIManager.put(key, f);
-      }
-    }
+    SwingUiUtils.setUIFont(f);
   }
 
   public ImageIcon createImageIcon(String path_and_file) {
@@ -4276,48 +4275,6 @@ public class main extends javax.swing.JFrame {
       loadImage(main.ICONS_DIRECTORY + "captains.png");
       loadImage(main.ICONS_DIRECTORY + "next_screen.png");
     }
-  }
-
-  public static String convert_month(int month_number) {
-    String month_name = "";
-
-    if (month_number == 0) {
-      month_name = "January";
-    } else if (month_number == 1) {
-      month_name = "February";
-    }
-    if (month_number == 2) {
-      month_name = "March";
-    }
-    if (month_number == 3) {
-      month_name = "April";
-    }
-    if (month_number == 4) {
-      month_name = "May";
-    }
-    if (month_number == 5) {
-      month_name = "June";
-    }
-    if (month_number == 6) {
-      month_name = "July";
-    }
-    if (month_number == 7) {
-      month_name = "August";
-    }
-    if (month_number == 8) {
-      month_name = "September";
-    }
-    if (month_number == 9) {
-      month_name = "October";
-    }
-    if (month_number == 10) {
-      month_name = "November";
-    }
-    if (month_number == 11) {
-      month_name = "December";
-    }
-
-    return month_name;
   }
 
   public static void check_and_set_datetime_v2() {
@@ -16112,20 +16069,7 @@ public class main extends javax.swing.JFrame {
   }
 
   private static String urlEncode(String s) {
-    // NB
-    // http://stackoverflow.com/questions/17373/how-do-i-open-the-default-mail-program-with-a-subject-and-body-in-a-cross-platfo
-
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < s.length(); i++) {
-      char ch = s.charAt(i);
-      if (Character.isLetterOrDigit(ch)) {
-        sb.append(ch);
-      } else {
-        sb.append(String.format("%%%02X", (int) ch));
-      }
-    }
-
-    return sb.toString();
+    return UrlUtils.urlEncode(s);
   }
 
   private void Output_obs_by_email_format_101() {
