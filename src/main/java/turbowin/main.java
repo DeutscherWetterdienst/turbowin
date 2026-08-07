@@ -13127,42 +13127,24 @@ public class main extends javax.swing.JFrame {
 
         if ((manual_send == true && (email_send_mode.equals(EMAIL_SEND_CUSTOM)))
             || (manual_send == false && (APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL)))) {
-          if (obs_format.equals(FORMAT_101)
-              || (main.obs_format.equals(main.FORMAT_AWS)
-                  && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))) {
-            // NB format 101 message was already prepared in function: Output_obs_by_email_all()
-            // [main.java]
-            //
-            if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT)) {
-              email_body = "see attachment";
-            } else {
-              // read the compressed obs (format 101) which is the only line in file
-              // HPK_format_101.txt
-              email_body = get_format_101_obs_from_file();
-              if (email_body.equals("") == true) // no format101 message found
-              {
-                doorgaan = false;
-              }
-            } // else
-          } // if (obs_format.equals(FORMAT_101)) etc.
-
-          if (obs_format.equals(FORMAT_FM13)) {
-            // if ddmmyyyy in subject field -> replace by actual utc date of observation
-            // String obs_email_subject_new = obs_email_subject.replaceAll("ddhhmm",
-            // mydatetime.YY_code + mydatetime.GG_code + "00");
-            // obs_email_subject = obs_email_subject_new;
-
-            if (obs_email_subject.contains("ddhhmm")) {
-              email_subject =
-                  obs_email_subject.replaceAll(
-                      "ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
-            }
-
-            email_body = obs_write;
-            if (email_body.equals("") == true) {
-              doorgaan = false;
-            }
-          } // if (obs_format.equals(FORMAT_FM13))
+          ObservationEmailContentPreparer.Result content =
+              ObservationEmailContentPreparer.prepare(
+                  obs_format,
+                  eucaws_uploads_method.equals(UPLOADS_VIA_TURBOWIN),
+                  obs_101_email,
+                  (obs_format.equals(FORMAT_101)
+                              || (obs_format.equals(FORMAT_AWS)
+                                  && eucaws_uploads_method.equals(UPLOADS_VIA_TURBOWIN)))
+                          && !obs_101_email.equals(FORMAT_101_ATTACHEMENT)
+                      ? get_format_101_obs_from_file()
+                      : "",
+                  obs_write,
+                  email_subject,
+                  mydatetime.YY_code,
+                  mydatetime.GG_code);
+          email_subject = content.subject();
+          email_body = content.body();
+          doorgaan = content.nonEmpty();
 
           if (!doorgaan) {
             jakarta_email_status = 1001; // empty obs
@@ -13479,43 +13461,24 @@ public class main extends javax.swing.JFrame {
         */
         if ((manual_send == true && (email_send_mode.equals(EMAIL_SEND_CUSTOM)))
             || (manual_send == false && (APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL)))) {
-          // if (obs_format.equals(FORMAT_101))
-          if (obs_format.equals(FORMAT_101)
-              || (main.obs_format.equals(main.FORMAT_AWS)
-                  && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))) {
-            // NB format 101 message was already prepared in function: Output_obs_by_email_all()
-            // [main.java]
-            //
-            if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT)) {
-              email_body = "see attachment";
-            } else {
-              // read the compressed obs (format 101) which is the only line in file
-              // HPK_format_101.txt
-              email_body = get_format_101_obs_from_file();
-              if (email_body.equals("") == true) // no format101 message found
-              {
-                doorgaan = false;
-              }
-            } // else
-          } // if (obs_format.equals(FORMAT_101))
-
-          if (obs_format.equals(FORMAT_FM13)) {
-            // if ddmmyyyy in subject field -> replace by actual utc date of observation
-            // String obs_email_subject_new = obs_email_subject.replaceAll("ddhhmm",
-            // mydatetime.YY_code + mydatetime.GG_code + "00");
-            // obs_email_subject = obs_email_subject_new;
-
-            if (obs_email_subject.contains("ddhhmm")) {
-              email_subject =
-                  obs_email_subject.replaceAll(
-                      "ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
-            }
-
-            email_body = obs_write;
-            if (email_body.equals("") == true) {
-              doorgaan = false;
-            }
-          } // if (obs_format.equals(FORMAT_FM13))
+          ObservationEmailContentPreparer.Result content =
+              ObservationEmailContentPreparer.prepare(
+                  obs_format,
+                  eucaws_uploads_method.equals(UPLOADS_VIA_TURBOWIN),
+                  obs_101_email,
+                  (obs_format.equals(FORMAT_101)
+                              || (obs_format.equals(FORMAT_AWS)
+                                  && eucaws_uploads_method.equals(UPLOADS_VIA_TURBOWIN)))
+                          && !obs_101_email.equals(FORMAT_101_ATTACHEMENT)
+                      ? get_format_101_obs_from_file()
+                      : "",
+                  obs_write,
+                  email_subject,
+                  mydatetime.YY_code,
+                  mydatetime.GG_code);
+          email_subject = content.subject();
+          email_body = content.body();
+          doorgaan = content.nonEmpty();
 
           if (!doorgaan) {
             python_email_status = 1001; // empty obs
