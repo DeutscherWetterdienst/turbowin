@@ -12924,20 +12924,7 @@ public class main extends javax.swing.JFrame {
         protected Boolean doInBackground() throws Exception {
           boolean obs_written_ok = true;
 
-          // write to selected file
-          try (BufferedWriter out = new BufferedWriter(new FileWriter(output_file))) {
-            out.write(obs_write);
-            // out.newLine();   // newLine(): write a line separator. The line separator string is
-            // defined by the system property line.separator, and is not necessarily a single
-            // newline ('\n') character.
-
-            // user feedback
-            obs_written_ok = true;
-
-          } // try
-          catch (IOException | HeadlessException e) {
-            obs_written_ok = false;
-          } // catch
+          obs_written_ok = ObservationFileWriter.write(new File(output_file), obs_write);
 
           return obs_written_ok;
         } // protected Void doInBackground() throws Exception
@@ -12992,20 +12979,8 @@ public class main extends javax.swing.JFrame {
           }
 
           if (doorgaan == true) {
-            // write to selected file
-            try (BufferedWriter out = new BufferedWriter(new FileWriter(output_file))) {
-              out.write(file_format_101_line);
-              // out.newLine();   // newLine(): write a line separator. The line separator string is
-              // defined by the system property line.separator, and is not necessarily a single
-              // newline ('\n') character.
-
-              // user feedback
-              obs_written_ok = true;
-
-            } // try
-            catch (IOException | HeadlessException e) {
-              obs_written_ok = false;
-            } // catch
+            obs_written_ok =
+                ObservationFileWriter.write(new File(output_file), file_format_101_line);
           } // if (doorgaan == true)
 
           return obs_written_ok;
