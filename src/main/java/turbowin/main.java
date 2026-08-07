@@ -13791,23 +13791,9 @@ public class main extends javax.swing.JFrame {
 
             // String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  +
             // "&body=" + obs_write;
-            String mail_txt = "";
-            if (obs_email_cc.length() > 3) {
-              // NB after the email address you'll use a question mark to prefix the first variable,
-              // and ampersands ( & ) for each consecutive variable.
-              // (https://developer.yoast.com/guide-mailto-links/)
-              mail_txt =
-                  obs_email_recipient
-                      + "?cc="
-                      + obs_email_cc
-                      + "&subject="
-                      + obs_email_subject_new
-                      + "&body="
-                      + obs_write;
-            } else {
-              mail_txt =
-                  obs_email_recipient + "?subject=" + obs_email_subject_new + "&body=" + obs_write;
-            }
+            String mail_txt =
+                ObservationEmailComposer.buildMailText(
+                    obs_email_recipient, obs_email_cc, obs_email_subject_new, obs_write);
 
             URI uriMailTo = null;
             try {
@@ -14055,27 +14041,9 @@ public class main extends javax.swing.JFrame {
 
               // String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  +
               // "&body=" + email_body_line;
-              String mail_txt = "";
-              if (obs_email_cc.length() > 3) {
-                // NB after the email address you'll use a question mark to prefix the first
-                // variable, and ampersands ( & ) for each consecutive variable.
-                // (https://developer.yoast.com/guide-mailto-links/)
-                mail_txt =
-                    obs_email_recipient
-                        + "?cc="
-                        + obs_email_cc
-                        + "&subject="
-                        + obs_email_subject_new
-                        + "&body="
-                        + email_body_line;
-              } else {
-                mail_txt =
-                    obs_email_recipient
-                        + "?subject="
-                        + obs_email_subject_new
-                        + "&body="
-                        + email_body_line;
-              }
+              String mail_txt =
+                  ObservationEmailComposer.buildMailText(
+                      obs_email_recipient, obs_email_cc, obs_email_subject_new, email_body_line);
 
               URI uriMailTo = null;
               try {
