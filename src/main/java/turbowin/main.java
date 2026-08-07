@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -14088,8 +14087,6 @@ public class main extends javax.swing.JFrame {
   }
 
   private static String get_format_101_obs_from_file() {
-    String format_101_obs = "";
-
     final String volledig_path_format_101_compressed_file =
         main.logs_dir
             + java.io.File.separator
@@ -14101,35 +14098,7 @@ public class main extends javax.swing.JFrame {
             + FORMAT_101_INPUT_FILE; // NB adding "HPK_" to the input file name is automatically
     // done by the C-code compression functions
 
-    try (BufferedReader in =
-        new BufferedReader(new FileReader(volledig_path_format_101_compressed_file))) {
-      if ((format_101_obs = in.readLine()) == null) {
-        // JOptionPane.showMessageDialog(null, "When retrieveing format 101 data empty file: " +
-        // volledig_path_format_101_compressed_file, main.APPLICATION_NAME + " error",
-        // JOptionPane.WARNING_MESSAGE);
-        System.out.println(
-            "--- error when retrieveing format 101 data empty file: "
-                + volledig_path_format_101_compressed_file);
-        format_101_obs =
-            ""; // the function which invoke get_format_101_obs_from_file() will check this value
-      } // else
-
-    } // try
-    catch (IOException | HeadlessException e) {
-      // JOptionPane.showMessageDialog(null, "When retrieving format 101 data error opening file: "
-      // + volledig_path_format_101_compressed_file + " (" + e + ")", main.APPLICATION_NAME + "
-      // error", JOptionPane.WARNING_MESSAGE);
-      System.out.println(
-          "--- error when retrieving format 101 data error opening file: "
-              + volledig_path_format_101_compressed_file);
-      format_101_obs =
-          ""; // the function which invoke get_format_101_obs_from_file() will check this value
-    } // catch
-
-    //  JOptionPane.showMessageDialog(null, format_101_obs, "test inhoud format_101_obs" + " error",
-    // JOptionPane.WARNING_MESSAGE);
-
-    return format_101_obs;
+    return Format101FileReader.readFirstLine(new File(volledig_path_format_101_compressed_file));
   }
 
   private void Output_obs_to_server_FM13_TurboWin_stand_alone() {
