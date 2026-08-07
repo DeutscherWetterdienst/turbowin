@@ -13057,40 +13057,26 @@ public class main extends javax.swing.JFrame {
             "null"; // NB do not insert "" here because this will be considerd as a 'none' argument
         // for the python script
 
-        ///////////////////////// EMAIL VIA SMTP HOST (disabled from version 4.2)
-        // //////////////////////
-        if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_LOCAL_HOST))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_SMTP_HOST))) {
+        ObservationEmailModeResolver.Mode emailMode =
+            ObservationEmailModeResolver.resolve(
+                manual_send,
+                email_send_mode,
+                APTR_AWSR_send_method,
+                EMAIL_SEND_LOCAL_HOST,
+                EMAIL_SEND_GMAIL,
+                EMAIL_SEND_YAHOO,
+                EMAIL_SEND_CUSTOM,
+                APTR_AWSR_SMTP_HOST,
+                APTR_AWSR_GMAIL,
+                APTR_AWSR_YAHOO_MAIL,
+                APTR_AWSR_CUSTOM_MAIL);
+        if (emailMode == ObservationEmailModeResolver.Mode.DISABLED) {
           JOptionPane.showMessageDialog(
               null,
               "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
               main.APPLICATION_NAME + " error",
               JOptionPane.WARNING_MESSAGE);
-        } // else if (email_send_mode.equals(EMAIL_SEND_LOCAL_HOST)) etc.
-
-        ///////////////////////// EMAIL VIA GMAIL (disabled from version 4.2) //////////////////////
-        else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_GMAIL))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_GMAIL))) {
-          JOptionPane.showMessageDialog(
-              null,
-              "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
-              main.APPLICATION_NAME + " error",
-              JOptionPane.WARNING_MESSAGE);
-        } // else if (email_send_mode.equals(EMAIL_SEND_GMAIL)) etc.
-
-        ///////////////////////// EMAIL VIA YAHOO (disabled from version 4.2) //////////////////////
-        else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_YAHOO))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_YAHOO_MAIL))) {
-          JOptionPane.showMessageDialog(
-              null,
-              "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
-              main.APPLICATION_NAME + " error",
-              JOptionPane.WARNING_MESSAGE);
-        } // else if (email_send_mode.equals(EMAIL_SEND_YAHOO)) etc.
-
-        ///////////////////////// EMAIL VIA CUSTOM //////////////////////
-        else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL))) {
+        } else if (emailMode == ObservationEmailModeResolver.Mode.CUSTOM) {
           boolean includeAttachment =
               (obs_format.equals(FORMAT_101)
                       || (main.obs_format.equals(main.FORMAT_AWS)
@@ -13125,8 +13111,7 @@ public class main extends javax.swing.JFrame {
         int jakarta_email_status = 0;
         boolean doorgaan = true;
 
-        if ((manual_send == true && (email_send_mode.equals(EMAIL_SEND_CUSTOM)))
-            || (manual_send == false && (APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL)))) {
+        if (emailMode == ObservationEmailModeResolver.Mode.CUSTOM) {
           ObservationEmailContentPreparer.Result content =
               ObservationEmailContentPreparer.prepare(
                   obs_format,
@@ -13316,31 +13301,26 @@ public class main extends javax.swing.JFrame {
             "null"; // NB do not insert "" here because this will be considerd as a 'none' argument
         // for the python script
 
-        ///////////////////////// EMAIL VIA SMTP HOST (disabled from version 4.2)
-        // //////////////////////
-        if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_LOCAL_HOST))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_SMTP_HOST))) {
+        ObservationEmailModeResolver.Mode emailMode =
+            ObservationEmailModeResolver.resolve(
+                manual_send,
+                email_send_mode,
+                APTR_AWSR_send_method,
+                EMAIL_SEND_LOCAL_HOST,
+                EMAIL_SEND_GMAIL,
+                EMAIL_SEND_YAHOO,
+                EMAIL_SEND_CUSTOM,
+                APTR_AWSR_SMTP_HOST,
+                APTR_AWSR_GMAIL,
+                APTR_AWSR_YAHOO_MAIL,
+                APTR_AWSR_CUSTOM_MAIL);
+        if (emailMode == ObservationEmailModeResolver.Mode.DISABLED) {
           JOptionPane.showMessageDialog(
               null,
               "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
               main.APPLICATION_NAME + " error",
               JOptionPane.WARNING_MESSAGE);
-        } else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_GMAIL))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_GMAIL))) {
-          JOptionPane.showMessageDialog(
-              null,
-              "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
-              main.APPLICATION_NAME + " error",
-              JOptionPane.WARNING_MESSAGE);
-        } else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_YAHOO))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_YAHOO_MAIL))) {
-          JOptionPane.showMessageDialog(
-              null,
-              "invalid email send method (Maintenance -> Email settings, insert the CUSTOM settings)",
-              main.APPLICATION_NAME + " error",
-              JOptionPane.WARNING_MESSAGE);
-        } else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM))
-            || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL))) {
+        } else if (emailMode == ObservationEmailModeResolver.Mode.CUSTOM) {
           boolean includeAttachment =
               (obs_format.equals(FORMAT_101)
                       || (main.obs_format.equals(main.FORMAT_AWS)
@@ -13385,8 +13365,7 @@ public class main extends javax.swing.JFrame {
                                           APTR_AWSR_send_method.equals(APTR_AWSR_YAHOO_MAIL) ||
                                           APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL))) )
         */
-        if ((manual_send == true && (email_send_mode.equals(EMAIL_SEND_CUSTOM)))
-            || (manual_send == false && (APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL)))) {
+        if (emailMode == ObservationEmailModeResolver.Mode.CUSTOM) {
           ObservationEmailContentPreparer.Result content =
               ObservationEmailContentPreparer.prepare(
                   obs_format,
