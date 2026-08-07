@@ -14161,20 +14161,11 @@ public class main extends javax.swing.JFrame {
           // U?rL = http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?
           String url = ServerObservationRequestBuilder.fm13Url(upload_URL, main.obs_write);
 
-          URL obj = null;
           try {
-            obj = new URI(url).toURL();
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            // optional (default is GET)
-            con.setRequestMethod("GET");
-            // con.setDoOutput(true);        //  To be clear: setting
-            // URLConnection#setDoOutput(true) to true implicitly sets the request method to POST
-
             String message = "[MANUAL] sending 'GET' request to URL: " + url;
             main.log_turbowin_system_message(message);
 
-            responseCode = con.getResponseCode();
+            responseCode = ObservationServerClient.getResponseCode(url);
 
             // NB besides the response code there is also a corresponding response text, but
             // unfortunately with html tags,
