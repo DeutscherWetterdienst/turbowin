@@ -13091,31 +13091,31 @@ public class main extends javax.swing.JFrame {
         ///////////////////////// EMAIL VIA CUSTOM //////////////////////
         else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM))
             || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL))) {
-          smtp_mode = custom_security; // CUSTOM_TLS_STARTTLS / CUSTOM_TLS / CUSTOM_SSL_STARTTLS /
-          // CUSTOM_SSL
-          smtp_host_local = custom_email_server; // eg "smtp.mail.special.com";
-          smtp_password_local = custom_password;
-          send_to = obs_email_recipient; // eg "user@example.com,user@example.org";
-          send_from = your_custom_address; // eg nedlloyd_ebro@nedlloyd.nl
-          email_subject = obs_email_subject; // nb can be overwritten in case of FM13 "ddhhmm"
-          email_body = "null"; // nb can be overwritten, see below
-          smtp_port_local = custom_port; // eg 587
-          attachment = "null"; // nb can be overwritten, FM13 never in attachment; format101 only if
-          // indicated by the user
-
-          if (obs_email_cc.length() > 3) {
-            send_cc = obs_email_cc;
-          } else {
-            send_cc = "null";
-          }
-
-          if (obs_format.equals(FORMAT_101)
-              || (main.obs_format.equals(main.FORMAT_AWS)
-                  && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))) {
-            if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT)) {
-              attachment = "yes";
-            }
-          }
+          boolean includeAttachment =
+              (obs_format.equals(FORMAT_101)
+                      || (main.obs_format.equals(main.FORMAT_AWS)
+                          && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN)))
+                  && main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT);
+          ObservationEmailParameters parameters =
+              ObservationEmailParameters.forCustomSettings(
+                  custom_security,
+                  custom_email_server,
+                  custom_password,
+                  obs_email_recipient,
+                  your_custom_address,
+                  obs_email_subject,
+                  obs_email_cc,
+                  custom_port,
+                  includeAttachment);
+          smtp_mode = parameters.smtpMode();
+          smtp_host_local = parameters.smtpHost();
+          smtp_password_local = parameters.smtpPassword();
+          send_to = parameters.recipient();
+          send_from = parameters.sender();
+          email_subject = parameters.subject();
+          send_cc = parameters.cc();
+          smtp_port_local = parameters.port();
+          attachment = parameters.attachment();
         } // else if ( (manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM)) ||
         // (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL)) )
 
@@ -13433,38 +13433,31 @@ public class main extends javax.swing.JFrame {
               JOptionPane.WARNING_MESSAGE);
         } else if ((manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM))
             || (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL))) {
-          smtp_mode = custom_security; // CUSTOM_TLS_STARTTLS / CUSTOM_TLS / CUSTOM_SSL_STARTTLS /
-          // CUSTOM_SSL
-          smtp_host_local = custom_email_server; // eg "smtp.mail.special.com";
-          smtp_password_local = custom_password;
-          send_to = obs_email_recipient; // eg "user@example.com,user@example.org";
-          send_from = your_custom_address; // eg nedlloyd_ebro@nedlloyd.nl
-          email_subject = obs_email_subject; // nb can be overwritten in case of FM13 "ddhhmm"
-          email_body = "null"; // nb can be overwritten, see below
-          smtp_port_local = custom_port; // eg 587
-          attachment = "null"; // nb can be overwritten, FM13 never in attachment; format101 only if
-          // indicated by the user
-
-          if (obs_email_cc.length() > 3) {
-            send_cc = obs_email_cc;
-          } else {
-            send_cc = "null";
-          }
-
-          // if (obs_format.equals(FORMAT_101))
-          // {
-          //   if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT))
-          //   {
-          //      attachment = "yes";
-          //   }
-          // }
-          if (obs_format.equals(FORMAT_101)
-              || (main.obs_format.equals(main.FORMAT_AWS)
-                  && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))) {
-            if (main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT)) {
-              attachment = "yes";
-            }
-          }
+          boolean includeAttachment =
+              (obs_format.equals(FORMAT_101)
+                      || (main.obs_format.equals(main.FORMAT_AWS)
+                          && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN)))
+                  && main.obs_101_email.equals(main.FORMAT_101_ATTACHEMENT);
+          ObservationEmailParameters parameters =
+              ObservationEmailParameters.forCustomSettings(
+                  custom_security,
+                  custom_email_server,
+                  custom_password,
+                  obs_email_recipient,
+                  your_custom_address,
+                  obs_email_subject,
+                  obs_email_cc,
+                  custom_port,
+                  includeAttachment);
+          smtp_mode = parameters.smtpMode();
+          smtp_host_local = parameters.smtpHost();
+          smtp_password_local = parameters.smtpPassword();
+          send_to = parameters.recipient();
+          send_from = parameters.sender();
+          email_subject = parameters.subject();
+          send_cc = parameters.cc();
+          smtp_port_local = parameters.port();
+          attachment = parameters.attachment();
         } // else if ( (manual_send == true && email_send_mode.equals(EMAIL_SEND_CUSTOM)) ||
         // (manual_send == false && APTR_AWSR_send_method.equals(APTR_AWSR_CUSTOM_MAIL)) )
 
