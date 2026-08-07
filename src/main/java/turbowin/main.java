@@ -32,7 +32,6 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -14160,7 +14159,7 @@ public class main extends javax.swing.JFrame {
           // encoded_server_format_101_obs;
           // String url = upload_URL + "obs=" + encoded_server_format_101_obs;       // eg upload
           // U?rL = http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?
-          String url = upload_URL + "obs=" + main.obs_write;
+          String url = ServerObservationRequestBuilder.fm13Url(upload_URL, main.obs_write);
 
           URL obj = null;
           try {
@@ -14381,13 +14380,11 @@ public class main extends javax.swing.JFrame {
           //
           // Encode all 'not allowed' ASCII chars if not java.net.URISyntaxException (with index
           // number in the URL string)
-          String encoded_server_format_101_obs = URLEncoder.encode(server_format_101_line, "UTF-8");
-
           // String url =
           // "http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?obs=" +
           // encoded_server_format_101_obs;
-          String url = upload_URL + "obs=" + encoded_server_format_101_obs; // eg upload U?rL =
-          // http://www.knmi.nl/samenw/turbowin/webstart101/index_webstart_101.php?
+          String url =
+              ServerObservationRequestBuilder.format101Url(upload_URL, server_format_101_line);
 
           int maxRetries = 3; // Maximum retries per IP
           boolean success = false;
