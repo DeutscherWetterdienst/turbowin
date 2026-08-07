@@ -21,4 +21,14 @@ public class UrlUtilsTest {
   public void preservesLettersFromNonAsciiInput() {
     assertEquals("café", UrlUtils.urlEncode("café"));
   }
+
+  @Test
+  public void encodesCharactersUsedInMailtoLinks() {
+    assertEquals("hello%20world%21", UrlUtils.urlEncode("hello world!"));
+  }
+
+  @Test
+  public void leavesLettersAndDigitsUnchanged() {
+    assertEquals("ABCxyz012", UrlUtils.urlEncode("ABCxyz012"));
+  }
 }

@@ -41,4 +41,10 @@ public class DateTimeUtilsTest {
     assertEquals("nov", DateTimeUtils.shortMonthOrOriginal("11"));
     assertEquals("unknown", DateTimeUtils.shortMonthOrOriginal("unknown"));
   }
+
+  @Test
+  public void legacyMainWrapperKeepsTheExistingMonthContract() {
+    assertEquals("January", main.convert_month(0));
+    assertEquals("", main.convert_month(12));
+  }
 }
