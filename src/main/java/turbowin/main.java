@@ -14,7 +14,6 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -11062,8 +11061,7 @@ public class main extends javax.swing.JFrame {
 
   private void Output_obs_to_clipboard_FM13() {
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    StringSelection selection = new StringSelection(obs_write);
-    clipboard.setContents(selection, null);
+    ObservationClipboardWriter.write(clipboard, obs_write);
 
     IMMT_log();
 
@@ -11082,8 +11080,7 @@ public class main extends javax.swing.JFrame {
 
     if (doorgaan == true) {
       Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-      StringSelection selection = new StringSelection(clipboard_format_101_line);
-      clipboard.setContents(selection, null);
+      ObservationClipboardWriter.write(clipboard, clipboard_format_101_line);
     }
 
     IMMT_log();
