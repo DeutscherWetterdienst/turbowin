@@ -27,4 +27,18 @@ public class DateTimeUtilsTest {
     assertEquals("", DateTimeUtils.convert_month(-1));
     assertEquals("", DateTimeUtils.convert_month(12));
   }
+
+  @Test
+  public void convertsTwoDigitMonthsToTheirAbbreviations() {
+    assertEquals("Jan", DateTimeUtils.shortMonth("01"));
+    assertEquals("Nov", DateTimeUtils.shortMonth("11"));
+    assertEquals("Dec", DateTimeUtils.shortMonth("12"));
+    assertEquals(null, DateTimeUtils.shortMonth("00"));
+  }
+
+  @Test
+  public void preservesLegacyMapMonthFormatting() {
+    assertEquals("nov", DateTimeUtils.shortMonthOrOriginal("11"));
+    assertEquals("unknown", DateTimeUtils.shortMonthOrOriginal("unknown"));
+  }
 }

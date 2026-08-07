@@ -9697,41 +9697,7 @@ public class main_RS232_RS422 {
               Calendar.DAY_OF_MONTH); // The first day of the month has value 1
       int system_hour_of_day = main.cal_systeem_datum_tijd.get(Calendar.HOUR_OF_DAY);
 
-      if (system_month == 0) {
-        system_month_volledig = "January";
-      } else if (system_month == 1) {
-        system_month_volledig = "February";
-      }
-      if (system_month == 2) {
-        system_month_volledig = "March";
-      }
-      if (system_month == 3) {
-        system_month_volledig = "April";
-      }
-      if (system_month == 4) {
-        system_month_volledig = "May";
-      }
-      if (system_month == 5) {
-        system_month_volledig = "June";
-      }
-      if (system_month == 6) {
-        system_month_volledig = "July";
-      }
-      if (system_month == 7) {
-        system_month_volledig = "August";
-      }
-      if (system_month == 8) {
-        system_month_volledig = "September";
-      }
-      if (system_month == 9) {
-        system_month_volledig = "October";
-      }
-      if (system_month == 10) {
-        system_month_volledig = "November";
-      }
-      if (system_month == 11) {
-        system_month_volledig = "December";
-      }
+      system_month_volledig = DateTimeUtils.convert_month(system_month);
 
       mydatetime.year = Integer.toString(system_year); // for progress main screen and IMMT
       mydatetime.month = system_month_volledig; // for progress main screen

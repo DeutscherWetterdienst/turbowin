@@ -581,17 +581,7 @@ public final class mycl extends javax.swing.JFrame {
   }
 
   public ImageIcon createImageIcon(String path_and_file) {
-    URL url = null;
-
-    try {
-      url = getClass().getResource(path_and_file);
-    } catch (Exception e) {
-      /* ... */
-    }
-
-    ImageIcon icon_glyph = new javax.swing.ImageIcon(url);
-
-    return icon_glyph;
+    return ImageUtils.createImageIcon(getClass(), path_and_file);
   }
 
   private void initImages() {

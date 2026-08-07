@@ -4044,17 +4044,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public ImageIcon createImageIcon(String path_and_file) {
-    URL url = null;
-
-    try {
-      url = getClass().getResource(path_and_file);
-    } catch (Exception e) {
-      /* ... */
-    }
-
-    ImageIcon icon_glyph = new javax.swing.ImageIcon(url);
-
-    return icon_glyph;
+    return ImageUtils.createImageIcon(getClass(), path_and_file);
   }
 
   // The doInBackground method, which creates the image icon for the photograph, is invoked by the

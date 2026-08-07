@@ -1348,47 +1348,7 @@ public class OSM {
 
           // date time of the IMMT obs
           //
-          switch (month) {
-            case "01":
-              month_full = "Jan";
-              break;
-            case "02":
-              month_full = "Feb";
-              break;
-            case "03":
-              month_full = "Mar";
-              break;
-            case "04":
-              month_full = "Apr";
-              break;
-            case "05":
-              month_full = "May";
-              break;
-            case "06":
-              month_full = "Jun";
-              break;
-            case "07":
-              month_full = "Jul";
-              break;
-            case "08":
-              month_full = "Aug";
-              break;
-            case "09":
-              month_full = "Sep";
-              break;
-            case "10":
-              month_full = "Oct";
-              break;
-            case "11":
-              month_full = "nov";
-              break;
-            case "12":
-              month_full = "Dec";
-              break;
-            default:
-              month_full = month;
-              break;
-          } // switch (month)
+          month_full = DateTimeUtils.shortMonthOrOriginal(month);
 
           String infowindow_date_time =
               day + " " + month_full + " " + year + "  " + hour + ".00 UTC";
@@ -1935,47 +1895,7 @@ public class OSM {
                 month = mylatestmeasurements.AWS_array[i][c].substring(4, 6);
                 day = mylatestmeasurements.AWS_array[i][c].substring(6, 8);
 
-                switch (month) {
-                  case "01":
-                    month_full = "Jan";
-                    break;
-                  case "02":
-                    month_full = "Feb";
-                    break;
-                  case "03":
-                    month_full = "Mar";
-                    break;
-                  case "04":
-                    month_full = "Apr";
-                    break;
-                  case "05":
-                    month_full = "May";
-                    break;
-                  case "06":
-                    month_full = "Jun";
-                    break;
-                  case "07":
-                    month_full = "Jul";
-                    break;
-                  case "08":
-                    month_full = "Aug";
-                    break;
-                  case "09":
-                    month_full = "Sep";
-                    break;
-                  case "10":
-                    month_full = "Oct";
-                    break;
-                  case "11":
-                    month_full = "nov";
-                    break;
-                  case "12":
-                    month_full = "Dec";
-                    break;
-                  default:
-                    month_full = month;
-                    break;
-                } // switch (month)
+                month_full = DateTimeUtils.shortMonthOrOriginal(month);
               } // if (mylatestmeasurements.AWS_array[i][c].length() == 8)
             } // if (c == mylatestmeasurements.date_index
             else if (c == mylatestmeasurements.time_index) {

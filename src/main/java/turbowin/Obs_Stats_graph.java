@@ -826,49 +826,6 @@ public class Obs_Stats_graph extends JPanel {
   }
 
   private String convert_month(final String month) {
-    // convert month (from -String-numbers e.g. "01") to month_let (month in 3 characters e.g.
-    // "Jan")
-
-    String month_let = null;
-    switch (month) {
-      case "01":
-        month_let = "Jan";
-        break;
-      case "02":
-        month_let = "Feb";
-        break;
-      case "03":
-        month_let = "Mar";
-        break;
-      case "04":
-        month_let = "Apr";
-        break;
-      case "05":
-        month_let = "May";
-        break;
-      case "06":
-        month_let = "Jun";
-        break;
-      case "07":
-        month_let = "Jul";
-        break;
-      case "08":
-        month_let = "Aug";
-        break;
-      case "09":
-        month_let = "Sep";
-        break;
-      case "10":
-        month_let = "Oct";
-        break;
-      case "11":
-        month_let = "Nov";
-        break;
-      case "12":
-        month_let = "Dec";
-        break;
-    }
-
-    return month_let;
+    return DateTimeUtils.shortMonth(month);
   }
 }

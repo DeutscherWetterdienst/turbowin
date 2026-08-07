@@ -110,47 +110,7 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
 
       //////////// date time
       //
-      switch (month) {
-        case "01":
-          month_full = "Jan";
-          break;
-        case "02":
-          month_full = "Feb";
-          break;
-        case "03":
-          month_full = "Mar";
-          break;
-        case "04":
-          month_full = "Apr";
-          break;
-        case "05":
-          month_full = "May";
-          break;
-        case "06":
-          month_full = "Jun";
-          break;
-        case "07":
-          month_full = "Jul";
-          break;
-        case "08":
-          month_full = "Aug";
-          break;
-        case "09":
-          month_full = "Sep";
-          break;
-        case "10":
-          month_full = "Oct";
-          break;
-        case "11":
-          month_full = "nov";
-          break;
-        case "12":
-          month_full = "Dec";
-          break;
-        default:
-          month_full = month;
-          break;
-      } // switch (month)
+      month_full = DateTimeUtils.shortMonthOrOriginal(month);
 
       jLabel10.setText(day + "-" + month_full + "-" + year + " " + hour + ":00 UTC");
 
