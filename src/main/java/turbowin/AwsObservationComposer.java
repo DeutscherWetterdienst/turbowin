@@ -1,0 +1,709 @@
+package turbowin;
+
+import static turbowin.main.*;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+/** Compiles the AWS observation string from the current application state. */
+final class AwsObservationComposer {
+
+  private AwsObservationComposer() {}
+
+  static String compile() {
+    String AWS_obs = "";
+    String AWS_id = "";
+    String AWS_diff_SLL_WL = "";
+    String AWS_dd = "";
+    String AWS_ff = "";
+    String AWS_TTT = "";
+    String AWS_rh = "";
+    String AWS_sst = "";
+    String AWS_VV = "";
+    String AWS_ww = "";
+    String AWS_W1 = "";
+    String AWS_W2 = "";
+    String AWS_N = "";
+    String AWS_Nh = "";
+    String AWS_Cl = "";
+    String AWS_Cm = "";
+    String AWS_Ch = "";
+    String AWS_h = "";
+    String AWS_Pw = "";
+    String AWS_Hw = "";
+    String AWS_Dw1 = "";
+    String AWS_Pw1 = "";
+    String AWS_Hw1 = "";
+    String AWS_Dw2 = "";
+    String AWS_Pw2 = "";
+    String AWS_Hw2 = "";
+    String AWS_EsEs = "";
+    String AWS_Rs = "";
+    String AWS_Is = "";
+    String AWS_ci = "";
+    String AWS_bi = "";
+    String AWS_zi = "";
+    String AWS_Si = "";
+    String AWS_Di = "";
+    String AWS_obs_id = "";
+
+    double double_wind_speed;
+    double double_sst;
+    double double_air_temp;
+
+    // See docs: - "EUCAWS inputs/outputs Complementary information about codes by Pierre Blouch"
+    //           - "SMD & PSO formats by jean-Baptiste Cohuet"
+
+    // AWS NMEA identifier
+    //
+    AWS_id = "$PTBWP";
+
+    // departure of SLL from the actual sea level (diff SLL - WL) [format sHH; range -10..20;
+    // resolution 1; units m]
+    //
+    AWS_diff_SLL_WL =
+        diff_sll_wl; // global var (set in "Maintenance -> Station data" and "Input -> Wind")
+
+    // wind direction [format WST; range 10..360; resolution 10; units deg]
+    //
+    if (true_wind_dir_from_AWS_present
+        == false) // if parameter is measured by AWS than must be not a part of the string send to
+    // the AWS
+    {
+      if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
+        AWS_dd = "0"; // NB wind dir = variable -> 0 : special for EUCAWS!!
+      } else if (mywind.int_true_wind_dir != INVALID) {
+        // NB So wind_dir = 0 (calm) also included here
+        AWS_dd = Integer.toString(mywind.int_true_wind_dir);
+      } else {
+        AWS_dd = "";
+      }
+    } // if (true_wind_dir_from_AWS_present == false)
+
+    // wind speed [format WS.s; range 0..75; resolution 0.1; units m/s]
+    //
+    if (true_wind_speed_from_AWS_present == false) {
+      if (mywind.int_true_wind_speed != INVALID) {
+        if (main.wind_units.trim().indexOf(main.M_S) != -1) // so wind speed in m/s
+        {
+          double_wind_speed = mywind.int_true_wind_speed * 1.0; // double_wind_speed: units m/s
+        } else // so wind speed units knots or wind speed units unknown
+        {
+          double_wind_speed =
+              mywind.int_true_wind_speed * KNOT_M_S_CONVERSION; // double_wind_speed: units m/s
+        }
+
+        // rounded one digit
+        BigDecimal bd =
+            new BigDecimal(double_wind_speed)
+                .setScale(1, RoundingMode.HALF_UP); // one decimal, rounded e.g. 2.12939 -> 2.1
+        double_wind_speed = bd.doubleValue();
+
+        AWS_ff = Double.toString(double_wind_speed);
+      } else {
+        AWS_ff = "";
+      }
+    } // if (true_wind_speed_from_AWS_present == false)
+
+    // air  temperature [format sTA.w; range -60..+60; resolution 0.1; unit C]
+    //
+    if (air_temp_from_AWS_present == false) {
+      if ((mytemp.air_temp.compareTo("") != 0) && (mytemp.air_temp != null)) {
+        double_air_temp = Double.parseDouble(mytemp.air_temp);
+
+        BigDecimal bd =
+            new BigDecimal(double_air_temp)
+                .setScale(1, RoundingMode.HALF_UP); // one decimal, rounded e.g. 2.12939 -> 2.1
+        double_air_temp = bd.doubleValue();
+
+        AWS_TTT = Double.toString(double_air_temp);
+      } else {
+        AWS_TTT = "";
+      }
+    } // if (air_temp_from_AWS_present == false)
+
+    // relative humidity [format UUU; range 0..100; resolution 1; unit %]
+    //
+    if (rh_from_AWS_present == false) {
+      if ((mytemp.double_rv != main.INVALID)) {
+        int int_rh =
+            (int)
+                Math.round(mytemp.double_rv * 100); // rounding and in % (and eg not 100.0 but 100)
+
+        if ((int_rh >= 0) && (int_rh <= 100)) {
+          AWS_rh = Integer.toString(int_rh);
+        } else {
+          AWS_rh = "";
+        }
+      } // if ((mytemp.double_rv != main.INVALID))
+      else {
+        AWS_rh = "";
+      }
+    } // if (rh_from_AWS_present == false)
+
+    // sea water temperature [format sTW.w; range -5..45; resolution 0.1; unit C]
+    //
+    if (SST_from_AWS_present == false) {
+      if ((mytemp.sea_water_temp.compareTo("") != 0) && (mytemp.sea_water_temp != null)) {
+        double_sst = Double.parseDouble(mytemp.sea_water_temp);
+
+        BigDecimal bd =
+            new BigDecimal(double_sst)
+                .setScale(1, RoundingMode.HALF_UP); // one decimal, rounded e.g. 2.12939 -> 2.1
+        double_sst = bd.doubleValue();
+
+        AWS_sst = Double.toString(double_sst);
+      } else {
+        AWS_sst = "";
+      }
+    } // if (SST_from_AWS_present == false)
+
+    // visibility [format VV; range 0..99; resolution -; units: code]
+    //
+    if (myvisibility.VV_code.equals("//")) {
+      AWS_VV = "";
+    } else if ((myvisibility.VV_code != null) && (myvisibility.VV_code.compareTo("") != 0)) {
+      AWS_VV = myvisibility.VV_code;
+    } else {
+      AWS_VV = "";
+    }
+
+    // Present Weather [format WW; range 0..99; resolution -; units: bufr code table 020003]
+    //
+    if (mypresentweather.ww_code.equals("//")) {
+      AWS_ww = "";
+    } else if ((mypresentweather.ww_code != null)
+        && (mypresentweather.ww_code.compareTo("") != 0)) {
+      AWS_ww = mypresentweather.ww_code;
+    } else {
+      AWS_ww = "";
+    }
+
+    // Past weather 1 (W1; bufr table 020004)
+    //
+    if (mypastweather.W1_code.equals("/")) {
+      AWS_W1 = "";
+    } else if ((mypastweather.W1_code != null) && (mypastweather.W1_code.compareTo("") != 0)) {
+      AWS_W1 = mypastweather.W1_code;
+    } else {
+      AWS_W1 = "";
+    }
+
+    // past weather 2 (W2; bufr table 020004)
+    //
+    if (mypastweather.W2_code.equals("/")) {
+      AWS_W2 = "";
+    } else if ((mypastweather.W2_code != null) && (mypastweather.W2_code.compareTo("") != 0)) {
+      AWS_W2 = mypastweather.W2_code;
+    } else {
+      AWS_W2 = "";
+    }
+
+    // total cloud cover (N)
+    //
+    if (mycloudcover.N_code.equals("/")) {
+      AWS_N = "";
+    } else if ((mycloudcover.N_code != null) && (mycloudcover.N_code.compareTo("") != 0)) {
+      AWS_N = mycloudcover.N_code;
+    } else {
+      AWS_N = "";
+    }
+
+    // Cloud amount Cl/Cm (Nh) [bufr table 020011]
+    //
+    if (mycloudcover.Nh_code.equals("/")) {
+      AWS_Nh = "";
+    } else if ((mycloudcover.Nh_code != null) && (mycloudcover.Nh_code.compareTo("") != 0)) {
+      AWS_Nh = mycloudcover.Nh_code;
+    } else {
+      AWS_Nh = "";
+    }
+
+    // clouds low (Cl) [bufr table 020012]
+    //
+    if (mycl.cl_code.equals("/")) {
+      AWS_Cl = "";
+    } else if ((mycl.cl_code != null) && (mycl.cl_code.compareTo("") != 0)) {
+      // AWS_Cl = mycl.cl_code;
+      try {
+        int hulp_cl = Integer.parseInt(mycl.cl_code) + 30; // add 30, see bufr table 020012
+        AWS_Cl = Integer.toString(hulp_cl);
+      } catch (NumberFormatException ex) {
+        AWS_Cl = "";
+        System.out.println("+++ Error compile obs for AWS; cloud type low (Cl) " + ex);
+      } // catch
+    } else {
+      AWS_Cl = "";
+    }
+
+    // clouds middle (Cm) [bufr table 020012]
+    //
+    if (mycm.cm_code.equals("/")) {
+      AWS_Cm = "";
+    } else if ((mycm.cm_code != null) && (mycm.cm_code.compareTo("") != 0)) {
+      // AWS_Cm = mycm.cm_code.substring(0, 1);// omdat bij cm_code in geval Cm7 een a, b, c er
+      // achter staat (dus 7a, 7b, 7c)
+      try {
+        int hulp_cm =
+            Integer.parseInt(mycm.cm_code.substring(0, 1)) + 20; // add 20, see bufr table 020012
+        AWS_Cm = Integer.toString(hulp_cm);
+        // NB because if Cm code = Cm7 there is an addition a, b, c (so 7a, 7b, 7c)
+      } catch (NumberFormatException ex) {
+        AWS_Cm = "";
+        System.out.println("+++ Error compile obs for AWS; cloud type middle (Cm) " + ex);
+      } // catch
+    } else {
+      AWS_Cm = "";
+    }
+
+    // clouds high (Ch) [bufr table 020012]
+    //
+    if (mych.ch_code.equals("/")) {
+      AWS_Ch = "";
+    } else if ((mych.ch_code != null) && (mych.ch_code.compareTo("") != 0)) {
+      // AWS_Ch = mych.ch_code;
+      try {
+        int hulp_ch = Integer.parseInt(mych.ch_code) + 10; // add 10, see bufr table 020012
+        AWS_Ch = Integer.toString(hulp_ch);
+      } catch (NumberFormatException ex) {
+        AWS_Ch = "";
+        System.out.println("+++ Error compile obs for AWS; cloud type high (Ch) " + ex);
+      } // catch
+    } else {
+      AWS_Ch = "";
+    }
+
+    // height of base of lowest clouds (h)
+    //
+    if (mycloudcover.h_code.equals("/")) {
+      AWS_h = "";
+    } else if ((mycloudcover.h_code != null) && (mycloudcover.h_code.compareTo("") != 0)) {
+      AWS_h = mycloudcover.h_code;
+    } else {
+      AWS_h = "";
+    }
+
+    // Pw (period wind waves)
+    //
+    if (mywaves.Pw_code.equals("//")) {
+      AWS_Pw = "";
+    } else if (mywaves.Pw_code.equals("99")) {
+      AWS_Pw = ""; // EUCAWS (Bufr) cannot handle 99 so agreed this will become ""
+    } else if ((mywaves.Pw_code != null) && (mywaves.Pw_code.compareTo("") != 0)) {
+      // period < 10 sec than skip leading 0
+      // if (Integer.parseInt(mywaves.Pw_code) >= 10)
+      // {
+      //   AWS_Pw = mywaves.Pw_code.substring(1, 1);
+      // }
+      // else
+      // {
+      //   AWS_Pw = mywaves.Pw_code;
+      // }
+      // skip if present the leading zero
+      int int_Pw = Integer.parseInt(mywaves.Pw_code);
+      AWS_Pw = Integer.toString(int_Pw);
+    } else {
+      AWS_Pw = "";
+    }
+
+    // Hw (height of wind waves)
+    //
+    if (mywaves.Hw_code.equals("//")) {
+      AWS_Hw = "";
+    } else if (mywaves.Hw_code.equals("99")) {
+      AWS_Hw = "";
+    } else if ((mywaves.Hw_code != null) && (mywaves.Hw_code.compareTo("") != 0)) {
+      // AWS_Hw = mywaves.Hw_code;
+
+      double double_Hw = Double.parseDouble(mywaves.Hw_code) / 2; // eg 03 in FM13 code -> 1.5 m
+
+      BigDecimal bd =
+          new BigDecimal(double_Hw)
+              .setScale(1, RoundingMode.HALF_UP); // one decimals, rounded e.g. 0.50000 -> 0.5
+      double_Hw = bd.doubleValue();
+
+      AWS_Hw = Double.toString(double_Hw);
+    } else {
+      AWS_Hw = "";
+    }
+
+    // dw1 (direction of first swell)
+    //
+    if (mywaves.Dw1_code.equals("//")) {
+      AWS_Dw1 = "";
+    } else if (mywaves.Dw1_code.equals("99")) {
+      AWS_Dw1 = "";
+    } else if ((mywaves.Dw1_code != null) && (mywaves.Dw1_code.compareTo("") != 0)) {
+      AWS_Dw1 = mywaves.Dw1_code + "0";
+    } else {
+      AWS_Dw1 = "";
+    }
+
+    // Pw1 (period of first swell)
+    //
+    if (mywaves.Pw1_code.equals("//")) {
+      AWS_Pw1 = "";
+    } else if (mywaves.Pw1_code.equals("99")) {
+      AWS_Pw1 = "";
+    } else if ((mywaves.Pw1_code != null) && (mywaves.Pw1_code.compareTo("") != 0)) {
+      // period < 10 sec? than skip leading 0
+      // if (Integer.parseInt(mywaves.Pw1_code) >= 10)
+      // {
+      //  AWS_Pw1 = mywaves.Pw1_code.substring(1, 1);
+      // }
+      // else
+      // {
+      //   AWS_Pw1 = mywaves.Pw1_code;
+      // }
+      int int_Pw1 = Integer.parseInt(mywaves.Pw1_code);
+      AWS_Pw1 = Integer.toString(int_Pw1);
+    } else {
+      AWS_Pw1 = "";
+    }
+
+    // Hw1 (height of first swell)
+    //
+    if (mywaves.Hw1_code.equals("//")) {
+      AWS_Hw1 = "";
+    } else if (mywaves.Hw1_code.equals("99")) {
+      AWS_Hw1 = "";
+    } else if ((mywaves.Hw1_code != null) && (mywaves.Hw1_code.compareTo("") != 0)) {
+      // AWS_Hw1 = mywaves.Hw1_code;
+
+      double double_Hw1 = Double.parseDouble(mywaves.Hw1_code) / 2; // eg 03 in FM13 code -> 1.5 m
+
+      BigDecimal bd =
+          new BigDecimal(double_Hw1)
+              .setScale(1, RoundingMode.HALF_UP); // one decimals, rounded e.g. 0.50000 -> 0.5
+      double_Hw1 = bd.doubleValue();
+
+      AWS_Hw1 = Double.toString(double_Hw1);
+    } else {
+      AWS_Hw1 = "";
+    }
+
+    // Dw2 (direction of second swell)
+    //
+    if (mywaves.Dw2_code.equals("//")) {
+      AWS_Dw2 = "";
+    } else if (mywaves.Dw2_code.equals("99")) {
+      AWS_Dw2 = "";
+    } else if ((mywaves.Dw2_code != null) && (mywaves.Dw2_code.compareTo("") != 0)) {
+      AWS_Dw2 = mywaves.Dw2_code + "0";
+    } else {
+      AWS_Dw2 = "";
+    }
+
+    // Pw2 (period of second swell)
+    //
+    if (mywaves.Pw2_code.equals("//")) {
+      AWS_Pw2 = "";
+    } else if (mywaves.Pw2_code.equals("99")) {
+      AWS_Pw2 = "";
+    } else if ((mywaves.Pw2_code != null) && (mywaves.Pw2_code.compareTo("") != 0)) {
+      // period < 10 sec than skip leading 0
+      // if (Integer.parseInt(mywaves.Pw2_code) >= 10)
+      // {
+      //  AWS_Pw2 = mywaves.Pw2_code.substring(1, 1);
+      // }
+      // else
+      // {
+      //   AWS_Pw2 = mywaves.Pw2_code;
+      // }
+      int int_Pw2 = Integer.parseInt(mywaves.Pw2_code);
+      AWS_Pw2 = Integer.toString(int_Pw2);
+    } else {
+      AWS_Pw2 = "";
+    }
+
+    // Hw2 (height of second swell)
+    //
+    if (mywaves.Hw2_code.equals("//")) {
+      AWS_Hw2 = "";
+    } else if (mywaves.Hw2_code.equals("99")) {
+      AWS_Hw2 = "";
+    } else if ((mywaves.Hw2_code != null) && (mywaves.Hw2_code.compareTo("") != 0)) {
+      double double_Hw2 = Double.parseDouble(mywaves.Hw2_code) / 2; // eg 03 in FM13 code -> 1.5 m
+
+      BigDecimal bd =
+          new BigDecimal(double_Hw2)
+              .setScale(1, RoundingMode.HALF_UP); // one decimals, rounded e.g. 0.50000 -> 0.5
+      double_Hw2 = bd.doubleValue();
+
+      AWS_Hw2 = Double.toString(double_Hw2);
+    } else {
+      AWS_Hw2 = "";
+    }
+
+    // ice deposit (thickness)
+    //
+    if (myicing.EsEs_code.equals("//")) {
+      AWS_EsEs = "";
+    } else if ((myicing.EsEs_code != null) && (myicing.EsEs_code.compareTo("") != 0)) {
+      double double_EsEs =
+          Double.parseDouble(myicing.EsEs_code) / 100; // eg 04 in FM13 code (4 cm) -> 0.04 m
+
+      BigDecimal bd =
+          new BigDecimal(double_EsEs)
+              .setScale(2, RoundingMode.HALF_UP); // two decimals, rounded e.g. 0.12939 -> 0.13
+      double_EsEs = bd.doubleValue();
+
+      AWS_EsEs = Double.toString(double_EsEs);
+    } else {
+      AWS_EsEs = "";
+    }
+
+    // rate of ice accretion (Rs) [bufr table 020032]
+    //
+    if (myicing.Rs_code.equals("/")) {
+      AWS_Rs = "";
+    } else if ((myicing.Rs_code != null) && (myicing.Rs_code.compareTo("") != 0)) {
+      AWS_Rs = myicing.Rs_code;
+    } else {
+      AWS_Rs = "";
+    }
+
+    // cause of ice accretion (Is) [bufr table 020033]
+    //
+    if (myicing.Is_code.equals("/")) {
+      AWS_Is = "";
+    } else if ((myicing.Is_code != null) && (myicing.Is_code.compareTo("") != 0)) {
+      if (myicing.Is_code.equals("1")) // icing from spray (FM13 code)
+      {
+        AWS_Is = "8"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
+        // information about codes", Pierre Blouch)
+      } else if (myicing.Is_code.equals("2")) // icing from fog (FM13 code)
+      {
+        AWS_Is = "4"; // BUFR table 020033 equivalent (see "EUCAWS inputs/outputs complementary
+        // information about codes", Pierre Blouch)
+      } else if (myicing.Is_code.equals("3")) // icing from spray and fog (FM13 code)
+      {
+        AWS_Is = "12"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
+        // information about codes", Pierre Blouch)
+      } else if (myicing.Is_code.equals("4")) // icing from rain (FM13 code)
+      {
+        AWS_Is = "2"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
+        // information about codes", Pierre Blouch)
+      } else if (myicing.Is_code.equals("5")) // icing from spray and rain (FM13 code)
+      {
+        AWS_Is = "10"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
+        // information about codes", Pierre Blouch)
+      } else if (myicing.Is_code.equals("6")) // icing from fog and rain (not present in FM13 code)
+      {
+        AWS_Is = "6"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
+        // information about codes", Pierre Blouch)
+      } else if (myicing.Is_code.equals(
+          "14")) // icing from spray and fog and rain (not present in FM13 code)
+      {
+        AWS_Is = "14"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
+        // information about codes", Pierre Blouch)
+      } else {
+        AWS_Is = "";
+      }
+    } else {
+      AWS_Is = "";
+    }
+
+    // sea ice concentration (ci) [bufr table 020034]
+    //
+    if (myice1.ci_code.equals("/")) {
+      AWS_ci = "";
+    } else if (myice1.ci_code.equals(
+        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
+    {
+      AWS_ci = "14";
+    } else if ((myice1.ci_code != null) && (myice1.ci_code.compareTo("") != 0)) {
+      AWS_ci = myice1.ci_code;
+    } else {
+      AWS_ci = "";
+    }
+
+    // amount and type of ice (bi) [bufr table 020035]
+    //
+    if (myice1.bi_code.equals("/")) {
+      AWS_bi = "";
+    } else if (myice1.bi_code.equals(
+        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
+    {
+      AWS_bi = "14";
+    } else if ((myice1.bi_code != null) && (myice1.bi_code.compareTo("") != 0)) {
+      AWS_bi = myice1.bi_code;
+    } else {
+      AWS_bi = "";
+    }
+
+    // ice situation (zi) [bufr table 020036]
+    //
+    if (myice1.zi_code.equals("/")) {
+      AWS_zi = "";
+    } else if (myice1.zi_code.equals(
+        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
+    {
+      AWS_zi = "30";
+    } else if ((myice1.zi_code != null) && (myice1.zi_code.compareTo("") != 0)) {
+      AWS_zi = myice1.zi_code;
+    } else {
+      AWS_zi = "";
+    }
+
+    // ice development (Si) [bufr table 020037]
+    //
+    if (myice1.Si_code.equals("/")) {
+      AWS_Si = "";
+    } else if (myice1.Si_code.equals(
+        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
+    {
+      AWS_Si = "30";
+    } else if ((myice1.Si_code != null) && (myice1.Si_code.compareTo("") != 0)) {
+      AWS_Si = myice1.Si_code;
+    } else {
+      AWS_Si = "";
+    }
+
+    // bearing of ice edge (Di) [bufr id 020038 NO TABLE]
+    //
+    if (myice1.Di_code.equals("/")) {
+      AWS_Di = "";
+    } else if (myice1.Di_code.equals(
+        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
+    {
+      AWS_Di =
+          ""; // there is no code table, only direction, no support for "unable to report...etc"
+    } else if ((myice1.Di_code != null) && (myice1.Di_code.compareTo("") != 0)) {
+      if (myice1.Di_code.equals("0")) // ship in shore or flaw lead (FM13 code)
+      {
+        AWS_Di =
+            ""; // see EUCAWS inputs/outputs Complementary information about codes", Pierre Blouch)
+      } else if (myice1.Di_code.equals("1")) {
+        AWS_Di = "45";
+      } else if (myice1.Di_code.equals("2")) {
+        AWS_Di = "90";
+      } else if (myice1.Di_code.equals("3")) {
+        AWS_Di = "135";
+      } else if (myice1.Di_code.equals("4")) {
+        AWS_Di = "180";
+      } else if (myice1.Di_code.equals("5")) {
+        AWS_Di = "225";
+      } else if (myice1.Di_code.equals("6")) {
+        AWS_Di = "270";
+      } else if (myice1.Di_code.equals("7")) {
+        AWS_Di = "315";
+      } else if (myice1.Di_code.equals("8")) {
+        AWS_Di = "360";
+      } else {
+        AWS_Di = "";
+      }
+    } else {
+      AWS_Di = "";
+    }
+
+    // OBS_ID (but only if requested and set in the maintenance section
+    //
+    if (eucaws_obs_id == true) {
+      if (!"".equals(myobserver.selected_observer)) // so there is an observer selected
+      {
+        // extract OBS_ID (column3) from selected_observer  e.g.: "Janssen;K;AB1;-;" -> OBS_ID = AB1
+        int firstSemicolon = myobserver.selected_observer.indexOf(';');
+        int secondSemicolon = myobserver.selected_observer.indexOf(';', firstSemicolon + 1);
+        int thirdSemicolon = myobserver.selected_observer.indexOf(';', secondSemicolon + 1);
+
+        if (firstSemicolon != -1 && secondSemicolon != -1 && thirdSemicolon != -1) {
+          String selected_obs_id =
+              myobserver.selected_observer.substring(secondSemicolon + 1, thirdSemicolon);
+
+          if (selected_obs_id.length() == 3) // so a "-" is also not taken into account
+          {
+            AWS_obs_id = selected_obs_id;
+          } else {
+            AWS_obs_id = "";
+          }
+        } // if (firstSemicolon != -1 && secondSemicolon != -1 && thirdSemicolon != -1)
+      } // if (!"".equals(myobserver.selected_observer))
+    } // if (eucaws_obs_id == true)
+
+    // compose AWS string
+    //
+    AWS_obs =
+        AWS_id
+            + ","
+            + AWS_diff_SLL_WL
+            + ","
+            + AWS_dd
+            + ","
+            + AWS_ff
+            + ","
+            + AWS_TTT
+            + ","
+            + AWS_rh
+            + ","
+            + AWS_sst
+            + ","
+            + AWS_VV
+            + ","
+            + AWS_ww
+            + ","
+            + AWS_W1
+            + ","
+            + AWS_W2
+            + ","
+            + AWS_N
+            + ","
+            + AWS_Nh
+            + ","
+            + AWS_Cl
+            + ","
+            + AWS_Cm
+            + ","
+            + AWS_Ch
+            + ","
+            + AWS_h
+            + ","
+            + AWS_Pw
+            + ","
+            + AWS_Hw
+            + ","
+            + AWS_Dw1
+            + ","
+            + AWS_Pw1
+            + ","
+            + AWS_Hw1
+            + ","
+            + AWS_Dw2
+            + ","
+            + AWS_Pw2
+            + ","
+            + AWS_Hw2
+            + ","
+            + AWS_EsEs
+            + ","
+            + AWS_Rs
+            + ","
+            + AWS_Is
+            + ","
+            + AWS_ci
+            + ","
+            + AWS_bi
+            + ","
+            + AWS_zi
+            + ","
+            + AWS_Si
+            + ","
+            + AWS_Di;
+
+    // add OBS_ID if requested and present
+    //
+    // if ((eucaws_obs_id == true) && (!"".equals(AWS_obs_id))) //
+    if (eucaws_obs_id == true) {
+      // see https://gitlab.com/KNMI-OSS/turbowin/turbowin/-/issues/211
+      // $PTBWP,sHH,WDT,WS.s,sTA.a,UUU,TW.w,VV,WW,W1W1,W2W2,N,NH,CL,CM,CH,H,PW,HW.w,DSW1,
+      // PW1,HW1.w1,DSW2, PW2,HW2.w2,E.EE,R,I,CC,BB,ZZ,SS,DDD,OBS
+      AWS_obs += "," + AWS_obs_id; // could be empty ("") !
+    }
+
+    // voor testen
+    // JOptionPane.showMessageDialog(null, AWS_obs  , APPLICATION_NAME + " AWS_obs",
+    // JOptionPane.INFORMATION_MESSAGE);
+
+    return AWS_obs;
+  }
+}
