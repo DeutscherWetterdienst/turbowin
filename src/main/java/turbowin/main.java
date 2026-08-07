@@ -14003,7 +14003,9 @@ public class main extends javax.swing.JFrame {
             if (main.obs_101_email.equals(FORMAT_101_BODY) == true) {
               // read the compressed obs (format 101) which is the only line in file
               // HPK_format_101.txt
-              email_body_line = get_format_101_obs_from_file();
+              email_body_line =
+                  Format101EmailContentResolver.resolve(
+                      main.FORMAT_101_BODY, new File(volledig_path_format_101_compressed_file));
               if (email_body_line.equals("") == true) {
                 doorgaan = false;
               }
@@ -14012,12 +14014,12 @@ public class main extends javax.swing.JFrame {
             /////// format 101 message as attachment //////
             //
             else if (main.obs_101_email.equals(FORMAT_101_ATTACHEMENT) == true) {
-              // first check if compressed file exists
               final File compressed_file = new File(volledig_path_format_101_compressed_file);
+              email_body_line =
+                  Format101EmailContentResolver.resolve(
+                      main.FORMAT_101_ATTACHEMENT, compressed_file);
 
-              if (compressed_file.exists() == true) {
-                email_body_line =
-                    "Please attach manually the file: " + volledig_path_format_101_compressed_file;
+              if (email_body_line.equals("") == false) {
                 doorgaan = true;
               } else {
                 JOptionPane.showMessageDialog(
