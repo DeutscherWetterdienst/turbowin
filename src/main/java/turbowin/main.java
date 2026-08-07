@@ -13162,50 +13162,11 @@ public class main extends javax.swing.JFrame {
         //
         if (doorgaan) // so no empty obs and send mode = ok
         {
-          String info_cc = ""; // only for logging
-          String info_port = ""; // only for logging
-          String info_attachment = ""; // only for logging
-
-          if (send_cc.equals("null")) // no cc
-          {
-            // main.log_turbowin_system_message("[EMAIL] trying to send obs (" + email_body + ") to
-            // " + send_to + " from " + send_from + " via " + smtp_mode);
-            info_cc = "none";
-          } else // send also to the cc
-          {
-            info_cc = send_cc;
-          }
-
-          if (smtp_port_local.equals("null")) {
-            info_port = "system defined";
-          } else {
-            info_port = smtp_port_local;
-          }
-
-          if (attachment.equals("null")) {
-            info_attachment = "none";
-          } else {
-            info_attachment = "yes";
-          }
-
+          ObservationEmailLogDetails.Details logDetails =
+              ObservationEmailLogDetails.from(send_cc, smtp_port_local, attachment);
           main.log_turbowin_system_message(
-              "[EMAIL] trying to send obs (body= "
-                  + "\""
-                  + email_body
-                  + "\""
-                  + ") to "
-                  + send_to
-                  + " cc "
-                  + info_cc
-                  + " from "
-                  + send_from
-                  + " via "
-                  + smtp_mode
-                  + " port "
-                  + info_port
-                  + " attachment "
-                  + info_attachment
-                  + " [primary email module, virtual thread]");
+              ObservationEmailLogDetails.message(
+                  email_body, send_to, logDetails, send_from, smtp_mode, "primary email module"));
 
           if (jakarta_email_class == null) {
             jakarta_email_class = new Jakarta_Email();
@@ -13496,53 +13457,11 @@ public class main extends javax.swing.JFrame {
         //
         if (doorgaan) // so no empty obs and send mode = ok
         {
-          String info_cc = ""; // only for logging
-          String info_port = ""; // only for logging
-          String info_attachment = ""; // only for logging
-
-          if (send_cc.equals("null")) // no cc
-          {
-            // main.log_turbowin_system_message("[EMAIL] trying to send obs (" + email_body + ") to
-            // " + send_to + " from " + send_from + " via " + smtp_mode);
-            info_cc = "none";
-          } else // send also to the cc
-          {
-            // main.log_turbowin_system_message("[EMAIL] trying to send obs (" + email_body + ") to
-            // " + send_to + " cc " + send_cc + " from " + send_from + " via " + smtp_mode);
-            info_cc = send_cc;
-          }
-
-          if (smtp_port_local.equals("null")) {
-            info_port = "system defined";
-          } else {
-            info_port = smtp_port_local;
-          }
-
-          if (attachment.equals("null")) {
-            info_attachment = "none";
-          } else {
-            info_attachment = "yes";
-          }
-
-          // main.log_turbowin_system_message(info);
+          ObservationEmailLogDetails.Details logDetails =
+              ObservationEmailLogDetails.from(send_cc, smtp_port_local, attachment);
           main.log_turbowin_system_message(
-              "[EMAIL] trying to send obs (body= "
-                  + "\""
-                  + email_body
-                  + "\""
-                  + ") to "
-                  + send_to
-                  + " cc "
-                  + info_cc
-                  + " from "
-                  + send_from
-                  + " via "
-                  + smtp_mode
-                  + " port "
-                  + info_port
-                  + " attachment "
-                  + info_attachment
-                  + " [secondary email module, virtual thread]");
+              ObservationEmailLogDetails.message(
+                  email_body, send_to, logDetails, send_from, smtp_mode, "secondary email module"));
 
           if (python_email_class == null) {
             python_email_class = new Python_Email();
