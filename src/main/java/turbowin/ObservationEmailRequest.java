@@ -14,7 +14,7 @@ final class ObservationEmailRequest {
   private final String port;
   private final String attachment;
 
-  ObservationEmailRequest(
+  private ObservationEmailRequest(
       String smtpMode,
       String smtpHost,
       String password,
@@ -35,6 +35,21 @@ final class ObservationEmailRequest {
     this.cc = cc;
     this.port = port;
     this.attachment = attachment;
+  }
+
+  static ObservationEmailRequest from(
+      String smtpMode,
+      String smtpHost,
+      String password,
+      String recipient,
+      String sender,
+      String subject,
+      String body,
+      String cc,
+      String port,
+      String attachment) {
+    return new ObservationEmailRequest(
+        smtpMode, smtpHost, password, recipient, sender, subject, body, cc, port, attachment);
   }
 
   String smtpMode() {

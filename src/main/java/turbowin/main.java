@@ -13177,7 +13177,7 @@ public class main extends javax.swing.JFrame {
                   smtp_password_local, myemailsettings::decrypt);
 
           ObservationEmailRequest request =
-              new ObservationEmailRequest(
+              ObservationEmailRequest.from(
                   smtp_mode,
                   smtp_host_local,
                   smtp_password_local_plain,
@@ -13443,7 +13443,7 @@ public class main extends javax.swing.JFrame {
                     smtp_password_local, myemailsettings::decrypt);
 
             ObservationEmailRequest request =
-                new ObservationEmailRequest(
+                ObservationEmailRequest.from(
                     smtp_mode,
                     smtp_host_local,
                     smtp_password_local_plain,

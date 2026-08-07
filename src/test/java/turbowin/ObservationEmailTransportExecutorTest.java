@@ -9,7 +9,7 @@ public class ObservationEmailTransportExecutorTest {
   @Test
   public void executesTheSelectedSenderAndReturnsItsStatus() throws Exception {
     ObservationEmailRequest request =
-        new ObservationEmailRequest(
+        ObservationEmailRequest.from(
             "tls",
             "smtp.example.org",
             "password",
