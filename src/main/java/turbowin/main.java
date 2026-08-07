@@ -24,11 +24,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
-import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -42,7 +40,6 @@ import java.util.Objects;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
-import javax.net.ssl.HttpsURLConnection;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -14338,10 +14335,6 @@ public class main extends javax.swing.JFrame {
       protected String doInBackground() throws Exception {
         String server_format_101_line = "";
         int responseCode = OK_RESPONSE_FORMAT_101; // OK
-        String responseString = "";
-        HttpURLConnection con_http = null;
-        HttpsURLConnection con_https = null;
-
         boolean isHttps = true;
         if (server_com_protocol.equals(HTTP_PROTOCOL)) {
           isHttps = false;
@@ -14376,116 +14369,9 @@ public class main extends javax.swing.JFrame {
           // encoded_server_format_101_obs;
           String url =
               ServerObservationRequestBuilder.format101Url(upload_URL, server_format_101_line);
-
-          int maxRetries = 3; // Maximum retries per IP
-          boolean success = false;
-          URL obj = null;
-          try {
-            // Resolve all IP addresses for the given domain
-            InetAddress[] addresses = InetAddress.getAllByName(new URI(url).toURL().getHost());
-
-            // Loop through all resolved IP addresses
-            for (InetAddress address : addresses) // Loop through all resolved IP addresses
-            {
-              // Multiple Connection Attempts (Failover Mechanism).
-              // If one IP is encountering issues, another IP may work fine. This is particularly
-              // useful in cases where
-              // certain routing or networking issues might cause a TCP reset.
-
-              System.out.println("--- Trying IP: " + address.getHostAddress());
-              int attempt = 0;
-              int backoff = 1000; // Start with 1 second
-              while (attempt < maxRetries && !success) // Automatic Retries within same IP
-              {
-                // Automatic Retries with Exponential Backoff (Delaying Retries).
-                // TCP resets can be caused by transient network issues or server-side conditions
-                // that may be temporary.
-                //  A retry helps in such cases by allowing the server to recover, or by avoiding
-                // network glitches that
-                // could have caused the reset. Exponential backoff prevents overwhelming the server
-                // with rapid retry attempts
-                // and gives time for transient errors to resolve. It also helps in reducing
-                // congestion on the network
-
-                attempt++;
-                try {
-                  obj = new URI(url).toURL();
-
-                  if (isHttps) {
-                    String message = "[MANUAL] sending 'GET' request (https) to URL: " + url;
-                    main.log_turbowin_system_message(message);
-
-                    con_https = (HttpsURLConnection) obj.openConnection(); // For HTTPS
-                    con_https.setRequestMethod("GET");
-                    responseCode = con_https.getResponseCode();
-                  } else {
-                    String message = "[MANUAL] sending 'GET' request (http) to URL: " + url;
-                    main.log_turbowin_system_message(message);
-
-                    con_http = (HttpURLConnection) obj.openConnection(); // FOR HTTP
-                    con_http.setRequestMethod("GET");
-                    responseCode = con_http.getResponseCode();
-                  } // else
-
-                } // try
-                catch (MalformedURLException | URISyntaxException ex) {
-                  responseCode = RESPONSE_MALFORMED_URL;
-                  responseString = ex.getMessage();
-                } catch (SocketException se) {
-                  // (hopefully...) also catching TCP errors ('TCP reset from server' / 'TCP RST')
-                  responseCode = RESPONSE_NO_INTERNET;
-                  responseString = se.getMessage(); // e.g. ........
-
-                  Thread.sleep(backoff); // Wait before retrying
-                  backoff *= 2; // Exponential backoff
-                } catch (IOException ix) {
-                  responseCode = RESPONSE_NO_INTERNET;
-                  responseString =
-                      ix.getMessage(); // e.g. "Permission denied: connect" (when firewall blocking)
-
-                  Thread.sleep(backoff); // Wait before retrying
-                  backoff *= 2; // Exponential backoff
-                } // catch (IOException ex)
-                finally {
-                  // Always disconnect to free up resources
-                  if (isHttps && (con_https != null)) {
-                    con_https.disconnect();
-                  }
-                  if ((!isHttps) && (con_http != null)) {
-                    con_http.disconnect();
-                  }
-                } // finally
-
-                if (responseCode == 200) {
-                  // Handle response
-                  success = true;
-                }
-              } // while (attempt < maxRetries && !success)
-
-              if (success) {
-                // Exit the IP loop if one IP worked successfully
-                break;
-              }
-            } //  for (InetAddress address : addresses)
-
-            if (!success) {
-              System.out.println("--- All IP addresses failed after retries.");
-            }
-
-          } // try
-          catch (UnknownHostException | MalformedURLException e) {
-            responseCode = RESPONSE_NO_INTERNET;
-            responseString = e.getMessage();
-          }
-        } // if (Objects.equals(responseCode, OK_RESPONSE_FORMAT_101))
-
-        String response = Integer.toString(responseCode);
-
-        if (!responseString.equals("")) {
-          response += " (" + responseString + ")";
+          return Format101ServerClient.execute(url, isHttps);
         }
-
-        return response;
+        return Integer.toString(responseCode);
       } // protected Void doInBackground() throws Exception
 
       @Override
