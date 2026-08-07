@@ -13188,16 +13188,16 @@ public class main extends javax.swing.JFrame {
 
           if (jakarta_email_status == 0) // OK
           {
-            IMMT_log();
-            Reset_all_meteo_parameters();
-
-            // NB also already written 'success' to system log
-
-            if (manual_send == true) {
-              String info = "sent obs successfully";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-            }
+            ObservationEmailSuccessHandler.complete(
+                manual_send,
+                main::IMMT_log,
+                main::Reset_all_meteo_parameters,
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null,
+                        info,
+                        main.APPLICATION_NAME + " info",
+                        JOptionPane.INFORMATION_MESSAGE));
           } else if (jakarta_email_status == 1001) // empty obs
           {
             Reset_all_meteo_parameters();
@@ -13452,16 +13452,16 @@ public class main extends javax.swing.JFrame {
 
           if (python_email_status == 0) // OK
           {
-            IMMT_log();
-            Reset_all_meteo_parameters();
-
-            // NB also already written 'success' to system log
-
-            if (manual_send == true) {
-              String info = "sent obs successfully";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-            }
+            ObservationEmailSuccessHandler.complete(
+                manual_send,
+                main::IMMT_log,
+                main::Reset_all_meteo_parameters,
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null,
+                        info,
+                        main.APPLICATION_NAME + " info",
+                        JOptionPane.INFORMATION_MESSAGE));
           } else if (python_email_status == 1000) // copy failure or python email exe not find
           {
             IMMT_log();
