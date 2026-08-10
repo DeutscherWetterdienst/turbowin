@@ -11959,42 +11959,7 @@ public class main extends javax.swing.JFrame {
   }
 
   private void check_immt_size() {
-    // TODO add your handling code here:
-
-    new SwingWorker<Boolean, Void>() {
-      @Override
-      protected Boolean doInBackground() throws Exception {
-        boolean immt_size_limit_exceeded = false;
-
-        /* first check if there is an immt log source file present (and not empty) */
-        String volledig_path_immt = logs_dir + java.io.File.separator + IMMT_LOG;
-        File immt_file = new File(volledig_path_immt);
-        if (immt_file.exists() && immt_file.length() > IMMT_LIMIT) // length() in bytes
-        {
-          immt_size_limit_exceeded = true;
-        }
-
-        return immt_size_limit_exceeded;
-      }
-
-      @Override
-      protected void done() {
-        try {
-          boolean immt_size_limit_exceeded = get(); // retrieve return value from doInBackground()
-          if (immt_size_limit_exceeded) {
-            String info =
-                "immt log (file with all stored observations for research and climatological use) exceeds ";
-            info += IMMT_LIMIT / 1024;
-            info += " Kb.\nPlease select one of the coming days: Maintenance -> Move log files ";
-            JOptionPane.showMessageDialog(
-                null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-          } // if (immt_size_limit_exceeded)
-
-        } // try
-        catch (InterruptedException | ExecutionException ex) {
-        }
-      } // protected void done()
-    }.execute();
+    ImmtLogSizeCheckWorkflow.start();
   }
 
   void Output_obs_to_file_FM13() {
@@ -12652,7 +12617,7 @@ public class main extends javax.swing.JFrame {
   public static final int IMMT_POSITION_IMMT_VERSION =
       110; // immt version voor zowel IMMT-3/IMMT-4/IMMT-5 staat deze op dezelfde pos, zal in de
   // toekomst ook wel zo blijven, maar wel controleren voor volgende IMMT versies
-  private static final int IMMT_LIMIT = 1024000; // 512000;      // 512000 bytes / 1024 = 500 kB
+  static final int IMMT_LIMIT = 1024000; // 512000;      // 512000 bytes / 1024 = 500 kB
   public static final String MOVE_TO_EMAIL = "move_to_email";
   public static final String MOVE_TO_DISK = "move_to_disk";
   public static final String LOGS_ZIP = "logs.zip";
