@@ -40,7 +40,6 @@ import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -12900,107 +12899,11 @@ public class main extends javax.swing.JFrame {
   }
 
   private void Output_obs_to_file_FM13() {
-    // JOptionPane.showMessageDialog(null, "test output obs to file", main.APPLICATION_NAME + "
-    // info", JOptionPane.INFORMATION_MESSAGE);
-
-    // pop-up the file chooser dialog box
-    JFileChooser chooser = new JFileChooser();
-    int result = chooser.showSaveDialog(main.this);
-    if (result == JFileChooser.APPROVE_OPTION) {
-      output_file = chooser.getSelectedFile().getPath();
-
-      new SwingWorker<Boolean, Void>() {
-        @Override
-        protected Boolean doInBackground() throws Exception {
-          boolean obs_written_ok = true;
-
-          obs_written_ok = ObservationFileWriter.write(new File(output_file), obs_write);
-
-          return obs_written_ok;
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void done() {
-          try {
-            boolean result_obs_written_ok = get();
-
-            if (result_obs_written_ok == true) {
-              String info = "obs written to: " + output_file;
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-              JOptionPane.showMessageDialog(
-                  null,
-                  "unable to write to: " + output_file,
-                  APPLICATION_NAME + " error",
-                  JOptionPane.WARNING_MESSAGE);
-            }
-
-            IMMT_log();
-
-            Reset_all_meteo_parameters();
-          } // protected void done()
-          catch (InterruptedException | ExecutionException ex) {
-            // Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("--- Function Output_obs_to_file_FM13(): " + ex);
-          }
-        }
-      }.execute(); // new SwingWorker<Void, Void>()
-    } // if (result == JFileChooser.APPROVE_OPTION
+    Fm13FileOutputWorkflow.start(this);
   }
 
   private void Output_obs_to_file_format_101() {
-    // pop-up the file chooser dialog box
-    JFileChooser chooser = new JFileChooser();
-    int result = chooser.showSaveDialog(main.this);
-    if (result == JFileChooser.APPROVE_OPTION) {
-      output_file = chooser.getSelectedFile().getPath();
-
-      new SwingWorker<Boolean, Void>() {
-        @Override
-        protected Boolean doInBackground() throws Exception {
-          boolean obs_written_ok = true;
-          boolean doorgaan = true;
-          String file_format_101_line = "";
-
-          file_format_101_line = get_format_101_obs_from_file();
-          if (file_format_101_line.equals("") == true) {
-            doorgaan = false;
-          }
-
-          if (doorgaan == true) {
-            obs_written_ok =
-                ObservationFileWriter.write(new File(output_file), file_format_101_line);
-          } // if (doorgaan == true)
-
-          return obs_written_ok;
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void done() {
-          try {
-            boolean result_obs_written_ok = get();
-            if (result_obs_written_ok == true) {
-              String info = "obs written to: " + output_file;
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-              JOptionPane.showMessageDialog(
-                  null,
-                  "unable to write to: " + output_file,
-                  APPLICATION_NAME + " error",
-                  JOptionPane.WARNING_MESSAGE);
-            }
-
-            IMMT_log();
-
-            Reset_all_meteo_parameters();
-          } catch (InterruptedException | ExecutionException ex) {
-            System.out.println("--- Function Output_obs_to_file_format_101(): " + ex);
-          }
-        } // protected void done()
-      }.execute(); // new SwingWorker<Void, Void>()
-    } // if (result == JFileChooser.APPROVE_OPTION
+    Format101FileOutputWorkflow.start(this);
   }
 
   public static void Output_obs_by_email_jakarta_FM13_format_101(boolean manual_send) {
@@ -14316,7 +14219,7 @@ public class main extends javax.swing.JFrame {
   // defined) (backup for muffin)
   // private URL url_php;
 
-  private String output_file = "";
+  String output_file = "";
   public static String volledig_path_dstFilename_immt = "";
   public static String volledig_path_srcFilename_immt = "";
   public static String volledig_path_backup_srcFilename_immt = "";
