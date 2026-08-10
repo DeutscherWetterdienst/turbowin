@@ -13229,14 +13229,14 @@ public class main extends javax.swing.JFrame {
           }
         } // try
         catch (InterruptedException | ExecutionException ex) {
-          main.log_turbowin_system_message("[EMAIL] error invoking email module (" + ex + ")");
-
-          if (manual_send == true) {
-            String info = "send obs failed (check Info -> System log)";
-            System.out.println(info);
-            JOptionPane.showMessageDialog(
-                null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-          }
+          ObservationEmailInvocationFailureHandler.handle(
+              manual_send,
+              ex,
+              main::log_turbowin_system_message,
+              System.out::println,
+              info ->
+                  JOptionPane.showMessageDialog(
+                      null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
         } // catch
       } // protected void done()
     }.execute(); // new SwingWorker<Void, Void>()
@@ -13500,14 +13500,14 @@ public class main extends javax.swing.JFrame {
           }
         } // try
         catch (InterruptedException | ExecutionException ex) {
-          main.log_turbowin_system_message("[EMAIL] error invoking email module (" + ex + ")");
-
-          if (manual_send == true) {
-            String info = "send obs failed (check Info -> System log)";
-            System.out.println(info);
-            JOptionPane.showMessageDialog(
-                null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-          }
+          ObservationEmailInvocationFailureHandler.handle(
+              manual_send,
+              ex,
+              main::log_turbowin_system_message,
+              System.out::println,
+              info ->
+                  JOptionPane.showMessageDialog(
+                      null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
         } // catch
       } // protected void done()
     }.execute(); // new SwingWorker<Void, Void>()
