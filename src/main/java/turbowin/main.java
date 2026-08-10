@@ -13456,19 +13456,13 @@ public class main extends javax.swing.JFrame {
                         JOptionPane.INFORMATION_MESSAGE));
           } else if (python_email_status == 1000) // copy failure or python email exe not find
           {
-            IMMT_log();
-            Reset_all_meteo_parameters();
-
-            // NB already written the cause of the failure to the system log (and
-            // ../logs/python/log_python_email.txt) (see copy_python_email_module()
-            // [Python_Email.java])
-
-            if (manual_send == true) {
-              String info =
-                  "error invoking email module (copy-error from jar to destination) (check Info -> System log)";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            }
+            ObservationEmailPythonModuleFailureHandler.handle(
+                manual_send,
+                main::IMMT_log,
+                main::Reset_all_meteo_parameters,
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else if (python_email_status == 1001) // empty obs
           {
             ObservationEmailEmptyObservationHandler.handle(
