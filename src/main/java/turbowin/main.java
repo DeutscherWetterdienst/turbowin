@@ -32,7 +32,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
-import java.util.concurrent.ExecutionException;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -40,7 +39,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -7202,44 +7200,7 @@ public class main extends javax.swing.JFrame {
 
   private void Info_Statistics_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_Statistics_menu_actionPerformed
-    // TODO add your handling code here:
-    new SwingWorker<Integer, Void>() {
-      @Override
-      protected Integer doInBackground() throws Exception {
-        String os = OSDetector.getOSString();
-
-        // NB deprecated from October 2024: String link_url =
-        // "http://esurfmar.meteo.fr/cgi-bin/meteo/display_vos_ext.cgi?callchx=";
-        String link_url = "https://esurfmar.meteo.fr/cgi-bin/display_vos_ext.cgi?callchx=";
-        link_url += station_ID;
-
-        return DesktopUtils.openLink(link_url, os);
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        try {
-          Integer response_code = get();
-
-          if (response_code == -1) {
-            String message = "[GENERAL] Error invoking default web browser";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          } else if (response_code == -2) {
-            String message = "[GENERAL] Error invoking URL";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          }
-        } // try
-        catch (InterruptedException | ExecutionException ex) {
-          String message = "[GENERAL] Error invoking default web browser; " + ex.toString();
-          main.log_turbowin_system_message(message);
-          // main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
-        } // catch
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+    StatisticsLinkWorkflow.start();
   } // GEN-LAST:event_Info_Statistics_menu_actionPerformed
 
   private void Amver_SailingPlan_actionPerformed(
