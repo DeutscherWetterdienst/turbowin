@@ -33,7 +33,7 @@ final class ObservationEmailWorkflowPreparation {
     }
 
     if (emailMode != ObservationEmailModeResolver.Mode.CUSTOM) {
-      return new Result(1002, null);
+      return new Result(ObservationEmailStatus.INVALID_MODE, null);
     }
 
     boolean includeAttachment =
@@ -70,7 +70,7 @@ final class ObservationEmailWorkflowPreparation {
             mydatetime.GG_code);
 
     if (!content.nonEmpty()) {
-      return new Result(1001, null);
+      return new Result(ObservationEmailStatus.EMPTY_OBSERVATION, null);
     }
 
     ObservationEmailRequest request =

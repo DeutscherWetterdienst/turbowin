@@ -46,7 +46,7 @@ final class PythonObservationEmailWorkflow {
           }
 
           if (!python_email_class.python_email_control_center()) {
-            return 1000;
+            return ObservationEmailStatus.PYTHON_MODULE_UNAVAILABLE;
           }
 
           request = ObservationEmailWorkflowPreparation.resolvePassword(request);
@@ -75,7 +75,8 @@ final class PythonObservationEmailWorkflow {
                         info,
                         main.APPLICATION_NAME + " info",
                         JOptionPane.INFORMATION_MESSAGE));
-          } else if (python_email_status == 1000) // copy failure or python email exe not find
+          } else if (python_email_status == ObservationEmailStatus.PYTHON_MODULE_UNAVAILABLE)
+          // copy failure or python email exe not find
           {
             ObservationEmailPythonModuleFailureHandler.handle(
                 manual_send,
@@ -84,7 +85,7 @@ final class PythonObservationEmailWorkflow {
                 info ->
                     JOptionPane.showMessageDialog(
                         null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
-          } else if (python_email_status == 1001) // empty obs
+          } else if (python_email_status == ObservationEmailStatus.EMPTY_OBSERVATION) // empty obs
           {
             ObservationEmailEmptyObservationHandler.handle(
                 manual_send,
@@ -93,7 +94,8 @@ final class PythonObservationEmailWorkflow {
                 info ->
                     JOptionPane.showMessageDialog(
                         null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
-          } else if (python_email_status == 1002) // invalid send mode
+          } else if (python_email_status
+              == ObservationEmailStatus.INVALID_MODE) // invalid send mode
           {
             ObservationEmailInvalidModeHandler.handle(
                 manual_send,

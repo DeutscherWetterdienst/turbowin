@@ -72,7 +72,7 @@ final class JakartaObservationEmailWorkflow {
                         info,
                         main.APPLICATION_NAME + " info",
                         JOptionPane.INFORMATION_MESSAGE));
-          } else if (jakarta_email_status == 1001) // empty obs
+          } else if (jakarta_email_status == ObservationEmailStatus.EMPTY_OBSERVATION) // empty obs
           {
             ObservationEmailEmptyObservationHandler.handle(
                 manual_send,
@@ -81,7 +81,8 @@ final class JakartaObservationEmailWorkflow {
                 info ->
                     JOptionPane.showMessageDialog(
                         null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
-          } else if (jakarta_email_status == 1002) // invalid send mode
+          } else if (jakarta_email_status
+              == ObservationEmailStatus.INVALID_MODE) // invalid send mode
           {
             ObservationEmailInvalidModeHandler.handle(
                 manual_send,
