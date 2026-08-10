@@ -13219,16 +13219,13 @@ public class main extends javax.swing.JFrame {
                         null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else // failed to send
           {
-            IMMT_log();
-            Reset_all_meteo_parameters();
-
-            // NB already written the cause of the failure to the system log (see doInBackground())
-
-            if (manual_send == true) {
-              String info = "send obs failed (see Info -> System log)";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            }
+            ObservationEmailGenericFailureHandler.handle(
+                manual_send,
+                main::IMMT_log,
+                main::Reset_all_meteo_parameters,
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           }
         } // try
         catch (InterruptedException | ExecutionException ex) {
@@ -13493,16 +13490,13 @@ public class main extends javax.swing.JFrame {
                         null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else // failed to send
           {
-            IMMT_log();
-            Reset_all_meteo_parameters();
-
-            // NB already written the cause of the failure to the system log (see doInBackground())
-
-            if (manual_send == true) {
-              String info = "send obs failed (see Info -> System log)";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            }
+            ObservationEmailGenericFailureHandler.handle(
+                manual_send,
+                main::IMMT_log,
+                main::Reset_all_meteo_parameters,
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           }
         } // try
         catch (InterruptedException | ExecutionException ex) {
