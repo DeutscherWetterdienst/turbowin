@@ -12317,42 +12317,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void satellite_link_mouse_clicked(String url_satellite_image) {
-    new SwingWorker<Integer, Void>() {
-      @Override
-      protected Integer doInBackground() throws Exception {
-        String os = OSDetector.getOSString();
-
-        String link_url = "";
-        link_url =
-            "https://realearth.ssec.wisc.edu/?products=globalir&time=latest&center=52,4&zoom=4";
-        link_url = url_satellite_image;
-
-        return DesktopUtils.openLink(link_url, os);
-      } // protected Integer doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        try {
-          Integer response_code = get();
-
-          if (response_code == -1) {
-            String message = "[GENERAL] Error invoking default web browser";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          } else if (response_code == -2) {
-            String message = "[GENERAL] Error invoking URL";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          }
-        } // try
-        catch (InterruptedException | ExecutionException ex) {
-          String message = "[GENERAL] Error invoking default web browser; " + ex.toString();
-          main.log_turbowin_system_message(message);
-        } // catch
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+    SatelliteLinkWorkflow.start(url_satellite_image);
   }
 
   /**
