@@ -4043,101 +4043,50 @@ public class main extends javax.swing.JFrame {
   // not result in invoking the doInBackground method twice.
   // see: http://java.sun.com/javase/6/docs/api/javax/swing/SwingWorker.html
   private void loadImage(final String imagePath) {
-    new SwingWorker<ImageIcon, Object>() {
-      @Override
-      public ImageIcon doInBackground() {
-        return createImageIcon(imagePath);
-      }
+    ImageLoadingWorkflow.start(this, imagePath);
+  }
 
-      @Override
-      public void done() {
-        try {
-          // toolbar icons
-          //
-          // if (imagePath.equals(main.ICONS_DIRECTORY + "call_sign.png"))
-          // {
-          //   ImageIcon toolbar_img_call_sign = get();
-          //   jButton1.setIcon(toolbar_img_call_sign);
-          // }
-          if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png")) {
-            ImageIcon toolbar_img_date_time = get();
-            jButton2.setIcon(toolbar_img_date_time);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "position.png")) {
-            ImageIcon toolbar_img_position = get();
-            jButton3.setIcon(toolbar_img_position);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "wind.png")) {
-            ImageIcon toolbar_img_wind = get();
-            jButton4.setIcon(toolbar_img_wind);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "waves.png")) {
-            ImageIcon toolbar_img_waves = get();
-            jButton5.setIcon(toolbar_img_waves);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "barometer.png")) {
-            ImageIcon toolbar_img_barometer = get();
-            jButton6.setIcon(toolbar_img_barometer);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "barograph.png")) {
-            ImageIcon toolbar_img_barograph = get();
-            jButton7.setIcon(toolbar_img_barograph);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "temperatures.png")) {
-            ImageIcon toolbar_img_temperatures = get();
-            jButton8.setIcon(toolbar_img_temperatures);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "present_weather.png")) {
-            ImageIcon toolbar_img_present_weather = get();
-            jButton9.setIcon(toolbar_img_present_weather);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "past_weather.png")) {
-            ImageIcon toolbar_img_past_weather = get();
-            jButton10.setIcon(toolbar_img_past_weather);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "visibility.png")) {
-            ImageIcon toolbar_img_visibility = get();
-            jButton11.setIcon(toolbar_img_visibility);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "cl.png")) {
-            ImageIcon toolbar_img_cl = get();
-            jButton12.setIcon(toolbar_img_cl);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "cm.png")) {
-            ImageIcon toolbar_img_cm = get();
-            jButton13.setIcon(toolbar_img_cm);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "ch.png")) {
-            ImageIcon toolbar_img_ch = get();
-            jButton14.setIcon(toolbar_img_ch);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "height.png")) {
-            ImageIcon toolbar_img_clouds_height = get();
-            jButton15.setIcon(toolbar_img_clouds_height);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "icing.png")) {
-            ImageIcon toolbar_img_icing = get();
-            jButton16.setIcon(toolbar_img_icing);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "ice.png")) {
-            ImageIcon toolbar_img_ice = get();
-            jButton17.setIcon(toolbar_img_ice);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "observers.png")) {
-            ImageIcon toolbar_img_observers = get();
-            jButton18.setIcon(toolbar_img_observers);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "captains.png")) {
-            ImageIcon toolbar_img_captains = get();
-            jButton19.setIcon(toolbar_img_captains);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "next_screen.png")) {
-            ImageIcon toolbar_img_next_screen = get();
-            jButton20.setIcon(toolbar_img_next_screen);
-          }
-
-        } // try
-        catch (InterruptedException ignore) {
-        } catch (java.util.concurrent.ExecutionException e) {
-          String why = null;
-          Throwable cause = e.getCause();
-          if (cause != null) {
-            why = cause.getMessage();
-          } else {
-            why = e.getMessage();
-          }
-          // System.err.println("Error retrieving file: " + why);
-          JOptionPane.showMessageDialog(
-              null,
-              "Error retrieving toolbar icon file: " + why,
-              main.APPLICATION_NAME,
-              JOptionPane.ERROR_MESSAGE);
-        } // catch
-      } //  public void done()
-    }.execute();
-  } // private void loadImage(final String imagePath, final int index)
+  void setToolbarIcon(String imagePath, ImageIcon icon) {
+    if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png")) {
+      jButton2.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "position.png")) {
+      jButton3.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "wind.png")) {
+      jButton4.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "waves.png")) {
+      jButton5.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "barometer.png")) {
+      jButton6.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "barograph.png")) {
+      jButton7.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "temperatures.png")) {
+      jButton8.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "present_weather.png")) {
+      jButton9.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "past_weather.png")) {
+      jButton10.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "visibility.png")) {
+      jButton11.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "cl.png")) {
+      jButton12.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "cm.png")) {
+      jButton13.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "ch.png")) {
+      jButton14.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "height.png")) {
+      jButton15.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "icing.png")) {
+      jButton16.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "ice.png")) {
+      jButton17.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "observers.png")) {
+      jButton18.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "captains.png")) {
+      jButton19.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "next_screen.png")) {
+      jButton20.setIcon(icon);
+    }
+  }
 
   private void loadImage_straight(final String imagePath) {
     if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png")) {
