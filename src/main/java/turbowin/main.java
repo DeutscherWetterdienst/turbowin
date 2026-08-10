@@ -12242,39 +12242,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void delete_logs_turbowin_system() {
-    // NB    sdf_tsl_1 = new SimpleDateFormat("MMM_yyyy");                                // e.g.
-    // JAN_2016 (part of the file name)
-    //       sdf_tsl_1.setTimeZone(TimeZone.getTimeZone("UTC"));
-    //
-
-    // delete the log files of 3 months and older
-    new SwingWorker<Void, Void>() {
-      GregorianCalendar cal_delete_datum;
-
-      @Override
-      protected Void doInBackground() throws Exception {
-        for (int i = 3; i <= 12; i++) {
-          cal_delete_datum = new GregorianCalendar();
-          cal_delete_datum.add(Calendar.MONTH, -i);
-
-          String file_naam =
-              "turbowin_system_" + main.sdf_tsl_1.format(cal_delete_datum.getTime()) + ".txt";
-          String volledig_path_turbowin_system_logs =
-              main.logs_dir
-                  + java.io.File.separator
-                  + main.TURBOWIN_SYSTEM_LOGS_DIR
-                  + java.io.File.separator
-                  + file_naam;
-
-          File file_log_data = new File(volledig_path_turbowin_system_logs);
-          if (file_log_data.exists()) {
-            file_log_data.delete();
-          }
-        } // for (int i = 3; i < 12; i++)
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-    }.execute(); // new SwingWorker<Void, Void>()
+    SystemLogCleanupWorkflow.start();
   }
 
   public static void log_turbowin_system_message(final String message) {
