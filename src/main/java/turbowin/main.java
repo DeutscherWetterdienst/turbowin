@@ -13200,16 +13200,13 @@ public class main extends javax.swing.JFrame {
                         JOptionPane.INFORMATION_MESSAGE));
           } else if (jakarta_email_status == 1001) // empty obs
           {
-            Reset_all_meteo_parameters();
-            // NB because empty obs, do not write to IMMT log
-
-            String info = "send obs failed (observation contains no data due to an internal error)";
-            main.log_turbowin_system_message("[EMAIL] " + info);
-
-            if (manual_send == true) {
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            }
+            ObservationEmailEmptyObservationHandler.handle(
+                manual_send,
+                main::Reset_all_meteo_parameters,
+                info -> main.log_turbowin_system_message("[EMAIL] " + info),
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else if (jakarta_email_status == 1002) // invalid send mode
           {
             IMMT_log();
@@ -13479,16 +13476,13 @@ public class main extends javax.swing.JFrame {
             }
           } else if (python_email_status == 1001) // empty obs
           {
-            Reset_all_meteo_parameters();
-            // NB because empty obs, do not write to IMMT log
-
-            String info = "send obs failed (observation contains no data due to an internal error)";
-            main.log_turbowin_system_message("[EMAIL] " + info);
-
-            if (manual_send == true) {
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            }
+            ObservationEmailEmptyObservationHandler.handle(
+                manual_send,
+                main::Reset_all_meteo_parameters,
+                info -> main.log_turbowin_system_message("[EMAIL] " + info),
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else if (python_email_status == 1002) // invalid send mode
           {
             IMMT_log();
