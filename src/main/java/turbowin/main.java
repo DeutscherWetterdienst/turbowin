@@ -19,10 +19,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -32,7 +30,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
@@ -12316,73 +12313,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void log_turbowin_system_message(final String message) {
-    // NB for logging path e.g. .../logs/turbowin_system_Jan_2016.txt
-    //    message e.g. : [WOW] barometer height above MSL not available (Maintenance -> Station
-    // data)
-    //
-    //
-    //    line on screen e.g. [WOW] barometer height above MSL not available (Maintenance -> Station
-    // data)
-    //    line in file log e.g. 12-Jan-2016 13:17:33 [WOW] barometer height above MSL not available
-    // (Maintenance -> Station data)
-
-    // to screen
-    //
-    System.out.println(message);
-
-    // to file
-    //
-    new SwingWorker<Void, Void>() {
-      @Override
-      protected Void doInBackground() throws Exception {
-        String file_naam = "turbowin_system_" + main.sdf_tsl_1.format(new Date()) + ".txt";
-        String volledig_path_turbowin_system_logs =
-            main.logs_dir
-                + java.io.File.separator
-                + main.TURBOWIN_SYSTEM_LOGS_DIR
-                + java.io.File.separator
-                + file_naam;
-
-        try (BufferedWriter out =
-            new BufferedWriter(
-                new FileWriter(
-                    volledig_path_turbowin_system_logs,
-                    true))) // true means append the specified data to the file i.e. the pre-exist
-        // data in a file is not overwritten and the new data is appended after
-        // the pre-exist data.
-        {
-          // NB try-with-resource; resources (is and os) will be closed automatically when execution
-          // leaves the try block.
-
-          out.write(
-              main.sdf_tsl_2.format(new Date())
-                  + " UTC "); // new Date() -> always in UTC (because of sdf set in UTC,
-          // sdf_tsl_1.setTimeZone(TimeZone.getTimeZone("UTC"));)
-          out.write(message);
-          out.newLine();
-        } catch (IOException ex) {
-          System.out.println("+++ " + ex + "; trying to create the logs folder");
-
-          // if not done before/deleted, create sub dir TURBOWIN_SYSTEM_LOGS (turbowin_system)
-          if ((logs_dir != null) && (logs_dir.compareTo("") != 0)) {
-            File f = new File(logs_dir);
-            if (f.exists() && f.isDirectory()) {
-              String turbowin_system_logs_dir =
-                  main.logs_dir + java.io.File.separator + main.TURBOWIN_SYSTEM_LOGS_DIR;
-              final File dir_turbowin_system_logs = new File(turbowin_system_logs_dir);
-
-              if (dir_turbowin_system_logs.exists() == false) {
-                dir_turbowin_system_logs.mkdir();
-                // main.log_turbowin_system_message("[GENERAL] created dir " +
-                // turbowin_system_logs_dir);
-              }
-            } // if (f.exists() && f.isDirectory())
-          } //  if ((logs_dir != null) && (logs_dir.compareTo("") != 0))
-        } // catch
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-    }.execute(); // new SwingWorker<Void, Void>()
+    SystemLogWriterWorkflow.start(message);
   }
 
   public static void satellite_link_mouse_clicked(String url_satellite_image) {
