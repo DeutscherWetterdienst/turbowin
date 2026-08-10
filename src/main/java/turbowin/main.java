@@ -13209,16 +13209,14 @@ public class main extends javax.swing.JFrame {
                         null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else if (jakarta_email_status == 1002) // invalid send mode
           {
-            IMMT_log();
-            Reset_all_meteo_parameters();
-
-            String info = "send obs failed (invalid manual or AP[T]R/AWSR email send mode)";
-            main.log_turbowin_system_message("[EMAIL] " + info);
-
-            if (manual_send == true) {
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            }
+            ObservationEmailInvalidModeHandler.handle(
+                manual_send,
+                main::IMMT_log,
+                main::Reset_all_meteo_parameters,
+                info -> main.log_turbowin_system_message("[EMAIL] " + info),
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else // failed to send
           {
             IMMT_log();
@@ -13485,16 +13483,14 @@ public class main extends javax.swing.JFrame {
                         null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else if (python_email_status == 1002) // invalid send mode
           {
-            IMMT_log();
-            Reset_all_meteo_parameters();
-
-            String info = "send obs failed (invalid manual or AP[T]R/AWSR email send mode)";
-            main.log_turbowin_system_message("[EMAIL] " + info);
-
-            if (manual_send == true) {
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            }
+            ObservationEmailInvalidModeHandler.handle(
+                manual_send,
+                main::IMMT_log,
+                main::Reset_all_meteo_parameters,
+                info -> main.log_turbowin_system_message("[EMAIL] " + info),
+                info ->
+                    JOptionPane.showMessageDialog(
+                        null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE));
           } else // failed to send
           {
             IMMT_log();
