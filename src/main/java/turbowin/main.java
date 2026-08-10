@@ -3,7 +3,6 @@ package turbowin;
 import com.fazecast.jSerialComm.SerialPort;
 import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -8719,132 +8718,7 @@ public class main extends javax.swing.JFrame {
 
   private void Info_send_System_log_menu_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_send_System_log_menu_actionperformed
-    // TODO add your handling code here:
-
-    new SwingWorker<Void, Void>() {
-      @Override
-      protected Void doInBackground() throws Exception {
-        /*
-        // Version 6 of the Java Platform, Standard Edition (Java SE), continues to narrow the gap with
-        // new system tray functionality, better  print support for JTable, and now the Desktop API
-        // (java.awt.Desktop API).
-        //
-        // Use the Desktop.isDesktopSupported() method to determine whether the Desktop API is available.
-        // On the Solaris Operating System and the Linux platform, this API is dependent on Gnome libraries.
-        // If those libraries are unavailable, this method will return false. After determining that the API is
-        // supported, that is, the isDesktopSupported() returns true, the application can retrieve a Desktop
-        // instance using the static method getDesktop().
-        //
-        */
-        Desktop desktop = null;
-        String email_body_line = "";
-        String email_body_line_1 = "";
-        String email_body_line_2 = "";
-
-        // Before more Desktop API is used, first check
-        // whether the API is supported by this particular
-        // virtual machine (VM) on this particular host.
-        if (Desktop.isDesktopSupported()) {
-          desktop = Desktop.getDesktop();
-          try {
-            TimeZone timeZone = TimeZone.getTimeZone("UTC");
-            Calendar cal = Calendar.getInstance(timeZone);
-
-            String file_naam_1 = "turbowin_system_" + sdf_tsl_1.format(cal.getTime()) + ".txt";
-
-            cal.add(Calendar.MONTH, -1);
-            String file_naam_2 = "turbowin_system_" + sdf_tsl_1.format(cal.getTime()) + ".txt";
-
-            // NB OK but not possible to go to previuos month [deprecated] String file_naam =
-            // "turbowin_system_" + sdf_tsl_1.format(new Date()) + ".txt";
-
-            String volledig_path_turbowin_system_logs_1 =
-                main.logs_dir
-                    + java.io.File.separator
-                    + main.TURBOWIN_SYSTEM_LOGS_DIR
-                    + java.io.File.separator
-                    + file_naam_1;
-            String volledig_path_turbowin_system_logs_2 =
-                main.logs_dir
-                    + java.io.File.separator
-                    + main.TURBOWIN_SYSTEM_LOGS_DIR
-                    + java.io.File.separator
-                    + file_naam_2;
-
-            //
-            // NB write every system log line in the email body fails !!
-            //
-
-            // check if System log 1 file exists (current month)
-            final File system_file_1 = new File(volledig_path_turbowin_system_logs_1);
-            if (system_file_1.exists() == true) {
-              email_body_line_1 =
-                  "Please attach manually the file: " + volledig_path_turbowin_system_logs_1;
-              email_body_line = email_body_line_1;
-            } // if (system_file_1.exists() == true)
-
-            // check if System log 2 file exists (previous month)
-            final File system_file_2 = new File(volledig_path_turbowin_system_logs_2);
-            if (system_file_2.exists() == true) {
-              email_body_line_2 =
-                  "Please attach manually the file: " + volledig_path_turbowin_system_logs_2;
-
-              if (system_file_1.exists() == true) {
-                email_body_line += "\nand\n\n";
-                email_body_line += email_body_line_2;
-              } else {
-                email_body_line = email_body_line_2;
-              }
-            } // if (system_file_2.exists() == true)
-
-            if (system_file_1.exists() == false && system_file_2.exists() == false) {
-              JOptionPane.showMessageDialog(
-                  null,
-                  "No " + APPLICATION_NAME + " system log files found",
-                  main.APPLICATION_NAME + " error",
-                  JOptionPane.WARNING_MESSAGE);
-            } else {
-              /////// invoke email program //////
-              //
-              String email_recipient = "";
-              String email_subject = APPLICATION_NAME + " System logs " + main.ship_name;
-              String mail_txt =
-                  email_recipient + "?subject=" + email_subject + "&body=" + email_body_line;
-              // String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  +
-              // "&body=test";
-              URI uriMailTo = null;
-              try {
-                uriMailTo = new URI("mailto", mail_txt, null);
-              } catch (URISyntaxException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error invoking default Email program" + " (" + ex + ")",
-                    main.APPLICATION_NAME + " error",
-                    JOptionPane.WARNING_MESSAGE);
-              }
-
-              desktop.mail(uriMailTo);
-            } // else
-          } // try
-          catch (IOException ex) {
-            JOptionPane.showMessageDialog(
-                null,
-                "Error invoking default Email program" + " (" + ex + ")",
-                main.APPLICATION_NAME + " error",
-                JOptionPane.WARNING_MESSAGE);
-          }
-        } // if (Desktop.isDesktopSupported())
-        else {
-          JOptionPane.showMessageDialog(
-              null,
-              "Error invoking default Email program (-Desktop- method not supported on this computer system)",
-              main.APPLICATION_NAME + " error",
-              JOptionPane.WARNING_MESSAGE);
-        } // else
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-    }.execute(); // new SwingWorker<Void, Void>()
+    SystemLogEmailWorkflow.start();
   } // GEN-LAST:event_Info_send_System_log_menu_actionperformed
 
   private void Dashboard_Barometer_actionPerformed(
