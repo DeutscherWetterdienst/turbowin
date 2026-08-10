@@ -4459,7 +4459,7 @@ public class main extends javax.swing.JFrame {
     // cal_systeem_datum_tijd         = null;
   }
 
-  private void specific_connection_initComponents() {
+  void specific_connection_initComponents() {
 
     // called from: - read_muffin() [main.java]
     //              - lees_configuratie_regels() [main.java]
@@ -4760,7 +4760,7 @@ public class main extends javax.swing.JFrame {
     } // if (APR || APTR)
   }
 
-  private static void disable_dashboard_and_maps_menu_items() {
+  static void disable_dashboard_and_maps_menu_items() {
     // initialisation (because some could be disabled before and must now enabled (see Function
     // OK_button_actionPerformed() [main_RS232_RS422.java])
 
@@ -4957,210 +4957,14 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void schrijf_configuratie_regels() {
-    /* NB input/output in een GUI altijd via een SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
-
-    /* This is also a backup for writting to muffin !!! */
-    /* backup (file configuration.txt) in: data dir (system defined) AND logs dir (user defined) */
-
-    /* NB i.v.m. Swingworker backgroud proces kan het niet in 1 lus gebeuren */
-
-    // fill array
-    fill_configuratie_array();
-
-    /*
-    // to data dir
-    */
-    if ((data_dir != null) && (data_dir.compareTo("") != 0)) {
-      new SwingWorker<Void, Void>() {
-        @Override
-        protected Void doInBackground() throws Exception {
-          // NB eg configuratie_regels[2]  = "wind source        : estimated; true speed and true
-          // direction"
-          String volledig_path = data_dir + java.io.File.separator + CONFIGURATION_FILE;
-
-          // JOptionPane.showMessageDialog(null, hulp_dir, APPLICATION_NAME + " hulp_dir",
-          // JOptionPane.WARNING_MESSAGE);
-          try {
-            ConfigurationFileStore.write(
-                new File(volledig_path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
-          } // try
-          // catch (Exception e)
-          // {
-          //   // No message if not writable, in the case of internet invoking (webstart) the data
-          // dir will be
-          //   // windows\ystem32 (or something like that) and under Vista or Windows7 write
-          // protected
-          //   //JOptionPane.showMessageDialog(null, "unable to write to: " + volledig_path,
-          // APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-          // } // catch
-          catch (IOException ex) {
-            System.out.println("--- Function schrijf_configuratie_regels(): " + ex);
-          }
-
-          return null;
-        } // protected Void doInBackground() throws Exception
-      }.execute(); // new SwingWorker<Void, Void>()
-    } // if ((data_dir != null) && (data_dir.compareTo("") != 0))
-
-    /*
-    // to logs dir
-    */
-    if ((logs_dir != null) && (logs_dir.compareTo("") != 0)) {
-      new SwingWorker<Void, Void>() {
-        @Override
-        protected Void doInBackground() throws Exception {
-          // NB bv configuratie_regels[2]  = "wind source        : estimated; true speed and true
-          // direction"
-          String volledig_path = logs_dir + java.io.File.separator + CONFIGURATION_FILE;
-
-          // JOptionPane.showMessageDialog(null, hulp_dir, APPLICATION_NAME + " hulp_dir",
-          // JOptionPane.WARNING_MESSAGE);
-          try {
-            ConfigurationFileStore.write(
-                new File(volledig_path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
-          } // try
-          catch (IOException e) {
-            JOptionPane.showMessageDialog(
-                null,
-                "unable to write to: " + volledig_path,
-                APPLICATION_NAME + " error",
-                JOptionPane.WARNING_MESSAGE);
-          } // catch
-
-          return null;
-        } // protected Void doInBackground() throws Exception
-      }.execute(); // new SwingWorker<Void, Void>()
-    } // if ((logs_dir != null) && (logs_dir.compareTo("") != 0))
+    ConfigurationPersistenceWorkflow.write();
   }
 
   public void lees_configuratie_regels() {
-    // called from: initComponents2()
-    //
-    // or
-    //
-    // could also be:
-    // An alternative if function read_muffin() failed (geen persistentService of geen muffin
-    // aanwezig) !!!
-    // on 2 locations configuration.txt present: - logs_dir (user defined in online mode or fixed
-    // subdir in offline mode)
-    //                                           - data_dir (system defined)
-    //
-    // NB input/output GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld
-    // 37, 215)
-
-    // initialisation
-    hulp_dir = "";
-
-    if ((logs_dir != null) && (logs_dir.compareTo("") != 0)) {
-      hulp_dir = logs_dir;
-    } else if ((data_dir != null) && (data_dir.compareTo("") != 0)) {
-      hulp_dir = data_dir;
-    }
-
-    if ((hulp_dir != null) && (hulp_dir.compareTo("") != 0)) {
-      new SwingWorker<Void, Void>() {
-        @Override
-        protected Void doInBackground() throws Exception {
-          // NB e.g. configuratie_regels[2]  = "wind source        : estimated; true speed and true
-          // direction"
-          String volledig_path = hulp_dir + java.io.File.separator + CONFIGURATION_FILE;
-
-          /* read all lines from configuration file */
-          try {
-            ConfigurationFileStore.read(
-                new File(volledig_path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
-          } // try
-          catch (IOException e) {
-            // do nothing, it is possible (at first use) that the file was never created
-          } // catch
-
-          /* put collected meta data from configuration file into appropriate global vars */
-          meta_data_from_configuration_regels_into_global_vars();
-
-          return null;
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void done() {
-          // "TurboWin+ started" message to log (logs dir must be known!)
-          if (!theme_changed) {
-            log_turbowin_system_message(
-                "[GENERAL] started "
-                    + APPLICATION_NAME
-                    + " "
-                    + application_mode
-                    + " "
-                    + TurboWinAppInfo.APPLICATION_VERSION);
-          } else {
-            log_turbowin_system_message(
-                "[GENERAL] restarted main module (Theme changed)"
-                    + APPLICATION_NAME
-                    + " "
-                    + application_mode
-                    + " "
-                    + TurboWinAppInfo.APPLICATION_VERSION);
-          }
-
-          // log Java version
-          support_class.log_java_version();
-
-          // log integrated libraries (jars)
-          support_class.log_integrated_libraries();
-
-          // log memory staistics
-          support_class.log_memory_statistics();
-
-          // deleting old (> 3 months) turbowin system logs
-          log_turbowin_system_message(
-              "[GENERAL] deleting old (> 3 months) " + APPLICATION_NAME + " system logs");
-          delete_logs_turbowin_system();
-
-          /* station ID and ship name update on main (progress) screen" */
-          ID_fields_update();
-
-          /* meta data (mystationdata.java), eg IMO number and call sign, must be present */
-          check_meta_data();
-
-          /* if indicated by the user (via Maintenance menu) set GUI light mode */
-          // if (GUI_mode.equals(GUI_LIGHT))
-          // {
-          //   set_GUI_light_mode();
-          // }
-
-          /* pop-up menu */
-          create_popup_menu(); // NB with dependency to GUI_mode
-
-          /* check immt size (main.java) */
-          check_immt_size();
-
-          ////////////////////////////////////////// TEST //////////////////////////////////////////
-          //              RS232_connection_mode = 6;     // mintakaStar WiFi
-          ////////////////////////////////////////// TEST //////////////////////////////////////////
-
-          //
-          ///////////// RS232/RS422/Wifi ///////////////
-          //
-          specific_connection_initComponents();
-
-          /* gray (disable) the not appropriate graph/dashboard/maps menu selection options */
-          disable_graph_menu_items();
-          disable_dashboard_and_maps_menu_items();
-          disable_and_enable_output_menu_items();
-          set_APR_toolbar();
-          set_AWSR_toolbar();
-
-          /* GPS connected ? */
-          // if (RS232_GPS_connection_mode == 1)   // 0 = no GPS; 1 = GPS (NMEA 1083)
-          // {
-          //   RS232_RS422.RS232_GPS_NMEA_0183_initComponents();
-          // }
-
-        }
-      }.execute(); // new SwingWorker<Void, Void>()
-    } // if ((hulp_dir != null) && (hulp_dir.compareTo("") != 0))
+    ConfigurationPersistenceWorkflow.read(this);
   }
 
-  private void disable_graph_menu_items() {
+  void disable_graph_menu_items() {
     // NOTE
     // Even in the case of the settings indicate a barometer or AWS connected but the program
     // couldn't find one (defaultPort == null)
@@ -5234,7 +5038,7 @@ public class main extends javax.swing.JFrame {
     ConfigurationManager.applyConfigurationLines();
   }
 
-  private static void check_meta_data() {
+  static void check_meta_data() {
     String info = ConfigurationValidator.findWarning();
     if (info.compareTo("") != 0) {
       JOptionPane.showMessageDialog(
@@ -10636,7 +10440,7 @@ public class main extends javax.swing.JFrame {
 
   }
 
-  private void create_popup_menu() {
+  void create_popup_menu() {
     /* create pop-up menu (right mouse button) */
     popup_input = new JPopupMenu();
 
@@ -11958,7 +11762,7 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  private void check_immt_size() {
+  void check_immt_size() {
     ImmtLogSizeCheckWorkflow.start();
   }
 
@@ -13145,7 +12949,7 @@ public class main extends javax.swing.JFrame {
   // private SISListener sisL                                        = null;          // for
   // checking only one instance is running
   public static String output_dir = null; // for function Kopieeren_Waarnemers_En_Aantallen()
-  private static String hulp_dir =
+  static String hulp_dir =
       ""; // for writing configuration.txt file in data_dir (system defined) AND logs_dir (user
   // defined) (backup for muffin)
   // private URL url_php;
