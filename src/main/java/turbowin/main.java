@@ -4417,24 +4417,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void coded_obs_update() {
-    // if (!main.obs_format.equals(main.FORMAT_AWS))            // not AWS connected mode
-    if ((RS232_connection_mode != 3)
-        && (RS232_connection_mode != 9)
-        && (RS232_connection_mode != 10)
-        && (RS232_connection_mode
-            != 11)) // not EUCAWS and not OMC-140 and not AMOS2X connected mode
-    {
-      // System.out.println("+++++++++++ coded_obs_update");
-
-      // NB in case format 101 (compressed) this coded obs is only a kind of decompressed FM13 obs
-      //    especially Is (icing) has a specially coding/meaning
-      //    (see also Function private void initSynopparameters() in icing.java)
-      //     So it is possible that the icing group contains 6 characters!
-
-      /* update coded obs status field (bottom line main -progress- window) */
-      String SPATIE = SPATIE_OBS_VIEW; // dan gewoon " " als spatie grbruiken
-      jTextField4.setText(compose_coded_obs(SPATIE));
-    }
+    CodedObservationFieldUpdater.update();
   }
 
   private void bepaal_frame_location() {
