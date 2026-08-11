@@ -4627,36 +4627,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void ID_fields_update() {
-    // call sign
-    //
-    // jTextField1.setText("");
-    // if ((call_sign.compareTo("") != 0) && (call_sign != null))
-    // {
-    //   jTextField1.setText(call_sign);
-    // }
-
-    // ship name
-    //
-    jTextField1.setText("");
-    if ((ship_name.compareTo("") != 0) && (ship_name != null)) {
-      jTextField1.setText(ship_name);
-    }
-
-    // station ID
-    //
-    jTextField2.setText("");
-    // if ((masked_call_sign.compareTo("") != 0) && (masked_call_sign != null))    // masked station
-    // ID
-    // {
-    //   jTextField2.setText(masked_call_sign);
-    // }
-
-    if ((station_ID.compareTo("") != 0) && (station_ID != null)) {
-      jTextField2.setText(station_ID);
-    }
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    IdentifierFieldsUpdater.update();
   }
 
   public static void date_time_fields_update() {
@@ -10345,7 +10316,7 @@ public class main extends javax.swing.JFrame {
   private javax.swing.JPopupMenu.Separator jSeparator7;
   private javax.swing.JPopupMenu.Separator jSeparator8;
   private javax.swing.JPopupMenu.Separator jSeparator9;
-  private static javax.swing.JTextField jTextField1;
+  static javax.swing.JTextField jTextField1;
   static javax.swing.JTextField jTextField10;
   static javax.swing.JTextField jTextField11;
   static javax.swing.JTextField jTextField12;
@@ -10356,7 +10327,7 @@ public class main extends javax.swing.JFrame {
   public static javax.swing.JTextField jTextField17;
   static javax.swing.JTextField jTextField18;
   static javax.swing.JTextField jTextField19;
-  private static javax.swing.JTextField jTextField2;
+  static javax.swing.JTextField jTextField2;
   private static javax.swing.JTextField jTextField20;
   static javax.swing.JTextField jTextField21;
   static javax.swing.JTextField jTextField22;
