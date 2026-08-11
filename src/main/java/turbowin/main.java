@@ -5253,27 +5253,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void ice_fields_update() {
-    if (((myice1.ci_code.compareTo("") != 0) && (myice1.ci_code != null))
-        || ((myice1.Si_code.compareTo("") != 0) && (myice1.Si_code != null))
-        || ((myice1.bi_code.compareTo("") != 0) && (myice1.bi_code != null))
-        || ((myice1.Di_code.compareTo("") != 0) && (myice1.Di_code != null))
-        || ((myice1.zi_code.compareTo("") != 0) && (myice1.zi_code != null))) {
-      // if all ice parameters "u" (unable to report) -> do not set present
-      if ((myice1.ci_code.trim().compareTo("u") != 0)
-          || (myice1.Si_code.trim().compareTo("u") != 0)
-          || (myice1.bi_code.trim().compareTo("u") != 0)
-          || (myice1.Di_code.trim().compareTo("u") != 0)
-          || (myice1.zi_code.trim().compareTo("u") != 0)) {
-        jTextField19.setText("present");
-      } else {
-        jTextField19.setText("");
-      }
-    } else {
-      jTextField19.setText("");
-    }
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    IceFieldsUpdater.update();
   }
 
   private void Input_Cloudshigh_menu_actionPerformed(
@@ -11179,7 +11159,7 @@ public class main extends javax.swing.JFrame {
   public static javax.swing.JTextField jTextField16;
   public static javax.swing.JTextField jTextField17;
   private static javax.swing.JTextField jTextField18;
-  private static javax.swing.JTextField jTextField19;
+  static javax.swing.JTextField jTextField19;
   private static javax.swing.JTextField jTextField2;
   private static javax.swing.JTextField jTextField20;
   static javax.swing.JTextField jTextField21;
