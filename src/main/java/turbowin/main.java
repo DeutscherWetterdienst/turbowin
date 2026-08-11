@@ -4384,122 +4384,36 @@ public class main extends javax.swing.JFrame {
   }
 
   static void disable_dashboard_and_maps_menu_items() {
-    // initialisation (because some could be disabled before and must now enabled (see Function
-    // OK_button_actionPerformed() [main_RS232_RS422.java])
-
-    jMenuItem55.setEnabled(true);
-    jMenuItem56.setEnabled(true);
-    jMenuItem57.setEnabled(true);
-    jMenuItem58.setEnabled(true);
-    jMenuItem62.setEnabled(true);
-    jMenuItem63.setEnabled(true);
-    jMenuItem64.setEnabled(true);
-    jMenuItem65.setEnabled(true);
-    jMenuItem66.setEnabled(true);
-    jMenuItem67.setEnabled(true);
-    jMenuItem68.setEnabled(true);
-    jMenuItem69.setEnabled(true);
-    jMenuItem70.setEnabled(true);
-    jMenuItem77.setEnabled(true);
-
-    // if no AWS connected
-    if (RS232_connection_mode != 3
-        && RS232_connection_mode != 9
-        && RS232_connection_mode != 10
-        && RS232_connection_mode != 11) // not AWS connected mode
-    {
-      // disable Dashboard AWS (analog)
-      jMenuItem56.setEnabled(false); // Dashboard - AWS [analog)
-
-      // disable Dasboard AWS (digital)
-      jMenuItem57.setEnabled(false); // Dashboard - AWS [digital)
-
-      // disable Dashboard AWS (hybrid)
-      jMenuItem63.setEnabled(false); // Dashboard - AWS [hybrid)
-
-      // disable Dashboard AWS (wind radar)
-      jMenuItem64.setEnabled(false); // Dashboard - AWS [wind radar)
-
-      // disable Latest AWS measurements
-      jMenuItem65.setEnabled(false); // Dashboard - Latest AWS measurements
-
-      // disable Maps -> AWS sensor Map (offline)              // Maps -> AWS sensor Map (offline)
-      jMenuItem62.setEnabled(false); // NB sensor_data files based
-
-      // disable Maps -> AWS visual Map (offline)               // Maps -> AWS visual Map (offline)
-      jMenuItem68.setEnabled(false); // NB IMMT based
-
-      // disable Maps -> AWS sensor Map (online)               // Maps -> AWS sensor Map (online)
-      jMenuItem69.setEnabled(false); // NB sensor_data files based
-
-      // disable Maps -> AWS visual Map (online)               // Maps -> AWS visual Map (online)
-      jMenuItem70.setEnabled(false); // NB IMMT based
-    }
-
-    // if no barometer connected
-    if (RS232_connection_mode != 1
-        && RS232_connection_mode != 2
-        && RS232_connection_mode != 4
-        && RS232_connection_mode != 5
-        && RS232_connection_mode != 6
-        && RS232_connection_mode != 7
-        && RS232_connection_mode != 8) {
-      jMenuItem55.setEnabled(false); // Dashboard - barometer
-    }
-
-    // if AWS connected
+    double width_screen = 0;
+    double height_screen = 0;
     if (RS232_connection_mode == 3
         || RS232_connection_mode == 9
         || RS232_connection_mode == 10
-        || RS232_connection_mode == 11) // AWS connected mode
-    {
-      // AWS connected BUT screen resolution < 1366 * 768: disable Dashboard AWS (analog)
+        || RS232_connection_mode == 11) {
       Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      double width_screen = screenSize.getWidth();
-      double height_screen = screenSize.getHeight();
-      // System.out.println("--- Screen resolution AWS Dashboard wind radar: " + width_screen + " x
-      // " + height_screen);
-      if ((width_screen < 1366) || (height_screen < 768)) {
-        jMenuItem56.setEnabled(false); // Dashboard - AWS [analog)
-      }
-
-      // disable Dashboard - latest obs
-      jMenuItem58.setEnabled(false); // Dashboard - latest obs
-
-      // disable Maps -> Obs's Map (offline)                    // NB IMMT log based
-      jMenuItem66.setEnabled(false); // Maps -> Obs's Map (offline)
-
-      // disable Maps -> Obs's Map (online)                     // NB IMMT log based
-      jMenuItem67.setEnabled(false); // Maps -> Obs's Map (online)
+      width_screen = screenSize.getWidth();
+      height_screen = screenSize.getHeight();
     }
-
-    // not APR
-    if (main.APR == false) {
-      jMenuItem77.setEnabled(false); // Dashboard -> APR meteo radar
-    }
-
-    // online mode (TurboWeb)
-    //     NB disable all offline Maps links because these offline maps will never be present in
-    // TurboWeb mode
-    //     (to keep TurboWeb as small as possible + they will always have an internet connection for
-    // the online Maps)
-    if (offline_mode == false) {
-      // disable Maps -> Obs's Map (offline)                   // NB IMMT log based
-      jMenuItem66.setEnabled(false); // Maps -> Obs's Map (offline)
-
-      // disable Maps -> AWS sensor Map (offline)               // Maps -> AWS sensor Map (offline)
-      jMenuItem62.setEnabled(false); // NB sensor_data files based
-
-      // disable Maps -> AWS visual Map (offline)               // Maps -> AWS visual Map (offline)
-      jMenuItem68.setEnabled(false); // NB IMMT based
-    }
-
-    // for DWD (Germany) even if an AWS is connected, wind radar always disabled!
-    // if (recruiting_country.indexOf("GERMANY") != -1)
-    // {
-    //   // disable Dashboard AWS (wind radar)
-    //   jMenuItem64.setEnabled(false);                            // Dashboard - AWS [wind radar)
-    // }
+    DashboardAndMapsMenuStateUpdater.update(
+        RS232_connection_mode,
+        APR,
+        offline_mode,
+        width_screen,
+        height_screen,
+        jMenuItem55,
+        jMenuItem56,
+        jMenuItem57,
+        jMenuItem58,
+        jMenuItem62,
+        jMenuItem63,
+        jMenuItem64,
+        jMenuItem65,
+        jMenuItem66,
+        jMenuItem67,
+        jMenuItem68,
+        jMenuItem69,
+        jMenuItem70,
+        jMenuItem77);
   }
 
   public static void coded_obs_update() {
@@ -10360,31 +10274,31 @@ public class main extends javax.swing.JFrame {
   private javax.swing.JMenuItem jMenuItem52;
   private javax.swing.JMenuItem jMenuItem53;
   private javax.swing.JMenuItem jMenuItem54;
-  private static javax.swing.JMenuItem jMenuItem55;
-  private static javax.swing.JMenuItem jMenuItem56;
-  private static javax.swing.JMenuItem jMenuItem57;
-  private static javax.swing.JMenuItem jMenuItem58;
+  static javax.swing.JMenuItem jMenuItem55;
+  static javax.swing.JMenuItem jMenuItem56;
+  static javax.swing.JMenuItem jMenuItem57;
+  static javax.swing.JMenuItem jMenuItem58;
   private javax.swing.JMenuItem jMenuItem59;
   private javax.swing.JMenuItem jMenuItem6;
   private javax.swing.JMenuItem jMenuItem60;
   private javax.swing.JMenuItem jMenuItem61;
-  private static javax.swing.JMenuItem jMenuItem62;
-  private static javax.swing.JMenuItem jMenuItem63;
-  private static javax.swing.JMenuItem jMenuItem64;
-  private static javax.swing.JMenuItem jMenuItem65;
-  private static javax.swing.JMenuItem jMenuItem66;
-  private static javax.swing.JMenuItem jMenuItem67;
-  private static javax.swing.JMenuItem jMenuItem68;
-  private static javax.swing.JMenuItem jMenuItem69;
+  static javax.swing.JMenuItem jMenuItem62;
+  static javax.swing.JMenuItem jMenuItem63;
+  static javax.swing.JMenuItem jMenuItem64;
+  static javax.swing.JMenuItem jMenuItem65;
+  static javax.swing.JMenuItem jMenuItem66;
+  static javax.swing.JMenuItem jMenuItem67;
+  static javax.swing.JMenuItem jMenuItem68;
+  static javax.swing.JMenuItem jMenuItem69;
   private javax.swing.JMenuItem jMenuItem7;
-  private static javax.swing.JMenuItem jMenuItem70;
+  static javax.swing.JMenuItem jMenuItem70;
   private javax.swing.JMenuItem jMenuItem71;
   private javax.swing.JMenuItem jMenuItem72;
   private javax.swing.JMenuItem jMenuItem73;
   private javax.swing.JMenuItem jMenuItem74;
   private javax.swing.JMenuItem jMenuItem75;
   private javax.swing.JMenuItem jMenuItem76;
-  private static javax.swing.JMenuItem jMenuItem77;
+  static javax.swing.JMenuItem jMenuItem77;
   private javax.swing.JMenuItem jMenuItem78;
   private javax.swing.JMenuItem jMenuItem79;
   private javax.swing.JMenuItem jMenuItem8;
