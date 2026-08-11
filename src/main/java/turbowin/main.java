@@ -5241,66 +5241,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void barometer_fields_update() {
-    // input text color setting 'air pressure reading' and 'air pressure MSL'
-    //
-    if (RS232_connection_mode == 3
-        || RS232_connection_mode == 9
-        || RS232_connection_mode == 10
-        || RS232_connection_mode == 11) // AWS connected
-    {
-      if (displayed_aws_data_obsolate) // set in Function:
-      // RS422_init_new_aws_data_received_check_timer()[main_RS232_RS422.java]
-      {
-        jTextField9.setForeground(obsolate_color_data_from_aws); // gray
-        jTextField10.setForeground(obsolate_color_data_from_aws); // gray
-      } else {
-        jTextField9.setForeground(main.input_color_from_aws);
-        jTextField10.setForeground(main.input_color_from_aws);
-      }
-    } else // no AWS
-    {
-      if (APR == true) {
-        if (main.obsolate_data_flag == true) {
-          jTextField9.setForeground(main.obsolete_input_color_from_apr);
-          jTextField10.setForeground(main.obsolete_input_color_from_apr);
-        } else {
-          jTextField9.setForeground(main.input_color_from_apr);
-          jTextField10.setForeground(main.input_color_from_apr);
-        }
-      } // if (APR == true)
-      else // no APR
-      {
-        jTextField9.setForeground(main.input_color_from_observer);
-        jTextField10.setForeground(main.input_color_from_observer);
-      } // else (no APR)
-    } // else (no AWS)
-
-    // air pressure reading
-    //
-    if ((mybarometer.pressure_reading_corrected.compareTo("") != 0)
-        && (mybarometer.pressure_reading_corrected != null)) {
-      jTextField9.setText(mybarometer.pressure_reading_corrected + " hPa");
-    } else {
-      jTextField9.setText("");
-    }
-
-    // air pressure MSL
-    //
-    if ((mybarometer.pressure_msl_corrected.compareTo("") != 0)
-        && (mybarometer.pressure_msl_corrected != null)) {
-      jTextField10.setText(mybarometer.pressure_msl_corrected + " hPa");
-    } else {
-      jTextField10.setText("");
-    }
-
-    // update of the coded obs representation (bottom line main screen)
-    //
-    if (APR
-        == false) // otherwise, in APR mode, the "next automated meteo report upload..." on botton
-    // status line will be overwritten everytime
-    {
-      coded_obs_update();
-    }
+    BarometerFieldsUpdater.update();
   }
 
   public static void barograph_fields_update() {
@@ -11297,7 +11238,7 @@ public class main extends javax.swing.JFrame {
   private javax.swing.JPopupMenu.Separator jSeparator8;
   private javax.swing.JPopupMenu.Separator jSeparator9;
   private static javax.swing.JTextField jTextField1;
-  private static javax.swing.JTextField jTextField10;
+  static javax.swing.JTextField jTextField10;
   private static javax.swing.JTextField jTextField11;
   private static javax.swing.JTextField jTextField12;
   private static javax.swing.JTextField jTextField13;
@@ -11332,7 +11273,7 @@ public class main extends javax.swing.JFrame {
   public static javax.swing.JTextField jTextField40;
   public static javax.swing.JTextField jTextField5;
   static javax.swing.JTextField jTextField7;
-  private static javax.swing.JTextField jTextField9;
+  static javax.swing.JTextField jTextField9;
   private javax.swing.JToolBar jToolBar1;
   // End of variables declaration//GEN-END:variables
 
