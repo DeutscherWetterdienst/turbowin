@@ -5115,14 +5115,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void visibility_fields_update() {
-    // visibility
-    //
-    if ((myvisibility.VV.compareTo("") != 0) && (myvisibility.VV != null))
-      jTextField18.setText(myvisibility.VV);
-    else jTextField18.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    VisibilityFieldsUpdater.update();
   }
 
   public static void waves_fields_update() {
@@ -11115,7 +11108,7 @@ public class main extends javax.swing.JFrame {
   private static javax.swing.JTextField jTextField15;
   public static javax.swing.JTextField jTextField16;
   public static javax.swing.JTextField jTextField17;
-  private static javax.swing.JTextField jTextField18;
+  static javax.swing.JTextField jTextField18;
   static javax.swing.JTextField jTextField19;
   private static javax.swing.JTextField jTextField2;
   private static javax.swing.JTextField jTextField20;
