@@ -5126,50 +5126,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void waves_fields_update() {
-    if ((mywaves.wind_waves_period.compareTo("") != 0)
-        && (mywaves.wind_waves_period
-            != null)) // NB null waarde heeft het als waves input pagina nooit geopend is
-    jTextField23.setText(mywaves.wind_waves_period + " sec");
-    else jTextField23.setText("");
-
-    if ((mywaves.wind_waves_height.compareTo("") != 0) && (mywaves.wind_waves_height != null))
-      jTextField22.setText(mywaves.wind_waves_height + " metres");
-    else jTextField22.setText("");
-
-    if (mywaves.swell_1_period.equals("confused")) jTextField26.setText(mywaves.swell_1_period);
-    else if (mywaves.swell_1_period.equals("no swell"))
-      jTextField26.setText(mywaves.swell_1_period);
-    else if ((mywaves.swell_1_period.compareTo("") != 0) && (mywaves.swell_1_period != null))
-      jTextField26.setText(mywaves.swell_1_period + " sec");
-    else jTextField26.setText("");
-
-    if (mywaves.swell_1_height.equals("confused")) jTextField25.setText(mywaves.swell_1_height);
-    else if (mywaves.swell_1_height.equals("no swell"))
-      jTextField25.setText(mywaves.swell_1_height);
-    else if ((mywaves.swell_1_height.compareTo("") != 0) && (mywaves.swell_1_height != null))
-      jTextField25.setText(mywaves.swell_1_height + " metres");
-    else jTextField25.setText("");
-
-    if (mywaves.swell_1_dir.equals("confused")) jTextField24.setText(mywaves.swell_1_dir);
-    else if (mywaves.swell_1_dir.equals("no swell")) jTextField24.setText(mywaves.swell_1_dir);
-    else if ((mywaves.swell_1_dir.compareTo("") != 0) && (mywaves.swell_1_dir != null))
-      jTextField24.setText(mywaves.swell_1_dir + " degr");
-    else jTextField24.setText("");
-
-    if ((mywaves.swell_2_period.compareTo("") != 0) && (mywaves.swell_2_period != null))
-      jTextField29.setText(mywaves.swell_2_period + " sec");
-    else jTextField29.setText("");
-
-    if ((mywaves.swell_2_height.compareTo("") != 0) && (mywaves.swell_2_height != null))
-      jTextField28.setText(mywaves.swell_2_height + " metres");
-    else jTextField28.setText("");
-
-    if ((mywaves.swell_2_dir.compareTo("") != 0) && (mywaves.swell_2_dir != null))
-      jTextField27.setText(mywaves.swell_2_dir + " degr");
-    else jTextField27.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    WavesFieldsUpdater.update();
   }
 
   public static void ID_fields_update() {
@@ -11163,14 +11120,14 @@ public class main extends javax.swing.JFrame {
   private static javax.swing.JTextField jTextField2;
   private static javax.swing.JTextField jTextField20;
   static javax.swing.JTextField jTextField21;
-  private static javax.swing.JTextField jTextField22;
-  private static javax.swing.JTextField jTextField23;
-  private static javax.swing.JTextField jTextField24;
-  private static javax.swing.JTextField jTextField25;
-  private static javax.swing.JTextField jTextField26;
-  private static javax.swing.JTextField jTextField27;
-  private static javax.swing.JTextField jTextField28;
-  private static javax.swing.JTextField jTextField29;
+  static javax.swing.JTextField jTextField22;
+  static javax.swing.JTextField jTextField23;
+  static javax.swing.JTextField jTextField24;
+  static javax.swing.JTextField jTextField25;
+  static javax.swing.JTextField jTextField26;
+  static javax.swing.JTextField jTextField27;
+  static javax.swing.JTextField jTextField28;
+  static javax.swing.JTextField jTextField29;
   static javax.swing.JTextField jTextField3;
   private static javax.swing.JTextField jTextField30;
   private static javax.swing.JTextField jTextField31;
