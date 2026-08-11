@@ -5249,16 +5249,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void icing_fields_update() {
-    if (((myicing.Is_code.compareTo("") != 0) && (myicing.Is_code != null))
-        || ((myicing.EsEs_code.compareTo("") != 0) && (myicing.EsEs_code != null))
-        || ((myicing.Rs_code.compareTo("") != 0) && (myicing.Rs_code != null))) {
-      jTextField21.setText("present");
-    } else {
-      jTextField21.setText("");
-    }
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    IcingFieldsUpdater.update();
   }
 
   public static void ice_fields_update() {
@@ -11191,7 +11182,7 @@ public class main extends javax.swing.JFrame {
   private static javax.swing.JTextField jTextField19;
   private static javax.swing.JTextField jTextField2;
   private static javax.swing.JTextField jTextField20;
-  private static javax.swing.JTextField jTextField21;
+  static javax.swing.JTextField jTextField21;
   private static javax.swing.JTextField jTextField22;
   private static javax.swing.JTextField jTextField23;
   private static javax.swing.JTextField jTextField24;
