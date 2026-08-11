@@ -5070,48 +5070,19 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void clouds_low_fields_update() {
-    if ((mycl.cl_code.compareTo("") != 0) && (mycl.cl_code != null))
-      jTextField33.setText(mycl.cl_code + " (code)");
-    else jTextField33.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    CloudFieldsUpdater.updateLow();
   }
 
   public static void clouds_middle_fields_update() {
-    if ((mycm.cm_code.compareTo("") != 0) && (mycm.cm_code != null)) {
-      /* take only first char (i.c.w. special cases Cm 7a, 7b, 7c -> 7) */
-      jTextField34.setText(mycm.cm_code.substring(0, 1) + " (code)");
-    } else jTextField34.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    CloudFieldsUpdater.updateMiddle();
   }
 
   public static void clouds_high_fields_update() {
-    if ((mych.ch_code.compareTo("") != 0) && (mych.ch_code != null))
-      jTextField35.setText(mych.ch_code + " (code)");
-    else jTextField35.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    CloudFieldsUpdater.updateHigh();
   }
 
   public static void cloud_cover_fields_update() {
-    if ((mycloudcover.N.compareTo("") != 0) && (mycloudcover.N != null))
-      jTextField30.setText(mycloudcover.N);
-    else jTextField30.setText("");
-
-    if ((mycloudcover.Nh.compareTo("") != 0) && (mycloudcover.Nh != null))
-      jTextField31.setText(mycloudcover.Nh);
-    else jTextField31.setText("");
-
-    if ((mycloudcover.h.compareTo("") != 0) && (mycloudcover.h != null))
-      jTextField32.setText(mycloudcover.h);
-    else jTextField32.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    CloudFieldsUpdater.updateCover();
   }
 
   public static void visibility_fields_update() {
@@ -11122,12 +11093,12 @@ public class main extends javax.swing.JFrame {
   static javax.swing.JTextField jTextField28;
   static javax.swing.JTextField jTextField29;
   static javax.swing.JTextField jTextField3;
-  private static javax.swing.JTextField jTextField30;
-  private static javax.swing.JTextField jTextField31;
-  private static javax.swing.JTextField jTextField32;
-  private static javax.swing.JTextField jTextField33;
-  private static javax.swing.JTextField jTextField34;
-  private static javax.swing.JTextField jTextField35;
+  static javax.swing.JTextField jTextField30;
+  static javax.swing.JTextField jTextField31;
+  static javax.swing.JTextField jTextField32;
+  static javax.swing.JTextField jTextField33;
+  static javax.swing.JTextField jTextField34;
+  static javax.swing.JTextField jTextField35;
   public static javax.swing.JTextField jTextField36;
   public static javax.swing.JTextField jTextField37;
   public static javax.swing.JTextField jTextField38;
