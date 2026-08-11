@@ -5135,30 +5135,11 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void present_weather_fields_update() {
-    if ((mypresentweather.present_weather.compareTo("") != 0)
-        && (mypresentweather.present_weather != null))
-      jTextField13.setText(mypresentweather.present_weather);
-    else jTextField13.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    WeatherFieldsUpdater.updatePresent();
   }
 
   public static void past_weather_fields_update() {
-    // past weather (prim. phenomena)
-    //
-    if ((mypastweather.past_weather_1.compareTo("") != 0) && (mypastweather.past_weather_1 != null))
-      jTextField14.setText(mypastweather.past_weather_1);
-    else jTextField14.setText("");
-
-    // past weather (sec. phenomena)
-    //
-    if ((mypastweather.past_weather_2.compareTo("") != 0) && (mypastweather.past_weather_2 != null))
-      jTextField15.setText(mypastweather.past_weather_2);
-    else jTextField15.setText("");
-
-    /* update of the coded obs representation (bottom line main screen) */
-    coded_obs_update();
+    WeatherFieldsUpdater.updatePast();
   }
 
   public static void barometer_fields_update() {
@@ -11074,9 +11055,9 @@ public class main extends javax.swing.JFrame {
   static javax.swing.JTextField jTextField10;
   static javax.swing.JTextField jTextField11;
   static javax.swing.JTextField jTextField12;
-  private static javax.swing.JTextField jTextField13;
-  private static javax.swing.JTextField jTextField14;
-  private static javax.swing.JTextField jTextField15;
+  static javax.swing.JTextField jTextField13;
+  static javax.swing.JTextField jTextField14;
+  static javax.swing.JTextField jTextField15;
   public static javax.swing.JTextField jTextField16;
   public static javax.swing.JTextField jTextField17;
   static javax.swing.JTextField jTextField18;
