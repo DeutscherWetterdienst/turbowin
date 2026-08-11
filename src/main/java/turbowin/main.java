@@ -4588,73 +4588,15 @@ public class main extends javax.swing.JFrame {
   }
 
   void disable_graph_menu_items() {
-    // NOTE
-    // Even in the case of the settings indicate a barometer or AWS connected but the program
-    // couldn't find one (defaultPort == null)
-    // you can still open the graphs for checking 'old' values via the main menu bar
-    //
-    // NOTE
-    // in that case with the right mouse button clicking on the minimised icon (iconfied) than in
-    // case of defaultPort == null
-    // the graph options are disabled
-
-    /* gray (disable) graph menu selection options */
-    if (RS232_connection_mode == 0) // no instrument connected
-    {
-      jMenuItem41.setEnabled(false); // menu item graph air pressure
-      jMenuItem43.setEnabled(false); // menu item graph air temp
-      jMenuItem44.setEnabled(false); // menu item graph SST
-      jMenuItem45.setEnabled(false); // menu item graph wind speed
-      jMenuItem47.setEnabled(false); // menu item graph wind dir
-      jMenuItem51.setEnabled(
-          false); // menu item graph total (pressure, air temp, wind dir, wind speed)
-    } else if (RS232_connection_mode == 1
-        || RS232_connection_mode == 2
-        || RS232_connection_mode == 4
-        || RS232_connection_mode == 5
-        || RS232_connection_mode
-            == 6) // PTB220 or PTB330 or Mintaka Duo or Mintaka Star USB or Mintaka Star WiFi
-    // connected
-    {
-      jMenuItem41.setEnabled(true); // menu item graph air pressure
-      jMenuItem43.setEnabled(false); // menu item graph air temp
-      jMenuItem44.setEnabled(false); // menu item SST
-      jMenuItem45.setEnabled(false); // menu item graph wind speed
-      jMenuItem47.setEnabled(false); // menu item graph wind dir
-      jMenuItem51.setEnabled(
-          false); // menu item graph total (pressure, air temp, wind dir, wind speed)
-    } else if (RS232_connection_mode == 7
-        || RS232_connection_mode == 8) // Mintaka StarX USB or Mintaka StarX LAN connected
-    {
-      jMenuItem41.setEnabled(true); // menu item graph air pressure
-      jMenuItem43.setEnabled(true); // menu item graph air temp
-      jMenuItem44.setEnabled(false); // menu item SST
-      jMenuItem45.setEnabled(false); // menu item graph wind speed
-      jMenuItem47.setEnabled(false); // menu item graph wind dir
-      jMenuItem51.setEnabled(
-          false); // menu item graph total (pressure, air temp, wind dir, wind speed)
-    } else if (RS232_connection_mode == 3
-        || RS232_connection_mode == 9
-        || RS232_connection_mode == 10
-        || RS232_connection_mode == 11) // AWS connected
-    {
-      jMenuItem41.setEnabled(true); // menu item graph air pressure
-      jMenuItem43.setEnabled(true); // menu item graph air temp
-      jMenuItem44.setEnabled(true); // menu item graph SST
-      jMenuItem45.setEnabled(
-          true); // menu item graph wind speed (wind speed gust included as a second line)
-      jMenuItem47.setEnabled(true); // menu item graph wind dir
-      jMenuItem51.setEnabled(
-          true); // menu item graph total (pressure, air temp, wind dir, wind speed)
-    }
-
-    /************* TEST BEGIN ******************/
-    // RS232_connection_mode_II = 1;
-    /************* TEST END *******************/
-
-    if (RS232_connection_mode_II == 1) {
-      jMenuItem43.setEnabled(true); // menu item graph air temp
-    }
+    GraphMenuStateUpdater.update(
+        RS232_connection_mode,
+        RS232_connection_mode_II,
+        jMenuItem41,
+        jMenuItem43,
+        jMenuItem44,
+        jMenuItem45,
+        jMenuItem47,
+        jMenuItem51);
   }
 
   public static void meta_data_from_configuration_regels_into_global_vars() {
