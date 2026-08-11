@@ -4585,13 +4585,7 @@ public class main extends javax.swing.JFrame {
   } // GEN-LAST:event_Input_waves_menu_actionPerformed
 
   public static void observer_field_update() {
-    // JOptionPane.showMessageDialog(null, myobserver.selected_observer, main.APPLICATION_NAME + "
-    // test", JOptionPane.WARNING_MESSAGE);
-    if (myobserver.selected_observer.compareTo("") != 0) {
-      jTextField20.setText(myobserver.selected_observer);
-    } else {
-      jTextField20.setText("");
-    }
+    ObserverFieldUpdater.update();
   }
 
   public static void temperatures_fields_update() {
@@ -10328,7 +10322,7 @@ public class main extends javax.swing.JFrame {
   static javax.swing.JTextField jTextField18;
   static javax.swing.JTextField jTextField19;
   static javax.swing.JTextField jTextField2;
-  private static javax.swing.JTextField jTextField20;
+  static javax.swing.JTextField jTextField20;
   static javax.swing.JTextField jTextField21;
   static javax.swing.JTextField jTextField22;
   static javax.swing.JTextField jTextField23;
