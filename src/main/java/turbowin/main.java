@@ -4043,45 +4043,10 @@ public class main extends javax.swing.JFrame {
   }
 
   void setToolbarIcon(String imagePath, ImageIcon icon) {
-    if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png")) {
-      jButton2.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "position.png")) {
-      jButton3.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "wind.png")) {
-      jButton4.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "waves.png")) {
-      jButton5.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "barometer.png")) {
-      jButton6.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "barograph.png")) {
-      jButton7.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "temperatures.png")) {
-      jButton8.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "present_weather.png")) {
-      jButton9.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "past_weather.png")) {
-      jButton10.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "visibility.png")) {
-      jButton11.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "cl.png")) {
-      jButton12.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "cm.png")) {
-      jButton13.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "ch.png")) {
-      jButton14.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "height.png")) {
-      jButton15.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "icing.png")) {
-      jButton16.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "ice.png")) {
-      jButton17.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "observers.png")) {
-      jButton18.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "captains.png")) {
-      jButton19.setIcon(icon);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "next_screen.png")) {
-      jButton20.setIcon(icon);
-    }
+    ToolbarIconUpdater.update(
+        imagePath, icon, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8,
+        jButton9, jButton10, jButton11, jButton12, jButton13, jButton14, jButton15, jButton16,
+        jButton17, jButton18, jButton19, jButton20);
   }
 
   private void loadImage_straight(final String imagePath) {
