@@ -4190,49 +4190,8 @@ public class main extends javax.swing.JFrame {
   private void bepaal_frame_location() {
     Toolkit kit = Toolkit.getDefaultToolkit();
     Dimension screenSize = kit.getScreenSize();
-    screenWidth = screenSize.width;
-    screenHeight = screenSize.height;
-
-    // compute x-y location start screen + set Location to this position
-    x_pos_start_frame = screenWidth / 2 - (1050 / 2);
-    y_pos_start_frame = screenHeight / 2 - (740 / 2);
+    WindowLayoutCalculator.calculate(screenSize.width, screenSize.height);
     setLocation(x_pos_start_frame, y_pos_start_frame);
-
-    // compute x-y location main screen (Maintenance etc)
-    x_pos_main_frame = screenWidth / 2 - (1000 / 2);
-    y_pos_main_frame = screenHeight / 2 - (700 / 2);
-
-    // compute x-y location main screen (AMVER forms)
-    x_pos_amver_frame = screenWidth / 2 - (1000 / 2);
-    y_pos_amver_frame = screenHeight / 2 - (750 / 2);
-
-    // compute position of other (parameter/element like waves) screens(frames)
-    x_pos_frame = screenWidth / 2 - (800 / 2);
-    y_pos_frame = screenHeight / 2 - (600 / 2);
-
-    // compute position of latest obsabout screen
-    x_pos_small_frame = screenWidth / 2 - (400 / 2);
-    y_pos_small_frame = screenHeight / 2 - (300 / 2);
-
-    // compute position of info-about screen
-    x_pos_about_frame = screenWidth / 2 - (600 / 2);
-    y_pos_about_frame = screenHeight / 2 - (700 / 2);
-
-    // compute position of calculator screen
-    x_pos_calculator_frame = screenWidth / 2 - (350 / 2);
-    y_pos_calculator_frame = screenHeight / 2 - (550 / 2);
-
-    // compute x-y location Dashboard latest measurements table screen
-    // x_pos_latestmeasurements_frame = screenWidth / 2 - (1000 / 2);
-    // y_pos_latestmeasurements_frame = screenHeight / 2 - (750 / 2);
-
-    // compute position of calculator screen
-    x_pos_pop_up_frame = screenWidth / 2 - (401 / 2);
-    y_pos_pop_up_frame = screenHeight / 2 - (236 / 2);
-
-    // compute position of immt log period screen
-    x_pos_immtlogperiod_frame = screenWidth / 2 - (600 / 2);
-    y_pos_immtlogperiod_frame = screenHeight / 2 - (300 / 2);
   }
 
   public static String compose_coded_obs(String SPATIE) {
