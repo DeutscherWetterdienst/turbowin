@@ -5361,76 +5361,22 @@ public class main extends javax.swing.JFrame {
 
   private void Amver_SailingPlan_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_SailingPlan_actionPerformed
-    // TODO add your handling code here:
-
-    if (amver_report.compareTo("") != 0) {
-      JOptionPane.showMessageDialog(
-          null,
-          "Please close first a previously opened AMVER form",
-          main.APPLICATION_NAME + " message",
-          JOptionPane.WARNING_MESSAGE);
-    } else {
-      amver_report = AMVER_SP; // AMVER sailing plan
-
-      myamversailingplan form = new myamversailingplan();
-      form.setSize(1000, 750);
-      form.setVisible(true);
-    }
+    AmverReportWorkflow.open(AMVER_SP, 1000, 750);
   } // GEN-LAST:event_Amver_SailingPlan_actionPerformed
 
   private void Amver_DeviationReport_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_DeviationReport_actionPerformed
-    // TODO add your handling code here:
-
-    if (amver_report.compareTo("") != 0) {
-      JOptionPane.showMessageDialog(
-          null,
-          "Please close first a previously opened AMVER form",
-          main.APPLICATION_NAME + " message",
-          JOptionPane.WARNING_MESSAGE);
-    } else {
-      amver_report = AMVER_DR; // AMVER deviation report
-
-      myamversailingplan form = new myamversailingplan();
-      form.setSize(1000, 700);
-      form.setVisible(true);
-    }
+    AmverReportWorkflow.open(AMVER_DR, 1000, 700);
   } // GEN-LAST:event_Amver_DeviationReport_actionPerformed
 
   private void Amver_ArrivalReport_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_ArrivalReport_actionPerformed
-    // TODO add your handling code here:
-    if (amver_report.compareTo("") != 0) {
-      JOptionPane.showMessageDialog(
-          null,
-          "Please close first a previously opened AMVER form",
-          main.APPLICATION_NAME + " message",
-          JOptionPane.WARNING_MESSAGE);
-    } else {
-      amver_report = AMVER_FR; // AMVER arrival(final) report
-
-      myamversailingplan form = new myamversailingplan();
-      form.setSize(1000, 750);
-      form.setVisible(true);
-    }
+    AmverReportWorkflow.open(AMVER_FR, 1000, 750);
   } // GEN-LAST:event_Amver_ArrivalReport_actionPerformed
 
   private void Amver_PositionReport_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Amver_PositionReport_actionPerformed
-    // TODO add your handling code here:
-    if (amver_report.compareTo("") != 0) {
-      JOptionPane.showMessageDialog(
-          null,
-          "Please close first a previously opened AMVER form",
-          main.APPLICATION_NAME + " message",
-          JOptionPane.WARNING_MESSAGE);
-    } else {
-      amver_report = AMVER_PR; // AMVER position report
-
-      myamversailingplan form = new myamversailingplan();
-      form.setSize(1000, 700);
-      form.setVisible(true);
-    }
+    AmverReportWorkflow.open(AMVER_PR, 1000, 700);
   } // GEN-LAST:event_Amver_PositionReport_actionPerformed
 
   private void Graphs_Pressure_Sensor_Data_actionPerformed(
