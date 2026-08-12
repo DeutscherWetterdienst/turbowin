@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -30,7 +29,6 @@ import java.util.TimeZone;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
@@ -4187,7 +4185,7 @@ public class main extends javax.swing.JFrame {
     ServerObservationOutputWorkflow.start(this);
   } // GEN-LAST:event_Output_Obs_to_server_menu_actionPerformed
 
-  private void Input_Wind_menu_actionPerformed(
+  void Input_Wind_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Wind_menu_actionPerformed
     // TODO add your handling code here:
     // if (wind_form == null)
@@ -4202,7 +4200,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Wind_menu_actionPerformed
 
-  private void Input_Cloudcover_menu_actionPerformed(
+  void Input_Cloudcover_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudcover_menu_actionPerformed
     // TODO add your handling code here:
     // if (cloudcover_form == null)
@@ -4217,7 +4215,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudcover_menu_actionPerformed
 
-  private void Input_Presentweather_menu_actionPerformed(
+  void Input_Presentweather_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Presentweather_menu_actionPerformed
     // TODO add your handling code here:
     // if (presentweather_form == null)
@@ -4232,7 +4230,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Presentweather_menu_actionPerformed
 
-  private void Input_waves_menu_actionPerformed(
+  void Input_waves_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_waves_menu_actionPerformed
     // TODO add your handling code here:
 
@@ -4313,7 +4311,7 @@ public class main extends javax.swing.JFrame {
     IceFieldsUpdater.update();
   }
 
-  private void Input_Cloudshigh_menu_actionPerformed(
+  void Input_Cloudshigh_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudshigh_menu_actionPerformed
     // TODO add your handling code here:
     // if (ch_form == null)
@@ -4328,7 +4326,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudshigh_menu_actionPerformed
 
-  private void Input_Position_menu_actionPerformed(
+  void Input_Position_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Position_menu_actionPerformed
     // TODO add your handling code here:
 
@@ -4408,7 +4406,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Position_menu_actionPerformed
 
-  private void Input_DateTime_menu_actionPerformed(
+  void Input_DateTime_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_DateTime_menu_actionPerformed
     // TODO add your handling code here:
 
@@ -4437,7 +4435,7 @@ public class main extends javax.swing.JFrame {
     } // else
   } // GEN-LAST:event_Input_DateTime_menu_actionPerformed
 
-  private void Input_Visibility_menu_actionPerformed(
+  void Input_Visibility_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Visibility_menu_actionPerformed
     // TODO add your handling code here:
     // if (visibility_form == null)
@@ -4458,7 +4456,7 @@ public class main extends javax.swing.JFrame {
     main_windowClosing(null);
   } // GEN-LAST:event_File_Exit_menu_actionPerformd
 
-  private void Input_Pastweather_menu_actionperformed(
+  void Input_Pastweather_menu_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Pastweather_menu_actionperformed
     // TODO add your handling code here:
     // if (pastweather_form == null)
@@ -4473,7 +4471,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Pastweather_menu_actionperformed
 
-  private void Input_Cloudslow_menu_actionPerformed(
+  void Input_Cloudslow_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudslow_menu_actionPerformed
     // TODO add your handling code here:
     // if (cl_form == null)
@@ -4488,7 +4486,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudslow_menu_actionPerformed
 
-  private void Input_Cloudsmiddle_menu_actionPerformed(
+  void Input_Cloudsmiddle_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudsmiddle_menu_actionPerformed
     // TODO add your handling code here:
     // if (cm_form == null)
@@ -4503,7 +4501,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Cloudsmiddle_menu_actionPerformed
 
-  private void Input_Temperatures_menu_actionPerformed(
+  void Input_Temperatures_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Temperatures_menu_actionPerformed
     // TODO add your handling code here:
     // if (temp_form == null)
@@ -4538,7 +4536,7 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Stationdata_actionPerformed
 
-  private void Input_Barometer_menu_actionPerformed(
+  void Input_Barometer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barometer_menu_actionPerformed
     // TODO add your handling code here:
     // if (barometer_form == null)
@@ -4553,7 +4551,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Input_Barometer_menu_actionPerformed
 
-  private void Input_Barograph_menu_actionPerformed(
+  void Input_Barograph_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barograph_menu_actionPerformed
     // TODO add your handling code here:
     // if (barograph_form == null)
@@ -4622,7 +4620,7 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_Log_files_actionPerformed
 
-  private void Input_Observer_menu_actionPerformed(
+  void Input_Observer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Observer_menu_actionPerformed
     // TODO add your handling code here:
     // if (observer_form == null)
@@ -5082,7 +5080,7 @@ public class main extends javax.swing.JFrame {
     Input_Observer_menu_actionPerformed(null);
   } // GEN-LAST:event_observer_toolbar_mouseClicked
 
-  private void Themes_1_actionPerformed(
+  void Themes_1_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_1_actionPerformed
     // Nimbus default color values: https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html
     ThemeWorkflow.apply(
@@ -5097,7 +5095,7 @@ public class main extends javax.swing.JFrame {
         new Color(204, 255, 255));
   } // GEN-LAST:event_Themes_1_actionPerformed
 
-  private void Themes_2_actionPerformed(
+  void Themes_2_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_2_actionPerformed
     // Night colors (Nimbus based).
     ThemeWorkflow.apply(
@@ -5112,7 +5110,7 @@ public class main extends javax.swing.JFrame {
         new Color(192, 192, 192));
   } // GEN-LAST:event_Themes_2_actionPerformed
 
-  private void Themes_3_actionPerformed(
+  void Themes_3_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_3_actionPerformed
     // Sunrise is a separate color scheme rather than a normal Nimbus theme.
     ThemeWorkflow.apply(
@@ -5127,7 +5125,7 @@ public class main extends javax.swing.JFrame {
         new Color(255, 255, 132));
   } // GEN-LAST:event_Themes_3_actionPerformed
 
-  private void Input_Icing_menu_actionPerformed(
+  void Input_Icing_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Icing_menu_actionPerformed
     // TODO add your handling code here:
 
@@ -5143,7 +5141,7 @@ public class main extends javax.swing.JFrame {
     Input_Icing_menu_actionPerformed(null);
   } // GEN-LAST:event_icing_mainscreen_mouseClicked
 
-  private void Input_Ice_menu_actionPerformed(
+  void Input_Ice_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Ice_menu_actionPerformed
     // TODO add your handling code here:
 
@@ -5656,7 +5654,7 @@ public class main extends javax.swing.JFrame {
     }
   } // GEN-LAST:event_Maintenance_server_settings_actionperformed
 
-  private void Themes_4_actionPerformed(
+  void Themes_4_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_4_actionPerformed
     // Sunset is a separate color scheme rather than a normal Nimbus theme.
     ThemeWorkflow.apply(
@@ -5978,7 +5976,7 @@ public class main extends javax.swing.JFrame {
     form.setVisible(true);
   } // GEN-LAST:event_Info_barometer_comparison_menu_actionPerformed
 
-  private void Themes_5_actionPerformed(
+  void Themes_5_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_5_actionPerformed
     // TODO add your handling code here:
 
@@ -7206,247 +7204,8 @@ public class main extends javax.swing.JFrame {
   }
 
   void create_popup_menu() {
-    /* create pop-up menu (right mouse button) */
     popup_input = new JPopupMenu();
-
-    JMenuItem menuItem301 = new JMenuItem("Date & Time...");
-    menuItem301.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_DateTime_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem301);
-
-    JMenuItem menuItem302 = new JMenuItem("Position, Course & Speed...");
-    menuItem302.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Position_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem302);
-
-    JMenuItem menuItem303 = new JMenuItem("Barometer reading...");
-    menuItem303.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Barometer_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem303);
-
-    JMenuItem menuItem304 = new JMenuItem("Barograph reading...");
-    menuItem304.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Barograph_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem304);
-
-    JMenuItem menuItem305 = new JMenuItem("Temperatures...");
-    menuItem305.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Temperatures_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem305);
-
-    JMenuItem menuItem306 = new JMenuItem("Wind...");
-    menuItem306.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Wind_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem306);
-
-    // if (!main.GUI_mode.equals(main.GUI_LIGHT))
-    // {
-    JMenuItem menuItem307 = new JMenuItem("Waves...");
-    menuItem307.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_waves_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem307);
-
-    JMenuItem menuItem308 = new JMenuItem("Visibility...");
-    menuItem308.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Visibility_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem308);
-
-    JMenuItem menuItem309 = new JMenuItem("Present weather...");
-    menuItem309.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Presentweather_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem309);
-
-    JMenuItem menuItem310 = new JMenuItem("Past weather...");
-    menuItem310.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Pastweather_menu_actionperformed(null);
-          }
-        });
-    popup_input.add(menuItem310);
-
-    JMenuItem menuItem311 = new JMenuItem("Clouds low...");
-    menuItem311.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Cloudslow_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem311);
-
-    JMenuItem menuItem312 = new JMenuItem("Clouds middle...");
-    menuItem312.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Cloudsmiddle_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem312);
-
-    JMenuItem menuItem313 = new JMenuItem("Clouds high...");
-    menuItem313.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Cloudshigh_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem313);
-
-    JMenuItem menuItem314 = new JMenuItem("Cloud cover & height...");
-    menuItem314.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Cloudcover_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem314);
-    // } // if (!main.GUI_mode.equals(main.GUI_LIGHT))
-
-    JMenuItem menuItem315 = new JMenuItem("Icing...");
-    menuItem315.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Icing_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem315);
-
-    JMenuItem menuItem316 = new JMenuItem("Ice...");
-    menuItem316.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Ice_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem316);
-
-    JMenuItem menuItem317 = new JMenuItem("Observer...");
-    menuItem317.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Input_Observer_menu_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem317);
-
-    popup_input.addSeparator();
-
-    JMenuItem menuItem318 = new JMenuItem("Day colours");
-    menuItem318.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Themes_1_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem318);
-
-    JMenuItem menuItem319 = new JMenuItem("Night colours");
-    menuItem319.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Themes_2_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem319);
-
-    JMenuItem menuItem320 = new JMenuItem("Sunrise colours");
-    menuItem320.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Themes_3_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem320);
-
-    JMenuItem menuItem321 = new JMenuItem("Sunset colours");
-    menuItem321.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Themes_4_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem321);
-
-    JMenuItem menuItem322 = new JMenuItem("Transparent");
-    menuItem322.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            Themes_5_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem322);
-
-    MouseListener popupListener_input = new PopupListener_input();
-    addMouseListener(popupListener_input); // connect to jFrame otherwise eg:
-    // jTextField1.addMouseListener(popupListener);
-    jToolBar1.addMouseListener(popupListener_input); // also connected to Toolbar now
-
-    // in 'gui light' mode, by default, the logo (Label13 reused) do not respond to right mouse
-    // click
-    // if (GUI_mode.equals(GUI_LIGHT))
-    // {
-    //   // in GUI LIGHT mode label13 (present weather in FULL mode) was altered to the chosen logo
-    // (eumetnet, noaa, sot)
-    //   jLabel13.addMouseListener(popupListener_input);
-    // }
+    PopupMenuWorkflow.populate(this, popup_input, jToolBar1, new PopupListener_input());
   }
 
   // private void IMMT_log()
