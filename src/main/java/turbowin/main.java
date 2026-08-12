@@ -4075,56 +4075,8 @@ public class main extends javax.swing.JFrame {
   }
 
   private void initImages() {
-    String os = OSDetector.getOSString();
-
-    if (os.equals("LINUX")) {
-      // NB
-      //    on Fedora linux approx. every 5-10 times when activating the form the glyphs are not
-      // loaded (no errors or exceptions)
-      //    even with using BufferdImages instead of the imageIcons, the same result.
-      //    After testing all the pictures were found everytime (so that was not the issue)
-      //    It seems the background loading is not always ok on Fedora
-
-      loadImage_straight(main.ICONS_DIRECTORY + "date_time.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "position.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "wind.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "waves.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "barometer.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "barograph.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "temperatures.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "present_weather.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "past_weather.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "visibility.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "cl.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "cm.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "ch.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "height.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "icing.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "ice.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "observers.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "captains.png");
-      loadImage_straight(main.ICONS_DIRECTORY + "next_screen.png");
-    } else {
-      loadImage(main.ICONS_DIRECTORY + "date_time.png");
-      loadImage(main.ICONS_DIRECTORY + "position.png");
-      loadImage(main.ICONS_DIRECTORY + "wind.png");
-      loadImage(main.ICONS_DIRECTORY + "waves.png");
-      loadImage(main.ICONS_DIRECTORY + "barometer.png");
-      loadImage(main.ICONS_DIRECTORY + "barograph.png");
-      loadImage(main.ICONS_DIRECTORY + "temperatures.png");
-      loadImage(main.ICONS_DIRECTORY + "present_weather.png");
-      loadImage(main.ICONS_DIRECTORY + "past_weather.png");
-      loadImage(main.ICONS_DIRECTORY + "visibility.png");
-      loadImage(main.ICONS_DIRECTORY + "cl.png");
-      loadImage(main.ICONS_DIRECTORY + "cm.png");
-      loadImage(main.ICONS_DIRECTORY + "ch.png");
-      loadImage(main.ICONS_DIRECTORY + "height.png");
-      loadImage(main.ICONS_DIRECTORY + "icing.png");
-      loadImage(main.ICONS_DIRECTORY + "ice.png");
-      loadImage(main.ICONS_DIRECTORY + "observers.png");
-      loadImage(main.ICONS_DIRECTORY + "captains.png");
-      loadImage(main.ICONS_DIRECTORY + "next_screen.png");
-    }
+    ToolbarImageInitializationWorkflow.initialize(
+        OSDetector.getOSString().equals("LINUX"), this::loadImage_straight, this::loadImage);
   }
 
   public static void check_and_set_datetime_v2() {
