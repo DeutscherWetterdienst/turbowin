@@ -5088,220 +5088,47 @@ public class main extends javax.swing.JFrame {
 
   private void Themes_1_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_1_actionPerformed
-    // TODO add your handling code here:
-    boolean reset_main_class = false;
-
-    //
-    //////// Day colors (Nimbus (vanaf Java 1.6.10) based)
-    //
-
-    if (theme_mode.equals(THEME_TRANSPARENT)) {
-      reset_main_class = true;
-      theme_changed = true; // for checking more than one instance running
-    }
-
-    if (reset_main_class) {
-      mainClass.dispose();
-    }
-
-    try {
-      // mainClass.dispose();
-      // JFrame.setDefaultLookAndFeelDecorated(true);
-
-      // mainClass.setVisible(true);
-      // UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-      // setOpacity(0.7f);
-
-      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          UIManager.setLookAndFeel(info.getClassName());
-
-          // Nimbus default color values:
-          // https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html
-
-          UIManager.put("control", new Color(214, 217, 223)); // Nimbus default
-          UIManager.put("nimbusBase", new Color(51, 98, 140)); // Nimbus default
-          UIManager.put("nimbusFocus", new Color(115, 164, 209)); // Nimbus default
-          UIManager.put("nimbusLightBackground", new Color(255, 255, 255)); // Nimbus default
-          // UIManager.put("nimbusSelectionBackground", new Color(57,105,138));       // Nimbus
-          // default, selected/highlighted text eg to copy, NOT IMPORTANT
-          UIManager.put("text", new Color(0, 0, 0)); // Nimbus default
-          UIManager.put("nimbusBlueGrey", new Color(169, 176, 190)); // Nimbus default
-
-          SwingUtilities.updateComponentTreeUI(main.this); // moet komen na setLookAndFeel !!!
-
-          jTextField4.setBackground(
-              new java.awt.Color(204, 255, 255)); // status bar (for system messages)
-
-          break;
-        }
-      }
-
-      theme_mode = THEME_NIMBUS_DAY;
-    } catch (ClassNotFoundException
-        | InstantiationException
-        | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
-      String info = "Nimbus related Themes not supported on this computer";
-      JOptionPane.showMessageDialog(
-          null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-      main.log_turbowin_system_message("[GENERAL] " + info);
-    }
-
-    if (reset_main_class) {
-      // JFrame.setDefaultLookAndFeelDecorated(true);
-      mainClass = new main();
-      mainClass.setVisible(true);
-    }
+    // Nimbus default color values: https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html
+    ThemeWorkflow.apply(
+        this,
+        THEME_NIMBUS_DAY,
+        new Color(214, 217, 223),
+        new Color(51, 98, 140),
+        new Color(115, 164, 209),
+        new Color(255, 255, 255),
+        new Color(0, 0, 0),
+        new Color(169, 176, 190),
+        new Color(204, 255, 255));
   } // GEN-LAST:event_Themes_1_actionPerformed
 
   private void Themes_2_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_2_actionPerformed
-    // TODO add your handling code here:
-    boolean reset_main_class = false;
-
-    // Night colors (Nimbus based)
-    //
-
-    // JFrame.setDefaultLookAndFeelDecorated(false);
-
-    if (theme_mode.equals(THEME_TRANSPARENT)) {
-      reset_main_class = true;
-      theme_changed = true; // for checking more than one instance running
-    }
-
-    if (reset_main_class) {
-      mainClass.dispose();
-    }
-
-    try {
-      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          UIManager.setLookAndFeel(info.getClassName());
-
-          UIManager.put("control", new Color(114, 114, 114));
-          UIManager.put("nimbusBase", new Color(64, 64, 64));
-          UIManager.put("nimbusFocus", new Color(191, 191, 191));
-          UIManager.put("nimbusLightBackground", new Color(176, 176, 176));
-          // UIManager.put("nimbusSelectionBackground", new Color(90,130,195));
-          UIManager.put("text", new Color(0, 0, 0));
-          UIManager.put("nimbusBlueGrey", new Color(169, 176, 190));
-
-          SwingUtilities.updateComponentTreeUI(main.this); // moet komen na setLookAndFeel !!!
-
-          jTextField4.setBackground(
-              new java.awt.Color(192, 192, 192)); // status bar (for system messages)
-
-          break;
-        }
-      }
-      theme_mode = THEME_NIMBUS_NIGHT;
-    } catch (ClassNotFoundException
-        | InstantiationException
-        | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
-      String info = "Nimbus related Themes not supported on this computer";
-      JOptionPane.showMessageDialog(
-          null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-      main.log_turbowin_system_message("[GENERAL] " + info);
-    }
-
-    if (reset_main_class) {
-      // JFrame.setDefaultLookAndFeelDecorated(true);
-      mainClass = new main();
-      mainClass.setVisible(true);
-    }
+    // Night colors (Nimbus based).
+    ThemeWorkflow.apply(
+        this,
+        THEME_NIMBUS_NIGHT,
+        new Color(114, 114, 114),
+        new Color(64, 64, 64),
+        new Color(191, 191, 191),
+        new Color(176, 176, 176),
+        new Color(0, 0, 0),
+        new Color(169, 176, 190),
+        new Color(192, 192, 192));
   } // GEN-LAST:event_Themes_2_actionPerformed
 
   private void Themes_3_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_3_actionPerformed
-    // TODO add your handling code here:
-    boolean reset_main_class = false;
-
-    //
-    //////// Sunrise, Nimbus (vanaf Java 1.6.10) based
-    //
-    // NB dit is eigenlijk geen Theme maar compleet ander color scheme
-
-    if (theme_mode.equals(THEME_TRANSPARENT)) {
-      reset_main_class = true;
-      theme_changed = true; // for checking more than one instance running
-    }
-
-    if (reset_main_class) {
-      mainClass.dispose();
-    }
-
-    try {
-      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          UIManager.setLookAndFeel(info.getClassName());
-
-          // eg for the color values see: http://www.rapidtables.com/web/color/RGB_Color.htm
-
-          // UIManager.put("control", new Color(214,217,223));                          // panels,
-          // frame
-          UIManager.put("control", new Color(255, 178, 102));
-
-          UIManager.put(
-              "nimbusBase",
-              new Color(
-                  51, 98, 140)); // menu background unfolded items, radio buttons, yes/no buttons
-          UIManager.put(
-              "nimbusFocus",
-              new Color(
-                  115, 164,
-                  209)); // border color selected control (text field, button, radio button etc.)
-
-          // UIManager.put("nimbusLightBackground", new Color(255,255,255));            // Nimbus
-          // default    // controls wit
-          UIManager.put("nimbusLightBackground", new Color(255, 204, 153)); //  controls
-
-          // UIManager.put("nimbusSelectionBackground", new Color(57,105,138));         // Nimbus
-          // default    // selected text  ONBELANGRIJK
-          UIManager.put("text", new Color(0, 0, 0)); // black texten
-
-          UIManager.put(
-              "nimbusBlueGrey",
-              new Color(169, 176, 190)); // menu bar, text field, button, radio button etc.
-
-          SwingUtilities.updateComponentTreeUI(main.this); // moet komen na setLookAndFeel !!!
-
-          jTextField4.setBackground(
-              new java.awt.Color(255, 255, 132)); // status bar (for system messages)
-          // jTextField4.setBackground(new java.awt.Color(255,153,153));
-
-          break;
-        }
-      }
-      theme_mode = THEME_NIMBUS_SUNRISE;
-    } catch (ClassNotFoundException
-        | InstantiationException
-        | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
-      String info = "Nimbus related Themes not supported on this computer";
-      JOptionPane.showMessageDialog(
-          null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-      main.log_turbowin_system_message("[GENERAL] " + info);
-    }
-
-    if (reset_main_class) {
-      // JFrame.setDefaultLookAndFeelDecorated(true);
-      mainClass = new main();
-      mainClass.setVisible(true);
-    }
-
-    /*
-    // http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/nimbus.html
-    //
-    // Version Note: Do not set the Nimbus look and feel explicitly by invoking the UIManager.setLookAndFeel
-    // method because not all versions or implementations of Java SE 6 support Nimbus. Additionally,
-    // the location of the Nimbus package changed between the 6u10 and JDK7 releases. Iterating through
-    // all installed look and feel implementations is a more robust approach because if Nimbus is not available,
-    // the default look and feel is used. For the Java SE 6 Update 10 release, the Nimbus package is
-    // located at com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel.
-    */
-
+    // Sunrise is a separate color scheme rather than a normal Nimbus theme.
+    ThemeWorkflow.apply(
+        this,
+        THEME_NIMBUS_SUNRISE,
+        new Color(255, 178, 102),
+        new Color(51, 98, 140),
+        new Color(115, 164, 209),
+        new Color(255, 204, 153),
+        new Color(0, 0, 0),
+        new Color(169, 176, 190),
+        new Color(255, 255, 132));
   } // GEN-LAST:event_Themes_3_actionPerformed
 
   private void Input_Icing_menu_actionPerformed(
@@ -6409,84 +6236,17 @@ public class main extends javax.swing.JFrame {
 
   private void Themes_4_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_4_actionPerformed
-
-    // TODO add your handling code here:
-    boolean reset_main_class = false;
-
-    //
-    //////// Sunset, Nimbus (vanaf Java 1.6.10) based
-    //
-    // NB dit is eigenlijk geen Theme maar compleet ander color scheme
-
-    if (theme_mode.equals(THEME_TRANSPARENT)) {
-      reset_main_class = true;
-      theme_changed = true; // for checking more than one instance running
-    }
-
-    if (reset_main_class) {
-      mainClass.dispose();
-    }
-
-    try {
-      for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          UIManager.setLookAndFeel(info.getClassName());
-
-          // eg for the color values see: http://www.rapidtables.com/web/color/RGB_Color.htm
-
-          // UIManager.put("control", new Color(214,217,223));                         // Nimbus
-          // default
-          UIManager.put("control", new Color(255, 110, 110)); // panels, frame
-
-          UIManager.put(
-              "nimbusBase",
-              new Color(
-                  51, 98, 140)); // menu background unfolded items, radio buttons, yes/no buttons
-          UIManager.put(
-              "nimbusFocus",
-              new Color(
-                  115, 164,
-                  209)); // border color selected control (text field, button, radio button etc.)
-
-          // UIManager.put("nimbusLightBackground", new Color(255,255,255));           // Nimbus
-          // default    // controls wit
-          UIManager.put("nimbusLightBackground", new Color(255, 204, 204)); // controls
-
-          // UIManager.put("nimbusSelectionBackground", new Color(57,105,138));        // Nimbus
-          // default    // selected text  ONBELANGRIJK
-          UIManager.put("text", new Color(0, 0, 0)); // Nimbus default, black texten
-
-          UIManager.put(
-              "nimbusBlueGrey",
-              new Color(
-                  169, 176,
-                  190)); // Nimbus default, menu bar, text field, button, radio button etc.
-
-          SwingUtilities.updateComponentTreeUI(main.this); // moet komen na setLookAndFeel !!!
-
-          jTextField4.setBackground(
-              new java.awt.Color(255, 51, 51)); // status bar (for system messages)
-          // jTextField4.setBackground(new java.awt.Color(255,153,153));
-
-          break;
-        }
-      }
-      theme_mode = THEME_NIMBUS_SUNSET;
-    } catch (ClassNotFoundException
-        | InstantiationException
-        | IllegalAccessException
-        | UnsupportedLookAndFeelException e) {
-      String info = "Nimbus related Themes not supported on this computer";
-      JOptionPane.showMessageDialog(
-          null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-      main.log_turbowin_system_message("[GENERAL] " + info);
-    }
-
-    if (reset_main_class) {
-      // JFrame.setDefaultLookAndFeelDecorated(true);
-      mainClass = new main();
-      mainClass.setVisible(true);
-    }
+    // Sunset is a separate color scheme rather than a normal Nimbus theme.
+    ThemeWorkflow.apply(
+        this,
+        THEME_NIMBUS_SUNSET,
+        new Color(255, 110, 110),
+        new Color(51, 98, 140),
+        new Color(115, 164, 209),
+        new Color(255, 204, 204),
+        new Color(0, 0, 0),
+        new Color(169, 176, 190),
+        new Color(255, 51, 51));
   } // GEN-LAST:event_Themes_4_actionPerformed
 
   private void Info_send_System_log_menu_actionperformed(
