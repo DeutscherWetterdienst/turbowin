@@ -4644,34 +4644,7 @@ public class main extends javax.swing.JFrame {
   private void Maintenance_Move_log_files_to_disk_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maintenance_Move_log_files_to_disk_actionPerformed
-    // TODO add your handling code here:
-
-    String move_mode_logs = MOVE_TO_DISK;
-    String info = "";
-    boolean doorgaan = true;
-
-    /* are you sure? */
-    info =
-        "Uploading log files should be undertaken when it is intended to return the stored log files"
-            + " to the National Meteorological Service.\nDo you wish to proceed";
-
-    if (JOptionPane.showConfirmDialog(
-            null, info, main.APPLICATION_NAME + " message", JOptionPane.YES_NO_OPTION)
-        == JOptionPane.YES_OPTION) {
-      doorgaan = true;
-    } else {
-      JOptionPane.showMessageDialog(
-          null,
-          "moving log files process cancelled",
-          APPLICATION_NAME + " message",
-          JOptionPane.INFORMATION_MESSAGE);
-      doorgaan = false;
-    }
-
-    if (doorgaan == true) {
-      support_class.Move_log_files(
-          move_mode_logs); // return value of Move_log_files not from interest in this function
-    }
+    LogFilesDiskWorkflow.start();
   } // GEN-LAST:event_Maintenance_Move_log_files_to_disk_actionPerformed
 
   private void Maintenance_Observer_menu_actionPerformed(
