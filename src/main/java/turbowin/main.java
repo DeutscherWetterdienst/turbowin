@@ -4050,65 +4050,29 @@ public class main extends javax.swing.JFrame {
   }
 
   private void loadImage_straight(final String imagePath) {
-    if (imagePath.equals(main.ICONS_DIRECTORY + "date_time.png")) {
-      ImageIcon toolbar_img_date_time = createImageIcon(imagePath);
-      jButton2.setIcon(toolbar_img_date_time);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "position.png")) {
-      ImageIcon toolbar_img_position = createImageIcon(imagePath);
-      jButton3.setIcon(toolbar_img_position);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "wind.png")) {
-      ImageIcon toolbar_img_wind = createImageIcon(imagePath);
-      jButton4.setIcon(toolbar_img_wind);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "waves.png")) {
-      ImageIcon toolbar_img_waves = createImageIcon(imagePath);
-      jButton5.setIcon(toolbar_img_waves);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "barometer.png")) {
-      ImageIcon toolbar_img_barometer = createImageIcon(imagePath);
-      jButton6.setIcon(toolbar_img_barometer);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "barograph.png")) {
-      ImageIcon toolbar_img_barograph = createImageIcon(imagePath);
-      jButton7.setIcon(toolbar_img_barograph);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "temperatures.png")) {
-      ImageIcon toolbar_img_temperatures = createImageIcon(imagePath);
-      jButton8.setIcon(toolbar_img_temperatures);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "present_weather.png")) {
-      ImageIcon toolbar_img_present_weather = createImageIcon(imagePath);
-      jButton9.setIcon(toolbar_img_present_weather);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "past_weather.png")) {
-      ImageIcon toolbar_img_past_weather = createImageIcon(imagePath);
-      jButton10.setIcon(toolbar_img_past_weather);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "visibility.png")) {
-      ImageIcon toolbar_img_visibility = createImageIcon(imagePath);
-      jButton11.setIcon(toolbar_img_visibility);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "cl.png")) {
-      ImageIcon toolbar_img_cl = createImageIcon(imagePath);
-      jButton12.setIcon(toolbar_img_cl);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "cm.png")) {
-      ImageIcon toolbar_img_cm = createImageIcon(imagePath);
-      jButton13.setIcon(toolbar_img_cm);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "ch.png")) {
-      ImageIcon toolbar_img_ch = createImageIcon(imagePath);
-      jButton14.setIcon(toolbar_img_ch);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "height.png")) {
-      ImageIcon toolbar_img_clouds_height = createImageIcon(imagePath);
-      jButton15.setIcon(toolbar_img_clouds_height);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "icing.png")) {
-      ImageIcon toolbar_img_icing = createImageIcon(imagePath);
-      jButton16.setIcon(toolbar_img_icing);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "ice.png")) {
-      ImageIcon toolbar_img_ice = createImageIcon(imagePath);
-      jButton17.setIcon(toolbar_img_ice);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "observers.png")) {
-      ImageIcon toolbar_img_observers = createImageIcon(imagePath);
-      jButton18.setIcon(toolbar_img_observers);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "captains.png")) {
-      ImageIcon toolbar_img_captains = createImageIcon(imagePath);
-      jButton19.setIcon(toolbar_img_captains);
-    } else if (imagePath.equals(main.ICONS_DIRECTORY + "next_screen.png")) {
-      ImageIcon toolbar_img_next_screen = createImageIcon(imagePath);
-      jButton20.setIcon(toolbar_img_next_screen);
-    }
-  } // private void loadImage(final String imagePath, final int index)
+    ToolbarIconUpdater.update(
+        imagePath,
+        createImageIcon(imagePath),
+        jButton2,
+        jButton3,
+        jButton4,
+        jButton5,
+        jButton6,
+        jButton7,
+        jButton8,
+        jButton9,
+        jButton10,
+        jButton11,
+        jButton12,
+        jButton13,
+        jButton14,
+        jButton15,
+        jButton16,
+        jButton17,
+        jButton18,
+        jButton19,
+        jButton20);
+  }
 
   private void initImages() {
     String os = OSDetector.getOSString();
