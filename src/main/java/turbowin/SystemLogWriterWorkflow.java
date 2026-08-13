@@ -14,6 +14,23 @@ final class SystemLogWriterWorkflow {
 
   private SystemLogWriterWorkflow() {}
 
+  static String logFileName(String month) {
+    return "turbowin_system_" + month + ".txt";
+  }
+
+  static String logFilePath(String logsDirectory, String systemLogsDirectory, String month) {
+    return logsDirectory
+        + File.separator
+        + systemLogsDirectory
+        + File.separator
+        + logFileName(month);
+  }
+
+  static String logLine(String timestamp, String message) {
+    java.util.Objects.requireNonNull(message);
+    return timestamp + " UTC " + message;
+  }
+
   static void start(String message) {
     // The console receives the raw message; the file uses a UTC timestamp and the format
     // turbowin_system_MMM_yyyy.txt for its monthly log file.
@@ -22,18 +39,13 @@ final class SystemLogWriterWorkflow {
     new SwingWorker<Void, Void>() {
       @Override
       protected Void doInBackground() throws Exception {
-        String file_naam = "turbowin_system_" + main.sdf_tsl_1.format(new Date()) + ".txt";
+        String month = main.sdf_tsl_1.format(new Date());
         String volledig_path_turbowin_system_logs =
-            main.logs_dir
-                + java.io.File.separator
-                + main.TURBOWIN_SYSTEM_LOGS_DIR
-                + java.io.File.separator
-                + file_naam;
+            logFilePath(main.logs_dir, main.TURBOWIN_SYSTEM_LOGS_DIR, month);
 
         try (BufferedWriter out =
             new BufferedWriter(new FileWriter(volledig_path_turbowin_system_logs, true))) {
-          out.write(main.sdf_tsl_2.format(new Date()) + " UTC ");
-          out.write(message);
+          out.write(logLine(main.sdf_tsl_2.format(new Date()), message));
           out.newLine();
         } catch (IOException ex) {
           System.out.println("+++ " + ex + "; trying to create the logs folder");
