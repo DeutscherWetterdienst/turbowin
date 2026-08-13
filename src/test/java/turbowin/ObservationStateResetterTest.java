@@ -77,4 +77,25 @@ public class ObservationStateResetterTest {
     assertEquals(Double.MAX_VALUE, myposition.SOG_APR_wind, 0.0);
     assertEquals(Double.MAX_VALUE, myposition.COG_APR_wind, 0.0);
   }
+
+  @Test
+  public void resetsWeatherPositionAndDateTimeState() {
+    mycloudcover.N = "8";
+    mywaves.swell_1_height = "3";
+    myicing.Is_code = "I";
+    myice1.ci_code = "C";
+    myposition.longitude_degrees = "4";
+    myposition.SOG_APR = 12;
+    mydatetime.GG_code = "10";
+
+    ObservationStateResetter.resetValues();
+
+    assertEquals("", mycloudcover.N);
+    assertEquals("", mywaves.swell_1_height);
+    assertEquals("", myicing.Is_code);
+    assertEquals("", myice1.ci_code);
+    assertEquals("", myposition.longitude_degrees);
+    assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
+    assertEquals("", mydatetime.GG_code);
+  }
 }
