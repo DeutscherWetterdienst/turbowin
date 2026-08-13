@@ -6585,9 +6585,11 @@ public class main extends javax.swing.JFrame {
     graph_form = null;
 
     // all specific RS232 and RS422 functions
-    RS232_RS422 = new main_RS232_RS422();
-    RS232_mintaka_class = new RS232_mintaka();
-    RS232_vaisala_class = new RS232_vaisala();
+    StartupCommunicationWorkflow.CommunicationComponents communicationComponents =
+        StartupCommunicationWorkflow.initialize();
+    RS232_RS422 = communicationComponents.serial;
+    RS232_mintaka_class = communicationComponents.mintaka;
+    RS232_vaisala_class = communicationComponents.vaisala;
 
     // for hybrid and radar dashboard
     myship = null;
