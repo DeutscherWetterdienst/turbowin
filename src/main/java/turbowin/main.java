@@ -6595,12 +6595,9 @@ public class main extends javax.swing.JFrame {
     /* read stored meta (station) data from muffins or from configuration files */
     if (offline_mode_via_cmd == true) // offline mode
     {
-      if (!theme_changed) {
-        s = OfflineStartupWorkflow.openInstanceCheck(PORT_command_line, PORT);
-      }
-
-      // read stored meta data
-      ApplicationStartupWorkflow.loadConfiguration(this, true);
+      s =
+          StartupConfigurationWorkflow.initializeCommandLineOffline(
+              this, theme_changed, PORT_command_line, PORT);
     } else // so offline_via_jnlp mode or online (webstart) mode
     {
       //
