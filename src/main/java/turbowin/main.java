@@ -6683,32 +6683,7 @@ public class main extends javax.swing.JFrame {
 
   public static void Reset_all_meteo_parameters() {
     ObservationStateResetter.resetValues();
-
-    // update of the fields on the main screen (and obs line on bottom main screen)
-    //
-    date_time_fields_update();
-    visibility_fields_update();
-    barometer_fields_update();
-    barograph_fields_update();
-    cloud_cover_fields_update();
-    clouds_high_fields_update();
-    clouds_low_fields_update();
-    clouds_middle_fields_update();
-    ice_fields_update();
-    icing_fields_update();
-    observer_field_update();
-    past_weather_fields_update();
-    position_fields_update();
-    present_weather_fields_update();
-    temperatures_fields_update();
-    waves_fields_update();
-    wind_fields_update();
-
-    // APR Dashboard reset
-    //
-    if (main.dashboard_form_APR_radar != null) {
-      DASHBOARD_view_APR_radar.reset_APR_wind_variables();
-    }
+    ObservationScreenResetWorkflow.refresh();
   }
 
   public static void delete_logs_turbowin_system() {
