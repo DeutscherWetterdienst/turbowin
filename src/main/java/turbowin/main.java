@@ -17,12 +17,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -6672,51 +6670,14 @@ public class main extends javax.swing.JFrame {
     /* read stored meta (station) data from muffins or from configuration files */
     if (offline_mode_via_cmd == true) // offline mode
     {
-      // check only one instance running (but not if this main class was created again due to a
-      // Theme change)
       if (!theme_changed) {
-        int port_for_checking_instances = PORT; // pORT is the default (cconstant)
-
-        try {
-          // NB PORT = 12345 at start up (= randomly chosen big number)
-          //    can be over ruled by the first argument at command line at start up (see main)
-          if (PORT_command_line.equals("") == false) {
-            try {
-              port_for_checking_instances = Integer.parseInt(PORT_command_line);
-            } catch (NumberFormatException e) {
-              JOptionPane.showMessageDialog(
-                  null,
-                  "command line argument PORT number not OK",
-                  main.APPLICATION_NAME + " error",
-                  JOptionPane.WARNING_MESSAGE);
-              port_for_checking_instances = PORT;
-            }
-          } // if (PORT_command_line.equals(""))
-
-          System.out.println(
-              "--- server port for checking multiple instances running = "
-                  + port_for_checking_instances);
-
-          // s = new ServerSocket(PORT, 10, InetAddress.getLocalHost());
-          s = new ServerSocket(port_for_checking_instances, 10, InetAddress.getLocalHost());
-        } catch (UnknownHostException e) {
-          // shouldn't happen for localhost
-        } catch (IOException e) {
-          // port taken, so app is already running
-          JOptionPane.showMessageDialog(
-              null,
-              "TurboWin+ is already running",
-              main.APPLICATION_NAME,
-              JOptionPane.ERROR_MESSAGE);
-          System.exit(0);
-        }
-      } // if (!theme_changed)
+        s = OfflineStartupWorkflow.openInstanceCheck(PORT_command_line, PORT);
+      }
 
       // read stored meta data
       lees_configuratie_regels();
     } else // so offline_via_jnlp mode or online (webstart) mode
     {
-      // only jnlp mode can use the single instance running check
       //
       // in offline mode: So by removing the file turbowin_plus_offline.cmd and invoking turbowin+
       // via turbowin_jws_offline.jnlp there will be only a single instance running check
@@ -6724,8 +6685,7 @@ public class main extends javax.swing.JFrame {
       //
       //
 
-      // check only one instance running  (but not if this main class was created again due to a
-      // Theme change)
+      // Theme changes recreate this main window; do not open a second instance-check socket.
       if (!theme_changed) {
         // try
         // {
