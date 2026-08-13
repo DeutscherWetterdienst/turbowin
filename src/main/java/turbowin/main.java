@@ -6618,60 +6618,7 @@ public class main extends javax.swing.JFrame {
 
     /* always for offline mode !!! fixed sub dir logs and sub dir amver(not user configurable) */
     if (offline_mode == true) {
-      // logs sub dir
-      //
-      // NB logs dir fixed for offline mode (sub dir of main dir -main dir is the dir where jar file
-      // is located-)
-      logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
-      // JOptionPane.showMessageDialog(null, logs_dir, main.APPLICATION_NAME + " logs_dir test",
-      // JOptionPane.WARNING_MESSAGE);
-
-      /* check sub dir logs already present, if not -> create */
-      final File dirs = new File(logs_dir);
-      if (dirs.exists() == false) {
-        final boolean success = dirs.mkdirs();
-        if (success == false) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Could not create " + logs_dir + ", disk write protected or no permission to write",
-              main.APPLICATION_NAME + " error",
-              JOptionPane.WARNING_MESSAGE);
-        }
-      } // if (dirs.exists() == false)
-
-      //
-      if (dirs.isDirectory()) {
-        // create sub dir TURBOWIN_SYSTEM_LOGS (turbowin_system)
-        String turbowin_system_logs_dir =
-            main.logs_dir + java.io.File.separator + main.TURBOWIN_SYSTEM_LOGS_DIR;
-        final File dir_turbowin_system_logs = new File(turbowin_system_logs_dir);
-        if (dir_turbowin_system_logs.exists() == false) {
-          dir_turbowin_system_logs.mkdir();
-          log_turbowin_system_message("[GENERAL] created dir " + turbowin_system_logs_dir);
-        }
-      } //  if (dirs.isDirectory())
-
-      // amver sub dir
-      //
-      // NB amver dir fixed for offline mode (sub dir of main dir -main dir is the dir where jar
-      // file is located-)
-      String amver_dir = data_dir + java.io.File.separator + OFFLINE_AMVER_DIR;
-
-      /* check sub dir amver already present, if not -> create */
-      final File dirs_amver = new File(amver_dir);
-      if (dirs_amver.exists() == false) {
-        final boolean success = dirs_amver.mkdirs();
-        if (success == false) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Could not create " + amver_dir + ", disk write protected or no permission to write",
-              main.APPLICATION_NAME + " error",
-              JOptionPane.WARNING_MESSAGE);
-        }
-      } // if (dirs.exists() == false)
-    } // if (offline_mode == true)
-
-    if (offline_mode == true) {
+      StartupDirectorySetup.initialize(StartupDirectorySetup.directories(data_dir));
       /* So file turbowin_jws_offline.jnlp and/or turbowin_plus_offline.cmd exists (TurboWeb online version: than these files wil not be present) */
       // offline_mode = true;
 
