@@ -4098,14 +4098,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Wind_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Wind_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (wind_form == null)
-    // {
-    //   wind_form = new mywind();
-    //   wind_form.setSize(800, 600);
-    // }
-    // wind_form.setVisible(true);
-
     mywind form = new mywind();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4113,14 +4105,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudcover_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudcover_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (cloudcover_form == null)
-    // {
-    //   cloudcover_form = new mycloudcover();
-    //   cloudcover_form.setSize(800, 600);
-    // }
-    // cloudcover_form.setVisible(true);
-
     mycloudcover form = new mycloudcover();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4128,14 +4112,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Presentweather_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Presentweather_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (presentweather_form == null)
-    // {
-    //   presentweather_form = new mypresentweather();
-    //   presentweather_form.setSize(800, 600);
-    // }
-    // presentweather_form.setVisible(true);
-
     mypresentweather form = new mypresentweather();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4143,8 +4119,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_waves_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_waves_menu_actionPerformed
-    // TODO add your handling code here:
-
     mywaves form = new mywaves();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4224,14 +4198,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudshigh_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudshigh_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (ch_form == null)
-    // {
-    //   ch_form = new mych();
-    //   ch_form.setSize(800, 600);
-    // }
-    // ch_form.setVisible(true);
-
     mych form = new mych();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4239,8 +4205,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Position_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Position_menu_actionPerformed
-    // TODO add your handling code here:
-
     // date time for leaflet Map plot
     leaflet_maps_obs_day = mydatetime.day; // for date-time on leaflet map
     leaflet_maps_obs_month = mydatetime.month; // for date-time on leaflet map
@@ -4305,13 +4269,6 @@ public class main extends javax.swing.JFrame {
       leaflet_maps_obs_msl_pressure = "";
     }
 
-    // if (position_form == null)
-    // {
-    //   position_form = new myposition();
-    //   position_form.setSize(800, 600);
-    // }
-    // position_form.setVisible(true);
-
     myposition form = new myposition();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4319,8 +4276,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_DateTime_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_DateTime_menu_actionPerformed
-    // TODO add your handling code here:
-
     // NB in serial connection mose (AWS or barometer connected) after an obs was send all
     // parameters will be set to blank,
     //    the "date & time obs" will be automatically updated/shown again (in case AWS every minute
@@ -4348,13 +4303,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Visibility_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Visibility_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (visibility_form == null)
-    // {
-    //   visibility_form = new myvisibility();
-    //   visibility_form.setSize(800, 600);
-    // }
-    // visibility_form.setVisible(true);
     myvisibility form = new myvisibility();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4362,21 +4310,11 @@ public class main extends javax.swing.JFrame {
 
   private void File_Exit_menu_actionPerformd(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_File_Exit_menu_actionPerformd
-    // TODO add your handling code here:
-
     main_windowClosing(null);
   } // GEN-LAST:event_File_Exit_menu_actionPerformd
 
   void Input_Pastweather_menu_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Pastweather_menu_actionperformed
-    // TODO add your handling code here:
-    // if (pastweather_form == null)
-    // {
-    //   pastweather_form = new mypastweather();
-    //   pastweather_form.setSize(800, 600);
-    // }
-    // pastweather_form.setVisible(true);
-
     mypastweather form = new mypastweather();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4384,14 +4322,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudslow_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudslow_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (cl_form == null)
-    // {
-    //   cl_form = new mycl();
-    //   cl_form.setSize(800, 600);
-    // }
-    // cl_form.setVisible(true);
-
     mycl form = new mycl();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4399,14 +4329,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudsmiddle_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudsmiddle_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (cm_form == null)
-    // {
-    //   cm_form = new mycm();
-    //   cm_form.setSize(800, 600);
-    // }
-    // cm_form.setVisible(true);
-
     mycm form = new mycm();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4414,14 +4336,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Temperatures_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Temperatures_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (temp_form == null)
-    // {
-    //   temp_form = new mytemp();
-    //   temp_form.setSize(800, 600);
-    // }
-    // temp_form.setVisible(true);
-
     mytemp form = new mytemp();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4429,8 +4343,6 @@ public class main extends javax.swing.JFrame {
 
   private void Maintenance_Stationdata_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Stationdata_actionPerformed
-    // TODO add your handling code here:
-
     mode = STATION_DATA;
 
     if (main_support.password_ok) // no password needed, direct to the station data form
@@ -4449,14 +4361,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Barometer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barometer_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (barometer_form == null)
-    // {
-    //   barometer_form = new mybarometer();
-    //   barometer_form.setSize(800, 600);
-    // }
-    // barometer_form.setVisible(true);
-
     mybarometer form = new mybarometer();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4464,14 +4368,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Barograph_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barograph_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (barograph_form == null)
-    // {
-    //   barograph_form = new mybarograph();
-    //   barograph_form.setSize(800, 600);
-    // }
-    // barograph_form.setVisible(true);
-
     mybarograph form = new mybarograph();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4479,7 +4375,6 @@ public class main extends javax.swing.JFrame {
 
   private void Info_About_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_About_menu_actionPerformed
-    // TODO add your handling code here:
     about form = new about();
     form.setSize(600, 700);
     form.setVisible(true);
@@ -4497,8 +4392,6 @@ public class main extends javax.swing.JFrame {
   private void Maintenance_Email_settings_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maintenance_Email_settings_actionPerformed
-    // TODO add your handling code here:
-
     mode = EMAIL_SETTINGS;
 
     if (main_support.password_ok) // no password needed, direct to the email settings form
@@ -4515,8 +4408,6 @@ public class main extends javax.swing.JFrame {
 
   private void Maintenance_Log_files_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Log_files_actionPerformed
-    // TODO add your handling code here:
-
     mode = LOG_FILES;
 
     if (main_support.password_ok) // no password needed, direct to the log files settings form
@@ -4533,14 +4424,6 @@ public class main extends javax.swing.JFrame {
 
   void Input_Observer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Observer_menu_actionPerformed
-    // TODO add your handling code here:
-    // if (observer_form == null)
-    // {
-    //   observer_form = new myobserver();
-    //   observer_form.setSize(800, 600);
-    // }
-    // observer_form.setVisible(true);
-
     myobserver form = new myobserver();
     form.setSize(800, 600);
     form.setVisible(true);
@@ -4554,20 +4437,11 @@ public class main extends javax.swing.JFrame {
 
   private void Maintenance_Observer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Observer_menu_actionPerformed
-    // TODO add your handling code here:
     Input_Observer_menu_actionPerformed(evt);
   } // GEN-LAST:event_Maintenance_Observer_menu_actionPerformed
 
   private void Maintenance_Captains_Menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Captains_Menu_actionPerformed
-    // TODO add your handling code here:
-    // if (captain_form == null)
-    // {
-    //   captain_form = new mycaptain();
-    //   captain_form.setSize(800, 600);
-    // }
-    // captain_form.setVisible(true);
-
     mycaptain form = new mycaptain();
     form.setSize(800, 600);
     form.setVisible(true);
