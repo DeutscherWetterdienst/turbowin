@@ -12,6 +12,12 @@ final class ConfigurationWriteWorkflow {
 
   private ConfigurationWriteWorkflow() {}
 
+  static void writeConfigurationFile(String directory, String[] lines, int maximumLines)
+      throws IOException {
+    ConfigurationFileStore.write(
+        new File(directory + File.separator + CONFIGURATION_FILE), lines, maximumLines);
+  }
+
   static void write() {
     fill_configuratie_array();
 
@@ -19,10 +25,8 @@ final class ConfigurationWriteWorkflow {
       new SwingWorker<Void, Void>() {
         @Override
         protected Void doInBackground() throws Exception {
-          String path = data_dir + File.separator + CONFIGURATION_FILE;
           try {
-            ConfigurationFileStore.write(
-                new File(path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
+            writeConfigurationFile(data_dir, configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
           } catch (IOException ex) {
             System.out.println("--- Function schrijf_configuratie_regels(): " + ex);
           }
@@ -35,14 +39,12 @@ final class ConfigurationWriteWorkflow {
       new SwingWorker<Void, Void>() {
         @Override
         protected Void doInBackground() throws Exception {
-          String path = logs_dir + File.separator + CONFIGURATION_FILE;
           try {
-            ConfigurationFileStore.write(
-                new File(path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
+            writeConfigurationFile(logs_dir, configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
           } catch (IOException ex) {
             JOptionPane.showMessageDialog(
                 null,
-                "unable to write to: " + path,
+                "unable to write to: " + logs_dir + File.separator + CONFIGURATION_FILE,
                 APPLICATION_NAME + " error",
                 JOptionPane.WARNING_MESSAGE);
           }
