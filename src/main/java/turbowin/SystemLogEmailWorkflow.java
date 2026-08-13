@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -16,6 +17,24 @@ import javax.swing.SwingWorker;
 final class SystemLogEmailWorkflow {
 
   private SystemLogEmailWorkflow() {}
+
+  static File[] recentLogFiles(
+      String logsDirectory,
+      String systemLogsDirectory,
+      java.text.SimpleDateFormat monthlyFormat,
+      Calendar calendar) {
+    Date currentMonth = calendar.getTime();
+    calendar.add(Calendar.MONTH, -1);
+    Date previousMonth = calendar.getTime();
+    return new File[] {
+      new File(
+          SystemLogWriterWorkflow.logFilePath(
+              logsDirectory, systemLogsDirectory, monthlyFormat.format(currentMonth))),
+      new File(
+          SystemLogWriterWorkflow.logFilePath(
+              logsDirectory, systemLogsDirectory, monthlyFormat.format(previousMonth)))
+    };
+  }
 
   static void start() {
     new SwingWorker<Void, Void>() {
@@ -29,18 +48,10 @@ final class SystemLogEmailWorkflow {
           try {
             TimeZone timeZone = TimeZone.getTimeZone("UTC");
             Calendar cal = Calendar.getInstance(timeZone);
-
-            String file_naam_1 = "turbowin_system_" + sdf_tsl_1.format(cal.getTime()) + ".txt";
-            cal.add(Calendar.MONTH, -1);
-            String file_naam_2 = "turbowin_system_" + sdf_tsl_1.format(cal.getTime()) + ".txt";
-
-            String logs_path =
-                main.logs_dir
-                    + java.io.File.separator
-                    + main.TURBOWIN_SYSTEM_LOGS_DIR
-                    + java.io.File.separator;
-            File system_file_1 = new File(logs_path + file_naam_1);
-            File system_file_2 = new File(logs_path + file_naam_2);
+            File[] recentLogFiles =
+                recentLogFiles(main.logs_dir, main.TURBOWIN_SYSTEM_LOGS_DIR, sdf_tsl_1, cal);
+            File system_file_1 = recentLogFiles[0];
+            File system_file_2 = recentLogFiles[1];
 
             // Writing every system-log line into the mail body fails; list the current and
             // previous monthly log files for manual attachment instead.
