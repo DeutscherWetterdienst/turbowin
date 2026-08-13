@@ -6631,11 +6631,7 @@ public class main extends javax.swing.JFrame {
     } // else
 
     // get the systemTrays instance
-    if (!SystemTray.isSupported()) {
-      log_turbowin_system_message("[GENERAL] SystemTray is not supported");
-    } else {
-      tray = SystemTray.getSystemTray();
-    }
+    SystemTrayWorkflow.initialize();
 
     // check wind speed units source in AWS mode
     // NB not available in this stage so see: check_meta_data() [main.java]

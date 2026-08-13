@@ -23,6 +23,14 @@ final class SystemTrayWorkflow {
     return osType == OSDetector.OSType.WINDOWS;
   }
 
+  static void initialize() {
+    if (!SystemTray.isSupported()) {
+      log_turbowin_system_message("[GENERAL] SystemTray is not supported");
+    } else {
+      tray = SystemTray.getSystemTray();
+    }
+  }
+
   static void handle(main owner) {
     // TODO add your handling code here:
 
