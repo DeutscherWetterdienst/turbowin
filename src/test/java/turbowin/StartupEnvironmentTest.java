@@ -61,7 +61,7 @@ public class StartupEnvironmentTest {
   }
 
   @Test
-  public void distinguishesJnlpAndCommandLineMarkers() throws IOException {
+  public void remainsOfflineWithoutMarkersWhileTrackingLegacyMarkers() throws IOException {
     File directory = Files.createTempDirectory("turbowin-startup").toFile();
     File jnlpFile = new File(directory, "offline.jnlp");
     File commandLineFile = new File(directory, "offline.cmd");

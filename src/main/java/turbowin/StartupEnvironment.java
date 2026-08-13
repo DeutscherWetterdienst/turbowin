@@ -2,7 +2,12 @@ package turbowin;
 
 import java.io.File;
 
-/** Calculates startup paths and offline-mode flags without touching application state. */
+/**
+ * Calculates startup paths and offline-mode flags without touching application state.
+ *
+ * <p>The current TurboWin deployment is intentionally offline-only. The marker flags remain
+ * available because legacy JNLP and launcher startup routes still use them.
+ */
 final class StartupEnvironment {
 
   private StartupEnvironment() {}
@@ -32,6 +37,7 @@ final class StartupEnvironment {
         || new File(dataDirectoryFile, linuxLauncherFile).exists()) {
       viaCommandLine = true;
     }
+    // Keep the application in offline mode; web mode is retained only as legacy compatibility.
     return new OfflineMode(true, viaJnlp, viaCommandLine);
   }
 
