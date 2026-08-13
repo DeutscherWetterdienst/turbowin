@@ -19,4 +19,11 @@ public class StartupThemeWorkflowTest {
     assertFalse(StartupThemeWorkflow.usesLinuxFont(main.THEME_TRANSPARENT, "WINDOWS"));
     assertFalse(StartupThemeWorkflow.usesLinuxFont("", "LINUX"));
   }
+
+  @Test
+  public void identifiesMissingUbuntuFontOnLinux() {
+    assertTrue(StartupThemeWorkflow.requiresUbuntuFontWarning("LINUX", "Dialog"));
+    assertFalse(StartupThemeWorkflow.requiresUbuntuFontWarning("LINUX", "Ubuntu"));
+    assertFalse(StartupThemeWorkflow.requiresUbuntuFontWarning("WINDOWS", "Dialog"));
+  }
 }

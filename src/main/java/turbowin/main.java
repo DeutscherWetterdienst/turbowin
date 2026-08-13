@@ -374,28 +374,7 @@ public class main extends javax.swing.JFrame {
     initImages();
     initComponents2();
 
-    if (theme_mode.equals(THEME_TRANSPARENT)) {
-      // NB before, by invoking initComponents2(), most of the main start-up settings were already
-      // done
-      //    but the specific main screen (menu) items settings must be done again
-
-      setOpacity(0.75f);
-
-      // font check
-      String os = OSDetector.getOSString();
-
-      if (os.equals("LINUX")) {
-        Font f = jLabel1.getFont();
-        String fontName = f.getFontName();
-        if (fontName.equals("Ubuntu") == false) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Install Ubuntu fonts for a better GUI lay out in opacity Theme mode",
-              main.APPLICATION_NAME,
-              JOptionPane.WARNING_MESSAGE);
-        }
-      }
-    } // else if (theme_mode.equals(THEME_TRANSPARENT))
+    StartupThemeWorkflow.finishTransparentTheme(this, OSDetector.getOSString(), jLabel1.getFont());
 
     // Font name to console (all operating systems)
     Font f = jLabel1.getFont();

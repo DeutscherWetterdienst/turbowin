@@ -1,6 +1,7 @@
 package turbowin;
 
 import java.awt.Font;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -18,6 +19,10 @@ final class StartupThemeWorkflow {
     return usesTransparentTheme(theme) && "LINUX".equals(os);
   }
 
+  static boolean requiresUbuntuFontWarning(String os, String fontName) {
+    return "LINUX".equals(os) && !"Ubuntu".equals(fontName);
+  }
+
   static void initialize(main owner) {
     if (!usesTransparentTheme(main.theme_mode)) {
       applyNimbusOrFallbackLookAndFeel();
@@ -32,6 +37,21 @@ final class StartupThemeWorkflow {
       // Without Ubuntu 12-point font, transparent-mode labels and text take too much space; this
       // workaround is for Linux only, not Windows, and must run before initComponents().
       main.setUIFont(new javax.swing.plaf.FontUIResource("Ubuntu", Font.PLAIN, 12));
+    }
+  }
+
+  static void finishTransparentTheme(main owner, String os, Font labelFont) {
+    if (!usesTransparentTheme(main.theme_mode)) {
+      return;
+    }
+
+    owner.setOpacity(0.75f);
+    if (requiresUbuntuFontWarning(os, labelFont.getFontName())) {
+      JOptionPane.showMessageDialog(
+          null,
+          "Install Ubuntu fonts for a better GUI lay out in opacity Theme mode",
+          main.APPLICATION_NAME,
+          JOptionPane.WARNING_MESSAGE);
     }
   }
 
