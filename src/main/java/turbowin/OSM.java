@@ -1093,119 +1093,16 @@ public class OSM {
         new BufferedWriter(new FileWriter(full_path_leaflet_maps_html_file))) {
       if (main.OSM_mode.equals(main.OSM_ONLINE_MANUAL)
           || main.OSM_mode.equals(main.OSM_ONLINE_AWS_VISUAL)) {
-        out.write("<html>");
-        out.newLine();
-        out.write("<head>");
-        out.newLine();
-        out.write("  <meta charset=utf-8 />");
-        out.newLine();
-        out.newLine();
-        out.write("  <title>TurboWin+ Obs's Map (internet)</title>");
-        out.newLine();
-        out.write(
-            "  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />");
-        out.newLine();
-        out.newLine();
-        out.write("  <!-- Load Leaflet from CDN -->");
-        out.newLine();
-        out.write(main.LEAFLET_CSS_URL);
-        out.newLine();
-        out.write(main.LEAFLET_CSS_INTEGRITY);
-        out.newLine();
-        out.write("  crossorigin=\"\"/>");
-        out.newLine();
-        out.write(main.LEAFLET_JS_URL);
-        out.newLine();
-        out.write(main.LEAFLET_JS_INTEGRITY);
-        out.newLine();
-        out.write("  crossorigin=\"\"></script>");
-        out.newLine();
-        out.newLine();
-        out.write("  <!-- Load Esri Leaflet from CDN -->");
-        out.newLine();
-        out.write(main.LEAFLET_ESRI_URL);
-        out.newLine();
-        out.write(main.LEAFLET_ESRI_INTEGRITY);
-        out.newLine();
-        out.write("  crossorigin=\"\"></script>");
-        out.newLine();
-        out.newLine();
-        out.write("  <style>");
-        out.newLine();
-        out.write("    body { margin:0; padding:0; }");
-        out.newLine();
-        out.write("    #map { position: absolute; top:0; bottom:0; right:0; left:0; }");
-        out.newLine();
-        out.write("  </style>");
-        out.newLine();
-        out.newLine();
-        out.write("</head>");
-        out.newLine();
-        out.newLine();
-        out.write("<body>");
-        out.newLine();
-        out.write("<div id=\"map\"></div>");
-        out.newLine();
-        out.newLine();
-        out.write("<script>");
-        out.newLine();
-        out.write("  var map = L.map(\"map\").setView([" + "0.0" + "," + "0.0" + "], 3);");
-        out.newLine(); // origin of the map at 0.0 N and 0.0 E
-        out.write("  L.esri.basemapLayer(\"Topographic\").addTo(map);");
-        out.newLine();
-        out.write("  var markerOptions = { };");
-        out.newLine();
-        out.newLine();
+        OsmMapHtmlWriter.writeOnlineShell(out, "TurboWin+ Obs's Map (internet)");
       } // if (main.OSM_mode.equals(main.OSM_ONLINE_MANUAL) ||
       // main.OSM_mode.equals(main.OSM_ONLINE_AWS_VISUAL))
       else if (main.OSM_mode.equals(main.OSM_OFFLINE_MANUAL)
           || main.OSM_mode.equals(main.OSM_OFFLINE_AWS_VISUAL)) // offline
       {
-        out.write("<html>");
-        out.newLine();
-        out.write("<head>");
-        out.newLine();
-        // out.write("  <meta charset=utf-8 />");out.newLine();
-        out.newLine();
-        out.write("  <title>TurboWin+ Obs's Map (offline)</title>");
-        out.newLine();
-        out.write(
-            "  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />");
-        out.newLine();
-        out.newLine();
-        out.write("  <link rel=\"stylesheet\" charset=\"utf-8\" href=\"leaflet.css\" />");
-        out.newLine();
-        out.write(
-            "  <script type=\"text/javascript\" charset=\"utf-8\" src=\"leaflet.js\"></script>");
-        out.newLine();
-        out.newLine();
-        out.write("  <style>");
-        out.newLine();
-        out.write("    body { margin:0; padding:0; }");
-        out.newLine();
-        out.write("    #map { position: absolute; top:0; bottom:0; right:0; left:0; }");
-        out.newLine();
-        out.write("  </style>");
-        out.newLine();
-        out.newLine();
-        out.write("<body>");
-        out.newLine();
-        out.write("<div id=\"map\"></div>");
-        out.newLine();
-        out.newLine();
-        out.write("<script>");
-        out.newLine();
-        out.write("var map = L.map('map').setView([0.0,0.0], 3);");
-        out.newLine();
-        out.write(
-            "L.tileLayer('OSMPublicTransport/{z}/{x}/{y}.png',{ maxZoom: 4, minZoom:2 }).addTo(map);");
-        out.newLine();
-        out.write(
+        OsmMapHtmlWriter.writeOfflineShell(
+            out,
+            "TurboWin+ Obs's Map (offline)",
             "var iconOptions = { iconUrl: 'marker_red_meet.png', iconAnchor: [10, 25], iconPopup: [0, -20] };");
-        out.newLine();
-        out.write("var markerOptions = { icon: L.icon(iconOptions) };");
-        out.newLine();
-        out.newLine();
       } // else if (main.OSM_mode.equals(main.OSM_OFFLINE_MANUAL) ||
       // main.OSM_mode.equals(main.OSM_OFFLINE_AWS_VISUAL))
 
@@ -1728,115 +1625,13 @@ public class OSM {
     try (BufferedWriter out =
         new BufferedWriter(new FileWriter(full_path_leaflet_maps_html_file))) {
       if (main.OSM_mode.equals(main.OSM_ONLINE_AWS_SENSOR)) {
-        out.write("<html>");
-        out.newLine();
-        out.write("<head>");
-        out.newLine();
-        out.write("  <meta charset=utf-8 />");
-        out.newLine();
-        out.newLine();
-        out.write("  <title>TurboWin+ AWS sensor Map (internet)</title>");
-        out.newLine();
-        out.write(
-            "  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />");
-        out.newLine();
-        out.newLine();
-        out.write("  <!-- Load Leaflet from CDN -->");
-        out.newLine();
-        out.write(main.LEAFLET_CSS_URL);
-        out.newLine();
-        out.write(main.LEAFLET_CSS_INTEGRITY);
-        out.newLine();
-        out.write("  crossorigin=\"\"/>");
-        out.newLine();
-        out.write(main.LEAFLET_JS_URL);
-        out.newLine();
-        out.write(main.LEAFLET_JS_INTEGRITY);
-        out.newLine();
-        out.write("  crossorigin=\"\"></script>");
-        out.newLine();
-        out.newLine();
-        out.write("  <!-- Load Esri Leaflet from CDN -->");
-        out.newLine();
-        out.write(main.LEAFLET_ESRI_URL);
-        out.newLine();
-        out.write(main.LEAFLET_ESRI_INTEGRITY);
-        out.newLine();
-        out.write("  crossorigin=\"\"></script>");
-        out.newLine();
-        out.newLine();
-        out.write("  <style>");
-        out.newLine();
-        out.write("    body { margin:0; padding:0; }");
-        out.newLine();
-        out.write("    #map { position: absolute; top:0; bottom:0; right:0; left:0; }");
-        out.newLine();
-        out.write("  </style>");
-        out.newLine();
-        out.newLine();
-        out.write("</head>");
-        out.newLine();
-        out.newLine();
-        out.write("<body>");
-        out.newLine();
-        out.write("<div id=\"map\"></div>");
-        out.newLine();
-        out.newLine();
-        out.write("<script>");
-        out.newLine();
-        out.write("  var map = L.map(\"map\").setView([" + "0.0" + "," + "0.0" + "], 3);");
-        out.newLine(); // origin of the map at 0.0 N and 0.0 E
-        out.write("  L.esri.basemapLayer(\"Topographic\").addTo(map);");
-        out.newLine();
-        out.write("  var markerOptions = { };");
-        out.newLine();
-        out.newLine();
+        OsmMapHtmlWriter.writeOnlineShell(out, "TurboWin+ AWS sensor Map (internet)");
       } // if (main.OSM_mode.equals(main.OSM_ONLINE_AWS_SENSOR))
       else if (main.OSM_mode.equals(main.OSM_OFFLINE_AWS_SENSOR)) {
-        out.write("<html>");
-        out.newLine();
-        out.write("<head>");
-        out.newLine();
-        // out.write("  <meta charset=utf-8 />");out.newLine();
-        out.newLine();
-        out.write("  <title>TurboWin+ AWS sensor Map (offline)</title>");
-        out.newLine();
-        out.write(
-            "  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />");
-        out.newLine();
-        out.newLine();
-        out.write("  <link rel=\"stylesheet\" charset=\"utf-8\" href=\"leaflet.css\" />");
-        out.newLine();
-        out.write(
-            "  <script type=\"text/javascript\" charset=\"utf-8\" src=\"leaflet.js\"></script>");
-        out.newLine();
-        out.newLine();
-        out.write("  <style>");
-        out.newLine();
-        out.write("    body { margin:0; padding:0; }");
-        out.newLine();
-        out.write("    #map { position: absolute; top:0; bottom:0; right:0; left:0; }");
-        out.newLine();
-        out.write("  </style>");
-        out.newLine();
-        out.newLine();
-        out.write("<body>");
-        out.newLine();
-        out.write("<div id=\"map\"></div>");
-        out.newLine();
-        out.newLine();
-        out.write("<script>");
-        out.newLine();
-        out.write("var map = L.map('map').setView([0.0,0.0], 3);");
-        out.newLine();
-        out.write(
-            "L.tileLayer('OSMPublicTransport/{z}/{x}/{y}.png',{ maxZoom: 4, minZoom:2 }).addTo(map);");
-        out.newLine();
-        out.write("var iconOptions = { iconUrl: 'marker_red_meet.png', iconAnchor: [10, 2] };");
-        out.newLine();
-        out.write("var markerOptions = { icon: L.icon(iconOptions) };");
-        out.newLine();
-        out.newLine();
+        OsmMapHtmlWriter.writeOfflineShell(
+            out,
+            "TurboWin+ AWS sensor Map (offline)",
+            "var iconOptions = { iconUrl: 'marker_red_meet.png', iconAnchor: [10, 2] };");
       } // else if (main.OSM_mode.equals(main.OSM_OFFLINE_AWS_SENSOR))
 
       for (int i = 0; i < mylatestmeasurements.AANTAL_AWS_MEASUREMENTS; i++) {
