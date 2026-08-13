@@ -4581,52 +4581,8 @@ public class main extends javax.swing.JFrame {
 
   private void Next_form_automation_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Next_form_automation_menu_actionPerformed
-    // TODO add your handling code here:
-
-    /* initialisation */
     in_next_sequence = true;
-
-    /* starting with the position data input screen */
     Input_Position_menu_actionPerformed(evt);
-
-    // int seq_no_input_screen =5;
-
-    /*
-    // sequence_no_input_screen: 1  = CmShipDatetime()
-    //                           2  = CmShipPosition()
-    //                           3  = CmShipWind()
-    //                           4  = CmShipWaves()
-    //                           5  = CmShipBarometer()
-    //                           6  = CmShipBarograph()
-    //                           7  = CmShipTemperatures()
-    //                           8  = CmShipPresentWeather()
-    //                           9  = CmShipPastWeather()
-    //                           10 = CmShipVisibility()
-    //                           11 = CmShipCloudslow()
-    //                           12 = CmShipCloudsmedium()
-    //                           13 = CmShipCloudshigh()
-    //                           14 = CmShipCloudsheight()
-    //                           15 = CmShipObserver()
-    */
-
-    // while (/*stop_in_next_sequence == false &&*/ (seq_no_input_screen <= 15) &&
-    // (seq_no_input_screen >= 1))
-    // {
-    // if (seq_no_input_screen == 5)
-    // {
-    //  Input_Barometer_menu_actionPerformed(evt);
-    //  seq_no_input_screen++;
-    // }
-
-    // if ((seq_no_input_screen == 6) /*&& (barometer_form_active == false)*/)
-    // {
-    //   Input_Barograph_menu_actionPerformed(evt);
-
-    // }
-
-    // seq_no_input_screen++;
-    // }
-
   } // GEN-LAST:event_Next_form_automation_menu_actionPerformed
 
   private void date_time_mainscreen_mouseClicked(
