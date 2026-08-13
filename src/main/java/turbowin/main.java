@@ -6540,23 +6540,7 @@ public class main extends javax.swing.JFrame {
 
   private void initComponents2() {
     // functions additional/supporting to this main class
-    support_class = new main_support();
-
-    /* title of main screen */
-    setTitle(APPLICATION_NAME); // fixed
-
-    /* fixed text bottom screen (e.g. Turboin+ stand-alone mode...) */
-    jLabel4.setText(APPLICATION_NAME);
-
-    /* set main application icon (top-left in title bar) */
-    setIconImage(
-        Toolkit.getDefaultToolkit()
-            .getImage(getClass().getResource(main.ICONS_DIRECTORY + "tray.png")));
-
-    /* status field (NB can be over written with different Themes) */
-    jTextField4.setBackground(new java.awt.Color(204, 255, 255)); // Cyan
-
-    jTextField4.setName("fm13_field");
+    StartupWindowWorkflow.initialize(this);
 
     /* create pop-up menu (right mouse button) */
     // create_popup_menu();
