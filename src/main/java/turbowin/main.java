@@ -28,7 +28,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
@@ -5862,31 +5861,7 @@ public class main extends javax.swing.JFrame {
 
   void Themes_5_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_5_actionPerformed
-    // TODO add your handling code here:
-
-    if (!theme_mode.equals(THEME_TRANSPARENT)) {
-      mainClass.dispose();
-      theme_changed = true; // for checking more than one instance running
-
-      try {
-        // UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        theme_mode = THEME_TRANSPARENT;
-        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-      } catch (ClassNotFoundException
-          | InstantiationException
-          | IllegalAccessException
-          | UnsupportedLookAndFeelException ex) {
-        String info = "Error invoking Transparent Theme";
-        JOptionPane.showMessageDialog(
-            null, info, main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-      }
-
-      JFrame.setDefaultLookAndFeelDecorated(
-          true); // !!! This is essential set it to the defult metal java mode (= the only Java Look
-      // and Feel suitable for tranaparency)
-      mainClass = new main();
-      mainClass.setVisible(true);
-    }
+    ThemeWorkflow.applyTransparent();
   } // GEN-LAST:event_Themes_5_actionPerformed
 
   private void APR_toolbar_itemStateChanged(

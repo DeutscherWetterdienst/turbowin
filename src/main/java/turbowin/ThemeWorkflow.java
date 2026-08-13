@@ -17,6 +17,33 @@ final class ThemeWorkflow {
     return THEME_TRANSPARENT.equals(currentTheme);
   }
 
+  static void applyTransparent() {
+    if (!theme_mode.equals(THEME_TRANSPARENT)) {
+      mainClass.dispose();
+      theme_changed = true;
+
+      try {
+        theme_mode = THEME_TRANSPARENT;
+        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+      } catch (ClassNotFoundException
+          | InstantiationException
+          | IllegalAccessException
+          | UnsupportedLookAndFeelException ex) {
+        String info = "Error invoking Transparent Theme";
+        javax.swing.JOptionPane.showMessageDialog(
+            null,
+            info,
+            main.APPLICATION_NAME + " message",
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+      }
+
+      // Essential for transparency: Metal is the only Java look-and-feel suitable for this theme.
+      javax.swing.JFrame.setDefaultLookAndFeelDecorated(true);
+      mainClass = new main();
+      mainClass.setVisible(true);
+    }
+  }
+
   static void apply(
       main owner,
       String theme,
