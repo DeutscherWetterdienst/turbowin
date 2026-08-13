@@ -17,7 +17,6 @@ import java.net.ServerSocket;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -6571,14 +6570,10 @@ public class main extends javax.swing.JFrame {
     System.out.println("data dir = " + data_dir);
 
     // for turbowin system logs
-    sdf_tsl_1 = new SimpleDateFormat("MMM_yyyy"); // e.g. JAN_2016 (part of the file name)
-    sdf_tsl_1.setTimeZone(TimeZone.getTimeZone("UTC"));
-
+    sdf_tsl_1 = StartupLogFormatting.monthlyLogFormat(); // e.g. JAN_2016 (part of the file name)
     sdf_tsl_2 =
-        new SimpleDateFormat(
-            "dd-MMM-yyyy HH:mm:ss"); // e.g. 09-Jan-2016 12:23:33 (time stamp of the recoreded
-    // messages)
-    sdf_tsl_2.setTimeZone(TimeZone.getTimeZone("UTC"));
+        StartupLogFormatting.messageLogFormat(); // e.g. 09-Jan-2016 12:23:33 (time stamp of the
+    // recoreded messages)
 
     // initialisation
     Reset_all_meteo_parameters();
