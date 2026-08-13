@@ -3,7 +3,9 @@ package turbowin;
 import static turbowin.main.*;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.SwingWorker;
 
@@ -11,6 +13,17 @@ import javax.swing.SwingWorker;
 final class SystemLogCleanupWorkflow {
 
   private SystemLogCleanupWorkflow() {}
+
+  static void deleteLogFile(
+      String logsDirectory, String systemLogsDirectory, SimpleDateFormat monthlyFormat, Date date) {
+    File logFile =
+        new File(
+            SystemLogWriterWorkflow.logFilePath(
+                logsDirectory, systemLogsDirectory, monthlyFormat.format(date)));
+    if (logFile.exists()) {
+      logFile.delete();
+    }
+  }
 
   static void start() {
     new SwingWorker<Void, Void>() {
@@ -24,19 +37,11 @@ final class SystemLogCleanupWorkflow {
           cal_delete_datum = new GregorianCalendar();
           cal_delete_datum.add(Calendar.MONTH, -i);
 
-          String file_naam =
-              "turbowin_system_" + main.sdf_tsl_1.format(cal_delete_datum.getTime()) + ".txt";
-          String volledig_path_turbowin_system_logs =
-              main.logs_dir
-                  + java.io.File.separator
-                  + main.TURBOWIN_SYSTEM_LOGS_DIR
-                  + java.io.File.separator
-                  + file_naam;
-
-          File file_log_data = new File(volledig_path_turbowin_system_logs);
-          if (file_log_data.exists()) {
-            file_log_data.delete();
-          }
+          deleteLogFile(
+              main.logs_dir,
+              main.TURBOWIN_SYSTEM_LOGS_DIR,
+              main.sdf_tsl_1,
+              cal_delete_datum.getTime());
         }
 
         return null;
