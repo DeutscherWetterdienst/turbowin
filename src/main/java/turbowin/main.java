@@ -4205,69 +4205,29 @@ public class main extends javax.swing.JFrame {
 
   void Input_Position_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Position_menu_actionPerformed
-    // date time for leaflet Map plot
-    leaflet_maps_obs_day = mydatetime.day; // for date-time on leaflet map
-    leaflet_maps_obs_month = mydatetime.month; // for date-time on leaflet map
-    leaflet_maps_obs_year = mydatetime.year; // for date-time on leaflet map
-    leaflet_maps_obs_hour = mydatetime.hour; // for date-time on leaflet map
-
-    // wind dir for leaflet Map plot
-    if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
-      leaflet_maps_obs_wind_dir = "variable";
-    } else if ((mywind.int_true_wind_dir != INVALID)
-        && (mywind.int_true_wind_dir != mywind.WIND_DIR_VARIABLE)) {
-      leaflet_maps_obs_wind_dir = Integer.toString(mywind.int_true_wind_dir) + " degr";
-    } else {
-      leaflet_maps_obs_wind_dir = "";
-    }
-
-    // wind speed for leaflet Maps plot
-    if (mywind.int_true_wind_speed != INVALID) {
-      if (main.wind_units.trim().indexOf(main.M_S) != -1) {
-        leaflet_maps_obs_wind_speed = Integer.toString(mywind.int_true_wind_speed) + " m/s";
-      } else // thus if wind speed units knots or wind speed units unknown
-      {
-        leaflet_maps_obs_wind_speed = Integer.toString(mywind.int_true_wind_speed) + " knots";
-      }
-    } else {
-      leaflet_maps_obs_wind_speed = "";
-    }
-
-    // air temp for leaflet Map plot
-    if ((mytemp.air_temp.compareTo("") != 0) && (mytemp.air_temp != null)) {
-      // it is possible that there is only the figures eg 25 -> change to 25.0 C
-      int pos = mytemp.air_temp.indexOf(".");
-      if (pos == -1) // dus geen "." in de air temp string
-      {
-        leaflet_maps_obs_air_temp = mytemp.air_temp + ".0" + " &#176" + "C";
-      } else {
-        leaflet_maps_obs_air_temp = mytemp.air_temp + " &#176" + "C";
-      }
-    } else {
-      leaflet_maps_obs_air_temp = "";
-    }
-
-    // SST for leaflet Map plot
-    if ((mytemp.sea_water_temp.compareTo("") != 0) && (mytemp.sea_water_temp != null)) {
-      // it is possible that there is only the figures eg 25 -> change to 25.0 C
-      int pos = mytemp.sea_water_temp.indexOf(".");
-      if (pos == -1) // dus geen "." in de air temp string
-      {
-        leaflet_maps_obs_sst = mytemp.sea_water_temp + ".0" + " &#176" + "C";
-      } else {
-        leaflet_maps_obs_sst = mytemp.sea_water_temp + " &#176" + "C";
-      }
-    } else {
-      leaflet_maps_obs_sst = "";
-    }
-
-    // MSl pressure for leaflet Map plot
-    if ((mybarometer.pressure_msl_corrected.compareTo("") != 0)
-        && (mybarometer.pressure_msl_corrected != null)) {
-      leaflet_maps_obs_msl_pressure = mybarometer.pressure_msl_corrected + " hPa";
-    } else {
-      leaflet_maps_obs_msl_pressure = "";
-    }
+    PositionMapPreparationWorkflow.Observation observation =
+        PositionMapPreparationWorkflow.prepare(
+            mydatetime.day,
+            mydatetime.month,
+            mydatetime.year,
+            mydatetime.hour,
+            mywind.int_true_wind_dir,
+            mywind.WIND_DIR_VARIABLE,
+            INVALID,
+            mywind.int_true_wind_speed,
+            wind_units,
+            mytemp.air_temp,
+            mytemp.sea_water_temp,
+            mybarometer.pressure_msl_corrected);
+    leaflet_maps_obs_day = observation.day;
+    leaflet_maps_obs_month = observation.month;
+    leaflet_maps_obs_year = observation.year;
+    leaflet_maps_obs_hour = observation.hour;
+    leaflet_maps_obs_wind_dir = observation.windDirection;
+    leaflet_maps_obs_wind_speed = observation.windSpeed;
+    leaflet_maps_obs_air_temp = observation.airTemperature;
+    leaflet_maps_obs_sst = observation.seaWaterTemperature;
+    leaflet_maps_obs_msl_pressure = observation.mslPressure;
 
     myposition form = new myposition();
     form.setSize(800, 600);
