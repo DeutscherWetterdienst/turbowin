@@ -6611,34 +6611,12 @@ public class main extends javax.swing.JFrame {
     /* always for offline mode !!! fixed sub dir logs and sub dir amver(not user configurable) */
     if (offline_mode == true) {
       StartupDirectorySetup.initialize(StartupDirectorySetup.directories(data_dir));
-      /* So file turbowin_jws_offline.jnlp and/or turbowin_plus_offline.cmd exists (TurboWeb online version: than these files wil not be present) */
-      // offline_mode = true;
-
-      /* gray (disable) the "output -> obs to server (internet)" menu selection option */
-      // see below now it is also an option for offline mode
-      // jMenuItem20.setEnabled(false);
-
-      /* gray (disable) the "Info -> Statistics(internet)" menu selection option */
-      // jMenuItem36.setEnabled(false);
-
-      /* set label on bottom main screen */
-      // application_mode =  "stand-alone mode";
-      application_mode = "";
-      jLabel4.setText(
-          APPLICATION_NAME
-              + " "
-              + application_mode); // NB can later in this start up process be overwritten if a
-      // barometer or AWS is coupled
-
-      /* NB logs dir fixed for offline mode (sub dir of main dir -main dir is the dir where the jar file is located-) */
-      /* see function: meta_data_from_configuration_regels_into_global_vars() */
+      application_mode = ApplicationStartupWorkflow.applicationMode(true);
+      jLabel4.setText(APPLICATION_NAME + " " + application_mode);
     } else {
-      /* set label on bottom main screen */
-      application_mode = "web mode";
+      application_mode = ApplicationStartupWorkflow.applicationMode(false);
       jLabel4.setText(APPLICATION_NAME + " " + application_mode);
     }
-
-    // Obs to server
     // if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
     // {
     //   // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an
@@ -6669,7 +6647,7 @@ public class main extends javax.swing.JFrame {
       }
 
       // read stored meta data
-      lees_configuratie_regels();
+      ApplicationStartupWorkflow.loadConfiguration(this, true);
     } else // so offline_via_jnlp mode or online (webstart) mode
     {
       //
