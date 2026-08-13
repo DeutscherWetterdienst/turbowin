@@ -12,6 +12,16 @@ final class ConfigurationPersistenceWorkflow {
 
   private ConfigurationPersistenceWorkflow() {}
 
+  static String configurationDirectory(String logsDirectory, String dataDirectory) {
+    if (logsDirectory != null && !logsDirectory.isEmpty()) {
+      return logsDirectory;
+    }
+    if (dataDirectory != null && !dataDirectory.isEmpty()) {
+      return dataDirectory;
+    }
+    return "";
+  }
+
   /**
    * Writes configuration.txt as a backup for the muffin/persistent configuration in both the
    * system-defined data_dir and the user-defined logs_dir.
@@ -62,12 +72,7 @@ final class ConfigurationPersistenceWorkflow {
    * the system-defined data_dir as the fallback.
    */
   static void read(main owner) {
-    main.hulp_dir = "";
-    if ((logs_dir != null) && (logs_dir.compareTo("") != 0)) {
-      main.hulp_dir = logs_dir;
-    } else if ((data_dir != null) && (data_dir.compareTo("") != 0)) {
-      main.hulp_dir = data_dir;
-    }
+    main.hulp_dir = configurationDirectory(logs_dir, data_dir);
 
     if ((main.hulp_dir != null) && (main.hulp_dir.compareTo("") != 0)) {
       new SwingWorker<Void, Void>() {
