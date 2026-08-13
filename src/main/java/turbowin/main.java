@@ -4904,37 +4904,7 @@ public class main extends javax.swing.JFrame {
   void Graphs_Pressure_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graphs_Pressure_Sensor_Data_actionPerformed
-    // TODO add your handling code here:
-
-    if (graph_form != null) {
-      if (sensor_data_file_ophalen_timer_is_gecreeerd == true) // 15-05-2013
-      {
-        if (RS232_view.sensor_data_file_ophalen_timer.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd = false;
-
-      if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true) {
-        if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer_II.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer_II = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
-
-      // graph_form.dispose();
-      graph_form.setVisible(false);
-    }
-
-    mode_grafiek = MODE_PRESSURE;
-
-    graph_form = new RS232_view();
-    // graph_form.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());       // full
-    // screen
-    graph_form.setExtendedState(MAXIMIZED_BOTH);
-    graph_form.setVisible(true);
+    graph_form = GraphViewWorkflow.show(graph_form, MODE_PRESSURE);
   } // GEN-LAST:event_Graphs_Pressure_Sensor_Data_actionPerformed
 
   private void Maintenance_Serial_actionPerformed(
@@ -4962,108 +4932,20 @@ public class main extends javax.swing.JFrame {
   void Graphs_Airtemp_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graphs_Airtemp_Sensor_Data_actionPerformed
-    // TODO add your handling code here:
-    if (graph_form != null) {
-      if (sensor_data_file_ophalen_timer_is_gecreeerd == true) // 15-05-2013
-      {
-        if (RS232_view.sensor_data_file_ophalen_timer.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd = false;
-
-      if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true) {
-        if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer_II.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer_II = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
-
-      // graph_form.dispose();
-      graph_form.setVisible(false);
-    }
-
-    if (RS232_connection_mode_II == 1) {
-      mode_grafiek = MODE_AIRTEMP_II;
-    } else {
-      mode_grafiek = MODE_AIRTEMP;
-    }
-
-    graph_form = new RS232_view();
-    // graph_form.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());       // full
-    // screen
-    graph_form.setExtendedState(MAXIMIZED_BOTH);
-    graph_form.setVisible(true);
+    graph_form =
+        GraphViewWorkflow.show(
+            graph_form, GraphViewWorkflow.airTemperatureMode(RS232_connection_mode_II));
   } // GEN-LAST:event_Graphs_Airtemp_Sensor_Data_actionPerformed
 
   void Graphs_SST_Sensor_data_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Graphs_SST_Sensor_data_actionPerformed
-    // TODO add your handling code here:
-    if (graph_form != null) {
-      if (sensor_data_file_ophalen_timer_is_gecreeerd == true) // 15-05-2013
-      {
-        if (RS232_view.sensor_data_file_ophalen_timer.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd = false;
-
-      if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true) {
-        if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer_II.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer_II = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
-
-      // graph_form.dispose();
-      graph_form.setVisible(false);
-    }
-
-    mode_grafiek = MODE_SST;
-
-    graph_form = new RS232_view();
-    // graph_form.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());       // full
-    // screen
-    graph_form.setExtendedState(MAXIMIZED_BOTH);
-    graph_form.setVisible(true);
+    graph_form = GraphViewWorkflow.show(graph_form, MODE_SST);
   } // GEN-LAST:event_Graphs_SST_Sensor_data_actionPerformed
 
   void Graphs_Wind_Speed_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graphs_Wind_Speed_Sensor_Data_actionPerformed
-    // TODO add your handling code here:
-    if (graph_form != null) {
-      if (sensor_data_file_ophalen_timer_is_gecreeerd == true) // 15-05-2013
-      {
-        if (RS232_view.sensor_data_file_ophalen_timer.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd = false;
-
-      if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true) {
-        if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer_II.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer_II = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
-
-      // graph_form.dispose();
-      graph_form.setVisible(false);
-    }
-    mode_grafiek = MODE_WIND_SPEED;
-
-    graph_form = new RS232_view();
-    // graph_form.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());       // full
-    // screen
-    graph_form.setExtendedState(MAXIMIZED_BOTH);
-    graph_form.setVisible(true);
+    graph_form = GraphViewWorkflow.show(graph_form, MODE_WIND_SPEED);
   } // GEN-LAST:event_Graphs_Wind_Speed_Sensor_Data_actionPerformed
 
   /*
@@ -5084,34 +4966,7 @@ public class main extends javax.swing.JFrame {
   void Graph_Wind_Dir_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Graph_Wind_Dir_Sensor_Data_actionPerformed
-    // TODO add your handling code here:
-    if (graph_form != null) {
-      if (sensor_data_file_ophalen_timer_is_gecreeerd == true) {
-        if (RS232_view.sensor_data_file_ophalen_timer.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd = false;
-
-      if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true) {
-        if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer_II.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer_II = null;
-      sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
-
-      // graph_form.dispose();
-      graph_form.setVisible(false);
-    }
-    mode_grafiek = MODE_WIND_DIR;
-
-    graph_form = new RS232_view();
-    // graph_form.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());       // full
-    // screen
-    graph_form.setExtendedState(MAXIMIZED_BOTH);
-    graph_form.setVisible(true);
+    graph_form = GraphViewWorkflow.show(graph_form, MODE_WIND_DIR);
   } // GEN-LAST:event_Graph_Wind_Dir_Sensor_Data_actionPerformed
 
   private void Output_obs_to_clipboard_actionPerformed(java.awt.event.ActionEvent evt) {
@@ -5157,40 +5012,7 @@ public class main extends javax.swing.JFrame {
 
   void Graph_All_Sensor_Data_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Graph_All_Sensor_Data_actionPerformed
-    // TODO add your handling code here:
-
-    if (graph_form != null) {
-      if (sensor_data_file_ophalen_timer_is_gecreeerd == true) // 15-05-2013
-      {
-        if (RS232_view.sensor_data_file_ophalen_timer.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer = null;
-
-      sensor_data_file_ophalen_timer_is_gecreeerd = false;
-
-      if (sensor_data_file_ophalen_timer_is_gecreeerd_II == true) // 15-05-2013
-      {
-        if (RS232_view.sensor_data_file_ophalen_timer_II.isRunning()) {
-          RS232_view.sensor_data_file_ophalen_timer_II.stop();
-        }
-      }
-      RS232_view.sensor_data_file_ophalen_timer_II = null;
-
-      sensor_data_file_ophalen_timer_is_gecreeerd_II = false;
-
-      // graph_form.dispose();
-      graph_form.setVisible(false);
-    }
-
-    mode_grafiek = MODE_ALL_PARAMETERS;
-
-    graph_form = new RS232_view();
-    // graph_form.setSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());       // full
-    // screen
-    graph_form.setExtendedState(MAXIMIZED_BOTH);
-    graph_form.setVisible(true);
+    graph_form = GraphViewWorkflow.show(graph_form, MODE_ALL_PARAMETERS);
   } // GEN-LAST:event_Graph_All_Sensor_Data_actionPerformed
 
   private void Maintenance_WOW_settings_actionPerformed(
