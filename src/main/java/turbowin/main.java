@@ -6573,19 +6573,7 @@ public class main extends javax.swing.JFrame {
 
     /* determine the OS this program is running on */
     String os = OSDetector.getOSString();
-    /* data directory */
-    if (os.equals("WINDOWS")) {
-      data_dir =
-          "C:" + java.io.File.separator + "ProgramData" + java.io.File.separator + "TurboWinPlus";
-    } else {
-      data_dir =
-          java.io.File.separator
-              + "opt"
-              + java.io.File.separator
-              + "turbowinplus"
-              + java.io.File.separator
-              + "data";
-    }
+    data_dir = StartupEnvironment.dataDirectory(os);
     // log_turbowin_system_message("[GENERAL] data dir:" + data_dir);
     // JOptionPane.showMessageDialog(null, data_dir, "data_dir", JOptionPane.INFORMATION_MESSAGE);
     System.out.println("data dir = " + data_dir);
@@ -6617,45 +6605,16 @@ public class main extends javax.swing.JFrame {
     //
 
     // initialisation
-    offline_mode = true;
-    offline_mode_via_jnlp = false;
-    offline_mode_via_cmd = true;
-
-    // turbowin jnlp offline file present? (turbowin_jws_offline.jnlp)
-    String volledig_path_jnlp_offline_file = data_dir + java.io.File.separator + JNLP_OFFLINE_FILE;
-    File jnlp_offline_file = new File(volledig_path_jnlp_offline_file);
-    if (jnlp_offline_file.exists()) {
-      // So file turbowin_jws_offline.jnlp exists (TurboWeb online version: than this file wil not
-      // be present)
-      offline_mode = true;
-      offline_mode_via_jnlp = true;
-    }
-
-    // turbowin cmd or launcher file present? ("turbowin_plus_offline.cmd" or
-    // "turbowin_launcher.bat" or "turbowin_launcher")
-    String volledig_path_cmd_offline_file = data_dir + java.io.File.separator + CMD_OFFLINE_FILE;
-    File cmd_offline_file = new File(volledig_path_cmd_offline_file);
-
-    String volledig_path_turbowin_launcher_file =
-        data_dir + java.io.File.separator + TURBOWIN_LAUNCHER_FILE;
-    File turbowin_launcher_file = new File(volledig_path_turbowin_launcher_file);
-
-    String volledig_path_turbowin_launcher_file_linux =
-        data_dir + java.io.File.separator + TURBOWIN_LAUNCHER_FILE_LINUX;
-    File turbowin_launcher_file_linux = new File(volledig_path_turbowin_launcher_file_linux);
-
-    // System.out.println("calculated turbowin_launcher_file path = " + turbowin_launcher_file);
-
-    if (cmd_offline_file.exists()
-        || turbowin_launcher_file.exists()
-        || turbowin_launcher_file_linux.exists()) {
-      // System.out.println(cmd_offline_file + " or " + turbowin_launcher_file + "found");
-
-      // So file "turbowin_plus_offline.cmd" or "turbowin_launcher.bat" or "turbowin_launcher"
-      // exists (TurboWeb online version: than this file wil not be present)
-      offline_mode = true;
-      offline_mode_via_cmd = true;
-    }
+    StartupEnvironment.OfflineMode startupMode =
+        StartupEnvironment.detectOfflineMode(
+            data_dir,
+            JNLP_OFFLINE_FILE,
+            CMD_OFFLINE_FILE,
+            TURBOWIN_LAUNCHER_FILE,
+            TURBOWIN_LAUNCHER_FILE_LINUX);
+    offline_mode = startupMode.offline;
+    offline_mode_via_jnlp = startupMode.viaJnlp;
+    offline_mode_via_cmd = startupMode.viaCommandLine;
 
     /* always for offline mode !!! fixed sub dir logs and sub dir amver(not user configurable) */
     if (offline_mode == true) {
@@ -6680,8 +6639,6 @@ public class main extends javax.swing.JFrame {
         }
       } // if (dirs.exists() == false)
 
-      // if not done before, create sub-sub dir "turbowin_system" (logs\turbowin_system) (NB in case
-      // of online(web) mode this will be done in OK_button_actionPerformed() [mylogfiles.java])
       //
       if (dirs.isDirectory()) {
         // create sub dir TURBOWIN_SYSTEM_LOGS (turbowin_system)
