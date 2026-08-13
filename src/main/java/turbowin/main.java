@@ -22,9 +22,6 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.Timer;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /*
 *
@@ -370,62 +367,7 @@ public class main extends javax.swing.JFrame {
   /* Creates new form main */
   public main() {
 
-    if (!theme_mode.equals(THEME_TRANSPARENT)) {
-      // always at first start-up of this application
-      try {
-        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-          if ("Nimbus".equals(info.getName())) {
-            UIManager.setLookAndFeel(info.getClassName());
-
-            break;
-          }
-        }
-      } catch (ClassNotFoundException
-          | InstantiationException
-          | IllegalAccessException
-          | UnsupportedLookAndFeelException e) {
-        // If Metal is not available, you can set the GUI to another look and feel.
-        // JOptionPane.showMessageDialog(null, "Metal color scheme not supported on this computer",
-        // main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-        try {
-          UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } // java default look and feel (voor Java 1.6 het zelde als:
-        // UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");)
-        catch (ClassNotFoundException
-            | InstantiationException
-            | IllegalAccessException
-            | UnsupportedLookAndFeelException ex) {
-        }
-      }
-
-      String os = OSDetector.getOSString();
-
-      if (os.equals("LINUX")) {
-        if (theme_changed == false) {
-          current_font = super.getFont();
-        } else // theme_changed
-        {
-          super.setFont(current_font);
-        }
-      }
-    } //  if (!theme_mode.equals(THEME_TRANSPARENT))
-    else // THEME_TRANSPARENT
-    {
-      // NB https://stackoverflow.com/questions/7434845/setting-the-default-font-of-swing-program
-
-      String os = OSDetector.getOSString();
-
-      if (os.equals("LINUX")) {
-        // NB necesarry because otherwise under LINUX OS the labels/text etc. takes too much space
-        // (but only in transparent mode!), not appropriate under Windos OS
-        //    related to: getCrossPlatformLookAndFeelClassName() and
-        // setDefaultLookAndFeelDecorated(true) (see: Themes_5_actionPerformed()[main.java])
-        //
-        // NB call setUIFont() before calling initComponents()!
-        //
-        setUIFont(new javax.swing.plaf.FontUIResource("Ubuntu", Font.PLAIN, 12));
-      }
-    } // else (THEME_TRANSPARENT)
+    StartupThemeWorkflow.initialize(this);
 
     initComponents();
     bepaal_frame_location();
