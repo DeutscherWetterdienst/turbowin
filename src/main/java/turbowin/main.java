@@ -13,10 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -6784,30 +6780,8 @@ public class main extends javax.swing.JFrame {
   }
 
   void bepaal_last_record_uit_immt() {
-    // NB This function will be called from within a swingworker e.g. see
-    // Output_obs_by_email_actionPerformed()
-    //    so not necessary to use a swingworker here (it is adviced to use a swingworker when file
-    // reading/writing)
-
-    String record = "";
-
-    /* initialisatie */
-    last_record = "";
-
-    /* first check if there is an immt log source file present (and not empty) */
-    String volledig_path_immt = logs_dir + java.io.File.separator + IMMT_LOG;
-
-    File immt_file = new File(volledig_path_immt);
-    if (immt_file.exists() && immt_file.length() > 0) // length() in bytes
-    {
-      try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_immt))) {
-        while ((record = in.readLine()) != null) {
-          last_record = record;
-        }
-      } catch (IOException ex) {
-        System.out.println("--- Function bepaal_last_record_uit_immt(): " + ex);
-      }
-    } // if (immt_file.exists() && immt_file.length() > 0)
+    last_record =
+        ImmtLogReaderWorkflow.readLastRecord(logs_dir + java.io.File.separator + IMMT_LOG);
   }
 
   public static void Reset_all_meteo_parameters() {
