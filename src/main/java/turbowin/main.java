@@ -18,8 +18,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
@@ -6737,55 +6735,7 @@ public class main extends javax.swing.JFrame {
   }
 
   public static void help_mouseClicked(final String help_page) {
-    // TODO add your handling code here:
-
-    String os = OSDetector.getOSString();
-
-    boolean local_help_file_exists = false;
-
-    // Are the help files stored locally? (installed as part of the complete TurboWin+ installation)
-    //
-    String help_file_path =
-        System.getProperty("app.dir")
-            + java.io.File.separator
-            + ".."
-            + java.io.File.separator
-            + "runtime"
-            + java.io.File.separator
-            + OFFLINE_HELP_DIR
-            + java.io.File.separator
-            + help_page; // nb help_page is parameter specific e.g. wind.pdf, waves.pdf etc.
-    File f = new File(help_file_path);
-    if (f.isFile()) {
-      local_help_file_exists = true;
-    }
-
-    URI uri = null;
-    String te_openen_help_file = null;
-
-    if (!local_help_file_exists) {
-      // e.g.
-      // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
-      String http_adres = main.URL_INTERNET_HELP + help_page + "";
-      try {
-        uri = new URI(http_adres);
-      } catch (URISyntaxException ex) {
-        uri = null;
-      }
-
-      if (uri != null) {
-        te_openen_help_file = uri.toString();
-      }
-    } else {
-      te_openen_help_file = help_file_path;
-    }
-
-    if (os.equals("LINUX")) {
-      support_class.open_browser_on_linux(te_openen_help_file);
-    } // if (os.equals("LINUX"))
-    else {
-      support_class.open_browser_on_not_linux(te_openen_help_file);
-    }
+    HelpWorkflow.open(help_page);
   }
 
   void check_immt_size() {
