@@ -6546,13 +6546,6 @@ public class main extends javax.swing.JFrame {
     // create_popup_menu();
     // NB moved to lees_configuratie_regels() [main.java] and read_muffin() [main.java]
 
-    /* determine the OS this program is running on */
-    String os = OSDetector.getOSString();
-    data_dir = StartupEnvironment.dataDirectory(os);
-    // log_turbowin_system_message("[GENERAL] data dir:" + data_dir);
-    // JOptionPane.showMessageDialog(null, data_dir, "data_dir", JOptionPane.INFORMATION_MESSAGE);
-    System.out.println("data dir = " + data_dir);
-
     // for turbowin system logs
     sdf_tsl_1 = StartupLogFormatting.monthlyLogFormat(); // e.g. JAN_2016 (part of the file name)
     sdf_tsl_2 =
@@ -6575,27 +6568,8 @@ public class main extends javax.swing.JFrame {
     // difficult to ascertain the true online / offline state of a client system."
     //
 
-    // initialisation
-    StartupEnvironment.OfflineMode startupMode =
-        StartupEnvironment.detectOfflineMode(
-            data_dir,
-            JNLP_OFFLINE_FILE,
-            CMD_OFFLINE_FILE,
-            TURBOWIN_LAUNCHER_FILE,
-            TURBOWIN_LAUNCHER_FILE_LINUX);
-    offline_mode = startupMode.offline;
-    offline_mode_via_jnlp = startupMode.viaJnlp;
-    offline_mode_via_cmd = startupMode.viaCommandLine;
-
-    /* always for offline mode !!! fixed sub dir logs and sub dir amver(not user configurable) */
-    if (offline_mode == true) {
-      StartupDirectorySetup.initialize(StartupDirectorySetup.directories(data_dir));
-      application_mode = ApplicationStartupWorkflow.applicationMode(true);
-      jLabel4.setText(APPLICATION_NAME + " " + application_mode);
-    } else {
-      application_mode = ApplicationStartupWorkflow.applicationMode(false);
-      jLabel4.setText(APPLICATION_NAME + " " + application_mode);
-    }
+    StartupEnvironmentWorkflow.initialize(
+        JNLP_OFFLINE_FILE, CMD_OFFLINE_FILE, TURBOWIN_LAUNCHER_FILE, TURBOWIN_LAUNCHER_FILE_LINUX);
     // if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
     // {
     //   // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an
