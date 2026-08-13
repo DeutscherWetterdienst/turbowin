@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.data.TableCell;
+import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.edt.GuiTask;
 import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.exception.WaitTimedOutError;
 import org.assertj.swing.finder.WindowFinder;
@@ -60,6 +62,24 @@ public class ObservationFillingTest extends AbstractUiTest {
 
     fillTotalCloudCoverInformation();
     verifyFM13Creation();
+  }
+
+  @Test
+  public void resetClearsRepresentativeVisibleField() throws InterruptedException {
+    closeStartDialogs();
+
+    main.jTextField36.setText("12 °C");
+    mytemp.air_temp = "12";
+
+    GuiActionRunner.execute(
+        new GuiTask() {
+          @Override
+          protected void executeInEDT() {
+            main.Reset_all_meteo_parameters();
+          }
+        });
+
+    assertEquals("", main.jTextField36.getText());
   }
 
   private void closeStartDialogs() throws InterruptedException {
