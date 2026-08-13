@@ -1430,15 +1430,7 @@ public class OSM {
           }
         } // if (obs.length() > 70)
       } //  for (String obs : immt_list)
-      out.newLine();
-
-      out.write("</script>");
-      out.newLine();
-      out.newLine();
-      out.write("</body>");
-      out.newLine();
-      out.write("</html>");
-      out.newLine();
+      OsmMapHtmlWriter.writeDocumentEnd(out);
 
     } // try
     catch (HeadlessException | IOException e) {
@@ -1867,15 +1859,7 @@ public class OSM {
         } // if ( (!mylatestmeasurements.AWS_array[i][mylatestmeasurements.date_index].equals(""))
         // && etc.
       } // for (int i = 0; i < AANTAL_AWS_MEASUREMENTS; i++)
-      out.newLine();
-
-      out.write("</script>");
-      out.newLine();
-      out.newLine();
-      out.write("</body>");
-      out.newLine();
-      out.write("</html>");
-      out.newLine();
+      OsmMapHtmlWriter.writeDocumentEnd(out);
 
     } // try
     catch (HeadlessException | IOException e) {

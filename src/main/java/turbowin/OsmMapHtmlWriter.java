@@ -120,4 +120,15 @@ final class OsmMapHtmlWriter {
     out.newLine();
     out.newLine();
   }
+
+  static void writeDocumentEnd(BufferedWriter out) throws IOException {
+    out.newLine();
+    out.write("</script>");
+    out.newLine();
+    out.newLine();
+    out.write("</body>");
+    out.newLine();
+    out.write("</html>");
+    out.newLine();
+  }
 }
