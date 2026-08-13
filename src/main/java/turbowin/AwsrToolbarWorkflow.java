@@ -11,7 +11,7 @@ final class AwsrToolbarWorkflow {
   private AwsrToolbarWorkflow() {}
 
   static boolean isBlank(String value) {
-    return value.equals("");
+    return ReportingSettingsValidation.isBlank(value);
   }
 
   static void handle() {

@@ -11,7 +11,7 @@ final class AprToolbarWorkflow {
   private AprToolbarWorkflow() {}
 
   static boolean isBlank(String value) {
-    return value.equals("");
+    return ReportingSettingsValidation.isBlank(value);
   }
 
   static boolean isValidDraught(String value) {
