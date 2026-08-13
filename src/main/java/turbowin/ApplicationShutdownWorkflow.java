@@ -53,13 +53,6 @@ final class ApplicationShutdownWorkflow {
             owner, info, "Exit " + APPLICATION_NAME, JOptionPane.YES_NO_OPTION);
 
     if (result == JOptionPane.YES_OPTION) {
-      // Remember to remove the listener (for checking only once instance running) before your
-      // application exits (see Function initComponents2()) [nb only in jnlp mode]
-      // if (sisL != null)
-      // {
-      //   sis.removeSingleInstanceListener(sisL);
-      // }
-
       // serial communication barometer (not neccessary for WiFi barometer)
       // if ( ((RS232_connection_mode == 1) || (RS232_connection_mode == 2) ||
       // (RS232_connection_mode == 3) || (RS232_connection_mode == 4)) && (defaultPort != null) )

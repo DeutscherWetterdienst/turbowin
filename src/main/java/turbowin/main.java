@@ -6544,7 +6544,7 @@ public class main extends javax.swing.JFrame {
 
     /* create pop-up menu (right mouse button) */
     // create_popup_menu();
-    // NB moved to lees_configuratie_regels() [main.java] and read_muffin() [main.java]
+    // NB moved to lees_configuratie_regels() [main.java] and startup configuration loading
 
     // for turbowin system logs
     sdf_tsl_1 = StartupLogFormatting.monthlyLogFormat(); // e.g. JAN_2016 (part of the file name)
@@ -6594,41 +6594,12 @@ public class main extends javax.swing.JFrame {
     // for hybrid and radar dashboard
     myship = null;
 
-    /* read stored meta (station) data from muffins or from configuration files */
-    if (offline_mode_via_cmd == true) // offline mode
-    {
+    /* read stored meta data from configuration files in command-line offline mode */
+    if (offline_mode_via_cmd == true) {
       s =
           StartupConfigurationWorkflow.initializeCommandLineOffline(
               this, theme_changed, PORT_command_line, PORT);
-    } else // so offline_via_jnlp mode or online (webstart) mode
-    {
-      //
-      // in offline mode: So by removing the file turbowin_plus_offline.cmd and invoking turbowin+
-      // via turbowin_jws_offline.jnlp there will be only a single instance running check
-      // online mode: is always started via the jnlp file -> always single instance running check
-      //
-      //
-
-      // Theme changes recreate this main window; do not open a second instance-check socket.
-      if (!theme_changed) {
-        // try
-        // {
-        //   sis = (SingleInstanceService)ServiceManager.lookup("javax.jnlp.SingleInstanceService");
-        // }
-        // catch (UnavailableServiceException e) { sis = null; }
-
-        // Register the single instance listener at the start of the application
-        // if (sis != null)
-        // {
-        //   sisL = new SISListener();
-        //   sis.addSingleInstanceListener(sisL);
-        // }
-      } // if (!theme_changed)
-
-      // read stored station data
-      //
-      // read_muffin();
-    } // else
+    }
 
     // get the systemTrays instance
     SystemTrayWorkflow.initialize();
@@ -7639,10 +7610,6 @@ public class main extends javax.swing.JFrame {
   private static final int PORT =
       12345; // for checking only one instance is running  // random large port number
   private static ServerSocket s; // do not delete!
-  // private SingleInstanceService sis                               = null;          // for
-  // checking only one instance is running
-  // private SISListener sisL                                        = null;          // for
-  // checking only one instance is running
   public static String output_dir = null; // for function Kopieeren_Waarnemers_En_Aantallen()
   static String hulp_dir =
       ""; // for writing configuration.txt file in data_dir (system defined) AND logs_dir (user
