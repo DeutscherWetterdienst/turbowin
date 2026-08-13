@@ -151,16 +151,7 @@ final class AprToolbarWorkflow {
     // NB below for APR turned on AND APR turned off !!
     // clear the text fields on the main screen (because maybe there are still values in the text
     // fields from a previous setting eg APR = true) and enable the output menu items again
-    main.Reset_all_meteo_parameters();
-    main.disable_and_enable_output_menu_items(); // in fact also for ENABLING the output menu
-    // options if now set APR = false and before APR =
-    // true
-    main.disable_dashboard_and_maps_menu_items(); // in fact also for ENABLING the dasboard menu
-    // options if now set APR = false and before APR =
-    // true
-
-    // save the change
-    main.schrijf_configuratie_regels();
+    AutomatedReportingWorkflow.finishToggle();
 
     // set start-up sequence finished flag
     // turbowin_start_up_sequence_finished = true;
