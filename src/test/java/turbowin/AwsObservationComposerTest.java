@@ -233,4 +233,44 @@ public class AwsObservationComposerTest {
     assertEquals("90", fields[32]);
     assertEquals("AB1", fields[33]);
   }
+
+  @Test
+  public void preservesTheCompleteAwsProtocolFieldLayout() {
+    String observation = AwsObservationComposer.compile();
+    String[] fields = observation.split(",", -1);
+
+    assertEquals("$PTBWP", fields[0]);
+    assertEquals(33, fields.length);
+  }
+
+  @Test
+  public void convertsManualWindValuesIntoAwsFields() {
+    String originalDiffSllWl = main.diff_sll_wl;
+    String originalWindUnits = main.wind_units;
+    int originalWindDirection = mywind.int_true_wind_dir;
+    int originalWindSpeed = mywind.int_true_wind_speed;
+    boolean originalDirectionFromAws = main.true_wind_dir_from_AWS_present;
+    boolean originalSpeedFromAws = main.true_wind_speed_from_AWS_present;
+    try {
+      main.diff_sll_wl = "5";
+      main.wind_units = main.M_S;
+      mywind.int_true_wind_dir = 180;
+      mywind.int_true_wind_speed = 10;
+      main.true_wind_dir_from_AWS_present = false;
+      main.true_wind_speed_from_AWS_present = false;
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("5", fields[1]);
+      assertEquals("180", fields[2]);
+      assertEquals("10.0", fields[3]);
+    } finally {
+      main.diff_sll_wl = originalDiffSllWl;
+      main.wind_units = originalWindUnits;
+      mywind.int_true_wind_dir = originalWindDirection;
+      mywind.int_true_wind_speed = originalWindSpeed;
+      main.true_wind_dir_from_AWS_present = originalDirectionFromAws;
+      main.true_wind_speed_from_AWS_present = originalSpeedFromAws;
+    }
+  }
 }
