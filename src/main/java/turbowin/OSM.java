@@ -951,11 +951,7 @@ public class OSM {
         } // if (OSM_dir.exists() == false)
 
         String full_path_leaflet_maps_html_file =
-            main.logs_dir
-                + java.io.File.separator
-                + OSM_ROOT_DIR
-                + java.io.File.separator
-                + OBS_ONLINE_MAP_HTML_FILE;
+            OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_ONLINE_MAP_HTML_FILE);
         OSM_IMMT_Obsen_on_Map(immt_list, full_path_leaflet_maps_html_file);
 
         try {
@@ -1044,11 +1040,7 @@ public class OSM {
         } // if (OSM_dir.exists() == false)
 
         String full_path_leaflet_maps_html_file =
-            main.logs_dir
-                + java.io.File.separator
-                + OSM_ROOT_DIR
-                + java.io.File.separator
-                + OBS_ONLINE_MAP_HTML_FILE;
+            OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_ONLINE_MAP_HTML_FILE);
         OSM_IMMT_Obsen_on_Map(immt_list, full_path_leaflet_maps_html_file);
 
         // open the just created leaflet maps html with the default web browser
@@ -1455,11 +1447,7 @@ public class OSM {
       desktop = Desktop.getDesktop();
 
       String full_path_leaflet_maps_html_file =
-          main.logs_dir
-              + java.io.File.separator
-              + OSM_ROOT_DIR
-              + java.io.File.separator
-              + OBS_OFFLINE_MAP_HTML_FILE;
+          OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_OFFLINE_MAP_HTML_FILE);
       OSM_IMMT_Obsen_on_Map(immt_list, full_path_leaflet_maps_html_file);
 
       // open the just created leaflet maps html with the default web browser
@@ -1503,11 +1491,7 @@ public class OSM {
         con.connect();
 
         String full_path_leaflet_maps_html_file =
-            main.logs_dir
-                + java.io.File.separator
-                + OSM_ROOT_DIR
-                + java.io.File.separator
-                + OBS_ONLINE_MAP_HTML_FILE;
+            OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_ONLINE_MAP_HTML_FILE);
         OSM_AWS_Sensor_Obsen_on_Map(full_path_leaflet_maps_html_file);
 
         // open the just created leaflet maps html with the default web browser
@@ -1569,11 +1553,7 @@ public class OSM {
       desktop = Desktop.getDesktop();
 
       String full_path_leaflet_maps_html_file =
-          main.logs_dir
-              + java.io.File.separator
-              + OSM_ROOT_DIR
-              + java.io.File.separator
-              + OBS_OFFLINE_MAP_HTML_FILE;
+          OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_OFFLINE_MAP_HTML_FILE);
       OSM_AWS_Sensor_Obsen_on_Map(full_path_leaflet_maps_html_file);
 
       // open the just created leaflet maps html with the default web browser
