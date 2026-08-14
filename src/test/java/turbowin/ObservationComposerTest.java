@@ -169,4 +169,85 @@ public class ObservationComposerTest {
       mytemp.TTT_code = originalTemperature;
     }
   }
+
+  @Test
+  public void includesAdditionalPassThroughWeatherGroups() {
+    String originalPressure = mybarometer.PPPP_code;
+    String originalPressureCharacteristic = mybarograph.a_code;
+    String originalPressureAmount = mybarograph.ppp_code;
+    String originalPresentWeather = mypresentweather.ww_code;
+    String originalPastWeatherOne = mypastweather.W1_code;
+    String originalPastWeatherTwo = mypastweather.W2_code;
+    String originalLowCloud = mycl.cl_code;
+    String originalHighCloud = mych.ch_code;
+    String originalWavePeriod = mywaves.Pw_code;
+    String originalWaveHeight = mywaves.Hw_code;
+    String originalSwellDirectionOne = mywaves.Dw1_code;
+    String originalSwellPeriodOne = mywaves.Pw1_code;
+    String originalSwellHeightOne = mywaves.Hw1_code;
+    String originalSwellDirectionTwo = mywaves.Dw2_code;
+    String originalSwellPeriodTwo = mywaves.Pw2_code;
+    String originalSwellHeightTwo = mywaves.Hw2_code;
+    String originalIceCause = myicing.Is_code;
+    String originalIceThickness = myicing.EsEs_code;
+    String originalIceRate = myicing.Rs_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mybarometer.PPPP_code = "1234";
+      mybarograph.a_code = "1";
+      mybarograph.ppp_code = "234";
+      mypresentweather.ww_code = "45";
+      mypastweather.W1_code = "6";
+      mypastweather.W2_code = "7";
+      mycl.cl_code = "2";
+      mych.ch_code = "3";
+      mywaves.Pw_code = "04";
+      mywaves.Hw_code = "05";
+      mywaves.Dw1_code = "12";
+      mywaves.Pw1_code = "03";
+      mywaves.Hw1_code = "04";
+      mywaves.Dw2_code = "24";
+      mywaves.Pw2_code = "05";
+      mywaves.Hw2_code = "06";
+      myicing.Is_code = "1";
+      myicing.EsEs_code = "04";
+      myicing.Rs_code = "2";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" 41234 "));
+      assertTrue(observation.contains(" 51234 "));
+      assertTrue(observation.contains(" 74567 "));
+      assertTrue(observation.contains(" 20405 "));
+      assertTrue(observation.contains(" 31224 "));
+      assertTrue(observation.contains(" 40304 "));
+      assertTrue(observation.contains(" 50506 "));
+      assertTrue(observation.contains(" 61042"));
+    } finally {
+      mybarometer.PPPP_code = originalPressure;
+      mybarograph.a_code = originalPressureCharacteristic;
+      mybarograph.ppp_code = originalPressureAmount;
+      mypresentweather.ww_code = originalPresentWeather;
+      mypastweather.W1_code = originalPastWeatherOne;
+      mypastweather.W2_code = originalPastWeatherTwo;
+      mycl.cl_code = originalLowCloud;
+      mych.ch_code = originalHighCloud;
+      mywaves.Pw_code = originalWavePeriod;
+      mywaves.Hw_code = originalWaveHeight;
+      mywaves.Dw1_code = originalSwellDirectionOne;
+      mywaves.Pw1_code = originalSwellPeriodOne;
+      mywaves.Hw1_code = originalSwellHeightOne;
+      mywaves.Dw2_code = originalSwellDirectionTwo;
+      mywaves.Pw2_code = originalSwellPeriodTwo;
+      mywaves.Hw2_code = originalSwellHeightTwo;
+      myicing.Is_code = originalIceCause;
+      myicing.EsEs_code = originalIceThickness;
+      myicing.Rs_code = originalIceRate;
+    }
+  }
 }
