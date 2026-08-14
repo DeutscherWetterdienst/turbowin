@@ -317,4 +317,68 @@ public class ObservationComposerTest {
       mytemp.TTT_code = originalAirTemperature;
     }
   }
+
+  @Test
+  public void includesLegacyIceValuesWhenReportable() {
+    String originalConcentration = myice1.ci_code;
+    String originalDevelopment = myice1.Si_code;
+    String originalAmountAndType = myice1.bi_code;
+    String originalBearing = myice1.Di_code;
+    String originalSituation = myice1.zi_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      myice1.ci_code = "1";
+      myice1.Si_code = "2";
+      myice1.bi_code = "3";
+      myice1.Di_code = "4";
+      myice1.zi_code = "5";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" ICE 12345"));
+    } finally {
+      myice1.ci_code = originalConcentration;
+      myice1.Si_code = originalDevelopment;
+      myice1.bi_code = originalAmountAndType;
+      myice1.Di_code = originalBearing;
+      myice1.zi_code = originalSituation;
+    }
+  }
+
+  @Test
+  public void omitsLegacyIceValuesThatAreUnavailable() {
+    String originalConcentration = myice1.ci_code;
+    String originalDevelopment = myice1.Si_code;
+    String originalAmountAndType = myice1.bi_code;
+    String originalBearing = myice1.Di_code;
+    String originalSituation = myice1.zi_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      myice1.ci_code = "u";
+      myice1.Si_code = "u";
+      myice1.bi_code = "u";
+      myice1.Di_code = "u";
+      myice1.zi_code = "u";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(!observation.contains(" ICE "));
+    } finally {
+      myice1.ci_code = originalConcentration;
+      myice1.Si_code = originalDevelopment;
+      myice1.bi_code = originalAmountAndType;
+      myice1.Di_code = originalBearing;
+      myice1.zi_code = originalSituation;
+    }
+  }
 }
