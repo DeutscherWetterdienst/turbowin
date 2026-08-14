@@ -1396,15 +1396,7 @@ public class OSM {
           } // else if etc.
 
           if (marker_position_ok) {
-            out.write(
-                "  L.marker(["
-                    + lat_marker
-                    + ","
-                    + lon_marker
-                    + "], markerOptions).addTo(map).bindPopup("
-                    + infowindow_total
-                    + ").openPopup();");
-            out.newLine();
+            OsmMapHtmlWriter.writeMarker(out, lat_marker, lon_marker, infowindow_total);
           }
         } // if (obs.length() > 70)
       } //  for (String obs : immt_list)
@@ -1784,15 +1776,7 @@ public class OSM {
           // main.OSM_mode.contains(main.OSM_OFFLINE_MANUAL))
 
           if (marker_position_ok) {
-            out.write(
-                "  L.marker(["
-                    + lat_marker
-                    + ","
-                    + lon_marker
-                    + "], markerOptions).addTo(map).bindPopup("
-                    + infowindow_total
-                    + ").openPopup();");
-            out.newLine();
+            OsmMapHtmlWriter.writeMarker(out, lat_marker, lon_marker, infowindow_total);
           }
         } // if ( (!mylatestmeasurements.AWS_array[i][mylatestmeasurements.date_index].equals(""))
         // && etc.

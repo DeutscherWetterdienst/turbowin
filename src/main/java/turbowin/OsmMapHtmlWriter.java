@@ -131,4 +131,17 @@ final class OsmMapHtmlWriter {
     out.write("</html>");
     out.newLine();
   }
+
+  static void writeMarker(BufferedWriter out, String latitude, String longitude, String popup)
+      throws IOException {
+    out.write(
+        "  L.marker(["
+            + latitude
+            + ","
+            + longitude
+            + "], markerOptions).addTo(map).bindPopup("
+            + popup
+            + ").openPopup();");
+    out.newLine();
+  }
 }
