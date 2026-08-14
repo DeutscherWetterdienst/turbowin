@@ -357,4 +357,48 @@ public class AwsObservationComposerTest {
       mywaves.Hw2_code = originalHw2;
     }
   }
+
+  @Test
+  public void convertsCloudTypesToAwsCodes() {
+    String originalLowCloud = mycl.cl_code;
+    String originalMiddleCloud = mycm.cm_code;
+    String originalHighCloud = mych.ch_code;
+    try {
+      mycl.cl_code = "1";
+      mycm.cm_code = "7a";
+      mych.ch_code = "3";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("31", fields[13]);
+      assertEquals("27", fields[14]);
+      assertEquals("13", fields[15]);
+    } finally {
+      mycl.cl_code = originalLowCloud;
+      mycm.cm_code = originalMiddleCloud;
+      mych.ch_code = originalHighCloud;
+    }
+  }
+
+  @Test
+  public void omitsUnavailableAndMalformedCloudTypes() {
+    String originalLowCloud = mycl.cl_code;
+    String originalMiddleCloud = mycm.cm_code;
+    String originalHighCloud = mych.ch_code;
+    try {
+      mycl.cl_code = "/";
+      mycm.cm_code = "x";
+      mych.ch_code = "";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("", fields[13]);
+      assertEquals("", fields[14]);
+      assertEquals("", fields[15]);
+    } finally {
+      mycl.cl_code = originalLowCloud;
+      mycm.cm_code = originalMiddleCloud;
+      mych.ch_code = originalHighCloud;
+    }
+  }
 }
