@@ -273,4 +273,88 @@ public class AwsObservationComposerTest {
       main.true_wind_speed_from_AWS_present = originalSpeedFromAws;
     }
   }
+
+  @Test
+  public void convertsWindWavePeriodsAndHeights() {
+    String originalPw = mywaves.Pw_code;
+    String originalHw = mywaves.Hw_code;
+    String originalDw1 = mywaves.Dw1_code;
+    String originalPw1 = mywaves.Pw1_code;
+    String originalHw1 = mywaves.Hw1_code;
+    String originalDw2 = mywaves.Dw2_code;
+    String originalPw2 = mywaves.Pw2_code;
+    String originalHw2 = mywaves.Hw2_code;
+    try {
+      mywaves.Pw_code = "03";
+      mywaves.Hw_code = "03";
+      mywaves.Dw1_code = "12";
+      mywaves.Pw1_code = "04";
+      mywaves.Hw1_code = "05";
+      mywaves.Dw2_code = "24";
+      mywaves.Pw2_code = "06";
+      mywaves.Hw2_code = "07";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("3", fields[17]);
+      assertEquals("1.5", fields[18]);
+      assertEquals("120", fields[19]);
+      assertEquals("4", fields[20]);
+      assertEquals("2.5", fields[21]);
+      assertEquals("240", fields[22]);
+      assertEquals("6", fields[23]);
+      assertEquals("3.5", fields[24]);
+    } finally {
+      mywaves.Pw_code = originalPw;
+      mywaves.Hw_code = originalHw;
+      mywaves.Dw1_code = originalDw1;
+      mywaves.Pw1_code = originalPw1;
+      mywaves.Hw1_code = originalHw1;
+      mywaves.Dw2_code = originalDw2;
+      mywaves.Pw2_code = originalPw2;
+      mywaves.Hw2_code = originalHw2;
+    }
+  }
+
+  @Test
+  public void omitsUnavailableWindWaveValues() {
+    String originalPw = mywaves.Pw_code;
+    String originalHw = mywaves.Hw_code;
+    String originalDw1 = mywaves.Dw1_code;
+    String originalPw1 = mywaves.Pw1_code;
+    String originalHw1 = mywaves.Hw1_code;
+    String originalDw2 = mywaves.Dw2_code;
+    String originalPw2 = mywaves.Pw2_code;
+    String originalHw2 = mywaves.Hw2_code;
+    try {
+      mywaves.Pw_code = "99";
+      mywaves.Hw_code = "99";
+      mywaves.Dw1_code = "99";
+      mywaves.Pw1_code = "99";
+      mywaves.Hw1_code = "99";
+      mywaves.Dw2_code = "99";
+      mywaves.Pw2_code = "99";
+      mywaves.Hw2_code = "99";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("", fields[17]);
+      assertEquals("", fields[18]);
+      assertEquals("", fields[19]);
+      assertEquals("", fields[20]);
+      assertEquals("", fields[21]);
+      assertEquals("", fields[22]);
+      assertEquals("", fields[23]);
+      assertEquals("", fields[24]);
+    } finally {
+      mywaves.Pw_code = originalPw;
+      mywaves.Hw_code = originalHw;
+      mywaves.Dw1_code = originalDw1;
+      mywaves.Pw1_code = originalPw1;
+      mywaves.Hw1_code = originalHw1;
+      mywaves.Dw2_code = originalDw2;
+      mywaves.Pw2_code = originalPw2;
+      mywaves.Hw2_code = originalHw2;
+    }
+  }
 }
