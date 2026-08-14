@@ -221,57 +221,15 @@ final class AwsObservationComposer {
 
     // clouds low (Cl) [bufr table 020012]
     //
-    if (mycl.cl_code.equals("/")) {
-      AWS_Cl = "";
-    } else if ((mycl.cl_code != null) && (mycl.cl_code.compareTo("") != 0)) {
-      // AWS_Cl = mycl.cl_code;
-      try {
-        int hulp_cl = Integer.parseInt(mycl.cl_code) + 30; // add 30, see bufr table 020012
-        AWS_Cl = Integer.toString(hulp_cl);
-      } catch (NumberFormatException ex) {
-        AWS_Cl = "";
-        System.out.println("+++ Error compile obs for AWS; cloud type low (Cl) " + ex);
-      } // catch
-    } else {
-      AWS_Cl = "";
-    }
+    AWS_Cl = AwsCloudCodeFormatter.convert(mycl.cl_code, 30, "low (Cl)");
 
     // clouds middle (Cm) [bufr table 020012]
     //
-    if (mycm.cm_code.equals("/")) {
-      AWS_Cm = "";
-    } else if ((mycm.cm_code != null) && (mycm.cm_code.compareTo("") != 0)) {
-      // AWS_Cm = mycm.cm_code.substring(0, 1);// omdat bij cm_code in geval Cm7 een a, b, c er
-      // achter staat (dus 7a, 7b, 7c)
-      try {
-        int hulp_cm =
-            Integer.parseInt(mycm.cm_code.substring(0, 1)) + 20; // add 20, see bufr table 020012
-        AWS_Cm = Integer.toString(hulp_cm);
-        // NB because if Cm code = Cm7 there is an addition a, b, c (so 7a, 7b, 7c)
-      } catch (NumberFormatException ex) {
-        AWS_Cm = "";
-        System.out.println("+++ Error compile obs for AWS; cloud type middle (Cm) " + ex);
-      } // catch
-    } else {
-      AWS_Cm = "";
-    }
+    AWS_Cm = AwsCloudCodeFormatter.convertFirstDigit(mycm.cm_code, 20, "middle (Cm)");
 
     // clouds high (Ch) [bufr table 020012]
     //
-    if (mych.ch_code.equals("/")) {
-      AWS_Ch = "";
-    } else if ((mych.ch_code != null) && (mych.ch_code.compareTo("") != 0)) {
-      // AWS_Ch = mych.ch_code;
-      try {
-        int hulp_ch = Integer.parseInt(mych.ch_code) + 10; // add 10, see bufr table 020012
-        AWS_Ch = Integer.toString(hulp_ch);
-      } catch (NumberFormatException ex) {
-        AWS_Ch = "";
-        System.out.println("+++ Error compile obs for AWS; cloud type high (Ch) " + ex);
-      } // catch
-    } else {
-      AWS_Ch = "";
-    }
+    AWS_Ch = AwsCloudCodeFormatter.convert(mych.ch_code, 10, "high (Ch)");
 
     // height of base of lowest clouds (h)
     //
