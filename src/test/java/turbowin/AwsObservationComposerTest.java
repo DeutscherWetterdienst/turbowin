@@ -517,4 +517,80 @@ public class AwsObservationComposerTest {
       myice1.Di_code = originalBearing;
     }
   }
+
+  @Test
+  public void preservesDirectAwsObservationCodes() {
+    String originalVisibility = myvisibility.VV_code;
+    String originalPresentWeather = mypresentweather.ww_code;
+    String originalPastWeatherOne = mypastweather.W1_code;
+    String originalPastWeatherTwo = mypastweather.W2_code;
+    String originalCloudCover = mycloudcover.N_code;
+    String originalCloudAmount = mycloudcover.Nh_code;
+    String originalCloudHeight = mycloudcover.h_code;
+    try {
+      myvisibility.VV_code = "10";
+      mypresentweather.ww_code = "45";
+      mypastweather.W1_code = "2";
+      mypastweather.W2_code = "3";
+      mycloudcover.N_code = "7";
+      mycloudcover.Nh_code = "5";
+      mycloudcover.h_code = "4";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("10", fields[7]);
+      assertEquals("45", fields[8]);
+      assertEquals("2", fields[9]);
+      assertEquals("3", fields[10]);
+      assertEquals("7", fields[11]);
+      assertEquals("5", fields[12]);
+      assertEquals("4", fields[16]);
+    } finally {
+      myvisibility.VV_code = originalVisibility;
+      mypresentweather.ww_code = originalPresentWeather;
+      mypastweather.W1_code = originalPastWeatherOne;
+      mypastweather.W2_code = originalPastWeatherTwo;
+      mycloudcover.N_code = originalCloudCover;
+      mycloudcover.Nh_code = originalCloudAmount;
+      mycloudcover.h_code = originalCloudHeight;
+    }
+  }
+
+  @Test
+  public void omitsDirectAwsObservationSentinelCodes() {
+    String originalVisibility = myvisibility.VV_code;
+    String originalPresentWeather = mypresentweather.ww_code;
+    String originalPastWeatherOne = mypastweather.W1_code;
+    String originalPastWeatherTwo = mypastweather.W2_code;
+    String originalCloudCover = mycloudcover.N_code;
+    String originalCloudAmount = mycloudcover.Nh_code;
+    String originalCloudHeight = mycloudcover.h_code;
+    try {
+      myvisibility.VV_code = "//";
+      mypresentweather.ww_code = "//";
+      mypastweather.W1_code = "/";
+      mypastweather.W2_code = "/";
+      mycloudcover.N_code = "/";
+      mycloudcover.Nh_code = "/";
+      mycloudcover.h_code = "/";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("", fields[7]);
+      assertEquals("", fields[8]);
+      assertEquals("", fields[9]);
+      assertEquals("", fields[10]);
+      assertEquals("", fields[11]);
+      assertEquals("", fields[12]);
+      assertEquals("", fields[16]);
+    } finally {
+      myvisibility.VV_code = originalVisibility;
+      mypresentweather.ww_code = originalPresentWeather;
+      mypastweather.W1_code = originalPastWeatherOne;
+      mypastweather.W2_code = originalPastWeatherTwo;
+      mycloudcover.N_code = originalCloudCover;
+      mycloudcover.Nh_code = originalCloudAmount;
+      mycloudcover.h_code = originalCloudHeight;
+    }
+  }
 }
