@@ -233,68 +233,23 @@ final class ObservationComposer {
 
     // concentration or arrangement of sea ice (ci)
     //
-    if ((myice1.ci_code != null) && (myice1.ci_code.compareTo("") != 0)) {
-      if (myice1.ci_code.trim().equals("u")) // unable to report etc.
-      {
-        coded_obs_ci = "/";
-      } else {
-        coded_obs_ci = myice1.ci_code;
-      }
-    } else {
-      coded_obs_ci = "/";
-    }
+    coded_obs_ci = ObservationCodeFormatter.iceValue(myice1.ci_code);
 
     // stage of development Si)
     //
-    if ((myice1.Si_code != null) && (myice1.Si_code.compareTo("") != 0)) {
-      if (myice1.Si_code.trim().equals("u")) // unable to report etc.
-      {
-        coded_obs_Si = "/";
-      } else {
-        coded_obs_Si = myice1.Si_code;
-      }
-    } else {
-      coded_obs_Si = "/";
-    }
+    coded_obs_Si = ObservationCodeFormatter.iceValue(myice1.Si_code);
 
     // Ice of land origin (bi)
     //
-    if ((myice1.bi_code != null) && (myice1.bi_code.compareTo("") != 0)) {
-      if (myice1.bi_code.trim().equals("u")) // unable to report etc.
-      {
-        coded_obs_bi = "/";
-      } else {
-        coded_obs_bi = myice1.bi_code;
-      }
-    } else {
-      coded_obs_bi = "/";
-    }
+    coded_obs_bi = ObservationCodeFormatter.iceValue(myice1.bi_code);
 
     // Bearing of principal ice edge (Di)
     //
-    if ((myice1.Di_code != null) && (myice1.Di_code.compareTo("") != 0)) {
-      if (myice1.Di_code.trim().equals("u")) // unable to report etc.
-      {
-        coded_obs_Di = "/";
-      } else {
-        coded_obs_Di = myice1.Di_code;
-      }
-    } else {
-      coded_obs_Di = "/";
-    }
+    coded_obs_Di = ObservationCodeFormatter.iceValue(myice1.Di_code);
 
     // Ice situation and trend over preceding three hours (zi)
     //
-    if ((myice1.zi_code != null) && (myice1.zi_code.compareTo("") != 0)) {
-      if (myice1.zi_code.trim().equals("u")) // unable to report etc.
-      {
-        coded_obs_zi = "/";
-      } else {
-        coded_obs_zi = myice1.zi_code;
-      }
-    } else {
-      coded_obs_zi = "/";
-    }
+    coded_obs_zi = ObservationCodeFormatter.iceValue(myice1.zi_code);
 
     if ((coded_obs_call_sign.compareTo("unknown") != 0)
         && (coded_obs_YY.compareTo("//") != 0)

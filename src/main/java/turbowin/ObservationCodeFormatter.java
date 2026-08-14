@@ -21,4 +21,16 @@ final class ObservationCodeFormatter {
     }
     return missingValue;
   }
+
+  static String iceValue(String code) {
+    // Internal "u" means unable to report; legacy observation output represents it as the slash
+    // missing marker.
+    if ((code != null) && (code.compareTo("") != 0)) {
+      if (code.trim().equals("u")) {
+        return "/";
+      }
+      return code;
+    }
+    return "/";
+  }
 }
