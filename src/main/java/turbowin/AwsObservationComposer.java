@@ -283,44 +283,7 @@ final class AwsObservationComposer {
 
     // cause of ice accretion (Is) [bufr table 020033]
     //
-    if (myicing.Is_code.equals("/")) {
-      AWS_Is = "";
-    } else if ((myicing.Is_code != null) && (myicing.Is_code.compareTo("") != 0)) {
-      if (myicing.Is_code.equals("1")) // icing from spray (FM13 code)
-      {
-        AWS_Is = "8"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-        // information about codes", Pierre Blouch)
-      } else if (myicing.Is_code.equals("2")) // icing from fog (FM13 code)
-      {
-        AWS_Is = "4"; // BUFR table 020033 equivalent (see "EUCAWS inputs/outputs complementary
-        // information about codes", Pierre Blouch)
-      } else if (myicing.Is_code.equals("3")) // icing from spray and fog (FM13 code)
-      {
-        AWS_Is = "12"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-        // information about codes", Pierre Blouch)
-      } else if (myicing.Is_code.equals("4")) // icing from rain (FM13 code)
-      {
-        AWS_Is = "2"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-        // information about codes", Pierre Blouch)
-      } else if (myicing.Is_code.equals("5")) // icing from spray and rain (FM13 code)
-      {
-        AWS_Is = "10"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-        // information about codes", Pierre Blouch)
-      } else if (myicing.Is_code.equals("6")) // icing from fog and rain (not present in FM13 code)
-      {
-        AWS_Is = "6"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-        // information about codes", Pierre Blouch)
-      } else if (myicing.Is_code.equals(
-          "14")) // icing from spray and fog and rain (not present in FM13 code)
-      {
-        AWS_Is = "14"; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-        // information about codes", Pierre Blouch)
-      } else {
-        AWS_Is = "";
-      }
-    } else {
-      AWS_Is = "";
-    }
+    AWS_Is = AwsIceCodeFormatter.iceCause(myicing.Is_code);
 
     // sea ice concentration (ci) [bufr table 020034]
     //

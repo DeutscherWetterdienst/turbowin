@@ -49,4 +49,35 @@ final class AwsIceCodeFormatter {
     }
     return "";
   }
+
+  static String iceCause(String code) {
+    // FM13 icing causes map to EUCAWS complementary-code table values: spray, fog, rain, and
+    // combinations are represented by the explicit mappings below; some EUCAWS values are not
+    // present in FM13.
+    // See "EUCAWS inputs/outputs complementary information about codes", Pierre Blouch.
+    if (code.equals("/")) {
+      return "";
+    }
+    if ((code != null) && (code.compareTo("") != 0)) {
+      switch (code) {
+        case "1": // icing from spray (FM13 code)
+          return "8";
+        case "2": // icing from fog (FM13 code)
+          return "4";
+        case "3": // icing from spray and fog (FM13 code)
+          return "12";
+        case "4": // icing from rain (FM13 code)
+          return "2";
+        case "5": // icing from spray and rain (FM13 code)
+          return "10";
+        case "6": // icing from fog and rain (not present in FM13 code)
+          return "6";
+        case "14": // icing from spray, fog, and rain (not present in FM13 code)
+          return "14";
+        default:
+          return "";
+      }
+    }
+    return "";
+  }
 }
