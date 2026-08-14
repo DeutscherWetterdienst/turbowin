@@ -160,64 +160,27 @@ final class AwsObservationComposer {
 
     // visibility [format VV; range 0..99; resolution -; units: code]
     //
-    if (myvisibility.VV_code.equals("//")) {
-      AWS_VV = "";
-    } else if ((myvisibility.VV_code != null) && (myvisibility.VV_code.compareTo("") != 0)) {
-      AWS_VV = myvisibility.VV_code;
-    } else {
-      AWS_VV = "";
-    }
+    AWS_VV = AwsObservationCodeFormatter.direct(myvisibility.VV_code, "//");
 
     // Present Weather [format WW; range 0..99; resolution -; units: bufr code table 020003]
     //
-    if (mypresentweather.ww_code.equals("//")) {
-      AWS_ww = "";
-    } else if ((mypresentweather.ww_code != null)
-        && (mypresentweather.ww_code.compareTo("") != 0)) {
-      AWS_ww = mypresentweather.ww_code;
-    } else {
-      AWS_ww = "";
-    }
+    AWS_ww = AwsObservationCodeFormatter.direct(mypresentweather.ww_code, "//");
 
     // Past weather 1 (W1; bufr table 020004)
     //
-    if (mypastweather.W1_code.equals("/")) {
-      AWS_W1 = "";
-    } else if ((mypastweather.W1_code != null) && (mypastweather.W1_code.compareTo("") != 0)) {
-      AWS_W1 = mypastweather.W1_code;
-    } else {
-      AWS_W1 = "";
-    }
+    AWS_W1 = AwsObservationCodeFormatter.direct(mypastweather.W1_code, "/");
 
     // past weather 2 (W2; bufr table 020004)
     //
-    if (mypastweather.W2_code.equals("/")) {
-      AWS_W2 = "";
-    } else if ((mypastweather.W2_code != null) && (mypastweather.W2_code.compareTo("") != 0)) {
-      AWS_W2 = mypastweather.W2_code;
-    } else {
-      AWS_W2 = "";
-    }
+    AWS_W2 = AwsObservationCodeFormatter.direct(mypastweather.W2_code, "/");
 
     // total cloud cover (N)
     //
-    if (mycloudcover.N_code.equals("/")) {
-      AWS_N = "";
-    } else if ((mycloudcover.N_code != null) && (mycloudcover.N_code.compareTo("") != 0)) {
-      AWS_N = mycloudcover.N_code;
-    } else {
-      AWS_N = "";
-    }
+    AWS_N = AwsObservationCodeFormatter.direct(mycloudcover.N_code, "/");
 
     // Cloud amount Cl/Cm (Nh) [bufr table 020011]
     //
-    if (mycloudcover.Nh_code.equals("/")) {
-      AWS_Nh = "";
-    } else if ((mycloudcover.Nh_code != null) && (mycloudcover.Nh_code.compareTo("") != 0)) {
-      AWS_Nh = mycloudcover.Nh_code;
-    } else {
-      AWS_Nh = "";
-    }
+    AWS_Nh = AwsObservationCodeFormatter.direct(mycloudcover.Nh_code, "/");
 
     // clouds low (Cl) [bufr table 020012]
     //
@@ -233,13 +196,7 @@ final class AwsObservationComposer {
 
     // height of base of lowest clouds (h)
     //
-    if (mycloudcover.h_code.equals("/")) {
-      AWS_h = "";
-    } else if ((mycloudcover.h_code != null) && (mycloudcover.h_code.compareTo("") != 0)) {
-      AWS_h = mycloudcover.h_code;
-    } else {
-      AWS_h = "";
-    }
+    AWS_h = AwsObservationCodeFormatter.direct(mycloudcover.h_code, "/");
 
     // Pw (period wind waves)
     //
