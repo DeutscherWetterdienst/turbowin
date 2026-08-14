@@ -113,16 +113,7 @@ final class ObservationComposer {
 
     // wind speed (ff)
     //
-    if ((mywind.ff_code != null) && (mywind.ff_code.compareTo("") != 0)) {
-      coded_obs_ff = mywind.ff_code;
-
-      // extra 00fff group only added if wind speed >= 100 units (so only if fff00_code != "")
-      if ((mywind.fff00_code != null) && (mywind.fff00_code.compareTo("") != 0)) {
-        coded_obs_ff += SPATIE + "00" + mywind.fff00_code;
-      }
-    } else {
-      coded_obs_ff = "//";
-    }
+    coded_obs_ff = ObservationCodeFormatter.windSpeed(mywind.ff_code, mywind.fff00_code, SPATIE);
 
     // air temperature
     //

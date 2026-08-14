@@ -42,4 +42,16 @@ final class ObservationCodeFormatter {
     }
     return missingValue;
   }
+
+  static String windSpeed(String speed, String highSpeed, String separator) {
+    // The optional 00fff group carries the extended fff00_code for wind speeds of at least 100
+    // units; its 00 prefix identifies the extended high-speed group in the FM13 format.
+    if ((speed != null) && (speed.compareTo("") != 0)) {
+      if ((highSpeed != null) && (highSpeed.compareTo("") != 0)) {
+        return speed + separator + "00" + highSpeed;
+      }
+      return speed;
+    }
+    return "//";
+  }
 }
