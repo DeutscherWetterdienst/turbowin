@@ -144,44 +144,31 @@ final class ObservationComposer {
 
     // air pressure (at MSL)
     //
-    if ((mybarometer.PPPP_code != null) && (mybarometer.PPPP_code.compareTo("") != 0))
-      coded_obs_PPPP = mybarometer.PPPP_code;
-    else coded_obs_PPPP = "////";
+    coded_obs_PPPP = ObservationCodeFormatter.direct(mybarometer.PPPP_code, "////");
 
     // air pressure tendency characteristic
     //
-    if ((mybarograph.a_code != null) && (mybarograph.a_code.compareTo("") != 0))
-      coded_obs_a = mybarograph.a_code;
-    else coded_obs_a = "/";
+    coded_obs_a = ObservationCodeFormatter.direct(mybarograph.a_code, "/");
 
     // air pressure tendency amount
     //
-    if ((mybarograph.ppp_code != null) && (mybarograph.ppp_code.compareTo("") != 0))
-      coded_obs_ppp = mybarograph.ppp_code;
-    else coded_obs_ppp = "///";
+    coded_obs_ppp = ObservationCodeFormatter.direct(mybarograph.ppp_code, "///");
 
     // present weather
     //
-    if ((mypresentweather.ww_code != null) && (mypresentweather.ww_code.compareTo("") != 0))
-      coded_obs_ww = mypresentweather.ww_code;
-    else coded_obs_ww = "//";
+    coded_obs_ww = ObservationCodeFormatter.direct(mypresentweather.ww_code, "//");
 
     // past weather 1
     //
-    if ((mypastweather.W1_code != null) && (mypastweather.W1_code.compareTo("") != 0))
-      coded_obs_W1 = mypastweather.W1_code;
-    else coded_obs_W1 = "/";
+    coded_obs_W1 = ObservationCodeFormatter.direct(mypastweather.W1_code, "/");
 
     // past weather 2
     //
-    if ((mypastweather.W2_code != null) && (mypastweather.W2_code.compareTo("") != 0))
-      coded_obs_W2 = mypastweather.W2_code;
-    else coded_obs_W2 = "/";
+    coded_obs_W2 = ObservationCodeFormatter.direct(mypastweather.W2_code, "/");
 
     // clouds low (Cl)
     //
-    if ((mycl.cl_code != null) && (mycl.cl_code.compareTo("") != 0)) coded_obs_Cl = mycl.cl_code;
-    else coded_obs_Cl = "/";
+    coded_obs_Cl = ObservationCodeFormatter.direct(mycl.cl_code, "/");
 
     // clouds middle (Cm)
     //
@@ -193,8 +180,7 @@ final class ObservationComposer {
 
     // clouds high (Ch)
     //
-    if ((mych.ch_code != null) && (mych.ch_code.compareTo("") != 0)) coded_obs_Ch = mych.ch_code;
-    else coded_obs_Ch = "/";
+    coded_obs_Ch = ObservationCodeFormatter.direct(mych.ch_code, "/");
 
     // Tsea
     //
@@ -207,78 +193,50 @@ final class ObservationComposer {
 
     // wind waves period
     //
-    if ((mywaves.Pw_code != null) && (mywaves.Pw_code.compareTo("") != 0))
-      coded_obs_Pw = mywaves.Pw_code;
-    else coded_obs_Pw = "//";
+    coded_obs_Pw = ObservationCodeFormatter.direct(mywaves.Pw_code, "//");
 
     // wind waves height
     //
-    if ((mywaves.Hw_code != null) && (mywaves.Hw_code.compareTo("") != 0))
-      coded_obs_Hw = mywaves.Hw_code;
-    else coded_obs_Hw = "//";
+    coded_obs_Hw = ObservationCodeFormatter.direct(mywaves.Hw_code, "//");
 
     // swell 1 direction
     //
 
     // JOptionPane.showMessageDialog(null, mywaves.Dw1_code, "mywaves.Dw1_code",
     // JOptionPane.WARNING_MESSAGE);
-    if ((mywaves.Dw1_code != null) && (mywaves.Dw1_code.compareTo("") != 0))
-      coded_obs_Dw1 = mywaves.Dw1_code;
-    else coded_obs_Dw1 = "//";
+    coded_obs_Dw1 = ObservationCodeFormatter.direct(mywaves.Dw1_code, "//");
 
     // swell 1 period
     //
-    if ((mywaves.Pw1_code != null) && (mywaves.Pw1_code.compareTo("") != 0))
-      coded_obs_Pw1 = mywaves.Pw1_code;
-    else coded_obs_Pw1 = "//";
+    coded_obs_Pw1 = ObservationCodeFormatter.direct(mywaves.Pw1_code, "//");
 
     // swell 1 height
     //
-    if ((mywaves.Hw1_code != null) && (mywaves.Hw1_code.compareTo("") != 0))
-      coded_obs_Hw1 = mywaves.Hw1_code;
-    else coded_obs_Hw1 = "//";
+    coded_obs_Hw1 = ObservationCodeFormatter.direct(mywaves.Hw1_code, "//");
 
     // swell 2 direction
     //
-    if ((mywaves.Dw2_code != null) && (mywaves.Dw2_code.compareTo("") != 0))
-      coded_obs_Dw2 = mywaves.Dw2_code;
-    else coded_obs_Dw2 = "//";
+    coded_obs_Dw2 = ObservationCodeFormatter.direct(mywaves.Dw2_code, "//");
 
     // swell 2 period
     //
-    if ((mywaves.Pw2_code != null) && (mywaves.Pw2_code.compareTo("") != 0))
-      coded_obs_Pw2 = mywaves.Pw2_code;
-    else coded_obs_Pw2 = "//";
+    coded_obs_Pw2 = ObservationCodeFormatter.direct(mywaves.Pw2_code, "//");
 
     // swell 2 height
     //
-    if ((mywaves.Hw2_code != null) && (mywaves.Hw2_code.compareTo("") != 0))
-      coded_obs_Hw2 = mywaves.Hw2_code;
-    else coded_obs_Hw2 = "//";
+    coded_obs_Hw2 = ObservationCodeFormatter.direct(mywaves.Hw2_code, "//");
 
     // icing cause (Is)
     //
-    if ((myicing.Is_code != null) && (myicing.Is_code.compareTo("") != 0)) {
-      coded_obs_Is = myicing.Is_code;
-    } else {
-      coded_obs_Is = "/";
-    }
+    coded_obs_Is = ObservationCodeFormatter.direct(myicing.Is_code, "/");
 
     // icing thickness (EsEs)
     //
-    if ((myicing.EsEs_code != null) && (myicing.EsEs_code.compareTo("") != 0)) {
-      coded_obs_EsEs = myicing.EsEs_code;
-    } else {
-      coded_obs_EsEs = "//";
-    }
+    coded_obs_EsEs = ObservationCodeFormatter.direct(myicing.EsEs_code, "//");
 
     // icing rate (Rs)
     //
-    if ((myicing.Rs_code != null) && (myicing.Rs_code.compareTo("") != 0)) {
-      coded_obs_Rs = myicing.Rs_code;
-    } else {
-      coded_obs_Rs = "/";
-    }
+    coded_obs_Rs = ObservationCodeFormatter.direct(myicing.Rs_code, "/");
 
     // wet bulb temperature (TbTbTb)
     //
