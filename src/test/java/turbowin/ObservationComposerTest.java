@@ -250,4 +250,71 @@ public class ObservationComposerTest {
       myicing.Rs_code = originalIceRate;
     }
   }
+
+  @Test
+  public void combinesTemperatureSignAndValueGroups() {
+    String originalAirSign = mytemp.sn_TTT_code;
+    String originalAirTemperature = mytemp.TTT_code;
+    String originalDewSign = mytemp.sn_TdTdTd_code;
+    String originalDewPoint = mytemp.TdTdTd_code;
+    String originalSeaSign = mytemp.ss_TsTsTs_code;
+    String originalSeaTemperature = mytemp.TsTsTs_code;
+    String originalWetBulbSign = mytemp.sn_TbTbTb_code;
+    String originalWetBulb = mytemp.TbTbTb_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mytemp.sn_TTT_code = "0";
+      mytemp.TTT_code = "123";
+      mytemp.sn_TdTdTd_code = "1";
+      mytemp.TdTdTd_code = "234";
+      mytemp.ss_TsTsTs_code = "0";
+      mytemp.TsTsTs_code = "111";
+      mytemp.sn_TbTbTb_code = "0";
+      mytemp.TbTbTb_code = "222";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" 10123 "));
+      assertTrue(observation.contains(" 21234 "));
+      assertTrue(observation.contains(" 00111 "));
+      assertTrue(observation.contains(" 80222"));
+    } finally {
+      mytemp.sn_TTT_code = originalAirSign;
+      mytemp.TTT_code = originalAirTemperature;
+      mytemp.sn_TdTdTd_code = originalDewSign;
+      mytemp.TdTdTd_code = originalDewPoint;
+      mytemp.ss_TsTsTs_code = originalSeaSign;
+      mytemp.TsTsTs_code = originalSeaTemperature;
+      mytemp.sn_TbTbTb_code = originalWetBulbSign;
+      mytemp.TbTbTb_code = originalWetBulb;
+    }
+  }
+
+  @Test
+  public void replacesIncompleteTemperatureGroupsWithUndefinedValues() {
+    String originalAirSign = mytemp.sn_TTT_code;
+    String originalAirTemperature = mytemp.TTT_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mytemp.sn_TTT_code = "0";
+      mytemp.TTT_code = "";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" 1//// "));
+    } finally {
+      mytemp.sn_TTT_code = originalAirSign;
+      mytemp.TTT_code = originalAirTemperature;
+    }
+  }
 }
