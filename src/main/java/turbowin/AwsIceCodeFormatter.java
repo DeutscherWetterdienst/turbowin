@@ -80,4 +80,32 @@ final class AwsIceCodeFormatter {
     }
     return "";
   }
+
+  static String iceBearing(String code) {
+    // FM13 0 means ship in shore or flaw lead; u means unable to report. Neither is encoded here
+    // because this field only represents direction and has no supporting BUFR code table.
+    if (code.equals("/") || code.equals("u") || code.equals("0")) {
+      return "";
+    }
+    switch (code) {
+      case "1":
+        return "45";
+      case "2":
+        return "90";
+      case "3":
+        return "135";
+      case "4":
+        return "180";
+      case "5":
+        return "225";
+      case "6":
+        return "270";
+      case "7":
+        return "315";
+      case "8":
+        return "360";
+      default:
+        return "";
+    }
+  }
 }

@@ -303,40 +303,7 @@ final class AwsObservationComposer {
 
     // bearing of ice edge (Di) [bufr id 020038 NO TABLE]
     //
-    if (myice1.Di_code.equals("/")) {
-      AWS_Di = "";
-    } else if (myice1.Di_code.equals(
-        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
-    {
-      AWS_Di =
-          ""; // there is no code table, only direction, no support for "unable to report...etc"
-    } else if ((myice1.Di_code != null) && (myice1.Di_code.compareTo("") != 0)) {
-      if (myice1.Di_code.equals("0")) // ship in shore or flaw lead (FM13 code)
-      {
-        AWS_Di =
-            ""; // see EUCAWS inputs/outputs Complementary information about codes", Pierre Blouch)
-      } else if (myice1.Di_code.equals("1")) {
-        AWS_Di = "45";
-      } else if (myice1.Di_code.equals("2")) {
-        AWS_Di = "90";
-      } else if (myice1.Di_code.equals("3")) {
-        AWS_Di = "135";
-      } else if (myice1.Di_code.equals("4")) {
-        AWS_Di = "180";
-      } else if (myice1.Di_code.equals("5")) {
-        AWS_Di = "225";
-      } else if (myice1.Di_code.equals("6")) {
-        AWS_Di = "270";
-      } else if (myice1.Di_code.equals("7")) {
-        AWS_Di = "315";
-      } else if (myice1.Di_code.equals("8")) {
-        AWS_Di = "360";
-      } else {
-        AWS_Di = "";
-      }
-    } else {
-      AWS_Di = "";
-    }
+    AWS_Di = AwsIceCodeFormatter.iceBearing(myice1.Di_code);
 
     // OBS_ID (but only if requested and set in the maintenance section
     //
