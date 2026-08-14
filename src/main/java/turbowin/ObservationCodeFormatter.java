@@ -11,4 +11,14 @@ final class ObservationCodeFormatter {
     }
     return missingValue;
   }
+
+  static String combined(String prefix, String value, String missingValue) {
+    if ((prefix != null)
+        && (prefix.compareTo("") != 0)
+        && (value != null)
+        && (value.compareTo("") != 0)) {
+      return prefix + value;
+    }
+    return missingValue;
+  }
 }

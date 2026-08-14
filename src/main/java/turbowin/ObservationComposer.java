@@ -126,21 +126,13 @@ final class ObservationComposer {
 
     // air temperature
     //
-    if ((mytemp.sn_TTT_code != null)
-        && (mytemp.sn_TTT_code.compareTo("") != 0)
-        && (mytemp.TTT_code != null)
-        && (mytemp.TTT_code.compareTo("") != 0))
-      coded_obs_snTTT = mytemp.sn_TTT_code + mytemp.TTT_code;
-    else coded_obs_snTTT = "////";
+    coded_obs_snTTT =
+        ObservationCodeFormatter.combined(mytemp.sn_TTT_code, mytemp.TTT_code, "////");
 
     // dew point
     //
-    if ((mytemp.sn_TdTdTd_code != null)
-        && (mytemp.sn_TdTdTd_code.compareTo("") != 0)
-        && (mytemp.TdTdTd_code != null)
-        && (mytemp.TdTdTd_code.compareTo("") != 0))
-      coded_obs_snTdTdTd = mytemp.sn_TdTdTd_code + mytemp.TdTdTd_code;
-    else coded_obs_snTdTdTd = "////";
+    coded_obs_snTdTdTd =
+        ObservationCodeFormatter.combined(mytemp.sn_TdTdTd_code, mytemp.TdTdTd_code, "////");
 
     // air pressure (at MSL)
     //
@@ -184,12 +176,8 @@ final class ObservationComposer {
 
     // Tsea
     //
-    if ((mytemp.ss_TsTsTs_code != null)
-        && (mytemp.ss_TsTsTs_code.compareTo("") != 0)
-        && (mytemp.TsTsTs_code != null)
-        && (mytemp.TsTsTs_code.compareTo("") != 0))
-      coded_obs_ssTsTsTs = mytemp.ss_TsTsTs_code + mytemp.TsTsTs_code;
-    else coded_obs_ssTsTsTs = "////";
+    coded_obs_ssTsTsTs =
+        ObservationCodeFormatter.combined(mytemp.ss_TsTsTs_code, mytemp.TsTsTs_code, "////");
 
     // wind waves period
     //
@@ -240,12 +228,8 @@ final class ObservationComposer {
 
     // wet bulb temperature (TbTbTb)
     //
-    if ((mytemp.sn_TbTbTb_code != null)
-        && (mytemp.sn_TbTbTb_code.compareTo("") != 0)
-        && (mytemp.TbTbTb_code != null)
-        && (mytemp.TbTbTb_code.compareTo("") != 0))
-      coded_obs_snTbTbTb = mytemp.sn_TbTbTb_code + mytemp.TbTbTb_code;
-    else coded_obs_snTbTbTb = "////";
+    coded_obs_snTbTbTb =
+        ObservationCodeFormatter.combined(mytemp.sn_TbTbTb_code, mytemp.TbTbTb_code, "////");
 
     // concentration or arrangement of sea ice (ci)
     //
