@@ -445,6 +445,22 @@ public class AwsObservationComposerTest {
   }
 
   @Test
+  public void convertsEverySupportedIceCauseCode() {
+    String originalIceCause = myicing.Is_code;
+    String[] sourceCodes = {"1", "2", "3", "4", "5", "6", "14"};
+    String[] expectedCodes = {"8", "4", "12", "2", "10", "6", "14"};
+    try {
+      for (int i = 0; i < sourceCodes.length; i++) {
+        myicing.Is_code = sourceCodes[i];
+        String[] fields = AwsObservationComposer.compile().split(",", -1);
+        assertEquals(expectedCodes[i], fields[27]);
+      }
+    } finally {
+      myicing.Is_code = originalIceCause;
+    }
+  }
+
+  @Test
   public void omitsUnavailableIceCodes() {
     String originalIceThickness = myicing.EsEs_code;
     String originalIceRate = myicing.Rs_code;
