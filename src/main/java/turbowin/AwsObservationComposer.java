@@ -2,9 +2,6 @@ package turbowin;
 
 import static turbowin.main.*;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /** Compiles the AWS observation string from the current application state. */
 final class AwsObservationComposer {
 
@@ -94,10 +91,7 @@ final class AwsObservationComposer {
         }
 
         // rounded one digit
-        BigDecimal bd =
-            new BigDecimal(double_wind_speed)
-                .setScale(1, RoundingMode.HALF_UP); // one decimal, rounded e.g. 2.12939 -> 2.1
-        double_wind_speed = bd.doubleValue();
+        double_wind_speed = AwsNumericFormatter.roundToOneDecimal(double_wind_speed);
 
         AWS_ff = Double.toString(double_wind_speed);
       } else {
@@ -111,10 +105,7 @@ final class AwsObservationComposer {
       if ((mytemp.air_temp.compareTo("") != 0) && (mytemp.air_temp != null)) {
         double_air_temp = Double.parseDouble(mytemp.air_temp);
 
-        BigDecimal bd =
-            new BigDecimal(double_air_temp)
-                .setScale(1, RoundingMode.HALF_UP); // one decimal, rounded e.g. 2.12939 -> 2.1
-        double_air_temp = bd.doubleValue();
+        double_air_temp = AwsNumericFormatter.roundToOneDecimal(double_air_temp);
 
         AWS_TTT = Double.toString(double_air_temp);
       } else {
@@ -147,10 +138,7 @@ final class AwsObservationComposer {
       if ((mytemp.sea_water_temp.compareTo("") != 0) && (mytemp.sea_water_temp != null)) {
         double_sst = Double.parseDouble(mytemp.sea_water_temp);
 
-        BigDecimal bd =
-            new BigDecimal(double_sst)
-                .setScale(1, RoundingMode.HALF_UP); // one decimal, rounded e.g. 2.12939 -> 2.1
-        double_sst = bd.doubleValue();
+        double_sst = AwsNumericFormatter.roundToOneDecimal(double_sst);
 
         AWS_sst = Double.toString(double_sst);
       } else {
