@@ -381,4 +381,44 @@ public class ObservationComposerTest {
       myice1.zi_code = originalSituation;
     }
   }
+
+  @Test
+  public void extractsTheFirstCharacterOfMiddleCloudCode() {
+    String originalMiddleCloud = mycm.cm_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mycm.cm_code = "7a";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" 8//7/ "));
+    } finally {
+      mycm.cm_code = originalMiddleCloud;
+    }
+  }
+
+  @Test
+  public void usesPlaceholderForMissingMiddleCloudCode() {
+    String originalMiddleCloud = mycm.cm_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mycm.cm_code = "";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" 8//// "));
+    } finally {
+      mycm.cm_code = originalMiddleCloud;
+    }
+  }
 }
