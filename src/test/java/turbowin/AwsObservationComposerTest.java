@@ -593,4 +593,76 @@ public class AwsObservationComposerTest {
       mycloudcover.h_code = originalCloudHeight;
     }
   }
+
+  @Test
+  public void roundsManualNumericWeatherValues() {
+    String originalWindUnits = main.wind_units;
+    int originalWindSpeed = mywind.int_true_wind_speed;
+    String originalAirTemperature = mytemp.air_temp;
+    double originalRelativeHumidity = mytemp.double_rv;
+    String originalSeaWaterTemperature = mytemp.sea_water_temp;
+    boolean originalSpeedFromAws = main.true_wind_speed_from_AWS_present;
+    boolean originalAirTemperatureFromAws = main.air_temp_from_AWS_present;
+    boolean originalHumidityFromAws = main.rh_from_AWS_present;
+    boolean originalSstFromAws = main.SST_from_AWS_present;
+    try {
+      main.wind_units = main.M_S;
+      mywind.int_true_wind_speed = 12;
+      mytemp.air_temp = "2.26";
+      mytemp.double_rv = 0.567;
+      mytemp.sea_water_temp = "4.26";
+      main.true_wind_speed_from_AWS_present = false;
+      main.air_temp_from_AWS_present = false;
+      main.rh_from_AWS_present = false;
+      main.SST_from_AWS_present = false;
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("12.0", fields[3]);
+      assertEquals("2.3", fields[4]);
+      assertEquals("57", fields[5]);
+      assertEquals("4.3", fields[6]);
+    } finally {
+      main.wind_units = originalWindUnits;
+      mywind.int_true_wind_speed = originalWindSpeed;
+      mytemp.air_temp = originalAirTemperature;
+      mytemp.double_rv = originalRelativeHumidity;
+      mytemp.sea_water_temp = originalSeaWaterTemperature;
+      main.true_wind_speed_from_AWS_present = originalSpeedFromAws;
+      main.air_temp_from_AWS_present = originalAirTemperatureFromAws;
+      main.rh_from_AWS_present = originalHumidityFromAws;
+      main.SST_from_AWS_present = originalSstFromAws;
+    }
+  }
+
+  @Test
+  public void omitsWeatherValuesProvidedByAws() {
+    String originalAirTemperature = mytemp.air_temp;
+    double originalRelativeHumidity = mytemp.double_rv;
+    String originalSeaWaterTemperature = mytemp.sea_water_temp;
+    boolean originalAirTemperatureFromAws = main.air_temp_from_AWS_present;
+    boolean originalHumidityFromAws = main.rh_from_AWS_present;
+    boolean originalSstFromAws = main.SST_from_AWS_present;
+    try {
+      mytemp.air_temp = "2.26";
+      mytemp.double_rv = 0.567;
+      mytemp.sea_water_temp = "4.26";
+      main.air_temp_from_AWS_present = true;
+      main.rh_from_AWS_present = true;
+      main.SST_from_AWS_present = true;
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("", fields[4]);
+      assertEquals("", fields[5]);
+      assertEquals("", fields[6]);
+    } finally {
+      mytemp.air_temp = originalAirTemperature;
+      mytemp.double_rv = originalRelativeHumidity;
+      mytemp.sea_water_temp = originalSeaWaterTemperature;
+      main.air_temp_from_AWS_present = originalAirTemperatureFromAws;
+      main.rh_from_AWS_present = originalHumidityFromAws;
+      main.SST_from_AWS_present = originalSstFromAws;
+    }
+  }
 }
