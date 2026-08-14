@@ -275,31 +275,11 @@ final class AwsObservationComposer {
 
     // ice deposit (thickness)
     //
-    if (myicing.EsEs_code.equals("//")) {
-      AWS_EsEs = "";
-    } else if ((myicing.EsEs_code != null) && (myicing.EsEs_code.compareTo("") != 0)) {
-      double double_EsEs =
-          Double.parseDouble(myicing.EsEs_code) / 100; // eg 04 in FM13 code (4 cm) -> 0.04 m
-
-      BigDecimal bd =
-          new BigDecimal(double_EsEs)
-              .setScale(2, RoundingMode.HALF_UP); // two decimals, rounded e.g. 0.12939 -> 0.13
-      double_EsEs = bd.doubleValue();
-
-      AWS_EsEs = Double.toString(double_EsEs);
-    } else {
-      AWS_EsEs = "";
-    }
+    AWS_EsEs = AwsIceCodeFormatter.thickness(myicing.EsEs_code);
 
     // rate of ice accretion (Rs) [bufr table 020032]
     //
-    if (myicing.Rs_code.equals("/")) {
-      AWS_Rs = "";
-    } else if ((myicing.Rs_code != null) && (myicing.Rs_code.compareTo("") != 0)) {
-      AWS_Rs = myicing.Rs_code;
-    } else {
-      AWS_Rs = "";
-    }
+    AWS_Rs = AwsIceCodeFormatter.direct(myicing.Rs_code);
 
     // cause of ice accretion (Is) [bufr table 020033]
     //
@@ -344,59 +324,19 @@ final class AwsObservationComposer {
 
     // sea ice concentration (ci) [bufr table 020034]
     //
-    if (myice1.ci_code.equals("/")) {
-      AWS_ci = "";
-    } else if (myice1.ci_code.equals(
-        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
-    {
-      AWS_ci = "14";
-    } else if ((myice1.ci_code != null) && (myice1.ci_code.compareTo("") != 0)) {
-      AWS_ci = myice1.ci_code;
-    } else {
-      AWS_ci = "";
-    }
+    AWS_ci = AwsIceCodeFormatter.unknownValue(myice1.ci_code, "14");
 
     // amount and type of ice (bi) [bufr table 020035]
     //
-    if (myice1.bi_code.equals("/")) {
-      AWS_bi = "";
-    } else if (myice1.bi_code.equals(
-        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
-    {
-      AWS_bi = "14";
-    } else if ((myice1.bi_code != null) && (myice1.bi_code.compareTo("") != 0)) {
-      AWS_bi = myice1.bi_code;
-    } else {
-      AWS_bi = "";
-    }
+    AWS_bi = AwsIceCodeFormatter.unknownValue(myice1.bi_code, "14");
 
     // ice situation (zi) [bufr table 020036]
     //
-    if (myice1.zi_code.equals("/")) {
-      AWS_zi = "";
-    } else if (myice1.zi_code.equals(
-        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
-    {
-      AWS_zi = "30";
-    } else if ((myice1.zi_code != null) && (myice1.zi_code.compareTo("") != 0)) {
-      AWS_zi = myice1.zi_code;
-    } else {
-      AWS_zi = "";
-    }
+    AWS_zi = AwsIceCodeFormatter.unknownValue(myice1.zi_code, "30");
 
     // ice development (Si) [bufr table 020037]
     //
-    if (myice1.Si_code.equals("/")) {
-      AWS_Si = "";
-    } else if (myice1.Si_code.equals(
-        "u")) // internal code used by TurboWin+ ("unable to report because of ......")
-    {
-      AWS_Si = "30";
-    } else if ((myice1.Si_code != null) && (myice1.Si_code.compareTo("") != 0)) {
-      AWS_Si = myice1.Si_code;
-    } else {
-      AWS_Si = "";
-    }
+    AWS_Si = AwsIceCodeFormatter.unknownValue(myice1.Si_code, "30");
 
     // bearing of ice edge (Di) [bufr id 020038 NO TABLE]
     //
