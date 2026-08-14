@@ -260,30 +260,15 @@ public class FORMAT_101 {
 
         // copy compression exe file (e.g teste_hc_TW.exe or teste_hc_TW_64)
         //
-        try (InputStream is =
-                getClass()
-                    .getResourceAsStream(
-                        main.FORMAT_101_ROOT_DIR
-                            + "/"
-                            + compression_exe); // NB in jar file: java.io.File.separator DO NOT
-            // WORK UNDER WINDOWS, MUST BE "/" !!!!!
-            OutputStream os =
-                new FileOutputStream(
-                    main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + compression_exe)) {
-          // NB try-with-resource; resources (is and os) will be closed automatically when execution
-          // leaves the try block.
-
-          int readBytes;
-          byte[] buffer = new byte[4096];
-
-          while ((readBytes = is.read(buffer)) > 0) {
-            os.write(buffer, 0, readBytes);
-          }
-
+        try {
+          copyResourceToFile(
+              main.FORMAT_101_ROOT_DIR + "/" + compression_exe,
+              new File(
+                  main.logs_dir
+                      + java.io.File.separator
+                      + main.FORMAT_101_ROOT_DIR
+                      + java.io.File.separator
+                      + compression_exe));
           // info = "--- success when copying " + COMPRESSION_EXE + " from jar to: " + main.logs_dir
           // + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // COMPRESSION_EXE;
@@ -353,30 +338,15 @@ public class FORMAT_101 {
 
         // copy decompression exe file (e.g MAWSbin_TW.exe or MAWSbin_TW_64)
         //
-        try (InputStream is =
-                getClass()
-                    .getResourceAsStream(
-                        main.FORMAT_101_ROOT_DIR
-                            + "/"
-                            + decompression_exe); // NB in jar file: java.io.File.separator DO NOT
-            // WORK UNDER WINDOWS, MUST BE "/" !!!!!
-            OutputStream os =
-                new FileOutputStream(
-                    main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + decompression_exe)) {
-          // NB try-with-resource; resources (is and os) will be closed automatically when execution
-          // leaves the try block.
-
-          int readBytes;
-          byte[] buffer = new byte[4096];
-
-          while ((readBytes = is.read(buffer)) > 0) {
-            os.write(buffer, 0, readBytes);
-          }
-
+        try {
+          copyResourceToFile(
+              main.FORMAT_101_ROOT_DIR + "/" + decompression_exe,
+              new File(
+                  main.logs_dir
+                      + java.io.File.separator
+                      + main.FORMAT_101_ROOT_DIR
+                      + java.io.File.separator
+                      + decompression_exe));
           // info = "--- success when copying " + DECOMPRESSION_EXE + " from jar to: " +
           // main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR +
           // java.io.File.separator + DECOMPRESSION_EXE;
@@ -443,34 +413,17 @@ public class FORMAT_101 {
 
         // copy bufr table (S-AWS-101_modl_pilote.csv) [required for compression]
         //
-        try (InputStream is =
-                getClass()
-                    .getResourceAsStream(
-                        main.FORMAT_101_ROOT_DIR
-                            + "/"
-                            + FORMAT_101_CONFIG_DIR
-                            + "/"
-                            + BUFR_TABLE); // NB in jar file: java.io.File.separator DO NOT WORK
-            // UNDER WINDOWS, MUST BE "/" !!!!!
-            OutputStream os =
-                new FileOutputStream(
-                    main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + FORMAT_101_CONFIG_DIR
-                        + java.io.File.separator
-                        + BUFR_TABLE)) {
-          // NB try-with-resource; resources (is and os) will be closed automatically when execution
-          // leaves the try block.
-
-          int readBytes;
-          byte[] buffer = new byte[4096];
-
-          while ((readBytes = is.read(buffer)) > 0) {
-            os.write(buffer, 0, readBytes);
-          }
-
+        try {
+          copyResourceToFile(
+              main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + BUFR_TABLE,
+              new File(
+                  main.logs_dir
+                      + java.io.File.separator
+                      + main.FORMAT_101_ROOT_DIR
+                      + java.io.File.separator
+                      + FORMAT_101_CONFIG_DIR
+                      + java.io.File.separator
+                      + BUFR_TABLE));
           // info = "--- success when copying " + BUFR_TABLE + " from jar to: " + main.logs_dir +
           // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // FORMAT_101_CONFIG_DIR + java.io.File.separator + BUFR_TABLE;
@@ -506,34 +459,17 @@ public class FORMAT_101 {
 
         // copy meta table (S-AWS-101_modl_meta.csv) [required for decompression]
         //
-        try (InputStream is =
-                getClass()
-                    .getResourceAsStream(
-                        main.FORMAT_101_ROOT_DIR
-                            + "/"
-                            + FORMAT_101_CONFIG_DIR
-                            + "/"
-                            + META_TABLE); // NB in jar file: java.io.File.separator DO NOT WORK
-            // UNDER WINDOWS, MUST BE "/" !!!!!
-            OutputStream os =
-                new FileOutputStream(
-                    main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + FORMAT_101_CONFIG_DIR
-                        + java.io.File.separator
-                        + META_TABLE)) {
-          // NB try-with-resource; resources (is and os) will be closed automatically when execution
-          // leaves the try block.
-
-          int readBytes;
-          byte[] buffer = new byte[4096];
-
-          while ((readBytes = is.read(buffer)) > 0) {
-            os.write(buffer, 0, readBytes);
-          }
-
+        try {
+          copyResourceToFile(
+              main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + META_TABLE,
+              new File(
+                  main.logs_dir
+                      + java.io.File.separator
+                      + main.FORMAT_101_ROOT_DIR
+                      + java.io.File.separator
+                      + FORMAT_101_CONFIG_DIR
+                      + java.io.File.separator
+                      + META_TABLE));
           // info = "--- success when copying " + META_TABLE + " from jar to: " + main.logs_dir +
           // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // FORMAT_101_CONFIG_DIR + java.io.File.separator + META_TABLE;
@@ -569,34 +505,17 @@ public class FORMAT_101 {
 
         // copy data type (DataType.txt) [required for decompression]
         //
-        try (InputStream is =
-                getClass()
-                    .getResourceAsStream(
-                        main.FORMAT_101_ROOT_DIR
-                            + "/"
-                            + FORMAT_101_CONFIG_DIR
-                            + "/"
-                            + DATA_TYPE); // NB in jar file: java.io.File.separator DO NOT WORK
-            // UNDER WINDOWS, MUST BE "/" !!!!!
-            OutputStream os =
-                new FileOutputStream(
-                    main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + FORMAT_101_CONFIG_DIR
-                        + java.io.File.separator
-                        + DATA_TYPE)) {
-          // NB try-with-resource; resources (is and os) will be closed automatically when execution
-          // leaves the try block.
-
-          int readBytes;
-          byte[] buffer = new byte[4096];
-
-          while ((readBytes = is.read(buffer)) > 0) {
-            os.write(buffer, 0, readBytes);
-          }
-
+        try {
+          copyResourceToFile(
+              main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + DATA_TYPE,
+              new File(
+                  main.logs_dir
+                      + java.io.File.separator
+                      + main.FORMAT_101_ROOT_DIR
+                      + java.io.File.separator
+                      + FORMAT_101_CONFIG_DIR
+                      + java.io.File.separator
+                      + DATA_TYPE));
           // info = "--- success when copying " + DATA_TYPE + " from jar to: " + main.logs_dir +
           // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // FORMAT_101_CONFIG_DIR + java.io.File.separator + DATA_TYPE;
@@ -633,6 +552,19 @@ public class FORMAT_101 {
     } // if (doorgaan == true)
 
     return format_101_module_status;
+  }
+
+  private void copyResourceToFile(String resourcePath, File destination) throws IOException {
+    // JAR resource paths must use "/"; File.separator does not work for resources on Windows.
+    try (InputStream is = getClass().getResourceAsStream(resourcePath);
+        OutputStream os = new FileOutputStream(destination)) {
+      int readBytes;
+      byte[] buffer = new byte[4096];
+
+      while ((readBytes = is.read(buffer)) > 0) {
+        os.write(buffer, 0, readBytes);
+      }
+    }
   }
 
   private int write_HC_identification_file(String identifier) {
