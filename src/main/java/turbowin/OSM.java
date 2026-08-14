@@ -931,24 +931,7 @@ public class OSM {
       //
 
       if (((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))) {
-        // it is possible that the OSM dir do not exist, if not create the OSM dir first
-        String str_OSM_dir = main.logs_dir + java.io.File.separator + OSM_ROOT_DIR;
-        final File OSM_dir = new File(str_OSM_dir);
-        if (OSM_dir.exists() == false) {
-          try {
-            OSM_dir.mkdir();
-            main.log_turbowin_system_message(
-                "[OSM] created OSM dir for obs online map in " + main.logs_dir);
-          } catch (Exception ex) {
-            // If a security manager exists and its SecurityManager.checkWrite(java.lang.String)
-            // method denies access to create the named directory.
-            main.log_turbowin_system_message(
-                "[OSM] could NOT create OSM dir for obs online map in "
-                    + main.logs_dir
-                    + "; reason: "
-                    + ex);
-          }
-        } // if (OSM_dir.exists() == false)
+        ensureOsmDirectory();
 
         String full_path_leaflet_maps_html_file =
             OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_ONLINE_MAP_HTML_FILE);
@@ -1020,24 +1003,7 @@ public class OSM {
           && ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))) {
         desktop = Desktop.getDesktop();
 
-        // it is possible that the OSM dir do not exist, if not create the OSM dir first
-        String str_OSM_dir = main.logs_dir + java.io.File.separator + OSM_ROOT_DIR;
-        final File OSM_dir = new File(str_OSM_dir);
-        if (OSM_dir.exists() == false) {
-          try {
-            OSM_dir.mkdir();
-            main.log_turbowin_system_message(
-                "[OSM] created OSM dir for obs online map in " + main.logs_dir);
-          } catch (Exception ex) {
-            // If a security manager exists and its SecurityManager.checkWrite(java.lang.String)
-            // method denies access to create the named directory.
-            main.log_turbowin_system_message(
-                "[OSM] could NOT create OSM dir for obs online map in "
-                    + main.logs_dir
-                    + "; reason: "
-                    + ex);
-          }
-        } // if (OSM_dir.exists() == false)
+        ensureOsmDirectory();
 
         String full_path_leaflet_maps_html_file =
             OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_ONLINE_MAP_HTML_FILE);
@@ -1060,6 +1026,26 @@ public class OSM {
         }
       } // if ((Desktop.isDesktopSupported()) && etc.
     } // else (Windows etc.)
+  }
+
+  private void ensureOsmDirectory() {
+    // It is possible that the OSM dir does not exist; if not, create it first.
+    String osmDirectoryPath = main.logs_dir + java.io.File.separator + OSM_ROOT_DIR;
+    File osmDirectory = new File(osmDirectoryPath);
+    if (osmDirectory.exists() == false) {
+      try {
+        osmDirectory.mkdir();
+        main.log_turbowin_system_message(
+            "[OSM] created OSM dir for obs online map in " + main.logs_dir);
+      } catch (Exception ex) {
+        // If a security manager exists, its checkWrite method may deny directory creation.
+        main.log_turbowin_system_message(
+            "[OSM] could NOT create OSM dir for obs online map in "
+                + main.logs_dir
+                + "; reason: "
+                + ex);
+      }
+    }
   }
 
   private void OSM_IMMT_Obsen_on_Map(
