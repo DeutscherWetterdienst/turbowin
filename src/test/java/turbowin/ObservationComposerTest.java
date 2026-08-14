@@ -439,4 +439,62 @@ public class ObservationComposerTest {
       mych.ch_code = originalHighCloud;
     }
   }
+
+  @Test
+  public void composesWindSpeedWithOptionalHighSpeedExtension() {
+    String originalCloudCover = mycloudcover.N_code;
+    String originalWindDirection = mywind.dd_code;
+    String originalWindSpeed = mywind.ff_code;
+    String originalHighWindSpeed = mywind.fff00_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mycloudcover.N_code = "5";
+      mywind.dd_code = "18";
+      mywind.ff_code = "05";
+      mywind.fff00_code = "12";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" 51805 0012 "));
+    } finally {
+      mycloudcover.N_code = originalCloudCover;
+      mywind.dd_code = originalWindDirection;
+      mywind.ff_code = originalWindSpeed;
+      mywind.fff00_code = originalHighWindSpeed;
+    }
+  }
+
+  @Test
+  public void usesWindSpeedPlaceholderWhenMissing() {
+    String originalCloudCover = mycloudcover.N_code;
+    String originalWindDirection = mywind.dd_code;
+    String originalWindSpeed = mywind.ff_code;
+    String originalHighWindSpeed = mywind.fff00_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mycloudcover.N_code = "5";
+      mywind.dd_code = "18";
+      mywind.ff_code = "";
+      mywind.fff00_code = "12";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.contains(" 518// "));
+    } finally {
+      mycloudcover.N_code = originalCloudCover;
+      mywind.dd_code = originalWindDirection;
+      mywind.ff_code = originalWindSpeed;
+      mywind.fff00_code = originalHighWindSpeed;
+    }
+  }
 }
