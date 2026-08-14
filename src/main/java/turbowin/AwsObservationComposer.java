@@ -285,155 +285,35 @@ final class AwsObservationComposer {
 
     // Pw (period wind waves)
     //
-    if (mywaves.Pw_code.equals("//")) {
-      AWS_Pw = "";
-    } else if (mywaves.Pw_code.equals("99")) {
-      AWS_Pw = ""; // EUCAWS (Bufr) cannot handle 99 so agreed this will become ""
-    } else if ((mywaves.Pw_code != null) && (mywaves.Pw_code.compareTo("") != 0)) {
-      // period < 10 sec than skip leading 0
-      // if (Integer.parseInt(mywaves.Pw_code) >= 10)
-      // {
-      //   AWS_Pw = mywaves.Pw_code.substring(1, 1);
-      // }
-      // else
-      // {
-      //   AWS_Pw = mywaves.Pw_code;
-      // }
-      // skip if present the leading zero
-      int int_Pw = Integer.parseInt(mywaves.Pw_code);
-      AWS_Pw = Integer.toString(int_Pw);
-    } else {
-      AWS_Pw = "";
-    }
+    AWS_Pw = AwsWaveCodeFormatter.period(mywaves.Pw_code);
 
     // Hw (height of wind waves)
     //
-    if (mywaves.Hw_code.equals("//")) {
-      AWS_Hw = "";
-    } else if (mywaves.Hw_code.equals("99")) {
-      AWS_Hw = "";
-    } else if ((mywaves.Hw_code != null) && (mywaves.Hw_code.compareTo("") != 0)) {
-      // AWS_Hw = mywaves.Hw_code;
-
-      double double_Hw = Double.parseDouble(mywaves.Hw_code) / 2; // eg 03 in FM13 code -> 1.5 m
-
-      BigDecimal bd =
-          new BigDecimal(double_Hw)
-              .setScale(1, RoundingMode.HALF_UP); // one decimals, rounded e.g. 0.50000 -> 0.5
-      double_Hw = bd.doubleValue();
-
-      AWS_Hw = Double.toString(double_Hw);
-    } else {
-      AWS_Hw = "";
-    }
+    AWS_Hw = AwsWaveCodeFormatter.height(mywaves.Hw_code);
 
     // dw1 (direction of first swell)
     //
-    if (mywaves.Dw1_code.equals("//")) {
-      AWS_Dw1 = "";
-    } else if (mywaves.Dw1_code.equals("99")) {
-      AWS_Dw1 = "";
-    } else if ((mywaves.Dw1_code != null) && (mywaves.Dw1_code.compareTo("") != 0)) {
-      AWS_Dw1 = mywaves.Dw1_code + "0";
-    } else {
-      AWS_Dw1 = "";
-    }
+    AWS_Dw1 = AwsWaveCodeFormatter.direction(mywaves.Dw1_code);
 
     // Pw1 (period of first swell)
     //
-    if (mywaves.Pw1_code.equals("//")) {
-      AWS_Pw1 = "";
-    } else if (mywaves.Pw1_code.equals("99")) {
-      AWS_Pw1 = "";
-    } else if ((mywaves.Pw1_code != null) && (mywaves.Pw1_code.compareTo("") != 0)) {
-      // period < 10 sec? than skip leading 0
-      // if (Integer.parseInt(mywaves.Pw1_code) >= 10)
-      // {
-      //  AWS_Pw1 = mywaves.Pw1_code.substring(1, 1);
-      // }
-      // else
-      // {
-      //   AWS_Pw1 = mywaves.Pw1_code;
-      // }
-      int int_Pw1 = Integer.parseInt(mywaves.Pw1_code);
-      AWS_Pw1 = Integer.toString(int_Pw1);
-    } else {
-      AWS_Pw1 = "";
-    }
+    AWS_Pw1 = AwsWaveCodeFormatter.period(mywaves.Pw1_code);
 
     // Hw1 (height of first swell)
     //
-    if (mywaves.Hw1_code.equals("//")) {
-      AWS_Hw1 = "";
-    } else if (mywaves.Hw1_code.equals("99")) {
-      AWS_Hw1 = "";
-    } else if ((mywaves.Hw1_code != null) && (mywaves.Hw1_code.compareTo("") != 0)) {
-      // AWS_Hw1 = mywaves.Hw1_code;
-
-      double double_Hw1 = Double.parseDouble(mywaves.Hw1_code) / 2; // eg 03 in FM13 code -> 1.5 m
-
-      BigDecimal bd =
-          new BigDecimal(double_Hw1)
-              .setScale(1, RoundingMode.HALF_UP); // one decimals, rounded e.g. 0.50000 -> 0.5
-      double_Hw1 = bd.doubleValue();
-
-      AWS_Hw1 = Double.toString(double_Hw1);
-    } else {
-      AWS_Hw1 = "";
-    }
+    AWS_Hw1 = AwsWaveCodeFormatter.height(mywaves.Hw1_code);
 
     // Dw2 (direction of second swell)
     //
-    if (mywaves.Dw2_code.equals("//")) {
-      AWS_Dw2 = "";
-    } else if (mywaves.Dw2_code.equals("99")) {
-      AWS_Dw2 = "";
-    } else if ((mywaves.Dw2_code != null) && (mywaves.Dw2_code.compareTo("") != 0)) {
-      AWS_Dw2 = mywaves.Dw2_code + "0";
-    } else {
-      AWS_Dw2 = "";
-    }
+    AWS_Dw2 = AwsWaveCodeFormatter.direction(mywaves.Dw2_code);
 
     // Pw2 (period of second swell)
     //
-    if (mywaves.Pw2_code.equals("//")) {
-      AWS_Pw2 = "";
-    } else if (mywaves.Pw2_code.equals("99")) {
-      AWS_Pw2 = "";
-    } else if ((mywaves.Pw2_code != null) && (mywaves.Pw2_code.compareTo("") != 0)) {
-      // period < 10 sec than skip leading 0
-      // if (Integer.parseInt(mywaves.Pw2_code) >= 10)
-      // {
-      //  AWS_Pw2 = mywaves.Pw2_code.substring(1, 1);
-      // }
-      // else
-      // {
-      //   AWS_Pw2 = mywaves.Pw2_code;
-      // }
-      int int_Pw2 = Integer.parseInt(mywaves.Pw2_code);
-      AWS_Pw2 = Integer.toString(int_Pw2);
-    } else {
-      AWS_Pw2 = "";
-    }
+    AWS_Pw2 = AwsWaveCodeFormatter.period(mywaves.Pw2_code);
 
     // Hw2 (height of second swell)
     //
-    if (mywaves.Hw2_code.equals("//")) {
-      AWS_Hw2 = "";
-    } else if (mywaves.Hw2_code.equals("99")) {
-      AWS_Hw2 = "";
-    } else if ((mywaves.Hw2_code != null) && (mywaves.Hw2_code.compareTo("") != 0)) {
-      double double_Hw2 = Double.parseDouble(mywaves.Hw2_code) / 2; // eg 03 in FM13 code -> 1.5 m
-
-      BigDecimal bd =
-          new BigDecimal(double_Hw2)
-              .setScale(1, RoundingMode.HALF_UP); // one decimals, rounded e.g. 0.50000 -> 0.5
-      double_Hw2 = bd.doubleValue();
-
-      AWS_Hw2 = Double.toString(double_Hw2);
-    } else {
-      AWS_Hw2 = "";
-    }
+    AWS_Hw2 = AwsWaveCodeFormatter.height(mywaves.Hw2_code);
 
     // ice deposit (thickness)
     //
