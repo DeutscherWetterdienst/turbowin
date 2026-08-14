@@ -33,4 +33,13 @@ final class ObservationCodeFormatter {
     }
     return "/";
   }
+
+  static String firstCharacter(String code, String missingValue) {
+    // Cm7 may carry an a/b/c suffix; the composed observation protocol uses only its numeric first
+    // character.
+    if ((code != null) && (code.compareTo("") != 0)) {
+      return code.substring(0, 1);
+    }
+    return missingValue;
+  }
 }

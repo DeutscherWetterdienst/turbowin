@@ -385,6 +385,9 @@ public class ObservationComposerTest {
   @Test
   public void extractsTheFirstCharacterOfMiddleCloudCode() {
     String originalMiddleCloud = mycm.cm_code;
+    String originalCloudAmount = mycloudcover.Nh_code;
+    String originalLowCloud = mycl.cl_code;
+    String originalHighCloud = mych.ch_code;
     try {
       main.station_ID = "TEST";
       mydatetime.YY_code = "01";
@@ -393,18 +396,27 @@ public class ObservationComposerTest {
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
       mycm.cm_code = "7a";
+      mycloudcover.Nh_code = "";
+      mycl.cl_code = "";
+      mych.ch_code = "";
 
       String observation = ObservationComposer.compose(" ");
 
       assertTrue(observation.contains(" 8//7/ "));
     } finally {
       mycm.cm_code = originalMiddleCloud;
+      mycloudcover.Nh_code = originalCloudAmount;
+      mycl.cl_code = originalLowCloud;
+      mych.ch_code = originalHighCloud;
     }
   }
 
   @Test
   public void usesPlaceholderForMissingMiddleCloudCode() {
     String originalMiddleCloud = mycm.cm_code;
+    String originalCloudAmount = mycloudcover.Nh_code;
+    String originalLowCloud = mycl.cl_code;
+    String originalHighCloud = mych.ch_code;
     try {
       main.station_ID = "TEST";
       mydatetime.YY_code = "01";
@@ -413,12 +425,18 @@ public class ObservationComposerTest {
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
       mycm.cm_code = "";
+      mycloudcover.Nh_code = "";
+      mycl.cl_code = "";
+      mych.ch_code = "";
 
       String observation = ObservationComposer.compose(" ");
 
       assertTrue(observation.contains(" 8//// "));
     } finally {
       mycm.cm_code = originalMiddleCloud;
+      mycloudcover.Nh_code = originalCloudAmount;
+      mycl.cl_code = originalLowCloud;
+      mych.ch_code = originalHighCloud;
     }
   }
 }

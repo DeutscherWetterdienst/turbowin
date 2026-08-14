@@ -164,11 +164,7 @@ final class ObservationComposer {
 
     // clouds middle (Cm)
     //
-    if ((mycm.cm_code != null) && (mycm.cm_code.compareTo("") != 0))
-      coded_obs_Cm =
-          mycm.cm_code.substring(
-              0, 1); // omdat bij cm_code in geval Cm7 een a, b, c er achter staat (dus 7a, 7b, 7c)
-    else coded_obs_Cm = "/";
+    coded_obs_Cm = ObservationCodeFormatter.firstCharacter(mycm.cm_code, "/");
 
     // clouds high (Ch)
     //
