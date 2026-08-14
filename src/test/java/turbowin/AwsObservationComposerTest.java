@@ -401,4 +401,88 @@ public class AwsObservationComposerTest {
       mych.ch_code = originalHighCloud;
     }
   }
+
+  @Test
+  public void convertsIceCodesToAwsValues() {
+    String originalIceThickness = myicing.EsEs_code;
+    String originalIceRate = myicing.Rs_code;
+    String originalIceCause = myicing.Is_code;
+    String originalConcentration = myice1.ci_code;
+    String originalAmountAndType = myice1.bi_code;
+    String originalSituation = myice1.zi_code;
+    String originalDevelopment = myice1.Si_code;
+    String originalBearing = myice1.Di_code;
+    try {
+      myicing.EsEs_code = "04";
+      myicing.Rs_code = "2";
+      myicing.Is_code = "3";
+      myice1.ci_code = "u";
+      myice1.bi_code = "u";
+      myice1.zi_code = "u";
+      myice1.Si_code = "u";
+      myice1.Di_code = "8";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("0.04", fields[25]);
+      assertEquals("2", fields[26]);
+      assertEquals("12", fields[27]);
+      assertEquals("14", fields[28]);
+      assertEquals("14", fields[29]);
+      assertEquals("30", fields[30]);
+      assertEquals("30", fields[31]);
+      assertEquals("360", fields[32]);
+    } finally {
+      myicing.EsEs_code = originalIceThickness;
+      myicing.Rs_code = originalIceRate;
+      myicing.Is_code = originalIceCause;
+      myice1.ci_code = originalConcentration;
+      myice1.bi_code = originalAmountAndType;
+      myice1.zi_code = originalSituation;
+      myice1.Si_code = originalDevelopment;
+      myice1.Di_code = originalBearing;
+    }
+  }
+
+  @Test
+  public void omitsUnavailableIceCodes() {
+    String originalIceThickness = myicing.EsEs_code;
+    String originalIceRate = myicing.Rs_code;
+    String originalIceCause = myicing.Is_code;
+    String originalConcentration = myice1.ci_code;
+    String originalAmountAndType = myice1.bi_code;
+    String originalSituation = myice1.zi_code;
+    String originalDevelopment = myice1.Si_code;
+    String originalBearing = myice1.Di_code;
+    try {
+      myicing.EsEs_code = "//";
+      myicing.Rs_code = "/";
+      myicing.Is_code = "9";
+      myice1.ci_code = "/";
+      myice1.bi_code = "/";
+      myice1.zi_code = "/";
+      myice1.Si_code = "/";
+      myice1.Di_code = "0";
+
+      String[] fields = AwsObservationComposer.compile().split(",", -1);
+
+      assertEquals("", fields[25]);
+      assertEquals("", fields[26]);
+      assertEquals("", fields[27]);
+      assertEquals("", fields[28]);
+      assertEquals("", fields[29]);
+      assertEquals("", fields[30]);
+      assertEquals("", fields[31]);
+      assertEquals("", fields[32]);
+    } finally {
+      myicing.EsEs_code = originalIceThickness;
+      myicing.Rs_code = originalIceRate;
+      myicing.Is_code = originalIceCause;
+      myice1.ci_code = originalConcentration;
+      myice1.bi_code = originalAmountAndType;
+      myice1.zi_code = originalSituation;
+      myice1.Si_code = originalDevelopment;
+      myice1.Di_code = originalBearing;
+    }
+  }
 }
