@@ -1436,37 +1436,12 @@ public class OSM {
     //
     // NB this function is still in background thread
 
-    Desktop desktop = null;
-
-    // Before more Desktop API is used, first check
-    // whether the API is supported by this particular
-    // virtual machine (VM) on this particular host.
-
-    if ((Desktop.isDesktopSupported())
-        && ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))) {
-      desktop = Desktop.getDesktop();
-
-      String full_path_leaflet_maps_html_file =
-          OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_OFFLINE_MAP_HTML_FILE);
-      OSM_IMMT_Obsen_on_Map(immt_list, full_path_leaflet_maps_html_file);
-
-      // open the just created leaflet maps html with the default web browser
-      try {
-        File leaflet_maps_file =
-            new File(full_path_leaflet_maps_html_file); // String omzetten naar File
-
-        // if (leaflet_maps_file.exists()) // is niet nodig door het try/catch blok
-        desktop.open(leaflet_maps_file);
-      } catch (NullPointerException | IllegalArgumentException | IOException ex1) {
-        // if file is null
-        System.out.println(
-            "+++ unable to create dynamic (offline) html file for leaflet Maps plot [function: OSM_display_IMMT_on_offline_map()] ("
-                + ex1
-                + ")");
-        main.log_turbowin_system_message(
-            "[OSM] error creating offline AWS sensor Obs's Map html file");
-      }
-    } // if ((Desktop.isDesktopSupported()) && etc.
+    openOfflineMap(
+        OBS_OFFLINE_MAP_HTML_FILE,
+        () ->
+            OSM_IMMT_Obsen_on_Map(
+                immt_list, OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_OFFLINE_MAP_HTML_FILE)),
+        "OSM_display_IMMT_on_offline_map()");
   } // private void OSM_display_IMMT_on_offline_map(List<String> immt_list)
 
   private void OSM_display_AWS_Sensor_on_online_map() {
@@ -1542,37 +1517,34 @@ public class OSM {
     //
     // NB this function is still in background thread
 
-    Desktop desktop = null;
+    openOfflineMap(
+        OBS_OFFLINE_MAP_HTML_FILE,
+        () ->
+            OSM_AWS_Sensor_Obsen_on_Map(
+                OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_OFFLINE_MAP_HTML_FILE)),
+        "OSM_display_AWS_Sensor_on_offline_map()");
+  }
 
-    // Before more Desktop API is used, first check
-    // whether the API is supported by this particular
-    // virtual machine (VM) on this particular host.
-
+  private void openOfflineMap(String mapFileName, Runnable mapWriter, String functionName) {
     if ((Desktop.isDesktopSupported())
         && ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))) {
-      desktop = Desktop.getDesktop();
+      Desktop desktop = Desktop.getDesktop();
+      String mapPath = OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, mapFileName);
+      mapWriter.run();
 
-      String full_path_leaflet_maps_html_file =
-          OsmMapPath.file(main.logs_dir, OSM_ROOT_DIR, OBS_OFFLINE_MAP_HTML_FILE);
-      OSM_AWS_Sensor_Obsen_on_Map(full_path_leaflet_maps_html_file);
-
-      // open the just created leaflet maps html with the default web browser
       try {
-        File leaflet_maps_file =
-            new File(full_path_leaflet_maps_html_file); // String omzetten naar File
-
-        // if (leaflet_maps_file.exists()) // is niet nodig door het try/catch blok
-        desktop.open(leaflet_maps_file);
-      } catch (NullPointerException | IllegalArgumentException | IOException ex1) {
-        // if file is null
+        desktop.open(new File(mapPath));
+      } catch (NullPointerException | IllegalArgumentException | IOException ex) {
         System.out.println(
-            "+++ unable to create dynamic (offline) html file for leaflet Maps plot [function: OSM_display_AWS_Sensor_on_offline_map()] ("
-                + ex1
+            "+++ unable to create dynamic (offline) html file for leaflet Maps plot [function: "
+                + functionName
+                + "] ("
+                + ex
                 + ")");
         main.log_turbowin_system_message(
             "[OSM] error creating offline AWS sensor Obs's Map html file");
       }
-    } // if ((Desktop.isDesktopSupported()) && etc.
+    }
   }
 
   private void OSM_AWS_Sensor_Obsen_on_Map(String full_path_leaflet_maps_html_file) {
