@@ -461,6 +461,22 @@ public class AwsObservationComposerTest {
   }
 
   @Test
+  public void convertsEverySupportedIceBearingCode() {
+    String originalBearing = myice1.Di_code;
+    String[] sourceCodes = {"1", "2", "3", "4", "5", "6", "7", "8"};
+    String[] expectedCodes = {"45", "90", "135", "180", "225", "270", "315", "360"};
+    try {
+      for (int i = 0; i < sourceCodes.length; i++) {
+        myice1.Di_code = sourceCodes[i];
+        String[] fields = AwsObservationComposer.compile().split(",", -1);
+        assertEquals(expectedCodes[i], fields[32]);
+      }
+    } finally {
+      myice1.Di_code = originalBearing;
+    }
+  }
+
+  @Test
   public void omitsUnavailableIceCodes() {
     String originalIceThickness = myicing.EsEs_code;
     String originalIceRate = myicing.Rs_code;
