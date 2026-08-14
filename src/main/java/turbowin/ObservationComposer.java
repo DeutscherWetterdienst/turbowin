@@ -68,74 +68,48 @@ final class ObservationComposer {
     // date/time (null value if YY_code never activated /null pointer, "" if page visited but
     // nothing done)"
     //
-    if ((mydatetime.YY_code != null) && (mydatetime.YY_code.compareTo("") != 0)) // day
-    coded_obs_YY = mydatetime.YY_code;
-    else coded_obs_YY = "//";
+    coded_obs_YY = ObservationCodeFormatter.direct(mydatetime.YY_code, "//");
 
-    if ((mydatetime.GG_code != null) && (mydatetime.GG_code.compareTo("") != 0)) // hour
-    coded_obs_GG = mydatetime.GG_code;
-    else coded_obs_GG = "//";
+    coded_obs_GG = ObservationCodeFormatter.direct(mydatetime.GG_code, "//");
 
     // position
     //
-    if ((myposition.Qc_code != null) && (myposition.Qc_code.compareTo("") != 0))
-      coded_obs_Qc = myposition.Qc_code;
-    else coded_obs_Qc = "/";
+    coded_obs_Qc = ObservationCodeFormatter.direct(myposition.Qc_code, "/");
 
-    if ((myposition.lalala_code != null) && (myposition.lalala_code.compareTo("") != 0))
-      coded_obs_lalala = myposition.lalala_code;
-    else coded_obs_lalala = "///";
+    coded_obs_lalala = ObservationCodeFormatter.direct(myposition.lalala_code, "///");
 
-    if ((myposition.lolololo_code != null) && (myposition.lolololo_code.compareTo("") != 0))
-      coded_obs_lolololo = myposition.lolololo_code;
-    else coded_obs_lolololo = "////";
+    coded_obs_lolololo = ObservationCodeFormatter.direct(myposition.lolololo_code, "////");
 
     // ship course
     //
-    if ((myposition.Ds_code != null) && (myposition.Ds_code.compareTo("") != 0))
-      coded_obs_Ds = myposition.Ds_code;
-    else coded_obs_Ds = "/";
+    coded_obs_Ds = ObservationCodeFormatter.direct(myposition.Ds_code, "/");
 
     // ship speed
     //
-    if ((myposition.vs_code != null) && (myposition.vs_code.compareTo("") != 0))
-      coded_obs_vs = myposition.vs_code;
-    else coded_obs_vs = "/";
+    coded_obs_vs = ObservationCodeFormatter.direct(myposition.vs_code, "/");
 
     // total cloud cover (N)
     //
-    if ((mycloudcover.N_code != null) && (mycloudcover.N_code.compareTo("") != 0))
-      coded_obs_N = mycloudcover.N_code;
-    else coded_obs_N = "/";
+    coded_obs_N = ObservationCodeFormatter.direct(mycloudcover.N_code, "/");
 
     // cover Cl/Cm (Nh)
     //
-    if ((mycloudcover.Nh_code != null) && (mycloudcover.Nh_code.compareTo("") != 0))
-      coded_obs_Nh = mycloudcover.Nh_code;
-    else coded_obs_Nh = "/";
+    coded_obs_Nh = ObservationCodeFormatter.direct(mycloudcover.Nh_code, "/");
 
     // height lowest cloud in the sky (h)
     //
-    if ((mycloudcover.h_code != null) && (mycloudcover.h_code.compareTo("") != 0))
-      coded_obs_h = mycloudcover.h_code;
-    else coded_obs_h = "/";
+    coded_obs_h = ObservationCodeFormatter.direct(mycloudcover.h_code, "/");
 
     // visibility (VV)
     //
-    if ((myvisibility.VV_code != null) && (myvisibility.VV_code.compareTo("") != 0))
-      coded_obs_VV = myvisibility.VV_code;
-    else coded_obs_VV = "//";
+    coded_obs_VV = ObservationCodeFormatter.direct(myvisibility.VV_code, "//");
 
     // winds source
-    if ((mywind.iw_code != null) && (mywind.iw_code.compareTo("") != 0))
-      coded_obs_iw = mywind.iw_code;
-    else coded_obs_iw = "/";
+    coded_obs_iw = ObservationCodeFormatter.direct(mywind.iw_code, "/");
 
     // wind direction (dd)
     //
-    if ((mywind.dd_code != null) && (mywind.dd_code.compareTo("") != 0))
-      coded_obs_dd = mywind.dd_code;
-    else coded_obs_dd = "//";
+    coded_obs_dd = ObservationCodeFormatter.direct(mywind.dd_code, "//");
 
     // wind speed (ff)
     //
