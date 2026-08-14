@@ -131,4 +131,42 @@ public class ObservationComposerTest {
     myposition.lalala_code = "234";
     myposition.lolololo_code = "5678";
   }
+
+  @Test
+  public void includesRepresentativeWeatherGroups() {
+    String originalWindSource = mywind.iw_code;
+    String originalWindDirection = mywind.dd_code;
+    String originalWindSpeed = mywind.ff_code;
+    String originalCloudCover = mycloudcover.N_code;
+    String originalTemperatureSign = mytemp.sn_TTT_code;
+    String originalTemperature = mytemp.TTT_code;
+    try {
+      main.station_ID = "TEST";
+      mydatetime.YY_code = "01";
+      mydatetime.GG_code = "12";
+      myposition.Qc_code = "1";
+      myposition.lalala_code = "234";
+      myposition.lolololo_code = "5678";
+      mywind.iw_code = "1";
+      mywind.dd_code = "18";
+      mywind.ff_code = "05";
+      mycloudcover.N_code = "5";
+      mytemp.sn_TTT_code = "0";
+      mytemp.TTT_code = "123";
+
+      String observation = ObservationComposer.compose(" ");
+
+      assertTrue(observation.startsWith("BBXX TEST 01121 99234 15678"));
+      assertTrue(observation.contains(" 51805 "));
+      assertTrue(observation.contains(" 10123 "));
+      assertTrue(observation.endsWith("="));
+    } finally {
+      mywind.iw_code = originalWindSource;
+      mywind.dd_code = originalWindDirection;
+      mywind.ff_code = originalWindSpeed;
+      mycloudcover.N_code = originalCloudCover;
+      mytemp.sn_TTT_code = originalTemperatureSign;
+      mytemp.TTT_code = originalTemperature;
+    }
+  }
 }
