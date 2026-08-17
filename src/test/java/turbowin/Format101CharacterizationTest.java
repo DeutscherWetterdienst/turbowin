@@ -389,6 +389,30 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void convertsDegreesAndMinutesWithThreeDecimalPlaces() throws Exception {
+    assertEquals(
+        12.5,
+        (Double)
+            invokePrivate(
+                "convertCoordinateToDegrees",
+                new Class<?>[] {int.class, int.class, boolean.class},
+                12,
+                30,
+                false),
+        0.0);
+    assertEquals(
+        -45.5,
+        (Double)
+            invokePrivate(
+                "convertCoordinateToDegrees",
+                new Class<?>[] {int.class, int.class, boolean.class},
+                45,
+                30,
+                true),
+        0.0);
+  }
+
+  @Test
   public void preservesPressureChangeRoundingAndSign() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
