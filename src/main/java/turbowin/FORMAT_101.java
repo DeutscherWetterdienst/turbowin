@@ -1427,15 +1427,8 @@ public class FORMAT_101 {
         present[18] = 1;
       } else if (main.wind_units.trim().indexOf(main.KNOTS) != -1) // so wind speed units knots
       {
-        // compressed_wind_speed = (double)mywind.int_true_wind_speed * main.KNOT_M_S_CONVERSION *
-        // schalings_factor; // from knots -> m/s
-        BigDecimal bd_wind =
-            new BigDecimal(
-                    (double) mywind.int_true_wind_speed
-                        * main.KNOT_M_S_CONVERSION
-                        * schalings_factor)
-                .setScale(3, RoundingMode.HALF_UP); // three decimals
-        compressed_wind_speed = bd_wind.doubleValue();
+        compressed_wind_speed =
+            convertKnotsToMetersPerSecond(mywind.int_true_wind_speed * schalings_factor);
         present[18] = 1;
       } else {
         compressed_wind_speed = COMPRESSED_UNDEF_VALUE;
@@ -2613,6 +2606,12 @@ public class FORMAT_101 {
         out.newLine(); // newLine(): write the line separator string defined by the system property.
       }
     }
+  }
+
+  private double convertKnotsToMetersPerSecond(double knots) {
+    return new BigDecimal(knots * main.KNOT_M_S_CONVERSION)
+        .setScale(3, RoundingMode.HALF_UP)
+        .doubleValue();
   }
 
   public static String compression_exe;
