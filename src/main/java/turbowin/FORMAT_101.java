@@ -14,6 +14,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class FORMAT_101 {
+  // Legacy SOG_APR and fallback speed codes are in knots; FORMAT 101 stores m/s to three decimals.
+  private static final double LEGACY_KNOTS_TO_METERS_PER_SECOND = 0.5144444;
+
   // for compression required:
   //                             - dir: format_101 [with file: teste_hc_TW.exe (Windows) or
   // teste_hc_TW (Linux)]
@@ -886,8 +889,6 @@ public class FORMAT_101 {
     double[] val = new double[NBMAXELEM];
     double schalings_factor;
     String[] description = new String[NBMAXELEM];
-    final double omzet_kn_ms = 0.5144444;
-
     // if masked call sign (VOS ID) iserted -> use this for obs else 'normal' call sign
     //
     //      if ((main.masked_call_sign != null) && (main.masked_call_sign.trim().length() > 0))
@@ -1053,10 +1054,7 @@ public class FORMAT_101 {
     {
       // if in APR mode the high resolution SOG_APR is available (eg Mintaka Star) use then this
       // value
-      BigDecimal bd_SOG_APR =
-          new BigDecimal((double) myposition.SOG_APR * omzet_kn_ms * schalings_factor)
-              .setScale(3, RoundingMode.HALF_UP); // three decimals // omzet_kn_ms = 0.5144444
-      compressed_ship_speed = bd_SOG_APR.doubleValue();
+      compressed_ship_speed = convertLegacyShipSpeedToMetersPerSecond(myposition.SOG_APR);
       present[3] = 1;
     } else // SOG_APR not available
     {
@@ -1087,12 +1085,7 @@ public class FORMAT_101 {
       }
 
       if (gem_Vs != Integer.MAX_VALUE) {
-        // compressed_ship_speed = (double)gem_Vs * omzet_kn_ms * schalings_factor;
-        // // omzet_kn_ms = 0.5144444
-        BigDecimal bd_vs =
-            new BigDecimal((double) gem_Vs * omzet_kn_ms * schalings_factor)
-                .setScale(3, RoundingMode.HALF_UP); // three decimals // omzet_kn_ms = 0.5144444
-        compressed_ship_speed = bd_vs.doubleValue();
+        compressed_ship_speed = convertLegacyShipSpeedToMetersPerSecond(gem_Vs);
         present[3] = 1;
       } else {
         compressed_ship_speed = COMPRESSED_UNDEF_VALUE;
@@ -2508,6 +2501,12 @@ public class FORMAT_101 {
 
   private double convertKnotsToMetersPerSecond(double knots) {
     return new BigDecimal(knots * main.KNOT_M_S_CONVERSION)
+        .setScale(3, RoundingMode.HALF_UP)
+        .doubleValue();
+  }
+
+  private double convertLegacyShipSpeedToMetersPerSecond(double knots) {
+    return new BigDecimal(knots * LEGACY_KNOTS_TO_METERS_PER_SECOND)
         .setScale(3, RoundingMode.HALF_UP)
         .doubleValue();
   }
