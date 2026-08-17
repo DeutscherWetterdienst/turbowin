@@ -367,6 +367,28 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void scalesAndSignsPressureChanges() throws Exception {
+    assertEquals(
+        123.4,
+        (Double)
+            invokePrivate(
+                "convertPressureChangeToPascals",
+                new Class<?>[] {double.class, int.class},
+                1.234,
+                2),
+        0.0);
+    assertEquals(
+        -123.4,
+        (Double)
+            invokePrivate(
+                "convertPressureChangeToPascals",
+                new Class<?>[] {double.class, int.class},
+                1.234,
+                5),
+        0.0);
+  }
+
+  @Test
   public void preservesPressureChangeRoundingAndSign() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
