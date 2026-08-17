@@ -469,6 +469,57 @@ public class Format101CharacterizationTest {
     }
   }
 
+  @Test
+  public void preservesCoordinateConversionAndHemisphereSigns() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    int originalLatitudeDegrees = myposition.int_latitude_degrees;
+    int originalLatitudeMinutes = myposition.int_latitude_minutes;
+    String originalLatitudeHemisphere = myposition.latitude_hemisphere;
+    int originalLongitudeDegrees = myposition.int_longitude_degrees;
+    int originalLongitudeMinutes = myposition.int_longitude_minutes;
+    String originalLongitudeHemisphere = myposition.longitude_hemisphere;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      myposition.int_latitude_degrees = 12;
+      myposition.int_latitude_minutes = 30;
+      myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH;
+      myposition.int_longitude_degrees = 45;
+      myposition.int_longitude_minutes = 30;
+      myposition.longitude_hemisphere = myposition.HEMISPHERE_WEST;
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 -12.5           latitude [degrees]", lines.get(12));
+      assertEquals("1 -45.5           longitude [degrees]", lines.get(13));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      myposition.int_latitude_degrees = originalLatitudeDegrees;
+      myposition.int_latitude_minutes = originalLatitudeMinutes;
+      myposition.latitude_hemisphere = originalLatitudeHemisphere;
+      myposition.int_longitude_degrees = originalLongitudeDegrees;
+      myposition.int_longitude_minutes = originalLongitudeMinutes;
+      myposition.longitude_hemisphere = originalLongitudeHemisphere;
+    }
+  }
+
   private static Object invokePrivate(String methodName, Class<?>[] parameterTypes, Object... args)
       throws Exception {
     Method method = FORMAT_101.class.getDeclaredMethod(methodName, parameterTypes);
