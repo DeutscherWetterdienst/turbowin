@@ -1031,36 +1031,10 @@ public class FORMAT_101 {
       present[2] = 1;
     } else // (COG_APR not available)
     {
-      if (myposition.Ds_code.equals("0") == true) {
-        compressed_ship_direction = (double) 0 * schalings_factor;
+      Integer direction = directionCodeToDegrees(myposition.Ds_code);
+      if (direction != null) {
+        compressed_ship_direction = direction * schalings_factor;
         present[2] = 1;
-      } else if (myposition.Ds_code.equals("1") == true) {
-        compressed_ship_direction = (double) 45 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("2") == true) {
-        compressed_ship_direction = (double) 90 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("3") == true) {
-        compressed_ship_direction = (double) 135 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("4") == true) {
-        compressed_ship_direction = (double) 180 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("5") == true) {
-        compressed_ship_direction = (double) 225 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("6") == true) {
-        compressed_ship_direction = (double) 270 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("7") == true) {
-        compressed_ship_direction = (double) 315 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("8") == true) {
-        compressed_ship_direction = (double) 360 * schalings_factor;
-        present[2] = 1;
-      } else if (myposition.Ds_code.equals("9") == true) {
-        compressed_ship_direction = COMPRESSED_UNDEF_VALUE;
-        present[2] = 0;
       } else {
         compressed_ship_direction = COMPRESSED_UNDEF_VALUE;
         present[2] = 0;
@@ -2409,36 +2383,15 @@ public class FORMAT_101 {
           COMPRESSED_UNDEF_VALUE; // see doc "EUCAWS inputs/outputs Complementary information about
       // codes", Pierre Blouch, 21 August 2013 draft V2
       present[56] = 0;
-    } else if (myice1.Di_code.equals("1") == true) {
-      compressed_ice_edge_bearing = (double) 45 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("2") == true) {
-      compressed_ice_edge_bearing = (double) 90 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("3") == true) {
-      compressed_ice_edge_bearing = (double) 135 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("4") == true) {
-      compressed_ice_edge_bearing = (double) 180 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("5") == true) {
-      compressed_ice_edge_bearing = (double) 225 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("6") == true) {
-      compressed_ice_edge_bearing = (double) 270 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("7") == true) {
-      compressed_ice_edge_bearing = (double) 315 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("8") == true) {
-      compressed_ice_edge_bearing = (double) 360 * schalings_factor;
-      present[56] = 1;
-    } else if (myice1.Di_code.equals("9") == true) {
-      compressed_ice_edge_bearing = COMPRESSED_UNDEF_VALUE;
-      present[56] = 0;
     } else {
-      compressed_ice_edge_bearing = COMPRESSED_UNDEF_VALUE;
-      present[56] = 0;
+      Integer direction = directionCodeToDegrees(myice1.Di_code);
+      if (direction != null) {
+        compressed_ice_edge_bearing = direction * schalings_factor;
+        present[56] = 1;
+      } else {
+        compressed_ice_edge_bearing = COMPRESSED_UNDEF_VALUE;
+        present[56] = 0;
+      }
     }
 
     //
@@ -2589,6 +2542,34 @@ public class FORMAT_101 {
             .setScale(3, RoundingMode.HALF_UP)
             .doubleValue();
     return negative ? coordinate * -1 : coordinate;
+  }
+
+  // Direction code 0 is valid for ship direction, but an ice-edge Di=0 means ship in shore or
+  // flaw lead and cannot be translated to the BUFR-required direction; that caller marks it
+  // unavailable before using this shared mapping.
+  private Integer directionCodeToDegrees(String code) {
+    switch (code) {
+      case "0":
+        return 0;
+      case "1":
+        return 45;
+      case "2":
+        return 90;
+      case "3":
+        return 135;
+      case "4":
+        return 180;
+      case "5":
+        return 225;
+      case "6":
+        return 270;
+      case "7":
+        return 315;
+      case "8":
+        return 360;
+      default:
+        return null;
+    }
   }
 
   public static String compression_exe;
