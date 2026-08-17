@@ -525,6 +525,57 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesCloudTypeOffsetsAndMiddleCloudSuffixHandling() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalLowCloudType = mycl.cl_code;
+    String originalMiddleCloudType = mycm.cm_code;
+    String originalHighCloudType = mych.ch_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      mycl.cl_code = "2";
+      mycm.cm_code = "7a";
+      mych.ch_code = "4";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 32.0            cloud type low (Cl) [code]", lines.get(36));
+      assertEquals("1 27.0            cloud type middle (Cm) [code]", lines.get(37));
+      assertEquals("1 14.0            cloud type high (Ch) [code]", lines.get(38));
+
+      mycl.cl_code = "/";
+      mycm.cm_code = "/";
+      mych.ch_code = "/";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 cloud type low (Cl) [code]", lines.get(36));
+      assertEquals("0                 cloud type middle (Cm) [code]", lines.get(37));
+      assertEquals("0                 cloud type high (Ch) [code]", lines.get(38));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mycl.cl_code = originalLowCloudType;
+      mycm.cm_code = originalMiddleCloudType;
+      mych.ch_code = originalHighCloudType;
+    }
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
