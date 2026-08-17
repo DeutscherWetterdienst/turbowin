@@ -1338,19 +1338,11 @@ public class FORMAT_101 {
       // sign)
       {
         try {
-          // double double_pressure_amount_tendency =
-          // Double.parseDouble(mybarograph.pressure_amount_tendency);
-          // compressed_pressure_change = double_pressure_amount_tendency * schalings_factor;
-          BigDecimal bd_ppp =
-              new BigDecimal(
-                      Double.parseDouble(mybarograph.pressure_amount_tendency) * schalings_factor)
-                  .setScale(3, RoundingMode.HALF_UP); // three decimals
-          compressed_pressure_change = bd_ppp.doubleValue();
-
+          double double_pressure_amount_tendency =
+              Double.parseDouble(mybarograph.pressure_amount_tendency);
           int int_a_code = Integer.parseInt(mybarograph.a_code);
-          if (int_a_code == 5 || int_a_code == 6 || int_a_code == 7 || int_a_code == 8) {
-            compressed_pressure_change *= -1;
-          }
+          compressed_pressure_change =
+              convertPressureChangeToPascals(double_pressure_amount_tendency, int_a_code);
           present[15] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2591,6 +2583,20 @@ public class FORMAT_101 {
 
   private double convertHectopascalsToPascals(double hectopascals) {
     return hectopascals * 100.0;
+  }
+
+  private double convertPressureChangeToPascals(double pressureChange, int pressureCharacteristic) {
+    // The input ppp amount has no sign; pressure characteristic a supplies it, with 5–8 meaning
+    // falling pressure and therefore requiring negation.
+    double convertedPressureChange =
+        new BigDecimal(pressureChange * 100.0).setScale(3, RoundingMode.HALF_UP).doubleValue();
+    if (pressureCharacteristic == 5
+        || pressureCharacteristic == 6
+        || pressureCharacteristic == 7
+        || pressureCharacteristic == 8) {
+      convertedPressureChange *= -1;
+    }
+    return convertedPressureChange;
   }
 
   public static String compression_exe;
