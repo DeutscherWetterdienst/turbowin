@@ -231,6 +231,95 @@ public class Format101CharacterizationTest {
     }
   }
 
+  @Test
+  public void preservesFormat101SensorConversionsAndRounding() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalWindUnits = main.wind_units;
+    String originalPressureMode = main.pressure_reading_msl_yes_no;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    int originalWindSpeed = mywind.int_true_wind_speed;
+    String originalAirTemperature = mytemp.air_temp;
+    String originalPressure = mybarometer.pressure_msl_corrected;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      main.wind_units = main.KNOTS;
+      main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_YES;
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      mywind.int_true_wind_speed = 10;
+      mytemp.air_temp = "20";
+      mybarometer.pressure_msl_corrected = "1013.25";
+
+      invokePrivate("write_input_for_101_compression");
+
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 5.144           true wind speed [m/s]", lines.get(19));
+      assertEquals("1 293.15          air temperature [K]", lines.get(24));
+      assertEquals("1 101325.0        pressure at MSL [Pa]", lines.get(15));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      main.wind_units = originalWindUnits;
+      main.pressure_reading_msl_yes_no = originalPressureMode;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      mywind.int_true_wind_speed = originalWindSpeed;
+      mytemp.air_temp = originalAirTemperature;
+      mybarometer.pressure_msl_corrected = originalPressure;
+    }
+  }
+
+  @Test
+  public void writesInvalidWindSpeedAsAnAbsentRecord() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalWindUnits = main.wind_units;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    int originalWindSpeed = mywind.int_true_wind_speed;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      main.wind_units = main.KNOTS;
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      mywind.int_true_wind_speed = main.INVALID;
+
+      invokePrivate("write_input_for_101_compression");
+
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 true wind speed [m/s]", lines.get(19));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      main.wind_units = originalWindUnits;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      mywind.int_true_wind_speed = originalWindSpeed;
+    }
+  }
+
   private static Object invokePrivate(String methodName, Class<?>[] parameterTypes, Object... args)
       throws Exception {
     Method method = FORMAT_101.class.getDeclaredMethod(methodName, parameterTypes);
