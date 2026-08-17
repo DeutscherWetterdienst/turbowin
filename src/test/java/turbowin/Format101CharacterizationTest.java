@@ -350,6 +350,16 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesLegacyShipSpeedConversionPrecision() throws Exception {
+    assertEquals(
+        4.116,
+        (Double)
+            invokePrivate(
+                "convertLegacyShipSpeedToMetersPerSecond", new Class<?>[] {double.class}, 8.0),
+        0.0);
+  }
+
+  @Test
   public void convertsCelsiusToKelvinWithFormat101Precision() throws Exception {
     assertEquals(
         293.15,
