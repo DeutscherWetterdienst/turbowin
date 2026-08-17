@@ -493,6 +493,16 @@ public class FORMAT_101 {
     return path;
   }
 
+  private void configureProcessBuilder(ProcessBuilder processBuilder, File logOutputFile) {
+    // Redirect any output (including error) to a file. This avoids deadlocks when the buffers get
+    // full.
+    processBuilder.redirectErrorStream(true);
+    processBuilder.redirectOutput(logOutputFile);
+
+    // Set the working directory. The exe file will run as if you are in this directory.
+    processBuilder.directory(new File(format101Path(main.FORMAT_101_ROOT_DIR)));
+  }
+
   private List<String> buildDecompressionArguments(
       File executable, String compressedFile, String decompressedFile) {
     final List<String> args = new ArrayList<>();
@@ -679,13 +689,7 @@ public class FORMAT_101 {
 
     final ProcessBuilder processBuilder = new ProcessBuilder(args);
 
-    // Redirect any output (including error) to a file. This avoids deadlocks when the buffers get
-    // full.
-    processBuilder.redirectErrorStream(true);
-    processBuilder.redirectOutput(log_outputFile);
-
-    // Set the working directory. The exe file will run as if you are in this directory.
-    processBuilder.directory(new File(format101Path(main.FORMAT_101_ROOT_DIR)));
+    configureProcessBuilder(processBuilder, log_outputFile);
 
     // Start the process and wait for it to finish.
     Process process = null;
@@ -756,16 +760,10 @@ public class FORMAT_101 {
 
     final ProcessBuilder processBuilder = new ProcessBuilder(args);
 
-    // Redirect any output (including error) to a file. This avoids deadlocks
-    // when the buffers get full.
-    processBuilder.redirectErrorStream(true);
-    processBuilder.redirectOutput(log_outputFile);
+    configureProcessBuilder(processBuilder, log_outputFile);
 
     // Add a new environment variable
     // processBuilder.environment().put("message", "Example of process builder");
-
-    // Set the working directory. The exe file will run as if you are in this directory.
-    processBuilder.directory(new File(format101Path(main.FORMAT_101_ROOT_DIR)));
 
     // Start the process and wait for it to finish.
     Process process = null;
