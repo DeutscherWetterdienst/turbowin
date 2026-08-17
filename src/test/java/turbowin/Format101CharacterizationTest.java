@@ -65,6 +65,30 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void configuresFormat101ProcessOutputAndWorkingDirectory() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File logFile = new File(logsDirectory, "process.log");
+      main.logs_dir = logsDirectory.getPath();
+      ProcessBuilder processBuilder = new ProcessBuilder("format101");
+
+      invokePrivate(
+          "configureProcessBuilder",
+          new Class<?>[] {ProcessBuilder.class, File.class},
+          processBuilder,
+          logFile);
+
+      assertTrue(processBuilder.redirectErrorStream());
+      assertEquals(logFile, processBuilder.redirectOutput().file());
+      assertEquals(new File(logsDirectory, main.FORMAT_101_ROOT_DIR), processBuilder.directory());
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+    }
+  }
+
+  @Test
   public void preservesCompressionCommandArguments() throws Exception {
     String originalImoNumber = main.imo_number;
 
