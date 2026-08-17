@@ -320,6 +320,15 @@ public class Format101CharacterizationTest {
     }
   }
 
+  @Test
+  public void roundsKnotsToMetersPerSecondWithFormat101Precision() throws Exception {
+    assertEquals(
+        5.144,
+        (Double)
+            invokePrivate("convertKnotsToMetersPerSecond", new Class<?>[] {double.class}, 10.0),
+        0.0);
+  }
+
   private static Object invokePrivate(String methodName, Class<?>[] parameterTypes, Object... args)
       throws Exception {
     Method method = FORMAT_101.class.getDeclaredMethod(methodName, parameterTypes);
