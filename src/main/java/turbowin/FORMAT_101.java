@@ -648,42 +648,22 @@ public class FORMAT_101 {
 
     // NB in logs_dir always 'data_dir' already present (so a complete path)
 
-    final File exeFile =
-        new File(
-            main.logs_dir
-                + java.io.File.separator
-                + main.FORMAT_101_ROOT_DIR
-                + java.io.File.separator
-                + decompression_exe);
+    final File exeFile = new File(format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe));
     final File log_outputFile =
         new File(
-            String.format(
-                main.logs_dir
-                    + java.io.File.separator
-                    + main.FORMAT_101_ROOT_DIR
-                    + java.io.File.separator
-                    + FORMAT_101_LOG_DIR
-                    + java.io.File.separator
-                    + "log_decompression.txt"));
+            format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_LOG_DIR, "log_decompression.txt"));
 
     final String volledig_path_format_101_compressed_file =
-        main.logs_dir
-            + java.io.File.separator
-            + main.FORMAT_101_ROOT_DIR
-            + java.io.File.separator
-            + main.FORMAT_101_TEMP_DIR
+        format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR)
             + java.io.File.separator
             + "HPK_"
             + main.FORMAT_101_INPUT_FILE; // NB adding "HPK_" to the input file name is
     // automatically done by the C-code compression functions
     final String volledig_path_decompressed_FM13_file =
-        main.logs_dir
-            + java.io.File.separator
-            + main.FORMAT_101_ROOT_DIR
-            + java.io.File.separator
-            + main.FORMAT_101_TEMP_DIR
-            + java.io.File.separator
-            + "do_not_send_decompressed_FM13_obs.txt";
+        format101Path(
+            main.FORMAT_101_ROOT_DIR,
+            main.FORMAT_101_TEMP_DIR,
+            "do_not_send_decompressed_FM13_obs.txt");
 
     final List<String> args = new ArrayList<>();
     args.add(exeFile.getAbsolutePath());
@@ -717,8 +697,7 @@ public class FORMAT_101 {
     processBuilder.redirectOutput(log_outputFile);
 
     // Set the working directory. The exe file will run as if you are in this directory.
-    processBuilder.directory(
-        new File(main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR));
+    processBuilder.directory(new File(format101Path(main.FORMAT_101_ROOT_DIR)));
 
     // Start the process and wait for it to finish.
     Process process = null;
@@ -759,13 +738,7 @@ public class FORMAT_101 {
     // NB in logs_dir always 'data_dir' already present (so a complete path)
 
     // The compression .exe file to execute
-    final File exeFile =
-        new File(
-            main.logs_dir
-                + java.io.File.separator
-                + main.FORMAT_101_ROOT_DIR
-                + java.io.File.separator
-                + compression_exe);
+    final File exeFile = new File(format101Path(main.FORMAT_101_ROOT_DIR, compression_exe));
 
     // The output log file. All activity is written to this file
     // final File log_outputFile = new File(String.format(main.logs_dir + java.io.File.separator +
@@ -776,23 +749,10 @@ public class FORMAT_101 {
     // a fixed point in time, not affected by your local time zone.
     final File log_outputFile =
         new File(
-            String.format(
-                main.logs_dir
-                    + java.io.File.separator
-                    + main.FORMAT_101_ROOT_DIR
-                    + java.io.File.separator
-                    + FORMAT_101_LOG_DIR
-                    + java.io.File.separator
-                    + "log_compression.txt"));
+            format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_LOG_DIR, "log_compression.txt"));
 
     final String volledig_path_bufr_file =
-        main.logs_dir
-            + java.io.File.separator
-            + main.FORMAT_101_ROOT_DIR
-            + java.io.File.separator
-            + FORMAT_101_CONFIG_DIR
-            + java.io.File.separator
-            + BUFR_TABLE;
+        format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE);
 
     final List<String> args = new ArrayList<>();
     args.add(exeFile.getAbsolutePath());
@@ -826,8 +786,7 @@ public class FORMAT_101 {
     // processBuilder.environment().put("message", "Example of process builder");
 
     // Set the working directory. The exe file will run as if you are in this directory.
-    processBuilder.directory(
-        new File(main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR));
+    processBuilder.directory(new File(format101Path(main.FORMAT_101_ROOT_DIR)));
 
     // Start the process and wait for it to finish.
     Process process = null;
@@ -2628,13 +2587,8 @@ public class FORMAT_101 {
     // write to sub dir temp
     //
     String volledig_path_format_101_input_file =
-        main.logs_dir
-            + java.io.File.separator
-            + main.FORMAT_101_ROOT_DIR
-            + java.io.File.separator
-            + main.FORMAT_101_TEMP_DIR
-            + java.io.File.separator
-            + main.FORMAT_101_INPUT_FILE;
+        format101Path(
+            main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR, main.FORMAT_101_INPUT_FILE);
 
     try (BufferedWriter out =
         new BufferedWriter(new FileWriter(volledig_path_format_101_input_file))) {
