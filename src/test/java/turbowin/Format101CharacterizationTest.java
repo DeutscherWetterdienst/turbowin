@@ -245,6 +245,7 @@ public class Format101CharacterizationTest {
     String originalWetBulbTemperature = mytemp.wet_bulb_temp;
     String originalSeaWaterTemperature = mytemp.sea_water_temp;
     double originalDewPoint = mytemp.double_dew_point;
+    String originalBarometerPressure = mybarometer.pressure_reading_corrected;
     String originalPressure = mybarometer.pressure_msl_corrected;
 
     try {
@@ -254,7 +255,7 @@ public class Format101CharacterizationTest {
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
       main.wind_units = main.KNOTS;
-      main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_YES;
+      main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_NO;
       mydatetime.year = "2026";
       mydatetime.MM_code = "10";
       mydatetime.day = "04";
@@ -264,6 +265,7 @@ public class Format101CharacterizationTest {
       mytemp.wet_bulb_temp = "15";
       mytemp.sea_water_temp = "18";
       mytemp.double_dew_point = 10.0;
+      mybarometer.pressure_reading_corrected = "1000.00";
       mybarometer.pressure_msl_corrected = "1013.25";
 
       invokePrivate("write_input_for_101_compression");
@@ -275,6 +277,7 @@ public class Format101CharacterizationTest {
       assertEquals("1 288.15          wet bulb temperature [K]", lines.get(25));
       assertEquals("1 283.15          dew point temperature [K]", lines.get(26));
       assertEquals("1 291.15          sea water temperature [K]", lines.get(28));
+      assertEquals("1 100000.0        pressure at barometer height [Pa]", lines.get(14));
       assertEquals("1 101325.0        pressure at MSL [Pa]", lines.get(15));
     } finally {
       main.logs_dir = originalLogsDirectory;
@@ -289,6 +292,7 @@ public class Format101CharacterizationTest {
       mytemp.wet_bulb_temp = originalWetBulbTemperature;
       mytemp.sea_water_temp = originalSeaWaterTemperature;
       mytemp.double_dew_point = originalDewPoint;
+      mybarometer.pressure_reading_corrected = originalBarometerPressure;
       mybarometer.pressure_msl_corrected = originalPressure;
     }
   }
@@ -346,6 +350,15 @@ public class Format101CharacterizationTest {
     assertEquals(
         293.15,
         (Double) invokePrivate("convertCelsiusToKelvin", new Class<?>[] {double.class}, 20.0),
+        0.0);
+  }
+
+  @Test
+  public void convertsHectopascalsToPascals() throws Exception {
+    assertEquals(
+        101325.0,
+        (Double)
+            invokePrivate("convertHectopascalsToPascals", new Class<?>[] {double.class}, 1013.25),
         0.0);
   }
 
