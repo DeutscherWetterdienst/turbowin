@@ -1537,14 +1537,7 @@ public class FORMAT_101 {
 
     if ((mytemp.air_temp.trim()).length() > 0) {
       try {
-        // compressed_air_temp = Double.parseDouble(mytemp.air_temp) * schalings_factor +
-        // CELCIUS_TO_KELVIN_FACTOR;
-        BigDecimal bd_air_temp =
-            new BigDecimal(
-                    Double.parseDouble(mytemp.air_temp) * schalings_factor
-                        + CELCIUS_TO_KELVIN_FACTOR)
-                .setScale(3, RoundingMode.HALF_UP); // three decimals
-        compressed_air_temp = bd_air_temp.doubleValue();
+        compressed_air_temp = convertCelsiusToKelvin(Double.parseDouble(mytemp.air_temp));
         present[23] = 1;
       } // try
       catch (NumberFormatException ex) {
@@ -2610,6 +2603,12 @@ public class FORMAT_101 {
 
   private double convertKnotsToMetersPerSecond(double knots) {
     return new BigDecimal(knots * main.KNOT_M_S_CONVERSION)
+        .setScale(3, RoundingMode.HALF_UP)
+        .doubleValue();
+  }
+
+  private double convertCelsiusToKelvin(double celsius) {
+    return new BigDecimal(celsius + CELCIUS_TO_KELVIN_FACTOR)
         .setScale(3, RoundingMode.HALF_UP)
         .doubleValue();
   }

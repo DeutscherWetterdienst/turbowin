@@ -329,6 +329,14 @@ public class Format101CharacterizationTest {
         0.0);
   }
 
+  @Test
+  public void convertsCelsiusToKelvinWithFormat101Precision() throws Exception {
+    assertEquals(
+        293.15,
+        (Double) invokePrivate("convertCelsiusToKelvin", new Class<?>[] {double.class}, 20.0),
+        0.0);
+  }
+
   private static Object invokePrivate(String methodName, Class<?>[] parameterTypes, Object... args)
       throws Exception {
     Method method = FORMAT_101.class.getDeclaredMethod(methodName, parameterTypes);
