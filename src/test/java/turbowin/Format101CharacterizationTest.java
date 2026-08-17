@@ -366,6 +366,87 @@ public class Format101CharacterizationTest {
         0.0);
   }
 
+  @Test
+  public void preservesPressureChangeRoundingAndSign() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalPressureChange = mybarograph.pressure_amount_tendency;
+    String originalPressureCharacteristic = mybarograph.a_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      mybarograph.pressure_amount_tendency = "1.234";
+      mybarograph.a_code = "2";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 123.4           3 hour pressure change [Pa]", lines.get(16));
+
+      mybarograph.a_code = "5";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 -123.4          3 hour pressure change [Pa]", lines.get(16));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      mybarograph.pressure_amount_tendency = originalPressureChange;
+      mybarograph.a_code = originalPressureCharacteristic;
+    }
+  }
+
+  @Test
+  public void writesMissingPressureChangeAsAnAbsentRecord() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalPressureChange = mybarograph.pressure_amount_tendency;
+    String originalPressureCharacteristic = mybarograph.a_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      mybarograph.pressure_amount_tendency = "";
+      mybarograph.a_code = "";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 3 hour pressure change [Pa]", lines.get(16));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      mybarograph.pressure_amount_tendency = originalPressureChange;
+      mybarograph.a_code = originalPressureCharacteristic;
+    }
+  }
+
   private static Object invokePrivate(String methodName, Class<?>[] parameterTypes, Object... args)
       throws Exception {
     Method method = FORMAT_101.class.getDeclaredMethod(methodName, parameterTypes);
