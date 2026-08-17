@@ -493,6 +493,41 @@ public class FORMAT_101 {
     return path;
   }
 
+  private List<String> buildDecompressionArguments(
+      File executable, String compressedFile, String decompressedFile) {
+    final List<String> args = new ArrayList<>();
+    args.add(executable.getAbsolutePath());
+    args.add("-n");
+    args.add(main.imo_number);
+    args.add("-f");
+    args.add(compressedFile);
+    args.add("-i");
+    args.add(HC_IDENT_FILE);
+    args.add("-r");
+    args.add(FORMAT_101_CONFIG_DIR);
+    args.add("-h"); // mandatory
+    args.add("-l");
+    args.add("-o");
+    args.add(decompressedFile);
+    return args;
+  }
+
+  private List<String> buildCompressionArguments(
+      File executable, String bufrFile, String identifier) {
+    final List<String> args = new ArrayList<>();
+    args.add(executable.getAbsolutePath());
+    // args.add(FORMAT_101_CONFIG_DIR + java.io.File.separator + BUFR_TABLE);
+    args.add(bufrFile);
+    args.add(
+        SOURCE_INPUT_COMPRESSION); // nb doesn't work with a java separator (probably due to the
+    // working of the semi comression C program) !!
+    args.add(
+        identifier); // call sign or marked call sign; NB identifiers > 7 characters will be cut off
+    // by the compression program
+    args.add(TEMPLATE_NUMBER); // "S-AWS-101";
+    return args;
+  }
+
   private int write_HC_identification_file(String identifier) {
     // NB this function is only necessary for decompression
     // NB the file (HC_IDENT_FILE) created by this function must be placed in the config dir
@@ -627,20 +662,11 @@ public class FORMAT_101 {
             main.FORMAT_101_TEMP_DIR,
             "do_not_send_decompressed_FM13_obs.txt");
 
-    final List<String> args = new ArrayList<>();
-    args.add(exeFile.getAbsolutePath());
-    args.add("-n");
-    args.add(main.imo_number);
-    args.add("-f");
-    args.add(volledig_path_format_101_compressed_file);
-    args.add("-i");
-    args.add(HC_IDENT_FILE);
-    args.add("-r");
-    args.add(FORMAT_101_CONFIG_DIR);
-    args.add("-h"); // mandatory
-    args.add("-l");
-    args.add("-o");
-    args.add(volledig_path_decompressed_FM13_file);
+    final List<String> args =
+        buildDecompressionArguments(
+            exeFile,
+            volledig_path_format_101_compressed_file,
+            volledig_path_decompressed_FM13_file);
 
     // print the complete argument list (only for checking in output console)
     System.out.println();
@@ -716,17 +742,8 @@ public class FORMAT_101 {
     final String volledig_path_bufr_file =
         format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE);
 
-    final List<String> args = new ArrayList<>();
-    args.add(exeFile.getAbsolutePath());
-    // args.add(FORMAT_101_CONFIG_DIR + java.io.File.separator + BUFR_TABLE);
-    args.add(volledig_path_bufr_file);
-    args.add(
-        SOURCE_INPUT_COMPRESSION); // nb doesn't work with a java separator (probably due to the
-    // working of the semi comression C program) !!
-    args.add(
-        identifier); // call sign or marked call sign; NB identifiers > 7 characters will be cut off
-    // by the compression program
-    args.add(TEMPLATE_NUMBER); // "S-AWS-101";
+    final List<String> args =
+        buildCompressionArguments(exeFile, volledig_path_bufr_file, identifier);
 
     // print the complete argument list (only for checking in output console)
     System.out.println();
