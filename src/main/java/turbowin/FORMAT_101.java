@@ -503,6 +503,10 @@ public class FORMAT_101 {
     processBuilder.directory(new File(format101Path(main.FORMAT_101_ROOT_DIR)));
   }
 
+  private int waitForProcess(Process process) throws InterruptedException {
+    return process.waitFor();
+  }
+
   private List<String> buildDecompressionArguments(
       File executable, String compressedFile, String decompressedFile) {
     final List<String> args = new ArrayList<>();
@@ -708,7 +712,7 @@ public class FORMAT_101 {
         // Returns:
         //    the exit value of the subprocess represented by this Process object. By convention,
         // the value 0 indicates normal termination.
-        exitStatus = process.waitFor();
+        exitStatus = waitForProcess(process);
       } catch (InterruptedException ex) {
         String info = "InterruptedException in function decompress (" + ex + ")";
         System.out.println(info);
@@ -782,7 +786,7 @@ public class FORMAT_101 {
         // Returns:
         //    the exit value of the subprocess represented by this Process object. By convention,
         // the value 0 indicates normal termination.
-        exitStatus = process.waitFor();
+        exitStatus = waitForProcess(process);
       } catch (InterruptedException ex) {
         // "Logger.getLogger(FORMAT_101.class.getName()).log(Level.SEVERE, null, ex);
         String info = "InterruptedException in function compress (" + ex + ")";

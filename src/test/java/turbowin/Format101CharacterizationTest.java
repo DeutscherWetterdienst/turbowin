@@ -89,6 +89,13 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesProcessExitStatus() throws Exception {
+    Process process = new ProcessBuilder("sh", "-c", "exit 7").start();
+
+    assertEquals(7, invokePrivate("waitForProcess", new Class<?>[] {Process.class}, process));
+  }
+
+  @Test
   public void preservesCompressionCommandArguments() throws Exception {
     String originalImoNumber = main.imo_number;
 
