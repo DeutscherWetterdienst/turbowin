@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.util.Arrays;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -60,6 +61,64 @@ public class Format101CharacterizationTest {
               (Object) new String[] {main.FORMAT_101_ROOT_DIR, "config", "HC_ident.txt"}));
     } finally {
       main.logs_dir = originalLogsDirectory;
+    }
+  }
+
+  @Test
+  public void preservesCompressionCommandArguments() throws Exception {
+    String originalImoNumber = main.imo_number;
+
+    try {
+      main.imo_number = "1234567";
+
+      assertEquals(
+          Arrays.asList(
+              "/tmp/format101-compress",
+              "/tmp/bufr-table.csv",
+              "temp/format_101.txt",
+              "TEST-ID",
+              "S-AWS-101"),
+          invokePrivate(
+              "buildCompressionArguments",
+              new Class<?>[] {File.class, String.class, String.class},
+              new File("/tmp/format101-compress"),
+              "/tmp/bufr-table.csv",
+              "TEST-ID"));
+    } finally {
+      main.imo_number = originalImoNumber;
+    }
+  }
+
+  @Test
+  public void preservesDecompressionCommandArguments() throws Exception {
+    String originalImoNumber = main.imo_number;
+
+    try {
+      main.imo_number = "1234567";
+
+      assertEquals(
+          Arrays.asList(
+              "/tmp/format101-decompress",
+              "-n",
+              "1234567",
+              "-f",
+              "/tmp/compressed.txt",
+              "-i",
+              "HC_ident.txt",
+              "-r",
+              "config",
+              "-h",
+              "-l",
+              "-o",
+              "/tmp/decompressed.txt"),
+          invokePrivate(
+              "buildDecompressionArguments",
+              new Class<?>[] {File.class, String.class, String.class},
+              new File("/tmp/format101-decompress"),
+              "/tmp/compressed.txt",
+              "/tmp/decompressed.txt"));
+    } finally {
+      main.imo_number = originalImoNumber;
     }
   }
 
