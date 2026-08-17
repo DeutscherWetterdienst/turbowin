@@ -413,6 +413,13 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void mapsDirectionCodesToDegreesAndRejectsUnknownCodes() throws Exception {
+    assertEquals(0, invokePrivate("directionCodeToDegrees", new Class<?>[] {String.class}, "0"));
+    assertEquals(270, invokePrivate("directionCodeToDegrees", new Class<?>[] {String.class}, "6"));
+    assertEquals(null, invokePrivate("directionCodeToDegrees", new Class<?>[] {String.class}, "9"));
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
