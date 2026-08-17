@@ -244,6 +244,7 @@ public class Format101CharacterizationTest {
     String originalAirTemperature = mytemp.air_temp;
     String originalWetBulbTemperature = mytemp.wet_bulb_temp;
     String originalSeaWaterTemperature = mytemp.sea_water_temp;
+    double originalDewPoint = mytemp.double_dew_point;
     String originalPressure = mybarometer.pressure_msl_corrected;
 
     try {
@@ -262,6 +263,7 @@ public class Format101CharacterizationTest {
       mytemp.air_temp = "20";
       mytemp.wet_bulb_temp = "15";
       mytemp.sea_water_temp = "18";
+      mytemp.double_dew_point = 10.0;
       mybarometer.pressure_msl_corrected = "1013.25";
 
       invokePrivate("write_input_for_101_compression");
@@ -271,6 +273,7 @@ public class Format101CharacterizationTest {
       assertEquals("1 5.144           true wind speed [m/s]", lines.get(19));
       assertEquals("1 293.15          air temperature [K]", lines.get(24));
       assertEquals("1 288.15          wet bulb temperature [K]", lines.get(25));
+      assertEquals("1 283.15          dew point temperature [K]", lines.get(26));
       assertEquals("1 291.15          sea water temperature [K]", lines.get(28));
       assertEquals("1 101325.0        pressure at MSL [Pa]", lines.get(15));
     } finally {
@@ -285,6 +288,7 @@ public class Format101CharacterizationTest {
       mytemp.air_temp = originalAirTemperature;
       mytemp.wet_bulb_temp = originalWetBulbTemperature;
       mytemp.sea_water_temp = originalSeaWaterTemperature;
+      mytemp.double_dew_point = originalDewPoint;
       mybarometer.pressure_msl_corrected = originalPressure;
     }
   }
