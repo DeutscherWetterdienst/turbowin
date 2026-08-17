@@ -241,6 +241,7 @@ public class Format101CharacterizationTest {
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
     int originalWindSpeed = mywind.int_true_wind_speed;
+    String originalRelativeWindSpeed = mywind.RWS_code;
     String originalAirTemperature = mytemp.air_temp;
     String originalWetBulbTemperature = mytemp.wet_bulb_temp;
     String originalSeaWaterTemperature = mytemp.sea_water_temp;
@@ -261,6 +262,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = "04";
       mydatetime.hour = "12";
       mywind.int_true_wind_speed = 10;
+      mywind.RWS_code = "10";
       mytemp.air_temp = "20";
       mytemp.wet_bulb_temp = "15";
       mytemp.sea_water_temp = "18";
@@ -273,6 +275,7 @@ public class Format101CharacterizationTest {
       List<String> lines =
           Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 5.144           true wind speed [m/s]", lines.get(19));
+      assertEquals("1 5.144           relative wind speed [m/s]", lines.get(21));
       assertEquals("1 293.15          air temperature [K]", lines.get(24));
       assertEquals("1 288.15          wet bulb temperature [K]", lines.get(25));
       assertEquals("1 283.15          dew point temperature [K]", lines.get(26));
@@ -288,6 +291,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = originalDay;
       mydatetime.hour = originalHour;
       mywind.int_true_wind_speed = originalWindSpeed;
+      mywind.RWS_code = originalRelativeWindSpeed;
       mytemp.air_temp = originalAirTemperature;
       mytemp.wet_bulb_temp = originalWetBulbTemperature;
       mytemp.sea_water_temp = originalSeaWaterTemperature;

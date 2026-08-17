@@ -1491,15 +1491,9 @@ public class FORMAT_101 {
             present[20] = 1;
           } else if (main.wind_units.trim().indexOf(main.KNOTS) != -1) // so wind speed units knots
           {
-            // compressed_wind_speed = (double)mywind.int_true_wind_speed * main.KNOT_M_S_CONVERSION
-            // * schalings_factor; // from knots -> m/s
-            BigDecimal bd_wind =
-                new BigDecimal(
-                        Double.parseDouble(mywind.RWS_code)
-                            * main.KNOT_M_S_CONVERSION
-                            * schalings_factor)
-                    .setScale(3, RoundingMode.HALF_UP); // three decimals
-            compressed_relative_wind_speed = bd_wind.doubleValue();
+            compressed_relative_wind_speed =
+                convertKnotsToMetersPerSecond(
+                    Double.parseDouble(mywind.RWS_code) * schalings_factor);
             present[20] = 1;
           } else {
             compressed_relative_wind_speed = COMPRESSED_UNDEF_VALUE;
