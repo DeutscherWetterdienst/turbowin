@@ -242,6 +242,8 @@ public class Format101CharacterizationTest {
     String originalHour = mydatetime.hour;
     int originalWindSpeed = mywind.int_true_wind_speed;
     String originalAirTemperature = mytemp.air_temp;
+    String originalWetBulbTemperature = mytemp.wet_bulb_temp;
+    String originalSeaWaterTemperature = mytemp.sea_water_temp;
     String originalPressure = mybarometer.pressure_msl_corrected;
 
     try {
@@ -258,6 +260,8 @@ public class Format101CharacterizationTest {
       mydatetime.hour = "12";
       mywind.int_true_wind_speed = 10;
       mytemp.air_temp = "20";
+      mytemp.wet_bulb_temp = "15";
+      mytemp.sea_water_temp = "18";
       mybarometer.pressure_msl_corrected = "1013.25";
 
       invokePrivate("write_input_for_101_compression");
@@ -266,6 +270,8 @@ public class Format101CharacterizationTest {
           Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 5.144           true wind speed [m/s]", lines.get(19));
       assertEquals("1 293.15          air temperature [K]", lines.get(24));
+      assertEquals("1 288.15          wet bulb temperature [K]", lines.get(25));
+      assertEquals("1 291.15          sea water temperature [K]", lines.get(28));
       assertEquals("1 101325.0        pressure at MSL [Pa]", lines.get(15));
     } finally {
       main.logs_dir = originalLogsDirectory;
@@ -277,6 +283,8 @@ public class Format101CharacterizationTest {
       mydatetime.hour = originalHour;
       mywind.int_true_wind_speed = originalWindSpeed;
       mytemp.air_temp = originalAirTemperature;
+      mytemp.wet_bulb_temp = originalWetBulbTemperature;
+      mytemp.sea_water_temp = originalSeaWaterTemperature;
       mybarometer.pressure_msl_corrected = originalPressure;
     }
   }
