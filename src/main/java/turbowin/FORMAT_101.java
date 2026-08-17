@@ -1582,12 +1582,7 @@ public class FORMAT_101 {
     if (mytemp.double_dew_point >= -70.0
         && mytemp.double_dew_point <= 70.0) // coarse limits, to be safe
     {
-      // compressed_dewpoint = mytemp.double_dew_point * schalings_factor +
-      // CELCIUS_TO_KELVIN_FACTOR;
-      BigDecimal bd_dewpoint =
-          new BigDecimal(mytemp.double_dew_point * schalings_factor + CELCIUS_TO_KELVIN_FACTOR)
-              .setScale(3, RoundingMode.HALF_UP); // three decimals
-      compressed_dewpoint = bd_dewpoint.doubleValue();
+      compressed_dewpoint = convertCelsiusToKelvin(mytemp.double_dew_point * schalings_factor);
       present[25] = 1;
     } else {
       compressed_dewpoint = COMPRESSED_UNDEF_VALUE;
