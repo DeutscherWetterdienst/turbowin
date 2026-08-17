@@ -45,6 +45,25 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void buildsFormat101PathsBelowTheConfiguredLogsDirectory() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      main.logs_dir = logsDirectory.getPath();
+
+      assertEquals(
+          new File(logsDirectory, "format_101/config/HC_ident.txt").getPath(),
+          invokePrivate(
+              "format101Path",
+              new Class<?>[] {String[].class},
+              (Object) new String[] {main.FORMAT_101_ROOT_DIR, "config", "HC_ident.txt"}));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+    }
+  }
+
+  @Test
   public void clearsFilesFromExistingFormat101TemporaryDirectory() throws Exception {
     String originalLogsDirectory = main.logs_dir;
 

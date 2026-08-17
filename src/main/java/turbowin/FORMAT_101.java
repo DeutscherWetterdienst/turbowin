@@ -218,7 +218,7 @@ public class FORMAT_101 {
 
         // create dir "format_101" (e.g. "C:\Program Files (x86)\TurboWin+\logs\format_101")
         //
-        String format_101_dir = main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR;
+        String format_101_dir = format101Path(main.FORMAT_101_ROOT_DIR);
         final File dir_format_101 = new File(format_101_dir);
         dir_format_101.mkdir();
 
@@ -226,23 +226,14 @@ public class FORMAT_101 {
         // (x86)\TurboWin+\logs\format_101\config")
         //
         String format_101_config_dir =
-            main.logs_dir
-                + java.io.File.separator
-                + main.FORMAT_101_ROOT_DIR
-                + java.io.File.separator
-                + FORMAT_101_CONFIG_DIR;
+            format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR);
         final File dir_format_101_config = new File(format_101_config_dir);
         dir_format_101_config.mkdir();
 
         // create sub dir "format_101\log" (e.g. "C:\Program Files
         // (x86)\TurboWin+\logs\format_101\log")
         //
-        String format_101_log_dir =
-            main.logs_dir
-                + java.io.File.separator
-                + main.FORMAT_101_ROOT_DIR
-                + java.io.File.separator
-                + FORMAT_101_LOG_DIR;
+        String format_101_log_dir = format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_LOG_DIR);
         final File dir_format_101_log = new File(format_101_log_dir);
         dir_format_101_log.mkdir();
 
@@ -250,11 +241,7 @@ public class FORMAT_101 {
         // (x86)\TurboWin+\logs\format_101\temp")
         //
         String format_101_temp_dir =
-            main.logs_dir
-                + java.io.File.separator
-                + main.FORMAT_101_ROOT_DIR
-                + java.io.File.separator
-                + main.FORMAT_101_TEMP_DIR;
+            format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR);
         final File dir_format_101_temp = new File(format_101_temp_dir);
         dir_format_101_temp.mkdir();
 
@@ -263,12 +250,7 @@ public class FORMAT_101 {
         try {
           copyResourceToFile(
               main.FORMAT_101_ROOT_DIR + "/" + compression_exe,
-              new File(
-                  main.logs_dir
-                      + java.io.File.separator
-                      + main.FORMAT_101_ROOT_DIR
-                      + java.io.File.separator
-                      + compression_exe));
+              new File(format101Path(main.FORMAT_101_ROOT_DIR, compression_exe)));
           // info = "--- success when copying " + COMPRESSION_EXE + " from jar to: " + main.logs_dir
           // + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // COMPRESSION_EXE;
@@ -341,12 +323,7 @@ public class FORMAT_101 {
         try {
           copyResourceToFile(
               main.FORMAT_101_ROOT_DIR + "/" + decompression_exe,
-              new File(
-                  main.logs_dir
-                      + java.io.File.separator
-                      + main.FORMAT_101_ROOT_DIR
-                      + java.io.File.separator
-                      + decompression_exe));
+              new File(format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe)));
           // info = "--- success when copying " + DECOMPRESSION_EXE + " from jar to: " +
           // main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR +
           // java.io.File.separator + DECOMPRESSION_EXE;
@@ -416,14 +393,7 @@ public class FORMAT_101 {
         try {
           copyResourceToFile(
               main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + BUFR_TABLE,
-              new File(
-                  main.logs_dir
-                      + java.io.File.separator
-                      + main.FORMAT_101_ROOT_DIR
-                      + java.io.File.separator
-                      + FORMAT_101_CONFIG_DIR
-                      + java.io.File.separator
-                      + BUFR_TABLE));
+              new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE)));
           // info = "--- success when copying " + BUFR_TABLE + " from jar to: " + main.logs_dir +
           // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // FORMAT_101_CONFIG_DIR + java.io.File.separator + BUFR_TABLE;
@@ -462,14 +432,7 @@ public class FORMAT_101 {
         try {
           copyResourceToFile(
               main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + META_TABLE,
-              new File(
-                  main.logs_dir
-                      + java.io.File.separator
-                      + main.FORMAT_101_ROOT_DIR
-                      + java.io.File.separator
-                      + FORMAT_101_CONFIG_DIR
-                      + java.io.File.separator
-                      + META_TABLE));
+              new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, META_TABLE)));
           // info = "--- success when copying " + META_TABLE + " from jar to: " + main.logs_dir +
           // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // FORMAT_101_CONFIG_DIR + java.io.File.separator + META_TABLE;
@@ -508,14 +471,7 @@ public class FORMAT_101 {
         try {
           copyResourceToFile(
               main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + DATA_TYPE,
-              new File(
-                  main.logs_dir
-                      + java.io.File.separator
-                      + main.FORMAT_101_ROOT_DIR
-                      + java.io.File.separator
-                      + FORMAT_101_CONFIG_DIR
-                      + java.io.File.separator
-                      + DATA_TYPE));
+              new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, DATA_TYPE)));
           // info = "--- success when copying " + DATA_TYPE + " from jar to: " + main.logs_dir +
           // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
           // FORMAT_101_CONFIG_DIR + java.io.File.separator + DATA_TYPE;
@@ -567,6 +523,14 @@ public class FORMAT_101 {
     }
   }
 
+  private String format101Path(String... pathParts) {
+    String path = main.logs_dir;
+    for (String pathPart : pathParts) {
+      path += java.io.File.separator + pathPart;
+    }
+    return path;
+  }
+
   private int write_HC_identification_file(String identifier) {
     // NB this function is only necessary for decompression
     // NB the file (HC_IDENT_FILE) created by this function must be placed in the config dir
@@ -577,13 +541,7 @@ public class FORMAT_101 {
 
     int exit_status = 0;
     final String volledig_path_HC_ident_file =
-        main.logs_dir
-            + java.io.File.separator
-            + main.FORMAT_101_ROOT_DIR
-            + java.io.File.separator
-            + FORMAT_101_CONFIG_DIR
-            + java.io.File.separator
-            + HC_IDENT_FILE;
+        format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, HC_IDENT_FILE);
 
     try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_HC_ident_file))) {
       // e.g. ;500;HC101;1;Test HC format 101;INMC_SC;S-AWS-101
@@ -631,11 +589,7 @@ public class FORMAT_101 {
 
     // first check if sub dir temp present
     final String temp_format_101_dir =
-        main.logs_dir
-            + java.io.File.separator
-            + main.FORMAT_101_ROOT_DIR
-            + java.io.File.separator
-            + main.FORMAT_101_TEMP_DIR;
+        format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR);
     final File dirs = new File(temp_format_101_dir);
 
     if (dirs.exists() == false) {
