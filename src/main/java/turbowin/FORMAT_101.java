@@ -1559,14 +1559,7 @@ public class FORMAT_101 {
 
     if ((mytemp.wet_bulb_temp.trim()).length() > 0) {
       try {
-        // compressed_wet_bulb_temp = Double.parseDouble(mytemp.wet_bulb_temp) * schalings_factor +
-        // CELCIUS_TO_KELVIN_FACTOR;
-        BigDecimal bd_wet_bulb =
-            new BigDecimal(
-                    Double.parseDouble(mytemp.wet_bulb_temp) * schalings_factor
-                        + CELCIUS_TO_KELVIN_FACTOR)
-                .setScale(3, RoundingMode.HALF_UP); // three decimals
-        compressed_wet_bulb_temp = bd_wet_bulb.doubleValue();
+        compressed_wet_bulb_temp = convertCelsiusToKelvin(Double.parseDouble(mytemp.wet_bulb_temp));
         present[24] = 1;
       } // try
       catch (NumberFormatException ex) {
@@ -1631,14 +1624,7 @@ public class FORMAT_101 {
 
     if ((mytemp.sea_water_temp.trim()).length() > 0) {
       try {
-        // compressed_sst = Double.parseDouble(mytemp.sea_water_temp) * schalings_factor +
-        // CELCIUS_TO_KELVIN_FACTOR;
-        BigDecimal bd_sst =
-            new BigDecimal(
-                    Double.parseDouble(mytemp.sea_water_temp) * schalings_factor
-                        + CELCIUS_TO_KELVIN_FACTOR)
-                .setScale(3, RoundingMode.HALF_UP); // three decimals
-        compressed_sst = bd_sst.doubleValue();
+        compressed_sst = convertCelsiusToKelvin(Double.parseDouble(mytemp.sea_water_temp));
         present[27] = 1;
       } // try
       catch (NumberFormatException ex) {
