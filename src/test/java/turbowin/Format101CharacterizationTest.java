@@ -479,6 +479,52 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesCloudAmountConversionsAndMissingValues() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalCloudCover = mycloudcover.N_code;
+    String originalLowCloudAmount = mycloudcover.Nh_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      mycloudcover.N_code = "5";
+      mycloudcover.Nh_code = "3";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 5.0             total cloud cover [code]", lines.get(34));
+      assertEquals("1 3.0             cloud amount (low) [code]", lines.get(35));
+
+      mycloudcover.N_code = "/";
+      mycloudcover.Nh_code = "/";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 total cloud cover [code]", lines.get(34));
+      assertEquals("0                 cloud amount (low) [code]", lines.get(35));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      mycloudcover.N_code = originalCloudCover;
+      mycloudcover.Nh_code = originalLowCloudAmount;
+    }
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
