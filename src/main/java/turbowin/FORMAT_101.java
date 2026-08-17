@@ -134,13 +134,7 @@ public class FORMAT_101 {
       // NB see function copy_format_101_module() for a message if "logs_dir" do not exist
 
       // NB e.g. exeFile = "C:\Program Files (x86)\TurboWin+\logs\format_101\teste_hc_TW.exe"
-      final File exeFile =
-          new File(
-              main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + compression_exe);
+      final File exeFile = new File(format101Path(main.FORMAT_101_ROOT_DIR, compression_exe));
       if (exeFile.exists() == false) {
         format_101_module_status = 1;
 
@@ -149,11 +143,7 @@ public class FORMAT_101 {
         // System.out.println(info);
         main.log_turbowin_system_message(
             "[FORMAT-101] did not find: "
-                + main.logs_dir
-                + java.io.File.separator
-                + main.FORMAT_101_ROOT_DIR
-                + java.io.File.separator
-                + compression_exe);
+                + format101Path(main.FORMAT_101_ROOT_DIR, compression_exe));
       } else {
         format_101_module_status = 0;
 
@@ -283,33 +273,19 @@ public class FORMAT_101 {
         OSDetector.OSType ostype = OSDetector.detect_OS();
         switch (ostype) {
           case LINUX:
-            File f =
-                new File(
-                    main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + compression_exe);
+            File f = new File(format101Path(main.FORMAT_101_ROOT_DIR, compression_exe));
             if (!f.canExecute()) {
               if (f.setExecutable(
                   true, false)) // NB parameters: 1st=boolean executable, 2nd=boolean ownerOnly
               {
                 main.log_turbowin_system_message(
                     "[FORMAT-101] success when setting "
-                        + main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + compression_exe
+                        + format101Path(main.FORMAT_101_ROOT_DIR, compression_exe)
                         + " as executable");
               } else {
                 main.log_turbowin_system_message(
                     "[FORMAT-101] failed when setting "
-                        + main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + compression_exe
+                        + format101Path(main.FORMAT_101_ROOT_DIR, compression_exe)
                         + " as executable");
               }
             } // if (!f.canExecute())
@@ -355,31 +331,17 @@ public class FORMAT_101 {
         // on Linux systems set "allow executing file as program"
         switch (ostype) {
           case LINUX:
-            File f =
-                new File(
-                    main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + decompression_exe);
+            File f = new File(format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe));
             if (!f.canExecute()) {
               if (f.setExecutable(true, false)) {
                 main.log_turbowin_system_message(
                     "[FORMAT-101] success when setting "
-                        + main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + decompression_exe
+                        + format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe)
                         + " as executable");
               } else {
                 main.log_turbowin_system_message(
                     "[FORMAT-101] failed when setting "
-                        + main.logs_dir
-                        + java.io.File.separator
-                        + main.FORMAT_101_ROOT_DIR
-                        + java.io.File.separator
-                        + decompression_exe
+                        + format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe)
                         + " as executable");
               }
             } // if (!f.canExecute())
