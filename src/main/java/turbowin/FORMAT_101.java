@@ -885,7 +885,6 @@ public class FORMAT_101 {
     int[] present = new int[NBMAXELEM];
     double[] val = new double[NBMAXELEM];
     double schalings_factor;
-    int pos_description;
     String[] description = new String[NBMAXELEM];
     final double omzet_kn_ms = 0.5144444;
 
@@ -2571,47 +2570,50 @@ public class FORMAT_101 {
         format101Path(
             main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR, main.FORMAT_101_INPUT_FILE);
 
-    try (BufferedWriter out =
-        new BufferedWriter(new FileWriter(volledig_path_format_101_input_file))) {
-      // always 0 as first line
-      out.write("0"); // "mode_oper"
-      out.newLine();
-
-      for (int i = 0; i < NBMAXELEM; i++) {
-        out.write(String.valueOf(present[i]));
-
-        if (present[i] == 1) {
-          out.write(" ");
-          out.write(String.valueOf(val[i]));
-
-          pos_description =
-              17
-                  - (Double.toString(val[i]).length())
-                  - 1; // 17 than description on same pos as Meteo France examples
-        } else // so no 'val' value present for this element
-        {
-          pos_description = 17;
-        } // else
-
-        // add appropriate description
-        for (int k = 0; k < pos_description; k++) {
-          out.write(" ");
-        }
-        out.write(description[i]);
-
-        out.newLine(); // newLine(): write a line separator. The line separator string is defined
-        // by the system property line.separator, and is not necessarily a single
-        // newline ('\n') character.
-      } // for (int i = 0; i < NBMAXELEM; i++)
-
-    } // try
-    catch (IOException ex) {
+    try {
+      writeFormat101InputFile(volledig_path_format_101_input_file, present, val, description);
+    } catch (IOException ex) {
       String info = "unable to write to: " + volledig_path_format_101_input_file;
       System.out.println(info);
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
     } // catch
   } // public void write_input_for_101_compression()
+
+  private void writeFormat101InputFile(
+      String path, int[] present, double[] values, String[] descriptions) throws IOException {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter(path))) {
+      // always 0 as first line
+      out.write("0"); // "mode_oper"
+      out.newLine();
+
+      for (int i = 0; i < present.length; i++) {
+        out.write(String.valueOf(present[i]));
+
+        int posDescription;
+        if (present[i] == 1) {
+          out.write(" ");
+          out.write(String.valueOf(values[i]));
+
+          posDescription =
+              17
+                  - (Double.toString(values[i]).length())
+                  - 1; // 17 than description on same pos as Meteo France examples
+        } else // so no 'val' value present for this element
+        {
+          posDescription = 17;
+        } // else
+
+        // add appropriate description
+        for (int k = 0; k < posDescription; k++) {
+          out.write(" ");
+        }
+        out.write(descriptions[i]);
+
+        out.newLine(); // newLine(): write the line separator string defined by the system property.
+      }
+    }
+  }
 
   public static String compression_exe;
   public static String decompression_exe;
