@@ -8,6 +8,7 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -150,6 +151,45 @@ public class Format101CharacterizationTest {
               "/tmp/decompressed.txt"));
     } finally {
       main.imo_number = originalImoNumber;
+    }
+  }
+
+  @Test
+  public void writesFormat101InputWithFixedHeaderAndRepresentativeFields() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+
+      invokePrivate("write_input_for_101_compression");
+
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0", lines.get(0));
+      assertEquals("1 101.0           format identifier", lines.get(1));
+      assertEquals("1 1.0             call sign encryption indicator", lines.get(2));
+      assertEquals("1 2026.0          year", lines.get(7));
+      assertEquals("1 10.0            month", lines.get(8));
+      assertEquals("1 4.0             day", lines.get(9));
+      assertEquals("1 12.0            hour", lines.get(10));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
     }
   }
 
