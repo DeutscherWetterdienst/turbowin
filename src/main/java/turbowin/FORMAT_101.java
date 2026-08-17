@@ -1219,19 +1219,11 @@ public class FORMAT_101 {
     /* unit  = degrees */
     schalings_factor = 1;
 
-    // compressed_latitude = ((double)myposition.int_latitude_degrees +
-    // (double)myposition.int_latitude_minutes / 60) * schalings_factor;
-    BigDecimal bd_lat =
-        new BigDecimal(
-                ((double) myposition.int_latitude_degrees
-                        + (double) myposition.int_latitude_minutes / 60)
-                    * schalings_factor)
-            .setScale(3, RoundingMode.HALF_UP); // three decimals
-    compressed_latitude = bd_lat.doubleValue();
-
-    if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) {
-      compressed_latitude *= -1;
-    }
+    compressed_latitude =
+        convertCoordinateToDegrees(
+            myposition.int_latitude_degrees,
+            myposition.int_latitude_minutes,
+            myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH));
     present[11] = 1;
 
     /* [12]
@@ -1240,19 +1232,11 @@ public class FORMAT_101 {
     /* unit  = degrees */
     schalings_factor = 1;
 
-    // compressed_longitude = ((double)myposition.int_longitude_degrees +
-    // (double)myposition.int_longitude_minutes / 60) * schalings_factor;
-    BigDecimal bd_lon =
-        new BigDecimal(
-                ((double) myposition.int_longitude_degrees
-                        + (double) myposition.int_longitude_minutes / 60)
-                    * schalings_factor)
-            .setScale(3, RoundingMode.HALF_UP); // three decimals // omzet_kn_ms = 0.5144444
-    compressed_longitude = bd_lon.doubleValue();
-
-    if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true) {
-      compressed_longitude *= -1;
-    }
+    compressed_longitude =
+        convertCoordinateToDegrees(
+            myposition.int_longitude_degrees,
+            myposition.int_longitude_minutes,
+            myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST));
     present[12] = 1;
 
     /* [13]
@@ -2597,6 +2581,14 @@ public class FORMAT_101 {
       convertedPressureChange *= -1;
     }
     return convertedPressureChange;
+  }
+
+  private double convertCoordinateToDegrees(int degrees, int minutes, boolean negative) {
+    double coordinate =
+        new BigDecimal((double) degrees + (double) minutes / 60)
+            .setScale(3, RoundingMode.HALF_UP)
+            .doubleValue();
+    return negative ? coordinate * -1 : coordinate;
   }
 
   public static String compression_exe;
