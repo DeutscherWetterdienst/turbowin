@@ -1272,7 +1272,8 @@ public class FORMAT_101 {
               && (double_pressure_reading_corrected
                   < 1100.0)) // raw check (for real limits see mybarometer.java)
           {
-            compressed_pressure_height = double_pressure_reading_corrected * schalings_factor;
+            compressed_pressure_height =
+                convertHectopascalsToPascals(double_pressure_reading_corrected);
             present[13] = 1;
           } else {
             compressed_pressure_height = COMPRESSED_UNDEF_VALUE;
@@ -1308,7 +1309,7 @@ public class FORMAT_101 {
             && (double_pressure_msl_corrected
                 < 1100.0)) // raw check (for real limits see mybarometer.java)
         {
-          compressed_pressure_msl = double_pressure_msl_corrected * schalings_factor;
+          compressed_pressure_msl = convertHectopascalsToPascals(double_pressure_msl_corrected);
           present[14] = 1;
         } else {
           compressed_pressure_msl = COMPRESSED_UNDEF_VALUE;
@@ -2592,6 +2593,10 @@ public class FORMAT_101 {
     return new BigDecimal(celsius + CELCIUS_TO_KELVIN_FACTOR)
         .setScale(3, RoundingMode.HALF_UP)
         .doubleValue();
+  }
+
+  private double convertHectopascalsToPascals(double hectopascals) {
+    return hectopascals * 100.0;
   }
 
   public static String compression_exe;
