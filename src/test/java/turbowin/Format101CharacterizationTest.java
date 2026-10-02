@@ -518,6 +518,7 @@ public class Format101CharacterizationTest {
     String originalHour = mydatetime.hour;
     String originalCloudCover = mycloudcover.N_code;
     String originalLowCloudAmount = mycloudcover.Nh_code;
+    String originalCloudBase = mycloudcover.h_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -531,19 +532,23 @@ public class Format101CharacterizationTest {
       mydatetime.hour = "12";
       mycloudcover.N_code = "5";
       mycloudcover.Nh_code = "3";
+      mycloudcover.h_code = "600";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
           Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 5.0             total cloud cover [code]", lines.get(34));
       assertEquals("1 3.0             cloud amount (low) [code]", lines.get(35));
+      assertEquals("1 600.0           height of base of lowest clouds [code]", lines.get(39));
 
       mycloudcover.N_code = "/";
       mycloudcover.Nh_code = "/";
+      mycloudcover.h_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 total cloud cover [code]", lines.get(34));
       assertEquals("0                 cloud amount (low) [code]", lines.get(35));
+      assertEquals("0                 height of base of lowest clouds [code]", lines.get(39));
     } finally {
       main.logs_dir = originalLogsDirectory;
       mydatetime.year = originalYear;
@@ -552,6 +557,7 @@ public class Format101CharacterizationTest {
       mydatetime.hour = originalHour;
       mycloudcover.N_code = originalCloudCover;
       mycloudcover.Nh_code = originalLowCloudAmount;
+      mycloudcover.h_code = originalCloudBase;
     }
   }
 

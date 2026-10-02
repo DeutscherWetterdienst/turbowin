@@ -1688,51 +1688,17 @@ public class FORMAT_101 {
     */
     /* unit  = code (no bufr table -> manual on codes table 2700) */
 
-    if ((mycloudcover.N_code.trim()).length() > 0) {
-      if (mycloudcover.N_code.equals("/")) {
-        compressed_cloud_cover = COMPRESSED_UNDEF_VALUE;
-        present[33] = 0;
-      } else {
-        try {
-          compressed_cloud_cover = parseNumericCode(mycloudcover.N_code);
-          present[33] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_cloud_cover = COMPRESSED_UNDEF_VALUE;
-          present[33] = 0;
-          System.out.println("+++ write input file for format 101; total cloud cover (N) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_cloud_cover = COMPRESSED_UNDEF_VALUE;
-      present[33] = 0;
-    } // else
+    compressed_cloud_cover =
+        parseOptionalNumericField(
+            mycloudcover.N_code, 1, present, 33, "total cloud cover (N)", COMPRESSED_UNDEF_VALUE);
 
     /* [34]
     //////////////////////////////////////////// 0 20 011 (cloud amount low; Nh) ////////////////////////////////////////
     */
     /* unit  = code (bufr table 020011) */
-    if ((mycloudcover.Nh_code.trim()).length() > 0) {
-      if (mycloudcover.Nh_code.equals("/")) {
-        compressed_cloud_amount_low_medium = COMPRESSED_UNDEF_VALUE;
-        present[34] = 0;
-      } else {
-        try {
-          compressed_cloud_amount_low_medium = parseNumericCode(mycloudcover.Nh_code);
-          present[34] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_cloud_amount_low_medium = COMPRESSED_UNDEF_VALUE;
-          present[34] = 0;
-          System.out.println("+++ write input file for format 101; cloud amount low (Nh) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_cloud_amount_low_medium = COMPRESSED_UNDEF_VALUE;
-      present[34] = 0;
-    } // else
+    compressed_cloud_amount_low_medium =
+        parseOptionalNumericField(
+            mycloudcover.Nh_code, 1, present, 34, "cloud amount low (Nh)", COMPRESSED_UNDEF_VALUE);
 
     /* [35]
     //////////////////////////////////////////// 0 20 012 (cloud type low; Cl) ////////////////////////////////////////
@@ -1773,27 +1739,14 @@ public class FORMAT_101 {
     */
     /* unit = code (no bufr table -> manual on codes table 1600) */
 
-    if ((mycloudcover.h_code.trim()).length() > 0) {
-      if (mycloudcover.h_code.equals("/")) {
-        compressed_cloud_base = COMPRESSED_UNDEF_VALUE;
-        present[38] = 0;
-      } else {
-        try {
-          compressed_cloud_base = Double.parseDouble(mycloudcover.h_code);
-          present[38] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_cloud_base = COMPRESSED_UNDEF_VALUE;
-          present[38] = 0;
-          System.out.println(
-              "+++ write input file for format 101; height of base of lowest clouds (h) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_cloud_base = COMPRESSED_UNDEF_VALUE;
-      present[38] = 0;
-    } // else
+    compressed_cloud_base =
+        parseOptionalNumericField(
+            mycloudcover.h_code,
+            1,
+            present,
+            38,
+            "height of base of lowest clouds (h)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [39]
     ///////////////////////////////////////// 1 08 000 waves obs presence indicator  ////////////////////////////////
