@@ -209,4 +209,22 @@ public class MainSupportCharacterizationTest {
       mybarometer.pressure_msl_corrected = originalPressure;
     }
   }
+
+  @Test
+  public void preservesSeaWaterTemperatureConversionAtLevelThree() {
+    String originalSeaWaterTemperature = mytemp.sea_water_temp;
+
+    try {
+      mytemp.sea_water_temp = "18";
+      assertTrue(new main_support().checking_level_3());
+
+      mytemp.sea_water_temp = "";
+      assertTrue(new main_support().checking_level_3());
+
+      mytemp.sea_water_temp = "invalid";
+      assertTrue(new main_support().checking_level_3());
+    } finally {
+      mytemp.sea_water_temp = originalSeaWaterTemperature;
+    }
+  }
 }

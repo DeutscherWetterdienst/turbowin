@@ -2949,16 +2949,13 @@ public class main_support {
     }
 
     // string SST to float
-    try {
-      if (mytemp.sea_water_temp.equals("") == false && mytemp.sea_water_temp != null) {
-        float_sea_water_temp = Float.parseFloat(mytemp.sea_water_temp);
-        sea_water_temp_conversion_ok = true;
-      } else {
-        sea_water_temp_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] SST conversion error; Function: checking_level_3()");
+    Float parsedSeaWaterTemperature =
+        parseValidationFloat(
+            mytemp.sea_water_temp, "[GENERAL] SST conversion error; Function: checking_level_3()");
+    if (parsedSeaWaterTemperature != null) {
+      float_sea_water_temp = parsedSeaWaterTemperature;
+      sea_water_temp_conversion_ok = true;
+    } else {
       sea_water_temp_conversion_ok = false;
     }
 
