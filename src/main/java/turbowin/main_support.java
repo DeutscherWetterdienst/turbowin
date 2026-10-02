@@ -2146,6 +2146,17 @@ public class main_support {
     return null;
   }
 
+  private Integer parseValidationInt(String value, String errorMessage) {
+    try {
+      if (value.equals("") == false && value != null) {
+        return Integer.parseInt(value);
+      }
+    } catch (NumberFormatException ex) {
+      main.log_turbowin_system_message(errorMessage);
+    }
+    return null;
+  }
+
   public boolean checking_level_2() {
     boolean doorgaan = true;
     boolean level_2_ok = true;
@@ -2271,30 +2282,25 @@ public class main_support {
     }
 
     // string ww code conversion to int
-    try {
-      if (mypresentweather.ww_code.equals("") == false && mypresentweather.ww_code != null) {
-        int_ww_code = Integer.parseInt(mypresentweather.ww_code);
-        ww_code_conversion_ok = true;
-      } else {
-        ww_code_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] ww conversion error; Function: checking_level_2()");
+    Integer parsedPresentWeather =
+        parseValidationInt(
+            mypresentweather.ww_code,
+            "[GENERAL] ww conversion error; Function: checking_level_2()");
+    if (parsedPresentWeather != null) {
+      int_ww_code = parsedPresentWeather;
+      ww_code_conversion_ok = true;
+    } else {
       ww_code_conversion_ok = false;
     }
 
     // string VV code conversion to int
-    try {
-      if (myvisibility.VV_code.equals("") == false && myvisibility.VV_code != null) {
-        int_VV_code = Integer.parseInt(myvisibility.VV_code);
-        VV_code_conversion_ok = true;
-      } else {
-        VV_code_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] VV conversion error; Function: checking_level_2()");
+    Integer parsedVisibility =
+        parseValidationInt(
+            myvisibility.VV_code, "[GENERAL] VV conversion error; Function: checking_level_2()");
+    if (parsedVisibility != null) {
+      int_VV_code = parsedVisibility;
+      VV_code_conversion_ok = true;
+    } else {
       VV_code_conversion_ok = false;
     }
 
