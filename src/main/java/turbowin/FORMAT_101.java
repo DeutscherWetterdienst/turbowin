@@ -2146,27 +2146,14 @@ public class FORMAT_101 {
     /* unit  = code (bufr table 020034 and FM13 table table 0639) */
     schalings_factor = 1;
 
-    if ((myice1.ci_code.trim()).length() > 0) {
-      if (myice1.ci_code.equals("/")) {
-        compressed_sea_ice_concentration = COMPRESSED_UNDEF_VALUE;
-        present[52] = 0;
-      } else {
-        try {
-          compressed_sea_ice_concentration = parseNumericCode(myice1.ci_code);
-          present[52] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_sea_ice_concentration = COMPRESSED_UNDEF_VALUE;
-          present[52] = 0;
-          System.out.println(
-              "+++ write input file for format 101; sea ice concentration (ci) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_sea_ice_concentration = COMPRESSED_UNDEF_VALUE;
-      present[52] = 0;
-    }
+    compressed_sea_ice_concentration =
+        parseOptionalNumericField(
+            myice1.ci_code,
+            schalings_factor,
+            present,
+            52,
+            "sea ice concentration (ci)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [53]
     ///////////////////// 0 20 035 (bi, amount and type of ice, ice of land origin)    ///////////////////////////
@@ -2174,27 +2161,14 @@ public class FORMAT_101 {
     /* unit  = code (bufr table 020035 and FM13 table table 0439) */
     schalings_factor = 1;
 
-    if ((myice1.bi_code.trim()).length() > 0) {
-      if (myice1.bi_code.equals("/")) {
-        compressed_amount_type_ice = COMPRESSED_UNDEF_VALUE;
-        present[53] = 0;
-      } else {
-        try {
-          compressed_amount_type_ice = parseNumericCode(myice1.bi_code);
-          present[53] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_amount_type_ice = COMPRESSED_UNDEF_VALUE;
-          present[53] = 0;
-          System.out.println(
-              "+++ write input file for format 101; amount and type of ice (bi) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_amount_type_ice = COMPRESSED_UNDEF_VALUE;
-      present[53] = 0;
-    }
+    compressed_amount_type_ice =
+        parseOptionalNumericField(
+            myice1.bi_code,
+            schalings_factor,
+            present,
+            53,
+            "amount and type of ice (bi)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [54]
     //////////////////////////////////////////////// 0 20 036 (zi; ice situation) ////////////////////////////////
@@ -2202,26 +2176,14 @@ public class FORMAT_101 {
     /* unit  = code (bufr table 020036 and FM13 table 5239) */
     schalings_factor = 1;
 
-    if ((myice1.zi_code.trim()).length() > 0) {
-      if (myice1.zi_code.equals("/")) {
-        compressed_ice_situation = COMPRESSED_UNDEF_VALUE;
-        present[54] = 0;
-      } else {
-        try {
-          compressed_ice_situation = parseNumericCode(myice1.zi_code);
-          present[54] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_ice_situation = COMPRESSED_UNDEF_VALUE;
-          present[54] = 0;
-          System.out.println("+++ write input file for format 101; ice concentration (zi) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_ice_situation = COMPRESSED_UNDEF_VALUE;
-      present[54] = 0;
-    }
+    compressed_ice_situation =
+        parseOptionalNumericField(
+            myice1.zi_code,
+            schalings_factor,
+            present,
+            54,
+            "ice concentration (zi)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [55]
     //////////////////////////////////////////////// 0 20 037 (Si; ice development) ////////////////////////////////
@@ -2229,26 +2191,14 @@ public class FORMAT_101 {
     /* unit  = code (bufr table 020037 and FM13 table 3739) */
     schalings_factor = 1;
 
-    if ((myice1.Si_code.trim()).length() > 0) {
-      if (myice1.Si_code.equals("/")) {
-        compressed_ice_development = COMPRESSED_UNDEF_VALUE;
-        present[55] = 0;
-      } else {
-        try {
-          compressed_ice_development = parseNumericCode(myice1.Si_code);
-          present[55] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_ice_development = COMPRESSED_UNDEF_VALUE;
-          present[55] = 0;
-          System.out.println("+++ write input file for format 101; ice development (Si) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_ice_development = COMPRESSED_UNDEF_VALUE;
-      present[55] = 0;
-    }
+    compressed_ice_development =
+        parseOptionalNumericField(
+            myice1.Si_code,
+            schalings_factor,
+            present,
+            55,
+            "ice development (Si)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [56]
     //////////////////////////////////////// 0 20 038 (Di, bearing of ice edge)  ////////////////////////////////////
@@ -2482,6 +2432,33 @@ public class FORMAT_101 {
           code = code.substring(0, 1);
         }
         double value = convertCloudTypeCode(code, offset);
+        present[presentIndex] = 1;
+        return value;
+      } catch (NumberFormatException ex) {
+        present[presentIndex] = 0;
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
+  }
+
+  private double parseOptionalNumericField(
+      String code,
+      double scalingFactor,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue) {
+    if (code.trim().length() > 0) {
+      if (code.equals("/")) {
+        present[presentIndex] = 0;
+        return undefinedValue;
+      }
+
+      try {
+        double value = parseNumericCode(code) * scalingFactor;
         present[presentIndex] = 1;
         return value;
       } catch (NumberFormatException ex) {
