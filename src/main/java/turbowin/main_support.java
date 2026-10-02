@@ -2237,16 +2237,13 @@ public class main_support {
     }
 
     // string Cl code conversion to int
-    try {
-      if (mycl.cl_code.equals("") == false && mycl.cl_code != null) {
-        int_cl_code = Integer.parseInt(mycl.cl_code);
-        cl_code_conversion_ok = true;
-      } else {
-        cl_code_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] Cl conversion error; Function: checking_level_2()");
+    Integer parsedLowCloudType =
+        parseValidationInt(
+            mycl.cl_code, "[GENERAL] Cl conversion error; Function: checking_level_2()");
+    if (parsedLowCloudType != null) {
+      int_cl_code = parsedLowCloudType;
+      cl_code_conversion_ok = true;
+    } else {
       cl_code_conversion_ok = false;
     }
 
@@ -2268,16 +2265,13 @@ public class main_support {
     }
 
     // string Ch code conversion to int
-    try {
-      if (mych.ch_code.equals("") == false && mych.ch_code != null) {
-        int_ch_code = Integer.parseInt(mych.ch_code);
-        ch_code_conversion_ok = true;
-      } else {
-        ch_code_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] Ch conversion error; Function: checking_level_2()");
+    Integer parsedHighCloudType =
+        parseValidationInt(
+            mych.ch_code, "[GENERAL] Ch conversion error; Function: checking_level_2()");
+    if (parsedHighCloudType != null) {
+      int_ch_code = parsedHighCloudType;
+      ch_code_conversion_ok = true;
+    } else {
       ch_code_conversion_ok = false;
     }
 
