@@ -1,5 +1,7 @@
 package turbowin;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -328,6 +330,42 @@ public class MainSupportCharacterizationTest {
       assertTrue(new main_support().checking_level_3());
     } finally {
       mypresentweather.ww_code = originalPresentWeather;
+    }
+  }
+
+  @Test
+  public void parsesSatelliteCoordinatesAndHemisphereSigns() {
+    assertEquals(12, main_support.parseSatelliteCoordinate("12", "N", "S"));
+    assertEquals(-12, main_support.parseSatelliteCoordinate("12", "S", "S"));
+    assertEquals(-45, main_support.parseSatelliteCoordinate("45", "W", "W"));
+    assertEquals(0, main_support.parseSatelliteCoordinate("invalid", "N", "S"));
+    assertEquals(0, main_support.parseSatelliteCoordinate("", "N", "S"));
+  }
+
+  @Test
+  public void preservesNoaaNullHemisphereFailure() {
+    String originalLatitudeDegrees = myposition.latitude_degrees;
+    String originalLatitudeHemisphere = myposition.latitude_hemisphere;
+    String originalLongitudeDegrees = myposition.longitude_degrees;
+    String originalLongitudeHemisphere = myposition.longitude_hemisphere;
+
+    try {
+      myposition.latitude_degrees = "12";
+      myposition.latitude_hemisphere = null;
+      myposition.longitude_degrees = "4";
+      myposition.longitude_hemisphere = "E";
+
+      try {
+        new main_support().determine_satellite_image_url_NOAA(main.SATELLITE_IR_IMAGE);
+        fail("Expected a null latitude hemisphere to fail in the NOAA path");
+      } catch (NullPointerException ex) {
+        assertEquals("latitude_hemisphere", ex.getMessage());
+      }
+    } finally {
+      myposition.latitude_degrees = originalLatitudeDegrees;
+      myposition.latitude_hemisphere = originalLatitudeHemisphere;
+      myposition.longitude_degrees = originalLongitudeDegrees;
+      myposition.longitude_hemisphere = originalLongitudeHemisphere;
     }
   }
 }
