@@ -1247,33 +1247,14 @@ public class FORMAT_101 {
     /* unit  = Pa */
     schalings_factor = 100;
 
-    if ((mybarograph.pressure_amount_tendency.trim()).length() > 0) {
-      if ((mybarograph.a_code.trim()).length()
-          > 0) // we need 'a' because ppp has no sign on the input form (characteristic defines the
-      // sign)
-      {
-        try {
-          double double_pressure_amount_tendency =
-              Double.parseDouble(mybarograph.pressure_amount_tendency);
-          int int_a_code = Integer.parseInt(mybarograph.a_code);
-          compressed_pressure_change =
-              convertPressureChangeToPascals(double_pressure_amount_tendency, int_a_code);
-          present[15] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_pressure_change = COMPRESSED_UNDEF_VALUE;
-          present[15] = 0;
-          System.out.println("+++ write input file for format 101; pressure change (ppp) " + ex);
-        } // catch
-      } // if ((mybarograph.a_code.trim()).length() > 0)
-      else {
-        compressed_pressure_change = COMPRESSED_UNDEF_VALUE;
-        present[15] = 0;
-      }
-    } else {
-      compressed_pressure_change = COMPRESSED_UNDEF_VALUE;
-      present[15] = 0;
-    }
+    compressed_pressure_change =
+        parsePressureChangeField(
+            mybarograph.pressure_amount_tendency,
+            mybarograph.a_code,
+            present,
+            15,
+            "pressure change (ppp)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [16]
     //////////////////////////////////////////////// 0 10 063 pressure characteristic (a) //////////////////////////////
@@ -2102,6 +2083,30 @@ public class FORMAT_101 {
           present[presentIndex] = 1;
           return convertHectopascalsToPascals(hectopascals);
         }
+      } catch (NumberFormatException ex) {
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
+  }
+
+  private double parsePressureChangeField(
+      String pressureChange,
+      String pressureCharacteristic,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue) {
+    // The input ppp amount has no sign; pressure characteristic a supplies the sign.
+    if (pressureChange.trim().length() > 0 && pressureCharacteristic.trim().length() > 0) {
+      try {
+        double value =
+            convertPressureChangeToPascals(
+                parseNumericCode(pressureChange), Integer.parseInt(pressureCharacteristic));
+        present[presentIndex] = 1;
+        return value;
       } catch (NumberFormatException ex) {
         System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
       }
