@@ -191,4 +191,22 @@ public class MainSupportCharacterizationTest {
       mywaves.swell_2_height = originalSecondHeight;
     }
   }
+
+  @Test
+  public void preservesMslPressureConversionAtLevelThree() {
+    String originalPressure = mybarometer.pressure_msl_corrected;
+
+    try {
+      mybarometer.pressure_msl_corrected = "1013.25";
+      assertTrue(new main_support().checking_level_3());
+
+      mybarometer.pressure_msl_corrected = "";
+      assertTrue(new main_support().checking_level_3());
+
+      mybarometer.pressure_msl_corrected = "invalid";
+      assertTrue(new main_support().checking_level_3());
+    } finally {
+      mybarometer.pressure_msl_corrected = originalPressure;
+    }
+  }
 }
