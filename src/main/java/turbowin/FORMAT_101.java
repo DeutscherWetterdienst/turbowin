@@ -1739,91 +1739,34 @@ public class FORMAT_101 {
     */
     /* unit  = code (bufr table 020012) */
 
-    if ((mycl.cl_code.trim()).length() > 0) {
-      if (mycl.cl_code.equals("/")) {
-        compressed_Cl = COMPRESSED_UNDEF_VALUE;
-        present[35] = 0;
-      } else {
-        try {
-          compressed_Cl = convertCloudTypeCode(mycl.cl_code, 30.0);
-          present[35] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_Cl = COMPRESSED_UNDEF_VALUE;
-          present[35] = 0;
-          System.out.println("+++ write input file for format 101; cloud type low (Cl) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_Cl = COMPRESSED_UNDEF_VALUE;
-      present[35] = 0;
-    } // else
+    compressed_Cl =
+        parseCloudTypeField(
+            mycl.cl_code, 30.0, present, 35, "cloud type low (Cl)", false, COMPRESSED_UNDEF_VALUE);
 
     /* [36]
     //////////////////////////////////////////// 0 20 012 (cloud type middle; Cm) ////////////////////////////////////////
     */
     /* unit  = code (bufr table 020012) */
 
-    if ((mycm.cm_code.trim()).length() > 0) {
-      if (mycm.cm_code.equals("/")) {
-        compressed_Cm = COMPRESSED_UNDEF_VALUE;
-        present[36] = 0;
-      } else {
-        try {
-          String hulp_cm_code = "";
-
-          // note: Cm7 is marked as 7a, 7b or 7c!
-          if (mycm.cm_code.length() > 1) {
-            hulp_cm_code =
-                mycm.cm_code.substring(
-                    0,
-                    1); // NB .substring(0, 1) --> because Cm_code in case of Cm7 an a, b, c could
-            // be sticked to the 7 (7a, 7b, 7c)
-          } else {
-            hulp_cm_code = mycm.cm_code;
-          }
-
-          compressed_Cm = convertCloudTypeCode(hulp_cm_code, 20.0);
-          present[36] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_Cm = COMPRESSED_UNDEF_VALUE;
-          present[36] = 0;
-          System.out.println("+++ write input file for format 101; cloud type middle (Cm) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_Cm = COMPRESSED_UNDEF_VALUE;
-      present[36] = 0;
-    } // else
+    // FORMAT 101 represents Cm7 as 7a, 7b, or 7c; only the first character is parsed.
+    compressed_Cm =
+        parseCloudTypeField(
+            mycm.cm_code,
+            20.0,
+            present,
+            36,
+            "cloud type middle (Cm)",
+            true,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [37]
     //////////////////////////////////////////// 0 20 012 (cloud type high; Ch) ////////////////////////////////////////
     */
     /* unit  = code (bufr table 020012) */
 
-    if ((mych.ch_code.trim()).length() > 0) {
-      if (mych.ch_code.equals("/")) {
-        compressed_Ch = COMPRESSED_UNDEF_VALUE;
-        present[37] = 0;
-      } else {
-        try {
-          compressed_Ch = convertCloudTypeCode(mych.ch_code, 10.0);
-          present[37] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_Ch = COMPRESSED_UNDEF_VALUE;
-          present[37] = 0;
-          System.out.println("+++ write input file for format 101; cloud type high (Ch) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_Ch = COMPRESSED_UNDEF_VALUE;
-      present[37] = 0;
-    } // else
+    compressed_Ch =
+        parseCloudTypeField(
+            mych.ch_code, 10.0, present, 37, "cloud type high (Ch)", false, COMPRESSED_UNDEF_VALUE);
 
     /* [38]
     //////////////////////////////////////////////// 0 20 013 (height of base of cloud; h)///////////////////////
@@ -2518,6 +2461,37 @@ public class FORMAT_101 {
 
   private double convertCloudTypeCode(String code, double offset) {
     return Double.parseDouble(code) + offset;
+  }
+
+  private double parseCloudTypeField(
+      String code,
+      double offset,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      boolean stripSuffix,
+      double undefinedValue) {
+    if (code.trim().length() > 0) {
+      if (code.equals("/")) {
+        present[presentIndex] = 0;
+        return undefinedValue;
+      }
+
+      try {
+        if (stripSuffix && code.length() > 1) {
+          code = code.substring(0, 1);
+        }
+        double value = convertCloudTypeCode(code, offset);
+        present[presentIndex] = 1;
+        return value;
+      } catch (NumberFormatException ex) {
+        present[presentIndex] = 0;
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
   }
 
   private Integer iceCauseCodeToBufrCode(String code) {
