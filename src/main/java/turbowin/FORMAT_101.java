@@ -2182,69 +2182,14 @@ public class FORMAT_101 {
         compressed_cause_ice_accretion = COMPRESSED_UNDEF_VALUE;
         present[51] = 0;
       } else {
-        // try
-        // {
-        // NB Is code already according bufr 020033-equivalent if format 101 or AWS mode [see
-        // myicing.java]
-        // compressed_cause_ice_accretion = Double.parseDouble(myicing.Is_code) * schalings_factor;
-        // present[51] = 1;
-
-        if (myicing.Is_code.equals("1")) // icing from spray (FM13 code)
-        {
-          compressed_cause_ice_accretion =
-              8.0; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-          // information about codes", Pierre Blouch)
-          present[51] = 1;
-        } else if (myicing.Is_code.equals("2")) // icing from fog (FM13 code)
-        {
-          compressed_cause_ice_accretion =
-              4.0; // BUFR table 020033 equivalent (see "EUCAWS inputs/outputs complementary
-          // information about codes", Pierre Blouch)
-          present[51] = 1;
-        } else if (myicing.Is_code.equals("3")) // icing from spray and fog (FM13 code)
-        {
-          compressed_cause_ice_accretion =
-              12.0; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-          // information about codes", Pierre Blouch)
-          present[51] = 1;
-        } else if (myicing.Is_code.equals("4")) // icing from rain (FM13 code)
-        {
-          compressed_cause_ice_accretion =
-              2.0; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-          // information about codes", Pierre Blouch)
-          present[51] = 1;
-        } else if (myicing.Is_code.equals("5")) // icing from spray and rain (FM13 code)
-        {
-          compressed_cause_ice_accretion =
-              10.0; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-          // information about codes", Pierre Blouch)
-          present[51] = 1;
-        } else if (myicing.Is_code.equals(
-            "6")) // icing from fog and rain (not present in FM13 code)
-        {
-          compressed_cause_ice_accretion =
-              6.0; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-          // information about codes", Pierre Blouch)
-          present[51] = 1;
-        } else if (myicing.Is_code.equals(
-            "14")) // icing from spray and fog and rain (not present in FM13 code)
-        {
-          compressed_cause_ice_accretion =
-              14.0; // BUFR table 020033-equivalent (see "EUCAWS inputs/outputs complementary
-          // information about codes", Pierre Blouch)
+        Integer cause = iceCauseCodeToBufrCode(myicing.Is_code);
+        if (cause != null) {
+          compressed_cause_ice_accretion = cause;
           present[51] = 1;
         } else {
           compressed_cause_ice_accretion = COMPRESSED_UNDEF_VALUE;
           present[51] = 0;
         }
-        // } // try
-        // catch (NumberFormatException ex)
-        // {
-        //   compressed_cause_ice_accretion = COMPRESSED_UNDEF_VALUE;
-        //   present[51] = 0;
-        //   System.out.println("+++ write input file for format 101; cause ice accretion (Is) " +
-        // ex);
-        // } // catch
       } // else
     } //
     else {
@@ -2573,6 +2518,28 @@ public class FORMAT_101 {
 
   private double convertCloudTypeCode(String code, double offset) {
     return Double.parseDouble(code) + offset;
+  }
+
+  private Integer iceCauseCodeToBufrCode(String code) {
+    // EUCAWS/BUFR table 020033-equivalent mapping (Pierre Blouch complementary-code information).
+    switch (code) {
+      case "1":
+        return 8; // spray (FM13)
+      case "2":
+        return 4; // fog (FM13)
+      case "3":
+        return 12; // spray and fog (FM13)
+      case "4":
+        return 2; // rain (FM13)
+      case "5":
+        return 10; // spray and rain (FM13)
+      case "6":
+        return 6; // fog and rain (not present in FM13)
+      case "14":
+        return 14; // spray, fog, and rain (not present in FM13)
+      default:
+        return null;
+    }
   }
 
   public static String compression_exe;

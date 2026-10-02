@@ -446,6 +446,13 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void mapsIceCauseCodes() throws Exception {
+    assertEquals(8, invokePrivate("iceCauseCodeToBufrCode", new Class<?>[] {String.class}, "1"));
+    assertEquals(14, invokePrivate("iceCauseCodeToBufrCode", new Class<?>[] {String.class}, "14"));
+    assertEquals(null, invokePrivate("iceCauseCodeToBufrCode", new Class<?>[] {String.class}, "9"));
+  }
+
+  @Test
   public void preservesLegacyShipSpeedConversionsAndMissingValues() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
