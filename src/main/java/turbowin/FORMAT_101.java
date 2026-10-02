@@ -1281,22 +1281,14 @@ public class FORMAT_101 {
     /* unit  = code (bufr table 010063) */
     schalings_factor = 1;
 
-    if ((mybarograph.a_code.trim()).length() > 0) {
-      try {
-        double double_a_code = Double.parseDouble(mybarograph.a_code);
-        compressed_pressure_characteristic = double_a_code * schalings_factor;
-        present[16] = 1;
-      } // try
-      catch (NumberFormatException ex) {
-        compressed_pressure_characteristic = COMPRESSED_UNDEF_VALUE;
-        present[16] = 0;
-        System.out.println(
-            "+++ write input file for format 101; pressure characteristic (a) " + ex);
-      } // catch
-    } else {
-      compressed_pressure_characteristic = COMPRESSED_UNDEF_VALUE;
-      present[16] = 0;
-    }
+    compressed_pressure_characteristic =
+        parseOptionalNumericField(
+            mybarograph.a_code,
+            schalings_factor,
+            present,
+            16,
+            "pressure characteristic (a)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [17]
     //////////////////////////////////////////////// 0 11 001 (true wind direction)   ///////////////////////////////////
