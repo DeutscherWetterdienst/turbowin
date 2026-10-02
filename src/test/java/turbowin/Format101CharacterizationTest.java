@@ -759,6 +759,13 @@ public class Format101CharacterizationTest {
       assertEquals("1 0.0             ice obs. precence indicator", lines.get(49));
       assertEquals("0                 ice deposit/thickness (EsEs) [metres]", lines.get(50));
       assertEquals("0                 rate of ice accretion (Rs) [code]", lines.get(51));
+
+      myicing.EsEs_code = "//";
+      myicing.Rs_code = "/";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 ice deposit/thickness (EsEs) [metres]", lines.get(50));
+      assertEquals("0                 rate of ice accretion (Rs) [code]", lines.get(51));
     } finally {
       main.logs_dir = originalLogsDirectory;
       mydatetime.year = originalYear;
