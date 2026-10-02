@@ -2977,17 +2977,14 @@ public class main_support {
     }
 
     // string ww code conversion to int
-    try {
-      if (mypresentweather.ww_code.equals("") == false && mypresentweather.ww_code != null) {
-        int_ww_code = Integer.parseInt(mypresentweather.ww_code);
-        ww_code_conversion_ok = true;
-      } else {
-        ww_code_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      // doorgaan = true;
-      main.log_turbowin_system_message(
-          "[GENERAL] ww conversion error; Function: checking_level_3()");
+    Integer parsedPresentWeather =
+        parseValidationInt(
+            mypresentweather.ww_code,
+            "[GENERAL] ww conversion error; Function: checking_level_3()");
+    if (parsedPresentWeather != null) {
+      int_ww_code = parsedPresentWeather;
+      ww_code_conversion_ok = true;
+    } else {
       ww_code_conversion_ok = false;
     }
 

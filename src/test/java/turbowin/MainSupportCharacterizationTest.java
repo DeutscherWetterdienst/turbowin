@@ -312,4 +312,22 @@ public class MainSupportCharacterizationTest {
       mycm.cm_code = originalMiddleCloudType;
     }
   }
+
+  @Test
+  public void preservesWeatherIntegerConversionAtLevelThree() {
+    String originalPresentWeather = mypresentweather.ww_code;
+
+    try {
+      mypresentweather.ww_code = "20";
+      assertTrue(new main_support().checking_level_3());
+
+      mypresentweather.ww_code = "";
+      assertTrue(new main_support().checking_level_3());
+
+      mypresentweather.ww_code = "invalid";
+      assertTrue(new main_support().checking_level_3());
+    } finally {
+      mypresentweather.ww_code = originalPresentWeather;
+    }
+  }
 }
