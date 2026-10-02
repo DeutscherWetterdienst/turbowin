@@ -2925,17 +2925,14 @@ public class main_support {
     }
 
     // string pressure_msl_corrected to float
-    try {
-      if (mybarometer.pressure_msl_corrected.equals("") == false
-          && mybarometer.pressure_msl_corrected != null) {
-        float_air_pressure_msl_corrected = Float.parseFloat(mybarometer.pressure_msl_corrected);
-        air_pressure_conversion_ok = true;
-      } else {
-        air_pressure_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] air pressure conversion error; Function: checking_level_3()");
+    Float parsedAirPressureMsl =
+        parseValidationFloat(
+            mybarometer.pressure_msl_corrected,
+            "[GENERAL] air pressure conversion error; Function: checking_level_3()");
+    if (parsedAirPressureMsl != null) {
+      float_air_pressure_msl_corrected = parsedAirPressureMsl;
+      air_pressure_conversion_ok = true;
+    } else {
       air_pressure_conversion_ok = false;
     }
 
