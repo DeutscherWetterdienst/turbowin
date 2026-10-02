@@ -453,6 +453,12 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void parsesNumericIceCodes() throws Exception {
+    assertEquals(
+        6.0, (Double) invokePrivate("convertIceCode", new Class<?>[] {String.class}, "6"), 0.0);
+  }
+
+  @Test
   public void preservesLegacyShipSpeedConversionsAndMissingValues() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
