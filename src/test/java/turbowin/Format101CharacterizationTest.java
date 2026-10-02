@@ -430,6 +430,22 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void appliesCloudTypeOffsets() throws Exception {
+    assertEquals(
+        32.0,
+        (Double)
+            invokePrivate(
+                "convertCloudTypeCode", new Class<?>[] {String.class, double.class}, "2", 30.0),
+        0.0);
+    assertEquals(
+        27.0,
+        (Double)
+            invokePrivate(
+                "convertCloudTypeCode", new Class<?>[] {String.class, double.class}, "7", 20.0),
+        0.0);
+  }
+
+  @Test
   public void preservesLegacyShipSpeedConversionsAndMissingValues() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;

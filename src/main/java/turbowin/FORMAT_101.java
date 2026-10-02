@@ -1745,7 +1745,7 @@ public class FORMAT_101 {
         present[35] = 0;
       } else {
         try {
-          compressed_Cl = Double.parseDouble(mycl.cl_code) + 30.0;
+          compressed_Cl = convertCloudTypeCode(mycl.cl_code, 30.0);
           present[35] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -1784,7 +1784,7 @@ public class FORMAT_101 {
             hulp_cm_code = mycm.cm_code;
           }
 
-          compressed_Cm = Double.parseDouble(hulp_cm_code) + 20.0;
+          compressed_Cm = convertCloudTypeCode(hulp_cm_code, 20.0);
           present[36] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -1810,7 +1810,7 @@ public class FORMAT_101 {
         present[37] = 0;
       } else {
         try {
-          compressed_Ch = Double.parseDouble(mych.ch_code) + 10.0;
+          compressed_Ch = convertCloudTypeCode(mych.ch_code, 10.0);
           present[37] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2569,6 +2569,10 @@ public class FORMAT_101 {
       default:
         return null;
     }
+  }
+
+  private double convertCloudTypeCode(String code, double offset) {
+    return Double.parseDouble(code) + offset;
   }
 
   public static String compression_exe;
