@@ -268,4 +268,27 @@ public class MainSupportCharacterizationTest {
       myvisibility.VV_code = originalVisibility;
     }
   }
+
+  @Test
+  public void preservesPlainCloudIntegerConversionAtLevelTwo() {
+    String originalLowCloudType = mycl.cl_code;
+    String originalHighCloudType = mych.ch_code;
+
+    try {
+      mycl.cl_code = "2";
+      mych.ch_code = "4";
+      assertTrue(new main_support().checking_level_2());
+
+      mycl.cl_code = "";
+      mych.ch_code = "";
+      assertTrue(new main_support().checking_level_2());
+
+      mycl.cl_code = "invalid";
+      mych.ch_code = "invalid";
+      assertTrue(new main_support().checking_level_2());
+    } finally {
+      mycl.cl_code = originalLowCloudType;
+      mych.ch_code = originalHighCloudType;
+    }
+  }
 }
