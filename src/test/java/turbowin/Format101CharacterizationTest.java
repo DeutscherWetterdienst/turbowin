@@ -740,6 +740,59 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesIceCauseMappingsAndSpecialBearingFallback() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalCause = myicing.Is_code;
+    String originalBearing = myice1.Di_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      myicing.Is_code = "1";
+      myice1.Di_code = "0";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 8.0             cause of ice accretion (Is) [code]", lines.get(52));
+      assertEquals("0                 bearing of ice edge (Di) [degrees]", lines.get(57));
+
+      myicing.Is_code = "14";
+      myice1.Di_code = "6";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 14.0            cause of ice accretion (Is) [code]", lines.get(52));
+      assertEquals("1 270.0           bearing of ice edge (Di) [degrees]", lines.get(57));
+
+      myicing.Is_code = "9";
+      myice1.Di_code = "/";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 cause of ice accretion (Is) [code]", lines.get(52));
+      assertEquals("0                 bearing of ice edge (Di) [degrees]", lines.get(57));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      myicing.Is_code = originalCause;
+      myice1.Di_code = originalBearing;
+    }
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
