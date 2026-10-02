@@ -1260,14 +1260,10 @@ public class FORMAT_101 {
     // System.out.println("+++++++++++ constant main.KNOTS = " + main.KNOTS);
 
     if (mywind.int_true_wind_speed >= 0 && mywind.int_true_wind_speed <= 500) {
-      if (main.wind_units.trim().indexOf(main.M_S) != -1) // so wind speed in m/s
-      {
-        compressed_wind_speed = (double) mywind.int_true_wind_speed * schalings_factor;
-        present[18] = 1;
-      } else if (main.wind_units.trim().indexOf(main.KNOTS) != -1) // so wind speed units knots
-      {
-        compressed_wind_speed =
-            convertKnotsToMetersPerSecond(mywind.int_true_wind_speed * schalings_factor);
+      Double convertedWindSpeed =
+          convertWindSpeedByUnit(mywind.int_true_wind_speed * schalings_factor, main.wind_units);
+      if (convertedWindSpeed != null) {
+        compressed_wind_speed = convertedWindSpeed;
         present[18] = 1;
       } else {
         compressed_wind_speed = COMPRESSED_UNDEF_VALUE;
@@ -2035,13 +2031,10 @@ public class FORMAT_101 {
 
       try {
         double value = parseNumericCode(speed) * scalingFactor;
-        if (windUnits.trim().indexOf(main.M_S) != -1) {
+        Double convertedWindSpeed = convertWindSpeedByUnit(value, windUnits);
+        if (convertedWindSpeed != null) {
           present[presentIndex] = 1;
-          return value;
-        }
-        if (windUnits.trim().indexOf(main.KNOTS) != -1) {
-          present[presentIndex] = 1;
-          return convertKnotsToMetersPerSecond(value);
+          return convertedWindSpeed;
         }
       } catch (NumberFormatException ex) {
         System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
@@ -2050,6 +2043,16 @@ public class FORMAT_101 {
 
     present[presentIndex] = 0;
     return undefinedValue;
+  }
+
+  private Double convertWindSpeedByUnit(double speed, String windUnits) {
+    if (windUnits.trim().indexOf(main.M_S) != -1) {
+      return speed;
+    }
+    if (windUnits.trim().indexOf(main.KNOTS) != -1) {
+      return convertKnotsToMetersPerSecond(speed);
+    }
+    return null;
   }
 
   private double convertHectopascalsToPascals(double hectopascals) {
