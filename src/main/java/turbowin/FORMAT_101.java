@@ -1910,27 +1910,15 @@ public class FORMAT_101 {
     schalings_factor =
         0.01; /* NB num_EsEs in centimeters -> schalings_factor divide by 100 = meters */
 
-    if ((myicing.EsEs_code.trim()).length() > 0) {
-      if (myicing.EsEs_code.equals("//")) {
-        compressed_thickness_ice_accretion = COMPRESSED_UNDEF_VALUE;
-        present[49] = 0;
-      } else {
-        try {
-          compressed_thickness_ice_accretion =
-              Double.parseDouble(myicing.EsEs_code) * schalings_factor;
-          present[49] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_thickness_ice_accretion = COMPRESSED_UNDEF_VALUE;
-          present[49] = 0;
-          System.out.println("+++ write input file for format 101; ice thickness (EsEs) " + ex);
-        } // catch
-      } // else
-    } // if ((myicing.EsEs_code.trim()).length() > 0)
-    else {
-      compressed_thickness_ice_accretion = COMPRESSED_UNDEF_VALUE;
-      present[49] = 0;
-    }
+    compressed_thickness_ice_accretion =
+        parseOptionalNumericField(
+            myicing.EsEs_code,
+            schalings_factor,
+            present,
+            49,
+            "ice thickness (EsEs)",
+            COMPRESSED_UNDEF_VALUE,
+            "//");
 
     /* [50]
     ///////////////////////////////////// 0 20 032 (Rs - rate of ice accretion)   ///////////////////////////////////
@@ -1938,26 +1926,14 @@ public class FORMAT_101 {
     /* unit  = code (bufr table 020032) */
     schalings_factor = 1;
 
-    if ((myicing.Rs_code.trim()).length() > 0) {
-      if (myicing.Rs_code.equals("/")) {
-        compressed_rate_ice_accretion = COMPRESSED_UNDEF_VALUE;
-        present[50] = 0;
-      } else {
-        try {
-          compressed_rate_ice_accretion = Double.parseDouble(myicing.Rs_code) * schalings_factor;
-          present[50] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_rate_ice_accretion = COMPRESSED_UNDEF_VALUE;
-          present[50] = 0;
-          System.out.println("+++ write input file for format 101; rate ice accretion (Rs) " + ex);
-        } // catch
-      } // else
-    } // if ((myicing.Rs_code.trim()).length() > 0)
-    else {
-      compressed_rate_ice_accretion = COMPRESSED_UNDEF_VALUE;
-      present[50] = 0;
-    }
+    compressed_rate_ice_accretion =
+        parseOptionalNumericField(
+            myicing.Rs_code,
+            schalings_factor,
+            present,
+            50,
+            "rate ice accretion (Rs)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [51]
     //////////////////////////////////////////// 0 20 033 (Is, cause of ice accretion) /////////////////////////////
@@ -2298,8 +2274,20 @@ public class FORMAT_101 {
       int presentIndex,
       String fieldDescription,
       double undefinedValue) {
+    return parseOptionalNumericField(
+        code, scalingFactor, present, presentIndex, fieldDescription, undefinedValue, "/");
+  }
+
+  private double parseOptionalNumericField(
+      String code,
+      double scalingFactor,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue,
+      String missingCode) {
     if (code.trim().length() > 0) {
-      if (code.equals("/")) {
+      if (code.equals(missingCode)) {
         present[presentIndex] = 0;
         return undefinedValue;
       }
