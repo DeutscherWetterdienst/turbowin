@@ -1063,11 +1063,19 @@ public class Format101CharacterizationTest {
       List<String> lines =
           Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 123.4           3 hour pressure change [Pa]", lines.get(16));
+      assertEquals("1 2.0             characteristic of pressure change [code]", lines.get(17));
 
       mybarograph.a_code = "5";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 -123.4          3 hour pressure change [Pa]", lines.get(16));
+      assertEquals("1 5.0             characteristic of pressure change [code]", lines.get(17));
+
+      mybarograph.pressure_amount_tendency = "";
+      mybarograph.a_code = "invalid";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 characteristic of pressure change [code]", lines.get(17));
     } finally {
       main.logs_dir = originalLogsDirectory;
       mydatetime.year = originalYear;
