@@ -437,36 +437,26 @@ public class main_support {
     }
 
     // Latitude
-    double centerLat = 0.0;
-    if (myposition.latitude_degrees != null
-        && !myposition.latitude_degrees.isEmpty()
-        && myposition.latitude_hemisphere != null
-        && !myposition.latitude_hemisphere.isEmpty()) {
-      try {
-        int intLat = Integer.parseInt(myposition.latitude_degrees.trim());
-        if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH)) intLat *= -1;
-        // clamp latitude to [-90, 90]
-        centerLat = Math.max(-90, Math.min(90, intLat));
-      } catch (NumberFormatException ex) {
-        /* ignore, default 0 */
-      }
-    }
+    double centerLat =
+        Math.max(
+            -90,
+            Math.min(
+                90,
+                parseSatelliteCoordinate(
+                    myposition.latitude_degrees,
+                    myposition.latitude_hemisphere,
+                    myposition.HEMISPHERE_SOUTH)));
 
     // Longitude
-    double centerLon = 0.0;
-    if (myposition.longitude_degrees != null
-        && !myposition.longitude_degrees.isEmpty()
-        && myposition.longitude_hemisphere != null
-        && !myposition.longitude_hemisphere.isEmpty()) {
-      try {
-        int intLon = Integer.parseInt(myposition.longitude_degrees.trim());
-        if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST)) intLon *= -1;
-        // clamp longitude to [-180, 180]
-        centerLon = Math.max(-180, Math.min(180, intLon));
-      } catch (NumberFormatException ex) {
-        /* ignore, default 0 */
-      }
-    }
+    double centerLon =
+        Math.max(
+            -180,
+            Math.min(
+                180,
+                parseSatelliteCoordinate(
+                    myposition.longitude_degrees,
+                    myposition.longitude_hemisphere,
+                    myposition.HEMISPHERE_WEST)));
 
     // Force zoom <= 4 to reduce chance of watermark
     int zoomLevel = 2;
@@ -521,38 +511,31 @@ public class main_support {
 
     // Latitude
     //
-    if (myposition.latitude_degrees.compareTo("") != 0
-        && myposition.latitude_hemisphere.compareTo("") != 0
-        && myposition.latitude_degrees != null
-        && myposition.latitude_hemisphere != null) {
-      try {
-        int_lat_degrees = Integer.parseInt(myposition.latitude_degrees.trim());
-
-        if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)) {
-          int_lat_degrees *= -1;
-        }
-      } catch (NumberFormatException ex) {
-        /* ... */
-      }
-    } // if (myposition.latitude_degrees.compareTo("") != 0 etc.
+    if (myposition.latitude_degrees == null) {
+      throw new NullPointerException("latitude_degrees");
+    }
+    if (!myposition.latitude_degrees.isEmpty() && myposition.latitude_hemisphere == null) {
+      throw new NullPointerException("latitude_hemisphere");
+    }
+    int_lat_degrees =
+        parseSatelliteCoordinate(
+            myposition.latitude_degrees,
+            myposition.latitude_hemisphere,
+            myposition.HEMISPHERE_SOUTH);
 
     // Longitude
     //
-    if (myposition.longitude_degrees.compareTo("") != 0
-        && myposition.longitude_hemisphere.compareTo("") != 0
-        && myposition.longitude_degrees != null
-        && myposition.longitude_hemisphere != null) {
-      // String longitude convert to integer
-      try {
-        int_lon_degrees = Integer.parseInt(myposition.longitude_degrees.trim());
-
-        if ((myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-          int_lon_degrees *= -1;
-        }
-      } catch (NumberFormatException ex) {
-        /* ... */
-      }
-    } // if (myposition.longitude_degrees.compareTo("") != 0 etc.
+    if (myposition.longitude_degrees == null) {
+      throw new NullPointerException("longitude_degrees");
+    }
+    if (!myposition.longitude_degrees.isEmpty() && myposition.longitude_hemisphere == null) {
+      throw new NullPointerException("longitude_hemisphere");
+    }
+    int_lon_degrees =
+        parseSatelliteCoordinate(
+            myposition.longitude_degrees,
+            myposition.longitude_hemisphere,
+            myposition.HEMISPHERE_WEST);
 
     //
     // bounding box
@@ -2144,6 +2127,19 @@ public class main_support {
       main.log_turbowin_system_message(errorMessage);
     }
     return null;
+  }
+
+  static int parseSatelliteCoordinate(
+      String degrees, String hemisphere, String negativeHemisphere) {
+    if (degrees != null && !degrees.isEmpty() && hemisphere != null && !hemisphere.isEmpty()) {
+      try {
+        int coordinate = Integer.parseInt(degrees.trim());
+        return hemisphere.equals(negativeHemisphere) ? coordinate * -1 : coordinate;
+      } catch (NumberFormatException ex) {
+        // Invalid coordinates use the existing default of zero.
+      }
+    }
+    return 0;
   }
 
   private Integer parseValidationInt(String value, String errorMessage) {
