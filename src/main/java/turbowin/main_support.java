@@ -2866,58 +2866,50 @@ public class main_support {
     }
 
     // first swell system period conversion
-    try {
-      if (mywaves.swell_1_period.equals("") == false && mywaves.swell_1_period != null) {
-        float_first_swell_period = Float.parseFloat(mywaves.swell_1_period);
-        first_swell_period_conversion_ok = true;
-      } else {
-        first_swell_period_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] first swell period conversion error; Function: checking_level_3()");
+    Float parsedFirstSwellPeriod =
+        parseValidationFloat(
+            mywaves.swell_1_period,
+            "[GENERAL] first swell period conversion error; Function: checking_level_3()");
+    if (parsedFirstSwellPeriod != null) {
+      float_first_swell_period = parsedFirstSwellPeriod;
+      first_swell_period_conversion_ok = true;
+    } else {
       first_swell_period_conversion_ok = false;
     }
 
     // first swell system height conversion
-    try {
-      if (mywaves.swell_1_height.equals("") == false && mywaves.swell_1_height != null) {
-        float_first_swell_height = Float.parseFloat(mywaves.swell_1_height);
-        first_swell_height_conversion_ok = true;
-      } else {
-        first_swell_height_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] first swell height conversion error; Function: checking_level_3()");
+    Float parsedFirstSwellHeight =
+        parseValidationFloat(
+            mywaves.swell_1_height,
+            "[GENERAL] first swell height conversion error; Function: checking_level_3()");
+    if (parsedFirstSwellHeight != null) {
+      float_first_swell_height = parsedFirstSwellHeight;
+      first_swell_height_conversion_ok = true;
+    } else {
       first_swell_height_conversion_ok = false;
     }
 
     // second swell system period conversion
-    try {
-      if (mywaves.swell_2_period.equals("") == false && mywaves.swell_2_period != null) {
-        float_second_swell_period = Float.parseFloat(mywaves.swell_2_period);
-        second_swell_period_conversion_ok = true;
-      } else {
-        second_swell_period_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] second swell period conversion error; Function: checking_level_3()");
+    Float parsedSecondSwellPeriod =
+        parseValidationFloat(
+            mywaves.swell_2_period,
+            "[GENERAL] second swell period conversion error; Function: checking_level_3()");
+    if (parsedSecondSwellPeriod != null) {
+      float_second_swell_period = parsedSecondSwellPeriod;
+      second_swell_period_conversion_ok = true;
+    } else {
       second_swell_period_conversion_ok = false;
     }
 
     // second swell system height conversion
-    try {
-      if (mywaves.swell_2_height.equals("") == false && mywaves.swell_2_height != null) {
-        float_second_swell_height = Float.parseFloat(mywaves.swell_2_height);
-        second_swell_height_conversion_ok = true;
-      } else {
-        second_swell_height_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] second swell height conversion error; Function: checking_level_3()");
+    Float parsedSecondSwellHeight =
+        parseValidationFloat(
+            mywaves.swell_2_height,
+            "[GENERAL] second swell height conversion error; Function: checking_level_3()");
+    if (parsedSecondSwellHeight != null) {
+      float_second_swell_height = parsedSecondSwellHeight;
+      second_swell_height_conversion_ok = true;
+    } else {
       second_swell_height_conversion_ok = false;
     }
 

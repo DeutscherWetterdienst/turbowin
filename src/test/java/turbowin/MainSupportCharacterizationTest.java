@@ -158,4 +158,37 @@ public class MainSupportCharacterizationTest {
       mybarograph.a_code = originalPressureCharacteristic;
     }
   }
+
+  @Test
+  public void preservesSwellConversionAtLevelThree() {
+    String originalFirstPeriod = mywaves.swell_1_period;
+    String originalFirstHeight = mywaves.swell_1_height;
+    String originalSecondPeriod = mywaves.swell_2_period;
+    String originalSecondHeight = mywaves.swell_2_height;
+
+    try {
+      mywaves.swell_1_period = "5";
+      mywaves.swell_1_height = "2";
+      mywaves.swell_2_period = "6";
+      mywaves.swell_2_height = "3";
+      assertTrue(new main_support().checking_level_3());
+
+      mywaves.swell_1_period = "";
+      mywaves.swell_1_height = "";
+      mywaves.swell_2_period = "";
+      mywaves.swell_2_height = "";
+      assertTrue(new main_support().checking_level_3());
+
+      mywaves.swell_1_period = "invalid";
+      mywaves.swell_1_height = "invalid";
+      mywaves.swell_2_period = "invalid";
+      mywaves.swell_2_height = "invalid";
+      assertTrue(new main_support().checking_level_3());
+    } finally {
+      mywaves.swell_1_period = originalFirstPeriod;
+      mywaves.swell_1_height = originalFirstHeight;
+      mywaves.swell_2_period = originalSecondPeriod;
+      mywaves.swell_2_height = originalSecondHeight;
+    }
+  }
 }
