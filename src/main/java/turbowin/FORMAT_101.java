@@ -1099,27 +1099,9 @@ public class FORMAT_101 {
     /* unit  = degrees */
     schalings_factor = 1;
 
-    if (mywind.ship_heading.trim().length() > 0) {
-      try {
-        double double_ship_heading = Double.parseDouble(mywind.ship_heading.trim());
-
-        if ((double_ship_heading >= 1.0) && (double_ship_heading <= 360.0)) {
-          compressed_true_heading = double_ship_heading * schalings_factor; // HDG = heading
-          present[4] = 1;
-        } else {
-          compressed_true_heading = COMPRESSED_UNDEF_VALUE;
-          present[4] = 0;
-        }
-      } // try
-      catch (NumberFormatException ex) {
-        compressed_true_heading = COMPRESSED_UNDEF_VALUE;
-        present[4] = 0;
-        System.out.println("+++ write input file for format 101; true heading " + ex);
-      } // catch
-    } else {
-      compressed_true_heading = COMPRESSED_UNDEF_VALUE;
-      present[4] = 0;
-    }
+    compressed_true_heading =
+        parseTrueHeadingField(
+            mywind.ship_heading, present, 4, "true heading", COMPRESSED_UNDEF_VALUE);
 
     /* [5]
     ////////////////////////////////////// 0 07 072 (sll - wl distance) ///////////////////////////////////
@@ -2107,6 +2089,29 @@ public class FORMAT_101 {
                 parseNumericCode(pressureChange), Integer.parseInt(pressureCharacteristic));
         present[presentIndex] = 1;
         return value;
+      } catch (NumberFormatException ex) {
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
+  }
+
+  private double parseTrueHeadingField(
+      String heading,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue) {
+    // HDG = heading.
+    if (heading.trim().length() > 0) {
+      try {
+        double value = parseNumericCode(heading.trim());
+        if (value >= 1.0 && value <= 360.0) {
+          present[presentIndex] = 1;
+          return value;
+        }
       } catch (NumberFormatException ex) {
         System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
       }
