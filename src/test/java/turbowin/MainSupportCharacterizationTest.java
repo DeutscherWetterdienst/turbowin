@@ -245,4 +245,27 @@ public class MainSupportCharacterizationTest {
       myicing.EsEs_code = originalIceThickness;
     }
   }
+
+  @Test
+  public void preservesWeatherIntegerConversionAtLevelTwo() {
+    String originalPresentWeather = mypresentweather.ww_code;
+    String originalVisibility = myvisibility.VV_code;
+
+    try {
+      mypresentweather.ww_code = "20";
+      myvisibility.VV_code = "5";
+      assertTrue(new main_support().checking_level_2());
+
+      mypresentweather.ww_code = "";
+      myvisibility.VV_code = "";
+      assertTrue(new main_support().checking_level_2());
+
+      mypresentweather.ww_code = "invalid";
+      myvisibility.VV_code = "invalid";
+      assertTrue(new main_support().checking_level_2());
+    } finally {
+      mypresentweather.ww_code = originalPresentWeather;
+      myvisibility.VV_code = originalVisibility;
+    }
+  }
 }
