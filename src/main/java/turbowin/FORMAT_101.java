@@ -2209,7 +2209,7 @@ public class FORMAT_101 {
         present[52] = 0;
       } else {
         try {
-          compressed_sea_ice_concentration = Double.parseDouble(myice1.ci_code) * schalings_factor;
+          compressed_sea_ice_concentration = convertIceCode(myice1.ci_code);
           present[52] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2237,7 +2237,7 @@ public class FORMAT_101 {
         present[53] = 0;
       } else {
         try {
-          compressed_amount_type_ice = Double.parseDouble(myice1.bi_code) * schalings_factor;
+          compressed_amount_type_ice = convertIceCode(myice1.bi_code);
           present[53] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2265,7 +2265,7 @@ public class FORMAT_101 {
         present[54] = 0;
       } else {
         try {
-          compressed_ice_situation = Double.parseDouble(myice1.zi_code) * schalings_factor;
+          compressed_ice_situation = convertIceCode(myice1.zi_code);
           present[54] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2292,7 +2292,7 @@ public class FORMAT_101 {
         present[55] = 0;
       } else {
         try {
-          compressed_ice_development = Double.parseDouble(myice1.Si_code) * schalings_factor;
+          compressed_ice_development = convertIceCode(myice1.Si_code);
           present[55] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2540,6 +2540,10 @@ public class FORMAT_101 {
       default:
         return null;
     }
+  }
+
+  private double convertIceCode(String code) {
+    return Double.parseDouble(code);
   }
 
   public static String compression_exe;
