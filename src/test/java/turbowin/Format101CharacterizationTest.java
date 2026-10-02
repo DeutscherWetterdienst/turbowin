@@ -453,9 +453,11 @@ public class Format101CharacterizationTest {
   }
 
   @Test
-  public void parsesNumericIceCodes() throws Exception {
+  public void parsesNumericCodes() throws Exception {
     assertEquals(
-        6.0, (Double) invokePrivate("convertIceCode", new Class<?>[] {String.class}, "6"), 0.0);
+        20.0, (Double) invokePrivate("parseNumericCode", new Class<?>[] {String.class}, "20"), 0.0);
+    assertEquals(
+        6.0, (Double) invokePrivate("parseNumericCode", new Class<?>[] {String.class}, "6"), 0.0);
   }
 
   @Test

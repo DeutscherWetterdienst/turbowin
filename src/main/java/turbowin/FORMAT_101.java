@@ -1590,7 +1590,7 @@ public class FORMAT_101 {
         present[29] = 0;
       } else {
         try {
-          compressed_visibility = Double.parseDouble(myvisibility.VV_code);
+          compressed_visibility = parseNumericCode(myvisibility.VV_code);
           present[29] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -1616,7 +1616,7 @@ public class FORMAT_101 {
         present[30] = 0;
       } else {
         try {
-          compressed_present_weather = Double.parseDouble(mypresentweather.ww_code);
+          compressed_present_weather = parseNumericCode(mypresentweather.ww_code);
           present[30] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -1642,7 +1642,7 @@ public class FORMAT_101 {
         present[31] = 0;
       } else {
         try {
-          compressed_past_weather_1 = Double.parseDouble(mypastweather.W1_code);
+          compressed_past_weather_1 = parseNumericCode(mypastweather.W1_code);
           present[31] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -1668,7 +1668,7 @@ public class FORMAT_101 {
         present[32] = 0;
       } else {
         try {
-          compressed_past_weather_2 = Double.parseDouble(mypastweather.W2_code);
+          compressed_past_weather_2 = parseNumericCode(mypastweather.W2_code);
           present[32] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -1694,7 +1694,7 @@ public class FORMAT_101 {
         present[33] = 0;
       } else {
         try {
-          compressed_cloud_cover = Double.parseDouble(mycloudcover.N_code);
+          compressed_cloud_cover = parseNumericCode(mycloudcover.N_code);
           present[33] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -1719,7 +1719,7 @@ public class FORMAT_101 {
         present[34] = 0;
       } else {
         try {
-          compressed_cloud_amount_low_medium = Double.parseDouble(mycloudcover.Nh_code);
+          compressed_cloud_amount_low_medium = parseNumericCode(mycloudcover.Nh_code);
           present[34] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2209,7 +2209,7 @@ public class FORMAT_101 {
         present[52] = 0;
       } else {
         try {
-          compressed_sea_ice_concentration = convertIceCode(myice1.ci_code);
+          compressed_sea_ice_concentration = parseNumericCode(myice1.ci_code);
           present[52] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2237,7 +2237,7 @@ public class FORMAT_101 {
         present[53] = 0;
       } else {
         try {
-          compressed_amount_type_ice = convertIceCode(myice1.bi_code);
+          compressed_amount_type_ice = parseNumericCode(myice1.bi_code);
           present[53] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2265,7 +2265,7 @@ public class FORMAT_101 {
         present[54] = 0;
       } else {
         try {
-          compressed_ice_situation = convertIceCode(myice1.zi_code);
+          compressed_ice_situation = parseNumericCode(myice1.zi_code);
           present[54] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2292,7 +2292,7 @@ public class FORMAT_101 {
         present[55] = 0;
       } else {
         try {
-          compressed_ice_development = convertIceCode(myice1.Si_code);
+          compressed_ice_development = parseNumericCode(myice1.Si_code);
           present[55] = 1;
         } // try
         catch (NumberFormatException ex) {
@@ -2542,7 +2542,7 @@ public class FORMAT_101 {
     }
   }
 
-  private double convertIceCode(String code) {
+  private double parseNumericCode(String code) {
     return Double.parseDouble(code);
   }
 
