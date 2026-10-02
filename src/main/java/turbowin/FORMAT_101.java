@@ -1058,31 +1058,7 @@ public class FORMAT_101 {
       present[3] = 1;
     } else // SOG_APR not available
     {
-      if (myposition.vs_code.equals("0")) {
-        gem_Vs = 0; // knots
-      } else if (myposition.vs_code.equals("1")) {
-        gem_Vs = 3; // knots
-      } else if (myposition.vs_code.equals("2")) {
-        gem_Vs = 8; // knots
-      } else if (myposition.vs_code.equals("3")) {
-        gem_Vs = 13; // knots
-      } else if (myposition.vs_code.equals("4")) {
-        gem_Vs = 18; // knots
-      } else if (myposition.vs_code.equals("5")) {
-        gem_Vs = 23; // knots
-      } else if (myposition.vs_code.equals("6")) {
-        gem_Vs = 28; // knots
-      } else if (myposition.vs_code.equals("7")) {
-        gem_Vs = 33; // knots
-      } else if (myposition.vs_code.equals("8")) {
-        gem_Vs = 38; // knots
-      } else if (myposition.vs_code.equals(
-          "9")) // tot versie 3.0.9: else if (myposition.vs_code.equals("2") == true)
-      {
-        gem_Vs = 42; // knots
-      } else {
-        gem_Vs = Integer.MAX_VALUE;
-      }
+      gem_Vs = legacySpeedCodeToKnots(myposition.vs_code);
 
       if (gem_Vs != Integer.MAX_VALUE) {
         compressed_ship_speed = convertLegacyShipSpeedToMetersPerSecond(gem_Vs);
@@ -1955,6 +1931,35 @@ public class FORMAT_101 {
     return new BigDecimal(knots * LEGACY_KNOTS_TO_METERS_PER_SECOND)
         .setScale(3, RoundingMode.HALF_UP)
         .doubleValue();
+  }
+
+  private int legacySpeedCodeToKnots(String speedCode) {
+    // Legacy speed codes 0–9 map to 0, 3, 8, 13, 18, 23, 28, 33, 38, and 42 knots;
+    // code 9 preserves the compatibility mapping used since version 3.0.9.
+    switch (speedCode) {
+      case "0":
+        return 0;
+      case "1":
+        return 3;
+      case "2":
+        return 8;
+      case "3":
+        return 13;
+      case "4":
+        return 18;
+      case "5":
+        return 23;
+      case "6":
+        return 28;
+      case "7":
+        return 33;
+      case "8":
+        return 38;
+      case "9":
+        return 42;
+      default:
+        return Integer.MAX_VALUE;
+    }
   }
 
   private double convertCelsiusToKelvin(double celsius) {
