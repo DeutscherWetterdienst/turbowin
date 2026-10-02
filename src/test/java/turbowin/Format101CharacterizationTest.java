@@ -863,6 +863,64 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesWeatherCodeConversionsAndSentinels() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalVisibility = myvisibility.VV_code;
+    String originalPresentWeather = mypresentweather.ww_code;
+    String originalPastWeather1 = mypastweather.W1_code;
+    String originalPastWeather2 = mypastweather.W2_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      myvisibility.VV_code = "5";
+      mypresentweather.ww_code = "20";
+      mypastweather.W1_code = "3";
+      mypastweather.W2_code = "4";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 5.0             visibility (VV) [code]", lines.get(30));
+      assertEquals("1 20.0            present weather (ww) [code]", lines.get(31));
+      assertEquals("1 3.0             past weather 1 (W1) [code]", lines.get(32));
+      assertEquals("1 4.0             past weather 2 (W2) [code]", lines.get(33));
+
+      myvisibility.VV_code = "//";
+      mypresentweather.ww_code = "//";
+      mypastweather.W1_code = "/";
+      mypastweather.W2_code = "/";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 visibility (VV) [code]", lines.get(30));
+      assertEquals("0                 present weather (ww) [code]", lines.get(31));
+      assertEquals("0                 past weather 1 (W1) [code]", lines.get(32));
+      assertEquals("0                 past weather 2 (W2) [code]", lines.get(33));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      myvisibility.VV_code = originalVisibility;
+      mypresentweather.ww_code = originalPresentWeather;
+      mypastweather.W1_code = originalPastWeather1;
+      mypastweather.W2_code = originalPastWeather2;
+    }
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
