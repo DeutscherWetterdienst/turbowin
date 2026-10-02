@@ -134,4 +134,28 @@ public class MainSupportCharacterizationTest {
       mytemp.air_temp = originalAirTemperature;
     }
   }
+
+  @Test
+  public void preservesPressureAmountTendencyConversionAtBothValidationLevels() {
+    String originalPressureAmountTendency = mybarograph.pressure_amount_tendency;
+    String originalPressureCharacteristic = mybarograph.a_code;
+
+    try {
+      mybarograph.pressure_amount_tendency = "1.5";
+      mybarograph.a_code = "2";
+      assertTrue(new main_support().checking_level_2());
+      assertTrue(new main_support().checking_level_3());
+
+      mybarograph.pressure_amount_tendency = "";
+      assertTrue(new main_support().checking_level_2());
+      assertTrue(new main_support().checking_level_3());
+
+      mybarograph.pressure_amount_tendency = "invalid";
+      assertTrue(new main_support().checking_level_2());
+      assertTrue(new main_support().checking_level_3());
+    } finally {
+      mybarograph.pressure_amount_tendency = originalPressureAmountTendency;
+      mybarograph.a_code = originalPressureCharacteristic;
+    }
+  }
 }

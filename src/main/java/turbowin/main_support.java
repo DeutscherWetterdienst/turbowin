@@ -2214,17 +2214,14 @@ public class main_support {
     }
 
     // pressure amount tendency conversion
-    try {
-      if (mybarograph.pressure_amount_tendency.equals("") == false
-          && mybarograph.pressure_amount_tendency != null) {
-        float_pressure_amount_tendency = Float.parseFloat(mybarograph.pressure_amount_tendency);
-        pressure_amount_tendency_conversion_ok = true;
-      } else {
-        pressure_amount_tendency_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] pressure amount tendency conversion error; Function: checking_level_2()");
+    Float parsedPressureAmountTendency =
+        parseValidationFloat(
+            mybarograph.pressure_amount_tendency,
+            "[GENERAL] pressure amount tendency conversion error; Function: checking_level_2()");
+    if (parsedPressureAmountTendency != null) {
+      float_pressure_amount_tendency = parsedPressureAmountTendency;
+      pressure_amount_tendency_conversion_ok = true;
+    } else {
       pressure_amount_tendency_conversion_ok = false;
     }
 
@@ -2951,17 +2948,14 @@ public class main_support {
     }
 
     // string amount pressure tendency to float
-    try {
-      if (mybarograph.pressure_amount_tendency.equals("") == false
-          && mybarograph.pressure_amount_tendency != null) {
-        float_amount_pressure_tendency = Float.parseFloat(mybarograph.pressure_amount_tendency);
-        amount_pressure_tendency_conversion_ok = true;
-      } else {
-        amount_pressure_tendency_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] amount air pressure tendency conversion error; Function: checking_level_3()");
+    Float parsedAmountPressureTendency =
+        parseValidationFloat(
+            mybarograph.pressure_amount_tendency,
+            "[GENERAL] amount air pressure tendency conversion error; Function: checking_level_3()");
+    if (parsedAmountPressureTendency != null) {
+      float_amount_pressure_tendency = parsedAmountPressureTendency;
+      amount_pressure_tendency_conversion_ok = true;
+    } else {
       amount_pressure_tendency_conversion_ok = false;
     }
 
