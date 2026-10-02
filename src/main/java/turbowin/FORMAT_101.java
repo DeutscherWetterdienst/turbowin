@@ -1437,21 +1437,8 @@ public class FORMAT_101 {
     /* unit  = Kelvin */
     schalings_factor = 1;
 
-    if ((mytemp.air_temp.trim()).length() > 0) {
-      try {
-        compressed_air_temp = convertCelsiusToKelvin(Double.parseDouble(mytemp.air_temp));
-        present[23] = 1;
-      } // try
-      catch (NumberFormatException ex) {
-        compressed_air_temp = COMPRESSED_UNDEF_VALUE;
-        present[23] = 0;
-        System.out.println("+++ write input file for format 101; air temp " + ex);
-      } // catch
-    } //
-    else {
-      compressed_air_temp = COMPRESSED_UNDEF_VALUE;
-      present[23] = 0;
-    }
+    compressed_air_temp =
+        parseTemperatureField(mytemp.air_temp, present, 23, "air temp", COMPRESSED_UNDEF_VALUE);
 
     /* [24]
     //////////////////////////////////////////////// 0 12 102  wet bulb    ///////////////////////////////
@@ -1459,21 +1446,9 @@ public class FORMAT_101 {
     /* unit  = Kelvin */
     schalings_factor = 1;
 
-    if ((mytemp.wet_bulb_temp.trim()).length() > 0) {
-      try {
-        compressed_wet_bulb_temp = convertCelsiusToKelvin(Double.parseDouble(mytemp.wet_bulb_temp));
-        present[24] = 1;
-      } // try
-      catch (NumberFormatException ex) {
-        compressed_wet_bulb_temp = COMPRESSED_UNDEF_VALUE;
-        present[24] = 0;
-        System.out.println("+++ write input file for format 101; wet bulb temp " + ex);
-      } // catch
-    } //
-    else {
-      compressed_wet_bulb_temp = COMPRESSED_UNDEF_VALUE;
-      present[24] = 0;
-    }
+    compressed_wet_bulb_temp =
+        parseTemperatureField(
+            mytemp.wet_bulb_temp, present, 24, "wet bulb temp", COMPRESSED_UNDEF_VALUE);
 
     /* [25]
     //////////////////////////////////////////////// 0 12 103 dewpoint    ///////////////////////////////
@@ -1519,21 +1494,8 @@ public class FORMAT_101 {
     /* unit  = Kelvin */
     schalings_factor = 1;
 
-    if ((mytemp.sea_water_temp.trim()).length() > 0) {
-      try {
-        compressed_sst = convertCelsiusToKelvin(Double.parseDouble(mytemp.sea_water_temp));
-        present[27] = 1;
-      } // try
-      catch (NumberFormatException ex) {
-        compressed_sst = COMPRESSED_UNDEF_VALUE;
-        present[27] = 0;
-        System.out.println("+++ write input file for format 101; SST " + ex);
-      } // catch
-    } //
-    else {
-      compressed_sst = COMPRESSED_UNDEF_VALUE;
-      present[27] = 0;
-    }
+    compressed_sst =
+        parseTemperatureField(mytemp.sea_water_temp, present, 27, "SST", COMPRESSED_UNDEF_VALUE);
 
     /* [28]
     ///////////////////////////////////////// 1 11 000 visual obs presence indicator  ////////////////////////////////
@@ -2140,6 +2102,26 @@ public class FORMAT_101 {
     return new BigDecimal(celsius + CELCIUS_TO_KELVIN_FACTOR)
         .setScale(3, RoundingMode.HALF_UP)
         .doubleValue();
+  }
+
+  private double parseTemperatureField(
+      String temperature,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue) {
+    if (temperature.trim().length() > 0) {
+      try {
+        double value = convertCelsiusToKelvin(parseNumericCode(temperature));
+        present[presentIndex] = 1;
+        return value;
+      } catch (NumberFormatException ex) {
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
   }
 
   private double convertHectopascalsToPascals(double hectopascals) {
