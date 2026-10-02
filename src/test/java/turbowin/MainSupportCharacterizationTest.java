@@ -291,4 +291,25 @@ public class MainSupportCharacterizationTest {
       mych.ch_code = originalHighCloudType;
     }
   }
+
+  @Test
+  public void preservesMiddleCloudSuffixConversionAtLevelTwo() {
+    String originalMiddleCloudType = mycm.cm_code;
+
+    try {
+      mycm.cm_code = "7";
+      assertTrue(new main_support().checking_level_2());
+
+      mycm.cm_code = "7a";
+      assertTrue(new main_support().checking_level_2());
+
+      mycm.cm_code = "";
+      assertTrue(new main_support().checking_level_2());
+
+      mycm.cm_code = "invalid";
+      assertTrue(new main_support().checking_level_2());
+    } finally {
+      mycm.cm_code = originalMiddleCloudType;
+    }
+  }
 }

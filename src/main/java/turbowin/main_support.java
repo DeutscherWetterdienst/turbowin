@@ -2157,6 +2157,17 @@ public class main_support {
     return null;
   }
 
+  private Integer parseValidationFirstDigitInt(String value, String errorMessage) {
+    try {
+      if (value.equals("") == false && value != null) {
+        return Integer.parseInt(value.substring(0, 1));
+      }
+    } catch (NumberFormatException ex) {
+      main.log_turbowin_system_message(errorMessage);
+    }
+    return null;
+  }
+
   public boolean checking_level_2() {
     boolean doorgaan = true;
     boolean level_2_ok = true;
@@ -2248,19 +2259,13 @@ public class main_support {
     }
 
     // string Cm code conversion to int
-    try {
-      if (mycm.cm_code.equals("") == false && mycm.cm_code != null) {
-        int_cm_code =
-            Integer.parseInt(
-                mycm.cm_code.substring(
-                    0, 1)); // to eliminate the a,b or c in 7a, 7b, 7c Cm code (see mycm.java)
-        cm_code_conversion_ok = true;
-      } else {
-        cm_code_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] Cm conversion error; Function: checking_level_2()");
+    Integer parsedMiddleCloudType =
+        parseValidationFirstDigitInt(
+            mycm.cm_code, "[GENERAL] Cm conversion error; Function: checking_level_2()");
+    if (parsedMiddleCloudType != null) {
+      int_cm_code = parsedMiddleCloudType;
+      cm_code_conversion_ok = true;
+    } else {
       cm_code_conversion_ok = false;
     }
 
