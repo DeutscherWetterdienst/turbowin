@@ -1215,32 +1215,13 @@ public class FORMAT_101 {
     // ONLY include pressure at baromter height if measured at this height (so not corrected by PMOs
     // to MSL) !!
     if (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_NO)) {
-      if ((mybarometer.pressure_reading_corrected.trim()).length() > 0) {
-        try {
-          double double_pressure_reading_corrected =
-              Double.parseDouble(mybarometer.pressure_reading_corrected);
-          if ((double_pressure_reading_corrected > 800.0)
-              && (double_pressure_reading_corrected
-                  < 1100.0)) // raw check (for real limits see mybarometer.java)
-          {
-            compressed_pressure_height =
-                convertHectopascalsToPascals(double_pressure_reading_corrected);
-            present[13] = 1;
-          } else {
-            compressed_pressure_height = COMPRESSED_UNDEF_VALUE;
-            present[13] = 0;
-          }
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_pressure_height = COMPRESSED_UNDEF_VALUE;
-          present[13] = 0;
-          System.out.println(
-              "+++ write input file for format 101; pressure at barometer height " + ex);
-        } // catch
-      } else {
-        compressed_pressure_height = COMPRESSED_UNDEF_VALUE;
-        present[13] = 0;
-      }
+      compressed_pressure_height =
+          parsePressureField(
+              mybarometer.pressure_reading_corrected,
+              present,
+              13,
+              "pressure at barometer height",
+              COMPRESSED_UNDEF_VALUE);
     } else {
       compressed_pressure_height = COMPRESSED_UNDEF_VALUE;
       present[13] = 0;
@@ -1252,30 +1233,13 @@ public class FORMAT_101 {
     /* unit  = Pa */
     schalings_factor = 100;
 
-    if ((mybarometer.pressure_msl_corrected.trim()).length() > 0) {
-      try {
-        double double_pressure_msl_corrected =
-            Double.parseDouble(mybarometer.pressure_msl_corrected);
-        if ((double_pressure_msl_corrected > 800.0)
-            && (double_pressure_msl_corrected
-                < 1100.0)) // raw check (for real limits see mybarometer.java)
-        {
-          compressed_pressure_msl = convertHectopascalsToPascals(double_pressure_msl_corrected);
-          present[14] = 1;
-        } else {
-          compressed_pressure_msl = COMPRESSED_UNDEF_VALUE;
-          present[14] = 0;
-        }
-      } // try
-      catch (NumberFormatException ex) {
-        compressed_pressure_msl = COMPRESSED_UNDEF_VALUE;
-        present[14] = 0;
-        System.out.println("+++ write input file for format 101; MSL pressure " + ex);
-      } // catch
-    } else {
-      compressed_pressure_msl = COMPRESSED_UNDEF_VALUE;
-      present[14] = 0;
-    }
+    compressed_pressure_msl =
+        parsePressureField(
+            mybarometer.pressure_msl_corrected,
+            present,
+            14,
+            "MSL pressure",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [15]
     //////////////////////////////////////////////// 0 10 061 pressure change (ppp) ////////////////////////////////////
@@ -2180,6 +2144,29 @@ public class FORMAT_101 {
 
   private double convertHectopascalsToPascals(double hectopascals) {
     return hectopascals * 100.0;
+  }
+
+  private double parsePressureField(
+      String pressure,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue) {
+    if (pressure.trim().length() > 0) {
+      try {
+        double hectopascals = parseNumericCode(pressure);
+        // Raw check; the real limits are defined in mybarometer.java.
+        if (hectopascals > 800.0 && hectopascals < 1100.0) {
+          present[presentIndex] = 1;
+          return convertHectopascalsToPascals(hectopascals);
+        }
+      } catch (NumberFormatException ex) {
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
   }
 
   private double convertPressureChangeToPascals(double pressureChange, int pressureCharacteristic) {

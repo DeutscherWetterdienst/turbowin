@@ -282,6 +282,20 @@ public class Format101CharacterizationTest {
       assertEquals("1 291.15          sea water temperature [K]", lines.get(28));
       assertEquals("1 100000.0        pressure at barometer height [Pa]", lines.get(14));
       assertEquals("1 101325.0        pressure at MSL [Pa]", lines.get(15));
+
+      mybarometer.pressure_reading_corrected = "799";
+      mybarometer.pressure_msl_corrected = "1100";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 pressure at barometer height [Pa]", lines.get(14));
+      assertEquals("0                 pressure at MSL [Pa]", lines.get(15));
+
+      mybarometer.pressure_reading_corrected = "invalid";
+      mybarometer.pressure_msl_corrected = "";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 pressure at barometer height [Pa]", lines.get(14));
+      assertEquals("0                 pressure at MSL [Pa]", lines.get(15));
     } finally {
       main.logs_dir = originalLogsDirectory;
       main.wind_units = originalWindUnits;
