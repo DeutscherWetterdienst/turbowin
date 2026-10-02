@@ -587,9 +587,25 @@ public class Format101CharacterizationTest {
       assertEquals("1 27.0            cloud type middle (Cm) [code]", lines.get(37));
       assertEquals("1 14.0            cloud type high (Ch) [code]", lines.get(38));
 
+      for (String middleCloudType : new String[] {"7b", "7c"}) {
+        mycm.cm_code = middleCloudType;
+        invokePrivate("write_input_for_101_compression");
+        lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+        assertEquals("1 27.0            cloud type middle (Cm) [code]", lines.get(37));
+      }
+
       mycl.cl_code = "/";
       mycm.cm_code = "/";
       mych.ch_code = "/";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 cloud type low (Cl) [code]", lines.get(36));
+      assertEquals("0                 cloud type middle (Cm) [code]", lines.get(37));
+      assertEquals("0                 cloud type high (Ch) [code]", lines.get(38));
+
+      mycl.cl_code = "2a";
+      mycm.cm_code = "";
+      mych.ch_code = "4b";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 cloud type low (Cl) [code]", lines.get(36));
