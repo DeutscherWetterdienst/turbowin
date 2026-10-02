@@ -510,6 +510,16 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void mapsLegacySpeedCodesToKnots() throws Exception {
+    assertEquals(0, invokePrivate("legacySpeedCodeToKnots", new Class<?>[] {String.class}, "0"));
+    assertEquals(8, invokePrivate("legacySpeedCodeToKnots", new Class<?>[] {String.class}, "2"));
+    assertEquals(42, invokePrivate("legacySpeedCodeToKnots", new Class<?>[] {String.class}, "9"));
+    assertEquals(
+        Integer.MAX_VALUE,
+        invokePrivate("legacySpeedCodeToKnots", new Class<?>[] {String.class}, "invalid"));
+  }
+
+  @Test
   public void preservesLegacyShipSpeedConversionsAndMissingValues() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
