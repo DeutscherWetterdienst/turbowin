@@ -592,6 +592,88 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesWaveValuesAndSpecialWaveCodes() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalWindWavePeriod = mywaves.wind_waves_period;
+    String originalWindWaveHeight = mywaves.wind_waves_height;
+    String originalSwell1Direction = mywaves.swell_1_dir;
+    String originalSwell1Period = mywaves.swell_1_period;
+    String originalSwell1Height = mywaves.swell_1_height;
+    String originalSwell2Direction = mywaves.swell_2_dir;
+    String originalSwell2Period = mywaves.swell_2_period;
+    String originalSwell2Height = mywaves.swell_2_height;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      mywaves.wind_waves_period = "8";
+      mywaves.wind_waves_height = "2.5";
+      mywaves.swell_1_dir = "90";
+      mywaves.swell_1_period = "12";
+      mywaves.swell_1_height = "3";
+      mywaves.swell_2_dir = "180";
+      mywaves.swell_2_period = "10";
+      mywaves.swell_2_height = "2";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 8.0             period of wind waves [seconds]", lines.get(41));
+      assertEquals("1 2.5             height of wind waves [metres]", lines.get(42));
+      assertEquals("1 90.0            direction of 1st swell [degree])", lines.get(43));
+      assertEquals("1 12.0            period of 1st swell [seconds]", lines.get(44));
+      assertEquals("1 3.0             height of 1st swell [metres]", lines.get(45));
+      assertEquals("1 180.0           direction of 2nd swell [degrees]", lines.get(46));
+      assertEquals("1 10.0            period of 2nd swell [seconds]]", lines.get(47));
+      assertEquals("1 2.0             height of 2nd swell [metres]", lines.get(48));
+
+      mywaves.wind_waves_period = "confused";
+      mywaves.wind_waves_height = "confused";
+      mywaves.swell_1_dir = "no swell";
+      mywaves.swell_1_period = "confused";
+      mywaves.swell_1_height = "confused";
+      mywaves.swell_2_dir = "confused";
+      mywaves.swell_2_period = "confused";
+      mywaves.swell_2_height = "confused";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 period of wind waves [seconds]", lines.get(41));
+      assertEquals("0                 height of wind waves [metres]", lines.get(42));
+      assertEquals("0                 direction of 1st swell [degree])", lines.get(43));
+      assertEquals("0                 period of 1st swell [seconds]", lines.get(44));
+      assertEquals("0                 height of 1st swell [metres]", lines.get(45));
+      assertEquals("0                 direction of 2nd swell [degrees]", lines.get(46));
+      assertEquals("0                 period of 2nd swell [seconds]]", lines.get(47));
+      assertEquals("0                 height of 2nd swell [metres]", lines.get(48));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      mywaves.wind_waves_period = originalWindWavePeriod;
+      mywaves.wind_waves_height = originalWindWaveHeight;
+      mywaves.swell_1_dir = originalSwell1Direction;
+      mywaves.swell_1_period = originalSwell1Period;
+      mywaves.swell_1_height = originalSwell1Height;
+      mywaves.swell_2_dir = originalSwell2Direction;
+      mywaves.swell_2_period = originalSwell2Period;
+      mywaves.swell_2_height = originalSwell2Height;
+    }
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
