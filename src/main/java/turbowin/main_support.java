@@ -2135,6 +2135,17 @@ public class main_support {
     } // if (moved_observername_file_array[4].compareTo("") != 0)
   }
 
+  private Float parseValidationFloat(String value, String errorMessage) {
+    try {
+      if (value.equals("") == false && value != null) {
+        return Float.parseFloat(value);
+      }
+    } catch (NumberFormatException ex) {
+      main.log_turbowin_system_message(errorMessage);
+    }
+    return null;
+  }
+
   public boolean checking_level_2() {
     boolean doorgaan = true;
     boolean level_2_ok = true;
@@ -2179,30 +2190,26 @@ public class main_support {
     //
 
     // wind_waves_period conversion
-    try {
-      if (mywaves.wind_waves_period.equals("") == false && mywaves.wind_waves_period != null) {
-        float_wind_waves_period = Float.parseFloat(mywaves.wind_waves_period);
-        wind_waves_period_conversion_ok = true;
-      } else {
-        wind_waves_period_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] wind waves period conversion error; Function: checking_level_2()");
+    Float parsedWindWavesPeriod =
+        parseValidationFloat(
+            mywaves.wind_waves_period,
+            "[GENERAL] wind waves period conversion error; Function: checking_level_2()");
+    if (parsedWindWavesPeriod != null) {
+      float_wind_waves_period = parsedWindWavesPeriod;
+      wind_waves_period_conversion_ok = true;
+    } else {
       wind_waves_period_conversion_ok = false;
     }
 
     // wind_waves_height conversion
-    try {
-      if (mywaves.wind_waves_height.equals("") == false && mywaves.wind_waves_height != null) {
-        float_wind_waves_height = Float.parseFloat(mywaves.wind_waves_height);
-        wind_waves_height_conversion_ok = true;
-      } else {
-        wind_waves_height_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] wind waves height conversion error; Function: checking_level_2()");
+    Float parsedWindWavesHeight =
+        parseValidationFloat(
+            mywaves.wind_waves_height,
+            "[GENERAL] wind waves height conversion error; Function: checking_level_2()");
+    if (parsedWindWavesHeight != null) {
+      float_wind_waves_height = parsedWindWavesHeight;
+      wind_waves_height_conversion_ok = true;
+    } else {
       wind_waves_height_conversion_ok = false;
     }
 
