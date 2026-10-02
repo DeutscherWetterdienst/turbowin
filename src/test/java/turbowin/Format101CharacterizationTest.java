@@ -674,6 +674,72 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesIcePresenceAndBasicIceConversions() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalThickness = myicing.EsEs_code;
+    String originalRate = myicing.Rs_code;
+    String originalCause = myicing.Is_code;
+    String originalConcentration = myice1.ci_code;
+    String originalType = myice1.bi_code;
+    String originalSituation = myice1.zi_code;
+    String originalDevelopment = myice1.Si_code;
+    String originalBearing = myice1.Di_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      myicing.EsEs_code = "100";
+      myicing.Rs_code = "2";
+      myicing.Is_code = "";
+      myice1.ci_code = "";
+      myice1.bi_code = "";
+      myice1.zi_code = "";
+      myice1.Si_code = "";
+      myice1.Di_code = "";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 1.0             ice obs. precence indicator", lines.get(49));
+      assertEquals("1 1.0             ice deposit/thickness (EsEs) [metres]", lines.get(50));
+      assertEquals("1 2.0             rate of ice accretion (Rs) [code]", lines.get(51));
+
+      myicing.EsEs_code = "";
+      myicing.Rs_code = "";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 0.0             ice obs. precence indicator", lines.get(49));
+      assertEquals("0                 ice deposit/thickness (EsEs) [metres]", lines.get(50));
+      assertEquals("0                 rate of ice accretion (Rs) [code]", lines.get(51));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      mydatetime.hour = originalHour;
+      myicing.EsEs_code = originalThickness;
+      myicing.Rs_code = originalRate;
+      myicing.Is_code = originalCause;
+      myice1.ci_code = originalConcentration;
+      myice1.bi_code = originalType;
+      myice1.zi_code = originalSituation;
+      myice1.Si_code = originalDevelopment;
+      myice1.Di_code = originalBearing;
+    }
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
