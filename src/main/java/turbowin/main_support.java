@@ -2302,16 +2302,13 @@ public class main_support {
     }
 
     // string air temp conversion to float
-    try {
-      if (mytemp.air_temp.equals("") == false && mytemp.air_temp != null) {
-        float_air_temp = Float.parseFloat(mytemp.air_temp);
-        air_temp_conversion_ok = true;
-      } else {
-        air_temp_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] air temp conversion error; Function: checking_level_2()");
+    Float parsedAirTemperature =
+        parseValidationFloat(
+            mytemp.air_temp, "[GENERAL] air temp conversion error; Function: checking_level_2()");
+    if (parsedAirTemperature != null) {
+      float_air_temp = parsedAirTemperature;
+      air_temp_conversion_ok = true;
+    } else {
       air_temp_conversion_ok = false;
     }
 
@@ -2928,16 +2925,13 @@ public class main_support {
     }
 
     // string air_temp conversion to float
-    try {
-      if (mytemp.air_temp.equals("") == false && mytemp.air_temp != null) {
-        float_air_temp = Float.parseFloat(mytemp.air_temp);
-        air_temp_conversion_ok = true;
-      } else {
-        air_temp_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] air temp conversion error; Function: checking_level_3()");
+    Float parsedAirTemperature =
+        parseValidationFloat(
+            mytemp.air_temp, "[GENERAL] air temp conversion error; Function: checking_level_3()");
+    if (parsedAirTemperature != null) {
+      float_air_temp = parsedAirTemperature;
+      air_temp_conversion_ok = true;
+    } else {
       air_temp_conversion_ok = false;
     }
 

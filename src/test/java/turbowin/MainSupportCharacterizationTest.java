@@ -113,4 +113,25 @@ public class MainSupportCharacterizationTest {
       mywaves.wind_waves_height = originalHeight;
     }
   }
+
+  @Test
+  public void preservesAirTemperatureConversionAtBothValidationLevels() {
+    String originalAirTemperature = mytemp.air_temp;
+
+    try {
+      mytemp.air_temp = "20";
+      assertTrue(new main_support().checking_level_2());
+      assertTrue(new main_support().checking_level_3());
+
+      mytemp.air_temp = "";
+      assertTrue(new main_support().checking_level_2());
+      assertTrue(new main_support().checking_level_3());
+
+      mytemp.air_temp = "invalid";
+      assertTrue(new main_support().checking_level_2());
+      assertTrue(new main_support().checking_level_3());
+    } finally {
+      mytemp.air_temp = originalAirTemperature;
+    }
+  }
 }
