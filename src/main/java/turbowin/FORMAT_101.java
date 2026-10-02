@@ -1510,104 +1510,54 @@ public class FORMAT_101 {
     */
     /* unit  = code (no bufr table -> manual on codes table 4377) */
 
-    if ((myvisibility.VV_code.trim()).length() > 0) {
-      if (myvisibility.VV_code.equals("//")) {
-        compressed_visibility = COMPRESSED_UNDEF_VALUE;
-        present[29] = 0;
-      } else {
-        try {
-          compressed_visibility = parseNumericCode(myvisibility.VV_code);
-          present[29] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_visibility = COMPRESSED_UNDEF_VALUE;
-          present[29] = 0;
-          System.out.println("+++ write input file for format 101; visibility (VV) " + ex);
-        } // catch
-      } // else
-    } // if ((myvisibility.VV_code.trim()).length() > 0)
-    else {
-      compressed_visibility = COMPRESSED_UNDEF_VALUE;
-      present[29] = 0;
-    } // else
+    compressed_visibility =
+        parseOptionalNumericField(
+            myvisibility.VV_code, 1, present, 29, "visibility (VV)", COMPRESSED_UNDEF_VALUE, "//");
 
     /* [30]
     /////////////////////////////////////////// 0 20 003 (present weather)  ///////////////////////////////////////
     */
     /* unit  = (bufr code table 020003) */
 
-    if ((mypresentweather.ww_code.trim()).length() > 0) {
-      if (mypresentweather.ww_code.equals("//")) {
-        compressed_present_weather = COMPRESSED_UNDEF_VALUE;
-        present[30] = 0;
-      } else {
-        try {
-          compressed_present_weather = parseNumericCode(mypresentweather.ww_code);
-          present[30] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_present_weather = COMPRESSED_UNDEF_VALUE;
-          present[30] = 0;
-          System.out.println("+++ write input file for format 101; present weather (ww) " + ex);
-        } // catch
-      } // else
-    } // if ((mypresentweather.ww_code.trim()).length() > 0)
-    else {
-      compressed_present_weather = COMPRESSED_UNDEF_VALUE;
-      present[30] = 0;
-    } // else
+    compressed_present_weather =
+        parseOptionalNumericField(
+            mypresentweather.ww_code,
+            1,
+            present,
+            30,
+            "present weather (ww)",
+            COMPRESSED_UNDEF_VALUE,
+            "//");
 
     /* [31]
     ////////////////////////////////////////////// 0 20 004 (past weather; W1) ////////////////////////////////////////
     */
     /* unit  = code (bufr table 020004/020005) */
 
-    if ((mypastweather.W1_code.trim()).length() > 0) {
-      if (mypastweather.W1_code.equals("/")) {
-        compressed_past_weather_1 = COMPRESSED_UNDEF_VALUE;
-        present[31] = 0;
-      } else {
-        try {
-          compressed_past_weather_1 = parseNumericCode(mypastweather.W1_code);
-          present[31] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_past_weather_1 = COMPRESSED_UNDEF_VALUE;
-          present[31] = 0;
-          System.out.println("+++ write input file for format 101; past weather 1 (W1) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_past_weather_1 = COMPRESSED_UNDEF_VALUE;
-      present[31] = 0;
-    } // else
+    compressed_past_weather_1 =
+        parseOptionalNumericField(
+            mypastweather.W1_code,
+            1,
+            present,
+            31,
+            "past weather 1 (W1)",
+            COMPRESSED_UNDEF_VALUE,
+            "/");
 
     /* [32]
     ////////////////////////////////////////////// 0 20 005 (past weather; W2) ////////////////////////////////////////
     */
     /* unit  = code (bufr code table 020004/020005) */
 
-    if ((mypastweather.W2_code.trim()).length() > 0) {
-      if (mypastweather.W2_code.equals("/")) {
-        compressed_past_weather_2 = COMPRESSED_UNDEF_VALUE;
-        present[32] = 0;
-      } else {
-        try {
-          compressed_past_weather_2 = parseNumericCode(mypastweather.W2_code);
-          present[32] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_past_weather_2 = COMPRESSED_UNDEF_VALUE;
-          present[32] = 0;
-          System.out.println("+++ write input file for format 101; past weather 2 (W2) " + ex);
-        } // catch
-      } // else
-    } //
-    else {
-      compressed_past_weather_2 = COMPRESSED_UNDEF_VALUE;
-      present[32] = 0;
-    } // else
+    compressed_past_weather_2 =
+        parseOptionalNumericField(
+            mypastweather.W2_code,
+            1,
+            present,
+            32,
+            "past weather 2 (W2)",
+            COMPRESSED_UNDEF_VALUE,
+            "/");
 
     /* [33]
     //////////////////////////////////////////// 0 20 010 (total cloud cover; N) ////////////////////////////////////////
