@@ -1353,31 +1353,9 @@ public class FORMAT_101 {
     /* unit  = degrees */
     schalings_factor = 1; // already in degrees
 
-    if ((mywind.RWD_code.trim()).length() > 0) {
-      if (mywind.RWD_code.equals("///")) {
-        compressed_relative_wind_dir = COMPRESSED_UNDEF_VALUE;
-        present[19] = 0;
-      } else if (mywind.RWD_code.equals("999")) // variable for RWD, see mywind.java
-      {
-        compressed_relative_wind_dir =
-            0.0; // in format 101 no option for variable so agreed to insert 0.0
-        present[19] = 1;
-      } else {
-        try {
-          compressed_relative_wind_dir = Double.parseDouble(mywind.RWD_code);
-          present[19] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_relative_wind_dir = COMPRESSED_UNDEF_VALUE;
-          present[19] = 0;
-          System.out.println("+++ write input file for format 101; relative wind dir " + ex);
-        } // catch
-      } // else
-    } //  if ((mywind.RWD_code.trim()).length() > 0)
-    else {
-      compressed_relative_wind_dir = COMPRESSED_UNDEF_VALUE;
-      present[19] = 0;
-    } // else
+    compressed_relative_wind_dir =
+        parseRelativeWindDirection(
+            mywind.RWD_code, present, 19, "relative wind dir", COMPRESSED_UNDEF_VALUE);
 
     /* [20]
     ////////////////////////////////////////// 0 11 100 (relative wind speed, RWS)   //////////////////////////////
@@ -1385,39 +1363,15 @@ public class FORMAT_101 {
     /* unit  = m/s */
     schalings_factor = 1;
 
-    if ((mywind.RWS_code.trim()).length() > 0) {
-      if (mywind.RWS_code.equals("///")) {
-        compressed_relative_wind_speed = COMPRESSED_UNDEF_VALUE;
-        present[20] = 0;
-      } else {
-        try {
-          // NB if necessary first convert RWS to m/s!!
-          if (main.wind_units.trim().indexOf(main.M_S) != -1) // so wind speed in m/s
-          {
-            compressed_relative_wind_speed = Double.parseDouble(mywind.RWS_code) * schalings_factor;
-            present[20] = 1;
-          } else if (main.wind_units.trim().indexOf(main.KNOTS) != -1) // so wind speed units knots
-          {
-            compressed_relative_wind_speed =
-                convertKnotsToMetersPerSecond(
-                    Double.parseDouble(mywind.RWS_code) * schalings_factor);
-            present[20] = 1;
-          } else {
-            compressed_relative_wind_speed = COMPRESSED_UNDEF_VALUE;
-            present[20] = 0;
-          }
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_relative_wind_speed = COMPRESSED_UNDEF_VALUE;
-          present[20] = 0;
-          System.out.println("+++ write input file for format 101; relative wind speed " + ex);
-        } // catch
-      } // else
-    } //  if ((mywind.RWD_code.trim()).length() > 0)
-    else {
-      compressed_relative_wind_speed = COMPRESSED_UNDEF_VALUE;
-      present[20] = 0;
-    } // else
+    compressed_relative_wind_speed =
+        parseRelativeWindSpeed(
+            mywind.RWS_code,
+            schalings_factor,
+            main.wind_units,
+            present,
+            20,
+            "relative wind speed",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [21]
     ////////////////////////////////////////// 0 11 041 (max wind gust speed)   ///////////////////////////////////
@@ -2065,6 +2019,70 @@ public class FORMAT_101 {
         double value = convertCelsiusToKelvin(parseNumericCode(temperature));
         present[presentIndex] = 1;
         return value;
+      } catch (NumberFormatException ex) {
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
+  }
+
+  private double parseRelativeWindDirection(
+      String direction,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue) {
+    if (direction.trim().length() > 0) {
+      if (direction.equals("///")) {
+        present[presentIndex] = 0;
+        return undefinedValue;
+      }
+      if (direction.equals("999")) {
+        // 999 means variable relative-wind direction (see mywind.java); FORMAT 101 has no
+        // variable-direction option, so 0.0 is the agreed compatibility representation.
+        present[presentIndex] = 1;
+        return 0.0;
+      }
+
+      try {
+        double value = parseNumericCode(direction);
+        present[presentIndex] = 1;
+        return value;
+      } catch (NumberFormatException ex) {
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
+  }
+
+  private double parseRelativeWindSpeed(
+      String speed,
+      double scalingFactor,
+      String windUnits,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      double undefinedValue) {
+    if (speed.trim().length() > 0) {
+      if (speed.equals("///")) {
+        present[presentIndex] = 0;
+        return undefinedValue;
+      }
+
+      try {
+        double value = parseNumericCode(speed) * scalingFactor;
+        if (windUnits.trim().indexOf(main.M_S) != -1) {
+          present[presentIndex] = 1;
+          return value;
+        }
+        if (windUnits.trim().indexOf(main.KNOTS) != -1) {
+          present[presentIndex] = 1;
+          return convertKnotsToMetersPerSecond(value);
+        }
       } catch (NumberFormatException ex) {
         System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
       }

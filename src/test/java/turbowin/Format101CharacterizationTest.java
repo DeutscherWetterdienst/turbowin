@@ -241,6 +241,7 @@ public class Format101CharacterizationTest {
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
     int originalWindSpeed = mywind.int_true_wind_speed;
+    String originalRelativeWindDirection = mywind.RWD_code;
     String originalRelativeWindSpeed = mywind.RWS_code;
     String originalAirTemperature = mytemp.air_temp;
     String originalWetBulbTemperature = mytemp.wet_bulb_temp;
@@ -262,6 +263,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = "04";
       mydatetime.hour = "12";
       mywind.int_true_wind_speed = 10;
+      mywind.RWD_code = "90";
       mywind.RWS_code = "10";
       mytemp.air_temp = "20";
       mytemp.wet_bulb_temp = "15";
@@ -282,6 +284,20 @@ public class Format101CharacterizationTest {
       assertEquals("1 291.15          sea water temperature [K]", lines.get(28));
       assertEquals("1 100000.0        pressure at barometer height [Pa]", lines.get(14));
       assertEquals("1 101325.0        pressure at MSL [Pa]", lines.get(15));
+
+      mywind.RWD_code = "999";
+      mywind.RWS_code = "///";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 0.0             relative wind direction [degrees]", lines.get(20));
+      assertEquals("0                 relative wind speed [m/s]", lines.get(21));
+
+      mywind.RWD_code = "///";
+      mywind.RWS_code = "invalid";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 relative wind direction [degrees]", lines.get(20));
+      assertEquals("0                 relative wind speed [m/s]", lines.get(21));
 
       mytemp.air_temp = "invalid";
       mytemp.wet_bulb_temp = "";
@@ -314,6 +330,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = originalDay;
       mydatetime.hour = originalHour;
       mywind.int_true_wind_speed = originalWindSpeed;
+      mywind.RWD_code = originalRelativeWindDirection;
       mywind.RWS_code = originalRelativeWindSpeed;
       mytemp.air_temp = originalAirTemperature;
       mytemp.wet_bulb_temp = originalWetBulbTemperature;
