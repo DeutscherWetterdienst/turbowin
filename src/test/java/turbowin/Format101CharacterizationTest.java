@@ -800,6 +800,63 @@ public class Format101CharacterizationTest {
   }
 
   @Test
+  public void preservesRemainingNumericIceCodesAndMissingValues() throws Exception {
+    String originalLogsDirectory = main.logs_dir;
+    String originalYear = mydatetime.year;
+    String originalMonth = mydatetime.MM_code;
+    String originalDay = mydatetime.day;
+    String originalHour = mydatetime.hour;
+    String originalConcentration = myice1.ci_code;
+    String originalType = myice1.bi_code;
+    String originalSituation = myice1.zi_code;
+    String originalDevelopment = myice1.Si_code;
+
+    try {
+      File logsDirectory = temporaryFolder.newFolder("logs");
+      File temporaryDirectory =
+          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
+      assertTrue(temporaryDirectory.mkdirs());
+      main.logs_dir = logsDirectory.getPath();
+      mydatetime.year = "2026";
+      mydatetime.MM_code = "10";
+      mydatetime.day = "04";
+      mydatetime.hour = "12";
+      myice1.ci_code = "3";
+      myice1.bi_code = "4";
+      myice1.zi_code = "5";
+      myice1.Si_code = "6";
+
+      invokePrivate("write_input_for_101_compression");
+      List<String> lines =
+          Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("1 3.0             sea ice concentration (ci) [code]", lines.get(53));
+      assertEquals("1 4.0             amount and type of ice (bi) [code]", lines.get(54));
+      assertEquals("1 5.0             ice situation (zi) [code]", lines.get(55));
+      assertEquals("1 6.0             ice development (Si) code]", lines.get(56));
+
+      myice1.ci_code = "/";
+      myice1.bi_code = "/";
+      myice1.zi_code = "/";
+      myice1.Si_code = "/";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 sea ice concentration (ci) [code]", lines.get(53));
+      assertEquals("0                 amount and type of ice (bi) [code]", lines.get(54));
+      assertEquals("0                 ice situation (zi) [code]", lines.get(55));
+      assertEquals("0                 ice development (Si) code]", lines.get(56));
+    } finally {
+      main.logs_dir = originalLogsDirectory;
+      mydatetime.year = originalYear;
+      mydatetime.MM_code = originalMonth;
+      mydatetime.day = originalDay;
+      myice1.ci_code = originalConcentration;
+      myice1.bi_code = originalType;
+      myice1.zi_code = originalSituation;
+      myice1.Si_code = originalDevelopment;
+    }
+  }
+
+  @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalYear = mydatetime.year;
