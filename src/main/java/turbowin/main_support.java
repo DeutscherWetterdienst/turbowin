@@ -2845,30 +2845,29 @@ public class main_support {
     //
 
     // wind_waves_period conversion
-    try {
-      if (mywaves.wind_waves_period.equals("") == false && mywaves.wind_waves_period != null) {
-        float_wind_waves_period = Float.parseFloat(mywaves.wind_waves_period);
-        wind_waves_period_conversion_ok = true;
-      } else {
-        wind_waves_period_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] wind waves period conversion error; Function: checking_level_3()");
+    Float parsedWindWavesPeriod =
+        parseValidationFloat(
+            mywaves.wind_waves_period,
+            "[GENERAL] wind waves period conversion error; Function: checking_level_3()");
+    if (parsedWindWavesPeriod != null) {
+      float_wind_waves_period = parsedWindWavesPeriod;
+      wind_waves_period_conversion_ok = true;
+    } else {
       wind_waves_period_conversion_ok = false;
     }
 
     // wind_waves_height conversion
-    try {
-      if (mywaves.wind_waves_height.equals("") == false && mywaves.wind_waves_height != null) {
-        float_wind_waves_height = Float.parseFloat(mywaves.wind_waves_height);
-        wind_waves_height_conversion_ok = true;
-      } else {
-        wind_waves_period_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] wind waves height conversion error; Function: checking_level_3()");
+    Float parsedWindWavesHeight =
+        parseValidationFloat(
+            mywaves.wind_waves_height,
+            "[GENERAL] wind waves height conversion error; Function: checking_level_3()");
+    if (parsedWindWavesHeight != null) {
+      float_wind_waves_height = parsedWindWavesHeight;
+      wind_waves_height_conversion_ok = true;
+    } else if (mywaves.wind_waves_height.equals("")) {
+      // Preserve the legacy level-3 flag assignment for an empty height.
+      wind_waves_period_conversion_ok = false;
+    } else {
       wind_waves_height_conversion_ok = false;
     }
 
