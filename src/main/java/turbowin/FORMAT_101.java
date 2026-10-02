@@ -1761,28 +1761,15 @@ public class FORMAT_101 {
     /* unit  = sec */
     schalings_factor = 1;
 
-    if ((mywaves.wind_waves_period.trim()).length() > 0) {
-      if (mywaves.wind_waves_period.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_period_wind_waves_estimated = COMPRESSED_UNDEF_VALUE;
-        present[40] = 0;
-      } else {
-        try {
-          compressed_period_wind_waves_estimated =
-              Double.parseDouble(mywaves.wind_waves_period) * schalings_factor;
-          present[40] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_period_wind_waves_estimated = COMPRESSED_UNDEF_VALUE;
-          present[40] = 0;
-          System.out.println("+++ write input file for format 101; wind waves period " + ex);
-        } // catch
-      } // else
-    } // if ((mywaves.wind_waves_period.trim()).length() > 0)
-    else {
-      compressed_period_wind_waves_estimated = COMPRESSED_UNDEF_VALUE;
-      present[40] = 0;
-    } // else
+    compressed_period_wind_waves_estimated =
+        parseWaveField(
+            mywaves.wind_waves_period,
+            schalings_factor,
+            present,
+            40,
+            "wind waves period",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [41]
     //////////////////////////////////// 0 22 022 (height wind waves)      ////////////////////////////////////////
@@ -1790,28 +1777,15 @@ public class FORMAT_101 {
     /* unit  = metres */
     schalings_factor = 1;
 
-    if ((mywaves.wind_waves_height.trim()).length() > 0) {
-      if (mywaves.wind_waves_height.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_height_wind_waves_estimated = COMPRESSED_UNDEF_VALUE;
-        present[41] = 0;
-      } else {
-        try {
-          compressed_height_wind_waves_estimated =
-              Double.parseDouble(mywaves.wind_waves_height) * schalings_factor;
-          present[41] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_height_wind_waves_estimated = COMPRESSED_UNDEF_VALUE;
-          present[41] = 0;
-          System.out.println("+++ write input file for format 101; wind waves height " + ex);
-        } // catch
-      } // else
-    } // if ((mywaves.wind_waves_height.trim()).length() > 0)
-    else {
-      compressed_height_wind_waves_estimated = COMPRESSED_UNDEF_VALUE;
-      present[41] = 0;
-    } // else
+    compressed_height_wind_waves_estimated =
+        parseWaveField(
+            mywaves.wind_waves_height,
+            schalings_factor,
+            present,
+            41,
+            "wind waves height",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [42]
     ////////////////////////////////////// 0 22 003 (dir swell 1)   ///////////////////////////////////////////
@@ -1819,31 +1793,15 @@ public class FORMAT_101 {
     /* unit  =  degrees true */
     schalings_factor = 1;
 
-    if ((mywaves.swell_1_dir.trim()).length() > 0) {
-      if (mywaves.swell_1_dir.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_dir_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-        present[42] = 0;
-      } else if (mywaves.swell_1_dir.equals("no swell")) {
-        compressed_dir_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-        present[42] = 0;
-      } else {
-        try {
-          compressed_dir_swell_1_estimated =
-              Double.parseDouble(mywaves.swell_1_dir) * schalings_factor;
-          present[42] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_dir_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-          present[42] = 0;
-          System.out.println("+++ write input file for format 101; direction of 1st swell " + ex);
-        } // catch
-      } // else
-    } // if ((mywaves.swell_1_dir.trim()).length() > 0)
-    else {
-      compressed_dir_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-      present[42] = 0;
-    } // else
+    compressed_dir_swell_1_estimated =
+        parseWaveField(
+            mywaves.swell_1_dir,
+            schalings_factor,
+            present,
+            42,
+            "direction of 1st swell",
+            true,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [43]
     //////////////////////////////////// 0 22 013 (period swell 1)   /////////////////////////////////////
@@ -1851,27 +1809,15 @@ public class FORMAT_101 {
     /* unit  = sec */
     schalings_factor = 1;
 
-    if ((mywaves.swell_1_period.trim()).length() > 0) {
-      if (mywaves.swell_1_period.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_period_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-        present[43] = 0;
-      } else {
-        try {
-          compressed_period_swell_1_estimated =
-              Double.parseDouble(mywaves.swell_1_period) * schalings_factor;
-          present[43] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_period_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-          present[43] = 0;
-          System.out.println("+++ write input file for format 101; period of 1st swell " + ex);
-        } // catch
-      } // else
-    } else {
-      compressed_period_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-      present[43] = 0;
-    } // else
+    compressed_period_swell_1_estimated =
+        parseWaveField(
+            mywaves.swell_1_period,
+            schalings_factor,
+            present,
+            43,
+            "period of 1st swell",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [44]
     //////////////////////////////////// 0 22 023 (height swell 1)   /////////////////////////////////////
@@ -1879,27 +1825,15 @@ public class FORMAT_101 {
     /* unit  = sec */
     schalings_factor = 1;
 
-    if ((mywaves.swell_1_height.trim()).length() > 0) {
-      if (mywaves.swell_1_height.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_height_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-        present[44] = 0;
-      } else {
-        try {
-          compressed_height_swell_1_estimated =
-              Double.parseDouble(mywaves.swell_1_height) * schalings_factor;
-          present[44] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_height_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-          present[44] = 0;
-          System.out.println("+++ write input file for format 101; height of 1st swell " + ex);
-        } // catch
-      } // else
-    } else {
-      compressed_height_swell_1_estimated = COMPRESSED_UNDEF_VALUE;
-      present[44] = 0;
-    } // else
+    compressed_height_swell_1_estimated =
+        parseWaveField(
+            mywaves.swell_1_height,
+            schalings_factor,
+            present,
+            44,
+            "height of 1st swell",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [45]
     ////////////////////////////////////// 0 22 003 (dir swell 2)   ///////////////////////////////////////////
@@ -1907,31 +1841,15 @@ public class FORMAT_101 {
     /* unit  =  degrees true */
     schalings_factor = 1;
 
-    if ((mywaves.swell_2_dir.trim()).length() > 0) {
-      if (mywaves.swell_2_dir.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_dir_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-        present[45] = 0;
-      } else if (mywaves.swell_2_dir.equals("no swell")) {
-        compressed_dir_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-        present[45] = 0;
-      } else {
-        try {
-          compressed_dir_swell_2_estimated =
-              Double.parseDouble(mywaves.swell_2_dir) * schalings_factor;
-          present[45] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_dir_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-          present[45] = 0;
-          System.out.println("+++ write input file for format 101; direction of 2nd swell " + ex);
-        } // catch
-      } // else
-    } // if ((mywaves.swell_1_dir.trim()).length() > 0)
-    else {
-      compressed_dir_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-      present[45] = 0;
-    } // else
+    compressed_dir_swell_2_estimated =
+        parseWaveField(
+            mywaves.swell_2_dir,
+            schalings_factor,
+            present,
+            45,
+            "direction of 2nd swell",
+            true,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [46]
     //////////////////////////////////// 0 22 013 (period swell 2)   /////////////////////////////////////
@@ -1939,27 +1857,15 @@ public class FORMAT_101 {
     /* unit  = sec */
     schalings_factor = 1;
 
-    if ((mywaves.swell_2_period.trim()).length() > 0) {
-      if (mywaves.swell_2_period.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_period_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-        present[46] = 0;
-      } else {
-        try {
-          compressed_period_swell_2_estimated =
-              Double.parseDouble(mywaves.swell_2_period) * schalings_factor;
-          present[46] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_period_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-          present[46] = 0;
-          System.out.println("+++ write input file for format 101; period of 2nd swell " + ex);
-        } // catch
-      } // else
-    } else {
-      compressed_period_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-      present[46] = 0;
-    } // else
+    compressed_period_swell_2_estimated =
+        parseWaveField(
+            mywaves.swell_2_period,
+            schalings_factor,
+            present,
+            46,
+            "period of 2nd swell",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [47]
     //////////////////////////////////// 0 22 023 (height swell 2)   /////////////////////////////////////
@@ -1967,27 +1873,15 @@ public class FORMAT_101 {
     /* unit  = sec */
     schalings_factor = 1;
 
-    if ((mywaves.swell_2_height.trim()).length() > 0) {
-      if (mywaves.swell_2_height.equals("confused")) // there is no "confused" option in bufr
-      {
-        compressed_height_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-        present[47] = 0;
-      } else {
-        try {
-          compressed_height_swell_2_estimated =
-              Double.parseDouble(mywaves.swell_2_height) * schalings_factor;
-          present[47] = 1;
-        } // try
-        catch (NumberFormatException ex) {
-          compressed_height_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-          present[47] = 0;
-          System.out.println("+++ write input file for format 101; height of 2nd swell " + ex);
-        } // catch
-      } // else
-    } else {
-      compressed_height_swell_2_estimated = COMPRESSED_UNDEF_VALUE;
-      present[47] = 0;
-    } // else
+    compressed_height_swell_2_estimated =
+        parseWaveField(
+            mywaves.swell_2_height,
+            schalings_factor,
+            present,
+            47,
+            "height of 2nd swell",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [48]
     ///////////////////////////////////////// 1 08 000 ice obs presence indicator  ////////////////////////////////
@@ -2406,6 +2300,36 @@ public class FORMAT_101 {
       double undefinedValue) {
     if (code.trim().length() > 0) {
       if (code.equals("/")) {
+        present[presentIndex] = 0;
+        return undefinedValue;
+      }
+
+      try {
+        double value = parseNumericCode(code) * scalingFactor;
+        present[presentIndex] = 1;
+        return value;
+      } catch (NumberFormatException ex) {
+        present[presentIndex] = 0;
+        System.out.println("+++ write input file for format 101; " + fieldDescription + " " + ex);
+      }
+    }
+
+    present[presentIndex] = 0;
+    return undefinedValue;
+  }
+
+  private double parseWaveField(
+      String code,
+      double scalingFactor,
+      int[] present,
+      int presentIndex,
+      String fieldDescription,
+      boolean acceptsNoSwell,
+      double undefinedValue) {
+    if (code.trim().length() > 0) {
+      // There is no "confused" option in BUFR, so treat this input as undefined.
+      // "no swell" is the special undefined sentinel for swell directions.
+      if (code.equals("confused") || (acceptsNoSwell && code.equals("no swell"))) {
         present[presentIndex] = 0;
         return undefinedValue;
       }
