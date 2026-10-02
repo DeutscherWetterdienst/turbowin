@@ -227,4 +227,22 @@ public class MainSupportCharacterizationTest {
       mytemp.sea_water_temp = originalSeaWaterTemperature;
     }
   }
+
+  @Test
+  public void preservesIceThicknessConversionAtLevelThree() {
+    String originalIceThickness = myicing.EsEs_code;
+
+    try {
+      myicing.EsEs_code = "10";
+      assertTrue(new main_support().checking_level_3());
+
+      myicing.EsEs_code = "";
+      assertTrue(new main_support().checking_level_3());
+
+      myicing.EsEs_code = "invalid";
+      assertTrue(new main_support().checking_level_3());
+    } finally {
+      myicing.EsEs_code = originalIceThickness;
+    }
+  }
 }

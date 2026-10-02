@@ -2960,17 +2960,14 @@ public class main_support {
     }
 
     // string thickness ice accretion (EsEs) to float
-    try {
-      if (myicing.EsEs_code.equals("") == false && myicing.EsEs_code != null) {
-        float_ice_thickness =
-            Float.parseFloat(myicing.EsEs_code); // EsEs_code = ice thickness in centimetres
-        ice_thickness_conversion_ok = true;
-      } else {
-        ice_thickness_conversion_ok = false;
-      }
-    } catch (NumberFormatException ex) {
-      main.log_turbowin_system_message(
-          "[GENERAL] ice thickness (EsEs) conversion error; Function: checking_level_3()");
+    Float parsedIceThickness =
+        parseValidationFloat(
+            myicing.EsEs_code,
+            "[GENERAL] ice thickness (EsEs) conversion error; Function: checking_level_3()");
+    if (parsedIceThickness != null) {
+      float_ice_thickness = parsedIceThickness; // EsEs_code = ice thickness in centimetres
+      ice_thickness_conversion_ok = true;
+    } else {
       ice_thickness_conversion_ok = false;
     }
 
