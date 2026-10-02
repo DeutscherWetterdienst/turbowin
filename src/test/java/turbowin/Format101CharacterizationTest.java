@@ -1076,6 +1076,12 @@ public class Format101CharacterizationTest {
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 characteristic of pressure change [code]", lines.get(17));
+
+      mybarograph.pressure_amount_tendency = "invalid";
+      mybarograph.a_code = "2";
+      invokePrivate("write_input_for_101_compression");
+      lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+      assertEquals("0                 3 hour pressure change [Pa]", lines.get(16));
     } finally {
       main.logs_dir = originalLogsDirectory;
       mydatetime.year = originalYear;
