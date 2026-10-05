@@ -16,10 +16,6 @@ final class BrowserOpenWorkflow {
 
   private BrowserOpenWorkflow() {}
 
-  static boolean isWebAddress(String address) {
-    return address.contains("http") || address.contains("HTTP");
-  }
-
   static void startNonLinux(String subjectAddress) {
     new SwingWorker<Integer, Void>() {
       @Override
@@ -29,7 +25,7 @@ final class BrowserOpenWorkflow {
         if (Desktop.isDesktopSupported()) {
           Desktop desktop = Desktop.getDesktop();
           try {
-            if (!isWebAddress(subjectAddress)) {
+            if (!DesktopUtils.isWebAddress(subjectAddress)) {
               // Local files use Desktop.open; HTTP addresses are opened with Desktop.browse.
               desktop.open(new File(subjectAddress));
             } else {
@@ -43,19 +39,9 @@ final class BrowserOpenWorkflow {
         }
 
         if (code == -1) {
-          // Raspberry Pi/Linux installations may need KDE or XDG; macOS uses "open" as fallback.
-          try {
-            Runtime.getRuntime().exec(new String[] {"kde-open", subjectAddress});
-          } catch (IOException ex) {
-            try {
-              Runtime.getRuntime().exec(new String[] {"xdg-open", subjectAddress});
-            } catch (IOException ex2) {
-              try {
-                Runtime.getRuntime().exec(new String[] {"open", subjectAddress});
-              } catch (IOException ex3) {
-                code = -2;
-              }
-            }
+          // Try kde-open, then xdg-open, then open for Raspberry Pi/Linux and macOS compatibility.
+          if (!DesktopUtils.openWithRuntimeFallback(subjectAddress)) {
+            code = -2;
           }
         }
 
@@ -89,24 +75,14 @@ final class BrowserOpenWorkflow {
       protected Integer doInBackground() throws Exception {
         int code = 0;
 
-        try {
-          Runtime.getRuntime().exec(new String[] {"kde-open", subjectAddress});
-        } catch (IOException ex) {
-          try {
-            Runtime.getRuntime().exec(new String[] {"xdg-open", subjectAddress});
-          } catch (IOException ex2) {
-            try {
-              Runtime.getRuntime().exec(new String[] {"open", subjectAddress});
-            } catch (IOException ex3) {
-              code = -1;
-            }
-          }
+        if (!DesktopUtils.openWithRuntimeFallback(subjectAddress)) {
+          code = -1;
         }
 
         if (code == -1) {
           if (Desktop.isDesktopSupported()) {
             try {
-              if (!isWebAddress(subjectAddress)) {
+              if (!DesktopUtils.isWebAddress(subjectAddress)) {
                 Desktop.getDesktop().open(new File(subjectAddress));
               } else {
                 Desktop.getDesktop().browse(new URI(subjectAddress));
