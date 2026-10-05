@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -159,106 +158,25 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
       if (!" ".equals(pressure_MSL.substring(0, 1))) {
         // IMMT: 991.7 hPa -> 9917
         //       1007.8 hPa -> 0078
-        try {
-          int int_pressure_MSL = Integer.parseInt(pressure_MSL);
-          if (int_pressure_MSL > 8000) {
-            jLabel12.setText(
-                pressure_MSL.substring(0, 3)
-                    + "."
-                    + pressure_MSL.substring(3, pressure_MSL.length())
-                    + " hPa");
-          } else {
-            jLabel12.setText(
-                "1"
-                    + pressure_MSL.substring(0, 3)
-                    + "."
-                    + pressure_MSL.substring(3, pressure_MSL.length())
-                    + " hPa");
-          }
-        } catch (NumberFormatException e) {
-          jLabel12.setText("-");
-        }
+        jLabel12.setText(LatestObservationFormatter.pressure(pressure_MSL));
       }
 
       ///////// air temp
       //
       if ((!" ".equals(air_temp_sign)) && (!" ".equals(air_temp.substring(0, 1)))) {
-        String air_temp_string = "";
-
-        // Sn 0 = positive or zero
-        //    1 = negative
-        if (air_temp_sign.equals("1")) {
-          air_temp_string = "-";
-        }
-
-        if (air_temp.substring(0, 1).equals("0")) {
-          air_temp_string +=
-              air_temp.substring(1, 2)
-                  + "."
-                  + air_temp.substring(2, air_temp.length()); // + " \u00B0C";
-        } else {
-          air_temp_string +=
-              air_temp.substring(0, 2)
-                  + "."
-                  + air_temp.substring(2, air_temp.length()); // + " \u00B0C";
-        }
-
         // only in case of US add the air temp in F
-        if (main.recruiting_country.contains("UNITED STATES US")) {
-          DecimalFormat df = new DecimalFormat("0.0"); // rounding only 1 decimal
-          double double_celcius = Double.parseDouble(air_temp_string);
-          double double_fahrenheit = (double_celcius * 1.8) + 32.0;
-          String string_fahrenheit = df.format(double_fahrenheit);
-          string_fahrenheit =
-              string_fahrenheit.replace(
-                  ",", "."); // if necessary replace "," by "." (e.g. if country is Netherlands see
-          // Windows settings
-
-          air_temp_string += " \u00B0C" + " / " + string_fahrenheit + " \u00B0F";
-        } // if (main.recruiting_country.contains("UNITED STATES US"))
-        else {
-          air_temp_string += " \u00B0C";
-        }
-
-        jLabel13.setText(air_temp_string);
+        jLabel13.setText(
+            LatestObservationFormatter.temperature(
+                air_temp_sign, air_temp, main.recruiting_country.contains("UNITED STATES US")));
       } // if ( (!" ".equals(air_temp_sign)) && (!" ".equals(air_temp.substring(0, 1))) )
 
       /////////// SST
       //
       if ((!" ".equals(sst_sign)) && (!" ".equals(sst.substring(0, 1)))) {
-        String sst_string = "";
-
-        // sst sign 0 = positive or zero
-        //          1 = neative
-        if (sst_sign.equals("1")) {
-          sst_string = "-";
-        }
-
-        if (sst.substring(0, 1).equals("0")) {
-          // not the extra leading zero
-          sst_string += sst.substring(1, 2) + "." + sst.substring(2, sst.length());
-        } else {
-          sst_string += sst.substring(0, 2) + "." + sst.substring(2, sst.length());
-        }
-
         // only in the case of US add the sst in F
-        if (main.recruiting_country.contains("UNITED STATES US")) {
-          DecimalFormat df = new DecimalFormat("0.0"); // rounding only 1 decimal
-          double double_celcius = Double.parseDouble(sst_string);
-          double double_fahrenheit = (double_celcius * 1.8) + 32.0;
-          String string_fahrenheit = df.format(double_fahrenheit);
-          string_fahrenheit =
-              string_fahrenheit.replace(
-                  ",", "."); // if necessary replace "," by "." (e.g. if country is Netherlands see
-          // Windows settings
-
-          sst_string += " \u00B0C" + " / " + string_fahrenheit + " \u00B0F";
-        } // if (main.recruiting_country.contains("UNITED STATES US"))
-        else {
-          sst_string += " \u00B0C";
-        }
-
-        jLabel14.setText(sst_string);
+        jLabel14.setText(
+            LatestObservationFormatter.seaSurfaceTemperature(
+                sst_sign, sst, main.recruiting_country.contains("UNITED STATES US")));
       } // if ( (!" ".equals(sst_sign)) && (!" ".equals(sst.substring(0, 1))) )
 
       ////////// True Wind
@@ -308,14 +226,7 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
           wind_waves_period = "confused";
         }
 
-        try {
-          double double_wind_waves_height = Double.parseDouble(wind_waves_height);
-          wind_waves_height =
-              String.format(
-                  "%.1f", double_wind_waves_height / 2.0); // one digit behind the decimal point
-        } catch (NumberFormatException e) {
-          wind_waves_height = "-";
-        }
+        wind_waves_height = LatestObservationFormatter.waveHeight(wind_waves_height);
 
         jLabel16.setText(wind_waves_period + " sec / " + wind_waves_height + " m");
       } // if ( (!" ".equals(wind_waves_period)) && (!" ".equals(wind_waves_height)) )
@@ -331,14 +242,7 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
           swell_1_dir = swell_1_dir + "0"; // eg 34 immt-code -> 340\u00B0
         }
 
-        try {
-          double double_swell_1_height = Double.parseDouble(swell_1_height);
-          swell_1_height =
-              String.format(
-                  "%.1f", double_swell_1_height / 2.0); // one digit behind the decimal point
-        } catch (NumberFormatException e) {
-          swell_1_height = "-";
-        }
+        swell_1_height = LatestObservationFormatter.swellHeight(swell_1_height);
 
         jLabel17.setText(
             swell_1_dir
