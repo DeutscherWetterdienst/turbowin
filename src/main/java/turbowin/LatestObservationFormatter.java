@@ -54,7 +54,7 @@ final class LatestObservationFormatter {
   private static String withFahrenheit(String celsius) {
     DecimalFormat format = new DecimalFormat("0.0");
     String fahrenheit = format.format((Double.parseDouble(celsius) * 1.8) + 32.0);
-    // Keep the dashboard decimal separator compatible with the expected dot notation.
+    // Locale may produce a comma (e.g. Netherlands); use a dot for dashboard compatibility.
     fahrenheit = fahrenheit.replace(",", ".");
     return celsius + " °C / " + fahrenheit + " °F";
   }
