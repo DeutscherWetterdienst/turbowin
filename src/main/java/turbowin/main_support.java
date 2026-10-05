@@ -2305,51 +2305,22 @@ public class main_support {
 
     // amount pressure tendency
     //
-    if ((doorgaan == true)
-        && amount_pressure_tendency_conversion_ok
-        && (float_amount_pressure_tendency > 30.0 && float_amount_pressure_tendency <= 99.9)) {
-      String info =
-          "pressure tendency amount, last 3 hours > 30.0 hPa\n Press the NO button if it was a typing error, press the YES button if this amount of pressure tendency is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !PressureTendencyConfirmationValidation.validateAmount(
+            amount_pressure_tendency_conversion_ok, float_amount_pressure_tendency)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // amount pressure tendency <-> characteristic pressure tendency (a)
     //
-    if ((doorgaan == true)
-        && amount_pressure_tendency_conversion_ok
-        && (float_amount_pressure_tendency >= 0.0 && float_amount_pressure_tendency <= 99.9)
-        && (mybarograph.a_code.equals("") == true)) {
-      String info =
-          "Amount of pressure tendency available and characteristic of tendency not available?\n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !PressureTendencyConfirmationValidation.validateCharacteristic(
+            amount_pressure_tendency_conversion_ok,
+            float_amount_pressure_tendency,
+            mybarograph.a_code.equals(""))) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // SST
