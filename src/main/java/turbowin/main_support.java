@@ -1876,60 +1876,16 @@ public class main_support {
     //
     ////////// wind - waves checks /////
     //
-
-    // wind speed <-> sea period
-    if ((doorgaan == true) && wind_waves_period_conversion_ok == true) {
-      if ((mywind.int_true_wind_speed == 0)
-          && (float_wind_waves_period > 0.01 && float_wind_waves_period < 99.9)) {
-        JOptionPane.showMessageDialog(
-            null,
-            "if (true) wind speed is 0, wind waves period must be 0 or blank",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        level_2_ok = false;
-        doorgaan = false;
-      }
-    }
-
-    // wind speed <-> sea height
-    if ((doorgaan == true) && (wind_waves_height_conversion_ok == true)) {
-      if ((mywind.int_true_wind_speed == 0)
-          && (float_wind_waves_height > 0.01 && float_wind_waves_height < 99.9)) {
-        JOptionPane.showMessageDialog(
-            null,
-            "if (true) wind speed is 0, wind waves height must be 0 or blank",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        level_2_ok = false;
-        doorgaan = false;
-      }
-    }
-
-    // wind speed <-> sea height
-    if ((doorgaan == true) && (wind_waves_height_conversion_ok == true)) {
-      if ((main.wind_units.trim().indexOf(main.M_S) != -1)
-          && (mywind.int_true_wind_speed >= 0 && mywind.int_true_wind_speed <= 3)
-          && (float_wind_waves_height > 9.7 && float_wind_waves_height < 99.9)) {
-        // wind speed in m/s
-        JOptionPane.showMessageDialog(
-            null,
-            "if (true) wind speed in range 0 - 3 m/s, wind waves height must be < 9.8 m or blank",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        level_2_ok = false;
-        doorgaan = false;
-      } else if ((main.wind_units.trim().indexOf(main.KNOTS) != -1)
-          && (mywind.int_true_wind_speed >= 0 && mywind.int_true_wind_speed <= 6)
-          && (float_wind_waves_height > 9.7 && float_wind_waves_height < 99.9)) {
-        // wind speed in knots
-        JOptionPane.showMessageDialog(
-            null,
-            "if (true) wind speed in range 0 - 6 knots, wind waves height must be < 9.8 m or blank",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        level_2_ok = false;
-        doorgaan = false;
-      }
+    if (doorgaan
+        && !LevelTwoWindWaveValidation.validate(
+            main.wind_units,
+            mywind.int_true_wind_speed,
+            wind_waves_period_conversion_ok,
+            float_wind_waves_period,
+            wind_waves_height_conversion_ok,
+            float_wind_waves_height)) {
+      level_2_ok = false;
+      doorgaan = false;
     }
 
     //
