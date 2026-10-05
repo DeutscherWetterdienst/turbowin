@@ -1891,28 +1891,14 @@ public class main_support {
     //
     ////////// air pressure /////
     //
-
-    // pressure characteristic <-> pressure tendency
-    if ((doorgaan == true) && (pressure_amount_tendency_conversion_ok == true)) {
-      if (mybarograph.a_code.equals("4") && mybarograph.pressure_amount_tendency.equals("")) {
-        JOptionPane.showMessageDialog(
-            null,
-            "if air pressure characteristic is steady (a = 0), amount of pressure tendency must be 0",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        level_2_ok = false;
-        doorgaan = false;
-      } else if ((mybarograph.a_code.equals("4")
-          && float_pressure_amount_tendency > 0.01
-          && float_pressure_amount_tendency < 50.0)) {
-        JOptionPane.showMessageDialog(
-            null,
-            "if air pressure characteristic is steady (a = 0), amount of pressure tendency must be 0",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        level_2_ok = false;
-        doorgaan = false;
-      }
+    if (doorgaan
+        && !LevelTwoPressureValidation.validate(
+            pressure_amount_tendency_conversion_ok,
+            mybarograph.a_code,
+            mybarograph.pressure_amount_tendency,
+            float_pressure_amount_tendency)) {
+      level_2_ok = false;
+      doorgaan = false;
     }
 
     //
