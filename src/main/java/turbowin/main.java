@@ -9,8 +9,6 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.ServerSocket;
@@ -18,10 +16,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.Timer;
 
 /*
 *
@@ -5961,51 +5957,7 @@ public class main extends javax.swing.JFrame {
   }
 
   void main_window_updating_date_time() {
-    // TODO add your handling code here:
-
-    // called from: - main_windowDeiconified() [main.java]   // in case os = NOT WINDOWS
-    //              - main_windowIconfied() [main.java]      // in case os = WINDOWS
-
-    // NB in case of a connected AWS or barometer a timer will already update the date time field on
-    // the main screen
-
-    if ((RS232_connection_mode == 3)
-        || (RS232_connection_mode == 9)
-        || (RS232_connection_mode == 10)
-        || (RS232_connection_mode == 11)
-        || (APR == true)) // AWS connected or APR
-    {
-      // System.out.println("+++ " + evt);
-
-      String info = "Screen will be updated within max 1 minute";
-
-      final JOptionPane pane_begin =
-          new JOptionPane(
-              info,
-              JOptionPane.INFORMATION_MESSAGE,
-              JOptionPane.DEFAULT_OPTION,
-              null,
-              new Object[] {},
-              null);
-      final JDialog updating_dialog = pane_begin.createDialog(main.APPLICATION_NAME);
-
-      Timer timer_begin =
-          new Timer(
-              2000,
-              new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                  updating_dialog.dispose();
-                }
-              });
-      timer_begin.setRepeats(false);
-      timer_begin.start();
-      updating_dialog.setVisible(true);
-    }
-
-    // NB in case of a connected AWS or barometer a timer will already update the date time field on
-    // the main screen
-
+    MainWindowDateTimeUpdateWorkflow.showIfNeeded(RS232_connection_mode, APR);
   }
 
   protected static Image createImage(String path) {
