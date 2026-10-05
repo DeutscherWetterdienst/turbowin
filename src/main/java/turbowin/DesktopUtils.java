@@ -6,6 +6,30 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class DesktopUtils {
+
+  static boolean isWebAddress(String address) {
+    return address.contains("http") || address.contains("HTTP");
+  }
+
+  static boolean openWithRuntimeFallback(String linkUrl) {
+    try {
+      Runtime.getRuntime().exec(new String[] {"kde-open", linkUrl});
+      return true;
+    } catch (IOException ex) {
+      try {
+        Runtime.getRuntime().exec(new String[] {"xdg-open", linkUrl});
+        return true;
+      } catch (IOException ex2) {
+        try {
+          Runtime.getRuntime().exec(new String[] {"open", linkUrl});
+          return true;
+        } catch (IOException ex3) {
+          return false;
+        }
+      }
+    }
+  }
+
   /**
    * Attempts to open the given URL in a browser using the appropriate method based on the operating
    * system.
@@ -38,24 +62,8 @@ public class DesktopUtils {
       // = (null)
       //         [5757:5757:1122/165659.328325:ERROR:sandbox_linux.cc(376)] InitializeSandbox()
       // called with multiple threads in process gpu-process.
-      try {
-        // First try: using kde-open
-        String[] cmdArray = {"kde-open", linkUrl};
-        Process process = Runtime.getRuntime().exec(cmdArray);
-      } catch (IOException e) {
-        try {
-          // Second try: using xdg-open
-          String[] cmdArray = {"xdg-open", linkUrl};
-          Process process = Runtime.getRuntime().exec(cmdArray);
-        } catch (IOException e2) {
-          try {
-            // Third try: using open command
-            String[] cmdArray = {"open", linkUrl};
-            Process process = Runtime.getRuntime().exec(cmdArray);
-          } catch (IOException e3) {
-            code = -1;
-          }
-        }
+      if (!openWithRuntimeFallback(linkUrl)) {
+        code = -1;
       }
 
       // If none of the commands worked, try using the Desktop API.
