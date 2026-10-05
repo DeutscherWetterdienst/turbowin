@@ -1718,6 +1718,16 @@ public class main_support {
   private record WindWaveValidation(
       float period, float height, boolean periodValid, boolean heightValid) {}
 
+  private record FloatValidation(float value, boolean valid) {}
+
+  private FloatValidation validateFloat(
+      String value, String description, String validationFunction) {
+    Float parsed =
+        parseValidationFloat(
+            value, "[GENERAL] " + description + "; Function: " + validationFunction + "()");
+    return new FloatValidation(parsed == null ? main.INVALID : parsed, parsed != null);
+  }
+
   private WindWaveValidation validateWindWaves(
       String validationFunction, boolean preserveEmptyHeightFlag) {
     Float parsedPeriod =
@@ -1861,16 +1871,10 @@ public class main_support {
       VV_code_conversion_ok = false;
     }
 
-    // string air temp conversion to float
-    Float parsedAirTemperature =
-        parseValidationFloat(
-            mytemp.air_temp, "[GENERAL] air temp conversion error; Function: checking_level_2()");
-    if (parsedAirTemperature != null) {
-      float_air_temp = parsedAirTemperature;
-      air_temp_conversion_ok = true;
-    } else {
-      air_temp_conversion_ok = false;
-    }
+    FloatValidation airTemperatureValidation =
+        validateFloat(mytemp.air_temp, "air temp conversion error", "checking_level_2");
+    float_air_temp = airTemperatureValidation.value();
+    air_temp_conversion_ok = airTemperatureValidation.valid();
 
     //
     ///////////////////////////// checks //////////////////////////
@@ -2455,16 +2459,10 @@ public class main_support {
       second_swell_height_conversion_ok = false;
     }
 
-    // string air_temp conversion to float
-    Float parsedAirTemperature =
-        parseValidationFloat(
-            mytemp.air_temp, "[GENERAL] air temp conversion error; Function: checking_level_3()");
-    if (parsedAirTemperature != null) {
-      float_air_temp = parsedAirTemperature;
-      air_temp_conversion_ok = true;
-    } else {
-      air_temp_conversion_ok = false;
-    }
+    FloatValidation airTemperatureValidation =
+        validateFloat(mytemp.air_temp, "air temp conversion error", "checking_level_3");
+    float_air_temp = airTemperatureValidation.value();
+    air_temp_conversion_ok = airTemperatureValidation.valid();
 
     // string pressure_msl_corrected to float
     Float parsedAirPressureMsl =
