@@ -5974,31 +5974,15 @@ public class main extends javax.swing.JFrame {
 
   void Output_obs_to_clipboard_FM13() {
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    ObservationClipboardWriter.write(clipboard, obs_write);
-
-    IMMT_log();
-
-    Reset_all_meteo_parameters();
+    ObservationClipboardWorkflow.writeFm13(clipboard, obs_write);
   }
 
   void Output_obs_to_clipboard_format_101() {
-    boolean doorgaan = true;
-    String clipboard_format_101_line = "";
-
     // read the compressed obs (format 101) which is the only line in file HPK_format_101.txt
-    clipboard_format_101_line = get_format_101_obs_from_file();
-    if (clipboard_format_101_line.equals("") == true) {
-      doorgaan = false;
-    }
-
-    if (doorgaan == true) {
-      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-      ObservationClipboardWriter.write(clipboard, clipboard_format_101_line);
-    }
-
-    IMMT_log();
-
-    Reset_all_meteo_parameters();
+    String clipboardFormat101Line = get_format_101_obs_from_file();
+    Clipboard clipboard =
+        clipboardFormat101Line.equals("") ? null : Toolkit.getDefaultToolkit().getSystemClipboard();
+    ObservationClipboardWorkflow.writeFormat101(clipboard, clipboardFormat101Line);
   }
 
   String compile_obs_for_AWS() {

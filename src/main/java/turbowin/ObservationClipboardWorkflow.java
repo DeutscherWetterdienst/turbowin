@@ -2,6 +2,7 @@ package turbowin;
 
 import static turbowin.main.*;
 
+import java.awt.datatransfer.Clipboard;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -10,6 +11,22 @@ import javax.swing.SwingWorker;
 final class ObservationClipboardWorkflow {
 
   private ObservationClipboardWorkflow() {}
+
+  static void writeFm13(Clipboard clipboard, String observation) {
+    ObservationClipboardWriter.write(clipboard, observation);
+    ImmtLogWorkflow.start();
+    ObservationStateResetter.resetValues();
+    ObservationScreenResetWorkflow.refresh();
+  }
+
+  static void writeFormat101(Clipboard clipboard, String observation) {
+    if (!observation.equals("")) {
+      ObservationClipboardWriter.write(clipboard, observation);
+    }
+    ImmtLogWorkflow.start();
+    ObservationStateResetter.resetValues();
+    ObservationScreenResetWorkflow.refresh();
+  }
 
   static void start(main owner) {
     // TODO add your handling code here:
