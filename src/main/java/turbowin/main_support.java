@@ -2032,17 +2032,13 @@ public class main_support {
     //
     ////////// icing <-> air temperature /////
     //
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (!myicing.Is_code.equals("")
-            || !myicing.EsEs_code.equals("")
-            || !myicing.Rs_code.equals(""))) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'Icing (Ice accretion)' is not possible",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
+    if (doorgaan
+        && !IcingAirTemperatureValidation.validate(
+            air_temp_conversion_ok,
+            float_air_temp,
+            !myicing.Is_code.equals("")
+                || !myicing.EsEs_code.equals("")
+                || !myicing.Rs_code.equals(""))) {
       level_2_ok = false;
       doorgaan = false;
     }
