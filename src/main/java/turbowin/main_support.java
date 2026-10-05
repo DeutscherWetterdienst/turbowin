@@ -1983,68 +1983,9 @@ public class main_support {
     //
     ////////// cloud cover <-> present weather /////
     //
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(sky_not_discernible_array).indexOf(int_ww_code) != -1)
-        && (mycloudcover.N.equals(mycloudcover.N_NOT_DETERMINED) == false
-            && mycloudcover.N.equals(mycloudcover.N_OBSCURED) == false)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'present weather' is 'fog with sky not discernable', 'total cloud cover' must be 'obscured' or 'not determined'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(sky_not_discernible_array).indexOf(int_ww_code) != -1)
-        && (mycl.cl_code.equals("") == false)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'present weather' is 'fog with sky not discernable', Cl must be 'not determined'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(sky_not_discernible_array).indexOf(int_ww_code) != -1)
-        && (mycm.cm_code.equals("") == false)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'present weather' is 'fog with sky not discernable', Cm must be 'not determined'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(sky_not_discernible_array).indexOf(int_ww_code) != -1)
-        && (mych.ch_code.equals("") == false)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'present weather' is 'fog with sky not discernable', Ch must be 'not determined'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && (mycloudcover.N.equals(mycloudcover.N_CLOUDLESS))
-        && ww_code_conversion_ok
-        && (Arrays.asList(drizzle_rain_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'present weather' is drizzle or rain, 'total cloud cover' cannot be 'cloudless'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
+    if (doorgaan
+        && !LevelTwoCloudValidation.validatePresentWeather(
+            ww_code_conversion_ok, int_ww_code, sky_not_discernible_array, drizzle_rain_array)) {
       level_2_ok = false;
       doorgaan = false;
     }
