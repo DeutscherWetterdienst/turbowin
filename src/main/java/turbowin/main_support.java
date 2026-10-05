@@ -1720,12 +1720,22 @@ public class main_support {
 
   private record FloatValidation(float value, boolean valid) {}
 
+  private record IntegerValidation(int value, boolean valid) {}
+
   private FloatValidation validateFloat(
       String value, String description, String validationFunction) {
     Float parsed =
         parseValidationFloat(
             value, "[GENERAL] " + description + "; Function: " + validationFunction + "()");
     return new FloatValidation(parsed == null ? main.INVALID : parsed, parsed != null);
+  }
+
+  private IntegerValidation validateInteger(
+      String value, String description, String validationFunction) {
+    Integer parsed =
+        parseValidationInt(
+            value, "[GENERAL] " + description + "; Function: " + validationFunction + "()");
+    return new IntegerValidation(parsed == null ? main.INVALID : parsed, parsed != null);
   }
 
   private WindWaveValidation validateWindWaves(
@@ -1844,17 +1854,10 @@ public class main_support {
       ch_code_conversion_ok = false;
     }
 
-    // string ww code conversion to int
-    Integer parsedPresentWeather =
-        parseValidationInt(
-            mypresentweather.ww_code,
-            "[GENERAL] ww conversion error; Function: checking_level_2()");
-    if (parsedPresentWeather != null) {
-      int_ww_code = parsedPresentWeather;
-      ww_code_conversion_ok = true;
-    } else {
-      ww_code_conversion_ok = false;
-    }
+    IntegerValidation presentWeatherValidation =
+        validateInteger(mypresentweather.ww_code, "ww conversion error", "checking_level_2");
+    int_ww_code = presentWeatherValidation.value();
+    ww_code_conversion_ok = presentWeatherValidation.valid();
 
     // string VV code conversion to int
     Integer parsedVisibility =
@@ -2503,17 +2506,10 @@ public class main_support {
       ice_thickness_conversion_ok = false;
     }
 
-    // string ww code conversion to int
-    Integer parsedPresentWeather =
-        parseValidationInt(
-            mypresentweather.ww_code,
-            "[GENERAL] ww conversion error; Function: checking_level_3()");
-    if (parsedPresentWeather != null) {
-      int_ww_code = parsedPresentWeather;
-      ww_code_conversion_ok = true;
-    } else {
-      ww_code_conversion_ok = false;
-    }
+    IntegerValidation presentWeatherValidation =
+        validateInteger(mypresentweather.ww_code, "ww conversion error", "checking_level_3");
+    int_ww_code = presentWeatherValidation.value();
+    ww_code_conversion_ok = presentWeatherValidation.valid();
 
     //
     ///////////////////////////// checks //////////////////////////
