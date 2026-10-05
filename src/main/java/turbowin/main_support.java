@@ -1061,60 +1061,7 @@ public class main_support {
             JOptionPane.WARNING_MESSAGE);
       }
       if ((result.equals("OK") == true)) {
-        // rename sourcefile to backup file (after it was copied)
-        File source_file = new File(main.volledig_path_srcFilename_immt);
-        File renamed_file = new File(main.volledig_path_backup_srcFilename_immt);
-
-        if (source_file.renameTo(renamed_file) == false) {
-          // rename failed: most of the time because a backup file of the same name already exist
-          // (2nd backup same day)
-          JOptionPane.showMessageDialog(
-              null,
-              "Backing up log file "
-                  + main.volledig_path_srcFilename_immt
-                  + " failed (2nd move/backup same day?)",
-              main.APPLICATION_NAME + " info",
-              JOptionPane.INFORMATION_MESSAGE);
-          source_file
-              .delete(); // because backup failed, immt.log still present to avoid confusing with
-          // log files, simply delete the immt.log
-        }
-
-        if (move_mode_logs.equals(main.MOVE_TO_EMAIL) == true) {
-          zip_log_files();
-        }
-
-        // Clearing all the observer data ? (the captain data is always cleared automatically after
-        // an upload/sending of the logs)
-        //
-        String info =
-            "Clearing all the data of the observers (surname, full initials/full christian name, rank, discharge book number)";
-        if (JOptionPane.showConfirmDialog(
-                null,
-                info,
-                main.APPLICATION_NAME + " message",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE)
-            == JOptionPane.YES_OPTION) {
-          String volledig_path_observer =
-              main.logs_dir + java.io.File.separator + main.OBSERVER_LOG;
-          try {
-            FileChannel.open(Paths.get(volledig_path_observer), StandardOpenOption.WRITE)
-                .truncate(0)
-                .close();
-            JOptionPane.showMessageDialog(
-                null,
-                "Successfully cleared all the data of the observers",
-                APPLICATION_NAME + " message",
-                JOptionPane.INFORMATION_MESSAGE);
-          } catch (IOException ex) {
-            JOptionPane.showMessageDialog(
-                null,
-                "Clearing all the data of the observers failed",
-                APPLICATION_NAME + " error",
-                JOptionPane.WARNING_MESSAGE);
-          }
-        }
+        handleImmtMoveSuccess(move_mode_logs);
       } // if (result_opgehaald.equals("OK") == true)
     } // if (doorgaan == true && move_mode_logs.equals(main.MOVE_TO_EMAIL) == true)
 
@@ -1158,7 +1105,9 @@ public class main_support {
     File renamed_file = new File(main.volledig_path_backup_srcFilename_immt);
 
     if (source_file.renameTo(renamed_file) == false) {
-      if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
+      // Backup failures are user-visible in both disk and email modes, preserving legacy behavior.
+      if (move_mode_logs.equals(main.MOVE_TO_DISK) == true
+          || move_mode_logs.equals(main.MOVE_TO_EMAIL) == true) {
         JOptionPane.showMessageDialog(
             null,
             "Backing up log file "
