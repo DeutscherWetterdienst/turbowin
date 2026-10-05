@@ -1968,117 +1968,14 @@ public class main_support {
     //
     ////////// cloud cover <-> cloud types /////
     //
-    if ((doorgaan == true)
-        && (mycloudcover.N.equals(mycloudcover.N_CLOUDLESS))
-        && mycl.cl_code.equals("0") == false) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if total cloud cover is 'cloudless', Cl must be 'no clouds Cl'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && (mycloudcover.N.equals(mycloudcover.N_CLOUDLESS))
-        && mycm.cm_code.equals("0") == false) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if total cloud cover is 'cloudless', Cm must be 'no clouds Cm'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && (mycloudcover.N.equals(mycloudcover.N_CLOUDLESS))
-        && mych.ch_code.equals("0") == false) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if total cloud cover is 'cloudless', Ch must be 'no clouds Ch'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && (mycl.cl_code.equals("0")
-            && mycm.cm_code.equals("0")
-            && mych.ch_code.equals("0")
-            && mycloudcover.N.equals(mycloudcover.N_CLOUDLESS) == false)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if Cl and Cm and Ch is 'no clouds', total cloud cover must be 'cloudless'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && (mycloudcover.Nh.equals(mycloudcover.NH_0_8) && mycl.cl_code.equals("0") == false)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'amount of Cl (or Cm if Cl not present)' is '0/8', Cl must be 'no clouds Cl'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && (mycloudcover.Nh.equals(mycloudcover.NH_0_8)
-            && mycl.cl_code.equals("0")
-            && mycm.cm_code.equals("0") == false)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'amount of Cl (or Cm if Cl not present)' is '0/8' and Cl is 'no clouds Cl', Cm must be 'no clouds Cm'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && mycl.cl_code.equals("0")
-        && mycm.cm_code.equals("0")
-        && mycloudcover.Nh.equals(mycloudcover.NH_0_8) == false) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if Cl and Cm is 'no clouds', amount of Cl (or Cm if Cl not present)' must be '0/8'  ",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && ch_code_conversion_ok
-        && (mycloudcover.Nh.equals(mycloudcover.NH_8_8))
-        && (int_ch_code >= 0 && int_ch_code <= 9)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'amount of Cl (or Cm if Cl not present)' is '8/8', Ch must be 'not determined'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && cl_code_conversion_ok
-        && cm_code_conversion_ok
-        && (mycloudcover.Nh.equals(mycloudcover.NH_8_8))
-        && (int_cl_code >= 1 && int_cl_code <= 9)
-        && (int_cm_code >= 0 && int_cm_code <= 9)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if 'amount of Cl (or Cm if Cl not present)' is '8/8' and Cl was determined (in range 1 - 9 or 'no clouds Cl'), Cm must be 'not determined'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
+    if (doorgaan
+        && !LevelTwoCloudValidation.validate(
+            cl_code_conversion_ok,
+            cm_code_conversion_ok,
+            ch_code_conversion_ok,
+            int_cl_code,
+            int_cm_code,
+            int_ch_code)) {
       level_2_ok = false;
       doorgaan = false;
     }
