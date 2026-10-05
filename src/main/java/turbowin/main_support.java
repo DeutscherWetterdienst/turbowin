@@ -1797,8 +1797,6 @@ public class main_support {
     Integer present_weather_70_75_array[] = {70, 71, 72, 73, 74, 75};
     Integer present_weather_76_79_array[] = {76, 77, 78, 79};
     Integer present_weather_83_86_array[] = {83, 84, 85, 86};
-    Integer cl_1_9_array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    Integer ch_1_9_array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     Integer fog_array[] = {42, 43, 44, 45, 46, 47, 48, 49};
     Integer visibility_95_99_array[] = {95, 96, 97, 98, 99};
     Integer visibility_90_93_array[] = {90, 91, 92, 93};
@@ -2038,106 +2036,19 @@ public class main_support {
     //
     ////////// present weather <-> air temperature /////
     //
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_36_39_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'drifting snow' or 'blowing snow'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_48_49_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'depositing rime'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_56_57_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'freezing drizzle'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_66_67_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'freezing rain'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_68_69_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'snow'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_70_75_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'snow flakes'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_76_79_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'snow grains/crystals' or 'ice prisms/pellets'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 20.0 && float_air_temp < 99.9)
-        && (Arrays.asList(present_weather_83_86_array).indexOf(int_ww_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 20.0 \u00B0C then 'present weather' can not indicate 'snow shower(s)'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
+    if (doorgaan
+        && !PresentWeatherTemperatureValidation.validate(
+            air_temp_conversion_ok,
+            float_air_temp,
+            int_ww_code,
+            present_weather_36_39_array,
+            present_weather_48_49_array,
+            present_weather_56_57_array,
+            present_weather_66_67_array,
+            present_weather_68_69_array,
+            present_weather_70_75_array,
+            present_weather_76_79_array,
+            present_weather_83_86_array)) {
       level_2_ok = false;
       doorgaan = false;
     }
