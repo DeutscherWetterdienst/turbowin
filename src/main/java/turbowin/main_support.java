@@ -14,7 +14,6 @@ import static turbowin.main.station_ID;
 import static turbowin.main.support_class;
 import static turbowin.main.temp_logs_dir;
 
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -27,8 +26,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
@@ -39,7 +36,6 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.SimpleTimeZone;
-import java.util.concurrent.ExecutionException;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -49,7 +45,6 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 public class main_support {
@@ -170,121 +165,7 @@ public class main_support {
   }
 
   public void open_browser_on_linux(final String subject_address) {
-    // LINUX: first try runtime procedure
-    //        second try Desktop procedure
-    //
-    // why?: on Fedora strange results if first Desktop method was invoked, then the browser only
-    // opens as soon as TurboWin+ itself is closed....
-    //       (so no error on Desktop procedure/method but strange behavior)
-    //       In several correspondance items you can find that the Desktop method is not workig fine
-    // on Linux
-    //
-    // related to: hardware accelarator of the webbrowser?
-    // (https://stackoverflow.com/questions/69037458/selenium-chromedriver-gives-initializesandbox-called-with-multiple-threads-in)
-    //         because the following errors in output window NetBeans IDE when trying to open URL
-    //         libva error: vaGetDriverNameByIndex() failed with unknown libva error, driver_name =
-    // (null)
-    //         [5757:5757:1122/165659.328325:ERROR:sandbox_linux.cc(376)] InitializeSandbox() called
-    // with multiple threads in process gpu-process.
-    //
-
-    new SwingWorker<Integer, Void>() {
-      @Override
-      protected Integer doInBackground() throws Exception {
-        int code = 0;
-
-        URI uri = null;
-        try {
-          // create cmd array
-          String[] cmdArray = {"kde-open", subject_address};
-
-          // create a process and execute cmdArray
-          Process process = Runtime.getRuntime().exec(cmdArray);
-        } catch (IOException e) {
-          // Linux (RaspBerry) [14-11-2014: tested on stand-alone RaspBerry succesfully]
-          try {
-            // create cmd array
-            String[] cmdArray = {"xdg-open", subject_address};
-
-            // create a process and execute cmdArray
-            Process process = Runtime.getRuntime().exec(cmdArray);
-          } catch (IOException e2) {
-            // Mac
-            try {
-              // create cmd array
-              String[] cmdArray = {"open", subject_address};
-
-              // create a process and execute cmdArray
-              Process process = Runtime.getRuntime().exec(cmdArray);
-            } catch (IOException e3) {
-              // JOptionPane.showMessageDialog(null, "Error invoking default web browser
-              // (-Desktop-method not supported on this computer system and Runtime alternatives
-              // failed)" , main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-              code = -1;
-            } // catch
-          } // catch
-        } // catch
-
-        if (code == -1) {
-          Desktop desktop = null;
-          if (Desktop.isDesktopSupported()) {
-            // JOptionPane.showMessageDialog(null, "Desktop.isDesktopSupported() = OK",
-            // main.APPLICATION_NAME + " test", JOptionPane.ERROR_MESSAGE);
-
-            desktop = Desktop.getDesktop();
-            uri = null;
-            try {
-              if (!(subject_address.contains("http") || subject_address.contains("HTTP"))) {
-                desktop.open(new File(subject_address));
-              } else {
-                // e.g.
-                // https://download.dwd.de/pub/turbowin/archive/knmi/help_files/barometer.pdf
-                // String http_adres = main.URL_INTERNET_HELP + help_page; //
-                // help_dir was set in java input page file e.g. mycm.java; ch1_image_mouseClicked()
-
-                // so must be an internet address (http)
-                uri = new URI(subject_address);
-                desktop.browse(uri);
-              }
-            } // try
-            catch (IOException | URISyntaxException ioe) {
-              code = -3;
-            }
-          } // if (Desktop.isDesktopSupported())
-          else {
-            code = -2;
-          }
-        } // if (code == -1)
-
-        return code;
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        try {
-          Integer response_code = get();
-
-          if (response_code == -2) {
-            String message = "[GENERAL] Error invoking default web browser or pdf reader";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          } else if (response_code == -3) {
-            String message =
-                "[GENERAL] Error invoking default web browser or pdf-reader (IOException or URISyntaxException)";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          }
-        } // try
-        catch (InterruptedException | ExecutionException ex) {
-          String message =
-              "[GENERAL] Error invoking default web browser or pdf reader; " + ex.toString();
-          main.log_turbowin_system_message(message);
-          // main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
-        } // catch
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+    BrowserOpenWorkflow.startLinux(subject_address);
   }
 
   public void response_warning_pop_up() {
