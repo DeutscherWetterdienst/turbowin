@@ -2334,24 +2334,11 @@ public class main_support {
 
     // thickness ice accretion (EsEs)
     //
-    if ((doorgaan == true) && ice_thickness_conversion_ok && (float_ice_thickness > 20.0)) {
-      String info =
-          "Ice thickness > 20.0 centimetres?\n Press the NO button if it was a typing error, press the YES button if this ice thickness is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !IceThicknessConfirmationValidation.validate(
+            ice_thickness_conversion_ok, float_ice_thickness)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // present weather <-> icing
