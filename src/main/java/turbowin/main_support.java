@@ -1797,9 +1797,6 @@ public class main_support {
     Integer present_weather_70_75_array[] = {70, 71, 72, 73, 74, 75};
     Integer present_weather_76_79_array[] = {76, 77, 78, 79};
     Integer present_weather_83_86_array[] = {83, 84, 85, 86};
-    Integer fog_array[] = {42, 43, 44, 45, 46, 47, 48, 49};
-    Integer visibility_95_99_array[] = {95, 96, 97, 98, 99};
-    Integer visibility_90_93_array[] = {90, 91, 92, 93};
 
     //
     ///////////////////////////// conversions //////////////////////////
@@ -2001,34 +1998,13 @@ public class main_support {
     //
     ////////// visibilty <-> present weather /////
     //
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(fog_array).indexOf(int_ww_code) != -1)
-        && VV_code_conversion_ok
-        && (Arrays.asList(visibility_95_99_array).indexOf(int_VV_code) != -1)) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if present weather = 'fog', visibility cannot be > 0.5 nm (an exception is made for 'fog banks', 'fog in patches' and 'shallow fog')",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (int_ww_code == 40)
-        && VV_code_conversion_ok
-        && (Arrays.asList(visibility_90_93_array).indexOf(int_VV_code) != -1)) {
-      String info =
-          "if present weather = "
-              + "\""
-              + mypresentweather.ww_40
-              + "\""
-              + ", reported visibility cannot be < 0.5 nm"; // to put "\"" diect in
-      // JOptionPane.showMessageDialog not
-      // allowed
-      JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
+    if (doorgaan
+        && !VisibilityPresentWeatherValidation.validate(
+            ww_code_conversion_ok,
+            int_ww_code,
+            VV_code_conversion_ok,
+            int_VV_code,
+            mypresentweather.ww_40)) {
       level_2_ok = false;
       doorgaan = false;
     }
