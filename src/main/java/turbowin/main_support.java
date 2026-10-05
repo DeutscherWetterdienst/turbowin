@@ -2046,19 +2046,15 @@ public class main_support {
     //
     ////////// ice <-> air temperature /////
     //
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 25.0 && float_air_temp < 99.9)
-        && (!myice1.ci_code.equals("")
-            || !myice1.Si_code.equals("")
-            || !myice1.bi_code.equals("")
-            || !myice1.Di_code.equals("")
-            || !myice1.zi_code.equals(""))) {
-      JOptionPane.showMessageDialog(
-          null,
-          "If 'air temperature' > 25.0 \u00B0C then 'Ice' is not possible",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
+    if (doorgaan
+        && !IceAirTemperatureValidation.validate(
+            air_temp_conversion_ok,
+            float_air_temp,
+            !myice1.ci_code.equals("")
+                || !myice1.Si_code.equals("")
+                || !myice1.bi_code.equals("")
+                || !myice1.Di_code.equals("")
+                || !myice1.zi_code.equals(""))) {
       level_2_ok = false;
       doorgaan = false;
     }
