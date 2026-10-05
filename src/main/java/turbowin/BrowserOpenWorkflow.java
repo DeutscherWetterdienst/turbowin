@@ -80,4 +80,69 @@ final class BrowserOpenWorkflow {
       }
     }.execute();
   }
+
+  static void startLinux(String subjectAddress) {
+    // Try runtime commands before Desktop: Fedora may delay the browser until TurboWin closes,
+    // and Desktop browser launches can be affected by hardware-accelerator failures.
+    new SwingWorker<Integer, Void>() {
+      @Override
+      protected Integer doInBackground() throws Exception {
+        int code = 0;
+
+        try {
+          Runtime.getRuntime().exec(new String[] {"kde-open", subjectAddress});
+        } catch (IOException ex) {
+          try {
+            Runtime.getRuntime().exec(new String[] {"xdg-open", subjectAddress});
+          } catch (IOException ex2) {
+            try {
+              Runtime.getRuntime().exec(new String[] {"open", subjectAddress});
+            } catch (IOException ex3) {
+              code = -1;
+            }
+          }
+        }
+
+        if (code == -1) {
+          if (Desktop.isDesktopSupported()) {
+            try {
+              if (!isWebAddress(subjectAddress)) {
+                Desktop.getDesktop().open(new File(subjectAddress));
+              } else {
+                Desktop.getDesktop().browse(new URI(subjectAddress));
+              }
+            } catch (IOException | URISyntaxException ex) {
+              code = -3;
+            }
+          } else {
+            code = -2;
+          }
+        }
+
+        return code;
+      }
+
+      @Override
+      protected void done() {
+        try {
+          Integer responseCode = get();
+          if (responseCode == -2) {
+            showError("[GENERAL] Error invoking default web browser or pdf reader");
+          } else if (responseCode == -3) {
+            showError(
+                "[GENERAL] Error invoking default web browser or pdf-reader (IOException or URISyntaxException)");
+          }
+        } catch (InterruptedException | ExecutionException ex) {
+          main.log_turbowin_system_message(
+              "[GENERAL] Error invoking default web browser or pdf reader; " + ex);
+        }
+      }
+    }.execute();
+  }
+
+  private static void showError(String message) {
+    JOptionPane.showMessageDialog(
+        null, message, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
+    main.log_turbowin_system_message(message);
+  }
 }
