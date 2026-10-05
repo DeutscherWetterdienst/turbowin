@@ -1715,6 +1715,35 @@ public class main_support {
     return null;
   }
 
+  private record WindWaveValidation(
+      float period, float height, boolean periodValid, boolean heightValid) {}
+
+  private WindWaveValidation validateWindWaves(
+      String validationFunction, boolean preserveEmptyHeightFlag) {
+    Float parsedPeriod =
+        parseValidationFloat(
+            mywaves.wind_waves_period,
+            "[GENERAL] wind waves period conversion error; Function: " + validationFunction + "()");
+    Float parsedHeight =
+        parseValidationFloat(
+            mywaves.wind_waves_height,
+            "[GENERAL] wind waves height conversion error; Function: " + validationFunction + "()");
+
+    boolean periodValid = parsedPeriod != null;
+    boolean heightValid = parsedHeight != null;
+    if (preserveEmptyHeightFlag && mywaves.wind_waves_height.equals("")) {
+      // Preserve the legacy level-3 flag assignment for an empty height.
+      periodValid = false;
+      heightValid = true;
+    }
+
+    return new WindWaveValidation(
+        parsedPeriod == null ? main.INVALID : parsedPeriod,
+        parsedHeight == null ? main.INVALID : parsedHeight,
+        periodValid,
+        heightValid);
+  }
+
   public boolean checking_level_2() {
     boolean doorgaan = true;
     boolean level_2_ok = true;
@@ -1758,29 +1787,11 @@ public class main_support {
     ///////////////////////////// conversions //////////////////////////
     //
 
-    // wind_waves_period conversion
-    Float parsedWindWavesPeriod =
-        parseValidationFloat(
-            mywaves.wind_waves_period,
-            "[GENERAL] wind waves period conversion error; Function: checking_level_2()");
-    if (parsedWindWavesPeriod != null) {
-      float_wind_waves_period = parsedWindWavesPeriod;
-      wind_waves_period_conversion_ok = true;
-    } else {
-      wind_waves_period_conversion_ok = false;
-    }
-
-    // wind_waves_height conversion
-    Float parsedWindWavesHeight =
-        parseValidationFloat(
-            mywaves.wind_waves_height,
-            "[GENERAL] wind waves height conversion error; Function: checking_level_2()");
-    if (parsedWindWavesHeight != null) {
-      float_wind_waves_height = parsedWindWavesHeight;
-      wind_waves_height_conversion_ok = true;
-    } else {
-      wind_waves_height_conversion_ok = false;
-    }
+    WindWaveValidation windWaveValidation = validateWindWaves("checking_level_2", false);
+    float_wind_waves_period = windWaveValidation.period();
+    float_wind_waves_height = windWaveValidation.height();
+    wind_waves_period_conversion_ok = windWaveValidation.periodValid();
+    wind_waves_height_conversion_ok = windWaveValidation.heightValid();
 
     // pressure amount tendency conversion
     Float parsedPressureAmountTendency =
@@ -2390,32 +2401,11 @@ public class main_support {
     ///////////////////////////// conversions //////////////////////////
     //
 
-    // wind_waves_period conversion
-    Float parsedWindWavesPeriod =
-        parseValidationFloat(
-            mywaves.wind_waves_period,
-            "[GENERAL] wind waves period conversion error; Function: checking_level_3()");
-    if (parsedWindWavesPeriod != null) {
-      float_wind_waves_period = parsedWindWavesPeriod;
-      wind_waves_period_conversion_ok = true;
-    } else {
-      wind_waves_period_conversion_ok = false;
-    }
-
-    // wind_waves_height conversion
-    Float parsedWindWavesHeight =
-        parseValidationFloat(
-            mywaves.wind_waves_height,
-            "[GENERAL] wind waves height conversion error; Function: checking_level_3()");
-    if (parsedWindWavesHeight != null) {
-      float_wind_waves_height = parsedWindWavesHeight;
-      wind_waves_height_conversion_ok = true;
-    } else if (mywaves.wind_waves_height.equals("")) {
-      // Preserve the legacy level-3 flag assignment for an empty height.
-      wind_waves_period_conversion_ok = false;
-    } else {
-      wind_waves_height_conversion_ok = false;
-    }
+    WindWaveValidation windWaveValidation = validateWindWaves("checking_level_3", true);
+    float_wind_waves_period = windWaveValidation.period();
+    float_wind_waves_height = windWaveValidation.height();
+    wind_waves_period_conversion_ok = windWaveValidation.periodValid();
+    wind_waves_height_conversion_ok = windWaveValidation.heightValid();
 
     // first swell system period conversion
     Float parsedFirstSwellPeriod =
