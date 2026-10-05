@@ -2283,29 +2283,15 @@ public class main_support {
 
     // icing <-> air temperature
     //
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 4.0 && float_air_temp < 99.9)
-        && (!myicing.Is_code.equals("")
-            || !myicing.EsEs_code.equals("")
-            || !myicing.Rs_code.equals(""))) {
-      String info =
-          "Air temperature > 4.0 \u00B0C and Icing (Ice accretion)\n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !IcingAirTemperatureValidation.confirmLevelThree(
+            air_temp_conversion_ok,
+            float_air_temp,
+            !myicing.Is_code.equals("")
+                || !myicing.EsEs_code.equals("")
+                || !myicing.Rs_code.equals(""))) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // air pressure (MSL)
