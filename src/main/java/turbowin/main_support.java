@@ -2296,27 +2296,11 @@ public class main_support {
 
     // air pressure (MSL)
     //
-    if ((doorgaan == true)
-        && air_pressure_conversion_ok
-        && !(float_air_pressure_msl_corrected >= 910.0
-            && float_air_pressure_msl_corrected <= 1050.0)) {
-      String info =
-          "Air pressure (MSL) < 950.0 hPa or > 1050.0 hPa\n Press the NO button if it was a typing error, press the YES button if this air pressure (MSL) is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !AirPressureConfirmationValidation.validate(
+            air_pressure_conversion_ok, float_air_pressure_msl_corrected)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // amount pressure tendency
