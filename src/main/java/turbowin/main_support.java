@@ -2263,100 +2263,14 @@ public class main_support {
 
     // wind speed <--> wand waves height
     //
-    if ((doorgaan == true)
-        && (main.wind_units.trim().indexOf(main.M_S) != -1)
-        && (mywind.int_true_wind_speed > 5 && mywind.int_true_wind_speed < 500.0)
-        && (wind_waves_height_conversion_ok && float_wind_waves_height <= 0.01)) {
-      // wind [m/s]
-      String info =
-          "Wind speed > 5 m/s (> 10 kts) and wind waves height 0 metres \n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
-    }
-
-    if ((doorgaan == true)
-        && (main.wind_units.trim().indexOf(main.KNOTS) != -1)
-        && (mywind.int_true_wind_speed > 10 && mywind.int_true_wind_speed < 500.0)
-        && (wind_waves_height_conversion_ok && float_wind_waves_height <= 0.01)) {
-      // wind [knots]
-      String info =
-          "Wind speed > 10 kts and wind waves height 0 metres \n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
-    }
-
-    if ((doorgaan == true)
-        && (main.wind_units.trim().indexOf(main.M_S) != -1)
-        && (mywind.int_true_wind_speed > 21 && mywind.int_true_wind_speed < 500.0)
-        && (wind_waves_height_conversion_ok && float_wind_waves_height < 2.3)) {
-      // wind [m/s]
-      String info =
-          "Wind speed > 21 m/s (> 41 kts) and wind waves height < 2.3 metres \n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
-    }
-
-    if ((doorgaan == true)
-        && (main.wind_units.trim().indexOf(main.KNOTS) != -1)
-        && (mywind.int_true_wind_speed > 41 && mywind.int_true_wind_speed < 500.0)
-        && (wind_waves_height_conversion_ok && float_wind_waves_height < 2.3)) {
-      // wind [knots]
-      String info =
-          "Wind speed > 41 kts and wind waves height < 2.3 metres \n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !WindWaveConsistencyValidation.validate(
+            main.wind_units,
+            mywind.int_true_wind_speed,
+            wind_waves_height_conversion_ok,
+            float_wind_waves_height)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // air temp
