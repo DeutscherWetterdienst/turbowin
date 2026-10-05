@@ -1,5 +1,6 @@
 package turbowin;
 
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /** Validates the level-two relationships between cloud amounts and cloud types. */
@@ -69,6 +70,50 @@ final class LevelTwoCloudValidation {
         && middleCloud <= 9) {
       return warning(
           "if 'amount of Cl (or Cm if Cl not present)' is '8/8' and Cl was determined (in range 1 - 9 or 'no clouds Cl'), Cm must be 'not determined'");
+    }
+
+    return true;
+  }
+
+  static boolean validatePresentWeather(
+      boolean weatherCodeValid,
+      int weatherCode,
+      Integer[] skyNotDiscernible,
+      Integer[] drizzleRain) {
+    if (weatherCodeValid
+        && Arrays.asList(skyNotDiscernible).contains(weatherCode)
+        && !mycloudcover.N.equals(mycloudcover.N_NOT_DETERMINED)
+        && !mycloudcover.N.equals(mycloudcover.N_OBSCURED)) {
+      return warning(
+          "if 'present weather' is 'fog with sky not discernable', 'total cloud cover' must be 'obscured' or 'not determined'");
+    }
+
+    if (weatherCodeValid
+        && Arrays.asList(skyNotDiscernible).contains(weatherCode)
+        && !mycl.cl_code.equals("")) {
+      return warning(
+          "if 'present weather' is 'fog with sky not discernable', Cl must be 'not determined'");
+    }
+
+    if (weatherCodeValid
+        && Arrays.asList(skyNotDiscernible).contains(weatherCode)
+        && !mycm.cm_code.equals("")) {
+      return warning(
+          "if 'present weather' is 'fog with sky not discernable', Cm must be 'not determined'");
+    }
+
+    if (weatherCodeValid
+        && Arrays.asList(skyNotDiscernible).contains(weatherCode)
+        && !mych.ch_code.equals("")) {
+      return warning(
+          "if 'present weather' is 'fog with sky not discernable', Ch must be 'not determined'");
+    }
+
+    if (mycloudcover.N.equals(mycloudcover.N_CLOUDLESS)
+        && weatherCodeValid
+        && Arrays.asList(drizzleRain).contains(weatherCode)) {
+      return warning(
+          "if 'present weather' is drizzle or rain, 'total cloud cover' cannot be 'cloudless'");
     }
 
     return true;
