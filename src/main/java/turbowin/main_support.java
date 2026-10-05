@@ -957,33 +957,7 @@ public class main_support {
             JOptionPane.WARNING_MESSAGE);
       }
       if (result.equals("OK") == true) {
-        // rename sourcefile to backup file (after it was copied, see doInBackground())
-        File source_file = new File(main.volledig_path_srcFilename_captain);
-        File renamed_file = new File(main.volledig_path_backup_srcFilename_captain);
-
-        if (source_file.renameTo(renamed_file) == false) {
-          // failed: most of the time because backup file of the same name already exist (2nd backup
-          // same day)
-
-          if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
-            // LET OP
-            // deze melding NIET geven als de files gezipped worden er daarna per email moeten
-            // worden verstuurd
-            // want dan wordt met deze melding de aanmaak van het zip bestand opgehouden, maar het
-            // email programma
-            // met een verwijzing naar dit zip bestand is echter al wel geopend !!
-            JOptionPane.showMessageDialog(
-                null,
-                "Backing up log file "
-                    + main.volledig_path_srcFilename_captain
-                    + " failed (2nd move/backup same day?)",
-                main.APPLICATION_NAME + " info",
-                JOptionPane.INFORMATION_MESSAGE);
-          }
-          source_file
-              .delete(); // because backup failed, immt.log still present to avoid confusing with
-          // log files, simply delete the immt.log
-        }
+        handleCaptainMoveSuccess(move_mode_logs);
       } // if (result_opgehaald.equals("OK") == true)
     } // if (doorgaan == true && doorgaan_captain == true &&
     // move_mode_logs.equals(main.MOVE_TO_EMAIL) == true)
