@@ -1151,64 +1151,10 @@ public class main_support {
     if (doorgaan == true
         && doorgaan_captain == true
         && move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
-      /* copy captain source file to destination captain file */
-      new SwingWorker<String, Void>() {
-        @Override
-        protected String doInBackground() throws Exception {
-          return LogFileCopyWorkflow.copy(
-              main.volledig_path_srcFilename_captain, main.volledig_path_dstFilename_captain);
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void done() {
-          String result_opgehaald = null;
-
-          try {
-            result_opgehaald = get();
-          } catch (InterruptedException | ExecutionException ex) {
-          }
-
-          if ((result_opgehaald != null) && result_opgehaald.equals("NOT_OK") == true) {
-            JOptionPane.showMessageDialog(
-                null,
-                "Unable to move "
-                    + main.volledig_path_srcFilename_captain
-                    + " to "
-                    + main.volledig_path_dstFilename_captain,
-                main.APPLICATION_NAME + " error",
-                JOptionPane.WARNING_MESSAGE);
-          }
-          if ((result_opgehaald != null) && (result_opgehaald.equals("OK") == true)) {
-            // rename sourcefile to backup file (after it was copied, see doInBackground())
-            File source_file = new File(main.volledig_path_srcFilename_captain);
-            File renamed_file = new File(main.volledig_path_backup_srcFilename_captain);
-
-            if (source_file.renameTo(renamed_file) == false) {
-              // failed: most of the time because backup file of the same name already exist (2nd
-              // backup same day)
-
-              if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
-                // LET OP
-                // deze melding NIET geven als de files gezipped worden er daarna per email moeten
-                // worden verstuurd
-                // want dan wordt met deze melding de aanmaak van het zip bestand opgehouden, maar
-                // het email programma
-                // met een verwijzing naar dit zip bestand is echter al wel geopend !!
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Backing up log file "
-                        + main.volledig_path_srcFilename_captain
-                        + " failed (2nd move/backup same day?)",
-                    main.APPLICATION_NAME + " info",
-                    JOptionPane.INFORMATION_MESSAGE);
-              }
-              source_file
-                  .delete(); // because backup failed, immt.log still present to avoid confusing
-              // with log files, simply delete the immt.log
-            }
-          } // if (result_opgehaald.equals("OK") == true)
-        } // protected void done()
-      }.execute(); // new SwingWorker<Void, Void>()
+      CaptainLogMoveWorkflow.start(
+          main.volledig_path_srcFilename_captain,
+          main.volledig_path_dstFilename_captain,
+          () -> handleCaptainMoveSuccess(move_mode_logs));
     } // if (doorgaan == true && doorgaan_captain == true &&
     // move_mode_logs.equals(main.MOVE_TO_DISK) == true)
 
@@ -1422,6 +1368,27 @@ public class main_support {
     } // if (doorgaan == true && move_mode_logs.equals(main.MOVE_TO_EMAIL) == true)
 
     return doorgaan;
+  }
+
+  private void handleCaptainMoveSuccess(final String move_mode_logs) {
+    File source_file = new File(main.volledig_path_srcFilename_captain);
+    File renamed_file = new File(main.volledig_path_backup_srcFilename_captain);
+
+    // Rename the source only after the copy has completed successfully.
+    if (source_file.renameTo(renamed_file) == false) {
+      // A same-day backup may already exist, causing the rename to fail.
+      if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Backing up log file "
+                + main.volledig_path_srcFilename_captain
+                + " failed (2nd move/backup same day?)",
+            main.APPLICATION_NAME + " info",
+            JOptionPane.INFORMATION_MESSAGE);
+      }
+      // Delete the source so it cannot be mistaken for the active captain log after backup fails.
+      source_file.delete();
+    }
   }
 
   private void handleImmtMoveSuccess(final String move_mode_logs) {
