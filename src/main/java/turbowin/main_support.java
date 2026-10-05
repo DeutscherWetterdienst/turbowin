@@ -2275,48 +2275,10 @@ public class main_support {
 
     // air temp
     //
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp > 50.0 && float_air_temp < 99.9)) {
-      String info =
-          "Air temperature > 50.0 \u00B0C \n Press the NO button if it was a typing error, press the YES button if this air temp is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
-    }
-
-    if ((doorgaan == true)
-        && air_temp_conversion_ok
-        && (float_air_temp < -20.0 && float_air_temp > -99.9)) {
-      String info =
-          "Air temperature < -20.0 \u00B0C \n Press the NO button if it was a typing error, press the YES button if this air temp is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !AirTemperatureConfirmationValidation.validate(air_temp_conversion_ok, float_air_temp)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // icing <-> air temperature
