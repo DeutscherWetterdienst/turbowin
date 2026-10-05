@@ -2205,24 +2205,9 @@ public class main_support {
 
     // speed ship
     //
-    if ((doorgaan == true) && (myposition.vs_code.equals("8") || myposition.vs_code.equals("9"))) {
-      String info =
-          "Ship's speed > 35 knots \n Press the NO button if it was a typing error, press the YES button if this average speed is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan && !ShipSpeedConfirmationValidation.validate(myposition.vs_code)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // wind speed
