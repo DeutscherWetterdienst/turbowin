@@ -1993,33 +1993,9 @@ public class main_support {
     //
     ////////// cloud type <-> cloud height /////
     //
-    if ((doorgaan == true)
-        && cl_code_conversion_ok
-        && (Arrays.asList(cl_1_9_array).indexOf(int_cl_code) != -1)
-        && (mycloudcover.h.equals(mycloudcover.H_GROTER_2500)
-            || mycloudcover.h.equals(mycloudcover.H_CLOUDLESS))) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if type Cl cloud is observed, 'height of base of lowest cloud' cannot be '>=2500m (8000 ft)' and not 'cloudless'",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      level_2_ok = false;
-      doorgaan = false;
-    }
-
-    if ((doorgaan == true)
-        && ch_code_conversion_ok
-        && mycl.cl_code.equals("0")
-        && mycm.cm_code.equals("0")
-        && (Arrays.asList(ch_1_9_array).indexOf(int_ch_code) != -1)
-        && (mycloudcover.h.equals(mycloudcover.H_0_50)
-            || mycloudcover.h.equals(mycloudcover.H_50_100)
-            || mycloudcover.h.equals(mycloudcover.H_100_200))) {
-      JOptionPane.showMessageDialog(
-          null,
-          "if Cl = 'no clouds Cl' and Cm = 'no clouds Cm' and Ch in range 1 - 9, 'height of base of lowest cloud in the sky' cannot be < 200 m (< 600 ft)",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
+    if (doorgaan
+        && !LevelTwoCloudValidation.validateCloudHeights(
+            cl_code_conversion_ok, ch_code_conversion_ok, int_cl_code, int_ch_code)) {
       level_2_ok = false;
       doorgaan = false;
     }

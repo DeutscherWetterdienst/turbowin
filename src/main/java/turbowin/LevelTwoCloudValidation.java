@@ -6,6 +6,9 @@ import javax.swing.JOptionPane;
 /** Validates the level-two relationships between cloud amounts and cloud types. */
 final class LevelTwoCloudValidation {
 
+  // Determined Cl and Ch cloud types use codes 1 through 9.
+  private static final Integer[] DETERMINED_CLOUD_TYPES = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
   private LevelTwoCloudValidation() {}
 
   static boolean validate(
@@ -114,6 +117,30 @@ final class LevelTwoCloudValidation {
         && Arrays.asList(drizzleRain).contains(weatherCode)) {
       return warning(
           "if 'present weather' is drizzle or rain, 'total cloud cover' cannot be 'cloudless'");
+    }
+
+    return true;
+  }
+
+  static boolean validateCloudHeights(
+      boolean lowCloudValid, boolean highCloudValid, int lowCloud, int highCloud) {
+    if (lowCloudValid
+        && Arrays.asList(DETERMINED_CLOUD_TYPES).contains(lowCloud)
+        && (mycloudcover.h.equals(mycloudcover.H_GROTER_2500)
+            || mycloudcover.h.equals(mycloudcover.H_CLOUDLESS))) {
+      return warning(
+          "if type Cl cloud is observed, 'height of base of lowest cloud' cannot be '>=2500m (8000 ft)' and not 'cloudless'");
+    }
+
+    if (highCloudValid
+        && mycl.cl_code.equals("0")
+        && mycm.cm_code.equals("0")
+        && Arrays.asList(DETERMINED_CLOUD_TYPES).contains(highCloud)
+        && (mycloudcover.h.equals(mycloudcover.H_0_50)
+            || mycloudcover.h.equals(mycloudcover.H_50_100)
+            || mycloudcover.h.equals(mycloudcover.H_100_200))) {
+      return warning(
+          "if Cl = 'no clouds Cl' and Cm = 'no clouds Cm' and Ch in range 1 - 9, 'height of base of lowest cloud in the sky' cannot be < 200 m (< 600 ft)");
     }
 
     return true;
