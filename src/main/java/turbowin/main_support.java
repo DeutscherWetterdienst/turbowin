@@ -1803,17 +1803,13 @@ public class main_support {
     wind_waves_period_conversion_ok = windWaveValidation.periodValid();
     wind_waves_height_conversion_ok = windWaveValidation.heightValid();
 
-    // pressure amount tendency conversion
-    Float parsedPressureAmountTendency =
-        parseValidationFloat(
+    FloatValidation pressureTendencyValidation =
+        validateFloat(
             mybarograph.pressure_amount_tendency,
-            "[GENERAL] pressure amount tendency conversion error; Function: checking_level_2()");
-    if (parsedPressureAmountTendency != null) {
-      float_pressure_amount_tendency = parsedPressureAmountTendency;
-      pressure_amount_tendency_conversion_ok = true;
-    } else {
-      pressure_amount_tendency_conversion_ok = false;
-    }
+            "pressure amount tendency conversion error",
+            "checking_level_2");
+    float_pressure_amount_tendency = pressureTendencyValidation.value();
+    pressure_amount_tendency_conversion_ok = pressureTendencyValidation.valid();
 
     // string Cl code conversion to int
     Integer parsedLowCloudType =
@@ -2476,17 +2472,13 @@ public class main_support {
       air_pressure_conversion_ok = false;
     }
 
-    // string amount pressure tendency to float
-    Float parsedAmountPressureTendency =
-        parseValidationFloat(
+    FloatValidation pressureTendencyValidation =
+        validateFloat(
             mybarograph.pressure_amount_tendency,
-            "[GENERAL] amount air pressure tendency conversion error; Function: checking_level_3()");
-    if (parsedAmountPressureTendency != null) {
-      float_amount_pressure_tendency = parsedAmountPressureTendency;
-      amount_pressure_tendency_conversion_ok = true;
-    } else {
-      amount_pressure_tendency_conversion_ok = false;
-    }
+            "amount air pressure tendency conversion error",
+            "checking_level_3");
+    float_amount_pressure_tendency = pressureTendencyValidation.value();
+    amount_pressure_tendency_conversion_ok = pressureTendencyValidation.valid();
 
     // string SST to float
     Float parsedSeaWaterTemperature =
