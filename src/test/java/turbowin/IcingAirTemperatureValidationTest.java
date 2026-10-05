@@ -25,4 +25,19 @@ public class IcingAirTemperatureValidationTest {
   public void acceptsAnEmptyIcingObservationAtHighTemperature() {
     assertTrue(IcingAirTemperatureValidation.validate(true, 20.1f, false));
   }
+
+  @Test
+  public void acceptsLevelThreeIcingAtTheFourDegreeBoundary() {
+    assertTrue(IcingAirTemperatureValidation.confirmLevelThree(true, 4.0f, true));
+  }
+
+  @Test
+  public void acceptsLevelThreeIcingWhenTemperatureConversionFails() {
+    assertTrue(IcingAirTemperatureValidation.confirmLevelThree(false, 4.1f, true));
+  }
+
+  @Test
+  public void acceptsLevelThreeIcingWhenNoIcingWasReported() {
+    assertTrue(IcingAirTemperatureValidation.confirmLevelThree(true, 4.1f, false));
+  }
 }
