@@ -31,7 +31,6 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -2089,10 +2088,6 @@ public class main_support {
     float float_sea_water_temp = main.INVALID;
     float float_ice_thickness = main.INVALID;
     int int_ww_code = main.INVALID;
-    Integer present_weather_48_49_array[] = {48, 49};
-    Integer present_weather_56_57_array[] = {56, 57};
-    Integer present_weather_66_67_array[] = {66, 67};
-
     //
     ///////////////////////////// conversions //////////////////////////
     //
@@ -2713,79 +2708,15 @@ public class main_support {
 
     // present weather <-> icing
     //
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(present_weather_48_49_array).indexOf(int_ww_code) != -1)
-        && (myicing.Is_code.equals("")
-            && myicing.EsEs_code.equals("")
-            && myicing.Rs_code.equals(""))) {
-      String info =
-          "Fog, depositing rime (present weather) and no ICING?\n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
-    }
-
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(present_weather_56_57_array).indexOf(int_ww_code) != -1)
-        && (myicing.Is_code.equals("")
-            && myicing.EsEs_code.equals("")
-            && myicing.Rs_code.equals(""))) {
-      String info =
-          "Freezing drizzle (present weather) and no ICING?\n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
-    }
-
-    if ((doorgaan == true)
-        && ww_code_conversion_ok
-        && (Arrays.asList(present_weather_66_67_array).indexOf(int_ww_code) != -1)
-        && (myicing.Is_code.equals("")
-            && myicing.EsEs_code.equals("")
-            && myicing.Rs_code.equals(""))) {
-      String info =
-          "Freezing rain (present weather) and no ICING?\n Press the NO button if it was a typing error, press the YES button if this observation is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !PresentWeatherIcingValidation.validate(
+            ww_code_conversion_ok,
+            int_ww_code,
+            myicing.Is_code.equals("")
+                && myicing.EsEs_code.equals("")
+                && myicing.Rs_code.equals(""))) {
+      level_3_ok = false;
+      doorgaan = false;
     }
 
     return level_3_ok;
