@@ -2227,50 +2227,10 @@ public class main_support {
 
     // wind speed
     //
-    if ((doorgaan == true)
-        && (main.wind_units.trim().indexOf(main.M_S) != -1)
-        && (mywind.int_true_wind_speed > 28 && mywind.int_true_wind_speed < 500.0)) {
-      // wind speed in m/s
-      String info =
-          "Wind speed > 28 m/s (> 55 knots) \n Press the NO button if it was a typing error, press the YES button if this wind speed is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
-    }
-
-    if ((doorgaan == true)
-        && (main.wind_units.trim().indexOf(main.KNOTS) != -1)
-        && (mywind.int_true_wind_speed > 55 && mywind.int_true_wind_speed < 500.0)) {
-      // wind speed in m/s
-      String info =
-          "Wind speed > 55 knots \n Press the NO button if it was a typing error, press the YES button if this wind speed is ok";
-      if (JOptionPane.showConfirmDialog(
-              null,
-              info,
-              main.APPLICATION_NAME + ", please confirm",
-              JOptionPane.YES_NO_OPTION,
-              JOptionPane.QUESTION_MESSAGE)
-          == JOptionPane.NO_OPTION) {
-        JOptionPane.showMessageDialog(
-            null,
-            "Please correct the error (no final obs was coded)",
-            main.APPLICATION_NAME,
-            JOptionPane.WARNING_MESSAGE);
-        doorgaan = false;
-        level_3_ok = false;
-      }
+    if (doorgaan
+        && !WindSpeedConfirmationValidation.validate(main.wind_units, mywind.int_true_wind_speed)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // wind waves period
