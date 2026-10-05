@@ -1155,25 +1155,8 @@ public class main_support {
       new SwingWorker<String, Void>() {
         @Override
         protected String doInBackground() throws Exception {
-          String result = null;
-
-          try (FileChannel srcChannel =
-                  new FileInputStream(main.volledig_path_srcFilename_captain).getChannel();
-              FileChannel dstChannel =
-                  new FileOutputStream(main.volledig_path_dstFilename_captain).getChannel()) {
-            // Copy file contents from source to destination
-            dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-
-            result = "OK";
-          } catch (IOException e) {
-            // JOptionPane.showMessageDialog(null, "Unable to move " +
-            // main.volledig_path_srcFilename_captain + " to " +
-            // main.volledig_path_dstFilename_captain, main.APPLICATION_NAME + " error",
-            // JOptionPane.WARNING_MESSAGE);
-            result = "NOT_OK";
-          }
-
-          return result;
+          return LogFileCopyWorkflow.copy(
+              main.volledig_path_srcFilename_captain, main.volledig_path_dstFilename_captain);
         } // protected Void doInBackground() throws Exception
 
         @Override
@@ -1236,22 +1219,9 @@ public class main_support {
       // attachement not created on time)
 
       /* copy captain source file to destination captain file */
-      String result = null;
-
-      try (FileChannel srcChannel =
-              new FileInputStream(main.volledig_path_srcFilename_captain).getChannel();
-          FileChannel dstChannel =
-              new FileOutputStream(main.volledig_path_dstFilename_captain).getChannel()) {
-        // Copy file contents from source to destination
-        dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-
-        result = "OK";
-      } catch (IOException e) {
-        // JOptionPane.showMessageDialog(null, "Unable to move " +
-        // main.volledig_path_srcFilename_captain + " to " + main.volledig_path_dstFilename_captain,
-        // main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-        result = "NOT_OK";
-      }
+      String result =
+          LogFileCopyWorkflow.copy(
+              main.volledig_path_srcFilename_captain, main.volledig_path_dstFilename_captain);
 
       if (result.equals("NOT_OK") == true) {
         JOptionPane.showMessageDialog(
@@ -1334,8 +1304,6 @@ public class main_support {
       new SwingWorker<String, Void>() {
         @Override
         protected String doInBackground() throws Exception {
-          String result = null;
-
           /*
           // count number of obs per observer per year
           */
@@ -1344,22 +1312,8 @@ public class main_support {
           /*
           // copy immt
           */
-          try (FileChannel srcChannel =
-                  new FileInputStream(main.volledig_path_srcFilename_immt).getChannel();
-              FileChannel dstChannel =
-                  new FileOutputStream(main.volledig_path_dstFilename_immt).getChannel()) {
-            // Copy file contents from source to destination
-            dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-
-            result = "OK";
-          } catch (IOException e) {
-            // JOptionPane.showMessageDialog(null, "Unable to move " +
-            // main.volledig_path_srcFilename_immt + " to " + main.volledig_path_dstFilename_immt,
-            // main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            result = "NOT_OK";
-          }
-
-          return result;
+          return LogFileCopyWorkflow.copy(
+              main.volledig_path_srcFilename_immt, main.volledig_path_dstFilename_immt);
         } // protected Void doInBackground() throws Exception
 
         @Override
@@ -1509,8 +1463,6 @@ public class main_support {
               + systeem_date_time
               + ".TXT";
 
-      String result = null;
-
       /*
       // count number of obs per observer per year
       */
@@ -1519,17 +1471,9 @@ public class main_support {
       /*
       // copy immt
       */
-      try (FileChannel srcChannel =
-              new FileInputStream(main.volledig_path_srcFilename_immt).getChannel();
-          FileChannel dstChannel =
-              new FileOutputStream(main.volledig_path_dstFilename_immt).getChannel()) {
-        // Copy file contents from source to destination
-        dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-
-        result = "OK";
-      } catch (IOException e) {
-        result = "NOT_OK";
-      }
+      String result =
+          LogFileCopyWorkflow.copy(
+              main.volledig_path_srcFilename_immt, main.volledig_path_dstFilename_immt);
 
       if ((result.equals("NOT_OK") == true)) {
         JOptionPane.showMessageDialog(
