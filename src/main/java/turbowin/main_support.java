@@ -1301,132 +1301,10 @@ public class main_support {
               + systeem_date_time
               + ".TXT";
 
-      new SwingWorker<String, Void>() {
-        @Override
-        protected String doInBackground() throws Exception {
-          /*
-          // count number of obs per observer per year
-          */
-          support_class.Kopieeren_Waarnemers_En_Aantallen();
-
-          /*
-          // copy immt
-          */
-          return LogFileCopyWorkflow.copy(
-              main.volledig_path_srcFilename_immt, main.volledig_path_dstFilename_immt);
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void done() {
-          String result_opgehaald = null;
-
-          try {
-            result_opgehaald = get();
-          } catch (InterruptedException | ExecutionException ex) {
-          }
-
-          if ((result_opgehaald != null) && (result_opgehaald.equals("NOT_OK") == true)) {
-            JOptionPane.showMessageDialog(
-                null,
-                "Unable to move "
-                    + main.volledig_path_srcFilename_immt
-                    + " to "
-                    + main.volledig_path_dstFilename_immt,
-                main.APPLICATION_NAME + " error",
-                JOptionPane.WARNING_MESSAGE);
-          }
-          if ((result_opgehaald != null) && (result_opgehaald.equals("OK") == true)) {
-            if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
-              // LET OP
-              // deze melding NIET geven als de files gezipped worden er daarna per email moeten
-              // worden verstuurd
-              // want dan wordt met deze melding de aanmaak van het zip bestand opgehouden, maar het
-              // email programma
-              // met een verwijzing naar dit zip bestand is echter al wel geopend !!
-
-              // Note: not possible to show this message at the end of this function (outsite the
-              // swingworker)
-              //       because Swingworker not finished
-              String info = "meteo log files moved to folder: " + output_dir;
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-              main.log_turbowin_system_message("[GENERAL] " + info);
-            }
-
-            // rename sourcefile to backup file (after it was copied, see doInBackground())
-            File source_file = new File(main.volledig_path_srcFilename_immt);
-            File renamed_file = new File(main.volledig_path_backup_srcFilename_immt);
-
-            if (source_file.renameTo(renamed_file) == false) {
-              // rename failed: most of the time because a backup file of the same name already
-              // exist (2nd backup same day)
-
-              if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
-                // LET OP
-                // deze melding NIET geven als de files gezipped worden er daarna per email moeten
-                // worden verstuurd
-                // want dan wordt met deze melding de aanmaak van het zip bestand opgehouden, maar
-                // het email programma
-                // met een verwijzing naar dit zip bestand is echter al wel geopend !!
-
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Backing up log file "
-                        + main.volledig_path_srcFilename_immt
-                        + " failed (2nd move/backup same day?)",
-                    main.APPLICATION_NAME + " info",
-                    JOptionPane.INFORMATION_MESSAGE);
-              }
-              source_file
-                  .delete(); // because backup failed, immt.log still present to avoid confusing
-              // with log files, simply delete the immt.log
-            }
-
-            // NB
-            // omdat zippen afhankelijk is van de verplaatste log files, moet dit hier in het done()
-            // deel gebeuren
-            // want als je dat anders doet kan het zijn dat de swingworker die de log files
-            // veplaatst
-            // nog bezig is zodat dan een i/0 zip error optreed
-            //
-            if (move_mode_logs.equals(main.MOVE_TO_EMAIL) == true) {
-              zip_log_files();
-            }
-
-            // Clearing all the observer data ? (the captain data is always cleared automatically
-            // after an upload/sending of the logs)
-            //
-            String info =
-                "Clearing all the data of the observers (surname, full initials/full christian name, rank, discharge book number)";
-            if (JOptionPane.showConfirmDialog(
-                    null,
-                    info,
-                    main.APPLICATION_NAME + " message",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE)
-                == JOptionPane.YES_OPTION) {
-              String volledig_path_observer =
-                  main.logs_dir + java.io.File.separator + main.OBSERVER_LOG;
-              try {
-                FileChannel.open(Paths.get(volledig_path_observer), StandardOpenOption.WRITE)
-                    .truncate(0)
-                    .close();
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Successfully cleared all the data of the observers",
-                    APPLICATION_NAME + " message",
-                    JOptionPane.INFORMATION_MESSAGE);
-              } catch (IOException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Clearing all the data of the observers failed",
-                    APPLICATION_NAME + " error",
-                    JOptionPane.WARNING_MESSAGE);
-              }
-            }
-          } // if (result_opgehaald.equals("OK") == true)
-        } // protected void done()
-      }.execute(); // new SwingWorker<Void, Void>()
+      ImmtLogMoveWorkflow.start(
+          main.volledig_path_srcFilename_immt,
+          main.volledig_path_dstFilename_immt,
+          () -> handleImmtMoveSuccess(move_mode_logs));
     } // if (doorgaan == true && move_mode_logs.equals(main.MOVE_TO_DISK) == true)
 
     if (doorgaan == true && move_mode_logs.equals(main.MOVE_TO_EMAIL) == true) {
@@ -1544,6 +1422,68 @@ public class main_support {
     } // if (doorgaan == true && move_mode_logs.equals(main.MOVE_TO_EMAIL) == true)
 
     return doorgaan;
+  }
+
+  private void handleImmtMoveSuccess(final String move_mode_logs) {
+    if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
+      // Show this message only for disk moves. Do not show it when the files are zipped for email:
+      // displaying it can delay zip creation even though the email program has already been opened
+      // with a reference to that zip file.
+      String info = "meteo log files moved to folder: " + output_dir;
+      JOptionPane.showMessageDialog(
+          null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
+      main.log_turbowin_system_message("[GENERAL] " + info);
+    }
+
+    // rename sourcefile to backup file (after it was copied)
+    File source_file = new File(main.volledig_path_srcFilename_immt);
+    File renamed_file = new File(main.volledig_path_backup_srcFilename_immt);
+
+    if (source_file.renameTo(renamed_file) == false) {
+      if (move_mode_logs.equals(main.MOVE_TO_DISK) == true) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Backing up log file "
+                + main.volledig_path_srcFilename_immt
+                + " failed (2nd move/backup same day?)",
+            main.APPLICATION_NAME + " info",
+            JOptionPane.INFORMATION_MESSAGE);
+      }
+      source_file.delete();
+    }
+
+    if (move_mode_logs.equals(main.MOVE_TO_EMAIL) == true) {
+      // Zip only after the asynchronous move completes to avoid an I/O race or incomplete archive.
+      zip_log_files();
+    }
+
+    String info =
+        "Clearing all the data of the observers (surname, full initials/full christian name, rank, discharge book number)";
+    if (JOptionPane.showConfirmDialog(
+            null,
+            info,
+            main.APPLICATION_NAME + " message",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE)
+        == JOptionPane.YES_OPTION) {
+      String volledig_path_observer = main.logs_dir + java.io.File.separator + main.OBSERVER_LOG;
+      try {
+        FileChannel.open(Paths.get(volledig_path_observer), StandardOpenOption.WRITE)
+            .truncate(0)
+            .close();
+        JOptionPane.showMessageDialog(
+            null,
+            "Successfully cleared all the data of the observers",
+            APPLICATION_NAME + " message",
+            JOptionPane.INFORMATION_MESSAGE);
+      } catch (IOException ex) {
+        JOptionPane.showMessageDialog(
+            null,
+            "Clearing all the data of the observers failed",
+            APPLICATION_NAME + " error",
+            JOptionPane.WARNING_MESSAGE);
+      }
+    }
   }
 
   private void zip_log_files() {
