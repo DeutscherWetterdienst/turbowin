@@ -2247,98 +2247,18 @@ public class main_support {
 
     // first swell period
     //
-    if ((doorgaan == true) && first_swell_period_conversion_ok == true) {
-      if (float_first_swell_period > 25.0 && float_first_swell_period < 99.9) {
-        String info =
-            "First swell system waves period > 25 seconds \n Press the NO button if it was a typing error, press the YES button if this first swell system waves period is ok";
-        if (JOptionPane.showConfirmDialog(
-                null,
-                info,
-                main.APPLICATION_NAME + ", please confirm",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE)
-            == JOptionPane.NO_OPTION) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Please correct the error (no final obs was coded)",
-              main.APPLICATION_NAME,
-              JOptionPane.WARNING_MESSAGE);
-          doorgaan = false;
-          level_3_ok = false;
-        }
-      }
-    }
-
-    // first swell height
-    //
-    if ((doorgaan == true) && first_swell_height_conversion_ok == true) {
-      if (float_first_swell_height > 12.2 && float_first_swell_height < 99.9) {
-        String info =
-            "First swell system waves height > 12.2 metres \n Press the NO button if it was a typing error, press the YES button if this first swell system height waves is ok";
-        if (JOptionPane.showConfirmDialog(
-                null,
-                info,
-                main.APPLICATION_NAME + ", please confirm",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE)
-            == JOptionPane.NO_OPTION) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Please correct the error (no final obs was coded)",
-              main.APPLICATION_NAME,
-              JOptionPane.WARNING_MESSAGE);
-          doorgaan = false;
-          level_3_ok = false;
-        }
-      }
-    }
-
-    // second swell period
-    //
-    if ((doorgaan == true) && second_swell_period_conversion_ok == true) {
-      if (float_second_swell_period > 25.0 && float_second_swell_period < 99.9) {
-        String info =
-            "Second swell system waves period > 25 seconds \n Press the NO button if it was a typing error, press the YES button if this second swell system waves period is ok";
-        if (JOptionPane.showConfirmDialog(
-                null,
-                info,
-                main.APPLICATION_NAME + ", please confirm",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE)
-            == JOptionPane.NO_OPTION) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Please correct the error (no final obs was coded)",
-              main.APPLICATION_NAME,
-              JOptionPane.WARNING_MESSAGE);
-          doorgaan = false;
-          level_3_ok = false;
-        }
-      }
-    }
-
-    // second swell height
-    //
-    if ((doorgaan == true) && second_swell_height_conversion_ok == true) {
-      if (float_second_swell_height > 12.2 && float_second_swell_height < 99.9) {
-        String info =
-            "Second swell system waves height > 12.2 metres \n Press the NO button if it was a typing error, press the YES button if this second swell system height waves is ok";
-        if (JOptionPane.showConfirmDialog(
-                null,
-                info,
-                main.APPLICATION_NAME + ", please confirm",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE)
-            == JOptionPane.NO_OPTION) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Please correct the error (no final obs was coded)",
-              main.APPLICATION_NAME,
-              JOptionPane.WARNING_MESSAGE);
-          doorgaan = false;
-          level_3_ok = false;
-        }
-      }
+    if (doorgaan
+        && !SwellConfirmationValidation.validate(
+            first_swell_period_conversion_ok,
+            float_first_swell_period,
+            first_swell_height_conversion_ok,
+            float_first_swell_height,
+            second_swell_period_conversion_ok,
+            float_second_swell_period,
+            second_swell_height_conversion_ok,
+            float_second_swell_height)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // wind speed <--> wand waves height
