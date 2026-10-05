@@ -2235,50 +2235,14 @@ public class main_support {
 
     // wind waves period
     //
-    if ((doorgaan == true) && wind_waves_period_conversion_ok == true) {
-      if (float_wind_waves_period > 25.0 && float_wind_waves_period < 99.9) {
-        String info =
-            "Wind waves period > 25 seconds \n Press the NO button if it was a typing error, press the YES button if this wind waves period is ok";
-        if (JOptionPane.showConfirmDialog(
-                null,
-                info,
-                main.APPLICATION_NAME + ", please confirm",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE)
-            == JOptionPane.NO_OPTION) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Please correct the error (no final obs was coded)",
-              main.APPLICATION_NAME,
-              JOptionPane.WARNING_MESSAGE);
-          doorgaan = false;
-          level_3_ok = false;
-        }
-      }
-    }
-
-    // wind waves height
-    //
-    if ((doorgaan == true) && wind_waves_height_conversion_ok == true) {
-      if (float_wind_waves_height > 12.2 && float_wind_waves_height < 99.9) {
-        String info =
-            "Wind waves height > 12.2 metres \n Press the NO button if it was a typing error, press the YES button if this wind waves height is ok";
-        if (JOptionPane.showConfirmDialog(
-                null,
-                info,
-                main.APPLICATION_NAME + ", please confirm",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE)
-            == JOptionPane.NO_OPTION) {
-          JOptionPane.showMessageDialog(
-              null,
-              "Please correct the error (no final obs was coded)",
-              main.APPLICATION_NAME,
-              JOptionPane.WARNING_MESSAGE);
-          doorgaan = false;
-          level_3_ok = false;
-        }
-      }
+    if (doorgaan
+        && !WindWaveConfirmationValidation.validate(
+            wind_waves_period_conversion_ok,
+            float_wind_waves_period,
+            wind_waves_height_conversion_ok,
+            float_wind_waves_height)) {
+      doorgaan = false;
+      level_3_ok = false;
     }
 
     // first swell period
