@@ -676,9 +676,7 @@ public class main_support {
       cal_systeem_datum_tijd =
           new GregorianCalendar(
               new SimpleTimeZone(0, "UTC")); // gives system date and time (UTC) of this moment
-      SimpleDateFormat sdf2;
-      sdf2 = new SimpleDateFormat("MMMM dd, yyyy"); // e.g "MMMM dd, yyyy" -> februari 27, 2010
-      String systeem_date_time = sdf2.format(cal_systeem_datum_tijd.getTime());
+      String systeem_date_time = LogFileBackupDate.format(cal_systeem_datum_tijd);
       // volledig_path_backup_srcFilename_captain = logs_dir + java.io.File.separator +
       // "CAPTAIN_BACKUP " + systeem_date_time + ".TXT";
       // volledig_path_backup_srcFilename_captain = logs_dir + java.io.File.separator + call_sign +
@@ -753,9 +751,7 @@ public class main_support {
       cal_systeem_datum_tijd =
           new GregorianCalendar(
               new SimpleTimeZone(0, "UTC")); // gives system date and time (UTC) of this moment
-      SimpleDateFormat sdf2;
-      sdf2 = new SimpleDateFormat("MMMM dd, yyyy"); // e.g "MMMM dd, yyyy" -> februari 27, 2010
-      String systeem_date_time = sdf2.format(cal_systeem_datum_tijd.getTime());
+      String systeem_date_time = LogFileBackupDate.format(cal_systeem_datum_tijd);
       // volledig_path_backup_srcFilename_immt = logs_dir + java.io.File.separator + "IMMT_BACKUP "
       // + systeem_date_time + ".TXT";
       // volledig_path_backup_srcFilename_immt = logs_dir + java.io.File.separator + call_sign + "_"
@@ -787,9 +783,7 @@ public class main_support {
       cal_systeem_datum_tijd =
           new GregorianCalendar(
               new SimpleTimeZone(0, "UTC")); // gives system date and time (UTC) of this moment
-      SimpleDateFormat sdf2;
-      sdf2 = new SimpleDateFormat("MMMM dd, yyyy"); // e.g "MMMM dd, yyyy" -> februari 27, 2010
-      String systeem_date_time = sdf2.format(cal_systeem_datum_tijd.getTime());
+      String systeem_date_time = LogFileBackupDate.format(cal_systeem_datum_tijd);
       // volledig_path_backup_srcFilename_immt = logs_dir + java.io.File.separator + "IMMT_BACKUP "
       // + systeem_date_time + ".TXT";
       // volledig_path_backup_srcFilename_immt = logs_dir + java.io.File.separator + call_sign + "_"
