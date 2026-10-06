@@ -622,7 +622,7 @@ public class main_support {
 
           if (dirs.exists() == false) // output_dir not exists
           {
-            final boolean success = dirs.mkdirs();
+            final boolean success = LogFilesDestinationValidation.ensureDirectory(output_dir);
             if (success == false) {
               JOptionPane.showMessageDialog(
                   null,
@@ -635,7 +635,7 @@ public class main_support {
 
           // output_dir and log_dir must be different !
           if (doorgaan == true) {
-            if (output_dir.equals(logs_dir) == true) {
+            if (LogFilesDestinationValidation.isSameDirectory(output_dir, logs_dir) == true) {
               JOptionPane.showMessageDialog(
                   null,
                   "Download folder the same as log files folder, LOG FILES NOT MOVED ",
