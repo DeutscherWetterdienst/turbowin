@@ -1,7 +1,6 @@
 package turbowin;
 
 import static turbowin.main.APPLICATION_NAME;
-import static turbowin.main.CAPTAIN_LOG;
 import static turbowin.main.IMMT_LOG;
 import static turbowin.main.INVALID;
 import static turbowin.main.OBSERVER_LOG;
@@ -578,7 +577,7 @@ public class main_support {
     boolean doorgaan_captain = true;
 
     /* first check if there is an immt log source file present (and not empty) */
-    main.volledig_path_srcFilename_immt = logs_dir + java.io.File.separator + IMMT_LOG;
+    main.volledig_path_srcFilename_immt = LogFilePathBuilder.immtSource(logs_dir);
     if (LogFilesMoveValidation.hasUsableImmtLog(main.volledig_path_srcFilename_immt)) {
       doorgaan = true;
     } else {
@@ -668,10 +667,10 @@ public class main_support {
       // volledig_path_dstFilename_captain = output_dir + java.io.File.separator + call_sign + "_" +
       // CAPTAIN_LOG;
       main.volledig_path_dstFilename_captain =
-          output_dir + java.io.File.separator + station_ID + "_" + CAPTAIN_LOG;
+          LogFilePathBuilder.captainDestination(output_dir, station_ID);
 
       /* captain source file (captain.log) */
-      main.volledig_path_srcFilename_captain = logs_dir + java.io.File.separator + CAPTAIN_LOG;
+      main.volledig_path_srcFilename_captain = LogFilePathBuilder.captainSource(logs_dir);
 
       /* captain backup file (eg PGDE_CAPTAIN_BACKUP May 08, 2015.TXT) */
       cal_systeem_datum_tijd =
@@ -685,13 +684,7 @@ public class main_support {
       // volledig_path_backup_srcFilename_captain = logs_dir + java.io.File.separator + call_sign +
       // "_" + "CAPTAIN_BACKUP " + systeem_date_time + ".TXT";
       main.volledig_path_backup_srcFilename_captain =
-          logs_dir
-              + java.io.File.separator
-              + station_ID
-              + "_"
-              + "CAPTAIN_BACKUP "
-              + systeem_date_time
-              + ".TXT";
+          LogFilePathBuilder.captainBackup(logs_dir, station_ID, systeem_date_time);
 
       File captain_source_file = new File(main.volledig_path_srcFilename_captain);
       if (captain_source_file.exists()) {
@@ -751,10 +744,10 @@ public class main_support {
       // volledig_path_dstFilename_immt = output_dir + java.io.File.separator + call_sign + "_" +
       // IMMT_LOG;
       main.volledig_path_dstFilename_immt =
-          output_dir + java.io.File.separator + station_ID + "_" + IMMT_LOG;
+          LogFilePathBuilder.immtDestination(output_dir, station_ID);
 
       /* immt source file (immt.log) */
-      main.volledig_path_srcFilename_immt = logs_dir + java.io.File.separator + IMMT_LOG;
+      main.volledig_path_srcFilename_immt = LogFilePathBuilder.immtSource(logs_dir);
 
       /* immt backup file (eg PGDE_IMMT_BACKUP May 08, 2015.TXT) */
       cal_systeem_datum_tijd =
@@ -768,13 +761,7 @@ public class main_support {
       // volledig_path_backup_srcFilename_immt = logs_dir + java.io.File.separator + call_sign + "_"
       // + "IMMT_BACKUP " + systeem_date_time + ".TXT";
       main.volledig_path_backup_srcFilename_immt =
-          logs_dir
-              + java.io.File.separator
-              + station_ID
-              + "_"
-              + "IMMT_BACKUP "
-              + systeem_date_time
-              + ".TXT";
+          LogFilePathBuilder.immtBackup(logs_dir, station_ID, systeem_date_time);
 
       ImmtLogMoveWorkflow.start(
           main.volledig_path_srcFilename_immt,
@@ -794,7 +781,7 @@ public class main_support {
           output_dir + java.io.File.separator + station_ID + "_" + IMMT_LOG;
 
       /* immt source file (immt.log) */
-      main.volledig_path_srcFilename_immt = logs_dir + java.io.File.separator + IMMT_LOG;
+      main.volledig_path_srcFilename_immt = LogFilePathBuilder.immtSource(logs_dir);
 
       /* immt backup file (eg PGDE_IMMT_BACKUP May 08, 2015.TXT) */
       cal_systeem_datum_tijd =
