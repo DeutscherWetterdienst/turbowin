@@ -635,14 +635,8 @@ public class main_support {
           // JOptionPane.showMessageDialog(null, afstand_vorige_huidige_obs,  main.APPLICATION_NAME
           // + " afstand tot vorige obs", JOptionPane.WARNING_MESSAGE);
 
-          if (((obs_verschil_uur >= 0 && obs_verschil_uur <= 6)
-                  && (afstand_vorige_huidige_obs > 180))
-              || ((obs_verschil_uur > 6 && obs_verschil_uur <= 12)
-                  && (afstand_vorige_huidige_obs > 360))
-              || ((obs_verschil_uur > 12 && obs_verschil_uur <= 18)
-                  && (afstand_vorige_huidige_obs > 540))
-              || ((obs_verschil_uur > 18 && obs_verschil_uur <= 24)
-                  && (afstand_vorige_huidige_obs > 720))) {
+          if (PositionSequenceValidation.exceedsAllowedDistance(
+              obs_verschil_uur, afstand_vorige_huidige_obs)) {
             String info = "";
             info = "-position sequence check-\n";
             info += "obs position:\n";
