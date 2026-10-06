@@ -1,7 +1,5 @@
 package turbowin;
 
-import javax.swing.JOptionPane;
-
 /** Handles level-three consistency checks between wind speed and wind-wave height. */
 final class WindWaveConsistencyValidation {
 
@@ -57,20 +55,6 @@ final class WindWaveConsistencyValidation {
   }
 
   private static boolean confirm(String message) {
-    if (JOptionPane.showConfirmDialog(
-            null,
-            message,
-            main.APPLICATION_NAME + ", please confirm",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE)
-        == JOptionPane.NO_OPTION) {
-      JOptionPane.showMessageDialog(
-          null,
-          "Please correct the error (no final obs was coded)",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      return false;
-    }
-    return true;
+    return ValidationDialog.confirm(message);
   }
 }

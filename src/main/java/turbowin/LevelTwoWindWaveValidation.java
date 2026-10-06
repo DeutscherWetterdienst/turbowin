@@ -1,7 +1,5 @@
 package turbowin;
 
-import javax.swing.JOptionPane;
-
 /** Validates level-two consistency between wind and wind-wave observations. */
 final class LevelTwoWindWaveValidation {
 
@@ -46,8 +44,6 @@ final class LevelTwoWindWaveValidation {
   }
 
   private static boolean warning(String message) {
-    JOptionPane.showMessageDialog(
-        null, message, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-    return false;
+    return ValidationDialog.warning(message);
   }
 }

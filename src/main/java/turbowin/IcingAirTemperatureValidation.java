@@ -1,7 +1,5 @@
 package turbowin;
 
-import javax.swing.JOptionPane;
-
 /** Validates icing observations against air temperature. */
 final class IcingAirTemperatureValidation {
 
@@ -27,26 +25,10 @@ final class IcingAirTemperatureValidation {
   }
 
   private static boolean warning(String message) {
-    JOptionPane.showMessageDialog(
-        null, message, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-    return false;
+    return ValidationDialog.warning(message);
   }
 
   private static boolean confirm(String message) {
-    if (JOptionPane.showConfirmDialog(
-            null,
-            message,
-            main.APPLICATION_NAME + ", please confirm",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE)
-        == JOptionPane.NO_OPTION) {
-      JOptionPane.showMessageDialog(
-          null,
-          "Please correct the error (no final obs was coded)",
-          main.APPLICATION_NAME,
-          JOptionPane.WARNING_MESSAGE);
-      return false;
-    }
-    return true;
+    return ValidationDialog.confirm(message);
   }
 }
