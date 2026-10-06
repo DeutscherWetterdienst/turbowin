@@ -485,29 +485,7 @@ public class main_support {
               0); // Month value is 0-based. e.g., 0 for January.
 
       if (ObservationTimeSequenceValidation.isNotLater(calendar_huidige_obs, calendar_vorige_obs)) {
-        SimpleDateFormat sdf2;
-        sdf2 = new SimpleDateFormat("MMMM dd, yyyy HH"); // e.g "MMMM dd, yyyy" -> februari 27, 2010
-
-        String string_calendar_huidige_obs = sdf2.format(calendar_huidige_obs.getTime());
-
-        String info = "";
-        info = "-time sequence check-\n";
-        info += "obs date/time";
-        info += " (";
-        info += string_calendar_huidige_obs;
-        info += ".00 UTC";
-        info += ")";
-
-        if (JOptionPane.showConfirmDialog(
-                null, info, main.APPLICATION_NAME + " please confirm", JOptionPane.YES_NO_OPTION)
-            == JOptionPane.NO_OPTION) {
-          // MessageBox("Please correct the error (no final obs was coded)", "TurboWin message",
-          // MB_OK);
-          JOptionPane.showMessageDialog(
-              null,
-              "Please correct the error (no final obs was coded)",
-              main.APPLICATION_NAME + " warning",
-              JOptionPane.WARNING_MESSAGE);
+        if (!PositionSequenceWorkflow.confirmDateTime(calendar_huidige_obs)) {
           doorgaan = false;
           time_sequence_checks_ok = false;
         }
@@ -554,17 +532,7 @@ public class main_support {
             info += myposition.longitude_hemisphere;
             info += "\n";
 
-            if (JOptionPane.showConfirmDialog(
-                    null,
-                    info,
-                    main.APPLICATION_NAME + " please confirm",
-                    JOptionPane.YES_NO_OPTION)
-                == JOptionPane.NO_OPTION) {
-              JOptionPane.showMessageDialog(
-                  null,
-                  "Please correct the obs position (no final obs was coded)",
-                  main.APPLICATION_NAME + " message",
-                  JOptionPane.WARNING_MESSAGE);
+            if (!PositionSequenceWorkflow.confirmPosition(info)) {
               doorgaan = false;
               time_sequence_checks_ok = false;
             }
