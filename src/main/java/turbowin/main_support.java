@@ -919,7 +919,6 @@ public class main_support {
     */
 
     int posi;
-    int w;
     int[][] aantal_waarnemer = new int[main.MAX_AANTAL_JAREN_IN_IMMT][main.MAX_AANTAL_WAARNEMERS];
     String volledig_path_immt = logs_dir + java.io.File.separator + IMMT_LOG;
     // String moved_observername_file                = output_dir + java.io.File.separator +
@@ -1029,13 +1028,7 @@ public class main_support {
 
     /* read all lines/records from observer log */
     try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_observer))) {
-      w = 0;
-      while ((record = in.readLine()) != null) {
-        if (w < main.MAX_AANTAL_WAARNEMERS) // extra check
-        {
-          main.observername_array[w++] = record;
-        }
-      } // while((record = in.readLine()) != null)
+      ObserverNameReader.read(in, main.observername_array);
 
     } // try
     catch (IOException ex) {
