@@ -25,7 +25,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
@@ -2077,79 +2076,18 @@ public class main_support {
     //    en (i.t.t. TurboWin) niet op 1/10 graads vak niveau (zgf_lkw)
 
     int Octant = INVALID;
-    int vak_10;
-    int sam_index;
-    int land_zee_cijfer_sam; // gevonden cijfer in ZGF_SAM (10 graads vakken file)
-    int int_record_sam_vak_10;
     boolean zee_vak_ok = true;
-    String record_sam;
 
     System.out.println("--- Checking entered position against a land-sea mask");
 
-    try (InputStream is = getClass().getResourceAsStream(main.ICONS_DIRECTORY + "zgf_sam");
-        BufferedReader in_1 = new BufferedReader(new InputStreamReader(is))) {
-      // reading file 1 degree squares
-      // InputStream is = getClass().getResourceAsStream(main.ICONS_DIRECTORY + "zgf_sam");
-      // BufferedReader in_1 = new BufferedReader(new InputStreamReader(is));
-
-      // deze aanzetten om de 1/10 graads niveau file mee te nemen
-      // InputStream is = getClass().getResourceAsStream(main.ICONS_DIRECTORY + "zgf_lkw");
-      // BufferedReader in_2 = new BufferedReader(new InputStreamReader(is));
-
-      LandSeaMaskPositionCalculator.Position maskPosition =
-          LandSeaMaskPositionCalculator.calculate(
-              myposition.latitude_hemisphere,
-              myposition.longitude_hemisphere,
-              myposition.int_latitude_degrees,
-              myposition.int_longitude_degrees);
-      Octant = maskPosition.octant();
-      vak_10 = maskPosition.tenDegreeCell();
-      sam_index = maskPosition.samIndex();
-
-      while (((record_sam = in_1.readLine()) != null) && (Octant != INVALID)) {
-        // record_sam.read_line(in_1);
-        if (record_sam.length() == 127) // zijn allemaal 127 char. lang
-        {
-          // if (atoi(record_sam.substring(0, 3)) == vak_10)
-          try {
-            int_record_sam_vak_10 = Integer.valueOf(record_sam.substring(0, 3));
-
-            if (int_record_sam_vak_10 == vak_10) {
-              // land_zee_cijfer_sam = atoi(record_sam.substring(sam_index, sam_index + 1));
-              land_zee_cijfer_sam = Integer.valueOf(record_sam.substring(sam_index, sam_index + 1));
-
-              if (land_zee_cijfer_sam == 0) // sea position
-              zee_vak_ok = true;
-              else if (land_zee_cijfer_sam == 4) // not yet but in mask/file
-              zee_vak_ok = true;
-              else if (land_zee_cijfer_sam == 2) // wrong position
-              zee_vak_ok = false;
-              else if (land_zee_cijfer_sam == 3) // land position
-              zee_vak_ok = false;
-              else if (land_zee_cijfer_sam == 1) // coast position
-              {
-                // code if testing on 1/10 degree squares
-                zee_vak_ok = true;
-              } // else if (land_zee_cijfer == 1)
-
-              break; // ok, gevonden verlaten do-while sam
-            } // if (atoi(record.SubString(0, 3)) == vak_10)
-          } // try
-          catch (NumberFormatException e) {
-          }
-
-        } // if (record.length() == 127)
-        else // invalid line length
-        {
-          break;
-        }
-      } // while((record_sam = in_1.readLine()) != null)
-
-    } catch (Exception ex) {
-      // JOptionPane.showMessageDialog(null, "Reading error 'sea-land mask' file", APPLICATION_NAME
-      // + " error", JOptionPane.WARNING_MESSAGE);
-      System.out.println("--- Function Check_Land_Sea_Mask(): " + ex);
-    } // catch
+    LandSeaMaskPositionCalculator.Position maskPosition =
+        LandSeaMaskPositionCalculator.calculate(
+            myposition.latitude_hemisphere,
+            myposition.longitude_hemisphere,
+            myposition.int_latitude_degrees,
+            myposition.int_longitude_degrees);
+    Octant = maskPosition.octant();
+    zee_vak_ok = LandSeaMaskWorkflow.check(maskPosition);
 
     if (zee_vak_ok == false) {
       String info = "";
