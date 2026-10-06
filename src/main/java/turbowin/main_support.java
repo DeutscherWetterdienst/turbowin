@@ -443,115 +443,15 @@ public class main_support {
     // initialisation
     boolean time_sequence_checks_ok = true;
     boolean doorgaan = true;
-    boolean string_num_converions_ok = true;
-    int num_vorige_obs_jaar = 0;
-    int num_vorige_obs_maand = 0;
-    int num_vorige_obs_dag = 0;
-    int num_vorige_obs_uur = 0;
-    int num_quadrant = 0;
-    float num_latitude = 0;
-    float num_longitude = 0;
-
-    //
-    ////////////////// first determine the substrings and convert them to numerical values
-    //
-    if (main.last_record.length() >= 19) {
-      /* string date time from previous obs (last stored record) */
-      String jaar = main.last_record.substring(1, 5); // cpp: jaar  = last_record.substr(1, 4);
-      String maand = main.last_record.substring(5, 7); // cpp: maand = last_record.substr(5, 2);
-      String dag = main.last_record.substring(7, 9); // cpp: dag   = last_record.substr(7, 2);
-      String uur = main.last_record.substring(9, 11); // cpp: uur   = last_record.substr(9, 2);
-
-      /* obs code position from previous obs (last stored record) */
-      String quadrant =
-          main.last_record.substring(
-              11,
-              12); // cpp: quadrant  = last_record.substr(11, 1);                       // WMO code
-      // table 3333
-      String latitude =
-          main.last_record.substring(
-              12,
-              15); // cpp: latitude  = last_record.substr(12, 3);                       // tenths of
-      // degrees
-      String longitude =
-          main.last_record.substring(
-              15,
-              19); // cpp: longitude = last_record.substr(15, 4);                       // tenths of
-      // degrees
-
-      /* date/time of last stored record convertion to numerical values */
-      try {
-        num_vorige_obs_jaar =
-            Integer.valueOf(jaar.trim()); // cpp: num_vorige_obs_jaar = atoi(jaar.c_str());
-      } catch (NumberFormatException ex) {
-        System.out.println("+++ Error function: position_sequence_check(). " + ex.toString());
-        string_num_converions_ok = false;
-      }
-      try {
-        num_vorige_obs_maand =
-            Integer.valueOf(maand.trim()); // cpp: num_vorige_obs_maand = atoi(maand.c_str());
-      } catch (NumberFormatException ex) {
-        System.out.println("+++ Error function: position_sequence_check(). " + ex.toString());
-        string_num_converions_ok = false;
-      }
-      try {
-        num_vorige_obs_dag =
-            Integer.valueOf(dag.trim()); // cpp: num_vorige_obs_dag   = atoi(dag.c_str());
-      } catch (NumberFormatException ex) {
-        System.out.println("+++ Error function: position_sequence_check(). " + ex.toString());
-        string_num_converions_ok = false;
-      }
-      try {
-        num_vorige_obs_uur =
-            Integer.valueOf(uur.trim()); // cpp: num_vorige_obs_uur   = atoi(uur.c_str());
-      } catch (NumberFormatException ex) {
-        System.out.println("+++ Error function: position_sequence_check(). " + ex.toString());
-        string_num_converions_ok = false;
-      }
-
-      /* positie uit laatste record omzetten naar num_waarden + afronden + "+/-" (afh. quadrant) maken */
-      try {
-        num_quadrant =
-            Integer.valueOf(quadrant.trim()); // cpp: num_quadrant  = atoi(quadrant.c_str());
-      } catch (NumberFormatException ex) {
-        System.out.println("+++ Error function: position_sequence_check(). " + ex.toString());
-        string_num_converions_ok = false;
-      }
-      try {
-        num_latitude =
-            Float.valueOf(latitude.trim()); // cpp: num_latitude  = atoi(latitude.c_str());
-      } catch (NumberFormatException ex) {
-        System.out.println("+++ Error function: position_sequence_check(). " + ex.toString());
-        string_num_converions_ok = false;
-      }
-      try {
-        num_longitude =
-            Float.valueOf(longitude.trim()); // cpp: num_longitude = atoi(longitude.c_str());
-      } catch (NumberFormatException ex) {
-        System.out.println("+++ Error function: position_sequence_check(). " + ex.toString());
-        string_num_converions_ok = false;
-      }
-    } // if (last_record.length() >= 19)
-    else // record too short for obtaining substrings
-    {
-      string_num_converions_ok = false;
-    }
+    PreviousObservationRecordParser.PreviousObservationRecord previousObservation =
+        PreviousObservationRecordParser.parse(main.last_record);
 
     //
     //////////////// conversion from substring to ints or floats successful
     //
-    if (string_num_converions_ok == true) {
-      float num_vorige_obs_breedte = num_latitude / 10; // nu in graden en tienden
-      float num_vorige_obs_lengte = num_longitude / 10; // nu in graden en tienden
-
-      if (num_quadrant == 3 || num_quadrant == 5) // Zuiderbreedte
-      {
-        num_vorige_obs_breedte *= -1;
-      }
-      if (num_quadrant == 5 || num_quadrant == 7) // Westerlengte
-      {
-        num_vorige_obs_lengte *= -1;
-      }
+    if (previousObservation.valid()) {
+      float num_vorige_obs_breedte = previousObservation.latitude();
+      float num_vorige_obs_lengte = previousObservation.longitude();
 
       /*
       // compare date/time with the date/time of the previous obs
@@ -562,10 +462,10 @@ public class main_support {
       /* date-time previous saved obs */
       Calendar calendar_vorige_obs =
           new GregorianCalendar(
-              num_vorige_obs_jaar,
-              num_vorige_obs_maand - 1,
-              num_vorige_obs_dag,
-              num_vorige_obs_uur,
+              previousObservation.year(),
+              previousObservation.month() - 1,
+              previousObservation.day(),
+              previousObservation.hour(),
               0); // Month value is 0-based. e.g., 0 for January.
 
       /* date-time present obs */
