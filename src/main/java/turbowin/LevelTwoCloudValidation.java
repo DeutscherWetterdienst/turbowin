@@ -1,7 +1,6 @@
 package turbowin;
 
 import java.util.Arrays;
-import javax.swing.JOptionPane;
 
 /** Validates the level-two relationships between cloud amounts and cloud types. */
 final class LevelTwoCloudValidation {
@@ -147,8 +146,6 @@ final class LevelTwoCloudValidation {
   }
 
   private static boolean warning(String message) {
-    JOptionPane.showMessageDialog(
-        null, message, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-    return false;
+    return ValidationDialog.warning(message);
   }
 }

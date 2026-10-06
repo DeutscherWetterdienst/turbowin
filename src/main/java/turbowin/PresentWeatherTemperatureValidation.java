@@ -1,7 +1,6 @@
 package turbowin;
 
 import java.util.Arrays;
-import javax.swing.JOptionPane;
 
 /** Validates present-weather codes against high air temperatures. */
 final class PresentWeatherTemperatureValidation {
@@ -80,8 +79,6 @@ final class PresentWeatherTemperatureValidation {
   }
 
   private static boolean warning(String message) {
-    JOptionPane.showMessageDialog(
-        null, message, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-    return false;
+    return ValidationDialog.warning(message);
   }
 }

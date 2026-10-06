@@ -1,7 +1,6 @@
 package turbowin;
 
 import java.util.Arrays;
-import javax.swing.JOptionPane;
 
 /** Validates visibility against present-weather codes. */
 final class VisibilityPresentWeatherValidation {
@@ -43,8 +42,6 @@ final class VisibilityPresentWeatherValidation {
   }
 
   private static boolean warning(String message) {
-    JOptionPane.showMessageDialog(
-        null, message, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-    return false;
+    return ValidationDialog.warning(message);
   }
 }

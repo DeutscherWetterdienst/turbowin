@@ -1,7 +1,5 @@
 package turbowin;
 
-import javax.swing.JOptionPane;
-
 /** Validates level-two pressure characteristic and tendency consistency. */
 final class LevelTwoPressureValidation {
 
@@ -23,8 +21,6 @@ final class LevelTwoPressureValidation {
   }
 
   private static boolean warning(String message) {
-    JOptionPane.showMessageDialog(
-        null, message, main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
-    return false;
+    return ValidationDialog.warning(message);
   }
 }
