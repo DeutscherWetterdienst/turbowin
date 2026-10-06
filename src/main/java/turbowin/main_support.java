@@ -2077,10 +2077,6 @@ public class main_support {
     //    en (i.t.t. TurboWin) niet op 1/10 graads vak niveau (zgf_lkw)
 
     int Octant = INVALID;
-    int la_vak_10;
-    int la_vak_1;
-    int lo_vak_10;
-    int lo_vak_1;
     int vak_10;
     int sam_index;
     int land_zee_cijfer_sam; // gevonden cijfer in ZGF_SAM (10 graads vakken file)
@@ -2100,73 +2096,15 @@ public class main_support {
       // InputStream is = getClass().getResourceAsStream(main.ICONS_DIRECTORY + "zgf_lkw");
       // BufferedReader in_2 = new BufferedReader(new InputStreamReader(is));
 
-      //
-      // Octant bepalen (WMO code table 0371)
-      //
-      // if ((obs_North_or_South == "N") && (obs_East_or_West == "W"))
-      if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-        // if (num_LoLoLoLo >= 0 && num_LoLoLoLo < 900)                      // n.b. 900 = 90.0 gr
-        if (myposition.int_longitude_degrees >= 0 && myposition.int_longitude_degrees < 90)
-          Octant = 0;
-        else if (myposition.int_longitude_degrees >= 90
-            && myposition.int_longitude_degrees <= 180) // n.b. 1800 = 180.0 gr
-        Octant = 1;
-      }
-
-      // else if ((obs_North_or_South == "N") && (obs_East_or_West == "E"))
-      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-        if (myposition.int_longitude_degrees >= 90 && myposition.int_longitude_degrees <= 180)
-          Octant = 2;
-        else if (myposition.int_longitude_degrees >= 0 && myposition.int_longitude_degrees < 90)
-          Octant = 3;
-      }
-
-      // else if ((obs_North_or_South == "S") && (obs_East_or_West == "W"))
-      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-        if (myposition.int_longitude_degrees >= 0
-            && myposition.int_longitude_degrees < 90) // n.b. 900 = 90.0 gr
-        Octant = 5;
-        else if (myposition.int_longitude_degrees >= 90
-            && myposition.int_longitude_degrees <= 180) // n.b. 1800 = 180.0 gr
-        Octant = 6;
-      }
-
-      // else if ((obs_North_or_South == "S") && (obs_East_or_West == "E"))
-      else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-        if (myposition.int_longitude_degrees >= 90 && myposition.int_longitude_degrees <= 180)
-          Octant = 7;
-        else if (myposition.int_longitude_degrees >= 0 && myposition.int_longitude_degrees < 90)
-          Octant = 8;
-      }
-
-      //
-      // La-Vak bepalen
-      //
-      // la_vak_10    = num_LaLaLa / 100;                        // 123 -> 1
-      // la_vak_1     = (num_LaLaLa / 10) % 10;                  // 123 -> 2
-      la_vak_10 = myposition.int_latitude_degrees / 10; // 12 -> 1
-      la_vak_1 = myposition.int_latitude_degrees % 10; // 12 -> 2
-      // la_vak_1_10  = num_LaLaLa % 10;                         // 123 -> 3
-      // la_voor_lkw  = num_LaLaLa / 10;                         // 123 -> 12
-
-      //
-      // Lo-Vak bepalen
-      //
-      // lo_vak_10    = (num_LoLoLoLo / 100) % 10;               // 1234 -> 2
-      // lo_vak_1     = (num_LoLoLoLo / 10) % 10;                // 1234 -> 3
-      lo_vak_10 = (myposition.int_longitude_degrees / 10) % 10; // 123 -> 2
-      lo_vak_1 = (myposition.int_longitude_degrees) % 10; // 123 -> 3
-      // lo_vak_1_10  = num_LoLoLoLo % 10;                       // 1234 -> 4
-      // lo_voor_lkw  = (num_LoLoLoLo / 10) % 100;               // 1234 -> 23
-
-      //
-      // 10 graads vak bepalen (WMO code tabel 0371)
-      //
-      vak_10 = (Octant * 100) + (la_vak_10 * 10) + lo_vak_10;
+      LandSeaMaskPositionCalculator.Position maskPosition =
+          LandSeaMaskPositionCalculator.calculate(
+              myposition.latitude_hemisphere,
+              myposition.longitude_hemisphere,
+              myposition.int_latitude_degrees,
+              myposition.int_longitude_degrees);
+      Octant = maskPosition.octant();
+      vak_10 = maskPosition.tenDegreeCell();
+      sam_index = maskPosition.samIndex();
 
       while (((record_sam = in_1.readLine()) != null) && (Octant != INVALID)) {
         // record_sam.read_line(in_1);
@@ -2177,8 +2115,6 @@ public class main_support {
             int_record_sam_vak_10 = Integer.valueOf(record_sam.substring(0, 3));
 
             if (int_record_sam_vak_10 == vak_10) {
-              sam_index = 5 + (11 * la_vak_1) + lo_vak_1; // start op positie 0
-
               // land_zee_cijfer_sam = atoi(record_sam.substring(sam_index, sam_index + 1));
               land_zee_cijfer_sam = Integer.valueOf(record_sam.substring(sam_index, sam_index + 1));
 
