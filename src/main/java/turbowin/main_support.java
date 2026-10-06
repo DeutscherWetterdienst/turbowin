@@ -920,7 +920,6 @@ public class main_support {
 
     int posi;
     int w;
-    int immt_position_observer;
     int[][] aantal_waarnemer = new int[main.MAX_AANTAL_JAREN_IN_IMMT][main.MAX_AANTAL_WAARNEMERS];
     boolean jaar_substring_al_aanwezig;
     String record;
@@ -934,9 +933,7 @@ public class main_support {
     String[] backup_moved_observername_file_array = new String[main.MAX_AANTAL_JAREN_IN_IMMT];
     String[] moved_observername_file_array = new String[main.MAX_AANTAL_JAREN_IN_IMMT];
     String jaar_substring;
-    String waarnemer_substring = "";
     String observername_office;
-    String immt_version;
     BufferedWriter out_0 = null;
     BufferedWriter out_0_backup = null;
     BufferedWriter out_1 = null;
@@ -1079,58 +1076,10 @@ public class main_support {
     // NB je weet zeker dat de immt.log in deze fase aanwezig is
     */
 
-    for (int m = 0; m < main.MAX_AANTAL_JAREN_IN_IMMT; m++) {
-      for (int i = 0; i < main.MAX_AANTAL_WAARNEMERS; i++) {
-        aantal_waarnemer[m][i] = 0;
-      }
-    }
-
     /* read all lines/records from immt log */
     try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_immt))) {
-      while ((record = in.readLine()) != null) {
-        /* eerst immt version bepalen want dan is pas bekend wat de positie van de waarnemer is */
-        if (record.length() > main.IMMT_POSITION_IMMT_VERSION) {
-          immt_version =
-              record.substring(
-                  main.IMMT_POSITION_IMMT_VERSION, main.IMMT_POSITION_IMMT_VERSION + 1);
-
-          if (immt_version.equals("3") == true) {
-            immt_position_observer = main.IMMT_3_POSITION_OBSERVER;
-          } else if (immt_version.equals("4") == true) {
-            immt_position_observer = main.IMMT_4_POSITION_OBSERVER;
-          } else if (immt_version.equals("5") == true) {
-            immt_position_observer = main.IMMT_5_POSITION_OBSERVER;
-          } else {
-            immt_position_observer =
-                INVALID; //  dan zal verderop geen waarnemer uit de record worden gelezen
-          }
-
-          // if (record.length() > IMMT_POSITION_OBSERVER - 1)
-          if (record.length() > immt_position_observer - 1) {
-            waarnemer_substring =
-                record.substring(
-                    immt_position_observer); // record.substring(IMMT_POSITION_OBSERVER);
-            jaar_substring = record.substring(1, 5); // eg 2010
-
-            for (int i = 0; i < main.MAX_AANTAL_WAARNEMERS; i++) {
-              if (main.observername_array[i].compareTo("") != 0) {
-                // NB waarnemer_substring  : surname - ; - initials (separated by .'s) - ; - rank -
-                // ; - discharge book number
-                // NB observername_array[i]: surname - ; - initials (separated by .'s) - ; - rank -
-                // ; - discharge book number
-
-                if (waarnemer_substring.equals(main.observername_array[i]) == true) {
-                  for (int m = 0; m < main.MAX_AANTAL_JAREN_IN_IMMT; m++) {
-                    if (jaar_substring.equals(main.jaar_substring_array[m])) {
-                      aantal_waarnemer[m][i]++;
-                    }
-                  } // for (int m = 0; m < main.MAX_AANTAL_JAREN_IN_IMMT; m++)
-                } // if (waarnemer_substring.equals(hulp_observername))
-              } // if (observername_array[i].compareTo("") != 0)
-            } // for (i = 0; i < MAX_AANTAL_WAARNEMERS: i++)
-          } // if (obs_immt.length() > IMMT_POSITION_OBSERVER -1)
-        } // if (record.length() > IMMT_POSITION_IMMT_VERSION)
-      } // while((record = in.readLine()) != null)
+      aantal_waarnemer =
+          ObserverStatisticsCounter.count(in, main.observername_array, main.jaar_substring_array);
     } // try
     catch (IOException ex) {
       // do nothing, possible file was never created
