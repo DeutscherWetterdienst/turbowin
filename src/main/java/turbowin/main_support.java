@@ -579,8 +579,7 @@ public class main_support {
 
     /* first check if there is an immt log source file present (and not empty) */
     main.volledig_path_srcFilename_immt = logs_dir + java.io.File.separator + IMMT_LOG;
-    File immt_source_file = new File(main.volledig_path_srcFilename_immt);
-    if (immt_source_file.exists() && immt_source_file.length() > 10) {
+    if (LogFilesMoveValidation.hasUsableImmtLog(main.volledig_path_srcFilename_immt)) {
       doorgaan = true;
     } else {
       JOptionPane.showMessageDialog(
