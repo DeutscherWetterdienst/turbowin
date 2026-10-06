@@ -684,96 +684,15 @@ public class main_support {
 
   private int bepaal_afstand_huidige_obs_pos_tot_vorige_obs_pos(
       double num_vorige_obs_breedte, double num_vorige_obs_lengte) {
-    /* used formula :                                                  */
-    /* cos_AB = sin_bA * sin_bB + cos_bA * cos_bB * cos_delta_l_AB     */
-    /*                                                                 */
-    /* distance = 60 arccos(cos_AB)                                    */
-    /*                                                                 */
-    /* from degrees angle to radians angle : graden * 60 * boogminuut  */
-
-    // constants
-    final int westgrens_POR = 90;
-    final int oostgrens_POR = -90;
-    final double boogminuut = 0.0002908882;
-    final double h180pi = 3437.746771;
-
-    // var's
-    int afstand = Integer.MAX_VALUE;
-    double delta_l_ab;
-    double cos_delta_l_ab;
-    double sin_breedte_a;
-    double sin_breedte_b;
-    double cos_breedte_a;
-    double cos_breedte_b;
-    double num_huidige_obs_breedte;
-    double num_huidige_obs_lengte;
-    double acos_argument;
-    boolean huidige_obs_in_por;
-
-    num_huidige_obs_breedte =
-        (double) myposition.int_latitude_degrees + ((double) myposition.int_latitude_minutes / 60);
-    num_huidige_obs_lengte =
-        (double) myposition.int_longitude_degrees
-            + ((double) myposition.int_longitude_minutes / 60);
-
-    if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) {
-      num_huidige_obs_breedte *= -1;
-    }
-
-    if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true) {
-      num_huidige_obs_lengte *= -1;
-    }
-
-    /* due to 180 degrees passage in the POR */
-    // if ((num_huidige_obs_lengte >= westgrens_POR) && (num_huidige_obs_lengte <= oostgrens_POR))
-    // // komt hier nooit in ????
-
-    // if ( (num_huidige_obs_lengte >= westgrens_POR && num_huidige_obs_lengte <= 180) ||      //
-    // westgrens_por +90
-    //     (num_huidige_obs_lengte >= -180 && num_huidige_obs_lengte <= oostgrens_POR) )      //
-    // oostgrens_por -90
-    huidige_obs_in_por =
-        (num_huidige_obs_lengte >= -180 && num_huidige_obs_lengte <= oostgrens_POR)
-            || (num_huidige_obs_lengte >= westgrens_POR
-                && num_huidige_obs_lengte <= 180); // westgrens_por +90 // oostgrens_por -90
-
-    if (huidige_obs_in_por == true) {
-      if (num_huidige_obs_lengte < 0) num_huidige_obs_lengte += 360;
-      if (num_vorige_obs_lengte < 0) num_vorige_obs_lengte += 360;
-    } // if (huidige_obs_in_por == true)
-
-    /* determine longitude difference */
-    delta_l_ab = num_huidige_obs_lengte - num_vorige_obs_lengte;
-
-    /* longitude difference > 180: do not compute but give MAX_VALUE (> 180 gives issues in formula) */
-    if (Math.abs(delta_l_ab) > 180) {
-      afstand = Integer.MAX_VALUE;
-    } else // longitude difference < 180
-    {
-      /* the (greatcircle) computation */
-      sin_breedte_a = Math.sin(num_vorige_obs_breedte * 60 * boogminuut);
-      sin_breedte_b = Math.sin(num_huidige_obs_breedte * 60 * boogminuut);
-      cos_breedte_a = Math.cos(num_vorige_obs_breedte * 60 * boogminuut);
-      cos_breedte_b = Math.cos(num_huidige_obs_breedte * 60 * boogminuut);
-      cos_delta_l_ab = Math.cos(delta_l_ab * 60 * boogminuut);
-
-      /* first test acos argument to prevent ACOS domain error (if 2x exact the same position + obs to screen)*/
-      acos_argument =
-          sin_breedte_a * sin_breedte_b + cos_breedte_a * cos_breedte_b * cos_delta_l_ab;
-      if (acos_argument <= -1 || acos_argument >= 1) {
-        afstand = 0;
-      } else {
-        afstand =
-            (int)
-                Math.round(
-                    h180pi
-                        * Math.acos(
-                            acos_argument)); // Returns the closest int to the argument (zelde als
-        // (int)Math.floor(a + 0.5f)
-      }
-    } // else (longitude difference < 180)
-
-    return afstand;
+    return PositionDistanceCalculator.calculate(
+        num_vorige_obs_breedte,
+        num_vorige_obs_lengte,
+        myposition.int_latitude_degrees,
+        myposition.int_latitude_minutes,
+        myposition.latitude_hemisphere,
+        myposition.int_longitude_degrees,
+        myposition.int_longitude_minutes,
+        myposition.longitude_hemisphere);
   }
 
   public boolean Move_log_files(final String move_mode_logs) {
