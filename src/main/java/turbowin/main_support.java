@@ -584,7 +584,7 @@ public class main_support {
               num_huidige_obs_uur,
               0); // Month value is 0-based. e.g., 0 for January.
 
-      if (calendar_huidige_obs.compareTo(calendar_vorige_obs) <= 0) {
+      if (ObservationTimeSequenceValidation.isNotLater(calendar_huidige_obs, calendar_vorige_obs)) {
         SimpleDateFormat sdf2;
         sdf2 = new SimpleDateFormat("MMMM dd, yyyy HH"); // e.g "MMMM dd, yyyy" -> februari 27, 2010
 
@@ -619,8 +619,8 @@ public class main_support {
 
         /* first determine the time diff between present and previous obs */
         long obs_verschil_uur =
-            (calendar_huidige_obs.getTimeInMillis() - calendar_vorige_obs.getTimeInMillis())
-                / 3600000; // 3600000 = 1000 * 60 * 60 = 1 uur
+            ObservationTimeSequenceValidation.elapsedWholeHours(
+                calendar_huidige_obs, calendar_vorige_obs);
 
         if (obs_verschil_uur
             >= 0) // alleen verdere checks als huidige obs datum/tijd is later dan vorige obs
