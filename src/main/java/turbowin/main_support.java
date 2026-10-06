@@ -18,8 +18,6 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,9 +34,6 @@ import java.util.SimpleTimeZone;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -913,81 +908,7 @@ public class main_support {
   }
 
   private void zip_log_files() {
-    File file_logs_dir = new File(temp_logs_dir /*+ java.io.File.separator*/);
-    String[] filenames =
-        file_logs_dir.list(); // Returns an array of strings naming the files and directories in the
-    // directory denoted by this abstract pathname.
-
-    for (int i = 0; i < filenames.length; i++) {
-      filenames[i] = temp_logs_dir + java.io.File.separator + filenames[i];
-    }
-
-    // Create a buffer for reading the files
-    byte[] buf = new byte[1024];
-
-    try {
-      // Create the ZIP file
-      // String outFilename = "C:/Users/User/Downloads/logs/temp/logs.zip";
-      // String outFilename = "C:/Users/User/Documents/logs.zip";
-      String outFilename =
-          temp_logs_dir
-              + java.io.File.separator
-              + ship_name
-              + " "
-              + main.LOGS_ZIP; // e.g. "C:/Users/User/Downloads/logs/temp/happy sailor logs.zip";
-      ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
-
-      // Compress the files
-      for (int i = 0; i < filenames.length; i++) {
-        // JOptionPane.showMessageDialog(null, filenames[i] , APPLICATION_NAME + " test",
-        // JOptionPane.WARNING_MESSAGE);
-        File te_zippen_file = new File(filenames[i]);
-        if (te_zippen_file.isDirectory()
-            == false) // ABSOLUUT GEEN DIRECTORIES, WANT DAN INVALID ARCHIEF
-        {
-          FileInputStream in = new FileInputStream(filenames[i]);
-
-          // Add ZIP entry to output stream.
-          try {
-            // out.putNextEntry(new ZipEntry(filenames[i]));
-            // out.putNextEntry(new ZipEntry(Path.GetFileName(filenames[i]))); // Path.GetFileName
-            // -> to prevent full paths are included
-            out.putNextEntry(
-                new ZipEntry(
-                    te_zippen_file.getName())); // getName -> to prevent full paths are included
-
-            //// out.setLevel(Deflater.DEFAULT_COMPRESSION);
-          } catch (ZipException ex) {
-            JOptionPane.showMessageDialog(
-                null,
-                "zip error (Maintenance_Move_log_files_by_email_actionPerformed)",
-                APPLICATION_NAME + " error",
-                JOptionPane.ERROR_MESSAGE);
-          }
-
-          // Transfer bytes from the input file to the ZIP file
-          int len;
-          while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-          }
-
-          // Complete the entry
-          out.closeEntry();
-          in.close();
-        } // if (test.isDirectory() == false)
-      } // for (int i = 0; i < filenames.length; i++)
-
-      // Complete the ZIP file
-      out.close();
-
-    } // try
-    catch (IOException e) {
-      JOptionPane.showMessageDialog(
-          null,
-          "i/o zip error (Maintenance_Move_log_files_by_email_actionPerformed)",
-          APPLICATION_NAME + " error",
-          JOptionPane.ERROR_MESSAGE);
-    }
+    LogFilesZipWorkflow.zip(temp_logs_dir, ship_name, main.LOGS_ZIP);
   }
 
   public void Kopieeren_Waarnemers_En_Aantallen() {
