@@ -921,8 +921,6 @@ public class main_support {
     int posi;
     int w;
     int[][] aantal_waarnemer = new int[main.MAX_AANTAL_JAREN_IN_IMMT][main.MAX_AANTAL_WAARNEMERS];
-    boolean jaar_substring_al_aanwezig;
-    String record;
     String volledig_path_immt = logs_dir + java.io.File.separator + IMMT_LOG;
     // String moved_observername_file                = output_dir + java.io.File.separator +
     // OBSERVER_LOG;
@@ -932,7 +930,6 @@ public class main_support {
         main.output_dir + java.io.File.separator + station_ID + "_" + OBSERVER_LOG;
     String[] backup_moved_observername_file_array = new String[main.MAX_AANTAL_JAREN_IN_IMMT];
     String[] moved_observername_file_array = new String[main.MAX_AANTAL_JAREN_IN_IMMT];
-    String jaar_substring;
     String observername_office;
     BufferedWriter out_0 = null;
     BufferedWriter out_0_backup = null;
@@ -952,34 +949,7 @@ public class main_support {
 
     /* read all lines/records from immt log */
     try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_immt))) {
-      while ((record = in.readLine()) != null) {
-        if (record.length()
-            > main.IMMT_POSITION_IMMT_VERSION) // NB at least number greater than year in IMMT
-        {
-          jaar_substring = record.substring(1, 5); // eg 2006
-          jaar_substring_al_aanwezig = false;
-
-          // System.out.println("+++ jaar_substring = " + jaar_substring);
-
-          for (int k = 0; k < main.MAX_AANTAL_JAREN_IN_IMMT; k++) {
-            if (main.jaar_substring_array[k].equals(jaar_substring)) // this year was stored before
-            {
-              jaar_substring_al_aanwezig = true;
-              break;
-            }
-          } // for (int j = 0; j < main.MAX_AANTAL_JAREN_IN_IMMT; j++)
-
-          if (jaar_substring_al_aanwezig == false) {
-            for (int m = 0; m < main.MAX_AANTAL_JAREN_IN_IMMT; m++) {
-              if (main.jaar_substring_array[m].equals("")) // empty array place
-              {
-                main.jaar_substring_array[m] = jaar_substring;
-                break;
-              }
-            } // for (int j = 0; j < main.MAX_AANTAL_JAREN_IN_IMMT; j++)
-          } // if (jaar_substring_al_aanwezig == false)
-        } // if (obs_immt.length() > IMMT_POSITION_IMMT_VERSION)
-      } // while((record = in.readLine()) != null)
+      ObserverYearExtractor.extract(in, main.jaar_substring_array);
     } // try
     catch (IOException ex) {
       // do nothing, possible file was never created
@@ -1055,6 +1025,7 @@ public class main_support {
     }
 
     String volledig_path_observer = main.logs_dir + java.io.File.separator + main.OBSERVER_LOG;
+    String record;
 
     /* read all lines/records from observer log */
     try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_observer))) {
