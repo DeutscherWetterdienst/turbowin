@@ -19,7 +19,6 @@ import java.net.URLConnection;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 public class OSM {
@@ -720,31 +719,7 @@ public class OSM {
   }
 
   public void OSM_AWS_Sensor_data_on_leaflet_map() {
-    // called from: Maps_OSM() [main.java]
-
-    new SwingWorker<Void, Void>() {
-      @Override
-      protected Void doInBackground() throws Exception {
-        mylatestmeasurements
-            .Read_Sensor_Data_Files_For_Latest_AWS_Measurements(); // now AWS_array[][] is filled
-        // (see
-        // myleatestmeasurements.java)
-
-        // display the online/offline map via a web browser
-        if (main.OSM_mode.equals(main.OSM_ONLINE_AWS_SENSOR)) {
-          OSM_display_AWS_Sensor_on_online_map();
-        } else if (main.OSM_mode.equals(main.OSM_OFFLINE_AWS_SENSOR)) {
-          OSM_display_AWS_Sensor_on_offline_map();
-        }
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        ;
-      }
-    }.execute(); // new SwingWorker<Void, Void>()
+    OsmAwsSensorMapWorkflow.start(this);
   }
 
   void OSM_display_IMMT_on_online_map(List<String> immt_list) {
@@ -1268,7 +1243,7 @@ public class OSM {
         "OSM_display_IMMT_on_offline_map()");
   } // private void OSM_display_IMMT_on_offline_map(List<String> immt_list)
 
-  private void OSM_display_AWS_Sensor_on_online_map() {
+  void OSM_display_AWS_Sensor_on_online_map() {
     // called from: OSM_AWS_Sensor_data_on_leaflet_map() [OSM.java]
     //
     // NB this function is still in background thread
@@ -1336,7 +1311,7 @@ public class OSM {
     } // if ((Desktop.isDesktopSupported()) && etc.
   }
 
-  private void OSM_display_AWS_Sensor_on_offline_map() {
+  void OSM_display_AWS_Sensor_on_offline_map() {
     // called from: called from: OSM_AWS_Sensor_data_on_leaflet_map() [OSM.java]
     //
     // NB this function is still in background thread
