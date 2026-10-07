@@ -25,7 +25,6 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -965,9 +964,7 @@ public class main_support {
     cal_systeem_datum_tijd =
         new GregorianCalendar(
             new SimpleTimeZone(0, "UTC")); // geeft systeem datum tijd in UTC van dit moment
-    SimpleDateFormat sdf2;
-    sdf2 = new SimpleDateFormat("MMMM dd, yyyy"); // e.g "MMMM dd, yyyy" -> februari 27, 2010
-    String systeem_date_time = sdf2.format(cal_systeem_datum_tijd.getTime());
+    String systeem_date_time = LogFileBackupDate.format(cal_systeem_datum_tijd);
 
     // volledig_path_backup_srcFilename_immt = logs_dir + java.io.File.separator + "IMMT_BACKUP " +
     // systeem_date_time + ".TXT";
