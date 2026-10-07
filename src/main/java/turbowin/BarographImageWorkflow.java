@@ -1,0 +1,45 @@
+package turbowin;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
+
+/** Owns asynchronous loading of barograph images. */
+final class BarographImageWorkflow {
+
+  private BarographImageWorkflow() {}
+
+  static void start(mybarograph owner, String imagePath) {
+    new SwingWorker<ImageIcon, Object>() {
+      @Override
+      public ImageIcon doInBackground() {
+        return owner.createImageIcon(imagePath);
+      }
+
+      @Override
+      public void done() {
+        try {
+          if (owner.isKnownBarographImagePath(imagePath)) {
+            owner.setBarographImageIcon(imagePath, get());
+          }
+        } // try
+        catch (InterruptedException ignore) {
+        } catch (java.util.concurrent.ExecutionException e) {
+          String why = null;
+          Throwable cause = e.getCause();
+          if (cause != null) {
+            why = cause.getMessage();
+          } else {
+            why = e.getMessage();
+          }
+          // System.err.println("Error retrieving file: " + why);
+          JOptionPane.showMessageDialog(
+              null,
+              "Error retrieving file: " + why,
+              main.APPLICATION_NAME,
+              JOptionPane.ERROR_MESSAGE);
+        } // catch
+      } //  public void done()
+    }.execute();
+  }
+}
