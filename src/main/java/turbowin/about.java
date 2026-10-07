@@ -551,36 +551,11 @@ public final class about extends javax.swing.JFrame {
   }
 
   private void loadImage_GPL_logo(final String imagePath) {
-    new SwingWorker<ImageIcon, Object>() {
-      @Override
-      public ImageIcon doInBackground() {
-        return createImageIcon(imagePath);
-      }
+    AboutGplImageWorkflow.start(this, imagePath);
+  }
 
-      @Override
-      public void done() {
-        try {
-          ImageIcon logo_icon = get();
-          jLabel10.setIcon(logo_icon);
-        } // try
-        catch (InterruptedException ignore) {
-        } catch (java.util.concurrent.ExecutionException e) {
-          String why;
-          Throwable cause = e.getCause();
-          if (cause != null) {
-            why = cause.getMessage();
-          } else {
-            why = e.getMessage();
-          }
-          // System.err.println("Error retrieving file: " + why);
-          JOptionPane.showMessageDialog(
-              null,
-              "Error retrieving file: " + why,
-              main.APPLICATION_NAME,
-              JOptionPane.ERROR_MESSAGE);
-        } // catch
-      } //  public void done()
-    }.execute();
+  void setGplLogoIcon(ImageIcon icon) {
+    jLabel10.setIcon(icon);
   }
 
   private void loadImage_GPL_logo_straight(final String imagePath) {
