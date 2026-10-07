@@ -918,7 +918,6 @@ public class main_support {
     // checking which years are present in immt.txt staan bv 2003, 2004 en 2005
     */
 
-    int posi;
     int[][] aantal_waarnemer = new int[main.MAX_AANTAL_JAREN_IN_IMMT][main.MAX_AANTAL_WAARNEMERS];
     String volledig_path_immt = logs_dir + java.io.File.separator + IMMT_LOG;
     // String moved_observername_file                = output_dir + java.io.File.separator +
@@ -972,8 +971,6 @@ public class main_support {
     }
 
     /* positie bepalen waar jaartal tussengevoegd moet worden (bv A:\observer.log -> A:\observer_2006.log) */
-    posi = moved_observername_file.indexOf(".log"); // nb variable pos wordt ook gebruikt in TPoint
-
     /* (absolute) filenamen van de download (en download backup) observer files bepalen */
 
     cal_systeem_datum_tijd =
@@ -990,10 +987,8 @@ public class main_support {
       if (main.jaar_substring_array[j].compareTo("") != 0) {
         /* eg A:\PGDE_observer_2006.log + A:\PGDE_observer_2007.log) */
         moved_observername_file_array[j] =
-            moved_observername_file.substring(0, posi)
-                + "_"
-                + main.jaar_substring_array[j]
-                + ".log";
+            ObserverStatisticsPathBuilder.outputPath(
+                moved_observername_file, main.jaar_substring_array[j]);
         /* bepalen naam van de observername backup file (altijd op een vaste plaats) */
 
         /* eg PGDE_OBSERVER_2006_BACKUP November 22, 2009.txt + PGDE_OBSERVER_2007_BACKUP November 22, 2009.txt */
@@ -1002,15 +997,8 @@ public class main_support {
         // backup_moved_observername_file_array[j] = logs_dir + java.io.File.separator + call_sign +
         // "_" + "OBSERVER_" + jaar_substring_array[j] + "_BACKUP " + systeem_date_time + ".TXT";
         backup_moved_observername_file_array[j] =
-            logs_dir
-                + java.io.File.separator
-                + station_ID
-                + "_"
-                + "OBSERVER_"
-                + main.jaar_substring_array[j]
-                + "_BACKUP "
-                + systeem_date_time
-                + ".TXT";
+            ObserverStatisticsPathBuilder.backupPath(
+                logs_dir, station_ID, main.jaar_substring_array[j], systeem_date_time);
       } // if (jaar_substring_array[k] != "")
     } // for (int j = 0; j < main.MAX_AANTAL_JAREN_IN_IMMT; j++)
 
