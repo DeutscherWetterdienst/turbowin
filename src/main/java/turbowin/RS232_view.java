@@ -432,57 +432,52 @@ public class RS232_view extends javax.swing.JFrame {
     // retrieving sensor data from file, only once (no timer because there is no active serial
     // connection)
 
-    new SwingWorker<Void, Void>() {
-      @Override
-      protected Void doInBackground() throws Exception {
-        // 1st meteo instrument
-        //
-        if (main.RS232_connection_mode == 1
-            || main.RS232_connection_mode == 2) // PTB220 or PTB330 connected
-        {
-          Read_Sensor_Data_Files_For_Barograph();
-        } else if (main.RS232_connection_mode == 3
-            || main.RS232_connection_mode == 9
-            || main.RS232_connection_mode == 10
-            || main.RS232_connection_mode == 11) // AWS connected
-        {
-          if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS)) {
-            Read_Sensor_Data_Files_For_Graphs_4();
-          } else {
-            Read_Sensor_Data_Files_For_Graphs();
-          }
-        } else if (main.RS232_connection_mode == 4
-            || main.RS232_connection_mode == 5
-            || main.RS232_connection_mode
-                == 6) // Mintaka Duo or Mintaka Star USB or Mintaka Star WiFi
-        {
-          Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
-        } else if (main.RS232_connection_mode == 7
-            || main.RS232_connection_mode == 8) // StarX USB or StarX LAN
-        {
-          if (main.mode_grafiek.equals(main.MODE_PRESSURE)) {
-            Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
-          } else if (main.mode_grafiek.equals(main.MODE_AIRTEMP)) {
-            Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX();
-          }
-        }
+    Rs232ViewSensorFileWorkflow.start(this);
+  }
 
-        // 2nd meteo instrument
-        //
-        if (main.RS232_connection_mode_II == 1) {
-          if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)) {
-            Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
-          }
-        }
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        jPanel1.repaint(); // main panel
+  void readSensorDataFromFile() {
+    // 1st meteo instrument
+    //
+    if (main.RS232_connection_mode == 1
+        || main.RS232_connection_mode == 2) // PTB220 or PTB330 connected
+    {
+      Read_Sensor_Data_Files_For_Barograph();
+    } else if (main.RS232_connection_mode == 3
+        || main.RS232_connection_mode == 9
+        || main.RS232_connection_mode == 10
+        || main.RS232_connection_mode == 11) // AWS connected
+    {
+      if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS)) {
+        Read_Sensor_Data_Files_For_Graphs_4();
+      } else {
+        Read_Sensor_Data_Files_For_Graphs();
       }
-    }.execute(); // new SwingWorker<Void, Void>()
+    } else if (main.RS232_connection_mode == 4
+        || main.RS232_connection_mode == 5
+        || main.RS232_connection_mode == 6) // Mintaka Duo or Mintaka Star USB or Mintaka Star WiFi
+    {
+      Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
+    } else if (main.RS232_connection_mode == 7
+        || main.RS232_connection_mode == 8) // StarX USB or StarX LAN
+    {
+      if (main.mode_grafiek.equals(main.MODE_PRESSURE)) {
+        Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
+      } else if (main.mode_grafiek.equals(main.MODE_AIRTEMP)) {
+        Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX();
+      }
+    }
+
+    // 2nd meteo instrument
+    //
+    if (main.RS232_connection_mode_II == 1) {
+      if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)) {
+        Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
+      }
+    }
+  }
+
+  void repaintSensorGraph() {
+    jPanel1.repaint(); // main panel
   }
 
   private void init_sensor_data_uit_file_ophalen_timer() {
