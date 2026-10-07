@@ -1,8 +1,6 @@
 package turbowin;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 
 public final class mycl extends javax.swing.JFrame {
 
@@ -626,64 +624,42 @@ public final class mycl extends javax.swing.JFrame {
   // not result in invoking the doInBackground method twice.
   // see: http://java.sun.com/javase/6/docs/api/javax/swing/SwingWorker.html
   private void loadImage(final String imagePath) {
-    new SwingWorker<ImageIcon, Object>() {
-      @Override
-      public ImageIcon doInBackground() {
-        return createImageIcon(imagePath);
-      }
+    CloudLayerImageWorkflow.start(this, imagePath);
+  }
 
-      @Override
-      public void done() {
-        try {
-          if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_1.jpg")) {
-            ImageIcon img_cl1 = get();
-            jLabel1.setIcon(img_cl1);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_2.jpg")) {
-            ImageIcon img_cl2 = get();
-            jLabel2.setIcon(img_cl2);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_3.jpg")) {
-            ImageIcon img_cl3 = get();
-            jLabel3.setIcon(img_cl3);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_4.jpg")) {
-            ImageIcon img_cl4 = get();
-            jLabel4.setIcon(img_cl4);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_5.jpg")) {
-            ImageIcon img_cl5 = get();
-            jLabel5.setIcon(img_cl5);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_6.jpg")) {
-            ImageIcon img_cl6 = get();
-            jLabel6.setIcon(img_cl6);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_7.jpg")) {
-            ImageIcon img_cl7 = get();
-            jLabel7.setIcon(img_cl7);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_8.jpg")) {
-            ImageIcon img_cl8 = get();
-            jLabel8.setIcon(img_cl8);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_9.jpg")) {
-            ImageIcon img_cl9 = get();
-            jLabel9.setIcon(img_cl9);
-          }
+  boolean isKnownCloudLayerImagePath(String imagePath) {
+    return imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_1.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_2.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_3.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_4.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_5.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_6.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_7.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_8.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_9.jpg");
+  }
 
-        } // try
-        catch (InterruptedException ignore) {
-        } catch (java.util.concurrent.ExecutionException e) {
-          String why = null;
-          Throwable cause = e.getCause();
-          if (cause != null) {
-            why = cause.getMessage();
-          } else {
-            why = e.getMessage();
-          }
-          // System.err.println("Error retrieving file: " + why);
-          JOptionPane.showMessageDialog(
-              null,
-              "Error retrieving file: " + why,
-              main.APPLICATION_NAME + " error",
-              JOptionPane.ERROR_MESSAGE);
-        } // catcl
-      } //  public void done()
-    }.execute();
-  } // private void loadImage(final String imagePath, final int index)
+  void setCloudLayerImageIcon(String imagePath, ImageIcon icon) {
+    if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_1.jpg")) {
+      jLabel1.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_2.jpg")) {
+      jLabel2.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_3.jpg")) {
+      jLabel3.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_4.jpg")) {
+      jLabel4.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_5.jpg")) {
+      jLabel5.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_6.jpg")) {
+      jLabel6.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_7.jpg")) {
+      jLabel7.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_8.jpg")) {
+      jLabel8.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_9.jpg")) {
+      jLabel9.setIcon(icon);
+    }
+  }
 
   private void loadImage_straight(final String imagePath) {
     if (imagePath.equals(main.ICONS_DIRECTORY + "glyph_cl_1.jpg")) {
