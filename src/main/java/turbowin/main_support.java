@@ -170,148 +170,45 @@ public class main_support {
   }
 
   public void determine_satellite_image_url_SSEC(String satellite_image_mode) {
-    // defaults
-    String products = "";
-    String url_satellite_image = "";
-
-    // determine type of satellite image
-    if (satellite_image_mode.equals(main.SATELLITE_IR_IMAGE)) {
-      products = "globalir";
-    } else if (satellite_image_mode.equals(main.SATELLITE_VIS_IMAGE)) {
-      products = "global1kmvis";
-    } else if (satellite_image_mode.equals(main.SATELLITE_SST_IMAGE)) {
-      products = "NESDIS-SST";
-    }
-
-    // Latitude
-    double centerLat =
-        Math.max(
-            -90,
-            Math.min(
-                90,
-                parseSatelliteCoordinate(
-                    myposition.latitude_degrees,
-                    myposition.latitude_hemisphere,
-                    myposition.HEMISPHERE_SOUTH)));
-
-    // Longitude
-    double centerLon =
-        Math.max(
-            -180,
-            Math.min(
-                180,
-                parseSatelliteCoordinate(
-                    myposition.longitude_degrees,
-                    myposition.longitude_hemisphere,
-                    myposition.HEMISPHERE_WEST)));
-
-    // Force zoom <= 4 to reduce chance of watermark
-    int zoomLevel = 2;
-
-    // construct URL
-    url_satellite_image =
-        SatelliteImageUrlBuilder.buildSsec(satellite_image_mode, (int) centerLat, (int) centerLon);
-
-    // open in browser
-    main.satellite_link_mouse_clicked(url_satellite_image);
+    int latitude =
+        parseSatelliteCoordinate(
+            myposition.latitude_degrees,
+            myposition.latitude_hemisphere,
+            myposition.HEMISPHERE_SOUTH);
+    int longitude =
+        parseSatelliteCoordinate(
+            myposition.longitude_degrees,
+            myposition.longitude_hemisphere,
+            myposition.HEMISPHERE_WEST);
+    String url = SatelliteImageUrlBuilder.buildSsec(satellite_image_mode, latitude, longitude);
+    main.satellite_link_mouse_clicked(url);
   }
 
   public void determine_satellite_image_url_NOAA(String satellite_image_mode) {
-    //
-    // Build a Worldview URL.
-    //
-    // @param centerLat Center latitude in degrees
-    // @param centerLon Center longitude in degrees
-    // @param halfWidthDeg Half-width of bounding box in degrees (controls zoom)
-    // @param halfHeightDeg Half-height of bounding box in degrees (controls zoom)
-    // @param layer Layer string, e.g., "GOES16:ABI-L2-CMIPF"
-    // @param time Optional UTC time in format "YYYY-MM-DDTHH:MM:SSZ", or null for latest
-    // @return Constructed Worldview URL
-    //
-    //
-    //
-    // NB For real-time frames, black areas happen a lot
-    //
-    //   - Cropping or viewport changes never fix it
-    //   - Layer switching rarely fixes it
-    //   - This problem is specific to Worldview tile service
-    //
-
-    int int_lat_degrees = 0;
-    int int_lon_degrees = 0;
-    double halfWidthDeg = 90.0; // ~zoom level
-    double halfHeightDeg = 90.0; // ~zoom level
-    String layer = "GOES16:ABI-L2-CMIPF"; // default the standard IR
-    double centerLat = 0.0;
-    double centerLon = 0.0;
-
-    if (satellite_image_mode.equals(main.SATELLITE_IR_IMAGE)) {
-      layer = "GOES16:ABI-L2-CMIPF";
-      // layer = "GOES16:ABI-L2-MCMIPF";                  // The MCMIPF layers are multi-channel
-      // composite products and are usually delivered with fewer or no tile gaps NO effect
-    } else if (satellite_image_mode.equals(main.SATELLITE_SST_IMAGE)) {
-      // layer = "GHRSST_L4_MUR_SST"; //"GOES16:ABI-L2-RadC02";
-      layer = ""; // "GOES16:ABI-L2-RadC02";
-    }
-
-    // Latitude
-    //
     if (myposition.latitude_degrees == null) {
       throw new NullPointerException("latitude_degrees");
     }
     if (!myposition.latitude_degrees.isEmpty() && myposition.latitude_hemisphere == null) {
       throw new NullPointerException("latitude_hemisphere");
     }
-    int_lat_degrees =
-        parseSatelliteCoordinate(
-            myposition.latitude_degrees,
-            myposition.latitude_hemisphere,
-            myposition.HEMISPHERE_SOUTH);
-
-    // Longitude
-    //
     if (myposition.longitude_degrees == null) {
       throw new NullPointerException("longitude_degrees");
     }
     if (!myposition.longitude_degrees.isEmpty() && myposition.longitude_hemisphere == null) {
       throw new NullPointerException("longitude_hemisphere");
     }
-    int_lon_degrees =
+    int latitude =
+        parseSatelliteCoordinate(
+            myposition.latitude_degrees,
+            myposition.latitude_hemisphere,
+            myposition.HEMISPHERE_SOUTH);
+    int longitude =
         parseSatelliteCoordinate(
             myposition.longitude_degrees,
             myposition.longitude_hemisphere,
             myposition.HEMISPHERE_WEST);
-
-    //
-    // bounding box
-    //
-    // - Even if the user is near the poles or the dateline, the bounding box will never produce
-    // values outside the allowed world limits.
-    // - This handles cases where your half-width or half-height zoom factor makes the bounding box
-    // exceed the map envelope.
-    //
-    centerLon = int_lon_degrees;
-    centerLat = int_lat_degrees;
-
-    // ensure center coordinates remain valid
-    centerLat = Math.max(-90.0, Math.min(90.0, centerLat));
-    centerLon = Math.max(-180.0, Math.min(180.0, centerLon));
-
-    double minLon = centerLon - halfWidthDeg;
-    double maxLon = centerLon + halfWidthDeg;
-    double minLat = centerLat - halfHeightDeg;
-    double maxLat = centerLat + halfHeightDeg;
-
-    // clamp bounding box to valid geographic limits
-    minLat = Math.max(-90.0, minLat);
-    maxLat = Math.min(90.0, maxLat);
-    minLon = Math.max(-180.0, minLon);
-    maxLon = Math.min(180.0, maxLon);
-
-    String url =
-        SatelliteImageUrlBuilder.buildNoaa(satellite_image_mode, int_lat_degrees, int_lon_degrees);
-
-    // invoke, in the default web browser, the url to the satellite image
+    // NOAA Worldview requires a bounded viewport and compatible visible/reference layer stack.
+    String url = SatelliteImageUrlBuilder.buildNoaa(satellite_image_mode, latitude, longitude);
     main.satellite_link_mouse_clicked(url);
   }
 
