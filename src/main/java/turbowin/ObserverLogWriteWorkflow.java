@@ -20,27 +20,8 @@ final class ObserverLogWriteWorkflow {
         String volledig_path = main.logs_dir + java.io.File.separator + main.OBSERVER_LOG;
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path))) {
-          for (int r = 0; r < myobserver.OBSERVER_ROWS; r++) {
-            // at least surname must be present (c = 0)
-            if ((myobserver.observer_data[r][0] != null)
-                && (myobserver.observer_data[r][0].compareTo("") != 0)) {
-              for (int c = 0; c < myobserver.OBSERVER_COLUMNS; c++) {
-                if ((myobserver.observer_data[r][c] != null)
-                    && (myobserver.observer_data[r][c].compareTo("") != 0)) {
-                  out.write(myobserver.observer_data[r][c]);
-                } else // empty field/cell
-                {
-                  out.write("-");
-                }
-
-                out.write(";"); // semi-column seperated
-              } // for (int c = 0; c < OBSERVER_COLUMNS; c++)
-
-              out.newLine(); // newLine(): write a line separator. The line separator string is
-              // defined by the system property line.separator, and is not
-              // necessarily a single newline ('\n') character.
-            } // if ((observer_data[r][0] != null)
-          } // for (int r = 0; r < OBSERVER_ROWS; r++)
+          SemicolonLogFileWriter.write(
+              out, myobserver.observer_data, myobserver.OBSERVER_ROWS, myobserver.OBSERVER_COLUMNS);
 
         } // try
         catch (IOException ex) {
