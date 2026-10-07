@@ -480,6 +480,39 @@ public class RS232_view extends javax.swing.JFrame {
     jPanel1.repaint(); // main panel
   }
 
+  void readPrimarySensorDataFromFile() {
+    // 1st meteo instrument
+    //
+    if (main.RS232_connection_mode == 1
+        || main.RS232_connection_mode == 2) // PTB220 or PTB330 connected
+    {
+      Read_Sensor_Data_Files_For_Barograph();
+    } else if (main.RS232_connection_mode == 3
+        || main.RS232_connection_mode == 9
+        || main.RS232_connection_mode == 10
+        || main.RS232_connection_mode == 11) // AWS connected
+    {
+      if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS)) {
+        Read_Sensor_Data_Files_For_Graphs_4();
+      } else {
+        Read_Sensor_Data_Files_For_Graphs();
+      }
+    } else if (main.RS232_connection_mode == 4
+        || main.RS232_connection_mode == 5
+        || main.RS232_connection_mode == 6) // Mintaka Duo, Mintaka Star USB, Mintaka Star WiFi
+    {
+      Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
+    } else if (main.RS232_connection_mode == 7
+        || main.RS232_connection_mode == 8) // Mintaka StarX USB or Mintaka StarX LAN
+    {
+      if (main.mode_grafiek.equals(main.MODE_PRESSURE)) {
+        Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
+      } else if (main.mode_grafiek.equals(main.MODE_AIRTEMP)) {
+        Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX();
+      }
+    }
+  }
+
   private void init_sensor_data_uit_file_ophalen_timer() {
     // retrieving sensor data from file, timer scheduled [1st meteo instrument]
     //
@@ -492,58 +525,7 @@ public class RS232_view extends javax.swing.JFrame {
           @Override
           public void actionPerformed(ActionEvent e) {
 
-            new SwingWorker<Void, Void>() {
-              @Override
-              protected Void doInBackground() throws Exception {
-                // 1st meteo instrument
-                //
-                if (main.RS232_connection_mode == 1
-                    || main.RS232_connection_mode == 2) // PTB220 or PTB330 connected
-                {
-                  Read_Sensor_Data_Files_For_Barograph();
-                } else if (main.RS232_connection_mode == 3
-                    || main.RS232_connection_mode == 9
-                    || main.RS232_connection_mode == 10
-                    || main.RS232_connection_mode == 11) // AWS connected
-                {
-                  if (main.mode_grafiek.equals(main.MODE_ALL_PARAMETERS)) {
-                    Read_Sensor_Data_Files_For_Graphs_4();
-                  } else {
-                    Read_Sensor_Data_Files_For_Graphs();
-                  }
-                } else if (main.RS232_connection_mode == 4
-                    || main.RS232_connection_mode == 5
-                    || main.RS232_connection_mode
-                        == 6) // Mintaka Duo, Mintaka Star USB, Mintaka Star WiFi
-                {
-                  Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
-                } else if (main.RS232_connection_mode == 7
-                    || main.RS232_connection_mode == 8) // Mintaka StarX USB or Mintaka StarX LAN
-                {
-                  if (main.mode_grafiek.equals(main.MODE_PRESSURE)) {
-                    Read_Sensor_Data_Files_For_Barograph_Mintaka_Duo_Or_Mintaka_Star_Or_StarX();
-                  } else if (main.mode_grafiek.equals(main.MODE_AIRTEMP)) {
-                    Read_Sensor_Data_Files_For_Air_Temp_Graph_Mintaka_StarX();
-                  }
-                }
-
-                // 2nd instrument
-                //
-                // if (main.RS232_connection_mode_II == 1)
-                // {
-                //   if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II))
-                //      Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
-                //   }
-                // }
-
-                return null;
-              } // protected Void doInBackground() throws Exception
-
-              @Override
-              protected void done() {
-                jPanel1.repaint(); // main panel
-              }
-            }.execute(); // new SwingWorker<Void, Void>()
+            Rs232ViewSensorFileTimerWorkflow.start(RS232_view.this);
           } // public void actionPerformed(ActionEvent e)
         }; // ActionListener sensor_data_file_ophalen_action = new ActionListener()
 
