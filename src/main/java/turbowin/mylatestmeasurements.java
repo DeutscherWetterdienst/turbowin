@@ -14,7 +14,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -97,7 +96,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     import_AWS_measurements();
   }
 
-  private void reset_all_table_cells() {
+  void reset_all_table_cells() {
     for (int i = 0; i < AANTAL_AWS_MEASUREMENTS; i++) // rows
     {
       for (int c = 0; c < AANTAL_AWS_PARAMETERS; c++) // columns (date, time, lat etc.)
@@ -111,23 +110,10 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     // called from: - initComponents2()
     //              - Refresh_button_actionPerformed()
 
-    new SwingWorker<Void, Void>() {
-      @Override
-      protected Void doInBackground() throws Exception {
-        Read_Sensor_Data_Files_For_Latest_AWS_Measurements();
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        reset_all_table_cells();
-        insert_AWS_values_in_table_fields();
-      }
-    }.execute(); // new SwingWorker<Void, Void>()
+    LatestMeasurementsRefreshWorkflow.start(this);
   }
 
-  private void insert_AWS_values_in_table_fields() {
+  void insert_AWS_values_in_table_fields() {
 
     // NB AWS_array[i][c]: rows i -> highest i-index numbers = most recent in time; i = 0 -> record
     // of 6 hours ago
