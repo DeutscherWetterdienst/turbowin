@@ -2,7 +2,6 @@ package turbowin;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 
 public final class mybarograph extends javax.swing.JFrame {
 
@@ -920,79 +919,58 @@ public final class mybarograph extends javax.swing.JFrame {
   // not result in invoking the doInBackground method twice.
   // see: http://java.sun.com/javase/6/docs/api/javax/swing/SwingWorker.html
   private void loadImage(final String imagePath) {
-    new SwingWorker<ImageIcon, Object>() {
-      @Override
-      public ImageIcon doInBackground() {
-        return createImageIcon(imagePath);
-      }
-
-      @Override
-      public void done() {
-        try {
-          // pressure higher than 3hrs ago
-          //
-          if (imagePath.equals(main.ICONS_DIRECTORY + "A_0.jpg")) {
-            ImageIcon img_a_0 = get();
-            jLabel1.setIcon(img_a_0);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_1.jpg")) {
-            ImageIcon img_a_1 = get();
-            jLabel2.setIcon(img_a_1);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_2.jpg")) {
-            ImageIcon img_a_2 = get();
-            jLabel3.setIcon(img_a_2);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_3.jpg")) {
-            ImageIcon img_a_3 = get();
-            jLabel4.setIcon(img_a_3);
-          }
-
-          // pressure lower than 3 hrs ago
-          //
-          else if (imagePath.equals(main.ICONS_DIRECTORY + "A_5.jpg")) {
-            ImageIcon img_a_5 = get();
-            jLabel5.setIcon(img_a_5);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_6.jpg")) {
-            ImageIcon img_a_6 = get();
-            jLabel6.setIcon(img_a_6);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_7.jpg")) {
-            ImageIcon img_a_7 = get();
-            jLabel7.setIcon(img_a_7);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_8.jpg")) {
-            ImageIcon img_a_8 = get();
-            jLabel8.setIcon(img_a_8);
-          }
-
-          // pressure the same as 3hrs ago
-          //
-          else if (imagePath.equals(main.ICONS_DIRECTORY + "A_0_same.jpg")) {
-            ImageIcon img_a_0_same = get();
-            jLabel9.setIcon(img_a_0_same);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_4.jpg")) {
-            ImageIcon img_a_4 = get();
-            jLabel10.setIcon(img_a_4);
-          } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_5_same.jpg")) {
-            ImageIcon img_a_5_same = get();
-            jLabel11.setIcon(img_a_5_same);
-          }
-        } // try
-        catch (InterruptedException ignore) {
-        } catch (java.util.concurrent.ExecutionException e) {
-          String why = null;
-          Throwable cause = e.getCause();
-          if (cause != null) {
-            why = cause.getMessage();
-          } else {
-            why = e.getMessage();
-          }
-          // System.err.println("Error retrieving file: " + why);
-          JOptionPane.showMessageDialog(
-              null,
-              "Error retrieving file: " + why,
-              main.APPLICATION_NAME,
-              JOptionPane.ERROR_MESSAGE);
-        } // catch
-      } //  public void done()
-    }.execute();
+    BarographImageWorkflow.start(this, imagePath);
   } // private void loadImage(final String imagePath, final int index)
+
+  boolean isKnownBarographImagePath(String imagePath) {
+    return imagePath.equals(main.ICONS_DIRECTORY + "A_0.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_1.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_2.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_3.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_5.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_6.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_7.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_8.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_0_same.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_4.jpg")
+        || imagePath.equals(main.ICONS_DIRECTORY + "A_5_same.jpg");
+  }
+
+  void setBarographImageIcon(String imagePath, ImageIcon icon) {
+    // pressure higher than 3hrs ago
+    //
+    if (imagePath.equals(main.ICONS_DIRECTORY + "A_0.jpg")) {
+      jLabel1.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_1.jpg")) {
+      jLabel2.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_2.jpg")) {
+      jLabel3.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_3.jpg")) {
+      jLabel4.setIcon(icon);
+    }
+
+    // pressure lower than 3 hrs ago
+    //
+    else if (imagePath.equals(main.ICONS_DIRECTORY + "A_5.jpg")) {
+      jLabel5.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_6.jpg")) {
+      jLabel6.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_7.jpg")) {
+      jLabel7.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_8.jpg")) {
+      jLabel8.setIcon(icon);
+    }
+
+    // pressure the same as 3 hrs ago
+    //
+    else if (imagePath.equals(main.ICONS_DIRECTORY + "A_0_same.jpg")) {
+      jLabel9.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_4.jpg")) {
+      jLabel10.setIcon(icon);
+    } else if (imagePath.equals(main.ICONS_DIRECTORY + "A_5_same.jpg")) {
+      jLabel11.setIcon(icon);
+    }
+  }
 
   private void loadImage_straight(final String imagePath) {
     // pressure higher than 3hrs ago
