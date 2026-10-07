@@ -7,7 +7,6 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -78,60 +77,22 @@ public class mymaintenancedata extends javax.swing.JFrame {
   }
 
   private void show_data() {
-    final String newline = System.getProperty("line.separator");
+    MaintenanceDataShowWorkflow.start(this);
+  }
 
+  void prepareShowData() {
     Font font = new Font("Monospaced", Font.PLAIN, 13);
     jTextArea1.setFont(font);
-
     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+  }
 
-    new SwingWorker<String, String>() {
-      @Override
-      protected String doInBackground() throws Exception {
-        String file_line = null;
+  void appendShowDataLine(String receivedLine, String newline) {
+    jTextArea1.append(receivedLine);
+    jTextArea1.append(newline);
+  }
 
-        // fill array
-        main.fill_configuratie_array();
-
-        for (int i = 0; i < main.MAX_AANTAL_CONFIGURATIEREGELS; i++) {
-          if ((main.configuratie_regels[i] != null)
-              && (main.configuratie_regels[i].compareTo("") != 0)) {
-            // System.out.println("+++ configuratie_regels[" + i + "] = " + configuratie_regels[i]);
-            file_line = main.configuratie_regels[i];
-            publish(new String[] {file_line});
-          }
-        } // for (int i = 0; i < MAX_AANTAL_CONFIGURATIEREGELS; i++)
-
-        // extend title with full path of the system log txt file (can be used to point the observer
-        // to the file for eg forwarding to a Met Centre in case of problems)
-        // setTitle("TurboWin+ system log [" + volledig_path_turbowin_system_logs + "]");
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void process(List<String> data) {
-        // process: Receives data chunks from the publish method asynchronously on the Event
-        // Dispatch Thread.
-        for (String received_line : data) {
-          // NB eg http://www.javacreed.com/swing-worker-example/
-          //    The swing component should only accessed from the process() method and never used
-          // from within the doInBackbround() method
-          //    or other methods directly (by directly we mean from the same thread) invoked from
-          // it.
-
-          // NB altijd in for loop omdat meerdere ontbvangen string's verzameld kunnen zijn voordat
-          // het hier procesed wordt(inherent aan SwingWorker)
-          jTextArea1.append(received_line);
-          jTextArea1.append(newline);
-        }
-      } // protected void process(List<String> data)
-
-      @Override
-      protected void done() {
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+  void finishShowData() {
+    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
   }
 
   private void export_data() {
