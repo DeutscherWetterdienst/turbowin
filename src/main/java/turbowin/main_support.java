@@ -210,9 +210,7 @@ public class main_support {
 
     // construct URL
     url_satellite_image =
-        String.format(
-            "https://realearth.ssec.wisc.edu/?products=%s&time=latest&center=%.6f,%.6f&zoom=%d",
-            products, centerLat, centerLon, zoomLevel);
+        SatelliteImageUrlBuilder.buildSsec(satellite_image_mode, (int) centerLat, (int) centerLon);
 
     // open in browser
     main.satellite_link_mouse_clicked(url_satellite_image);
@@ -310,37 +308,11 @@ public class main_support {
     minLon = Math.max(-180.0, minLon);
     maxLon = Math.min(180.0, maxLon);
 
-    String vParam = String.format("%.6f,%.6f,%.6f,%.6f", minLon, minLat, maxLon, maxLat);
-
-    // compile complete URL string
-    //    NB if a colour layer the visible layer 'menuitem' will not be visible in the left
-    // worldview panel
-    //    NB but a colour layer is need otherwise no image visible...
-    //    Layer stacking: TrueColor first, then IR on top, then reference layers?
-    //
-    StringBuilder url = new StringBuilder("https://worldview.earthdata.nasa.gov/?");
-    url.append("v=").append(vParam);
-    url.append("&l=").append(layer);
-    if (satellite_image_mode.equals(main.SATELLITE_IR_IMAGE)) {
-      url.append(
-          ",MODIS_Terra_CorrectedReflectance_TrueColor"); // trueColor gives land/sea reference even
-      // if the main layer is semi-transparent
-    } else if (satellite_image_mode.equals(main.SATELLITE_SST_IMAGE)) {
-      url.append(",MODIS_Aqua_L2_Sea_Surface_Temp_Night,MODIS_Aqua_L2_Sea_Surface_Temp_Day");
-      // url.append(",MODIS_Aqua_L3_SST_Thermal_4km_Night_Daily,MODIS_Aqua_L3_SST_Thermal_4km_Day_Daily);      // not working nov 2025
-    }
-    url.append(
-        ",Reference_Labels,Reference_Features"); // with no reference layers, the map may appear
-    // empty, dark, or “not loaded yet”
-    // url.append("&t=now");                                    // force timestamp-independent
-    // latest image, not necessary
-    // url.append("&pt=").append("52.0,6.0,10,FF0000,ship");    // altough mentioned a few times in
-    // docs it is not working nov 2025
-    url.append("&al=false"); // clear all previous stored layers
+    String url =
+        SatelliteImageUrlBuilder.buildNoaa(satellite_image_mode, int_lat_degrees, int_lon_degrees);
 
     // invoke, in the default web browser, the url to the satellite image
-    //
-    main.satellite_link_mouse_clicked(url.toString());
+    main.satellite_link_mouse_clicked(url);
   }
 
   public void log_memory_statistics() {
