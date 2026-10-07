@@ -1,8 +1,6 @@
 package turbowin;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -767,7 +765,7 @@ public final class myobserver extends javax.swing.JFrame {
     return true;
   }
 
-  private void clear_observer_data_array() {
+  void clear_observer_data_array() {
     for (int r = 0; r < OBSERVER_ROWS; r++) {
       for (int c = 0; c < OBSERVER_COLUMNS; c++) {
         observer_data[r][c] = "";
@@ -778,81 +776,32 @@ public final class myobserver extends javax.swing.JFrame {
   private void lees_observer_log_en_vul_table() {
     /* NB input/output GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
 
-    new SwingWorker<Void, Void>() {
-      @Override
-      protected Void doInBackground() throws Exception {
-        String record;
-        int pos_begin;
-        int pos_eind;
-        int r;
+    ObserverLogReadWorkflow.start(this);
+  }
 
-        /* initialisation */
-        clear_observer_data_array();
+  void updateObserverTable() {
+    // collect data from all table cells
+    for (int r = 0; r < OBSERVER_ROWS; r++) {
+      for (int c = 0; c < OBSERVER_COLUMNS; c++) {
+        jTable1.setValueAt(observer_data[r][c], r, c);
+      }
+    } // for (int r = 0; r < OBSERVER_ROWS; r++)
 
-        String volledig_path = main.logs_dir + java.io.File.separator + main.OBSERVER_LOG;
-
-        /* read all lines from observer log */
-        try (BufferedReader in = new BufferedReader(new FileReader(volledig_path))) {
-          r = 0;
-          while ((record = in.readLine()) != null) {
-            pos_begin = 0;
-            pos_eind = 0;
-            for (int c = 0; c < OBSERVER_COLUMNS; c++) {
-              pos_eind =
-                  record.indexOf(
-                      ";",
-                      pos_begin); // Returns the index within this string of the first occurrence of
-              // the specified substring, starting at the specified index.
-
-              if (pos_eind != -1) {
-                observer_data[r][c] = record.substring(pos_begin, pos_eind);
-                pos_begin = pos_eind + 1;
-              } else {
-                break;
-              }
-            } // for (int c = 0; c < OBSERVER_COLUMNS; c++)
-
-            r++;
-
-            /* safety */
-            if (r >= OBSERVER_ROWS) {
-              break;
-            }
-          } // while((file_line = in.readLine()) != null)
-        } // try
-        catch (IOException ex) {
-          // do nothing, possible file was never created
-        } // catch
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        // collect data from all table cells
-        for (int r = 0; r < OBSERVER_ROWS; r++) {
-          for (int c = 0; c < OBSERVER_COLUMNS; c++) {
-            jTable1.setValueAt(observer_data[r][c], r, c);
-          }
-        } // for (int r = 0; r < OBSERVER_ROWS; r++)
-
-        // select the row of the observer which was selected befor
-        //
-        for (int r = 0; r < OBSERVER_ROWS; r++) {
-          if ((selected_observer.compareTo("") != 0)
-              && (observer_data[r][0].compareTo("") != 0)
-              && (observer_data[r][1].compareTo("") != 0)) {
-            if ((selected_observer.indexOf(observer_data[r][0]) != -1)
-                && // [0] : surname
-                (selected_observer.indexOf(observer_data[r][1]) != -1)) // [1] : initials
-            {
-              jTable1.setRowSelectionInterval(r, r);
-              break;
-            }
-          }
-        } // for (int r = 0; r < OBSERVER_ROWS; r++)
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+    // select the row of the observer which was selected befor
+    //
+    for (int r = 0; r < OBSERVER_ROWS; r++) {
+      if ((selected_observer.compareTo("") != 0)
+          && (observer_data[r][0].compareTo("") != 0)
+          && (observer_data[r][1].compareTo("") != 0)) {
+        if ((selected_observer.indexOf(observer_data[r][0]) != -1)
+            && // [0] : surname
+            (selected_observer.indexOf(observer_data[r][1]) != -1)) // [1] : initials
+        {
+          jTable1.setRowSelectionInterval(r, r);
+          break;
+        }
+      }
+    } // for (int r = 0; r < OBSERVER_ROWS; r++)
   }
 
   private void schrijf_observer_log() {
