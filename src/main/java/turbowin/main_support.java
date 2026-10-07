@@ -1101,95 +1101,17 @@ public class main_support {
     } // if (moved_observername_file_array[4].compareTo("") != 0)
 
     /* write to the moved and backup files */
+    BufferedWriter[] outputFiles = {out_0, out_1, out_2, out_3, out_4};
+    BufferedWriter[] backupFiles = {
+      out_0_backup, out_1_backup, out_2_backup, out_3_backup, out_4_backup
+    };
     for (int m = 0; m < main.MAX_AANTAL_JAREN_IN_IMMT; m++) {
       for (int i = 0; i < main.MAX_AANTAL_WAARNEMERS; i++) {
         observername_office = main.observername_array[i];
 
         if (observername_office.compareTo("") != 0) {
-          // observername_office += "\t";                // tab
-          observername_office +=
-              Integer.toString(aantal_waarnemer[m][i]); // number of observations waarnemingen
-
-          if (m == 0 && aantal_waarnemer[m][i] != 0) {
-            try {
-              if (out_0 != null) {
-                out_0.write(observername_office);
-                out_0.newLine();
-              }
-            } catch (IOException ex) {
-            }
-            try {
-              if (out_0_backup != null) {
-                out_0_backup.write(observername_office);
-                out_0_backup.newLine();
-              }
-            } catch (IOException ex) {
-            }
-          } // if (m == 0 && aantal_waarnemer[m][i] != 0)
-          else if (m == 1 && aantal_waarnemer[m][i] != 0) {
-            try {
-              if (out_1 != null) {
-                out_1.write(observername_office);
-                out_1.newLine();
-              }
-            } catch (IOException ex) {
-            }
-            try {
-              if (out_1_backup != null) {
-                out_1_backup.write(observername_office);
-                out_1_backup.newLine();
-              }
-            } catch (IOException ex) {
-            }
-          } // else if (m == 2 && aantal_waarnemer[j][i] != 0)
-          else if (m == 2 && aantal_waarnemer[m][i] != 0) {
-            try {
-              if (out_2 != null) {
-                out_2.write(observername_office);
-                out_2.newLine();
-              }
-            } catch (IOException ex) {
-            }
-            try {
-              if (out_2_backup != null) {
-                out_2_backup.write(observername_office);
-                out_2_backup.newLine();
-              }
-            } catch (IOException ex) {
-            }
-          } // else if (m == 2 && aantal_waarnemer[m][i] != 0)
-          else if (m == 3 && aantal_waarnemer[m][i] != 0) {
-            try {
-              if (out_3 != null) {
-                out_3.write(observername_office);
-                out_3.newLine();
-              }
-            } catch (IOException ex) {
-            }
-            try {
-              if (out_3_backup != null) {
-                out_3_backup.write(observername_office);
-                out_3_backup.newLine();
-              }
-            } catch (IOException ex) {
-            }
-          } // else if (m == 3 && aantal_waarnemer[m][i] != 0)
-          else if (m == 4 && aantal_waarnemer[m][i] != 0) {
-            try {
-              if (out_4 != null) {
-                out_4.write(observername_office);
-                out_4.newLine();
-              }
-            } catch (IOException ex) {
-            }
-            try {
-              if (out_4_backup != null) {
-                out_4_backup.write(observername_office);
-                out_4_backup.newLine();
-              }
-            } catch (IOException ex) {
-            }
-          } // else if (m == 4 && aantal_waarnemer[m][i] != 0)
+          ObserverStatisticsWriter.write(
+              outputFiles, backupFiles, m, observername_office, aantal_waarnemer[m][i]);
         } // if (observername_office != "")
       } // for (i = 0; i < MAX_AANTAL_WAARNEMERS; i++)
     } // for (int m = 0; m < MAX_AANTAL_JAREN_IN_IMMT; m++)
