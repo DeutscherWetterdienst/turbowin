@@ -1,8 +1,6 @@
 package turbowin;
 
 import java.awt.Cursor;
-import java.util.List;
-import javax.swing.SwingWorker;
 
 public class mydevice_log extends javax.swing.JFrame {
 
@@ -120,6 +118,10 @@ public class mydevice_log extends javax.swing.JFrame {
     jTextArea1.append(newline);
   }
 
+  void appendDeviceGpsLine(String line) {
+    jTextArea1.append(line);
+  }
+
   void resetDeviceLogCursor() {
     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
   }
@@ -148,44 +150,7 @@ public class mydevice_log extends javax.swing.JFrame {
     if (main.RS232_GPS_connection_mode == 1) {
       setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-      new SwingWorker<String, String>() {
-        @Override
-        protected String doInBackground() throws Exception {
-          publish(new String[] {log_separator()});
-          publish(new String[] {newline});
-          publish(new String[] {"--- RECEIVED GPS DATA ---"});
-
-          String GPS_memory_line = "";
-          for (int m = main_RS232_RS422.MAX_GPS_ARRAY; m > 0; m--) {
-            GPS_memory_line = main_RS232_RS422.GPS_array_device_log[m];
-            publish(new String[] {GPS_memory_line});
-          }
-
-          return null;
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void process(List<String> data) {
-          // process: Receives data chunks from the publish method asynchronously on the Event
-          // Dispatch Thread.
-          for (String received_line : data) {
-            // NB eg http://www.javacreed.com/swing-worker-example/
-            //    This swing component is only accessed from the process() method and never used
-            // from within the doInBackbround() method
-            //    or other methods directly (by directly we mean from the same thread) invoked from
-            // it.
-
-            // NB altijd in for loop omdat meerdere ontvangen string's verzameld kunnen zijn voordat
-            // het hier geprocessed wordt(inherent aan SwingWorker)
-            jTextArea1.append(received_line);
-          }
-        } // protected void process(List<String> data)
-
-        @Override
-        protected void done() {
-          setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-        } // protected void done()
-      }.execute(); // new SwingWorker<String, String>()
+      DeviceGpsLogWorkflow.start(this, newline);
     } // if (main.RS232_GPS_connection_mode == 1)
   }
 
