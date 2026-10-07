@@ -513,6 +513,16 @@ public class RS232_view extends javax.swing.JFrame {
     }
   }
 
+  void readSecondarySensorDataFromFile() {
+    // 2nd instrument
+    //
+    if (main.RS232_connection_mode_II == 1) {
+      if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)) {
+        Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
+      }
+    }
+  }
+
   private void init_sensor_data_uit_file_ophalen_timer() {
     // retrieving sensor data from file, timer scheduled [1st meteo instrument]
     //
@@ -557,26 +567,7 @@ public class RS232_view extends javax.swing.JFrame {
           @Override
           public void actionPerformed(ActionEvent e) {
 
-            new SwingWorker<Void, Void>() {
-              @Override
-              protected Void doInBackground() throws Exception {
-
-                // 2nd instrument
-                //
-                if (main.RS232_connection_mode_II == 1) {
-                  if (main.mode_grafiek.equals(main.MODE_AIRTEMP_II)) {
-                    Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155();
-                  }
-                }
-
-                return null;
-              } // protected Void doInBackground() throws Exception
-
-              @Override
-              protected void done() {
-                jPanel1.repaint(); // main panel
-              }
-            }.execute(); // new SwingWorker<Void, Void>()
+            Rs232ViewSecondarySensorTimerWorkflow.start(RS232_view.this);
           } // public void actionPerformed(ActionEvent e)
         }; // ActionListener sensor_data_file_ophalen_action = new ActionListener()
 
