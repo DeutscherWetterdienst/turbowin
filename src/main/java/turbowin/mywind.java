@@ -6,7 +6,6 @@ import static turbowin.main.INVALID;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 
 public final class mywind extends javax.swing.JFrame {
 
@@ -1802,37 +1801,12 @@ public final class mywind extends javax.swing.JFrame {
   // not result in invoking the doInBackground method twice.
   // see: http://java.sun.com/javase/6/docs/api/javax/swing/SwingWorker.html
   private void loadImage(final String imagePath) {
-    new SwingWorker<ImageIcon, Object>() {
-      @Override
-      public ImageIcon doInBackground() {
-        return createImageIcon(imagePath);
-      }
-
-      @Override
-      public void done() {
-        try {
-          ImageIcon bf_icon = get();
-          jLabel19.setIcon(bf_icon);
-        } // try
-        catch (InterruptedException ignore) {
-        } catch (java.util.concurrent.ExecutionException e) {
-          String why = null;
-          Throwable cause = e.getCause();
-          if (cause != null) {
-            why = cause.getMessage();
-          } else {
-            why = e.getMessage();
-          }
-          // System.err.println("Error retrieving file: " + why);
-          JOptionPane.showMessageDialog(
-              null,
-              "Error retrieving file: " + why,
-              main.APPLICATION_NAME,
-              JOptionPane.ERROR_MESSAGE);
-        } // catch
-      } //  public void done()
-    }.execute();
+    WindImageWorkflow.start(this, imagePath);
   } // private void loadImage(final String imagePath, final int index)
+
+  void setWindImageIcon(ImageIcon icon) {
+    jLabel19.setIcon(icon);
+  }
 
   /**
    * @param args the command line arguments
