@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -943,40 +942,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
       } // if (doorgaan == true)
 
       if (doorgaan == true) {
-        new SwingWorker<String, Void>() {
-          @Override
-          protected String doInBackground() throws Exception {
-            String export_ok = write_export_file(latest_AWS_measurements_export_file);
-
-            return export_ok;
-          } // protected Void doInBackground() throws Exception
-
-          @Override
-          protected void done() {
-            String result_export_ok = null;
-            try {
-              result_export_ok = get();
-            } catch (ExecutionException | InterruptedException ex) {
-              result_export_ok = "Error writing export file (" + ex + ")";
-            }
-
-            if (result_export_ok.contains("OK") != true) {
-              // show error message
-              JOptionPane.showMessageDialog(
-                  null,
-                  result_export_ok,
-                  main.APPLICATION_NAME + " error",
-                  JOptionPane.WARNING_MESSAGE);
-            } else {
-              // show the succesfully exported message
-              JOptionPane.showMessageDialog(
-                  null,
-                  result_export_ok,
-                  main.APPLICATION_NAME + " info",
-                  JOptionPane.INFORMATION_MESSAGE);
-            }
-          } // protected void done()
-        }.execute(); // new SwingWorker<Void, Void>()
+        LatestMeasurementsExportWorkflow.start(this, latest_AWS_measurements_export_file);
       } // if (doorgaan == true)
     } // if (result == JFileChooser.APPROVE_OPTION
     else // Cancel button
@@ -985,7 +951,7 @@ public class mylatestmeasurements extends javax.swing.JFrame {
     }
   }
 
-  private String write_export_file(final String latest_AWS_measurements_export_file) {
+  String write_export_file(final String latest_AWS_measurements_export_file) {
     // called from: export_latest_AWS_measurements() [within swingworker]
 
     String[][] export_array = new String[AANTAL_AWS_MEASUREMENTS][AANTAL_AWS_PARAMETERS];
