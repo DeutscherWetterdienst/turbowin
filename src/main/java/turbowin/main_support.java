@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -929,16 +928,6 @@ public class main_support {
     String[] backup_moved_observername_file_array = new String[main.MAX_AANTAL_JAREN_IN_IMMT];
     String[] moved_observername_file_array = new String[main.MAX_AANTAL_JAREN_IN_IMMT];
     String observername_office;
-    BufferedWriter out_0 = null;
-    BufferedWriter out_0_backup = null;
-    BufferedWriter out_1 = null;
-    BufferedWriter out_1_backup = null;
-    BufferedWriter out_2 = null;
-    BufferedWriter out_2_backup = null;
-    BufferedWriter out_3 = null;
-    BufferedWriter out_3_backup = null;
-    BufferedWriter out_4 = null;
-    BufferedWriter out_4_backup = null;
 
     /* initialisation */
     for (int p = 0; p < main.MAX_AANTAL_JAREN_IN_IMMT; p++) {
@@ -1042,57 +1031,13 @@ public class main_support {
     */
 
     /* open the moved(download) and backup observer files */
-    if (moved_observername_file_array[0].compareTo("") != 0) {
-      try {
-        out_0 = new BufferedWriter(new FileWriter(moved_observername_file_array[0]));
-        out_0_backup = new BufferedWriter(new FileWriter(backup_moved_observername_file_array[0]));
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[0].compareTo("") != 0)
-    if (moved_observername_file_array[1].compareTo("") != 0) {
-      try {
-        out_1 = new BufferedWriter(new FileWriter(moved_observername_file_array[1]));
-        out_1_backup = new BufferedWriter(new FileWriter(backup_moved_observername_file_array[1]));
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[2].compareTo("") != 0)
-    if (moved_observername_file_array[2].compareTo("") != 0) {
-      try {
-        out_2 = new BufferedWriter(new FileWriter(moved_observername_file_array[2]));
-        out_2_backup = new BufferedWriter(new FileWriter(backup_moved_observername_file_array[2]));
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[2].compareTo("") != 0)
-    if (moved_observername_file_array[3].compareTo("") != 0) {
-      try {
-        out_3 = new BufferedWriter(new FileWriter(moved_observername_file_array[3]));
-        out_3_backup = new BufferedWriter(new FileWriter(backup_moved_observername_file_array[3]));
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[3].compareTo("") != 0)
-    if (moved_observername_file_array[4].compareTo("") != 0) {
-      try {
-        out_4 = new BufferedWriter(new FileWriter(moved_observername_file_array[4]));
-        out_4_backup = new BufferedWriter(new FileWriter(backup_moved_observername_file_array[4]));
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[4].compareTo("") != 0)
+    ObserverStatisticsFileSet observerFiles =
+        ObserverStatisticsFileSet.open(
+            moved_observername_file_array, backup_moved_observername_file_array);
 
     /* write to the moved and backup files */
-    BufferedWriter[] outputFiles = {out_0, out_1, out_2, out_3, out_4};
-    BufferedWriter[] backupFiles = {
-      out_0_backup, out_1_backup, out_2_backup, out_3_backup, out_4_backup
-    };
+    BufferedWriter[] outputFiles = observerFiles.outputFiles();
+    BufferedWriter[] backupFiles = observerFiles.backupFiles();
     for (int m = 0; m < main.MAX_AANTAL_JAREN_IN_IMMT; m++) {
       for (int i = 0; i < main.MAX_AANTAL_WAARNEMERS; i++) {
         observername_office = main.observername_array[i];
@@ -1105,71 +1050,7 @@ public class main_support {
     } // for (int m = 0; m < MAX_AANTAL_JAREN_IN_IMMT; m++)
 
     /* close all the (moved and backup) observer files */
-    if (moved_observername_file_array[0].compareTo("") != 0) {
-      try {
-        if (out_0 != null) {
-          out_0.close();
-        }
-        if (out_0_backup != null) {
-          out_0_backup.close();
-        }
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[0].compareTo("") != 0)
-    if (moved_observername_file_array[1].compareTo("") != 0) {
-      try {
-        if (out_1 != null) {
-          out_1.close();
-        }
-        if (out_1_backup != null) {
-          out_1_backup.close();
-        }
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[2].compareTo("") != 0)
-    if (moved_observername_file_array[2].compareTo("") != 0) {
-      try {
-        if (out_2 != null) {
-          out_2.close();
-        }
-        if (out_2_backup != null) {
-          out_2_backup.close();
-        }
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[2].compareTo("") != 0)
-    if (moved_observername_file_array[3].compareTo("") != 0) {
-      try {
-        if (out_3 != null) {
-          out_3.close();
-        }
-        if (out_3_backup != null) {
-          out_3_backup.close();
-        }
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[3].compareTo("") != 0)
-    if (moved_observername_file_array[4].compareTo("") != 0) {
-      try {
-        if (out_4 != null) {
-          out_4.close();
-        }
-        if (out_4_backup != null) {
-          out_4_backup.close();
-        }
-      } // try
-      catch (Exception e) {
-        /* ... */
-      }
-    } // if (moved_observername_file_array[4].compareTo("") != 0)
+    observerFiles.close();
   }
 
   private Float parseValidationFloat(String value, String errorMessage) {
