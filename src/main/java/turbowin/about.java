@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.nio.charset.Charset;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 
 public final class about extends javax.swing.JFrame {
 
@@ -628,47 +625,7 @@ public final class about extends javax.swing.JFrame {
   }
 
   private void link_mouse_clicked(String link_subject) {
-
-    new SwingWorker<Integer, Void>() {
-
-      @Override
-      protected Integer doInBackground() throws Exception {
-        String os = OSDetector.getOSString();
-
-        String link_url = "";
-        if (link_subject.equals(LINK_SOT_VOS)) {
-          link_url = "https://www.ocean-ops.org/sot/vos/";
-        } else if (link_subject.equals(LINK_GITLAB)) {
-          link_url = "https://github.com/DeutscherWetterdienst/turbowin";
-        }
-
-        return DesktopUtils.openLink(link_url, os);
-      } // protected Integer doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        try {
-          Integer response_code = get();
-
-          if (response_code == -1) {
-            String message = "[GENERAL] Error invoking default web browser";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          } else if (response_code == -2) {
-            String message = "[GENERAL] Error invoking URL";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          }
-        } // try
-        catch (InterruptedException | ExecutionException ex) {
-          String message = "[GENERAL] Error invoking default web browser; " + ex.toString();
-          main.log_turbowin_system_message(message);
-          // main.jTextField4.setText(main.sdf_tsl_2.format(new Date()) + " UTC " + message);
-        } // catch
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+    AboutLinkWorkflow.start(link_subject, LINK_SOT_VOS, LINK_GITLAB);
   }
 
   /**
