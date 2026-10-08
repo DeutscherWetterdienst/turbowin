@@ -1,9 +1,7 @@
 package turbowin;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.regex.Pattern;
 import javax.swing.AbstractListModel;
 import javax.swing.JFileChooser;
@@ -1117,38 +1115,15 @@ public final class mystationdata extends javax.swing.JFrame {
       protected Void doInBackground() throws Exception {
         // NB e.g. configuratie_regels[2]  = "wind source        : estimated; true speed and true
         // direction"
-        int teller_iso_landen_regels;
-        String file_line;
-
-        for (teller_iso_landen_regels = 0;
-            teller_iso_landen_regels < MAX_AANTAL_ISO_LANDEN_REGELS;
-            teller_iso_landen_regels++) {
-          iso_landen_regels[teller_iso_landen_regels] = "";
+        for (int i = 0; i < MAX_AANTAL_ISO_LANDEN_REGELS; i++) {
+          iso_landen_regels[i] = "";
         }
 
         /* read all lines from iso land codes file */
         try (InputStream is =
-                getClass().getResourceAsStream(main.ICONS_DIRECTORY + "ISO_landen_codes.txt");
-            BufferedReader in = new BufferedReader(new InputStreamReader(is))) {
+            getClass().getResourceAsStream(main.ICONS_DIRECTORY + "ISO_landen_codes.txt")) {
           // reading file ISO_landen_codes.txt from the JAR file
-          teller_iso_landen_regels = 0;
-          while ((file_line = in.readLine()) != null) {
-            if (file_line.length() > 3) {
-              // remove tab's
-              file_line = file_line.replaceAll("\t", "");
-
-              iso_landen_regels[teller_iso_landen_regels] = file_line;
-              teller_iso_landen_regels++;
-              // JOptionPane.showMessageDialog(null, file_line, main.APPLICATION_NAME + " TEST",
-              // JOptionPane.WARNING_MESSAGE);
-            }
-
-            /* safety */
-            if (teller_iso_landen_regels >= MAX_AANTAL_ISO_LANDEN_REGELS) {
-              break;
-            }
-          } // while((file_line = in.readLine()) != null)
-
+          iso_landen_regels = IsoCountryCodeReader.read(is, MAX_AANTAL_ISO_LANDEN_REGELS);
         } // try
         catch (IOException ex) {
           // JOptionPane.showMessageDialog(null, "Reading error 'ISO country codes' file",
