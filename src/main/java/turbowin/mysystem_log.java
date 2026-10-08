@@ -1,13 +1,6 @@
 package turbowin;
 
 import java.awt.Cursor;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import javax.swing.SwingWorker;
 
 public class mysystem_log extends javax.swing.JFrame {
 
@@ -64,117 +57,13 @@ public class mysystem_log extends javax.swing.JFrame {
   } // </editor-fold>//GEN-END:initComponents
 
   private void initComponents2() {
-    final String newline = System.getProperty("line.separator");
-
-    // eg http://www.javacreed.com/swing-worker-example/
-
     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    SystemLogDisplayWorkflow.start(this);
+  }
 
-    new SwingWorker<String, String>() {
-      @Override
-      protected String doInBackground() throws Exception {
-        String file_line = null;
-        int teller1 = 0; // for counting total number of records in immt (first loop)
-        int teller2 = -1; // for counting numer of records in immt_list (second loop)
-        boolean doorgaan = true;
-
-        String file_naam = "turbowin_system_" + main.sdf_tsl_1.format(new Date()) + ".txt";
-        String volledig_path_turbowin_system_logs =
-            main.logs_dir
-                + java.io.File.separator
-                + main.TURBOWIN_SYSTEM_LOGS_DIR
-                + java.io.File.separator
-                + file_naam;
-
-        // extend title with full path of the system log txt file (can be used to point the observer
-        // to the file for eg forwarding to a Met Centre in case of a problems)
-        setTitle("TurboWin+ system log [" + volledig_path_turbowin_system_logs + "]");
-
-        try (BufferedReader in =
-            new BufferedReader(
-                new FileReader(volledig_path_turbowin_system_logs))) // try with resources
-        {
-          while ((in.readLine()) != null) {
-            teller1++;
-          }
-        } // try
-        catch (FileNotFoundException ex) {
-          // JOptionPane.showMessageDialog(null, "Reading error 'TurboWin+ system log' file or no
-          // TurboWin+ events logged for the current month", main.APPLICATION_NAME + " error",
-          // JOptionPane.WARNING_MESSAGE);
-          String info =
-              "[GENERAL] reading error 'TurboWin+ system log' file or no TurboWin+ events logged for the current month";
-          main.log_turbowin_system_message(info);
-          doorgaan = false;
-        } catch (IOException ex) {
-          String info = "[GENERAL] error 'TurboWin+ system log' file (" + ex + ")";
-          main.log_turbowin_system_message(info);
-          doorgaan = false;
-        } // catch
-        System.out.println("--- system log number of records: " + teller1);
-
-        if (doorgaan) {
-          // truck to display always the last 1000 records if > 1000 records stored in immt log
-          if (teller1 > 5000) {
-            teller2 = (teller1 - 5000) * -1; // e.g. teller1 = 1700 -> teller2 = -700;
-          } else {
-            teller2 = -1;
-          }
-          System.out.println(
-              "--- system log displaying from record number: " + Math.abs(teller2 + 1));
-
-          try (BufferedReader in2 =
-              new BufferedReader(
-                  new FileReader(volledig_path_turbowin_system_logs))) // try with resources
-          {
-            while ((file_line = in2.readLine()) != null) {
-              teller2++;
-              if (teller2 >= 0) {
-                publish(new String[] {file_line});
-              }
-            } // while ((file_line = in2.readLine()) != null)
-          } catch (FileNotFoundException ex) {
-            // JOptionPane.showMessageDialog(null, "Reading error 'TurboWin+ system log' file or no
-            // TurboWin+ events logged for the current month", main.APPLICATION_NAME + " error",
-            // JOptionPane.WARNING_MESSAGE);
-            String info =
-                "[GENERAL] reading error 'TurboWin+ system log' file or no TurboWin+ events logged for the current month";
-            main.log_turbowin_system_message(info);
-            doorgaan = false;
-          } catch (IOException ex) {
-            String info = "[GENERAL] error 'TurboWin+ system log' file (" + ex + ")";
-            main.log_turbowin_system_message(info);
-            doorgaan = false;
-          } // catch
-        } // if (doorgaan)
-
-        return null;
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void process(List<String> data) {
-        // process: Receives data chunks from the publish method asynchronously on the Event
-        // Dispatch Thread.
-        for (String received_line : data) {
-          // NB eg http://www.javacreed.com/swing-worker-example/
-          //    This swing component is only accessed from the process() method and never used from
-          // within the doInBackbround() method
-          //    or other methods directly (by directly we mean from the same thread) invoked from
-          // it. The following image highlights the places
-          //    from where the swing component is accessed.
-
-          // NB altijd in for loop omdat meerdere ontbvangen string's verzameld kunnen zijn voordat
-          // het hier procesed wordt(inherent aan SwingWorker)
-          jTextArea1.append(received_line);
-          jTextArea1.append(newline);
-        }
-      } // protected void process(List<String> data)
-
-      @Override
-      protected void done() {
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+  void appendSystemLogLine(String line, String newline) {
+    jTextArea1.append(line);
+    jTextArea1.append(newline);
   }
 
   /**
