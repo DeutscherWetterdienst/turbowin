@@ -6,12 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -316,107 +312,18 @@ public class Obs_Stats_view extends javax.swing.JFrame {
       new SwingWorker<Integer, Void>() {
         @Override
         protected Integer doInBackground() throws Exception {
-          // immt_list = new ArrayList<>();           // size is now dynamically
-          // immt_rec_first = "";
-          // immt_rec_last = "";
-          String record = "";
-          Integer return_immt = 0;
-          Integer rec_counter = 0;
-
           String volledig_path_immt = main.logs_dir + java.io.File.separator + main.IMMT_LOG;
-
-          try (BufferedReader in =
-              new BufferedReader(new FileReader(volledig_path_immt))) // try with resources
-          {
-            while ((record = in.readLine()) != null) {
-              try {
-                if (record.length()
-                    >= main.IMMT_5_LENGTH) // avoiding that empty records will be added
-                {
-                  // immt_rec_first and immt_rec_last necessary for the log line on the graph
-                  rec_counter++;
-                  if (rec_counter == 1) {
-                    immt_rec_first = record; // first record of the raw imm tlog
-                  }
-                  if (rec_counter >= 1) {
-                    immt_rec_last = record; // finally always the last record of the immt log
-                  }
-
-                  if (view_immt_log_period.equals(myimmtlogperiod.ALL)) // all available
-                  {
-                    immt_list.add(record);
-                  } else // so 'view_immt_log_period = CUSTOM'
-                  {
-                    // extra: check the date of the record against the required custom log period
-                    boolean date_log_period_ok = check_record_log_period(record);
-                    if (date_log_period_ok) {
-                      immt_list.add(record);
-                    }
-                  } // else
-                } // if (record.length() >= main.IMMT_5_LENGTH)
-              } catch (UnsupportedOperationException e) {
-                return_immt = -1;
-              }
-            } // while ((record = in.readLine()) != null)
-          } catch (IOException ex) {
-            return_immt = -2;
-          }
-
-          //
-          //////////////// count the number of different observer names because only a limited
-          // number can be displayed as bars in the graph
-          //               NB only appropriate in the observers stats mode
-          //
-          if (main.obs_stats_mode.equals(main.OBSERVERS_STATS)) {
-            int test_different_observer_names = 0;
-            String test_observers_names_array[] = new String[MAX_NUMBER_OBSERVERS_TEST];
-            for (int i = 0; i < MAX_NUMBER_OBSERVERS_TEST; i++) {
-              test_observers_names_array[i] = "";
-            }
-
-            for (String obs : immt_list) {
-              String observer_name = "";
-              boolean observer_name_found = false;
-
-              if (obs.length()
-                  > main.IMMT_5_POSITION_OBSERVER - 1) // main.IMMT_5_POSITION_OBSERVER - 1 = 172
-              {
-                observer_name =
-                    obs.substring(
-                        main.IMMT_5_POSITION_OBSERVER); // main.IMMT_5_POSITION_OBSERVER = 173
-
-                for (int i = 0; i < MAX_NUMBER_OBSERVERS_TEST; i++) {
-                  if (test_observers_names_array[i].equals(observer_name)
-                      && (!observer_name.equals(""))) {
-                    observer_name_found = true;
-                    break;
-                  }
-                } // for (int i = 0; i < MAX_NUMBER_OBSERVERS_TEST; i++)
-
-                if (observer_name_found == false) {
-                  for (int i = 0; i < MAX_NUMBER_OBSERVERS_TEST; i++) {
-                    if (test_observers_names_array[i].equals("") && (!observer_name.equals(""))) {
-                      test_observers_names_array[i] = observer_name;
-                      break;
-                    }
-                  } // for (int i = 0; i < MAX_NUMBER_OBSERVERS_BARS; i++)
-                } // if (observer_name_found == false)
-              } // if (obs.length() > main.IMMT_5_POSITION_OBSERVER - 1)
-            } // for (String obs : immt_list)
-
-            // count number of different observer names
-            for (int i = 0; i < MAX_NUMBER_OBSERVERS_TEST; i++) {
-              if (test_observers_names_array[i].equals("") == false) {
-                test_different_observer_names++;
-              }
-            } // for (int i = 0; i < MAX_NUMBER_OBSERVERS_TEST; i++)
-
-            if (test_different_observer_names > MAX_NUMBER_OBSERVERS_NAMES) {
-              return_immt = -3;
-            }
-          } // if (main.obs_stats_mode.equals(main.OBSERVERS_STATS))
-
-          return return_immt;
+          ObsStatsImmtLogProcessor.Result result =
+              ObsStatsImmtLogProcessor.process(
+                  volledig_path_immt,
+                  view_immt_log_period,
+                  view_local_start_date,
+                  view_local_end_date,
+                  main.obs_stats_mode.equals(main.OBSERVERS_STATS));
+          immt_list.addAll(result.records());
+          immt_rec_first = result.firstRecord();
+          immt_rec_last = result.lastRecord();
+          return result.status();
         } // protected Void doInBackground() throws Exception
 
         @Override
@@ -459,52 +366,6 @@ public class Obs_Stats_view extends javax.swing.JFrame {
       }.execute(); // new SwingWorker<Integer, Void>()
     } // if doorgaan
   } // private void initComponents1()
-
-  private boolean check_record_log_period(String record) {
-    boolean date_log_period_ok = true;
-    boolean continue_checking = true;
-    LocalDate local_record_date = null;
-
-    // immt record e.g.: 32023112414152700620         018851110070     5       0
-    // 44TESTNL NL 314    01435009             A599199111999999119911                    9999
-    // 9990610001234567 Brouwer;M.F.;1 off;-;
-    String year_record = record.substring(1, 5);
-    String month_record = record.substring(5, 7);
-    String day_record = record.substring(7, 9);
-
-    try {
-      local_record_date =
-          LocalDate.parse(year_record + "-" + month_record + "-" + day_record); // e.g. 2025-12-27
-      continue_checking = true;
-    } catch (DateTimeParseException e) {
-      continue_checking = false;
-    }
-
-    if (local_record_date == null || view_local_start_date == null || view_local_end_date == null) {
-      continue_checking = false;
-    }
-
-    if (continue_checking) {
-      boolean is_after_ok =
-          local_record_date.isAfter(
-              view_local_start_date.minusDays(1)); // requested start date included
-      boolean is_before_ok =
-          local_record_date.isBefore(
-              view_local_end_date.plusDays(1)); // requested end date included
-
-      if (is_after_ok && is_before_ok) {
-        date_log_period_ok = true;
-      } else {
-        date_log_period_ok = false;
-      }
-    }
-
-    if (!continue_checking) {
-      date_log_period_ok = false;
-    }
-
-    return date_log_period_ok;
-  }
 
   /**
    * @param args the command line arguments
