@@ -1114,16 +1114,7 @@ public class RS232_view extends javax.swing.JFrame {
                   switch ((Integer) e.getNewValue()) {
                     // case JOptionPane.OK_OPTION: break;
                     case JOptionPane.OK_OPTION:
-                      new SwingWorker<Void, Void>() {
-                        @Override
-                        protected Void doInBackground() throws Exception {
-                          File file_sensor_data = new File(last_sensor_data_file);
-                          if (file_sensor_data.exists()) {
-                            file_sensor_data.delete();
-                          }
-                          return null;
-                        } // protected Void doInBackground() throws Exception
-                      }.execute(); // new SwingWorker<Void, Void>()
+                      Rs232ViewSensorFileCleanupWorkflow.start(last_sensor_data_file);
 
                       break;
                   }
