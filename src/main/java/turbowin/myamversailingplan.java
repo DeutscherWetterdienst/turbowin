@@ -3019,128 +3019,8 @@ public final class myamversailingplan extends javax.swing.JFrame {
             boolean result_ok = false;
 
             try (BufferedWriter out = new BufferedWriter(new FileWriter(sp_saved_file))) {
-              out.write(AMVER_SP_VESSEL + amver_sp_vessel);
-              out.newLine(); // newLine(): write a line separator. The line separator string is
-              // defined by the system property line.separator, and is not
-              // necessarily a single newline ('\n') character.
-
-              out.write(AMVER_SP_CALL_SIGN + amver_sp_call_sign);
-              out.newLine();
-
-              out.write(AMVER_SP_IMO_NUMBER + amver_sp_imo_number);
-              out.newLine();
-
-              out.write(AMVER_SP_DEP_DAY + amver_sp_time_of_dep_day);
-              out.newLine();
-
-              out.write(AMVER_SP_DEP_HOUR + amver_sp_time_of_dep_hour);
-              out.newLine();
-
-              out.write(AMVER_SP_DEP_MINUTE + amver_sp_time_of_dep_minute);
-              out.newLine();
-
-              out.write(AMVER_SP_DEP_MONTH + amver_sp_time_of_dep_month);
-              out.newLine();
-
-              out.write(AMVER_SP_CURRENT_COURSE + amver_sp_current_course);
-              out.newLine();
-
-              out.write(AMVER_SP_REMAINDER_SPEED + amver_sp_remainder_speed);
-              out.newLine();
-
-              out.write(AMVER_SP_PORT_DEP_NAME + amver_sp_port_dep_name);
-              out.newLine();
-
-              out.write(AMVER_SP_PORT_DEP_LAT + amver_sp_port_dep_lat);
-              out.newLine();
-
-              out.write(AMVER_SP_PORT_DEP_LON + amver_sp_port_dep_lon);
-              out.newLine();
-
-              out.write(AMVER_SP_PORT_DES_NAME + amver_sp_port_des_name);
-              out.newLine();
-
-              out.write(AMVER_SP_PORT_DES_LAT + amver_sp_port_des_lat);
-              out.newLine();
-
-              out.write(AMVER_SP_PORT_DES_LON + amver_sp_port_des_lon);
-              out.newLine();
-
-              out.write(AMVER_SP_TIME_OF_DES_DAY + amver_sp_time_of_des_day);
-              out.newLine();
-
-              out.write(AMVER_SP_TIME_OF_DES_HR + amver_sp_time_of_des_hour);
-              out.newLine();
-
-              out.write(AMVER_SP_TIME_OF_DES_MIN + amver_sp_time_of_des_minute);
-              out.newLine();
-
-              out.write(AMVER_SP_TIME_OF_DES_MON + amver_sp_time_of_des_month);
-              out.newLine();
-
-              // route info (array)
-              for (int r = 0; r < AMVER_TRACK_ROWS; r++) {
-                for (int c = 0; c < AMVER_TRACK_COLUMNS; c++) {
-                  if ((amver_track_data[r][c] != null)
-                      && (amver_track_data[r][c].compareTo("") != 0)) {
-                    if (c != 0) // c:0 contains only route number
-                    {
-                      out.write(AMVER_SP_TRACK);
-                      out.write("[" + Integer.toString(r) + "]");
-                      out.write("[" + Integer.toString(c) + "]");
-
-                      out.write(amver_track_data[r][c]);
-                      out.newLine();
-                    } // if (c != 0)
-                  } // if ((amver_track_data[r][c] != null) etc.
-                }
-              } // for (int r = 0; r < AMVER_TRACK_ROWS; r++)
-
-              out.write(AMVER_SP_RADIO_GUARD + amver_sp_radio_guard);
-              out.newLine();
-
-              if (amver_sp_medical[0] == true) {
-                out.write(AMVER_SP_MEDICAL + NONE);
-                out.newLine();
-              }
-              if (amver_sp_medical[1] == true) {
-                out.write(AMVER_SP_MEDICAL + NURSE);
-                out.newLine();
-              }
-              if (amver_sp_medical[2] == true) {
-                out.write(AMVER_SP_MEDICAL + PA);
-                out.newLine();
-              }
-              if (amver_sp_medical[3] == true) {
-                out.write(AMVER_SP_MEDICAL + MD);
-                out.newLine();
-              }
-
-              if (amver_sp_relay[0] == true) {
-                out.write(AMVER_SP_RELAY + JASREP);
-                out.newLine();
-              }
-              if (amver_sp_relay[1] == true) {
-                out.write(AMVER_SP_RELAY + AUSREP);
-                out.newLine();
-              }
-              if (amver_sp_relay[2] == true) {
-                out.write(AMVER_SP_RELAY + CHILREP);
-                out.newLine();
-              }
-              if (amver_sp_relay[3] == true) {
-                out.write(AMVER_SP_RELAY + MAREP);
-                out.newLine();
-              }
-
-              // user feedback
-              // String info = "Amver Sailing Plan written to: " + sp_saved_file;
-              // info += "\n NOTE Sailing Plan was not saved in AMVER format but in an internal
-              // format for future (import) use";
-              // JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info",
-              // JOptionPane.INFORMATION_MESSAGE);
+              AmverSailingPlanExportFormatter.write(out);
               result_ok = true;
-
             } // try
             catch (IOException ex) {
               // JOptionPane.showMessageDialog(null, "unable to write to: " + "sp_saved_file",
@@ -3896,8 +3776,8 @@ public final class myamversailingplan extends javax.swing.JFrame {
   private final int MAX_CHAR_AMVER_EMAIL_BODY = 400; // in theory 512 = body + subject + address
 
   // constants
-  private static final int AMVER_TRACK_ROWS = 100; // static !!
-  private static final int AMVER_TRACK_COLUMNS = 9; // static !!
+  static final int AMVER_TRACK_ROWS = 100; // static !!
+  static final int AMVER_TRACK_COLUMNS = 9; // static !!
   private static final String AMVER_EMAIL_ADDRESS = "amvermsg@amver.org"; // "user@example.org";
   private static final int SP_IMPORT_FILE_POS_INHOUD = 21;
   private static final String NONE = "NONE";
