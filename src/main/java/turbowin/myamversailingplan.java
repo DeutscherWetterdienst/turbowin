@@ -5,14 +5,11 @@ import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -3013,49 +3010,7 @@ public final class myamversailingplan extends javax.swing.JFrame {
       }
 
       if (doorgaan == true) {
-        new SwingWorker<Boolean, Void>() {
-          @Override
-          protected Boolean doInBackground() throws Exception {
-            boolean result_ok = false;
-
-            try (BufferedWriter out = new BufferedWriter(new FileWriter(sp_saved_file))) {
-              AmverSailingPlanExportFormatter.write(out);
-              result_ok = true;
-            } // try
-            catch (IOException ex) {
-              // JOptionPane.showMessageDialog(null, "unable to write to: " + "sp_saved_file",
-              // main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-              System.out.println("--- Function save_amver_sp(): " + ex);
-              result_ok = false;
-            } // catch
-
-            return result_ok;
-          } // protected Void doInBackground() throws Exception
-
-          @Override
-          protected void done() {
-            try {
-              boolean result_ok = get();
-              if (result_ok == true) {
-                // user feedback
-                String info = "Amver Sailing Plan written to: " + sp_saved_file;
-                info +=
-                    "\n NOTE Sailing Plan was not saved in AMVER format but in an internal format for future (import) use";
-                JOptionPane.showMessageDialog(
-                    null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-              } else {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "unable to write to: " + "sp_saved_file",
-                    main.APPLICATION_NAME + " error",
-                    JOptionPane.WARNING_MESSAGE);
-              }
-            } // protected void done()
-            catch (InterruptedException | ExecutionException ex) {
-              System.out.println("--- Function save_amver_sp(): " + ex);
-            }
-          }
-        }.execute(); // new SwingWorker<Void, Void>()
+        AmverSailingPlanSaveWorkflow.start(sp_saved_file);
       } // if (doorgaan == true)
     } // if (result == JFileChooser.APPROVE_OPTION
   }
