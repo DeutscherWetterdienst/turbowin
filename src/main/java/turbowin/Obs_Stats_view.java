@@ -8,14 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JDialog;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingWorker;
 import javax.swing.Timer;
 
 public class Obs_Stats_view extends javax.swing.JFrame {
@@ -304,66 +301,14 @@ public class Obs_Stats_view extends javax.swing.JFrame {
       processing_dialog.setSize(400, 300);
       processing_dialog.setVisible(true);
 
-      immt_list = new ArrayList<>(); // size is now dynamically  // NB from version 4.6 outside the
+      immt_list =
+          new java.util
+              .ArrayList<>(); // size is now dynamically  // NB from version 4.6 outside the
       // SwingWorker defined (to prevent ConcurrentModifcationException -
       // seen once)
       immt_rec_first = "";
       immt_rec_last = "";
-      new SwingWorker<Integer, Void>() {
-        @Override
-        protected Integer doInBackground() throws Exception {
-          String volledig_path_immt = main.logs_dir + java.io.File.separator + main.IMMT_LOG;
-          ObsStatsImmtLogProcessor.Result result =
-              ObsStatsImmtLogProcessor.process(
-                  volledig_path_immt,
-                  view_immt_log_period,
-                  view_local_start_date,
-                  view_local_end_date,
-                  main.obs_stats_mode.equals(main.OBSERVERS_STATS));
-          immt_list.addAll(result.records());
-          immt_rec_first = result.firstRecord();
-          immt_rec_last = result.lastRecord();
-          return result.status();
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void done() {
-          processing_dialog
-              .dispose(); // NB actually it closes much too early, but also putting the closing
-          // statement in another functions (eg in display_IMMT_on_leaflet_map()) ,
-          // the result is the same (too early)
-          try {
-            int return_immt = get();
-            if (return_immt == 0) {
-              immt_log_ok = true;
-              repaint();
-            } else if (return_immt == -1) {
-              immt_log_ok = false;
-              String info = "Error when creating immt.log list";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            } else if (return_immt == -2) {
-              immt_log_ok = false;
-              String info = "Error when opening immt.log";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            } else if (return_immt == -3) {
-              immt_log_ok = false;
-              String info =
-                  "> "
-                      + MAX_NUMBER_OBSERVERS_NAMES
-                      + " different observer names recorded in immt.log. Please send logs to your Port Meteorological Officer";
-              JOptionPane.showMessageDialog(
-                  null, info, main.APPLICATION_NAME + " warning", JOptionPane.WARNING_MESSAGE);
-            }
-
-          } catch (InterruptedException | ExecutionException ex) {
-            String info = "internal error :" + ex;
-            JOptionPane.showMessageDialog(
-                null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-          }
-        } // protected void done()
-      }.execute(); // new SwingWorker<Integer, Void>()
+      ObservationStatisticsWorkflow.start(this, processing_dialog);
     } // if doorgaan
   } // private void initComponents1()
 
