@@ -1,12 +1,9 @@
 package turbowin;
 
-import java.awt.Desktop;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 
 public final class myposition extends javax.swing.JFrame {
 
@@ -1388,142 +1385,10 @@ public final class myposition extends javax.swing.JFrame {
 
       /* put ship position on a leaflet map (but only if an internet connection is available (and appropriate checkbox ticked and a logs_dir is available */
       if ((checks_ok == true) && (jCheckBox1.isSelected() == true)) {
-        new SwingWorker<Void, Void>() {
-          @Override
-          protected Void doInBackground() throws Exception {
-            String os = OSDetector.getOSString();
-
-            Desktop desktop = null;
-            Integer code = 0;
-
-            if (os.equals("LINUX")) {
-              // LINUX: first try runtime procedure
-              //        second try Desktop procedure
-              //
-              // why?: on Fedora strange results if first Desktop method was invoked, then the
-              // browser only opens as soon as TurboWin+ itself is closed....
-              //       (so no error on Desktop procedure/method but strange behavior)
-              //       In several correspondance items you can find that the Desktop method is not
-              // workig fine on Linux
-              //
-              // related to: hardware accelarator of the webbrowser?
-              // (https://stackoverflow.com/questions/69037458/selenium-chromedriver-gives-initializesandbox-called-with-multiple-threads-in)
-              //         because the following errors in output window NetBeans IDE when trying to
-              // open URL
-              //         libva error: vaGetDriverNameByIndex() failed with unknown libva error,
-              // driver_name = (null)
-              //         [5757:5757:1122/165659.328325:ERROR:sandbox_linux.cc(376)]
-              // InitializeSandbox() called with multiple threads in process gpu-process.
-              //
-
-              if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0)) {
-                String full_path_leaflet_maps_html_file =
-                    main.logs_dir + java.io.File.separator + main.LEAFLET_MAPS_HTML_FILE;
-                Position_In_leaflet_Maps(full_path_leaflet_maps_html_file /*, AIS_map_also*/);
-                // File leaflet_maps_file = new File(full_path_leaflet_maps_html_file);  // String
-                // omzetten naar File
-
-                try {
-                  // create cmd array
-                  String[] cmdArray = {"kde-open", full_path_leaflet_maps_html_file};
-
-                  // create a process and execute cmdArray
-                  Process process = Runtime.getRuntime().exec(cmdArray);
-                } catch (IOException e) {
-                  try {
-                    // create cmd array
-                    String[] cmdArray = {"xdg-open", full_path_leaflet_maps_html_file};
-
-                    // create a process and execute cmdArray
-                    Process process = Runtime.getRuntime().exec(cmdArray);
-                  } catch (IOException e2) {
-                    try {
-                      // create cmd array
-                      String[] cmdArray = {"open", full_path_leaflet_maps_html_file};
-
-                      // create a process and execute cmdArray
-                      Process process = Runtime.getRuntime().exec(cmdArray);
-                    } catch (IOException e3) {
-                      code = -1;
-                    } // catch (IOException e3)
-                  } // catch (IOException e2)
-                } // catch  (IOException e)
-                if (code == -1) {
-                  if (Desktop.isDesktopSupported()) {
-                    desktop = Desktop.getDesktop();
-
-                    // open the just created leaflet maps html with the default web browser
-                    try {
-                      File leaflet_maps_file =
-                          new File(full_path_leaflet_maps_html_file); // String omzetten naar File
-
-                      // if (leaflet_maps_file.exists()) // is niet nodig door het try/catch blok
-                      desktop.open(leaflet_maps_file);
-                    } catch (NullPointerException | IllegalArgumentException | IOException ex1) {
-                      // if file is null
-                      System.out.println(
-                          "+++ unable to create dynamic html file for leaflet Maps plot [function: OK_button_actionPerformed()] ("
-                              + ex1
-                              + ")");
-                    }
-                  } // if (Desktop.isDesktopSupported())
-                  else {
-                    code = -1;
-                  } // else
-                } // if (code == -1)
-
-                if (code == -1 || code == -2) {
-                  System.out.println(
-                      "+++ unable to create dynamic html file for leaflet Maps plot [function: OK_button_actionPerformed()] (OS = Linux)");
-                }
-              } // if ( (main.logs_dir != null) && (main.logs_dir.compareTo("") != 0)  )
-            } // if (os.equals("LINUX"))
-            else // Windows etc.
-            {
-              // Before more Desktop API is used, first check
-              // whether the API is supported by this particular
-              // virtual machine (VM) on this particular host.
-
-              if ((Desktop.isDesktopSupported())
-                  && ((main.logs_dir != null)
-                      && (main.logs_dir.compareTo("") != 0)) /*&& (main.offline_mode == false)*/) {
-                desktop = Desktop.getDesktop();
-
-                String full_path_leaflet_maps_html_file =
-                    main.logs_dir + java.io.File.separator + main.LEAFLET_MAPS_HTML_FILE;
-                Position_In_leaflet_Maps(full_path_leaflet_maps_html_file /*, AIS_map_also*/);
-
-                // open the just created leaflet maps html with the default web browser
-                try {
-                  File leaflet_maps_file =
-                      new File(full_path_leaflet_maps_html_file); // String omzetten naar File
-
-                  // if (leaflet_maps_file.exists()) // is niet nodig door het try/catch blok
-                  desktop.open(leaflet_maps_file);
-                } catch (NullPointerException | IllegalArgumentException | IOException ex1) {
-                  // if file is null
-                  System.out.println(
-                      "+++ unable to create dynamic html file for leaflet Maps plot [function: OK_button_actionPerformed()] ("
-                          + ex1
-                          + ")");
-                }
-                // }
-                // catch (MalformedURLException ex)
-                // {
-                //   System.out.println("+++ unable to create dynamic html file for leaflet Maps
-                // plot [function: OK_button_actionPerformed()] (" + ex + ")");
-                // }
-                // catch (IOException ioe)
-                // {
-                //   System.out.println("+++ unable to create dynamic html file for leaflet Maps
-                // plot [function: OK_button_actionPerformed()] (" + ioe + ")");
-                // }
-              } // if ((Desktop.isDesktopSupported()) && etc.
-            } // else (Windows etc.)
-
-            return null;
-          } // protected Void doInBackground() throws Exception
-        }.execute(); // new SwingWorker<Void, Void>()
+        PositionLeafletMapWorkflow.start(
+            () ->
+                Position_In_leaflet_Maps(
+                    main.logs_dir + java.io.File.separator + main.LEAFLET_MAPS_HTML_FILE));
       } // if ( (checks_ok == true) && (jCheckBox1.isSelected() == true) )
 
     } // if (main.RS232_connection_mode != 3) etc.
