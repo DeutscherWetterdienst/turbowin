@@ -3,17 +3,11 @@ package turbowin;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FocusTraversalPolicy;
-import java.awt.HeadlessException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 
 public class barometer_comparison extends javax.swing.JFrame {
 
@@ -1018,113 +1012,22 @@ public class barometer_comparison extends javax.swing.JFrame {
       }
 
       if (doorgaan == true) {
-        new SwingWorker<String, Void>() {
-          @Override
-          protected String doInBackground() throws Exception {
-            String export_maintenance_data_ok = "OK";
-
-            try (BufferedWriter out =
-                new BufferedWriter(new FileWriter(barometer_comparison_export_file))) {
-              out.write("BAROMETER COMPARISON");
-              out.newLine();
-              out.newLine();
-              out.write("ship name: " + local_ship_name);
-              out.newLine();
-              out.write(
-                  "height ship barometer above Summer Load Line: "
-                      + local_barometer_above_sll
-                      + " metres");
-              out.newLine();
-              out.write(
-                  "distance of bottom of the keel to Summer Load Line: "
-                      + local_keel_sll
-                      + " metres");
-              out.newLine();
-              out.newLine();
-              out.write("date and time: " + local_date_time + " UTC");
-              out.newLine();
-              out.write("position or port: " + local_position);
-              out.newLine();
-              out.write(
-                  "ship barometer reading, indicating air pressure at bridge level: "
-                      + local_ship_barometer_reading
-                      + " hPa");
-              out.newLine();
-              out.write(
-                  "reference barometer reading, indicating air pressure at sea level: "
-                      + local_reference_barometer_reading
-                      + " hPa");
-              out.newLine();
-              out.write("actual ship draft: " + local_draft + " metres");
-              out.newLine();
-              out.write("outdoor air temperature: " + local_air_temp + " \u00B0C");
-              out.newLine();
-              out.newLine();
-              out.write(
-                  "actual height of the ship barometer above the waterline: "
-                      + local_ship_barometer_above_wl
-                      + " metres");
-              out.newLine();
-              out.write(
-                  "ship barometer air pressure converted to sea level: "
-                      + local_ship_barometer_sea_level
-                      + " hPa");
-              out.newLine();
-              out.write(
-                  "instrument error ship barometer: "
-                      + local_instrument_error_ship_barometer
-                      + " hPa");
-              out.newLine();
-              out.write(
-                  "instrument correction ship barometer: "
-                      + local_instrument_correction_ship_barometer
-                      + " hPa");
-              out.newLine();
-
-              // user feedback string
-              export_maintenance_data_ok =
-                  "OK, barometer comparison data written to: " + barometer_comparison_export_file;
-            } catch (IOException | HeadlessException e) {
-              // Note: A try-with-resources statement can have catch and finally blocks just like an
-              // ordinary try statement. In a try-with-resources statement, any catch or finally
-              // block is run after the resources declared have been closed.
-              export_maintenance_data_ok =
-                  "Unable to write to: " + barometer_comparison_export_file + " (" + e + ")";
-            } // catch
-
-            return export_maintenance_data_ok;
-          } // protected Void doInBackground() throws Exception
-
-          @Override
-          protected void done() {
-            try {
-              String result_export_maintenance_data_ok = get();
-
-              if (result_export_maintenance_data_ok.contains("OK") != true) {
-                // show error message
-                JOptionPane.showMessageDialog(
-                    null,
-                    result_export_maintenance_data_ok,
-                    main.APPLICATION_NAME + " error",
-                    JOptionPane.WARNING_MESSAGE);
-              } else {
-                // show the 'succesfully exported' message
-                JOptionPane.showMessageDialog(
-                    null,
-                    result_export_maintenance_data_ok,
-                    main.APPLICATION_NAME + " info",
-                    JOptionPane.INFORMATION_MESSAGE);
-              }
-            } catch (InterruptedException | ExecutionException ex) {
-              // show error message
-              JOptionPane.showMessageDialog(
-                  null,
-                  "Error writing export file (" + ex + ")",
-                  main.APPLICATION_NAME + " error",
-                  JOptionPane.WARNING_MESSAGE);
-            }
-          } // protected void done()
-        }.execute(); // new SwingWorker<String, Void>()
+        BarometerComparisonExportWorkflow.start(
+            barometer_comparison_export_file,
+            new BarometerComparisonExportWorkflow.ExportData(
+                local_ship_name,
+                local_barometer_above_sll,
+                local_keel_sll,
+                local_date_time,
+                local_position,
+                local_ship_barometer_reading,
+                local_reference_barometer_reading,
+                local_draft,
+                local_air_temp,
+                local_ship_barometer_above_wl,
+                local_ship_barometer_sea_level,
+                local_instrument_error_ship_barometer,
+                local_instrument_correction_ship_barometer));
       } // if (doorgaan == true)
     } // if (result == JFileChooser.APPROVE_OPTION
   } // GEN-LAST:event_Export_button_actionPerformed
