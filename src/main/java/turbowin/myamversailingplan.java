@@ -5,9 +5,7 @@ import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
@@ -3229,31 +3227,8 @@ public final class myamversailingplan extends javax.swing.JFrame {
       if (result == JFileChooser.APPROVE_OPTION) {
         import_file = chooser.getSelectedFile().getPath();
 
-        new SwingWorker<Void, Void>() {
-          @Override
-          protected Void doInBackground() throws Exception {
-            String file_line;
-
-            // read all lines from imported sailing plan file
-            try (BufferedReader in = new BufferedReader(new FileReader(import_file))) {
-              while ((file_line = in.readLine()) != null) {
-                read_sp_data_from_import_file(file_line);
-              } // while((file_line = in.readLine()) != null)
-            } // try
-            catch (IOException ex) {
-              // JOptionPane.showMessageDialog(null, "Error reading saling plan import file (" +
-              // import_file + ")",  main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-              System.out.println("--- Function import_button_actionPerformed(): " + ex);
-            } // catch
-
-            return null;
-          } // protected Void doInBackground() throws Exception
-
-          @Override
-          protected void done() {
-            insert_values_in_fields();
-          }
-        }.execute(); // new SwingWorker<Void, Void>()
+        AmverSailingPlanImportWorkflow.start(
+            import_file, this::read_sp_data_from_import_file, this::insert_values_in_fields);
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)
   } // GEN-LAST:event_import_button_actionPerformed
