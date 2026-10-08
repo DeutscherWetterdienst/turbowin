@@ -3269,39 +3269,7 @@ public final class myamversailingplan extends javax.swing.JFrame {
       java.awt.event.MouseEvent evt) { // GEN-FIRST:event_AMVER_web_link_mouseClicked
     // TODO add your handling code here:
 
-    new SwingWorker<Integer, Void>() {
-      @Override
-      protected Integer doInBackground() throws Exception {
-        String os = OSDetector.getOSString();
-
-        String link_url = "https://www.amver.com";
-
-        return DesktopUtils.openLink(link_url, os);
-      } // protected Void doInBackground() throws Exception
-
-      @Override
-      protected void done() {
-        try {
-          Integer response_code = get();
-
-          if (response_code == -1) {
-            String message = "[GENERAL] Error invoking default web browser";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          } else if (response_code == -2) {
-            String message = "[GENERAL] Error invoking URL";
-            JOptionPane.showMessageDialog(
-                null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-            main.log_turbowin_system_message(message);
-          }
-        } // try
-        catch (InterruptedException | ExecutionException ex) {
-          String message = "[GENERAL] Error invoking default web browser; " + ex.toString();
-          main.log_turbowin_system_message(message);
-        } // catch
-      } // protected void done()
-    }.execute(); // new SwingWorker<Void, Void>()
+    AmverWebLinkWorkflow.start();
   } // GEN-LAST:event_AMVER_web_link_mouseClicked
 
   private void AMVER_web_link_mouseEntered(
