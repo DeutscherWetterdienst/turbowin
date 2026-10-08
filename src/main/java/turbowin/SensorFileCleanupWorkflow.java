@@ -3,10 +3,10 @@ package turbowin;
 import java.io.File;
 import javax.swing.SwingWorker;
 
-/** Owns asynchronous cleanup of the primary sensor data file. */
-final class Rs232ViewSensorFileCleanupWorkflow {
+/** Owns asynchronous cleanup of a sensor data file. */
+final class SensorFileCleanupWorkflow {
 
-  private Rs232ViewSensorFileCleanupWorkflow() {}
+  private SensorFileCleanupWorkflow() {}
 
   static void start(String sensorDataFilePath) {
     new SwingWorker<Void, Void>() {

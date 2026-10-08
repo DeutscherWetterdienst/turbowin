@@ -836,7 +836,7 @@ public class RS232_view extends javax.swing.JFrame {
                   switch ((Integer) e.getNewValue()) {
                     // case JOptionPane.OK_OPTION: break;
                     case JOptionPane.OK_OPTION:
-                      Rs232ViewSecondarySensorFileCleanupWorkflow.start(last_sensor_data_file_II);
+                      SensorFileCleanupWorkflow.start(last_sensor_data_file_II);
 
                       break;
                   }
@@ -1114,7 +1114,7 @@ public class RS232_view extends javax.swing.JFrame {
                   switch ((Integer) e.getNewValue()) {
                     // case JOptionPane.OK_OPTION: break;
                     case JOptionPane.OK_OPTION:
-                      Rs232ViewSensorFileCleanupWorkflow.start(last_sensor_data_file);
+                      SensorFileCleanupWorkflow.start(last_sensor_data_file);
 
                       break;
                   }
