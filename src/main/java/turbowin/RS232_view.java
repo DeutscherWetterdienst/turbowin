@@ -22,13 +22,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -2602,23 +2600,7 @@ public class RS232_view extends javax.swing.JFrame {
               }
 
               if (doorgaan_trace_save == true) {
-                new SwingWorker<Void, Void>() {
-                  @Override
-                  protected Void doInBackground() throws Exception {
-                    try {
-                      ImageIO.write(bi, "png", new File(saved_trace_image));
-                    } // try
-                    catch (HeadlessException | IOException e) {
-                      JOptionPane.showMessageDialog(
-                          null,
-                          "unable to write to: " + saved_trace_image,
-                          main.APPLICATION_NAME + " error",
-                          JOptionPane.WARNING_MESSAGE);
-                    } // catch
-
-                    return null;
-                  } // protected Void doInBackground() throws Exception
-                }.execute(); // new SwingWorker<Void, Void>()
+                Rs232ViewTraceImageSaveWorkflow.start(bi, saved_trace_image);
               } // if (doorgaan == true)
             } // if (result == JFileChooser.APPROVE_OPTION
           } // public void actionPerformed(ActionEvent e)
