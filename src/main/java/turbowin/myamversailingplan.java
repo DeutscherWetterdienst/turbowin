@@ -1,18 +1,13 @@
 package turbowin;
 
 import java.awt.Cursor;
-import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.table.TableCellEditor;
 
 public final class myamversailingplan extends javax.swing.JFrame {
@@ -2861,82 +2856,7 @@ public final class myamversailingplan extends javax.swing.JFrame {
     //
     if (checks_ok == true && invoke_email_program == true) // so user clicked the 'E-mail button'
     {
-      new SwingWorker<Void, Void>() {
-        @Override
-        protected Void doInBackground() throws Exception {
-          /*
-          //
-          // Version 6 of the Java Platform, Standard Edition (Java SE), continues to narrow the gap with
-          // new system tray functionality, better  print support for JTable, and now the Desktop API
-          //(java.awt.Desktop API).
-          //
-          // Use the Desktop.isDesktopSupported() method to determine whether the Desktop API is available.
-          // On the Solaris Operating System and the Linux platform, this API is dependent on Gnome libraries.
-          // If those libraries are unavailable, this method will return false. After determining that the API is
-          // supported, that is, the isDesktopSupported() returns true, the application can retrieve a Desktop
-          // instance using the static method getDesktop().
-          //
-          */
-          Desktop desktop = null;
-
-          // Before more Desktop API is used, first check
-          // whether the API is supported by this particular
-          // virtual machine (VM) on this particular host.
-          if (Desktop.isDesktopSupported()) {
-            desktop = Desktop.getDesktop();
-            try {
-              String email_subject = "Amver Sailing plan";
-              String email_txt = "";
-              if (email_body_lengte < MAX_CHAR_AMVER_EMAIL_BODY) {
-                email_txt =
-                    AMVER_EMAIL_ADDRESS + "?subject=" + email_subject + "&body=" + email_body;
-              } else {
-                email_txt = AMVER_EMAIL_ADDRESS + "?subject=" + email_subject /*  + "&body="*/;
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Paste coded amver message from clipboard (right click in e-mail body and select Paste)",
-                    main.APPLICATION_NAME + " info",
-                    JOptionPane.INFORMATION_MESSAGE);
-              } // else
-
-              URI uriMailTo = null;
-              try {
-                uriMailTo = new URI("mailto", email_txt, null);
-              } catch (URISyntaxException ex) {
-                JOptionPane.showMessageDialog(
-                    null,
-                    "Error invoking default Email program (URISyntaxException)",
-                    main.APPLICATION_NAME + " error",
-                    JOptionPane.WARNING_MESSAGE);
-              }
-
-              desktop.mail(uriMailTo);
-
-            } // try
-            catch (IOException ex) {
-              // Also here if body text exceeds limit number of char
-
-              JOptionPane.showMessageDialog(
-                  null,
-                  "Error invoking default Email program",
-                  main.APPLICATION_NAME + " error",
-                  JOptionPane.WARNING_MESSAGE);
-            }
-          } // if (Desktop.isDesktopSupported())
-          else {
-            JOptionPane.showMessageDialog(
-                null,
-                "Error invoking default Email program (method not supported on this computer system)",
-                main.APPLICATION_NAME + " error",
-                JOptionPane.WARNING_MESSAGE);
-          } // else
-
-          return null;
-        } // protected Void doInBackground() throws Exception
-
-        @Override
-        protected void done() {}
-      }.execute();
+      AmverEmailLaunchWorkflow.start(email_body, email_body_lengte);
     }
   }
 
