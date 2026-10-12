@@ -88,15 +88,9 @@ public class RS232_vaisala {
         sensor_data_file = new File(volledig_path_sensor_data);
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
-          try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-            record = null;
-            laatste_record = null;
-
-            while ((record = in.readLine()) != null) {
-              if (record.length() == main.type_record_lengte) {
-                laatste_record = record;
-              }
-            } // while ((record = in.readLine()) != null)
+          try {
+            laatste_record =
+                SensorDataRecordReader.readLastRecord(sensor_data_file, main.type_record_lengte);
 
             if (laatste_record != null) {
               String record_datum_tijd_minuten =
