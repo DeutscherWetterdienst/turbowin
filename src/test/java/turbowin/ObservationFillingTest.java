@@ -30,8 +30,6 @@ public class ObservationFillingTest extends AbstractUiTest {
 
   @Test
   public void testFillingOutAllValuesForAFM13() throws InterruptedException {
-    closeStartDialogs();
-
     addObserverInformation();
 
     fillAllStationData();
@@ -66,36 +64,17 @@ public class ObservationFillingTest extends AbstractUiTest {
 
   @Test
   public void resetClearsRepresentativeVisibleField() throws InterruptedException {
-    closeStartDialogs();
-
-    main.jTextField36.setText("12 °C");
-    mytemp.air_temp = "12";
-
     GuiActionRunner.execute(
         new GuiTask() {
           @Override
           protected void executeInEDT() {
+            main.jTextField36.setText("12 °C");
+            mytemp.air_temp = "12";
             main.Reset_all_meteo_parameters();
           }
         });
 
-    assertEquals("", main.jTextField36.getText());
-  }
-
-  private void closeStartDialogs() throws InterruptedException {
-    DialogFixture turboWinWarningFrame =
-        WindowFinder.findDialog(new DialogTitleMatcher("TurboWin+ warning")).using(this.robot());
-    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
-    turboWinWarningFrame
-        .button(JButtonMatcher.withText("OK"))
-        .requireVisible()
-        .requireEnabled()
-        .click();
-    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
-    DialogFixture dateTimeDialog =
-        WindowFinder.findDialog(new DialogTitleMatcher("Date and Time")).using(this.robot());
-    TimeUnit.MILLISECONDS.sleep(TIMEOUT);
-    handleLocalizedButtonClick(dateTimeDialog, "No", "Nein");
+    new JTextComponentFixture(robot(), main.jTextField36).requireText("");
   }
 
   private void fillPositionInformation() throws InterruptedException {

@@ -12,22 +12,30 @@ import org.junit.Test;
 /** Characterizes the observable state established by main startup. */
 public class MainStartupCharacterizationTest extends AbstractUiTest {
 
+  private String initialStatusLine;
+
+  @Override
+  protected void onWindowCreated(main window) {
+    initialStatusLine = main.jTextField4.getText();
+  }
+
   @Test
   public void startupInitializesCoreApplicationState() {
     assertEquals(main.APPLICATION_NAME, frame.target().getTitle());
     assertEquals(main.APPLICATION_NAME + " " + main.application_mode, main.jLabel4.getText());
-    assertEquals("", main.jTextField4.getText());
+    assertEquals("", initialStatusLine);
     assertEquals(main.MODE_PRESSURE, main.mode_grafiek);
     assertNull(main.myship);
   }
 
   @Test
   public void startupInitializesCoordinatorOwnedState() throws Exception {
+    assertEquals(startupDirectory.getRoot().getAbsolutePath(), main.data_dir);
     assertNotNull(main.sdf_tsl_1);
     assertEquals("MMM_yyyy", main.sdf_tsl_1.toPattern());
     assertNotNull(main.sdf_tsl_2);
     assertEquals("dd-MMM-yyyy HH:mm:ss", main.sdf_tsl_2.toPattern());
-    assertEquals("", main.jTextField4.getText());
+    assertEquals("", initialStatusLine);
     assertTrue(main.offline_mode);
     assertTrue(main.offline_mode_via_cmd);
 

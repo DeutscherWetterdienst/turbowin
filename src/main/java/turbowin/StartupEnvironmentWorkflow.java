@@ -11,7 +11,8 @@ final class StartupEnvironmentWorkflow {
       String launcherFile,
       String linuxLauncherFile) {
     String os = OSDetector.getOSString();
-    main.data_dir = StartupEnvironment.dataDirectory(os);
+    // Tests can use a writable sandbox without changing the installed platform defaults.
+    main.data_dir = System.getProperty("turbowin.data.dir", StartupEnvironment.dataDirectory(os));
     System.out.println("data dir = " + main.data_dir);
 
     // JNLP BasicService.isOffline() is not guaranteed to report the true client state; use the
