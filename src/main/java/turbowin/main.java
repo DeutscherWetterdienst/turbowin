@@ -4293,19 +4293,12 @@ public class main extends javax.swing.JFrame {
   private void Maintenance_Stationdata_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Stationdata_actionPerformed
     mode = STATION_DATA;
-
-    if (main_support.password_ok) // no password needed, direct to the station data form
-    {
-      // open station data input page
-      mystationdata form = new mystationdata();
-      form.setSize(800, 600);
-      form.setVisible(true);
-    } else // via the password input screen to the station data input form
-    {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.open(
+        main_support.password_ok,
+        mystationdata::new,
+        new Dimension(800, 600),
+        mypassword::new,
+        new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Stationdata_actionPerformed
 
   void Input_Barometer_menu_actionPerformed(
