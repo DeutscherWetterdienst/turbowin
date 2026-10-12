@@ -24,3 +24,4 @@ jobs:
         with:
           name: rpm-amd64-artifacts
           path: build/jpackage/*
+          retention-days: 7

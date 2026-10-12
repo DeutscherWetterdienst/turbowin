@@ -24,3 +24,4 @@ jobs:
         with:
           name: deb-amd64-artifacts
           path: build/jpackage/*
+          retention-days: 7

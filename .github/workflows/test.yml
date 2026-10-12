@@ -30,3 +30,4 @@ jobs:
             test-run.log
             build/reports/tests/test/
             build/test-results/test/*.xml
+          retention-days: 7
