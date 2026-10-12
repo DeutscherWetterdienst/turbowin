@@ -366,7 +366,7 @@ public class main extends javax.swing.JFrame {
     StartupThemeWorkflow.initialize(this);
 
     initComponents();
-    bepaal_frame_location();
+    StartupWindowLayoutWorkflow.initialize(this);
     initImages();
     initComponents2();
 
@@ -4038,13 +4038,6 @@ public class main extends javax.swing.JFrame {
 
   public static void coded_obs_update() {
     CodedObservationFieldUpdater.update();
-  }
-
-  private void bepaal_frame_location() {
-    Toolkit kit = Toolkit.getDefaultToolkit();
-    Dimension screenSize = kit.getScreenSize();
-    WindowLayoutCalculator.calculate(screenSize.width, screenSize.height);
-    setLocation(x_pos_start_frame, y_pos_start_frame);
   }
 
   public static String compose_coded_obs(String SPATIE) {
