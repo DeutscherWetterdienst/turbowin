@@ -26,4 +26,19 @@ final class SensorDataRecordReader {
     }
     return lastRecord;
   }
+
+  static String readLastPhysicalRecord(File sensorDataFile) throws IOException {
+    if (!sensorDataFile.exists() || sensorDataFile.length() <= 0) {
+      return null;
+    }
+
+    String lastRecord = null;
+    try (BufferedReader in = new BufferedReader(new FileReader(sensorDataFile))) {
+      String record;
+      while ((record = in.readLine()) != null) {
+        lastRecord = record;
+      }
+    }
+    return lastRecord;
+  }
 }
