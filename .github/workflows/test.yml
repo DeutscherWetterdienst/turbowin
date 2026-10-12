@@ -7,6 +7,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     container:
       image: eclipse-temurin:21-jdk-noble
     steps:
@@ -15,12 +16,17 @@ jobs:
       - name: Run tests
         run: ./scripts/task_linux.bash test
         env:
-          TURBOWIN_EMAIL_ENCRYPTION_KEY: ${{ secrets.TURBOWIN_EMAIL_ENCRYPTION_KEY }}
-          TURBOWIN_EMAIL_CHARACTER_ENCODING: ${{ secrets.TURBOWIN_EMAIL_CHARACTER_ENCODING }}
-          TURBOWIN_EMAIL_CIPHER_TRANSFORMATION: ${{ secrets.TURBOWIN_EMAIL_CIPHER_TRANSFORMATION }}
-          TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM: ${{ secrets.TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM }}
+          TURBOWIN_EMAIL_ENCRYPTION_KEY: ${{ secrets.TURBOWIN_EMAIL_ENCRYPTION_KEY || 'dummy-key' }}
+          TURBOWIN_EMAIL_CHARACTER_ENCODING: ${{ secrets.TURBOWIN_EMAIL_CHARACTER_ENCODING || 'UTF-8' }}
+          TURBOWIN_EMAIL_CIPHER_TRANSFORMATION: ${{ secrets.TURBOWIN_EMAIL_CIPHER_TRANSFORMATION || 'AES' }}
+          TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM: ${{ secrets.TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM || 'AES' }}
       - name: Upload test artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-artifacts
-          path: screen_capture.webm
+          path: |
+            screen_capture.webm
+            test-run.log
+            build/reports/tests/test/
+            build/test-results/test/*.xml
