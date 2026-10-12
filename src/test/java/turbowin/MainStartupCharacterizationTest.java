@@ -14,6 +14,9 @@ public class MainStartupCharacterizationTest extends AbstractUiTest {
 
   @Test
   public void startupInitializesCoreApplicationState() {
+    assertEquals(main.APPLICATION_NAME, frame.target().getTitle());
+    assertEquals(main.APPLICATION_NAME + " " + main.application_mode, main.jLabel4.getText());
+    assertEquals("", main.jTextField4.getText());
     assertEquals(main.MODE_PRESSURE, main.mode_grafiek);
     assertNull(main.myship);
   }
