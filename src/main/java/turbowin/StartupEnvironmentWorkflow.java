@@ -14,6 +14,8 @@ final class StartupEnvironmentWorkflow {
     main.data_dir = StartupEnvironment.dataDirectory(os);
     System.out.println("data dir = " + main.data_dir);
 
+    // JNLP BasicService.isOffline() is not guaranteed to report the true client state; use the
+    // file markers instead. FM13 server output is online-only, while format 101 supports both.
     StartupEnvironment.OfflineMode startupMode =
         StartupEnvironment.detectOfflineMode(
             main.data_dir,

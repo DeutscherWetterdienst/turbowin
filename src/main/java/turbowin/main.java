@@ -6008,70 +6008,15 @@ public class main extends javax.swing.JFrame {
   }
 
   private void initComponents2() {
-    // functions additional/supporting to this main class
-    StartupWindowWorkflow.initialize(this);
-
-    /* create pop-up menu (right mouse button) */
-    // create_popup_menu();
-    // NB moved to lees_configuratie_regels() [main.java] and startup configuration loading
-
-    // for turbowin system logs
-    sdf_tsl_1 = StartupLogFormatting.monthlyLogFormat(); // e.g. JAN_2016 (part of the file name)
-    sdf_tsl_2 =
-        StartupLogFormatting.messageLogFormat(); // e.g. 09-Jan-2016 12:23:33 (time stamp of the
-    // recoreded messages)
-
-    // initialisation
-    Reset_all_meteo_parameters();
-
-    // NB in via Reset_all_meteo_parameters() the status line (JTextField4) was set literally to
-    // "undefined") (because the selection criterium -AWS connected'is there still not determined0
-    jTextField4.setText("");
-
-    /* check if the application is online or offline (different help file handling)  */
-    //
-    // NB werken via bs = (BasicService)ServiceManager.lookup("javax.jnlp.BasicService");
-    //               en hierna if (bs.isOffline() == true) gaat niet goed
-    // deze methode kan niet goed online of offline bepalen (staat ook in API documentatie)
-    // API: "The return value is does not have to be guaranteed to be reliable, as it is sometimes
-    // difficult to ascertain the true online / offline state of a client system."
-    //
-
-    StartupEnvironmentWorkflow.initialize(
-        JNLP_OFFLINE_FILE, CMD_OFFLINE_FILE, TURBOWIN_LAUNCHER_FILE, TURBOWIN_LAUNCHER_FILE_LINUX);
-    // if ((obs_format.equals(FORMAT_FM13)) && (offline_mode == true))
-    // {
-    //   // NB FM13 only "obs to server" in online mode, in case of format 101 "obs to server" is an
-    // output option in both modes (online/web and offline)
-    //   // gray (disable) the "output -> obs to server (internet)" menu selection option
-    //   jMenuItem20.setEnabled(false);
-    // }
-
-    // initialisation
-    mode_grafiek = MODE_PRESSURE;
-
-    // initialisation graph form (for barometer or AWS connected)
-    graph_form = null;
-
-    // all specific RS232 and RS422 functions
-    StartupCommunicationWorkflow.CommunicationComponents communicationComponents =
-        StartupCommunicationWorkflow.initialize();
-    RS232_RS422 = communicationComponents.serial;
-    RS232_mintaka_class = communicationComponents.mintaka;
-    RS232_vaisala_class = communicationComponents.vaisala;
-
-    // for hybrid and radar dashboard
-    myship = null;
-
-    /* read stored meta data from configuration files in command-line offline mode */
-    if (offline_mode_via_cmd == true) {
-      s =
-          StartupConfigurationWorkflow.initializeCommandLineOffline(
-              this, theme_changed, PORT_command_line, PORT);
-    }
-
-    // get the systemTrays instance
-    SystemTrayWorkflow.initialize();
+    StartupCoordinator.initialize(
+        this,
+        JNLP_OFFLINE_FILE,
+        CMD_OFFLINE_FILE,
+        TURBOWIN_LAUNCHER_FILE,
+        TURBOWIN_LAUNCHER_FILE_LINUX,
+        PORT_command_line,
+        PORT,
+        theme_changed);
 
     // check wind speed units source in AWS mode
     // NB not available in this stage so see: check_meta_data() [main.java]
@@ -6080,6 +6025,21 @@ public class main extends javax.swing.JFrame {
     // dashboards
     // display_resolution_greather_than_HD = main_support.determine_screen_size();
 
+  }
+
+  void initializeGraphState() {
+    graph_form = null;
+  }
+
+  void initializeCommunicationComponents(
+      StartupCommunicationWorkflow.CommunicationComponents communicationComponents) {
+    RS232_RS422 = communicationComponents.serial;
+    RS232_mintaka_class = communicationComponents.mintaka;
+    RS232_vaisala_class = communicationComponents.vaisala;
+  }
+
+  void initializeInstanceSocket(ServerSocket instanceSocket) {
+    s = instanceSocket;
   }
 
   void create_popup_menu() {
