@@ -1,6 +1,7 @@
 package turbowin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -10,5 +11,6 @@ public class MainStartupCharacterizationTest extends AbstractUiTest {
   @Test
   public void startupInitializesCoreApplicationState() {
     assertEquals(main.MODE_PRESSURE, main.mode_grafiek);
+    assertNull(main.myship);
   }
 }
