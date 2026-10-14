@@ -31,6 +31,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
@@ -154,7 +155,7 @@ final class Rs232MintakaWowAprWorkflow {
         sensor_data_file = new File(volledig_path_sensor_data);
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
-          try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data))) {
+          try {
             record = null;
             laatste_record = null; // last record for all further manipulations
             String laatste_record_0 = null; // last record temperarily
@@ -162,43 +163,26 @@ final class Rs232MintakaWowAprWorkflow {
             String laatste_record_2 = null; // 2 after last temperarily
             String laatste_record_3 = null; // 2 after last temperarily
             String laatste_record_4 = null; // 2 after last temperarily
-            int num_read_records = 0;
 
-            // retrieve the last 3 records in the sensor data file
+            // retrieve the last 5 records in the sensor data file
             //
-            while ((record = in.readLine()) != null) {
-              num_read_records++;
-
-              if (num_read_records == 1) {
-                laatste_record_0 = record;
+            List<String> last_records = SensorDataRecordReader.readLastRecords(sensor_data_file, 5);
+            if (!last_records.isEmpty()) {
+              int last_record_index = last_records.size() - 1;
+              laatste_record_0 = last_records.get(last_record_index);
+              if (last_record_index > 0) {
+                laatste_record_1 = last_records.get(last_record_index - 1);
               }
-
-              if (num_read_records == 2) {
-                laatste_record_1 = laatste_record_0;
-                laatste_record_0 = record;
+              if (last_record_index > 1) {
+                laatste_record_2 = last_records.get(last_record_index - 2);
               }
-
-              if (num_read_records == 3) {
-                laatste_record_2 = laatste_record_1;
-                laatste_record_1 = laatste_record_0;
-                laatste_record_0 = record;
+              if (last_record_index > 2) {
+                laatste_record_3 = last_records.get(last_record_index - 3);
               }
-
-              if (num_read_records == 4) {
-                laatste_record_3 = laatste_record_2;
-                laatste_record_2 = laatste_record_1;
-                laatste_record_1 = laatste_record_0;
-                laatste_record_0 = record;
+              if (last_record_index > 3) {
+                laatste_record_4 = last_records.get(last_record_index - 4);
               }
-
-              if (num_read_records > 4) {
-                laatste_record_4 = laatste_record_3;
-                laatste_record_3 = laatste_record_2;
-                laatste_record_2 = laatste_record_1;
-                laatste_record_1 = laatste_record_0;
-                laatste_record_0 = record;
-              }
-            } // while ((record = in.readLine()) != null)
+            }
 
             // check records on a GPS position APR destination
             //
