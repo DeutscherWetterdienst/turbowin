@@ -4,10 +4,8 @@ import static turbowin.main_RS232_RS422.GPS_latitude_earlier_wind;
 import static turbowin.main_RS232_RS422.GPS_longitude_earlier_wind;
 import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -104,10 +102,11 @@ public class RS232_mintaka {
       File sensor_data_file_wind = new File(volledig_path_sensor_data_wind);
       if (sensor_data_file_wind.exists() && sensor_data_file_wind.length() > 0) // length() in bytes
       {
-        try (BufferedReader in =
-            new BufferedReader(new FileReader(volledig_path_sensor_data_wind))) {
-          record = null;
-          while ((record = in.readLine()) != null) {
+        try {
+          record =
+              MintakaHistoricalRecordReader.readLatestValidRecord(
+                  sensor_data_file_wind, date_time_SOG_COG_start_wind, StarX);
+          if (record != null) {
             if (record.length()
                 > 15) // NB > 15 is a little bit arbitrary number (YYYYMMDDHHmm + 3 commas + at leat
             // 2 char pressure value= 15 chars)
@@ -227,7 +226,10 @@ public class RS232_mintaka {
               GPS_latitude_earlier_wind = "";
               GPS_longitude_earlier_wind = "";
             }
-          } // while ((record = in.readLine()) != null)
+          } else {
+            GPS_latitude_earlier_wind = "";
+            GPS_longitude_earlier_wind = "";
+          }
 
         } // try
         catch (FileNotFoundException ex) {

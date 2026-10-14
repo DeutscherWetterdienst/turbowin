@@ -30,6 +30,21 @@ final class MintakaHistoricalRecordReader {
     return latestValidRecord;
   }
 
+  static String readLatestPhysicalRecord(File sensorDataFile) throws IOException {
+    if (!sensorDataFile.exists() || sensorDataFile.length() <= 0) {
+      return null;
+    }
+
+    String latestRecord = null;
+    try (BufferedReader in = new BufferedReader(new FileReader(sensorDataFile))) {
+      String record;
+      while ((record = in.readLine()) != null) {
+        latestRecord = record;
+      }
+    }
+    return latestRecord;
+  }
+
   private static boolean isValidRecord(String record, String timestamp, boolean starX) {
     if (record.length() <= 15
         || !record.substring(record.length() - 12).equals(timestamp)
