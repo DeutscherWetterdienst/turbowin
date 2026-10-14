@@ -27,7 +27,7 @@ final class SensorDataRecordReader {
     return lastRecord;
   }
 
-  static String readLastPhysicalRecord(File sensorDataFile) throws IOException {
+  static String readLatestRecord(File sensorDataFile) throws IOException {
     if (!sensorDataFile.exists() || sensorDataFile.length() <= 0) {
       return null;
     }

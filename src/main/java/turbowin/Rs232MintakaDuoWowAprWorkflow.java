@@ -5,9 +5,7 @@ import static turbowin.main_RS232_RS422.RS232_APR_AWSR_send;
 import static turbowin.main_RS232_RS422.RS232_WOW_APR_compute_air_pressure_height_correction;
 import static turbowin.main_RS232_RS422.RS232_make_pressure_APR_FM13_IMMT_ready;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,7 +36,6 @@ final class Rs232MintakaDuoWowAprWorkflow {
             -2); // of is -1 ook goed????? : to be sure there was all time that it was written to
         // the file
         File sensor_data_file;
-        String record = null;
         String laatste_record = null;
 
         // initialisation
@@ -58,15 +55,8 @@ final class Rs232MintakaDuoWowAprWorkflow {
         sensor_data_file = new File(volledig_path_sensor_data);
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
-          try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-            record = null;
-            laatste_record = null;
-
-            // retrieve the last record in the sensor data file
-            //
-            while ((record = in.readLine()) != null) {
-              laatste_record = record;
-            } // while ((record = in.readLine()) != null)
+          try {
+            laatste_record = SensorDataRecordReader.readLatestRecord(sensor_data_file);
 
             // check on minimum record length
             //

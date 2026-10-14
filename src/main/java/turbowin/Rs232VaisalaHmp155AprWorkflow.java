@@ -43,7 +43,7 @@ final class Rs232VaisalaHmp155AprWorkflow {
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
           laatste_record =
-              SensorDataRecordReader.readLastPhysicalRecord(sensor_data_file);
+              SensorDataRecordReader.readLatestRecord(sensor_data_file);
 
           if (laatste_record != null) {
             if (laatste_record.length() != main.RECORD_LENGTE_HMP155) // fixed record length
