@@ -4,9 +4,7 @@ import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -72,7 +70,6 @@ final class Rs232MintakaApppDataFilesWorkflow {
             -2); // of is -1 ook goed????? : to be sure there was all time that it was written to
         // the file
         File sensor_data_file;
-        String record = null;
         String laatste_record = null;
         String local_obs_age = "";
         int pos1 = 0; // position of the first "," in the last record
@@ -107,15 +104,8 @@ final class Rs232MintakaApppDataFilesWorkflow {
         sensor_data_file = new File(volledig_path_sensor_data);
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
-          try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-            record = null;
-            laatste_record = null;
-
-            // retrieve the last record in the sensor data file
-            //
-            while ((record = in.readLine()) != null) {
-              laatste_record = record;
-            } // while ((record = in.readLine()) != null)
+          try {
+            laatste_record = SensorDataRecordReader.readLatestRecord(sensor_data_file);
 
             // check on minimum record length
             //
