@@ -1,9 +1,7 @@
 package turbowin;
 
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -47,7 +45,6 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
         @Override
         protected String doInBackground() throws Exception {
           File sensor_data_file;
-          String record;
           String last_record = null;
 
           if (system_minute != 0) {
@@ -73,26 +70,17 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
           sensor_data_file = new File(volledig_path_sensor_data);
           if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
           {
-            try (BufferedReader in =
-                new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-              // initialisation
-              record = "";
-              last_record = "";
-
-              while ((record = in.readLine()) != null) {
-                // pos = record.indexOf("\n");
-                // if (pos > 0)     // "\n" found
-
-                if (record.length()
-                    > 43) // arbitrary but > $PEUMB + yyyymmdduu + TOTAL_NUMBER_RECORD_COMMAS
-                {
-                  if ((record.substring(0, 6).equals("$PEUMB"))
-                      && (record.indexOf(sensor_data_file_naam_datum_tijd_deel) != -1)) {
-                    last_record = record;
-                  }
-                } // if (record.length() > 43)
-              } // while ((record = in.readLine()) != null)
-
+            try {
+              last_record =
+                  SensorDataRecordReader.readLatestMatchingRecord(
+                      sensor_data_file,
+                      record ->
+                          record.length() > 43
+                              && record.substring(0, 6).equals("$PEUMB")
+                              && record.indexOf(sensor_data_file_naam_datum_tijd_deel) != -1);
+              if (last_record == null) {
+                last_record = "";
+              }
             } // try
             catch (IOException ex) {
               last_record = "";
