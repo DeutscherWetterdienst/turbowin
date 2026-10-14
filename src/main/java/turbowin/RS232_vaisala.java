@@ -5,15 +5,14 @@ import static turbowin.main_RS232_RS422.RS232_make_air_temp_APR_FM13_IMMT_ready;
 import static turbowin.main_RS232_RS422.RS232_make_dew_point_APR_FM13_IMMT_ready;
 import static turbowin.main_RS232_RS422.RS232_make_wet_bulb_temp_APR_FM13_IMMT_ready;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 // import static turbowin.main_RS232_RS422.TIMEDIFF_SENSOR_DATA;
 
@@ -204,7 +203,6 @@ public class RS232_vaisala {
         -2); // of is -1 ook goed????? : to be sure there was all time that it was written to the
     // file
     File sensor_data_file;
-    String record = null;
     String record_0 = null; // last retrieved record
     String record_1 = null; // second last retrieved record (Dutch: een-na-laatste)
     String laatste_record = null;
@@ -231,8 +229,7 @@ public class RS232_vaisala {
     sensor_data_file = new File(volledig_path_sensor_data);
     if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
     {
-      try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-        record = null;
+      try {
         record_0 = null; // last retrieved record
         record_1 = null; // second last retrieved record
         laatste_record =
@@ -241,10 +238,13 @@ public class RS232_vaisala {
 
         // retrieve the last and second last records in the sensor data file
         //
-        while ((record = in.readLine()) != null) {
-          record_1 = record_0;
-          record_0 = record;
-        } // while ((record = in.readLine()) != null)
+        List<String> last_records = SensorDataRecordReader.readLastRecords(sensor_data_file, 2);
+        if (!last_records.isEmpty()) {
+          record_0 = last_records.get(last_records.size() - 1);
+        }
+        if (last_records.size() > 1) {
+          record_1 = last_records.get(last_records.size() - 2);
+        }
 
         // check on minimum record length last retrieved record (record_0)
         //
