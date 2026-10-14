@@ -296,6 +296,31 @@ public class Rs232MintakaWowAprWorkflowTest {
   }
 
   @Test
+  public void historicalTargetIsSelectedWhenNewerRecordFollowsIt() throws Exception {
+    Date current = new Date();
+    Date earlier = new Date(current.getTime() - 10 * 60 * 1000L);
+    Date newer = new Date(earlier.getTime() + 60 * 1000L);
+
+    writeRecordInHour(
+        starRecord(
+            starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), earlier),
+        earlier);
+    writeRecordInHour(
+        starRecord(
+            starPayload("1000.0", "1.0", "2", "53 00.0000N", "005 00.0000E"), newer),
+        earlier);
+    writeRecordInHour(
+        starRecord(
+            starPayload("1000.0", "1.0", "2", "52 01.0000N", "004 01.0000E"), current),
+        current);
+
+    startWorkflow("MAIN_SCREEN", false, false);
+
+    assertEquals("52 00.0000N", main_RS232_RS422.GPS_latitude_earlier);
+    assertEquals("004 00.0000E", main_RS232_RS422.GPS_longitude_earlier);
+  }
+
+  @Test
   public void starXSensorBoundariesAreApplied() throws Exception {
     runWorkflowWithRecord(
         starRecord(

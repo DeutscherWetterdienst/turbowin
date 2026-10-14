@@ -21,9 +21,7 @@ import static turbowin.main_RS232_RS422.RS232_make_pressure_a_APR_FM13_IMMT_read
 import static turbowin.main_RS232_RS422.RS232_make_pressure_ppp_APR_FM13_IMMT_ready;
 import static turbowin.main_RS232_RS422.RS232_make_wet_bulb_temp_APR_FM13_IMMT_ready;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -681,10 +679,11 @@ final class Rs232MintakaWowAprWorkflow {
           sensor_data_file = new File(volledig_path_sensor_data);
           if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
           {
-            try (BufferedReader in =
-                new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-              record = null;
-              while ((record = in.readLine()) != null) {
+            try {
+              record =
+                  MintakaHistoricalRecordReader.readLatestValidRecord(
+                      sensor_data_file, date_time_SOG_COG_start, StarX);
+              if (record != null) {
                 if (record.length()
                     > 15) // NB > 15 is a little bit arbitrary number (YYYYMMDDHHmm + 3 commas + at
                 // leat 2 char pressure value= 15 chars)
@@ -815,7 +814,10 @@ final class Rs232MintakaWowAprWorkflow {
                   GPS_latitude_earlier = "";
                   GPS_longitude_earlier = "";
                 }
-              } // while ((record = in.readLine()) != null)
+              } else {
+                GPS_latitude_earlier = "";
+                GPS_longitude_earlier = "";
+              }
 
             } // try
             catch (IOException ex) {
