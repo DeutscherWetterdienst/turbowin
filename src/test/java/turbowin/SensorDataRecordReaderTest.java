@@ -115,4 +115,31 @@ public class SensorDataRecordReaderTest {
       emptyFile.delete();
     }
   }
+
+  @Test
+  public void matchingReaderCanSelectValidHistoricalMintakaRecords() throws IOException {
+    File file = Files.createTempFile("turbowin-mintaka-history", ".txt").toFile();
+    String targetTimestamp = "202601010000";
+    try {
+      Files.write(
+          file.toPath(),
+          List.of(
+              "1000,1000,1*OK" + targetTimestamp,
+              "1000,1000*OK" + targetTimestamp,
+              "1000,1000,1*NO" + targetTimestamp,
+              "1001,1001,2*OK" + targetTimestamp));
+
+      assertEquals(
+          "1001,1001,2*OK" + targetTimestamp,
+          SensorDataRecordReader.readLatestMatchingRecord(
+              file,
+              record ->
+                  record.length() > 15
+                      && record.substring(record.length() - 12).equals(targetTimestamp)
+                      && record.substring(record.length() - 14, record.length() - 12).equals("OK")
+                      && record.chars().filter(character -> character == ',').count() == 2));
+    } finally {
+      file.delete();
+    }
+  }
 }
