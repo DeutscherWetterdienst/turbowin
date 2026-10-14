@@ -95,15 +95,8 @@ final class Rs232MintakaGpsWorkflow {
         sensor_data_file = new File(volledig_path_sensor_data);
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
-          try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-            record = null;
-            laatste_record = null;
-
-            // retrieve the last record in the sensor data file
-            //
-            while ((record = in.readLine()) != null) {
-              laatste_record = record;
-            } // while ((record = in.readLine()) != null)
+          try {
+            laatste_record = SensorDataRecordReader.readLatestRecord(sensor_data_file);
 
             // check on minimum record length
             //
