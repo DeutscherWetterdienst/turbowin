@@ -274,6 +274,23 @@ public class Rs232MintakaGpsWorkflowTest {
     assertEquals("52", myposition.latitude_degrees);
   }
 
+  @Test
+  public void historicalTargetIsSelectedWhenNewerRecordFollowsIt() throws Exception {
+    Date end = new Date();
+    Date start = shifted(end, -10);
+    Date newer = shifted(start, 1);
+
+    writeHistoryRecord(starRecord(starPayload(" 52 00.0000N", " 004 00.0000E", 8), start));
+    writeHistoryRecord(starRecord(starPayload(" 53 00.0000N", " 005 00.0000E", 8), newer));
+    writeCurrentRecord(
+        starRecord(starPayload(" 52 02.0000N", " 004 02.0000E", 8), end), true);
+
+    runWorkflow(false);
+
+    assertEquals(" 52 00.0000N", main_RS232_RS422.GPS_latitude_earlier);
+    assertEquals(" 004 00.0000E", main_RS232_RS422.GPS_longitude_earlier);
+  }
+
   private void runWorkflow(boolean starX) throws Exception {
     Rs232MintakaGpsWorkflow.start("APR", starX);
     waitFor(() -> main.obs_file_datum_tijd == null);
