@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 
@@ -85,6 +86,33 @@ public class SensorDataRecordReaderTest {
       assertNull(SensorDataRecordReader.readLatestMatchingRecord(file, record -> false));
     } finally {
       file.delete();
+    }
+  }
+
+  @Test
+  public void returnsTheLastRequestedNumberOfRecordsInFileOrder() throws IOException {
+    File file = Files.createTempFile("turbowin-sensor-last-records", ".txt").toFile();
+    try {
+      Files.write(file.toPath(), List.of("first", "second", "third"));
+
+      assertEquals(
+          Arrays.asList("second", "third"), SensorDataRecordReader.readLastRecords(file, 2));
+    } finally {
+      file.delete();
+    }
+  }
+
+  @Test
+  public void lastRecordsReturnsEmptyForMissingOrEmptyFiles() throws IOException {
+    File emptyFile = Files.createTempFile("turbowin-sensor-last-records-empty", ".txt").toFile();
+    try {
+      assertEquals(List.of(), SensorDataRecordReader.readLastRecords(emptyFile, 2));
+      assertEquals(
+          List.of(),
+          SensorDataRecordReader.readLastRecords(
+              new File(emptyFile.getParent(), "missing-last-records.txt"), 2));
+    } finally {
+      emptyFile.delete();
     }
   }
 }
