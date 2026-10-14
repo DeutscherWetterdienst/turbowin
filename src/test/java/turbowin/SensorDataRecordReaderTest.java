@@ -60,4 +60,31 @@ public class SensorDataRecordReaderTest {
       emptyFile.delete();
     }
   }
+
+  @Test
+  public void returnsTheLatestRecordMatchingThePredicate() throws IOException {
+    File file = Files.createTempFile("turbowin-sensor-matching", ".txt").toFile();
+    try {
+      Files.write(file.toPath(), List.of("ignore", "match-1", "other", "match-2"));
+
+      assertEquals(
+          "match-2",
+          SensorDataRecordReader.readLatestMatchingRecord(
+              file, record -> record.startsWith("match")));
+    } finally {
+      file.delete();
+    }
+  }
+
+  @Test
+  public void latestMatchingRecordReturnsNullWhenNothingMatches() throws IOException {
+    File file = Files.createTempFile("turbowin-sensor-no-match", ".txt").toFile();
+    try {
+      Files.write(file.toPath(), List.of("first", "second"));
+
+      assertNull(SensorDataRecordReader.readLatestMatchingRecord(file, record -> false));
+    } finally {
+      file.delete();
+    }
+  }
 }
