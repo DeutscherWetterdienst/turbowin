@@ -1131,6 +1131,63 @@ public class RS232_view extends javax.swing.JFrame {
   }
 
   private void Read_Sensor_Data_Files_For_Graphs() {
+    int primaryComma;
+    int secondaryComma;
+    if (main.mode_grafiek.equals(main.MODE_PRESSURE)) {
+      primaryComma = main.PRESSURE_MSL_COMMA_NUMBER;
+      secondaryComma = -1;
+    } else if (main.mode_grafiek.equals(main.MODE_AIRTEMP)) {
+      primaryComma = main.AIR_TEMP_COMMA_NUMBER;
+      secondaryComma = -1;
+    } else if (main.mode_grafiek.equals(main.MODE_SST)) {
+      primaryComma = main.SST_COMMA_NUMBER;
+      secondaryComma = -1;
+    } else if (main.mode_grafiek.equals(main.MODE_WIND_SPEED)) {
+      primaryComma = main.TRUE_WIND_SPEED_COMMA_NUMBER;
+      secondaryComma = main.TRUE_WIND_GUST_COMMA_NUMBER;
+    } else if (main.mode_grafiek.equals(main.MODE_WIND_DIR)) {
+      primaryComma = main.TRUE_WIND_DIR_COMMA_NUMBER;
+      secondaryComma = -1;
+    } else {
+      System.out.println("+++ mode_grafiek unknown, Function Read_Sensor_Data_For_Graphs()");
+      return;
+    }
+
+    for (int k = 0; k < AANTAL_PLOT_POINTS; k++) {
+      sensor_waarde_array[k] = "";
+      sensor_waarde_array_2[k] = "";
+      datum_tijd_array[k] = "";
+    }
+
+    int filesToRead = 0;
+    if (mode_tijd_periode.equals(MODE_DAY)) {
+      filesToRead = 24;
+    } else if (mode_tijd_periode.equals(MODE_WEEK)) {
+      filesToRead = 168;
+    }
+
+    System.out.println(
+        "--- " + sdf2.format(new Date()) + " UTC " + "reading AWS sensor data from file for graph");
+
+    AwsGraphCollector collector =
+        new AwsGraphCollector(sensor_waarde_array, sensor_waarde_array_2, datum_tijd_array);
+    for (int i = filesToRead; i >= 0; i--) {
+      cal_file_datum_tijd = new GregorianCalendar();
+      cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
+      String hour = main.sdf3.format(cal_file_datum_tijd.getTime());
+      File sensorDataFile =
+          new File(main.logs_dir + java.io.File.separator + "sensor_data_" + hour + ".txt");
+      try {
+        AwsGraphFileProcessor.process(
+            sensorDataFile, hour, primaryComma, secondaryComma, collector, filesToRead - i);
+      } catch (IOException ex) {
+        System.out.println("--- Function Read_Sensor_Data_Files_For_Graphs(): " + ex);
+      }
+      cal_file_datum_tijd = null;
+    }
+  }
+
+  private void Read_Sensor_Data_Files_For_Graphs_Legacy() {
     // NB this function reads sensor data from an AWS (not from an individual Vaisala or Mintaka
     // barometer) stored in files
     //

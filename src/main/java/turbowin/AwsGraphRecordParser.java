@@ -36,7 +36,7 @@ final class AwsGraphRecordParser {
 
     String primaryValue = valueAfterComma(record, primaryComma, timestampPosition);
     String secondaryValue = valueAfterComma(record, secondaryComma, timestampPosition);
-    if (primaryValue == null || (secondaryComma >= 0 && secondaryValue == null)) {
+    if (primaryValue == null && secondaryValue == null) {
       return null;
     }
     return new AwsGraphRecord(timestamp, minute, primaryValue, secondaryValue);

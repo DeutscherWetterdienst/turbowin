@@ -22,6 +22,17 @@ public class AwsGraphRecordParserTest {
   }
 
   @Test
+  public void acceptsRecordWithOnlySecondaryGraphValue() {
+    AwsGraphRecord parsed =
+        AwsGraphRecordParser.parse(RECORD.replace(",5,", ",,"), HOUR, 5, 7);
+
+    assertEquals(HOUR + "05", parsed.timestamp);
+    assertEquals(5, parsed.minute);
+    assertNull(parsed.primaryValue);
+    assertEquals("7", parsed.secondaryValue);
+  }
+
+  @Test
   public void rejectsInvalidPrefixHourAndMinute() {
     assertNull(AwsGraphRecordParser.parse(RECORD.replace("$PEUMB", "$OTHER"), HOUR, 5, -1));
     assertNull(AwsGraphRecordParser.parse(RECORD, "2026010101", 5, -1));
