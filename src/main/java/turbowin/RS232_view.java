@@ -861,232 +861,119 @@ public class RS232_view extends javax.swing.JFrame {
     //
     // NB plot every 5 minutes -> 12 points per hour -> 288 points per 24 hours (12 * 24) + 12
     // (extra hour)
-
-    // declaration + initialisation
-    int type_record_lengte = 0;
-    int type_record_datum_tijd_begin_pos = 0;
-    int type_record_minuten_begin_pos = 0;
-    int type_record_pressure_begin_pos = 0;
-
-    String sensor_data_file_name = "";
-    String volledig_path_sensor_data = "";
-    int aantal_intelezen_files = 0;
-    // keep track of the number of records with wrong record length (every 1 minute) in the file
-    // (note: only in the file of present hour)
-    int[] wrong_record_length_counter = {0};
-    // keep track of the number of records with wrong pressure format (every 5 minutes) in the file
-    int[] wrong_record_pressure_counter = {0};
-
-    // initialisation
     for (int k = 0; k < AANTAL_PLOT_POINTS; k++) {
       sensor_waarde_array[k] = "";
       datum_tijd_array[k] = "";
     }
 
-    // intialisation
-
-    if (main.RS232_connection_mode == 1) // PTB220
-    {
-      type_record_lengte = main.RECORD_LENGTE_PTB220;
-      type_record_datum_tijd_begin_pos = main.RECORD_DATUM_TIJD_BEGIN_POS_PTB220;
-      type_record_minuten_begin_pos = main.RECORD_MINUTEN_BEGIN_POS_PTB220;
-      type_record_pressure_begin_pos = main.RECORD_P_BEGIN_POS_PTB220;
-    } else if (main.RS232_connection_mode == 2) // PTB330
-    {
-      type_record_lengte = main.RECORD_LENGTE_PTB330;
-      type_record_datum_tijd_begin_pos = main.RECORD_DATUM_TIJD_BEGIN_POS_PTB330;
-      type_record_minuten_begin_pos = main.RECORD_MINUTEN_BEGIN_POS_PTB330;
-      type_record_pressure_begin_pos = main.RECORD_P_BEGIN_POS_PTB330;
+    int recordLength = 0;
+    int timestampPosition = 0;
+    int minutePosition = 0;
+    int pressurePosition = 0;
+    if (main.RS232_connection_mode == 1) {
+      recordLength = main.RECORD_LENGTE_PTB220;
+      timestampPosition = main.RECORD_DATUM_TIJD_BEGIN_POS_PTB220;
+      minutePosition = main.RECORD_MINUTEN_BEGIN_POS_PTB220;
+      pressurePosition = main.RECORD_P_BEGIN_POS_PTB220;
+    } else if (main.RS232_connection_mode == 2) {
+      recordLength = main.RECORD_LENGTE_PTB330;
+      timestampPosition = main.RECORD_DATUM_TIJD_BEGIN_POS_PTB330;
+      minutePosition = main.RECORD_MINUTEN_BEGIN_POS_PTB330;
+      pressurePosition = main.RECORD_P_BEGIN_POS_PTB330;
     }
 
-    if ((mode_tijd_periode).equals(MODE_DAY)) {
-      aantal_intelezen_files = 24; // 24 * 1 = 24
-    } else if ((mode_tijd_periode).equals(MODE_WEEK)) {
-      aantal_intelezen_files = 168; // 24 * 7 = 168
+    int filesToRead = 0;
+    if (mode_tijd_periode.equals(MODE_DAY)) {
+      filesToRead = 24;
+    } else if (mode_tijd_periode.equals(MODE_WEEK)) {
+      filesToRead = 168;
     }
 
-    // message to console
+    // keep track of the number of records with wrong record length (every 1 minute) in the file
+    // (note: only in the file of present hour)
+    int[] wrongRecordLengthCounter = {0};
+    // keep track of the number of records with wrong pressure format (every 5 minutes) in the file
+    int[] wrongRecordPressureCounter = {0};
+    final int barographRecordLength = recordLength;
+    final int barographTimestampPosition = timestampPosition;
+    final int barographMinutePosition = minutePosition;
+    final int barographPressurePosition = pressurePosition;
     System.out.println(
         "--- "
             + sdf2.format(new Date())
             + " UTC "
             + "reading barometer sensor data from file for graph");
 
-    final int barographRecordLength = type_record_lengte;
-    final int barographDateTimePosition = type_record_datum_tijd_begin_pos;
-    final int barographMinutesPosition = type_record_minuten_begin_pos;
-    final int barographPressurePosition = type_record_pressure_begin_pos;
-    final int totalFiles = aantal_intelezen_files;
-
-    // 24 files at day mode and 168 at week mode must be read (eg sensor_data_2013020115.txt,
-    // sensor_data_2013020116.txt etc.)
-    for (int i = aantal_intelezen_files; i >= 0; i--) {
+    for (int i = filesToRead; i >= 0; i--) {
       cal_file_datum_tijd = new GregorianCalendar();
       cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
-
-      String sensor_data_file_naam_datum_tijd_deel =
-          main.sdf3.format(cal_file_datum_tijd.getTime()); // eg 2013020308
-      sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
-
-      // first check if there is a sensor data file present (and not empty)
-      volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
-      // bv volledig_path_sensor_data =
-      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
-
-      // System.out.println("--- " +  RS232_AWS_1View.sdf2.format(new Date()) + " UTC " + "proberen
-      // te openen file: " + volledig_path_sensor_data);
-
-      // keep track of the file name of the last (present hour) sensor data file
+      String hour = main.sdf3.format(cal_file_datum_tijd.getTime());
+      String sensorDataFilePath =
+          main.logs_dir + java.io.File.separator + "sensor_data_" + hour + ".txt";
       if (i == 0) {
-        // NB for later use if there are more than 20 wrong records in the file ( or > 3 invalid
-        // pressure formats) , so we can delete this file, otherwise after a restart the program
-        // complains again (see next lines)
-        last_sensor_data_file = volledig_path_sensor_data;
+        last_sensor_data_file = sensorDataFilePath;
       }
 
-      File sensor_data_file = new File(volledig_path_sensor_data);
-      if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
-      {
-        final int fileIndex = i;
-        final String expectedRecordHour = sensor_data_file_naam_datum_tijd_deel;
-        try {
+      File sensorDataFile = new File(sensorDataFilePath);
+      final int fileIndex = i;
+      final int graphIndex = filesToRead - i;
+      try {
+        SensorDataRecordReader.forEachRecord(
+            sensorDataFile,
+            record -> {
+              if (record.length() != barographRecordLength) {
+                if (fileIndex == 0) {
+                  wrongRecordLengthCounter[0]++;
+                  if (record.length() > MAX_WRONG_RECORDS * barographRecordLength) {
+                    wrongRecordLengthCounter[0] += MAX_WRONG_RECORDS;
+                  }
+                }
+                return;
+              }
 
-          // System.out.println("--- " + RS232_AWS_1View.sdf2.format(new Date()) + " UTC " +
-          // "geopende file: " + volledig_path_sensor_data);
+              FixedLengthBarographRecord parsed =
+                  FixedLengthBarographRecordParser.parse(
+                      record,
+                      barographRecordLength,
+                      barographTimestampPosition,
+                      barographMinutePosition,
+                      barographPressurePosition,
+                      hour);
+              if (parsed == null) {
+                return;
+              }
 
-          SensorDataRecordReader.forEachRecord(
-              sensor_data_file,
-              record -> {
-                if (record.length() == barographRecordLength) {
-                  String record_datum_tijd =
-                      record.substring(
-                          barographDateTimePosition,
-                          barographDateTimePosition
-                              + 10); // substring van begin-index t/m eind-index-1
-
-                  // System.out.println("--- " + "record met lengte 54 = " + record);
-
-                  if (record_datum_tijd.equals(
-                      expectedRecordHour)) // NB record_datum_tijd dus ook zonder
-                  // minuten (YYYYMMDDUU)
-                  {
-                    String record_minuten =
-                        record.substring(barographMinutesPosition, barographMinutesPosition + 2);
-
-                    // initialisation
-                    int int_record_minuten = 9999;
-
-                    try {
-                      int_record_minuten = Integer.parseInt(record_minuten.trim());
-                    }
-                    // catch (NumberFormatException e) {System.out.println("--- " +
-                    // "NumberFormatException:" + e); }
-                    catch (NumberFormatException e) {
-                    }
-
-                    // only pressure every 5 minutes (00, 05, 10, 15 etc minutes) !
-                    if (int_record_minuten >= 0
-                        && int_record_minuten <= 59
-                        && (int_record_minuten % 5 == 0)) {
-                      String record_pressure =
-                          record.substring(
-                              barographPressurePosition, barographPressurePosition + 7);
-                      int int_minuten_5 = int_record_minuten / 5;
-
-                      // sensor_waarde_array[(24 - i) * 12 + int_minuten_5] = record_pressure; //
-                      // dus om
-                      // de 5 miuten opslag (=array plaats)
-                      sensor_waarde_array[(totalFiles - fileIndex) * 12 + int_minuten_5] =
-                          record_pressure.trim(); // dus om de 5 miuten opslag (=array plaats)
-
-                      String record_datum_tijd_met_minuten =
-                          record.substring(
-                              barographDateTimePosition,
-                              barographDateTimePosition + 12); // YYYYMMDDUUmm
-
-                      datum_tijd_array[(totalFiles - fileIndex) * 12 + int_minuten_5] =
-                          record_datum_tijd_met_minuten; // dus om de 5 miuten opslag (=array
-                      // plaats)
-
-                      // System.out.println("--- " + "record_pressure = " + record_pressure);
-
-                      // check/testing on valid pressure value
-                      if (fileIndex == 0) // so file of present hour
-                      {
-                        try {
-                          double test_waarde = Double.parseDouble(record_pressure);
-                          if (test_waarde < 900.0 || test_waarde > 1100.0) {
-                            wrong_record_pressure_counter[0]++;
-                          }
-                        } // try
-                        catch (NumberFormatException e) {
-                          wrong_record_pressure_counter[0]++;
-                        } // catch
-                      } //  if (i == 0)
-                    } // if (int_record_minuten >= 0 && int_record_minuten <= 59 etc.
-                  } // if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel))
-
-                } // if (record.length() == type_record_lengte)
-                else // record length not OK
-                {
-                  if (fileIndex == 0) // so file of present hour
-                  {
-                    wrong_record_length_counter[0]++;
-
-                    // NB when no <cr> then all records will be written as one long string
-                    if (record.length() > (MAX_WRONG_RECORDS * barographRecordLength)) {
-                      wrong_record_length_counter[0] += MAX_WRONG_RECORDS;
-                    }
-
-                    // System.out.println("--- wrong_record_length_counter = " +
-                    // wrong_record_length_counter);
-
-                  } // if (i == 0)
-                } // else (record length not OK)
-              });
-
-        } // try
-        catch (IOException ex) {
-          System.out.println("--- Function Read_Sensor_Data_Files_For_Barograph(): " + ex);
-        }
-      } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
-
-      // clear memory
+              int index = graphIndex * 12 + parsed.minute / 5;
+              sensor_waarde_array[index] = parsed.pressure;
+              datum_tijd_array[index] = parsed.timestamp;
+              if (fileIndex == 0 && parsed.pressureOutsideExpectedRange) {
+                wrongRecordPressureCounter[0]++;
+              }
+            });
+      } catch (IOException ex) {
+        System.out.println("--- Function Read_Sensor_Data_Files_For_Barograph(): " + ex);
+      }
       cal_file_datum_tijd = null;
-    } // for (int i = aantal_intelezen_files; i >= 0; i--)
+    }
 
-    //
-    // check
-    //
-    if ((wrong_record_length_counter[0] > MAX_WRONG_RECORDS)
-        || (wrong_record_pressure_counter[0] > MAX_WRONG_PRESSURE_IN_RECORDS)) {
-      if (wrong_record_length_counter[0] > MAX_WRONG_RECORDS) {
+    if (wrongRecordLengthCounter[0] > MAX_WRONG_RECORDS
+        || wrongRecordPressureCounter[0] > MAX_WRONG_PRESSURE_IN_RECORDS) {
+      if (wrongRecordLengthCounter[0] > MAX_WRONG_RECORDS) {
         System.out.println(
             "--- more than "
                 + MAX_WRONG_RECORDS
                 + " records with wrong length (or 1 record with length > "
                 + MAX_WRONG_RECORDS
-                + " x default record length)"
-                + " Function Read_Sensor_Data_Files_For_Barograph()");
-      } else if (wrong_record_pressure_counter[0] > MAX_WRONG_PRESSURE_IN_RECORDS) {
+                + " x default record length) Function Read_Sensor_Data_Files_For_Barograph()");
+      } else {
         System.out.println(
             "--- more than "
                 + MAX_WRONG_PRESSURE_IN_RECORDS
                 + " Function Read_Sensor_Data_Files_For_Barograph()");
       }
 
-      if (dialog_sensor_data_error_present == false) {
-        // private JDialog optionPaneDialog;
-        // JFrame mainFrame = RS232_AWS_1App.getApplication().getMainFrame();
-        // JFrame mainFrame = main.getApplication().getMainFrame();
-
-        // optionPaneDialog = new JDialog(mainFrame, main.APPLICATION_NAME);   // A dialog can be
-        // either modeless (the default) or modal (A modal dialog is one which blocks input to some
-        // other top-level windows in the application)
+      if (!dialog_sensor_data_error_present) {
         optionPaneDialog = new JDialog(this, main.APPLICATION_NAME);
-
-        // NB Note we are creating an instance of a JOptionPane
-        //    Normally it's just a call to a static method.
         JOptionPane optPane =
             new JOptionPane(
                 "sensor data format errors, close "
@@ -1095,20 +982,13 @@ public class RS232_view extends javax.swing.JFrame {
                     + main.APPLICATION_NAME,
                 JOptionPane.WARNING_MESSAGE,
                 JOptionPane.DEFAULT_OPTION);
-
-        // NB Listen for the JOptionPane button click. It comes through as property change
-        //    event with the property called "value".
         optPane.addPropertyChangeListener(
             new PropertyChangeListener() {
               @Override
               public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals("value")) {
-                  switch ((Integer) e.getNewValue()) {
-                    // case JOptionPane.OK_OPTION: break;
-                    case JOptionPane.OK_OPTION:
-                      SensorFileCleanupWorkflow.start(last_sensor_data_file);
-
-                      break;
+                  if ((Integer) e.getNewValue() == JOptionPane.OK_OPTION) {
+                    SensorFileCleanupWorkflow.start(last_sensor_data_file);
                   }
                   optionPaneDialog.dispose();
                   dialog_sensor_data_error_present = false;
@@ -1116,16 +996,12 @@ public class RS232_view extends javax.swing.JFrame {
               }
             });
         optionPaneDialog.setContentPane(optPane);
-
-        // NB Let the JDialog figure out how big it needs to be
-        //    based on the size of JOptionPane by calling the pack() method
         optionPaneDialog.pack();
-        // optionPaneDialog.setLocationRelativeTo(mainFrame);
         optionPaneDialog.setLocationRelativeTo(this);
         optionPaneDialog.setVisible(true);
         dialog_sensor_data_error_present = true;
-      } // if (dialog_sensor_data_error_present == false)
-    } // if (wrong_record_length_counter > 10)
+      }
+    }
   }
 
   /**
