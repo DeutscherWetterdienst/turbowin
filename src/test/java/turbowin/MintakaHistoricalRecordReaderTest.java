@@ -55,4 +55,36 @@ public class MintakaHistoricalRecordReaderTest {
       emptyFile.delete();
     }
   }
+
+  @Test
+  public void rejectsARecordWithTheWrongTimestamp() throws IOException {
+    File file = Files.createTempFile("turbowin-mintaka-history-timestamp", ".txt").toFile();
+    try {
+      Files.write(file.toPath(), List.of(VALID_RECORD));
+
+      assertNull(MintakaHistoricalRecordReader.readLatestValidRecord(file, "201703152007", false));
+    } finally {
+      file.delete();
+    }
+  }
+
+  @Test
+  public void acceptsAValidStarXRecordWithTheStarXCommaCount() throws IOException {
+    File file = Files.createTempFile("turbowin-mintaka-history-starx", ".txt").toFile();
+    try {
+      String recordWithoutChecksum =
+          "1018.12,1018.13,0.00,0, 16 30.4429N, 88 21.9040W,0,2,7,29.4,85,27.4,26.7,60*00"
+              + TIMESTAMP;
+      String validStarXRecord =
+          recordWithoutChecksum.replace(
+              "*00", "*" + main_RS232_RS422.Mintaka_Star_Checksum(recordWithoutChecksum));
+      Files.write(file.toPath(), List.of(validStarXRecord));
+
+      assertEquals(
+          validStarXRecord,
+          MintakaHistoricalRecordReader.readLatestValidRecord(file, TIMESTAMP, true));
+    } finally {
+      file.delete();
+    }
+  }
 }
