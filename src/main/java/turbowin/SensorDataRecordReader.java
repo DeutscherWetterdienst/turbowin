@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /** Reads the latest fixed-length record from a sensor-data file. */
@@ -82,5 +83,19 @@ final class SensorDataRecordReader {
       }
     }
     return lastRecords;
+  }
+
+  static void forEachRecord(File sensorDataFile, Consumer<String> recordConsumer)
+      throws IOException {
+    if (!sensorDataFile.exists() || sensorDataFile.length() <= 0) {
+      return;
+    }
+
+    try (BufferedReader in = new BufferedReader(new FileReader(sensorDataFile))) {
+      String record;
+      while ((record = in.readLine()) != null) {
+        recordConsumer.accept(record);
+      }
+    }
   }
 }

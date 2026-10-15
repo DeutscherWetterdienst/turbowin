@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
@@ -111,6 +112,36 @@ public class SensorDataRecordReaderTest {
           List.of(),
           SensorDataRecordReader.readLastRecords(
               new File(emptyFile.getParent(), "missing-last-records.txt"), 2));
+    } finally {
+      emptyFile.delete();
+    }
+  }
+
+  @Test
+  public void visitsEveryRecordInFileOrder() throws IOException {
+    File file = Files.createTempFile("turbowin-sensor-every-record", ".txt").toFile();
+    try {
+      Files.write(file.toPath(), List.of("first", "second", "third"));
+      List<String> records = new ArrayList<>();
+
+      SensorDataRecordReader.forEachRecord(file, records::add);
+
+      assertEquals(Arrays.asList("first", "second", "third"), records);
+    } finally {
+      file.delete();
+    }
+  }
+
+  @Test
+  public void visitsNoRecordsForMissingOrEmptyFiles() throws IOException {
+    File emptyFile = Files.createTempFile("turbowin-sensor-every-record-empty", ".txt").toFile();
+    try {
+      List<String> records = new ArrayList<>();
+      SensorDataRecordReader.forEachRecord(emptyFile, records::add);
+      SensorDataRecordReader.forEachRecord(
+          new File(emptyFile.getParent(), "missing-every-record.txt"), records::add);
+
+      assertEquals(List.of(), records);
     } finally {
       emptyFile.delete();
     }
