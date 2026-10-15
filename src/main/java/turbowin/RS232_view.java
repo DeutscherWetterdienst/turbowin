@@ -604,211 +604,94 @@ public class RS232_view extends javax.swing.JFrame {
     // ___22.98____17.77____14.77____60.09_201909041422
     // 3x      4x       4x       4x       1x spaces
     //
-
-    // declaration + initialisation
-    int type_record_lengte = main.RECORD_LENGTE_HMP155; // 48
-    int type_record_datum_tijd_begin_pos = type_record_lengte - 12; // 36
-    int type_record_minuten_begin_pos = type_record_lengte - 2; // 46
-    int type_record_air_temp_begin_pos = 0;
-
-    String sensor_data_file_name = "";
-    String volledig_path_sensor_data = "";
-    int aantal_intelezen_files = 0;
-    // keep track of the number of records with wrong record length (every 1 minute) in the file
-    // (note: only in the file of present hour)
-    int[] wrong_record_length_counter = {0};
-    // keep track of the number of records with wrong air temp format (every 5 minutes) in the file
-    int[] wrong_record_air_temp_counter = {0};
-
-    // initialisation
     for (int k = 0; k < AANTAL_PLOT_POINTS; k++) {
       sensor_waarde_array_II[k] = "";
       datum_tijd_array_II[k] = "";
     }
 
-    // intialisation
-
-    if ((mode_tijd_periode).equals(MODE_DAY)) {
-      aantal_intelezen_files = 24; // 24 * 1 = 24
-    } else if ((mode_tijd_periode).equals(MODE_WEEK)) {
-      aantal_intelezen_files = 168; // 24 * 7 = 168
+    int filesToRead = 0;
+    if (mode_tijd_periode.equals(MODE_DAY)) {
+      filesToRead = 24;
+    } else if (mode_tijd_periode.equals(MODE_WEEK)) {
+      filesToRead = 168;
     }
 
-    // message to console
+    // keep track of the number of records with wrong record length (every 1 minute) in the file
+    // (note: only in the file of present hour)
+    int[] wrongRecordLengthCounter = {0};
+    // keep track of the number of records with wrong air temp format (every 5 minutes) in the file
+    int[] wrongRecordAirTempCounter = {0};
     System.out.println(
         "--- "
             + sdf2.format(new Date())
             + " UTC "
             + "reading thermometer sensor data from file for graph");
 
-    final int totalFiles = aantal_intelezen_files;
-
-    // 24 files at day mode and 168 at week mode must be read (eg sensor_data_II_2013020115.txt,
-    // sensor_data_II_2013020116.txt etc.)
-    for (int i = aantal_intelezen_files; i >= 0; i--) {
+    for (int i = filesToRead; i >= 0; i--) {
       cal_file_datum_tijd_II = new GregorianCalendar();
       cal_file_datum_tijd_II.add(Calendar.HOUR_OF_DAY, -i);
-
-      String sensor_data_file_naam_datum_tijd_deel =
-          main.sdf3.format(cal_file_datum_tijd_II.getTime()); // eg 2013020308
-      sensor_data_file_name = "sensor_data_II_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
-
-      // first check if there is a sensor data file present (and not empty)
-      volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
-      // bv volledig_path_sensor_data =
-      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
-
-      // System.out.println("--- " +  sdf2.format(new Date()) + " UTC " + "proberen te openen file:
-      // " + volledig_path_sensor_data);
-
-      // keep track of the file name of the last (present hour) sensor data file
+      String hour = main.sdf3.format(cal_file_datum_tijd_II.getTime());
+      String sensorDataFilePath =
+          main.logs_dir + java.io.File.separator + "sensor_data_II_" + hour + ".txt";
       if (i == 0) {
-        // NB for later use if there are more than 20 wrong records in the file ( or > 3 invalid
-        // temperature formats) , so we can delete this file, otherwise after a restart the program
-        // complains again (see next lines)
-        last_sensor_data_file_II = volledig_path_sensor_data;
+        last_sensor_data_file_II = sensorDataFilePath;
       }
 
-      File sensor_data_file = new File(volledig_path_sensor_data);
-      if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
-      {
-        final int fileIndex = i;
-        final String expectedRecordHour = sensor_data_file_naam_datum_tijd_deel;
-        try {
+      File sensorDataFile = new File(sensorDataFilePath);
+      final int fileIndex = i;
+      final int graphIndex = filesToRead - i;
+      try {
+        SensorDataRecordReader.forEachRecord(
+            sensorDataFile,
+            record -> {
+              if (record.length() != main.RECORD_LENGTE_HMP155) {
+                if (fileIndex == 0) {
+                  wrongRecordLengthCounter[0]++;
+                  if (record.length() > MAX_WRONG_RECORDS * main.RECORD_LENGTE_HMP155) {
+                    wrongRecordLengthCounter[0] += MAX_WRONG_RECORDS;
+                  }
+                }
+                return;
+              }
 
-          // System.out.println("--- " + sdf2.format(new Date()) + " UTC " + "geopende file: " +
-          // volledig_path_sensor_data);
+              Hmp155AirTemperatureRecord parsed =
+                  Hmp155AirTemperatureRecordParser.parse(record, hour);
+              if (parsed == null) {
+                return;
+              }
 
-          SensorDataRecordReader.forEachRecord(
-              sensor_data_file,
-              record -> {
-                if (record.length() == type_record_lengte) {
-                  String record_datum_tijd =
-                      record.substring(
-                          type_record_datum_tijd_begin_pos,
-                          type_record_datum_tijd_begin_pos
-                              + 10); // substring van begin-index t/m eind-index-1
+              int index = graphIndex * 12 + parsed.minute / 5;
+              sensor_waarde_array_II[index] = parsed.temperature;
+              datum_tijd_array_II[index] = parsed.timestamp;
+              if (fileIndex == 0 && parsed.temperatureOutsideExpectedRange) {
+                wrongRecordAirTempCounter[0]++;
+              }
+            });
+      } catch (IOException ex) {
+        System.out.println(
+            "--- Function Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155(): " + ex);
+      }
+      cal_file_datum_tijd_II = null;
+    }
 
-                  // System.out.println("--- " + "record met lengte 48 = " + record);
-
-                  if (record_datum_tijd.equals(
-                      expectedRecordHour)) // NB record_datum_tijd dus ook zonder
-                  // minuten (YYYYMMDDUU)
-                  {
-                    String record_minuten =
-                        record.substring(
-                            type_record_minuten_begin_pos, type_record_minuten_begin_pos + 2);
-
-                    // initialisation
-                    int int_record_minuten = 9999;
-
-                    try {
-                      int_record_minuten = Integer.parseInt(record_minuten.trim());
-                    }
-                    // catch (NumberFormatException e) {System.out.println("--- " +
-                    // "NumberFormatException:" + e); }
-                    catch (NumberFormatException e) {
-                    }
-
-                    // only temp. every 5 minutes (00, 05, 10, 15 etc minutes) !
-                    if (int_record_minuten >= 0
-                        && int_record_minuten <= 59
-                        && (int_record_minuten % 5 == 0)) {
-                      String record_air_temp =
-                          record.substring(
-                              type_record_air_temp_begin_pos, type_record_air_temp_begin_pos + 8);
-                      int int_minuten_5 = int_record_minuten / 5;
-                      sensor_waarde_array_II[(totalFiles - fileIndex) * 12 + int_minuten_5] =
-                          record_air_temp.trim(); // dus om de 5 miuten opslag (=array plaats)
-
-                      String record_datum_tijd_met_minuten =
-                          record.substring(
-                              type_record_datum_tijd_begin_pos,
-                              type_record_datum_tijd_begin_pos + 12); // YYYYMMDDUUmm
-                      datum_tijd_array_II[(totalFiles - fileIndex) * 12 + int_minuten_5] =
-                          record_datum_tijd_met_minuten; // dus om de 5 miuten opslag (=array
-                      // plaats)
-
-                      // System.out.println("--- " + "record_air_temp = " + record_air_temp);
-
-                      // check/testing on valid pressure value
-                      if (fileIndex == 0) // so file of present hour
-                      {
-                        try {
-                          double test_waarde = Double.parseDouble(record_air_temp);
-                          if (test_waarde < -99.9 || test_waarde > 99.9) {
-                            wrong_record_air_temp_counter[0]++;
-                          }
-                        } // try
-                        catch (NumberFormatException e) {
-                          wrong_record_air_temp_counter[0]++;
-                        } // catch
-                      } //  if (i == 0)
-                    } // if (int_record_minuten >= 0 && int_record_minuten <= 59 etc.
-                  } // if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel))
-
-                } // if (record.length() == type_record_lengte)
-                else // record length not OK
-                {
-                  if (fileIndex == 0) // so file of present hour
-                  {
-                    wrong_record_length_counter[0]++;
-
-                    // NB when no <cr> then all records will be written as one long string
-                    if (record.length() > (MAX_WRONG_RECORDS * type_record_lengte)) {
-                      wrong_record_length_counter[0] += MAX_WRONG_RECORDS;
-                    }
-
-                    // System.out.println("--- wrong_record_length_counter = " +
-                    // wrong_record_length_counter);
-
-                  } // if (i == 0)
-                } // else (record length not OK)
-              });
-
-        } // try
-        catch (IOException ex) {
-          System.out.println(
-              "--- Function Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155(): " + ex);
-        }
-      } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
-
-      // clear memory
-      cal_file_datum_tijd = null;
-    } // for (int i = aantal_intelezen_files; i >= 0; i--)
-
-    //
-    // check
-    //
-    if ((wrong_record_length_counter[0] > MAX_WRONG_RECORDS)
-        || (wrong_record_air_temp_counter[0] > MAX_WRONG_AIR_TEMP_IN_RECORDS)) {
-      if (wrong_record_length_counter[0] > MAX_WRONG_RECORDS) {
+    if (wrongRecordLengthCounter[0] > MAX_WRONG_RECORDS
+        || wrongRecordAirTempCounter[0] > MAX_WRONG_AIR_TEMP_IN_RECORDS) {
+      if (wrongRecordLengthCounter[0] > MAX_WRONG_RECORDS) {
         System.out.println(
             "--- more than "
                 + MAX_WRONG_RECORDS
                 + " records with wrong length (or 1 record with length > "
                 + MAX_WRONG_RECORDS
-                + " x default record length)"
-                + " Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155()");
-      } else if (wrong_record_air_temp_counter[0] > MAX_WRONG_PRESSURE_IN_RECORDS) {
+                + " x default record length) Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155()");
+      } else {
         System.out.println(
             "--- more than "
                 + MAX_WRONG_PRESSURE_IN_RECORDS
                 + " Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155()");
       }
 
-      if (dialog_sensor_data_error_present == false) {
-        // private JDialog optionPaneDialog;
-        // JFrame mainFrame = RS232_AWS_1App.getApplication().getMainFrame();
-        // JFrame mainFrame = main.getApplication().getMainFrame();
-
-        // optionPaneDialog = new JDialog(mainFrame, main.APPLICATION_NAME);   // A dialog can be
-        // either modeless (the default) or modal (A modal dialog is one which blocks input to some
-        // other top-level windows in the application)
+      if (!dialog_sensor_data_error_present) {
         optionPaneDialog = new JDialog(this, main.APPLICATION_NAME);
-
-        // NB Note we are creating an instance of a JOptionPane
-        //    Normally it's just a call to a static method.
         JOptionPane optPane =
             new JOptionPane(
                 "sensor data format errors, close "
@@ -817,20 +700,13 @@ public class RS232_view extends javax.swing.JFrame {
                     + main.APPLICATION_NAME,
                 JOptionPane.WARNING_MESSAGE,
                 JOptionPane.DEFAULT_OPTION);
-
-        // NB Listen for the JOptionPane button click. It comes through as property change
-        //    event with the property called "value".
         optPane.addPropertyChangeListener(
             new PropertyChangeListener() {
               @Override
               public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals("value")) {
-                  switch ((Integer) e.getNewValue()) {
-                    // case JOptionPane.OK_OPTION: break;
-                    case JOptionPane.OK_OPTION:
-                      SensorFileCleanupWorkflow.start(last_sensor_data_file_II);
-
-                      break;
+                  if ((Integer) e.getNewValue() == JOptionPane.OK_OPTION) {
+                    SensorFileCleanupWorkflow.start(last_sensor_data_file_II);
                   }
                   optionPaneDialog.dispose();
                   dialog_sensor_data_error_present = false;
@@ -838,16 +714,12 @@ public class RS232_view extends javax.swing.JFrame {
               }
             });
         optionPaneDialog.setContentPane(optPane);
-
-        // NB Let the JDialog figure out how big it needs to be
-        //    based on the size of JOptionPane by calling the pack() method
         optionPaneDialog.pack();
-        // optionPaneDialog.setLocationRelativeTo(mainFrame);
         optionPaneDialog.setLocationRelativeTo(this);
         optionPaneDialog.setVisible(true);
         dialog_sensor_data_error_present = true;
-      } // if (dialog_sensor_data_error_present == false)
-    } // if (wrong_record_length_counter > 10)
+      }
+    }
   }
 
   private void Read_Sensor_Data_Files_For_Barograph() {
