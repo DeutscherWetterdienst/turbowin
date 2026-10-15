@@ -499,19 +499,7 @@ public class RS232_view extends javax.swing.JFrame {
           } // public void actionPerformed(ActionEvent e)
         }; // ActionListener sensor_data_file_ophalen_action = new ActionListener()
 
-    // zo snel mogelijk geheugen weer vrijmaken
-    // cal_systeem_datum_tijd = null;
-
-    // main loop for retrieving sensor data from file (file was and is filled by TurboWin+)
-    sensor_data_file_ophalen_timer =
-        new Timer(DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP, sensor_data_file_ophalen_action);
-    sensor_data_file_ophalen_timer.setRepeats(true); // false = only one action
-    sensor_data_file_ophalen_timer.setInitialDelay(
-        INITIAL_DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP); // time in millisec to wait after timer is
-    // started to fire first event
-    sensor_data_file_ophalen_timer.setCoalesce(
-        true); // in principe was dit al de default, maar voor de zekerheid hier neergezet
-    sensor_data_file_ophalen_timer.restart();
+    sensor_data_file_ophalen_timer = createSensorDataTimer(sensor_data_file_ophalen_action);
     main.sensor_data_file_ophalen_timer_is_gecreeerd = true;
   }
 
@@ -531,21 +519,21 @@ public class RS232_view extends javax.swing.JFrame {
           } // public void actionPerformed(ActionEvent e)
         }; // ActionListener sensor_data_file_ophalen_action = new ActionListener()
 
-    // zo snel mogelijk geheugen weer vrijmaken
-    // cal_systeem_datum_tijd = null;
+    sensor_data_file_ophalen_timer_II = createSensorDataTimer(sensor_data_file_ophalen_action);
+    main.sensor_data_file_ophalen_timer_is_gecreeerd_II = true;
+  }
 
-    // main loop for retrieving sensor data from file 2nd meteo instrument (file was and is filled
-    // by TurboWin+)
-    sensor_data_file_ophalen_timer_II =
-        new Timer(DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP, sensor_data_file_ophalen_action);
-    sensor_data_file_ophalen_timer_II.setRepeats(true); // false = only one action
-    sensor_data_file_ophalen_timer_II.setInitialDelay(
+  private Timer createSensorDataTimer(ActionListener actionListener) {
+    // main loop for retrieving sensor data from file (file was and is filled by TurboWin+)
+    Timer timer = new Timer(DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP, actionListener);
+    timer.setRepeats(true); // false = only one action
+    timer.setInitialDelay(
         INITIAL_DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP); // time in millisec to wait after timer is
     // started to fire first event
-    sensor_data_file_ophalen_timer_II.setCoalesce(
+    timer.setCoalesce(
         true); // in principe was dit al de default, maar voor de zekerheid hier neergezet
-    sensor_data_file_ophalen_timer_II.restart();
-    main.sensor_data_file_ophalen_timer_is_gecreeerd_II = true;
+    timer.restart();
+    return timer;
   }
 
   private void Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155() {
