@@ -1887,324 +1887,64 @@ public class RS232_view extends javax.swing.JFrame {
     super(title);
   }
 
+  /**
+   * Reads four AWS {@code $PEUMB} graph series from each file traversal. Records contain 27 commas
+   * and graph samples are stored every five minutes, giving 12 points per hour. The parallel
+   * primary-comma and collector arrays are ordered as MSL pressure (9), true-wind direction (18),
+   * air temperature (12), and true-wind speed (17).
+   */
   private void Read_Sensor_Data_Files_For_Graphs_4() {
-    // NB 4 graphs on same page
-    // NB this function reads sensor data from an AWS (not from an individual Vaisala barometer)
-    // stored in files
-    //
-    // NB This function will be called from within a swingworker, see:
-    // init_sensor_data_uit_file_ophalen_timer() and sensor_data_uit_file_ophalen()
-    //    so not necessary to use a swingworker here (it is adviced to use a swingworker when file
-    // reading/writing)
-    //
-    // NB plot every 5 minutes -> 12 points per hour -> 288 points per 24 hours (12 * 24) + 12
-    // (extra hour)
-
-    // final int TOTAL_NUMBER_RECORD_COMMAS                   = 27;  // 26 via predefined format + 1
-    // comma added by TurboWin+
-    int number_read_commas = 0;
-    int number_parameter_commas_a = -1;
-    int number_parameter_commas_b = -1;
-    int number_parameter_commas_c = -1;
-    int number_parameter_commas_d = -1;
-    int aantal_intelezen_files = 0;
-    int int_record_minuten = 0;
-    int pos = 0;
-    String sensor_data_file_name = "";
-    String volledig_path_sensor_data = "";
-    String record_parameter = "";
-    String record_datum_tijd_met_minuten = "";
-    String record_datum_tijd = "";
-    String record_minuten = "";
-    boolean doorgaan_in_record = true;
-
-    // initialisation
-    number_parameter_commas_a =
-        main.PRESSURE_MSL_COMMA_NUMBER; // MSL pressure parameter data after comma 9 (start counting
-    // at 1)
-    number_parameter_commas_b =
-        main.TRUE_WIND_DIR_COMMA_NUMBER; // true wind dir parameter data after comma 18 (start
-    // counting at 1)
-    number_parameter_commas_c =
-        main.AIR_TEMP_COMMA_NUMBER; // air temp parameter data after comma 12 (start counting at 1)
-    number_parameter_commas_d =
-        main.TRUE_WIND_SPEED_COMMA_NUMBER; // true wind speed parameter data after comma 17 (start
-    // counting at 1)
-
-    // initialisation
     for (int k = 0; k < AANTAL_PLOT_POINTS; k++) {
-      sensor_waarde_array[k] = ""; // air pressure
-      sensor_waarde_array_2[k] = ""; // wind dir
-      sensor_waarde_array_c[k] = ""; // air temp
-      sensor_waarde_array_d[k] = ""; // wind speed
-
-      datum_tijd_array[k] = ""; // air pressure
-      datum_tijd_array_b[k] = ""; // wind dir
-      datum_tijd_array_c[k] = ""; // air temp
-      datum_tijd_array_d[k] = ""; // wind speed
+      sensor_waarde_array[k] = "";
+      sensor_waarde_array_2[k] = "";
+      sensor_waarde_array_c[k] = "";
+      sensor_waarde_array_d[k] = "";
+      datum_tijd_array[k] = "";
+      datum_tijd_array_b[k] = "";
+      datum_tijd_array_c[k] = "";
+      datum_tijd_array_d[k] = "";
     }
 
-    // initialisation
-    if ((mode_tijd_periode).equals(MODE_DAY)) {
-      aantal_intelezen_files = 24; // 24 * 1 = 24
-    } else if ((mode_tijd_periode).equals(MODE_WEEK)) {
-      aantal_intelezen_files = 168; // 24 * 7 = 168
+    int filesToRead = 0;
+    if (mode_tijd_periode.equals(MODE_DAY)) {
+      filesToRead = 24;
+    } else if (mode_tijd_periode.equals(MODE_WEEK)) {
+      filesToRead = 168;
     }
 
-    // message to console
     System.out.println(
         "--- " + sdf2.format(new Date()) + " UTC " + "reading AWS sensor data from file for graph");
 
-    // cal_file_datum_tijd = new GregorianCalendar();
-    for (int i = aantal_intelezen_files; i >= 0; i--) {
+    AwsGraphCollector[] collectors = {
+      new AwsGraphCollector(sensor_waarde_array, new String[AANTAL_PLOT_POINTS], datum_tijd_array),
+      new AwsGraphCollector(
+          sensor_waarde_array_2, new String[AANTAL_PLOT_POINTS], datum_tijd_array_b),
+      new AwsGraphCollector(
+          sensor_waarde_array_c, new String[AANTAL_PLOT_POINTS], datum_tijd_array_c),
+      new AwsGraphCollector(
+          sensor_waarde_array_d, new String[AANTAL_PLOT_POINTS], datum_tijd_array_d)
+    };
+    int[] primaryCommas = {
+      main.PRESSURE_MSL_COMMA_NUMBER,
+      main.TRUE_WIND_DIR_COMMA_NUMBER,
+      main.AIR_TEMP_COMMA_NUMBER,
+      main.TRUE_WIND_SPEED_COMMA_NUMBER
+    };
+
+    for (int i = filesToRead; i >= 0; i--) {
       cal_file_datum_tijd = new GregorianCalendar();
       cal_file_datum_tijd.add(Calendar.HOUR_OF_DAY, -i);
-
-      String sensor_data_file_naam_datum_tijd_deel =
-          main.sdf3.format(cal_file_datum_tijd.getTime()); // -> eg 2013020308
-      sensor_data_file_name = "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
-
-      // first check if there is a sensor data file present (and not empty)
-      volledig_path_sensor_data = main.logs_dir + java.io.File.separator + sensor_data_file_name;
-      // bv volledig_path_sensor_data =
-      // C:\Users\User\Documents\NetBeansProjects\RS232_AWS_1\data\sensor_data.aws
-
-      // System.out.println("+++ " +  "i = : " + i);
-      // System.out.println("+++ " +  "proberen te openen file: " + volledig_path_sensor_data);
-
-      // keep track of the file name of the last (present hour) sensor data file
-      // if (i == 0)
-      // {
-      //   // for later use if there are more than 20 wrong records in the file, so we can delete
-      // this file, otherwise after a restart the program complains again (see next lines)
-      //   last_sensor_data_file = volledig_path_sensor_data;
-      // }
-
-      File sensor_data_file = new File(volledig_path_sensor_data);
-      if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
-      {
-        try (BufferedReader in = new BufferedReader(new FileReader(volledig_path_sensor_data))) {
-          String record = null;
-
-          while ((record = in.readLine())
-              != null) // null means that the end of the stream has been reached
-          {
-            // System.out.println("+++ ingelezen record: " + record);
-
-            // initialisation
-            doorgaan_in_record = true;
-
-            // Check the number of comma's in the record that must exactely match the fixed expected
-            // number (TOTAL_NUMBER_RECORD_COMMAS)
-            //
-            number_read_commas = 0;
-            pos = -1;
-
-            do {
-              pos = record.indexOf(",", pos + 1);
-              if (pos > 0) // "," found
-              {
-                number_read_commas++;
-              }
-            } while (pos > 0);
-
-            if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS) {
-              doorgaan_in_record = false;
-            }
-
-            // if ( (record.length() > 18) && (record.substring(0, 6).equals("$PEUMB")) )   // NB >
-            // 18 is a little bit arbitrary number (YYYYMMDDHHmm + $PEUMB = 18 chars)
-            if ((doorgaan_in_record == true)
-                && (record.length() > 18)
-                && (record
-                    .substring(0, 6)
-                    .equals("$PEUMB"))) // NB > 18 is a little bit arbitrary number (YYYYMMDDHHmm +
-            // $PEUMB = 18 chars)
-            {
-              pos = record.lastIndexOf(","); // searching for LAST appearance of ","
-              // if (pos > 0)     // so "," found
-              if ((pos > 0)
-                  && (pos + 1 + 12 == record.length())) // so "," found and YYYYMMDDHHmm follows
-              {
-                record_datum_tijd_met_minuten =
-                    record.substring(pos + 1, pos + 1 + 12); // YYYYMMDDHHmm has length 12
-                record_datum_tijd =
-                    record.substring(pos + 1, pos + 1 + 10); // YYYYMMDDHH has length 10
-
-                // System.out.println("+++ record_datum_tijd_met_minuten = " +
-                // record_datum_tijd_met_minuten);
-                // System.out.println("+++ record_datum_tijd = " + record_datum_tijd);
-                // System.out.println("+++ sensor_data_file_naam_datum_tijd_deel = " +
-                // sensor_data_file_naam_datum_tijd_deel);
-
-                if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel)) {
-                  record_minuten =
-                      record.substring(pos + 1 + 10, pos + 1 + 12); // mm from YYYYMMDDHHmm
-
-                  // System.out.println("+++ record_minuten = " + record_minuten);
-
-                  // initialisation
-                  int_record_minuten = 9999;
-
-                  try {
-                    int_record_minuten = Integer.parseInt(record_minuten.trim());
-                  } catch (NumberFormatException e) {
-                    // System.out.println("+++ " + "NumberFormatException:" + e);
-                    doorgaan_in_record = false;
-                  }
-
-                  // only parameter value (eg pressure) every 5 minutes (00, 05, 10, 15 etc minutes)
-                  // !
-                  if (!(int_record_minuten >= 0
-                      && int_record_minuten <= 59
-                      && (int_record_minuten % 5 == 0))) {
-                    doorgaan_in_record = false;
-                  }
-                  // else
-                  // {
-                  //   System.out.println("+++ " + "minuten ok (5-voud)");
-                  //   System.out.println("+++ " + "doorgaan_in_record = " + doorgaan_in_record);
-                  // }
-                } // if (record_datum_tijd.equals(sensor_data_file_naam_datum_tijd_deel))
-                else {
-                  doorgaan_in_record = false;
-                }
-              } // if (pos > 0) -> so "," NOT found
-              else {
-                doorgaan_in_record = false;
-              }
-
-              // If the by TurboWin+ added date and time are OK and number of commas in the record
-              // is OK then continue
-              //
-              if (doorgaan_in_record == true) {
-                // initialisation
-                number_read_commas = 0;
-                pos = -1;
-
-                do {
-                  pos = record.indexOf(",", pos + 1); // searching "," from position "pos + 1"
-                  if (pos > 0) // "," found
-                  {
-                    number_read_commas++;
-
-                    ///// air pressure /////
-                    if (number_read_commas
-                        == number_parameter_commas_a) // eg air temp value always after the 12th
-                    // comma
-                    {
-                      if (record.length()
-                          > pos + 1
-                              + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every
-                      // record)
-                      {
-                        int pos2 = record.indexOf(",", pos + 1);
-                        if (pos2 - pos >= 2) // between conmmas at least 1 char
-                        {
-                          record_parameter = record.substring(pos + 1, pos2);
-
-                          // System.out.println("+++ record_parameter = " + record_parameter);
-
-                          int int_minuten_5 = int_record_minuten / 5;
-
-                          sensor_waarde_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_parameter; // so every 5 minutes storage (=array position)
-                          datum_tijd_array[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_datum_tijd_met_minuten; // so every 5 minutes storage (=array
-                          // position)
-                        } // if (pos2 - pos >= 2)
-                      } // if (record.length() > number_read_commas + 12)
-                    } // if (number_read_commas == number_parameter_commas_a)
-
-                    /////// wind dir /////
-                    if (number_read_commas == number_parameter_commas_b) {
-                      if (record.length()
-                          > pos + 1
-                              + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every
-                      // record)
-                      {
-                        int pos2 = record.indexOf(",", pos + 1);
-                        if (pos2 - pos >= 2) // between commas at least 1 char
-                        {
-                          record_parameter = record.substring(pos + 1, pos2);
-
-                          int int_minuten_5 = int_record_minuten / 5;
-
-                          // System.out.println("+++ record_parameter = " + record_parameter);
-
-                          sensor_waarde_array_2[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_parameter; // so every 5 minutes storage (=array position)
-                          datum_tijd_array_b[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_datum_tijd_met_minuten; // so every 5 minutes storage (=array
-                          // position)
-                        } // if (pos2 - pos >= 2)
-                      } // if (record.length() > number_read_commas + 12)
-                    } // if (number_read_commas == number_parameter_commas_b)
-
-                    /////// air temp /////
-                    if (number_read_commas == number_parameter_commas_c) {
-                      if (record.length()
-                          > pos + 1
-                              + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every
-                      // record)
-                      {
-                        int pos2 = record.indexOf(",", pos + 1);
-                        if (pos2 - pos >= 2) // between commas at least 1 char
-                        {
-                          record_parameter = record.substring(pos + 1, pos2);
-
-                          int int_minuten_5 = int_record_minuten / 5;
-
-                          // System.out.println("+++ record_parameter = " + record_parameter);
-
-                          sensor_waarde_array_c[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_parameter; // so every 5 minutes storage (=array position)
-                          datum_tijd_array_c[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_datum_tijd_met_minuten; // so every 5 minutes storage (=array
-                          // position)
-                        } // if (pos2 - pos >= 2)
-                      } // if (record.length() > number_read_commas + 12)
-                    } // if (number_read_commas == number_parameter_commas_c)
-
-                    /////// wind speed /////
-                    if (number_read_commas == number_parameter_commas_d) {
-                      if (record.length()
-                          > pos + 1
-                              + 12) // for safety; 12 = YYYYMMDDHHmm (always at the end of every
-                      // record)
-                      {
-                        int pos2 = record.indexOf(",", pos + 1);
-                        if (pos2 - pos >= 2) // between commas at least 1 char
-                        {
-                          record_parameter = record.substring(pos + 1, pos2);
-
-                          int int_minuten_5 = int_record_minuten / 5;
-
-                          // System.out.println("+++ record_parameter = " + record_parameter);
-
-                          sensor_waarde_array_d[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_parameter; // so every 5 minutes storage (=array position)
-                          datum_tijd_array_d[(aantal_intelezen_files - i) * 12 + int_minuten_5] =
-                              record_datum_tijd_met_minuten; // so every 5 minutes storage (=array
-                          // position)
-                        } // if (pos2 - pos >= 2)
-                      } // if (record.length() > number_read_commas + 12)
-                    } // if (number_read_commas == number_parameter_commas_d)
-                  } // if (pos > 0)
-                } while (pos > 0);
-              } // if (doorgaan_in_record)
-            } // if ( (record.length() > 18) etc.
-          } // while ((record = in.readLine()) != null)
-        } // try
-        // catch (IOException ex) {System.out.println("--- " + "IOException:" + ex); }
-        catch (IOException ex) {
-          System.out.println("--- Function Read_Sensor_Data_Files_For_Graphs_4(): " + ex);
-        }
-      } // if (sensor_data_file.exists() && sensor_data_file.length() > 0)
-
-      // clear memory
+      String hour = main.sdf3.format(cal_file_datum_tijd.getTime());
+      File sensorDataFile =
+          new File(main.logs_dir + java.io.File.separator + "sensor_data_" + hour + ".txt");
+      try {
+        AwsGraphFileProcessor.processMultiple(
+            sensorDataFile, hour, primaryCommas, collectors, filesToRead - i);
+      } catch (IOException ex) {
+        System.out.println("--- Function Read_Sensor_Data_Files_For_Graphs_4(): " + ex);
+      }
       cal_file_datum_tijd = null;
-    } // for (int i = aantal_intelezen_files; i >= 0; i--)
+    }
   }
 
   public RS232_view(GraphicsConfiguration gc) {

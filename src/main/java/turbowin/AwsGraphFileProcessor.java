@@ -26,4 +26,28 @@ final class AwsGraphFileProcessor {
           }
         });
   }
+
+  static void processMultiple(
+      File sensorDataFile,
+      String expectedHour,
+      int[] primaryCommas,
+      AwsGraphCollector[] collectors,
+      int graphIndex)
+      throws IOException {
+    if (primaryCommas.length != collectors.length) {
+      throw new IllegalArgumentException("Each graph series needs one comma index and collector");
+    }
+
+    SensorDataRecordReader.forEachRecord(
+        sensorDataFile,
+        record -> {
+          for (int series = 0; series < primaryCommas.length; series++) {
+            AwsGraphRecord parsed =
+                AwsGraphRecordParser.parse(record, expectedHour, primaryCommas[series], -1);
+            if (parsed != null) {
+              collectors[series].add(parsed, graphIndex * 12 + parsed.minute / 5);
+            }
+          }
+        });
+  }
 }
