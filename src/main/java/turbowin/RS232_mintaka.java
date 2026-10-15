@@ -186,8 +186,9 @@ public class RS232_mintaka {
                   // int pos7 = record.indexOf(",", pos6 +1);
                   //   // position of the 7th "," in the last record
 
-                  GPS_latitude_earlier_wind = record.substring(pos4 + 1, pos5);
-                  GPS_longitude_earlier_wind = record.substring(pos5 + 1, pos6);
+                  MintakaGpsFields gpsFields = MintakaGpsFieldsParser.parse(record);
+                  GPS_latitude_earlier_wind = gpsFields.latitude;
+                  GPS_longitude_earlier_wind = gpsFields.longitude;
 
                   // below for testing
                   // System.out.println("+++ sensor data record, GPS latitude earlier (10 min): "
