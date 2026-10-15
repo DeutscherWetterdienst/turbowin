@@ -248,29 +248,9 @@ final class Rs232MintakaGpsWorkflow {
 
                   // retrieved (from file) record example Mintaka Star: 1029.97,1029.97,-0.90,7, 52
                   // 41.9535N,  6 14.1943E,0,0,19*1A201703152006
-                  int pos1 =
-                      laatste_record.indexOf(
-                          ",", 0); // position of the first "," in the last record
-                  int pos2 =
-                      laatste_record.indexOf(
-                          ",", pos1 + 1); // position of the second "," in the last record
-                  int pos3 =
-                      laatste_record.indexOf(
-                          ",", pos2 + 1); // position of the third "," in the last record
-                  int pos4 =
-                      laatste_record.indexOf(
-                          ",", pos3 + 1); // position of the 4th "," in the last record
-                  int pos5 =
-                      laatste_record.indexOf(
-                          ",", pos4 + 1); // position of the 5th "," in the last record
-                  int pos6 =
-                      laatste_record.indexOf(
-                          ",", pos5 + 1); // position of the 6th "," in the last record
-                  // int pos7 = laatste_record.indexOf(",", pos6 +1);
-                  //         // position of the 7th "," in the last record
-
-                  GPS_latitude = laatste_record.substring(pos4 + 1, pos5);
-                  GPS_longitude = laatste_record.substring(pos5 + 1, pos6);
+                  MintakaGpsFields gpsFields = MintakaGpsFieldsParser.parse(laatste_record);
+                  GPS_latitude = gpsFields.latitude;
+                  GPS_longitude = gpsFields.longitude;
 
                   System.out.println(
                       "--- sensor data record, GPS latitude: "
