@@ -572,98 +572,29 @@ final class Rs232MintakaWowAprWorkflow {
           if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
           {
             try {
-              record =
-                  MintakaHistoricalRecordReader.readLatestValidRecord(
-                      sensor_data_file, date_time_SOG_COG_start, StarX);
-              if (record != null) {
-                if (record.length()
-                    > 15) // NB > 15 is a little bit arbitrary number (YYYYMMDDHHmm + 3 commas + at
-                // leat 2 char pressure value= 15 chars)
-                {
-                  int pos = record.length() - 12; // pos is now start position of YYYYMMDDHHmm
-                  String record_datum_tijd_minuten =
-                      record.substring(pos, pos + 12); // YYYYMMDDHHmm has length 12
+              MintakaHistoricalGpsReading gpsFields =
+                  MintakaHistoricalGpsReader.read(sensor_data_file, date_time_SOG_COG_start, StarX);
+              if (gpsFields != null) {
+                GPS_latitude_earlier = gpsFields.latitude;
+                GPS_longitude_earlier = gpsFields.longitude;
 
-                  if (record_datum_tijd_minuten.equals(
-                      date_time_SOG_COG_start)) // found the corresponding record of 10 min or 3 hrs
-                  // earlier
-                  {
-                    if (MintakaRecordValidator.hasValidChecksum(record)) {
-                      // System.out.println("checksum ok");
-
-                      // extra check on correct number of commas in the earlier (10 min or 3 hrs)
-                      // record
-                      //
-                      boolean format_ok =
-                          MintakaRecordValidator.hasExpectedCommaCount(record, StarX);
-                      if (!format_ok) {
-                        String format = StarX ? "StarX" : "Star";
-                        System.out.println(
-                            "--- Mintaka "
-                                + format
-                                + " format (number commas) rertieved record earlier (for SOG and COG) NOT ok (file: "
-                                + volledig_path_sensor_data
-                                + "; record: "
-                                + record
-                                + ")");
-                      }
-
-                      if (format_ok) {
-                        // retrieved (from file) record example Mintaka Star:
-                        // 1029.97,1029.97,-0.90,7, 52 41.9535N,  6 14.1943E,0,0,19*1A201703152006
-                        MintakaHistoricalGpsReading gpsFields =
-                            MintakaHistoricalGpsReader.parseRecord(record, StarX);
-                        if (gpsFields != null) {
-                          GPS_latitude_earlier = gpsFields.latitude;
-                          GPS_longitude_earlier = gpsFields.longitude;
-
-                          // below for testing
-                          // System.out.println("+++ sensor data record, GPS latitude earlier: " +
-                          // GPS_latitude_earlier + "(" + record_datum_tijd_minuten + ")");
-                          // System.out.println("+++ sensor data record, GPS longitude earlier: " +
-                          // GPS_longitude_earlier + "(" + record_datum_tijd_minuten + ")");
-
-                          if (destination.equals("MAIN_SCREEN") == false) {
-                            System.out.println(
-                                "--- sensor data record, GPS latitude earlier: "
-                                    + GPS_latitude_earlier
-                                    + "("
-                                    + record_datum_tijd_minuten
-                                    + ")");
-                            System.out.println(
-                                "--- sensor data record, GPS longitude earlier: "
-                                    + GPS_longitude_earlier
-                                    + "("
-                                    + record_datum_tijd_minuten
-                                    + ")");
-                          }
-                        } else {
-                          GPS_latitude_earlier = "";
-                          GPS_longitude_earlier = "";
-                        }
-                      } // if (format_ok)
-                      else {
-                        GPS_latitude_earlier = "";
-                        GPS_longitude_earlier = "";
-                      }
-                    } // if (computed_checksum.equals(record_checksum))
-                    else {
-                      // System.out.println("record checksum = " + record_checksum);
-                      // System.out.println("computed checksum = " + computed_checksum);
-                      System.out.println("--- checksum NOT ok " + "(" + record + ")");
-
-                      GPS_latitude_earlier = "";
-                      GPS_longitude_earlier = "";
-                    } // else
-                  } // if (record_datum_tijd_minuten.equals(date_time_SOG_COG_start))
-                } // if (record.length() > 15)
-                else {
-                  GPS_latitude_earlier = "";
-                  GPS_longitude_earlier = "";
-                }
+                if (destination.equals("MAIN_SCREEN") == false) {
+                  System.out.println(
+                      "--- sensor data record, GPS latitude earlier: "
+                          + GPS_latitude_earlier
+                          + "("
+                          + date_time_SOG_COG_start
+                          + ")");
+                  System.out.println(
+                      "--- sensor data record, GPS longitude earlier: "
+                          + GPS_longitude_earlier
+                          + "("
+                          + date_time_SOG_COG_start
+                          + ")");
               } else {
                 GPS_latitude_earlier = "";
                 GPS_longitude_earlier = "";
+                }
               }
 
             } // try
