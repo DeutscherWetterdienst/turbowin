@@ -5005,17 +5005,12 @@ public class main extends javax.swing.JFrame {
     // TODO add your handling code here:
 
     mode = SET_SERVER_SETTINGS;
-
-    if (main_support.password_ok) // no password needed, direct to the server settings form
-    {
-      myserversettings form = new myserversettings();
-      form.setSize(1000, 700);
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.open(
+        main_support.password_ok,
+        myserversettings::new,
+        new Dimension(1000, 700),
+        mypassword::new,
+        new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_server_settings_actionperformed
 
   void Themes_4_actionPerformed(
