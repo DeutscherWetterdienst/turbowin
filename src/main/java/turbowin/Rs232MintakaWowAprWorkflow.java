@@ -26,7 +26,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -297,11 +296,9 @@ final class Rs232MintakaWowAprWorkflow {
               String record_datum_tijd_minuten =
                   laatste_record.substring(pos, pos + 12); // YYYYMMDDHHmm has length 12
 
-              Date file_date = main.sdf4.parse(record_datum_tijd_minuten);
-              long system_sec = System.currentTimeMillis();
-
               long timeDiff =
-                  Math.abs(file_date.getTime() - system_sec) / (60 * 1000); // timeDiff in minutes
+                  SensorDataRecordAgeCalculator.ageMinutes(
+                      record_datum_tijd_minuten, System::currentTimeMillis);
 
               // System.out.println("+++ difference [min]: " + timeDiff); //differencs in min
               // System.out.println("+++ file last record date time [min, since January 1, 1970,

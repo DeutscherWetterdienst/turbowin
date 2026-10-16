@@ -44,8 +44,7 @@ final class MintakaDuoRecordReader {
       return null;
     }
 
-    long ageMinutes =
-        Math.abs(main.sdf4.parse(record.timestamp).getTime() - nowMillis.getAsLong()) / (60 * 1000);
+    long ageMinutes = SensorDataRecordAgeCalculator.ageMinutes(record.timestamp, nowMillis);
     return new MintakaDuoRecordReading(record, ageMinutes);
   }
 }

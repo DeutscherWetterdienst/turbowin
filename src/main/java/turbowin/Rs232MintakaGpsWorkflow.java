@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.swing.JDialog;
@@ -127,15 +126,12 @@ final class Rs232MintakaGpsWorkflow {
 
             // last retrieved record ok
             if (laatste_record != null) {
-              int pos = laatste_record.length() - 12; // pos is now start position of YYYYMMDDHHmm
               String record_datum_tijd_minuten =
-                  laatste_record.substring(pos, pos + 12); // YYYYMMDDHHmm has length 12
-
-              Date file_date = main.sdf4.parse(record_datum_tijd_minuten);
-              long system_sec = System.currentTimeMillis();
-
+                  laatste_record.substring(laatste_record.length() - 12);
               long timeDiff =
-                  Math.abs(file_date.getTime() - system_sec) / (60 * 1000); // timeDiff in minutes
+                  SensorDataRecordAgeCalculator.ageMinutes(
+                      laatste_record.substring(laatste_record.length() - 12),
+                      System::currentTimeMillis);
 
               /// System.out.println("+++ difference [minuten]: " + timeDiff); //differencs in min
 
