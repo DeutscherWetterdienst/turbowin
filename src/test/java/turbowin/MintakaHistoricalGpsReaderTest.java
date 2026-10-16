@@ -50,4 +50,25 @@ public class MintakaHistoricalGpsReaderTest {
         MintakaHistoricalGpsReader.parseRecord(
             MALFORMED_STAR_X_RECORD.replace(",60*18", "60*18"), true));
   }
+
+  @Test
+  public void returnsCoordinatesFromAValidStarXRecord() throws Exception {
+    File file = Files.createTempFile("turbowin-historical-gps-starx", ".txt").toFile();
+    try {
+      String recordWithoutChecksum =
+          "1018.12,1018.13,0.00,0, 16 30.4429N, 88 21.9040W,0,2,7,29.4,85,27.4,26.7,60*00"
+              + TIMESTAMP;
+      String record =
+          recordWithoutChecksum.replace(
+              "*00", "*" + main_RS232_RS422.Mintaka_Star_Checksum(recordWithoutChecksum));
+      Files.write(file.toPath(), List.of(record));
+
+      MintakaHistoricalGpsReading reading = MintakaHistoricalGpsReader.read(file, TIMESTAMP, true);
+
+      assertEquals(" 16 30.4429N", reading.latitude);
+      assertEquals(" 88 21.9040W", reading.longitude);
+    } finally {
+      file.delete();
+    }
+  }
 }
