@@ -60,45 +60,25 @@ final class Rs232MintakaDuoPpppWorkflow {
         {
           try {
             laatste_record = SensorDataRecordReader.readLatestRecord(sensor_data_file);
-
-            // check on minimum record length
-            //
-            if (laatste_record != null) {
-              if (!(laatste_record.length()
-                  > 15)) // NB > 15 is a little bit arbitrary number (YYYYMMDDHHmm + 3 commas + at
-              // leat 2 char pressure value= 15 chars)
-              {
-                laatste_record = null;
-                System.out.println(
-                    "--- Mintaka Duo, format (min. record length) last retrieved record NOT ok (file: "
-                        + volledig_path_sensor_data
-                        + ")");
-              }
+            MintakaDuoRecord parsedRecord = null;
+            if (laatste_record != null && laatste_record.length() <= 15) {
+              laatste_record = null;
+              System.out.println(
+                  "--- Mintaka Duo, format (min. record length) last retrieved record NOT ok (file: "
+                      + volledig_path_sensor_data
+                      + ")");
             }
-
-            // check on correct number of commas in the laatste_record
-            //
+            if (laatste_record != null
+                && !MintakaDuoRecordParser.hasExpectedCommaCount(laatste_record)) {
+              laatste_record = null;
+              System.out.println(
+                  "--- Mintaka Duo, format (number commas) last retrieved record NOT ok (file: "
+                      + volledig_path_sensor_data
+                      + ")");
+            }
             if (laatste_record != null) {
-              int number_read_commas = 0;
-              int pos = 0;
-
-              do {
-                pos = laatste_record.indexOf(",", pos + 1);
-                if (pos > 0) // "," found
-                {
-                  number_read_commas++;
-                  // System.out.println("+++ number_read_commas = " + number_read_commas);
-                }
-              } while (pos > 0);
-
-              if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA) {
-                laatste_record = null;
-                System.out.println(
-                    "--- Mintaka Duo, format (number commas) last retrieved record NOT ok (file: "
-                        + volledig_path_sensor_data
-                        + ")");
-              }
-            } // if (laatste_record != null)
+              parsedRecord = MintakaDuoRecordParser.parse(laatste_record);
+            }
 
             // last retrieved record ok
             //
@@ -109,11 +89,7 @@ final class Rs232MintakaDuoPpppWorkflow {
               // laatste_record.substring(main.type_record_datum_tijd_begin_pos,
               // main.type_record_datum_tijd_begin_pos + 12);  // bv 201302201345
 
-              int pos = laatste_record.length() - 12; // pos is now start position of YYYYMMDDHHmm
-              String record_datum_tijd_minuten =
-                  laatste_record.substring(pos, pos + 12); // YYYYMMDDHHmm has length 12
-
-              Date file_date = main.sdf4.parse(record_datum_tijd_minuten);
+              Date file_date = main.sdf4.parse(parsedRecord.timestamp);
               long system_sec = System.currentTimeMillis();
 
               long timeDiff =
@@ -124,9 +100,7 @@ final class Rs232MintakaDuoPpppWorkflow {
               if (timeDiff <= 3L) // max 3 minutes old
               {
                 // retrieved record example Mintaka Duo: 1021.89,1021.89,1.70,1*05 201502111405
-                int pos1 =
-                    laatste_record.indexOf(",", 0); // position of the first "," in the record
-                main.sensor_data_record_obs_pressure = laatste_record.substring(0, pos1);
+                main.sensor_data_record_obs_pressure = parsedRecord.pressure;
 
                 // rounding eg: 998.19 -> 998.2
                 //        double digitale_sensor_waarde =
