@@ -73,20 +73,6 @@ final class Rs232MintakaPpppWorkflow {
             SensorDataFileLocator.locate(main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
         String laatste_record = null;
         String local_obs_age = "";
-        int pos1 = 0; // position of the first "," in the last record
-        int pos2 = 0; // position of the second "," in the last record
-        int pos3 = 0; // position of the third "," in the last record
-        int pos4 = 0;
-        int pos5 = 0;
-        int pos6 = 0;
-        int pos7 = 0;
-        int pos8 = 0;
-        int pos9 = 0;
-        int pos10 = 0;
-        int pos11 = 0;
-        int pos12 = 0;
-        int pos13 = 0;
-        int pos14 = 0; // pos of the "*"
 
         // initialisation
         main.sensor_data_record_obs_pressure = "";
@@ -156,35 +142,24 @@ final class Rs232MintakaPpppWorkflow {
                 // 21.9040W,0,2,7,29.4,85,27.4,26.7,1017.89,60*18
                 //
                 if (MintakaRecordValidator.hasValidChecksum(laatste_record)) {
-                  if (StarX == false) {
-                    pos1 =
-                        laatste_record.indexOf(
-                            ",", 0); // position of the first "," in the last record
+                  MintakaStarRecordFields fields =
+                      MintakaStarRecordFieldsParser.parse(laatste_record, StarX);
+                  if (fields != null) {
+                    local_obs_age = fields.observationAge;
+                    main.sensor_data_record_obs_pressure = fields.pressure;
 
-                    // not StarX then there is no obs age to be checked
-                    local_obs_age = "0";
-                    main.sensor_data_record_obs_pressure = laatste_record.substring(0, pos1);
-                  } else if (StarX == true) {
-                    MintakaStarXObservationFields fields =
-                        MintakaStarXObservationFieldsParser.parse(laatste_record);
-                    int firstComma = laatste_record.indexOf(',');
-                    main.sensor_data_record_obs_pressure = laatste_record.substring(0, firstComma);
-                    if (fields != null) {
-                      local_obs_age = fields.observationAge;
+                    if (main.tray_icon_clicked == true) {
+                      System.out.println(
+                          "--- sensor data record, pressure for tray icon: "
+                              + main.sensor_data_record_obs_pressure);
                     } else {
-                      local_obs_age = "";
-                      main.sensor_data_record_obs_pressure = "";
+                      System.out.println(
+                          "--- sensor data record, pressure for barometer form: "
+                              + main.sensor_data_record_obs_pressure);
                     }
-                  }
-
-                  if (main.tray_icon_clicked == true) {
-                    System.out.println(
-                        "--- sensor data record, pressure for tray icon: "
-                            + main.sensor_data_record_obs_pressure);
                   } else {
-                    System.out.println(
-                        "--- sensor data record, pressure for barometer form: "
-                            + main.sensor_data_record_obs_pressure);
+                    local_obs_age = "";
+                    main.sensor_data_record_obs_pressure = "";
                   }
                 } // if (computed_checksum.equals(record_checksum))
                 else // checksum not ok

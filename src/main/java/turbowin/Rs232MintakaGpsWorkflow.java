@@ -213,22 +213,28 @@ final class Rs232MintakaGpsWorkflow {
 
                   // retrieved (from file) record example Mintaka Star: 1029.97,1029.97,-0.90,7, 52
                   // 41.9535N,  6 14.1943E,0,0,19*1A201703152006
-                  MintakaGpsFields gpsFields = MintakaGpsFieldsParser.parse(laatste_record);
-                  GPS_latitude = gpsFields.latitude;
-                  GPS_longitude = gpsFields.longitude;
+                  MintakaStarRecordFields fields =
+                      MintakaStarRecordFieldsParser.parse(laatste_record, StarX);
+                  if (fields != null) {
+                    GPS_latitude = fields.latitude;
+                    GPS_longitude = fields.longitude;
 
-                  System.out.println(
-                      "--- sensor data record, GPS latitude: "
-                          + GPS_latitude
-                          + "("
-                          + record_datum_tijd_minuten
-                          + ")");
-                  System.out.println(
-                      "--- sensor data record, GPS longitude: "
-                          + GPS_longitude
-                          + "("
-                          + record_datum_tijd_minuten
-                          + ")");
+                    System.out.println(
+                        "--- sensor data record, GPS latitude: "
+                            + GPS_latitude
+                            + "("
+                            + record_datum_tijd_minuten
+                            + ")");
+                    System.out.println(
+                        "--- sensor data record, GPS longitude: "
+                            + GPS_longitude
+                            + "("
+                            + record_datum_tijd_minuten
+                            + ")");
+                  } else {
+                    GPS_latitude = "";
+                    GPS_longitude = "";
+                  }
                 } else {
                   // System.out.println("record checksum = " + record_checksum);
                   // System.out.println("computed checksum = " + computed_checksum);

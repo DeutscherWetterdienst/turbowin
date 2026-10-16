@@ -65,20 +65,6 @@ final class Rs232MintakaApppDataFilesWorkflow {
             SensorDataFileLocator.locate(main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
         String laatste_record = null;
         String local_obs_age = "";
-        int pos1 = 0; // position of the first "," in the last record
-        int pos2 = 0; // position of the second "," in the last record
-        int pos3 = 0; // position of the third "," in the last record
-        int pos4 = 0;
-        int pos5 = 0;
-        int pos6 = 0;
-        int pos7 = 0;
-        int pos8 = 0;
-        int pos9 = 0;
-        int pos10 = 0;
-        int pos11 = 0;
-        int pos12 = 0;
-        int pos13 = 0;
-        int pos14 = 0; // pos of the "*"
 
         // initialisation
         // main.sensor_data_record_obs_pressure = "";
@@ -141,60 +127,36 @@ final class Rs232MintakaApppDataFilesWorkflow {
                 // 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
                 //
                 if (MintakaRecordValidator.hasValidChecksum(laatste_record)) {
-                  if (StarX == false) {
-                    pos1 =
-                        laatste_record.indexOf(
-                            ",", 0); // position of the first "," in the last record
-                    pos2 =
-                        laatste_record.indexOf(
-                            ",", pos1 + 1); // position of the second "," in the last record
-                    pos3 =
-                        laatste_record.indexOf(
-                            ",", pos2 + 1); // position of the third "," in the last record
-                    pos4 = laatste_record.indexOf(",", pos3 + 1);
+                  MintakaStarRecordFields fields =
+                      MintakaStarRecordFieldsParser.parse(laatste_record, StarX);
+                  if (fields != null) {
+                    main.sensor_data_record_obs_ppp = fields.pressureTendency;
+                    main.sensor_data_record_obs_a = fields.tendencyCharacteristic;
+                    local_obs_age = fields.observationAge;
+                    if (StarX == false) {
+                      System.out.println(
+                          "--- sensor data record, tendency for obs: "
+                              + main.sensor_data_record_obs_ppp);
+                      System.out.println(
+                          "--- sensor data record, characteristic for obs: "
+                              + main.sensor_data_record_obs_a);
 
-                    main.sensor_data_record_obs_ppp = laatste_record.substring(pos2 + 1, pos3);
-                    main.sensor_data_record_obs_a = laatste_record.substring(pos3 + 1, pos4);
-
-                    // if not StarX then there is no obs age to be checked
-                    local_obs_age = "0";
-
-                    System.out.println(
-                        "--- sensor data record, tendency for obs: "
-                            + main.sensor_data_record_obs_ppp);
-                    System.out.println(
-                        "--- sensor data record, characteristic for obs: "
-                            + main.sensor_data_record_obs_a);
-
-                  } // if (StarX == false)
-                  else if (StarX == true) {
-                    MintakaStarXObservationFields fields =
-                        MintakaStarXObservationFieldsParser.parse(laatste_record);
-                    int firstComma = laatste_record.indexOf(',');
-                    int secondComma = laatste_record.indexOf(',', firstComma + 1);
-                    int thirdComma = laatste_record.indexOf(',', secondComma + 1);
-                    int fourthComma = laatste_record.indexOf(',', thirdComma + 1);
-
-                    main.sensor_data_record_obs_ppp =
-                        laatste_record.substring(secondComma + 1, thirdComma);
-                    main.sensor_data_record_obs_a =
-                        laatste_record.substring(thirdComma + 1, fourthComma);
-                    if (fields != null) {
-                      local_obs_age = fields.observationAge;
-                    } else {
-                      main.sensor_data_record_obs_ppp = "";
-                      main.sensor_data_record_obs_a = "";
-                      local_obs_age = "";
-                    }
-
-                    System.out.println(
-                        "--- sensor data record, tendency for obs: "
-                            + main.sensor_data_record_obs_ppp);
-                    System.out.println(
-                        "--- sensor data record, characteristic for obs: "
-                            + main.sensor_data_record_obs_a);
-                    System.out.println("--- sensor data record, obs age (StarX): " + local_obs_age);
-                  } // else if (StarX == true)
+                    } // if (StarX == false)
+                    else if (StarX == true) {
+                      System.out.println(
+                          "--- sensor data record, tendency for obs: "
+                              + main.sensor_data_record_obs_ppp);
+                      System.out.println(
+                          "--- sensor data record, characteristic for obs: "
+                              + main.sensor_data_record_obs_a);
+                      System.out.println(
+                          "--- sensor data record, obs age (StarX): " + local_obs_age);
+                    } // else if (StarX == true)
+                  } else {
+                    main.sensor_data_record_obs_ppp = "";
+                    main.sensor_data_record_obs_a = "";
+                    local_obs_age = "";
+                  }
 
                 } // if (computed_checksum.equals(record_checksum))
                 else // checksum not ok

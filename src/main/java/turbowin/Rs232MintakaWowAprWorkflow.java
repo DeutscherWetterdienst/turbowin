@@ -387,58 +387,64 @@ final class Rs232MintakaWowAprWorkflow {
                   // retrieved (from file) record example Mintaka Star: 1029.97,1029.97,-0.90,7, 52
                   // 41.9535N,  6 14.1943E,0,0,19*1A201703152006
                   // pressure at sensor height
-                  int pos1 =
+                  MintakaStarRecordFields commonFields =
+                      MintakaStarRecordFieldsParser.parse(laatste_record, StarX);
+                  if (commonFields == null) {
+                    error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
+                    laatste_record = null;
+                  } else {
+                    int pos1 =
                       laatste_record.indexOf(
                           ",", 0); // ML hereafter; position of the first "," in the last record
-                  int pos2 =
+                    int pos2 =
                       laatste_record.indexOf(
                           ",",
                           pos1 + 1); // ppp hereafter; position of the second "," in the last record
-                  int pos3 =
+                    int pos3 =
                       laatste_record.indexOf(
                           ",",
                           pos2 + 1); // a hereafter; position of the third "," in the last record
-                  int pos4 =
+                    int pos4 =
                       laatste_record.indexOf(
                           ",",
                           pos3 + 1); // lat hereafter; position of the 4th "," in the last record
-                  int pos5 =
+                    int pos5 =
                       laatste_record.indexOf(
                           ",",
                           pos4 + 1); // lon hereafter; position n of the 5th "," in the last record
-                  int pos6 =
+                    int pos6 =
                       laatste_record.indexOf(
                           ",",
                           pos5 + 1); // course hereafter; position of the 6th "," in the last record
-                  // NB before already checked number commas in record
+                    // NB before already checked number commas in record
 
-                  // pressure (uncorrected at sensor height)
+                    // pressure (uncorrected at sensor height)
                   //
-                  local_sensor_data_record_obs_pressure = laatste_record.substring(0, pos1);
+                    local_sensor_data_record_obs_pressure = commonFields.pressure;
 
-                  if (destination.equals("MAIN_SCREEN") == false) {
+                    if (destination.equals("MAIN_SCREEN") == false) {
                     System.out.println(
                         "--- sensor data record, raw uncorrected pressure: "
                             + local_sensor_data_record_obs_pressure);
-                  }
+                    }
 
                   // ppp (3hr pressure tendency)
                   //
-                  local_sensor_data_record_obs_ppp = laatste_record.substring(pos2 + 1, pos3);
-                  if (destination.equals("MAIN_SCREEN") == false) {
+                    local_sensor_data_record_obs_ppp = commonFields.pressureTendency;
+                    if (destination.equals("MAIN_SCREEN") == false) {
                     System.out.println(
                         "--- sensor data record, 3hr pressure tendency (ppp): "
                             + local_sensor_data_record_obs_ppp);
-                  }
+                    }
 
                   // a (3hr pressure tendency characteristic; WMO code)
                   //
-                  local_sensor_data_record_obs_a = laatste_record.substring(pos3 + 1, pos4);
-                  if (destination.equals("MAIN_SCREEN") == false) {
+                    local_sensor_data_record_obs_a = commonFields.tendencyCharacteristic;
+                    if (destination.equals("MAIN_SCREEN") == false) {
                     System.out.println(
                         "--- sensor data record, 3hr pressure characteristic (a): "
                             + local_sensor_data_record_obs_a);
-                  }
+                    }
 
                   // rounding eg: 998.19 -> 998.2
                   //        double digitale_sensor_waarde =
@@ -449,15 +455,16 @@ final class Rs232MintakaWowAprWorkflow {
 
                   // GPS
                   //
-                  GPS_latitude = laatste_record.substring(pos4 + 1, pos5);
-                  GPS_longitude = laatste_record.substring(pos5 + 1, pos6);
+                    GPS_latitude = commonFields.latitude;
+                    GPS_longitude = commonFields.longitude;
+                    local_obs_age = commonFields.observationAge;
 
-                  if (destination.equals("MAIN_SCREEN") == false) {
+                    if (destination.equals("MAIN_SCREEN") == false) {
                     System.out.println("--- sensor data record, GPS latitude: " + GPS_latitude);
                     System.out.println("--- sensor data record, GPS longitude: " + GPS_longitude);
-                  }
+                    }
 
-                  if (StarX == true) {
+                    if (StarX == true) {
                     MintakaStarXObservationFields fields =
                         MintakaStarXObservationFieldsParser.parse(laatste_record);
                     if (fields != null) {
@@ -504,6 +511,7 @@ final class Rs232MintakaWowAprWorkflow {
                     } else {
                       error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
                       laatste_record = null;
+                    }
                     }
                   }
                 } // if (computed_checksum.equals(record_checksum))
