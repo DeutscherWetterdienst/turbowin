@@ -472,92 +472,54 @@ final class Rs232MintakaWowAprWorkflow {
                   }
 
                   if (StarX == true) {
-                    // StarX example: // 1009.73,1007.73,0.00,0, 52 41.9491N,  6
-                    // 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
-                    int pos7 = laatste_record.indexOf(",", pos6 + 1); // speed hereafter
-                    int pos8 = laatste_record.indexOf(",", pos7 + 1); // elevation hereafter
-                    int pos9 = laatste_record.indexOf(",", pos8 + 1); // air temp
-                    int pos10 = laatste_record.indexOf(",", pos9 + 1); // RH
-                    int pos11 = laatste_record.indexOf(",", pos10 + 1); // wet bulb
-                    int pos12 = laatste_record.indexOf(",", pos11 + 1); // dew point
-                    int pos13 = laatste_record.indexOf(",", pos12 + 1); // observation age
-                    int pos14 = laatste_record.indexOf("*", pos13 + 1); // pos of the "*"
-                    // NB before already checked number commas in record
+                    MintakaStarXObservationFields fields =
+                        MintakaStarXObservationFieldsParser.parse(laatste_record);
+                    if (fields != null) {
+                      GPS_latitude = fields.latitude;
+                      GPS_longitude = fields.longitude;
+                      local_sensor_data_record_obs_temp = fields.airTemperature;
+                      local_sensor_data_record_obs_RH = fields.relativeHumidity;
+                      local_sensor_data_record_obs_wet_bulb = fields.wetBulbTemperature;
+                      local_sensor_data_record_obs_dew_point = fields.dewPoint;
+                      local_obs_age = fields.observationAge;
 
-                    // air temperature (only available in case of StarX)
-                    //
-                    local_sensor_data_record_obs_temp = laatste_record.substring(pos9 + 1, pos10);
-
-                    if (destination.equals("MAIN_SCREEN") == false) {
-                      System.out.println(
-                          "--- sensor data record, air temperature: "
-                              + local_sensor_data_record_obs_temp);
-                    }
-
-                    // RH (only available in case of StarX)
-                    //
-                    local_sensor_data_record_obs_RH = laatste_record.substring(pos10 + 1, pos11);
-
-                    if (destination.equals("MAIN_SCREEN") == false) {
-                      System.out.println(
-                          "--- sensor data record, RH: " + local_sensor_data_record_obs_RH);
-                    }
-
-                    // wet bulb (only available in case of StarX)
-                    //
-                    local_sensor_data_record_obs_wet_bulb =
-                        laatste_record.substring(pos11 + 1, pos12);
-
-                    if (destination.equals("MAIN_SCREEN") == false) {
-                      System.out.println(
-                          "--- sensor data record, wet bulb: "
-                              + local_sensor_data_record_obs_wet_bulb);
-                    }
-
-                    // dew point (only available in case of StarX)
-                    //
-                    local_sensor_data_record_obs_dew_point =
-                        laatste_record.substring(pos12 + 1, pos13);
-
-                    if (destination.equals("MAIN_SCREEN") == false) {
-                      System.out.println(
-                          "--- sensor data record, dew point: "
-                              + local_sensor_data_record_obs_dew_point);
-                    }
-
-                    // observation age (only available in case of StarX)
-                    //
-                    local_obs_age = laatste_record.substring(pos13 + 1, pos14);
-
-                    if (destination.equals("MAIN_SCREEN") == false) {
-                      System.out.println("--- sensor data record, obs age: " + local_obs_age);
-                    }
-
-                    int int_local_obs_age = AGE_NOT_OK; // 999999 = random number but > 99.9
-                    if ((local_obs_age.compareTo("") != 0)
-                        && (local_obs_age != null)
-                        && (local_obs_age.indexOf("*") == -1)) {
-                      try {
-                        int_local_obs_age = Integer.parseInt(local_obs_age.trim());
-                      } catch (NumberFormatException e) {
-                        int_local_obs_age = AGE_NOT_OK;
+                      if (!destination.equals("MAIN_SCREEN")) {
                         System.out.println(
-                            "--- "
-                                + "RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR() "
-                                + e);
+                            "--- sensor data record, air temperature: "
+                                + local_sensor_data_record_obs_temp);
+                        System.out.println(
+                            "--- sensor data record, RH: " + local_sensor_data_record_obs_RH);
+                        System.out.println(
+                            "--- sensor data record, wet bulb: "
+                                + local_sensor_data_record_obs_wet_bulb);
+                        System.out.println(
+                            "--- sensor data record, dew point: "
+                                + local_sensor_data_record_obs_dew_point);
+                        System.out.println("--- sensor data record, obs age: " + local_obs_age);
                       }
-                    }
 
-                    if ((int_local_obs_age < 0)
-                        || (int_local_obs_age
-                            > main_RS232_RS422
-                                .MAX_AGE_STARX_OBS_DATA)) // NB 60 * 10 = 600 sec = 10 minutes
-                    {
-                      error_info = STRING_STARX_PART_OBSOLETE_ERROR;
+                      int int_local_obs_age = AGE_NOT_OK;
+                      if (!local_obs_age.isEmpty() && local_obs_age.indexOf("*") == -1) {
+                        try {
+                          int_local_obs_age = Integer.parseInt(local_obs_age.trim());
+                        } catch (NumberFormatException e) {
+                          int_local_obs_age = AGE_NOT_OK;
+                          System.out.println(
+                              "--- RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR() "
+                                  + e);
+                        }
+                      }
+
+                      if (int_local_obs_age < 0
+                          || int_local_obs_age > main_RS232_RS422.MAX_AGE_STARX_OBS_DATA) {
+                        error_info = STRING_STARX_PART_OBSOLETE_ERROR;
+                        laatste_record = null;
+                      }
+                    } else {
+                      error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
                       laatste_record = null;
-                    } // if ((hulp_return_obs_age >= 0) && (hulp_return_obs_age <=
-                    // MAX_AGE_STARX_OBS_DATA))
-                  } // if (StarX == true)
+                    }
+                  }
                 } // if (computed_checksum.equals(record_checksum))
                 else // checksum not ok
                 {
