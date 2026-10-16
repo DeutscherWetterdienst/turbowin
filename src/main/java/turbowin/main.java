@@ -4335,17 +4335,12 @@ public class main extends javax.swing.JFrame {
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Maintenance_Email_settings_actionPerformed
     mode = EMAIL_SETTINGS;
-
-    if (main_support.password_ok) // no password needed, direct to the email settings form
-    {
-      myemailsettings form = new myemailsettings();
-      form.setSize(1000, 700);
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.open(
+        main_support.password_ok,
+        myemailsettings::new,
+        new Dimension(1000, 700),
+        mypassword::new,
+        new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Email_settings_actionPerformed
 
   private void Maintenance_Log_files_actionPerformed(
