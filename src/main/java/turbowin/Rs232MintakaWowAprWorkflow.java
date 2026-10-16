@@ -113,11 +113,8 @@ final class Rs232MintakaWowAprWorkflow {
       @Override
       protected String doInBackground() throws Exception {
         main.obs_file_datum_tijd = new GregorianCalendar();
-        main.obs_file_datum_tijd.add(
-            Calendar.MINUTE,
-            -2); // of is -1 ook goed????? : to be sure there was all time that it was written to
-        // the file
-        File sensor_data_file;
+        File sensor_data_file =
+            SensorDataFileLocator.locate(main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
         String record = null;
         String laatste_record = null;
         String error_info = "";
@@ -138,18 +135,10 @@ final class Rs232MintakaWowAprWorkflow {
         // 12 char of record)
         String date_time_SOG_COG_end = null;
 
-        // determine sensor data file name
-        String sensor_data_file_naam_datum_tijd_deel =
-            main.sdf3.format(main.obs_file_datum_tijd.getTime()); // e.g. 2013020308
-        String sensor_data_file_name =
-            "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
-
         // first check if there is a sensor data file present (and not empty)
-        String volledig_path_sensor_data =
-            main.logs_dir + java.io.File.separator + sensor_data_file_name;
+        String volledig_path_sensor_data = sensor_data_file.getPath();
         // System.out.println("+++ te openen file voor APR obs: "+ volledig_path_sensor_data);
 
-        sensor_data_file = new File(volledig_path_sensor_data);
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
           try {
@@ -588,7 +577,7 @@ final class Rs232MintakaWowAprWorkflow {
 
           // determine sensor data file name of the file with the GPS position of 10 minutes or 3
           // hours ago
-          sensor_data_file_name =
+          String sensor_data_file_name =
               "sensor_data_" + sensor_data_file_naam_datum_tijd_deel_start + ".txt";
 
           // first check if there is a sensor data file present (and not empty)

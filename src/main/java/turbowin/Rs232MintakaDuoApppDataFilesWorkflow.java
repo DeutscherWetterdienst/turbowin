@@ -21,8 +21,7 @@ final class Rs232MintakaDuoApppDataFilesWorkflow {
       protected Void doInBackground() throws Exception {
         main.obs_file_datum_tijd = new GregorianCalendar();
         File sensor_data_file =
-            MintakaDuoSensorDataFileLocator.locate(
-                main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
+            SensorDataFileLocator.locate(main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
 
         // initialisation
         // main.sensor_data_record_obs_pressure = "";

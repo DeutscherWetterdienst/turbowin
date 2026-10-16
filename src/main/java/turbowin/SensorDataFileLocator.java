@@ -4,10 +4,10 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-/** Locates the hourly sensor-data file used by Mintaka Duo workflows. */
-final class MintakaDuoSensorDataFileLocator {
+/** Locates the hourly sensor-data file used by sensor workflows. */
+final class SensorDataFileLocator {
 
-  private MintakaDuoSensorDataFileLocator() {}
+  private SensorDataFileLocator() {}
 
   static File locate(Calendar observationTime, String logsDirectory, DateFormat fileDateFormat) {
     Calendar fileTime = (Calendar) observationTime.clone();

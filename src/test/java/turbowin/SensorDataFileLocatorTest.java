@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import org.junit.Test;
 
-public class MintakaDuoSensorDataFileLocatorTest {
+public class SensorDataFileLocatorTest {
 
   @Test
   public void usesTwoMinutesEarlierHourlySensorDataFile() {
@@ -19,7 +19,7 @@ public class MintakaDuoSensorDataFileLocatorTest {
     observationTime.set(2015, Calendar.FEBRUARY, 4, 0, 1, 0);
     observationTime.set(Calendar.MILLISECOND, 0);
 
-    File result = MintakaDuoSensorDataFileLocator.locate(observationTime, "/logs", format);
+    File result = SensorDataFileLocator.locate(observationTime, "/logs", format);
 
     assertEquals(new File("/logs", "sensor_data_2015020323.txt"), result);
   }

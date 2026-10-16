@@ -30,8 +30,7 @@ final class Rs232MintakaDuoWowAprWorkflow {
       protected String doInBackground() throws Exception {
         main.obs_file_datum_tijd = new GregorianCalendar();
         File sensor_data_file =
-            MintakaDuoSensorDataFileLocator.locate(
-                main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
+            SensorDataFileLocator.locate(main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
 
         // initialisation
         String sensor_data_record_WOW_APR_pressure_hpa = "";
