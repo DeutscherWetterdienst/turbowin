@@ -4982,17 +4982,12 @@ public class main extends javax.swing.JFrame {
     // TODO add your handling code here:
 
     mode = SET_WOW_APR_SETTINGS;
-
-    if (main_support.password_ok) // no password needed, direct to the APR settings form
-    {
-      WOW_APR_settings form = new WOW_APR_settings();
-      form.setSize(1000, 700);
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.open(
+        main_support.password_ok,
+        WOW_APR_settings::new,
+        new Dimension(1000, 700),
+        mypassword::new,
+        new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_WOW_settings_actionPerformed
 
   private void Info_System_Log_menu_actionPerformed(
