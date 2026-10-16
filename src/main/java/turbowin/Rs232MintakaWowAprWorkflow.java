@@ -393,32 +393,7 @@ final class Rs232MintakaWowAprWorkflow {
                     error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
                     laatste_record = null;
                   } else {
-                    int pos1 =
-                      laatste_record.indexOf(
-                          ",", 0); // ML hereafter; position of the first "," in the last record
-                    int pos2 =
-                      laatste_record.indexOf(
-                          ",",
-                          pos1 + 1); // ppp hereafter; position of the second "," in the last record
-                    int pos3 =
-                      laatste_record.indexOf(
-                          ",",
-                          pos2 + 1); // a hereafter; position of the third "," in the last record
-                    int pos4 =
-                      laatste_record.indexOf(
-                          ",",
-                          pos3 + 1); // lat hereafter; position of the 4th "," in the last record
-                    int pos5 =
-                      laatste_record.indexOf(
-                          ",",
-                          pos4 + 1); // lon hereafter; position n of the 5th "," in the last record
-                    int pos6 =
-                      laatste_record.indexOf(
-                          ",",
-                          pos5 + 1); // course hereafter; position of the 6th "," in the last record
-                    // NB before already checked number commas in record
-
-                    // pressure (uncorrected at sensor height)
+                  // pressure (uncorrected at sensor height)
                   //
                     local_sensor_data_record_obs_pressure = commonFields.pressure;
 

@@ -16,7 +16,7 @@ public class MintakaGpsWowWorkflowCharacterizationTest {
   public void gpsBranchExtractsLatitudeAndLongitudeFromValidStarRecord() {
     assertTrue(MintakaRecordValidator.isValid(STAR_RECORD, false));
 
-    MintakaGpsFields fields = MintakaGpsFieldsParser.parse(STAR_RECORD);
+    MintakaStarRecordFields fields = MintakaStarRecordFieldsParser.parse(STAR_RECORD, false);
 
     assertEquals(" 52 41.9535N", fields.latitude);
     assertEquals("  6 14.1943E", fields.longitude);
