@@ -10,7 +10,14 @@ final class MintakaHistoricalGpsReader {
 
   static MintakaHistoricalGpsReading read(File file, String timestamp, boolean starX)
       throws IOException {
-    String record = MintakaHistoricalRecordReader.readLatestValidRecord(file, timestamp, starX);
+    return read(file, timestamp, starX, false);
+  }
+
+  static MintakaHistoricalGpsReading read(
+      File file, String timestamp, boolean starX, boolean windDiagnostics) throws IOException {
+    String record =
+        MintakaHistoricalRecordReader.readLatestValidRecord(
+            file, timestamp, starX, windDiagnostics);
     if (record == null) {
       return null;
     }

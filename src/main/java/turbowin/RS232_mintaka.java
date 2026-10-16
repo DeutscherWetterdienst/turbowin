@@ -2,7 +2,6 @@ package turbowin;
 
 import static turbowin.main_RS232_RS422.GPS_latitude_earlier_wind;
 import static turbowin.main_RS232_RS422.GPS_longitude_earlier_wind;
-import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -103,137 +102,16 @@ public class RS232_mintaka {
       if (sensor_data_file_wind.exists() && sensor_data_file_wind.length() > 0) // length() in bytes
       {
         try {
-          record =
-              MintakaHistoricalRecordReader.readLatestValidRecord(
-                  sensor_data_file_wind, date_time_SOG_COG_start_wind, StarX);
-          if (record != null) {
-            if (record.length() > 15) // NB > 15 is a little bit arbitrary number (YYYYMMDDHHmm + 3 commas + at leat
-            // 2 char pressure value= 15 chars)
-            {
-              int pos = record.length() - 12; // pos is now start position of YYYYMMDDHHmm
-              String record_datum_tijd_minuten =
-                  record.substring(pos, pos + 12); // YYYYMMDDHHmm has length 12
-
-            if (record_datum_tijd_minuten.equals(
-                date_time_SOG_COG_start_wind)) // found the corresponding record of 10 min earlier
-            {
-              String record_checksum =
-                  record.substring(
-                      record.length() - 14,
-                      record.length()
-                          - 12); // eg "24" from record "1022.20,1022.20,0.80,2, 52 41.9497N,  6
-              // 14.1848E,0,0,-1*24201703291211"
-              String computed_checksum = Mintaka_Star_Checksum(record);
-
-              // below only for testing (uncomment when testing)
-              // computed_checksum = record_checksum;
-
-              if (computed_checksum.equals(record_checksum)) {
-                // System.out.println("checksum ok");
-
-                // extra check on correct number of commas in the earlier (10 min or 3 hrs) record
-                //
-                int number_read_commas = 0;
-                int pos_comma = -1;
-
-                do {
-                  pos_comma = record.indexOf(",", pos_comma + 1);
-                  if (pos_comma != -1) // "," found
-                  {
-                    number_read_commas++;
-                    // System.out.println("+++ number_read_commas = " + number_read_commas);
-                  }
-                } while (pos_comma != -1);
-
-                boolean format_ok = true;
-                if (StarX == false) {
-                  if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STAR) {
-                    format_ok = false;
-                    System.out.println(
-                        "--- Mintaka Star format (number commas) rertieved record earlier (for SOG and COG wind) NOT ok (file: "
-                            + volledig_path_sensor_data_wind
-                            + "; record: "
-                            + record
-                            + ")");
-                  }
-                } else if (StarX == true) {
-                  if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX) {
-                    format_ok = false;
-                    System.out.println(
-                        "--- Mintaka StarX format (number commas) rertieved record earlier (for SOG and COG wind) NOT ok (file: "
-                            + volledig_path_sensor_data_wind
-                            + "; record: "
-                            + record
-                            + ")");
-                  }
-                }
-
-                if (format_ok) {
-                  // retrieved (from file) record example Mintaka Star: 1029.97,1029.97,-0.90,7,
-                  // 52 41.9535N,  6 14.1943E,0,0,19*1A201703152006
-                  int pos1 = record.indexOf(",", 0); // position of the first "," in the last record
-                  int pos2 =
-                      record.indexOf(
-                          ",", pos1 + 1); // position of the second "," in the last record
-                  int pos3 =
-                      record.indexOf(",", pos2 + 1); // position of the third "," in the last record
-                  int pos4 =
-                      record.indexOf(",", pos3 + 1); // position of the 4th "," in the last record
-                  int pos5 =
-                      record.indexOf(",", pos4 + 1); // position of the 5th "," in the last record
-                  int pos6 =
-                      record.indexOf(",", pos5 + 1); // position of the 6th "," in the last record
-                  // int pos7 = record.indexOf(",", pos6 +1);
-                  //   // position of the 7th "," in the last record
-
-                  MintakaHistoricalGpsReading gpsFields =
-                      MintakaHistoricalGpsReader.parseRecord(record, StarX);
-                  if (gpsFields != null) {
-                    GPS_latitude_earlier_wind = gpsFields.latitude;
-                    GPS_longitude_earlier_wind = gpsFields.longitude;
-                  } else {
-                    GPS_latitude_earlier_wind = "";
-                    GPS_longitude_earlier_wind = "";
-                  }
-
-                  // below for testing
-                  // System.out.println("+++ sensor data record, GPS latitude earlier (10 min): "
-                  // + GPS_latitude_earlier_wind + "(" + record_datum_tijd_minuten + ")");
-                  // System.out.println("+++ sensor data record, GPS longitude earlier (10 min): "
-                  // + GPS_longitude_earlier_wind + "(" + record_datum_tijd_minuten + ")");
-
-                  // if (destination.equals("MAIN_SCREEN") == false)
-                  // {
-                  //   System.out.println("--- sensor data record, GPS latitude earlier (10 min):
-                  // " + GPS_latitude_earlier_wind + "(" + record_datum_tijd_minuten + ")");
-                  //   System.out.println("--- sensor data record, GPS longitude earlier (10 min):
-                  // " + GPS_longitude_earlier_wind + "(" + record_datum_tijd_minuten + ")");
-                  // }
-                } // if (format_ok)
-                else {
-                  GPS_latitude_earlier_wind = "";
-                  GPS_longitude_earlier_wind = "";
-                } // else
-              } else {
-                // System.out.println("record checksum = " + record_checksum);
-                // System.out.println("computed checksum = " + computed_checksum);
-                System.out.println(
-                    "--- checksum NOT ok, SOG and COG for wind in FM13 " + "(" + record + ")");
-
-                GPS_latitude_earlier_wind = "";
-                GPS_longitude_earlier_wind = "";
-              } // else
-              } // if (record_datum_tijd_minuten.equals(date_time_SOG_COG_start))
-            } // if (record.length() > 15)
-            else {
-              GPS_latitude_earlier_wind = "";
-              GPS_longitude_earlier_wind = "";
-            }
+          MintakaHistoricalGpsReading gpsFields =
+              MintakaHistoricalGpsReader.read(
+                  sensor_data_file_wind, date_time_SOG_COG_start_wind, StarX, true);
+          if (gpsFields != null) {
+            GPS_latitude_earlier_wind = gpsFields.latitude;
+            GPS_longitude_earlier_wind = gpsFields.longitude;
           } else {
             GPS_latitude_earlier_wind = "";
             GPS_longitude_earlier_wind = "";
           }
-
         } // try
         catch (FileNotFoundException ex) {
           System.out.println(
