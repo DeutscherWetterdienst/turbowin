@@ -4346,17 +4346,12 @@ public class main extends javax.swing.JFrame {
   private void Maintenance_Log_files_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Log_files_actionPerformed
     mode = LOG_FILES;
-
-    if (main_support.password_ok) // no password needed, direct to the log files settings form
-    {
-      mylogfiles form = new mylogfiles();
-      form.setSize(800, 600);
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.open(
+        main_support.password_ok,
+        mylogfiles::new,
+        new Dimension(800, 600),
+        mypassword::new,
+        new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Log_files_actionPerformed
 
   void Input_Observer_menu_actionPerformed(
