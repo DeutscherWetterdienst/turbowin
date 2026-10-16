@@ -30,6 +30,22 @@ public class MintakaHistoricalRecordReaderTest {
   }
 
   @Test
+  public void historicalWorkflowFieldsPreserveCoordinatesFromTheMatchedRecord() throws IOException {
+    File file = Files.createTempFile("turbowin-mintaka-history-fields", ".txt").toFile();
+    try {
+      Files.write(file.toPath(), List.of(VALID_RECORD));
+
+      String record = MintakaHistoricalRecordReader.readLatestValidRecord(file, TIMESTAMP, false);
+      MintakaStarRecordFields fields = MintakaStarRecordFieldsParser.parse(record, false);
+
+      assertEquals(" 52 41.9535N", fields.latitude);
+      assertEquals("  6 14.1943E", fields.longitude);
+    } finally {
+      file.delete();
+    }
+  }
+
+  @Test
   public void rejectsWrongChecksumAndCommaCount() throws IOException {
     File file = Files.createTempFile("turbowin-mintaka-history-invalid", ".txt").toFile();
     try {
