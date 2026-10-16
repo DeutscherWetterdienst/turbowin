@@ -1,7 +1,5 @@
 package turbowin;
 
-import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -116,19 +114,7 @@ final class Rs232MintakaStarXObservationWorkflow {
             // check on correct number of commas in the laatste_record
             //
             if (laatste_record != null) {
-              int number_read_commas = 0;
-              int pos = -1;
-
-              do {
-                pos = laatste_record.indexOf(",", pos + 1);
-                if (pos != -1) // "," found
-                {
-                  number_read_commas++;
-                  // System.out.println("+++ number_read_commas = " + number_read_commas);
-                }
-              } while (pos != -1);
-
-              if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX) {
+              if (!MintakaRecordValidator.hasExpectedCommaCount(laatste_record, true)) {
                 // System.out.println("number_read_commas = " + number_read_commas);
                 // System.out.println("main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX = " +
                 // main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX);
@@ -161,37 +147,15 @@ final class Rs232MintakaStarXObservationWorkflow {
                 // example Mintaka StarX last record: 1009.73,1007.73,0.00,0, 52 41.9491N,  6
                 // 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
                 //
-                String record_checksum =
-                    laatste_record.substring(
-                        laatste_record.length() - 14,
-                        laatste_record.length()
-                            - 12); // eg "24" from record "1022.20,1022.20,0.80,2, 52 41.9497N,  6
-                // 14.1848E,0,0,-1*24201703291211"
-                String computed_checksum = Mintaka_Star_Checksum(laatste_record);
-
-                if (computed_checksum.equals(record_checksum)) { // sensor height pressure
-                  int pos1 =
-                      laatste_record.indexOf(
-                          ",", 0); // MSL hereafter; position of the first "," in the last record
-                  int pos2 =
-                      laatste_record.indexOf(
-                          ",",
-                          pos1 + 1); // ppp hereafter; position of the second "," in the last record
-                  int pos3 =
-                      laatste_record.indexOf(
-                          ",",
-                          pos2 + 1); // a hereafter; position of the third "," in the last record
-                  int pos4 = laatste_record.indexOf(",", pos3 + 1); // lat hereafter
-                  int pos5 = laatste_record.indexOf(",", pos4 + 1); // lon hereafter
-                  int pos6 = laatste_record.indexOf(",", pos5 + 1); // course hereafter
-                  int pos7 = laatste_record.indexOf(",", pos6 + 1); // speed hereafter
-                  int pos8 = laatste_record.indexOf(",", pos7 + 1); // elevation hereafter
-                  int pos9 = laatste_record.indexOf(",", pos8 + 1); // air temp
-                  int pos10 = laatste_record.indexOf(",", pos9 + 1); // RH
-                  int pos11 = laatste_record.indexOf(",", pos10 + 1); // wet bulb
-                  int pos12 = laatste_record.indexOf(",", pos11 + 1); // dew point
-                  int pos13 = laatste_record.indexOf(",", pos12 + 1); // observation age
-                  int pos14 = laatste_record.indexOf("*", pos13 + 1); // pos of the "*"
+                if (MintakaRecordValidator.hasValidChecksum(laatste_record)) {
+                  MintakaStarXObservationFields fields =
+                      MintakaStarXObservationFieldsParser.parse(laatste_record);
+                  if (fields != null) {
+                    mytemp.air_temp = fields.airTemperature;
+                    mytemp.RH = fields.relativeHumidity;
+                    mytemp.wet_bulb_temp = fields.wetBulbTemperature;
+                    local_dew_point = fields.dewPoint;
+                    local_obs_age = fields.observationAge;
 
                   // rounding eg: 998.19 -> 998.2
                   //        double digitale_sensor_waarde =
@@ -200,21 +164,21 @@ final class Rs232MintakaStarXObservationWorkflow {
                   //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) /
                   // 10.0d;  // bv 998.19 -> 998.2
 
-                  mytemp.air_temp = laatste_record.substring(pos9 + 1, pos10);
-                  mytemp.RH = laatste_record.substring(pos10 + 1, pos11);
-                  mytemp.wet_bulb_temp = laatste_record.substring(pos11 + 1, pos12);
-                  local_dew_point = laatste_record.substring(pos12 + 1, pos13);
-                  local_obs_age = laatste_record.substring(pos13 + 1, pos14);
-
-                  System.out.println(
-                      "--- sensor data record, air temp for obs: " + mytemp.air_temp);
-                  System.out.println("--- sensor data record, RH for obs: " + mytemp.RH);
-                  System.out.println(
-                      "--- sensor data record, wet bulb temp for obs: " + mytemp.wet_bulb_temp);
-                  System.out.println(
-                      "--- sensor data record, dewpoint for obs: " + local_dew_point);
-                  System.out.println("--- sensor data record, obs age for obs: " + local_obs_age);
-
+                    System.out.println(
+                        "--- sensor data record, air temp for obs: " + mytemp.air_temp);
+                    System.out.println("--- sensor data record, RH for obs: " + mytemp.RH);
+                    System.out.println(
+                        "--- sensor data record, wet bulb temp for obs: " + mytemp.wet_bulb_temp);
+                    System.out.println(
+                        "--- sensor data record, dewpoint for obs: " + local_dew_point);
+                    System.out.println("--- sensor data record, obs age for obs: " + local_obs_age);
+                  } else {
+                    mytemp.air_temp = "";
+                    mytemp.RH = "";
+                    mytemp.wet_bulb_temp = "";
+                    local_dew_point = "";
+                    local_obs_age = "";
+                  }
                 } // if (computed_checksum.equals(record_checksum))
                 else // checksum not ok
                 {
