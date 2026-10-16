@@ -9,7 +9,6 @@ import static turbowin.main_RS232_RS422.GPS_longitude;
 import static turbowin.main_RS232_RS422.GPS_longitude_earlier;
 import static turbowin.main_RS232_RS422.GPS_longitude_earlier_wind;
 import static turbowin.main_RS232_RS422.GPS_longitude_hemisphere;
-import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
 import static turbowin.main_RS232_RS422.RS232_APR_AWSR_send;
 import static turbowin.main_RS232_RS422.RS232_WOW_APR_compute_air_pressure_height_correction;
 import static turbowin.main_RS232_RS422.RS232_compute_APR_COG_SOG_wind;
@@ -286,45 +285,20 @@ final class Rs232MintakaWowAprWorkflow {
             // check on correct number of commas in the laatste_record
             //
             if (laatste_record != null) {
-              int number_read_commas = 0;
-              int pos = -1;
+              if (!MintakaRecordValidator.hasExpectedCommaCount(laatste_record, StarX)) {
+                laatste_record = null;
+                error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
 
-              do {
-                pos = laatste_record.indexOf(",", pos + 1);
-                if (pos != -1) // "," found
-                {
-                  number_read_commas++;
-                  // System.out.println("+++ number_read_commas = " + number_read_commas);
+                if (!destination.equals("MAIN_SCREEN")) {
+                  String format = StarX ? "StarX" : "Star";
+                  System.out.println(
+                      "--- Mintaka "
+                          + format
+                          + " format (number commas) last retrieved record NOT ok (file: "
+                          + volledig_path_sensor_data
+                          + ")");
                 }
-              } while (pos != -1);
-
-              if (StarX == true) {
-                if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX) {
-                  laatste_record = null;
-                  error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
-
-                  if (destination.equals("MAIN_SCREEN") == false) {
-                    System.out.println(
-                        "--- Mintaka StarX format (number commas) last retrieved record NOT ok (file: "
-                            + volledig_path_sensor_data
-                            + ")");
-                  }
-                }
-              } //  if (StarX == true)
-              else {
-                if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STAR) {
-                  laatste_record = null;
-                  error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
-
-                  if (destination.equals("MAIN_SCREEN") == false) {
-                    System.out.println(
-                        "--- Mintaka Star format (number commas) last retrieved record NOT ok (file: "
-                            + volledig_path_sensor_data
-                            + ")");
-                  }
-                  // local_sensor_data_record_obs_pressure = STRING_PRESSURE_RECORD_FORMAT_ERROR;
-                }
-              } // else
+              }
             } // if (laatste_record != null)
 
             // last retrieved record ok
@@ -421,20 +395,7 @@ final class Rs232MintakaWowAprWorkflow {
                 // example Mintaka Star last_record: 1022.20,1022.20,0.80,2, 52 41.9497N,  6
                 // 14.1848E,0,0,-1*24201703291211
                 //
-                String record_checksum =
-                    laatste_record.substring(
-                        laatste_record.length() - 14,
-                        laatste_record.length()
-                            - 12); // eg "24" from record "1022.20,1022.20,0.80,2, 52 41.9497N,  6
-                // 14.1848E,0,0,-1*24201703291211"
-                String computed_checksum =
-                    Mintaka_Star_Checksum(laatste_record); // used by the Star and StarX !
-
-                ///// TEST ////
-                // computed_checksum = record_checksum;
-                ///// TEST ///
-
-                if (computed_checksum.equals(record_checksum)) {
+                if (MintakaRecordValidator.hasValidChecksum(laatste_record)) {
                   // System.out.println("checksum ok");
 
                   // retrieved (from file) record example Mintaka Star: 1029.97,1029.97,-0.90,7, 52
@@ -696,56 +657,24 @@ final class Rs232MintakaWowAprWorkflow {
                       date_time_SOG_COG_start)) // found the corresponding record of 10 min or 3 hrs
                   // earlier
                   {
-                    String record_checksum =
-                        record.substring(
-                            record.length() - 14,
-                            record.length()
-                                - 12); // eg "24" from record "1022.20,1022.20,0.80,2, 52 41.9497N,
-                    // 6 14.1848E,0,0,-1*24201703291211"
-                    String computed_checksum = Mintaka_Star_Checksum(record);
-
-                    // below only for testing (uncomment when testing)
-                    // computed_checksum = record_checksum;
-
-                    if (computed_checksum.equals(record_checksum)) {
+                    if (MintakaRecordValidator.hasValidChecksum(record)) {
                       // System.out.println("checksum ok");
 
                       // extra check on correct number of commas in the earlier (10 min or 3 hrs)
                       // record
                       //
-                      int number_read_commas = 0;
-                      int pos_comma = -1;
-
-                      do {
-                        pos_comma = record.indexOf(",", pos_comma + 1);
-                        if (pos_comma != -1) // "," found
-                        {
-                          number_read_commas++;
-                          // System.out.println("+++ number_read_commas = " + number_read_commas);
-                        }
-                      } while (pos_comma != -1);
-
-                      boolean format_ok = true;
-                      if (StarX == false) {
-                        if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STAR) {
-                          format_ok = false;
-                          System.out.println(
-                              "--- Mintaka Star format (number commas) rertieved record earlier (for SOG and COG) NOT ok (file: "
-                                  + volledig_path_sensor_data
-                                  + "; record: "
-                                  + record
-                                  + ")");
-                        }
-                      } else if (StarX == true) {
-                        if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX) {
-                          format_ok = false;
-                          System.out.println(
-                              "--- Mintaka StarX format (number commas) rertieved record earlier (for SOG and COG) NOT ok (file: "
-                                  + volledig_path_sensor_data
-                                  + "; record: "
-                                  + record
-                                  + ")");
-                        }
+                      boolean format_ok =
+                          MintakaRecordValidator.hasExpectedCommaCount(record, StarX);
+                      if (!format_ok) {
+                        String format = StarX ? "StarX" : "Star";
+                        System.out.println(
+                            "--- Mintaka "
+                                + format
+                                + " format (number commas) rertieved record earlier (for SOG and COG) NOT ok (file: "
+                                + volledig_path_sensor_data
+                                + "; record: "
+                                + record
+                                + ")");
                       }
 
                       if (format_ok) {
