@@ -4958,17 +4958,12 @@ public class main extends javax.swing.JFrame {
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_obs_format_actionPerformed
     // TODO add your handling code here:
     mode = SET_OBS_FORMAT;
-
-    if (main_support.password_ok) // no password needed, direct to the obs format settings form
-    {
-      myobsformat form = new myobsformat();
-      form.setSize(800, 600);
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.open(
+        main_support.password_ok,
+        myobsformat::new,
+        new Dimension(800, 600),
+        mypassword::new,
+        new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_obs_format_actionPerformed
 
   private void seawater_temp_mainscreen_mouseClicked(
