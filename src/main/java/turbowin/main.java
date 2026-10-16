@@ -4884,17 +4884,12 @@ public class main extends javax.swing.JFrame {
     // TODO add your handling code here:
 
     mode = SERIAL_CONNECTION;
-
-    if (main_support.password_ok) // no password needed, direct to the connections settings form
-    {
-      RS232_settings form = new RS232_settings();
-      form.setSize(800, 600);
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.open(
+        main_support.password_ok,
+        RS232_settings::new,
+        new Dimension(800, 600),
+        mypassword::new,
+        new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Serial_actionPerformed
 
   void main_windowClosing(java.awt.event.WindowEvent evt) { // GEN-FIRST:event_main_windowClosing
