@@ -9,16 +9,16 @@ package turbowin;
  * fragment. The characteristic immediately after the third comma is one character; it can be
  * {@code *} when no characteristic is present and the caller handles that case.
  *
- * <p>This shared parser intentionally returns {@code null} for both short records and records with
- * the wrong comma count. The Duo workflows report those consolidated failures with their generic
- * record-format diagnostic.
+ * <p>This shared parser returns {@code null} for malformed records. {@link #failureReason(String)}
+ * preserves the legacy minimum-length and comma-count distinctions for the shared reader's
+ * diagnostics.
  */
 final class MintakaDuoRecordParser {
 
   private MintakaDuoRecordParser() {}
 
   static MintakaDuoRecord parse(String record) {
-    if (record == null || record.length() <= 15 || !hasExpectedCommaCount(record)) {
+    if (failureReason(record) != null) {
       return null;
     }
 
@@ -37,7 +37,17 @@ final class MintakaDuoRecordParser {
         record.substring(thirdComma + 1, thirdComma + 2));
   }
 
-  static boolean hasExpectedCommaCount(String record) {
+  static String failureReason(String record) {
+    if (record == null || record.length() <= 15) {
+      return "min. record length";
+    }
+    if (!hasExpectedCommaCount(record)) {
+      return "number commas";
+    }
+    return null;
+  }
+
+  private static boolean hasExpectedCommaCount(String record) {
     if (record == null) {
       return false;
     }

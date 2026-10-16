@@ -21,8 +21,10 @@ public class MintakaDuoRecordParserTest {
 
   @Test
   public void rejectsShortAndWrongFormatRecords() {
-    // The parser intentionally consolidates these two legacy format failures as null.
     assertNull(MintakaDuoRecordParser.parse("short"));
     assertNull(MintakaDuoRecordParser.parse(RECORD.replace(",1.70", "1.70")));
+    assertEquals("min. record length", MintakaDuoRecordParser.failureReason("short"));
+    assertEquals(
+        "number commas", MintakaDuoRecordParser.failureReason(RECORD.replace(",1.70", "1.70")));
   }
 }

@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
@@ -36,7 +35,6 @@ final class Rs232MintakaDuoWowAprWorkflow {
             -2); // of is -1 ook goed????? : to be sure there was all time that it was written to
         // the file
         File sensor_data_file;
-        String laatste_record = null;
 
         // initialisation
         String sensor_data_record_WOW_APR_pressure_hpa = "";
@@ -56,72 +54,42 @@ final class Rs232MintakaDuoWowAprWorkflow {
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
           try {
-            laatste_record = SensorDataRecordReader.readLatestRecord(sensor_data_file);
-            MintakaDuoRecord parsedRecord = null;
-            if (laatste_record != null && laatste_record.length() <= 15) {
-              laatste_record = null;
-              System.out.println(
-                  "--- Mintaka Duo reading data for WOW/APR, format (min. record length) last retrieved record NOT ok (file: "
-                      + volledig_path_sensor_data
-                      + ")");
-            }
-            if (laatste_record != null
-                && !MintakaDuoRecordParser.hasExpectedCommaCount(laatste_record)) {
-              laatste_record = null;
-              System.out.println(
-                  "--- Mintaka Duo reading data for WOW/APR, format (number commas) last retrieved record NOT ok (file: "
-                      + volledig_path_sensor_data
-                      + ")");
-            }
-            if (laatste_record != null) {
-              parsedRecord = MintakaDuoRecordParser.parse(laatste_record);
-            }
+            MintakaDuoRecordReading reading =
+                MintakaDuoRecordReader.readLatest(
+                    sensor_data_file,
+                    System::currentTimeMillis,
+                    "Mintaka Duo reading data for WOW/APR");
 
             // last retrieved record ok
             //
-            if (laatste_record != null) {
-              // System.out.println("+++ Mintaka Duo, last retrieved record = " + laatste_record);
+            if (reading != null && reading.isWithin(main_RS232_RS422.TIMEDIFF_SENSOR_DATA)) {
+              // retrieved record example Mintaka Duo: 1021.89,1021.89,1.70,1*05 201502111405
+              sensor_data_record_WOW_APR_pressure_hpa = reading.record.pressure;
 
-              // String record_datum_tijd_minuten =
-              // laatste_record.substring(main.type_record_datum_tijd_begin_pos,
-              // main.type_record_datum_tijd_begin_pos + 12);  // bv 201302201345
+              // rounding eg: 998.19 -> 998.2
+              //        double digitale_sensor_waarde =
+              // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) + HOOGTE_CORRECTIE;
+              //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
+              // // bv 998.19 -> 998.2
 
-              Date file_date = main.sdf4.parse(parsedRecord.timestamp);
-              long system_sec = System.currentTimeMillis();
-              long timeDiff =
-                  Math.abs(file_date.getTime() - system_sec) / (60 * 1000); // timeDiff in minutes
-
-              if (timeDiff <= main_RS232_RS422.TIMEDIFF_SENSOR_DATA) // max 5/10 minutes old
-              {
-                // retrieved record example Mintaka Duo: 1021.89,1021.89,1.70,1*05 201502111405
-                sensor_data_record_WOW_APR_pressure_hpa = parsedRecord.pressure;
-
-                // rounding eg: 998.19 -> 998.2
-                //        double digitale_sensor_waarde =
-                // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) + HOOGTE_CORRECTIE;
-                //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
-                // // bv 998.19 -> 998.2
-
-                if (destination.equals("MAIN_SCREEN") == false) {
-                  System.out.println(
-                      "--- sensor data record, raw uncorrected pressure: "
-                          + sensor_data_record_WOW_APR_pressure_hpa);
-                }
-              } // if (timeDiff <= TIMEDIFF_SENSOR_DATA)
-              else {
-                sensor_data_record_WOW_APR_pressure_hpa = "";
+              if (destination.equals("MAIN_SCREEN") == false) {
                 System.out.println(
-                    "--- automatically retrieved barometer reading for WOW/APR obsolete");
-
-                if (destination.equals("MAIN_SCREEN") == false) {
-                  String message =
-                      "[WOW/APR] automatically retrieved barometer reading for WOW/APR obsolete ("
-                          + timeDiff
-                          + " minutes old)";
-                  main.log_turbowin_system_message(message);
-                }
+                    "--- sensor data record, raw uncorrected pressure: "
+                        + sensor_data_record_WOW_APR_pressure_hpa);
               }
-            } // if (laatste_record != null)
+            } else if (reading != null) {
+              sensor_data_record_WOW_APR_pressure_hpa = "";
+              System.out.println(
+                  "--- automatically retrieved barometer reading for WOW/APR obsolete");
+
+              if (destination.equals("MAIN_SCREEN") == false) {
+                String message =
+                    "[WOW/APR] automatically retrieved barometer reading for WOW/APR obsolete ("
+                        + reading.ageMinutes
+                        + " minutes old)";
+                main.log_turbowin_system_message(message);
+              }
+            }
 
           } // try
           catch (IOException ex) {

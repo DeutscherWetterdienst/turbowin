@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.SimpleTimeZone;
 import javax.swing.JDialog;
@@ -39,7 +38,6 @@ final class Rs232MintakaDuoPpppWorkflow {
             -2); // of is -1 ook goed????? : to be sure there was all time that it was written to
         // the file
         File sensor_data_file;
-        String laatste_record = null;
 
         // initialisation
         main.sensor_data_record_obs_pressure = "";
@@ -59,70 +57,35 @@ final class Rs232MintakaDuoPpppWorkflow {
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
           try {
-            laatste_record = SensorDataRecordReader.readLatestRecord(sensor_data_file);
-            MintakaDuoRecord parsedRecord = null;
-            if (laatste_record != null && laatste_record.length() <= 15) {
-              laatste_record = null;
-              System.out.println(
-                  "--- Mintaka Duo, format (min. record length) last retrieved record NOT ok (file: "
-                      + volledig_path_sensor_data
-                      + ")");
-            }
-            if (laatste_record != null
-                && !MintakaDuoRecordParser.hasExpectedCommaCount(laatste_record)) {
-              laatste_record = null;
-              System.out.println(
-                  "--- Mintaka Duo, format (number commas) last retrieved record NOT ok (file: "
-                      + volledig_path_sensor_data
-                      + ")");
-            }
-            if (laatste_record != null) {
-              parsedRecord = MintakaDuoRecordParser.parse(laatste_record);
-            }
+            MintakaDuoRecordReading reading =
+                MintakaDuoRecordReader.readLatest(
+                    sensor_data_file, System::currentTimeMillis, "Mintaka Duo");
 
             // last retrieved record ok
             //
-            if (laatste_record != null) {
-              // System.out.println("+++ Mintaka Duo, last retrieved record = " + laatste_record);
+            if (reading != null && reading.isWithin(3L)) {
+              // retrieved record example Mintaka Duo: 1021.89,1021.89,1.70,1*05 201502111405
+              main.sensor_data_record_obs_pressure = reading.record.pressure;
 
-              // String record_datum_tijd_minuten =
-              // laatste_record.substring(main.type_record_datum_tijd_begin_pos,
-              // main.type_record_datum_tijd_begin_pos + 12);  // bv 201302201345
+              // rounding eg: 998.19 -> 998.2
+              //        double digitale_sensor_waarde =
+              // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) + HOOGTE_CORRECTIE;
+              //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
+              // // bv 998.19 -> 998.2
 
-              Date file_date = main.sdf4.parse(parsedRecord.timestamp);
-              long system_sec = System.currentTimeMillis();
-
-              long timeDiff =
-                  Math.abs(file_date.getTime() - system_sec) / (60 * 1000); // timeDiff in minutes
-
-              /// System.out.println("+++ difference [minuten]: " + timeDiff); //differencs in min
-
-              if (timeDiff <= 3L) // max 3 minutes old
-              {
-                // retrieved record example Mintaka Duo: 1021.89,1021.89,1.70,1*05 201502111405
-                main.sensor_data_record_obs_pressure = parsedRecord.pressure;
-
-                // rounding eg: 998.19 -> 998.2
-                //        double digitale_sensor_waarde =
-                // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) + HOOGTE_CORRECTIE;
-                //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
-                // // bv 998.19 -> 998.2
-
-                if (main.tray_icon_clicked == true) {
-                  System.out.println(
-                      "--- sensor data record, pressure for tray icon: "
-                          + main.sensor_data_record_obs_pressure);
-                } else {
-                  System.out.println(
-                      "--- sensor data record, pressure for barometer form: "
-                          + main.sensor_data_record_obs_pressure);
-                }
-              } // if (timeDiff <= 3L)
-              else {
-                main.sensor_data_record_obs_pressure = "";
-                System.out.println("--- automatically retrieved barometer reading obsolete");
+              if (main.tray_icon_clicked == true) {
+                System.out.println(
+                    "--- sensor data record, pressure for tray icon: "
+                        + main.sensor_data_record_obs_pressure);
+              } else {
+                System.out.println(
+                    "--- sensor data record, pressure for barometer form: "
+                        + main.sensor_data_record_obs_pressure);
               }
-            } // if (laatste_record != null)
+            } else if (reading != null) {
+              main.sensor_data_record_obs_pressure = "";
+              System.out.println("--- automatically retrieved barometer reading obsolete");
+            }
 
           } // try
           catch (IOException ex) {
