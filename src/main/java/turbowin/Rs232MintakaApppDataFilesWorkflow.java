@@ -1,7 +1,5 @@
 package turbowin;
 
-import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -125,36 +123,16 @@ final class Rs232MintakaApppDataFilesWorkflow {
             // check on correct number of commas in the laatste_record
             //
             if (laatste_record != null) {
-              int number_read_commas = 0;
-              int pos = -1;
-
-              do {
-                pos = laatste_record.indexOf(",", pos + 1);
-                if (pos != -1) // "," found
-                {
-                  number_read_commas++;
-                  // System.out.println("+++ number_read_commas = " + number_read_commas);
-                }
-              } while (pos != -1);
-
-              if (StarX == false) {
-                if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STAR) {
-                  laatste_record = null;
-                  System.out.println(
-                      "--- Mintaka Star format (number commas) last retrieved record NOT ok (file: "
-                          + volledig_path_sensor_data
-                          + ")");
-                }
-              } // if (StarX == false)
-              else if (StarX == true) {
-                if (number_read_commas != main.TOTAL_NUMBER_RECORD_COMMAS_MINTAKA_STARX) {
-                  laatste_record = null;
-                  System.out.println(
-                      "--- Mintaka StarX format (number commas) last retrieved record NOT ok (file: "
-                          + volledig_path_sensor_data
-                          + ")");
-                }
-              } // else if (StarX == true)
+              if (!MintakaRecordValidator.hasExpectedCommaCount(laatste_record, StarX)) {
+                laatste_record = null;
+                String format = StarX ? "StarX" : "Star";
+                System.out.println(
+                    "--- Mintaka "
+                        + format
+                        + " format (number commas) last retrieved record NOT ok (file: "
+                        + volledig_path_sensor_data
+                        + ")");
+              }
             } // if (laatste_record != null)
 
             // last retrieved record ok
@@ -180,18 +158,7 @@ final class Rs232MintakaApppDataFilesWorkflow {
                 // example Mintaka StarX last record: 1009.73,1007.73,0.00,0, 52 41.9491N,  6
                 // 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
                 //
-                String record_checksum =
-                    laatste_record.substring(
-                        laatste_record.length() - 14,
-                        laatste_record.length()
-                            - 12); // eg "24" from record "1022.20,1022.20,0.80,2, 52 41.9497N,  6
-                // 14.1848E,0,0,-1*24201703291211"
-                String computed_checksum = Mintaka_Star_Checksum(laatste_record);
-
-                /**** TEST BEGIN *****/
-                // computed_checksum = record_checksum;
-
-                if (computed_checksum.equals(record_checksum)) {
+                if (MintakaRecordValidator.hasValidChecksum(laatste_record)) {
                   if (StarX == false) {
                     pos1 =
                         laatste_record.indexOf(
@@ -219,46 +186,24 @@ final class Rs232MintakaApppDataFilesWorkflow {
 
                   } // if (StarX == false)
                   else if (StarX == true) {
-                    // StarX example: // 1009.73,1007.73,0.00,0, 52 41.9491N,  6
-                    // 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
-                    // sensor height pressure
-                    pos1 =
-                        laatste_record.indexOf(
-                            ",", 0); // MSLP hereafter; position of the first "," in the last record
-                    pos2 =
-                        laatste_record.indexOf(
-                            ",", pos1 + 1); // ppp hereafter; position of the second "," in the last
-                    // record
-                    pos3 =
-                        laatste_record.indexOf(
-                            ",",
-                            pos2 + 1); // a hereafter; position of the third "," in the last record
-                    pos4 =
-                        laatste_record.indexOf(
-                            ",",
-                            pos3 + 1); // lat hereafter; position of the 4th "," in the last record
-                    pos5 =
-                        laatste_record.indexOf(
-                            ",",
-                            pos4
-                                + 1); // lon hereafter; position n of the 5th "," in the last record
-                    pos6 =
-                        laatste_record.indexOf(
-                            ",", pos5 + 1); // course hereafter; position of the 6th "," in the last
-                    // record
-                    pos7 = laatste_record.indexOf(",", pos6 + 1); // speed hereafter
-                    pos8 = laatste_record.indexOf(",", pos7 + 1); // elevation hereafter
-                    pos9 = laatste_record.indexOf(",", pos8 + 1); // air temp
-                    pos10 = laatste_record.indexOf(",", pos9 + 1); // RH
-                    pos11 = laatste_record.indexOf(",", pos10 + 1); // wet bulb
-                    pos12 = laatste_record.indexOf(",", pos11 + 1); // dew point
-                    pos13 = laatste_record.indexOf(",", pos12 + 1); // observation age
-                    pos14 = laatste_record.indexOf("*", pos13 + 1); // pos of the "*"
+                    MintakaStarXObservationFields fields =
+                        MintakaStarXObservationFieldsParser.parse(laatste_record);
+                    int firstComma = laatste_record.indexOf(',');
+                    int secondComma = laatste_record.indexOf(',', firstComma + 1);
+                    int thirdComma = laatste_record.indexOf(',', secondComma + 1);
+                    int fourthComma = laatste_record.indexOf(',', thirdComma + 1);
 
-                    main.sensor_data_record_obs_ppp = laatste_record.substring(pos2 + 1, pos3);
-                    main.sensor_data_record_obs_a = laatste_record.substring(pos3 + 1, pos4);
-
-                    local_obs_age = laatste_record.substring(pos13 + 1, pos14);
+                    main.sensor_data_record_obs_ppp =
+                        laatste_record.substring(secondComma + 1, thirdComma);
+                    main.sensor_data_record_obs_a =
+                        laatste_record.substring(thirdComma + 1, fourthComma);
+                    if (fields != null) {
+                      local_obs_age = fields.observationAge;
+                    } else {
+                      main.sensor_data_record_obs_ppp = "";
+                      main.sensor_data_record_obs_a = "";
+                      local_obs_age = "";
+                    }
 
                     System.out.println(
                         "--- sensor data record, tendency for obs: "
