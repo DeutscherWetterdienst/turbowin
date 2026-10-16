@@ -2,7 +2,6 @@ package turbowin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.SwingWorker;
 
@@ -21,27 +20,17 @@ final class Rs232MintakaDuoApppDataFilesWorkflow {
       @Override
       protected Void doInBackground() throws Exception {
         main.obs_file_datum_tijd = new GregorianCalendar();
-        main.obs_file_datum_tijd.add(
-            Calendar.MINUTE,
-            -2); // of is -1 ook goed????? : to be sure there was all time that it was written to
-        // the file
-        File sensor_data_file;
+        File sensor_data_file =
+            MintakaDuoSensorDataFileLocator.locate(
+                main.obs_file_datum_tijd, main.logs_dir, main.sdf3);
 
         // initialisation
         // main.sensor_data_record_obs_pressure = "";
 
-        // determine sensor data file name
-        String sensor_data_file_naam_datum_tijd_deel =
-            main.sdf3.format(main.obs_file_datum_tijd.getTime()); // e.g. 2013020308
-        String sensor_data_file_name =
-            "sensor_data_" + sensor_data_file_naam_datum_tijd_deel + ".txt";
-
         // first check if there is a sensor data file present (and not empty)
-        String volledig_path_sensor_data =
-            main.logs_dir + java.io.File.separator + sensor_data_file_name;
+        String volledig_path_sensor_data = sensor_data_file.getPath();
         // System.out.println("+++ te openen file voor obs: "+ volledig_path_sensor_data);
 
-        sensor_data_file = new File(volledig_path_sensor_data);
         if (sensor_data_file.exists() && sensor_data_file.length() > 0) // length() in bytes
         {
           try {
