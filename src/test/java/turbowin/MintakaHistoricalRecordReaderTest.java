@@ -19,7 +19,8 @@ public class MintakaHistoricalRecordReaderTest {
   public void returnsTheLatestValidRecordForTheRequestedTimestamp() throws IOException {
     File file = Files.createTempFile("turbowin-mintaka-history-reader", ".txt").toFile();
     try {
-      Files.write(file.toPath(), List.of("wrong", VALID_RECORD, VALID_RECORD));
+      Files.write(
+          file.toPath(), List.of("wrong", VALID_RECORD, VALID_RECORD.replace(TIMESTAMP, "201703152007")));
 
       assertEquals(
           VALID_RECORD,

@@ -322,22 +322,28 @@ final class Rs232MintakaGpsWorkflow {
                       if (format_ok) {
                         // retrieved (from file) record example Mintaka Star:
                         // 1029.97,1029.97,-0.90,7, 52 41.9535N,  6 14.1943E,0,0,19*1A201703152006
-                        MintakaGpsFields gpsFields = MintakaGpsFieldsParser.parse(record);
-                        GPS_latitude_earlier = gpsFields.latitude;
-                        GPS_longitude_earlier = gpsFields.longitude;
+                        MintakaHistoricalGpsReading gpsFields =
+                            MintakaHistoricalGpsReader.parseRecord(record, StarX);
+                        if (gpsFields != null) {
+                          GPS_latitude_earlier = gpsFields.latitude;
+                          GPS_longitude_earlier = gpsFields.longitude;
 
-                        System.out.println(
-                            "--- sensor data record, GPS latitude earlier: "
-                                + GPS_latitude_earlier
-                                + "("
-                                + record_datum_tijd_minuten
-                                + ")");
-                        System.out.println(
-                            "--- sensor data record, GPS longitude earlier: "
-                                + GPS_longitude_earlier
-                                + "("
-                                + record_datum_tijd_minuten
-                                + ")");
+                          System.out.println(
+                              "--- sensor data record, GPS latitude earlier: "
+                                  + GPS_latitude_earlier
+                                  + "("
+                                  + record_datum_tijd_minuten
+                                  + ")");
+                          System.out.println(
+                              "--- sensor data record, GPS longitude earlier: "
+                                  + GPS_longitude_earlier
+                                  + "("
+                                  + record_datum_tijd_minuten
+                                  + ")");
+                        } else {
+                          GPS_latitude_earlier = "";
+                          GPS_longitude_earlier = "";
+                        }
                       } // if (format_ok)
                       else {
                         GPS_latitude_earlier = "";

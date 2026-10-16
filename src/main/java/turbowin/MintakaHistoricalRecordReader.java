@@ -17,13 +17,21 @@ final class MintakaHistoricalRecordReader {
     }
 
     String latestValidRecord = null;
+    String latestInvalidMatchingRecord = null;
     try (BufferedReader in = new BufferedReader(new FileReader(sensorDataFile))) {
       String record;
       while ((record = in.readLine()) != null) {
-        if (isValidRecord(record, timestamp, starX)) {
-          latestValidRecord = record;
+        if (hasTimestamp(record, timestamp)) {
+          if (isValidRecord(record, timestamp, starX)) {
+            latestValidRecord = record;
+          } else {
+            latestInvalidMatchingRecord = record;
+          }
         }
       }
+    }
+    if (latestValidRecord == null && latestInvalidMatchingRecord != null) {
+      reportInvalidRecord(sensorDataFile, latestInvalidMatchingRecord, starX);
     }
     return latestValidRecord;
   }
@@ -49,5 +57,31 @@ final class MintakaHistoricalRecordReader {
       return false;
     }
     return true;
+  }
+
+  private static boolean hasTimestamp(String record, String timestamp) {
+    return record.length() >= 12 && record.substring(record.length() - 12).equals(timestamp);
+  }
+
+  private static void reportInvalidRecord(File sensorDataFile, String record, boolean starX) {
+    if (record.length() <= 15) {
+      System.out.println(
+          "--- Mintaka "
+              + (starX ? "StarX" : "Star")
+              + " format (min. record length) last retrieved record NOT ok (file: "
+              + sensorDataFile
+              + ")");
+    } else if (!MintakaRecordValidator.hasValidChecksum(record)) {
+      System.out.println("--- checksum NOT ok (" + record + ")");
+    } else if (!MintakaRecordValidator.hasExpectedCommaCount(record, starX)) {
+      System.out.println(
+          "--- Mintaka "
+              + (starX ? "StarX" : "Star")
+              + " format (number commas) last retrieved record NOT ok (file: "
+              + sensorDataFile
+              + "; record: "
+              + record
+              + ")");
+    }
   }
 }
