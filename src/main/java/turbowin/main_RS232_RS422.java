@@ -1823,15 +1823,14 @@ public class main_RS232_RS422 {
             //
             // but will have no effect on OMC-140 serial and EUCAWS serial
             //
-            int start = message_peumb.toString().indexOf("$PEUMB");
-            if (start != -1) {
+            String peumbRecord = PeumbRecordExtractor.extract(message_peumb.toString());
+            if (peumbRecord != null) {
               // test_record: for dispaying on main screen date/ime of this last received data
               // update
               test_record =
                   main.sdf_tsl_2.format(new Date()) + " UTC"; // // new Date() -> always in UTC
 
-              // out.write(message_peumb.toString().replaceAll("[\r\n]", ""));
-              out.write(message_peumb.toString().substring(start).replaceAll("[\r\n]", ""));
+              out.write(peumbRecord);
               out.write(
                   ","); // NB "," : typically for AWS connection (record data separated by commas)
 
