@@ -105,6 +105,38 @@ public class Rs232GpsNmeaDatePositionParsingCharacterizationTest {
     assertFalse(main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE"));
   }
 
+  @Test
+  public void retainsPreviouslyParsedNumericFieldsWhenCoordinateParsingFails() {
+    setCurrentGpsDateTime();
+    main_RS232_RS422.GPS_latitude = "XX04.7";
+    main_RS232_RS422.GPS_latitude_hemisphere = "N";
+    main_RS232_RS422.GPS_longitude = "01144.3";
+    main_RS232_RS422.GPS_longitude_hemisphere = "E";
+    myposition.int_latitude_degrees = 41;
+    myposition.int_latitude_minutes = 9;
+    myposition.Qc_code = "7";
+
+    assertFalse(main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE"));
+
+    assertEquals(41, myposition.int_latitude_degrees);
+    assertEquals(5, myposition.int_latitude_minutes);
+    assertEquals("1", myposition.Qc_code);
+  }
+
+  @Test
+  public void retainsPreviousQuadrantWhenHemisphereValidationFails() {
+    setCurrentGpsDateTime();
+    main_RS232_RS422.GPS_latitude = "4804.7";
+    main_RS232_RS422.GPS_latitude_hemisphere = "X";
+    main_RS232_RS422.GPS_longitude = "01144.3";
+    main_RS232_RS422.GPS_longitude_hemisphere = "Y";
+    myposition.Qc_code = "7";
+
+    assertFalse(main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE"));
+
+    assertEquals("7", myposition.Qc_code);
+  }
+
   private static void setCurrentGpsDateTime() {
     Date now = new Date();
     SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyy");

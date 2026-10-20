@@ -3205,208 +3205,44 @@ public class main_RS232_RS422 {
       //////// latitude (eg 4804.7041778) /////////
       //
 
-      // fill the public string latitude values
-      //
-      myposition.latitude_degrees = GPS_latitude.substring(0, 2); // eg 4804.7041778 -> 48
+      GpsCoordinateParser.Result coordinate =
+          GpsCoordinateParser.parse(
+              GPS_latitude, GPS_latitude_hemisphere, GPS_longitude, GPS_longitude_hemisphere);
 
-      String fix_latitude_minutes =
-          GPS_latitude.substring(
-              2); // only the minutes of the latitude eg 4804.7041778 -> 04.7041778
-      BigDecimal bd_lat_min =
-          new BigDecimal(fix_latitude_minutes).setScale(0, RoundingMode.HALF_UP); // 0 decimals
-
-      ///////////////////
-      int hulp_bd_lat_min = bd_lat_min.intValue(); // BigDecimal to int
-      if (hulp_bd_lat_min == 60) {
-        // set latitude minutes to 0
-        hulp_bd_lat_min = 0;
-        bd_lat_min = BigDecimal.valueOf(hulp_bd_lat_min); // int to BigDecimal
-
-        // increment latitude degrees
-        int hulp_latitude_degrees = Integer.parseInt(myposition.latitude_degrees); // String to int
-        hulp_latitude_degrees++;
-        myposition.latitude_degrees =
-            Integer.toString(hulp_latitude_degrees); // int to String (via Integer)
+      myposition.latitude_degrees = coordinate.latitudeDegrees;
+      myposition.latitude_minutes = coordinate.latitudeMinutes;
+      myposition.latitude_hemisphere = coordinate.latitudeHemisphere;
+      if (coordinate.latitudeDegreesParsed) {
+        myposition.int_latitude_degrees = coordinate.latitudeDegreesNumber;
       }
-      ///////////////////
-      myposition.latitude_minutes =
-          bd_lat_min.toString(); // rounded minutes value  e.g. 41.9504 -> 42 minutes
-
-      if (GPS_latitude_hemisphere.toUpperCase().equals("N")) {
-        myposition.latitude_hemisphere = myposition.HEMISPHERE_NORTH;
-      } else if (GPS_latitude_hemisphere.toUpperCase().equals("S")) {
-        myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH;
-      } else {
-        myposition.latitude_hemisphere = "";
-        GPS_date_time_ok = false;
+      if (coordinate.latitudeMinutesParsed) {
+        myposition.int_latitude_minutes = coordinate.latitudeMinutesNumber;
       }
-
-      // fill the public int latitude values and storage latude minutes (high accurancy)
-      //
-      try {
-        myposition.int_latitude_degrees = Integer.parseInt(myposition.latitude_degrees);
-      } catch (NumberFormatException e) {
-        GPS_date_time_ok = false;
+      myposition.lalala_code = coordinate.latitudeCode;
+      myposition.longitude_degrees = coordinate.longitudeDegrees;
+      myposition.longitude_minutes = coordinate.longitudeMinutes;
+      myposition.longitude_hemisphere = coordinate.longitudeHemisphere;
+      if (coordinate.longitudeDegreesParsed) {
+        myposition.int_longitude_degrees = coordinate.longitudeDegreesNumber;
       }
-
-      try {
-        myposition.int_latitude_minutes = Integer.parseInt(myposition.latitude_minutes);
-        double_fix_latitude_minutes =
-            Double.parseDouble(
-                fix_latitude_minutes); // only for storage and retrievel for course and speed
-        // calculation
-      } catch (NumberFormatException e) {
-        GPS_date_time_ok = false;
+      if (coordinate.longitudeMinutesParsed) {
+        myposition.int_longitude_minutes = coordinate.longitudeMinutesNumber;
       }
-
-      // for latitude (LaLaLa) for IMMT log
-      //
-      int int_latitude_minutes_6 =
-          bd_lat_min.intValue()
-              / 6; // devide the minutes by six and disregard the remainder, now tenths of degrees
-      // [IMMT rounding!!!}
-      String latitude_minutes_6 = Integer.toString(int_latitude_minutes_6); // convert to String
-      // myposition.lalala_code = myposition.latitude_degrees.trim().replaceFirst("^0+(?!$)", "") +
-      // latitude_minutes_6;
-      myposition.lalala_code = myposition.latitude_degrees + latitude_minutes_6;
-
-      int len = 3; // always 3 chars
-      if (myposition.lalala_code.length() < len) {
-        // pad on left with zeros
-        myposition.lalala_code =
-            "0000000000".substring(0, len - myposition.lalala_code.length())
-                + myposition.lalala_code;
-      } else if (myposition.lalala_code.length() > len) {
-        GPS_date_time_ok = false;
-        // System.out.println("+++++++++++ lalala_code error: " + myposition.lalala_code);
+      myposition.lolololo_code = coordinate.longitudeCode;
+      if (coordinate.quadrant != null) {
+        myposition.Qc_code = coordinate.quadrant;
       }
+      GPS_date_time_ok = coordinate.valid;
 
-      //
-      //////// longitude (eg 01144.3966270) ////////
-      //
-
-      // fill the public string longitude values
-      //
-      myposition.longitude_degrees = GPS_longitude.substring(0, 3); // eg 01144.3966270 -> 011
-
-      String fix_longitude_minutes =
-          GPS_longitude.substring(
-              3); // only the minutes of the longitude eg  01144.3966270 -> 44.3966270
-      BigDecimal bd_lon_min =
-          new BigDecimal(fix_longitude_minutes).setScale(0, RoundingMode.HALF_UP); // 0 decimals
-
-      ///////////////////
-      int hulp_bd_lon_min = bd_lon_min.intValue(); // BigDecimal to int
-      if (hulp_bd_lon_min == 60) {
-        // set longitude minutes to 0
-        hulp_bd_lon_min = 0;
-        bd_lon_min = BigDecimal.valueOf(hulp_bd_lon_min); // int to BigDecimal
-
-        // increment longitude degrees
-        int hulp_longitude_degrees =
-            Integer.parseInt(myposition.longitude_degrees); // String to int
-        hulp_longitude_degrees++;
-        myposition.longitude_degrees =
-            Integer.toString(hulp_longitude_degrees); // int to String (via Integer)
-      }
-      ///////////////////
-      myposition.longitude_minutes =
-          bd_lon_min.toString(); // rounded minutes value  e.g. 41.9504 -> 42 minutes
-
-      if (GPS_longitude_hemisphere.toUpperCase().equals("E")) {
-        myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST;
-      } else if (GPS_longitude_hemisphere.toUpperCase().equals("W")) {
-        myposition.longitude_hemisphere = myposition.HEMISPHERE_WEST;
-      } else {
-        myposition.longitude_hemisphere = "";
-        GPS_date_time_ok = false;
-      }
-
-      // fill the public int longitude values and storage longitude minutes (high accurancy)
-      //
-      try {
-        myposition.int_longitude_degrees = Integer.parseInt(myposition.longitude_degrees);
-        double_fix_longitude_minutes =
-            Double.parseDouble(
-                fix_longitude_minutes); // only for storage and retrievel for course and speed
-        // calculation
-      } catch (NumberFormatException e) {
-        GPS_date_time_ok = false;
-      }
-
-      try {
-        myposition.int_longitude_minutes = Integer.parseInt(myposition.longitude_minutes);
-      } catch (NumberFormatException e) {
-        GPS_date_time_ok = false;
-      }
-
-      // for longitude (LoLoLoLo) for IMMT log
-      //
-      int int_longitude_minutes_6 =
-          bd_lon_min.intValue()
-              / 6; // devide the minutes by six and disregard the remainder, now tenths of degrees
-      // [IMMT rounding!!!}
-      String longitude_minutes_6 = Integer.toString(int_longitude_minutes_6); // convert to String
-      myposition.lolololo_code = myposition.longitude_degrees + longitude_minutes_6;
-
-      int len2 = 4; // always 4 chars
-      if (myposition.lolololo_code.length() < len2) {
-        // pad on left with zeros
-        myposition.lolololo_code =
-            "0000000000".substring(0, len2 - myposition.lolololo_code.length())
-                + myposition.lolololo_code;
-      } else if (myposition.lolololo_code.length() > len2) {
-        GPS_date_time_ok = false;
-        // System.out.println("+++++++++++ lolololo_code error: " + myposition.lolololo_code);
-      }
-
-      // quadrant of the globe for IMMT
-      //
-      if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-        myposition.Qc_code = "1";
-      } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-        myposition.Qc_code = "3";
-      } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-        myposition.Qc_code = "5";
-      } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-          && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-        myposition.Qc_code = "7";
-      } else {
-        GPS_date_time_ok = false;
-        // System.out.println("+++++++++++ Qc_code error");
-
-      }
-
-      // message_fix_position = "GPS position (dd-mm [N/S] ddd-mm [E/W]): " +
-      // myposition.latitude_degrees + "-" + myposition.latitude_minutes + " " +
-      // myposition.latitude_hemisphere.substring(0, 1) +  " " + myposition.longitude_degrees + "-"
-      // + myposition.longitude_minutes + " " + myposition.longitude_hemisphere.substring(0, 1);
-
-      // for GPS data storage latitude and longitude (for calculation of obs course end speed)
-      //
       if (GPS_date_time_ok) {
-        // store_fix_lat = myposition.int_latitude_degrees + (myposition.int_latitude_minutes / 60);
-        store_fix_lat = myposition.int_latitude_degrees + (double_fix_latitude_minutes / 60.0);
-
-        if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH)) {
-          store_fix_lat *= -1;
-        }
-
-        // store_fix_lon = myposition.int_longitude_degrees + (myposition.int_longitude_minutes /
-        // 60);
-        store_fix_lon = myposition.int_longitude_degrees + (double_fix_longitude_minutes / 60.0);
-        if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST)) {
-          store_fix_lon *= -1;
-        }
-      } // if (GPS_date_time_ok)
-
-      if (GPS_date_time_ok == false) {
+        store_fix_lat = coordinate.signedLatitude;
+        store_fix_lon = coordinate.signedLongitude;
+      } else {
         message = "[GPS] formatting error";
         message_fix_position = "";
-      } else {
+      }
+
+      if (GPS_date_time_ok) {
         message_fix_position =
             "GPS position (dd-mm [N/S] ddd-mm [E/W]): "
                 + myposition.latitude_degrees
