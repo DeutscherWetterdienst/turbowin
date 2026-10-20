@@ -1897,11 +1897,10 @@ public class main_RS232_RS422 {
                 Calendar.HOUR_OF_DAY); // HOUR_OF_DAY is used for the 24-hour clock. E.g., at
         // 10:04:15.250 PM the HOUR_OF_DAY is 22.
         int AWSR_system_minute_local = cal_AWSR_system_date_time.get(Calendar.MINUTE);
+        int AWSR_reporting_interval = Integer.valueOf(main.AWSR_reporting_interval);
 
-        if ((AWSR_system_minute_local == 0)
-            && (AWSR_system_hour_local % Integer.valueOf(main.AWSR_reporting_interval)
-                == 0)) // e.g. every 1 hour (AWSR_reporting_interval);
-        {
+        if (AwsrScheduleDecision.isScheduledUpload(
+            AWSR_system_hour_local, AWSR_system_minute_local, AWSR_reporting_interval)) {
           retry = false;
 
           // logging
@@ -1928,11 +1927,13 @@ public class main_RS232_RS422 {
             // checked
           } // if (AWSR_settings_ok && GPS_date_time_ok)
         } // if ((AWSR_system_minute_local == 0) etc.
-        else if ((AWSR_server_response_code == main.RESPONSE_NO_INTERNET)
-            && (AWSR_system_minute_local == AWSR_RETRY_MINUTES)
-            && (AWSR_system_hour_local % Integer.valueOf(main.AWSR_reporting_interval)
-                == 0)) // e.g. every 1 hour (APR_reporting_interval);
-        {
+        else if (AwsrScheduleDecision.isRetryUpload(
+            AWSR_server_response_code,
+            main.RESPONSE_NO_INTERNET,
+            AWSR_system_hour_local,
+            AWSR_system_minute_local,
+            AWSR_reporting_interval,
+            AWSR_RETRY_MINUTES)) {
           retry = true;
 
           // logging
@@ -1960,21 +1961,23 @@ public class main_RS232_RS422 {
           AWSR_server_response_code = 0;
 
         } // else if ((APR_server_response_code = main.RESPONSE_NO_INTERNET) etc.
-        else if ((AWSR_server_response_code == main.RESPONSE_NO_INTERNET)
-            && (AWSR_system_minute_local < AWSR_RETRY_MINUTES)
-            && (AWSR_system_hour_local % Integer.valueOf(main.AWSR_reporting_interval)
-                == 0)) // e.g. every 1 hour (AWSR_reporting_interval);
-        {
+        else if (AwsrScheduleDecision.isRetryPending(
+            AWSR_server_response_code,
+            main.RESPONSE_NO_INTERNET,
+            AWSR_system_hour_local,
+            AWSR_system_minute_local,
+            AWSR_reporting_interval,
+            AWSR_RETRY_MINUTES)) {
           // text will be visible only a few minutes (till the retry upload)
           main.jTextField4.setText("[AWSR] retry AWS report upload within a few minutes");
         } else {
           // text with next AWSR update bottom status line TurboWin+ main screen (updated every
           // minute)
           for (int i = (AWSR_system_hour_local + 1);
-              i < (AWSR_system_hour_local + 1 + Integer.valueOf(main.AWSR_reporting_interval));
+              i < (AWSR_system_hour_local + 1 + AWSR_reporting_interval);
               i++) {
             // 24 hours or higher makes no difference for this computation
-            if (i % Integer.valueOf(main.AWSR_reporting_interval) == 0) {
+            if (i % AWSR_reporting_interval == 0) {
               cal_AWSR_system_date_time.add(
                   Calendar.HOUR_OF_DAY, i - AWSR_system_hour_local); // add 1 - 5 hours
               cal_AWSR_system_date_time.getTime();
