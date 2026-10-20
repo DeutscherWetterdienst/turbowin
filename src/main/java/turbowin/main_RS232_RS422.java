@@ -1683,8 +1683,6 @@ public class main_RS232_RS422 {
     // NB geen Swingworker hier gebruiken (worden dan alleen stukken geschreven)
     //
 
-    boolean doorgaan = false;
-
     // if time is 57, 58 or 59 sec round to next whole minute
     //
     // to prevent such situations:
@@ -1720,46 +1718,19 @@ public class main_RS232_RS422 {
     String volledig_path_sensor_data =
         main.logs_dir + java.io.File.separator + java.io.File.separator + file_naam;
 
-    if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0)) {
-      // NB in Function RS422_initComponents() there was already checked on dir logs_dir
-      doorgaan = true;
-    }
-
-    if (doorgaan) {
-      try (BufferedWriter out =
-          new BufferedWriter(new FileWriter(volledig_path_sensor_data, true))) {
-        // NB Alleen onderstaande zou al voldoende zijn als er geen aparte datum/tijd toegevoegd zou
-        // hoeven te worden
-        /// out.write(total_string);
-
-        if (main.total_string.indexOf("\n") != -1) {
-          // test-record can be called by pressing the "Test" button on the instrument connections
-          // settings page
-          test_record =
-              main.sdf_tsl_2.format(new Date()) + " UTC"; // // new Date() -> always in UTC
-
-          out.write(main.total_string.replaceAll("[\r\n]", ""));
-          out.write(","); // NB "," : typically for AWS connection (record data separated by commas)
-
-          // out.write(main.sdf4.format(new Date()));                       // new Date() -> altijd
-          // in UTC
-          out.write(main.sdf4.format(cal_sensor_datum_tijd.getTime()));
-          out.newLine();
-
-          // only if the last piece of a record string was written check for presence parameters (if
-          // parameter present disable the input on TurboWin+ input form)
-          // RS422_Read_AWS_Sensor_Data(); // and also if a parameter is present in the saved sensor
-          // data file then disable this parameter on the TurboWin+ input form
-        } else {
-          out.write(main.total_string.replace("\r", ""));
-        }
-
-      } // try
-      catch (IOException ex) {
-        String info = ex + "; unable to write to: " + volledig_path_sensor_data;
-        main.log_turbowin_system_message("[AWS] " + info);
-      }
-    } // if (doorgaan)
+    // A complete AWS record updates test_record for the Test action on the instrument settings
+    // page and appends the cal_sensor_datum_tijd minute as a UTC sdf4 timestamp; fragments are
+    // written without a timestamp until the complete record arrives.
+    // A complete record can also be followed by RS422_Read_AWS_Sensor_Data() to disable input for
+    // parameters already present in the saved sensor data.
+    SensorDataFileWriter.append(
+        main.logs_dir,
+        volledig_path_sensor_data,
+        main.total_string,
+        ",", // AWS records are saved with comma-separated fields.
+        () -> main.sdf4.format(cal_sensor_datum_tijd.getTime()),
+        () -> test_record = main.sdf_tsl_2.format(new Date()) + " UTC",
+        "[AWS] ");
   }
 
   public void RS422_V3_write_sensor_data_to_file() {
