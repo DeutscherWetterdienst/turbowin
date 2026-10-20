@@ -227,14 +227,14 @@ final class ConfigurationManager {
         // PTB330, SAWS-)
         if (configuratie_regels[teller].indexOf(RS232_INSTRUMENT_TYPE_TXT) != -1) {
           RS232_connection_mode =
-              Integer.parseInt(
+              ConfigurationValueParser.integer(
                   configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 INSTRUMENT bits per sec
         if (configuratie_regels[teller].indexOf(RS232_BITS_PER_SEC_TXT) != -1) {
           bits_per_second =
-              Integer.parseInt(
+              ConfigurationValueParser.integer(
                   configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
@@ -295,7 +295,8 @@ final class ConfigurationManager {
         // WOW publish?
         if (configuratie_regels[teller].indexOf(WOW_PUBLISH_TXT) != -1) {
           WOW =
-              Boolean.valueOf(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+              ConfigurationValueParser.bool(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
           // NB You have to be carefull when using Boolean.valueOf(string) or
           // Boolean.parseBoolean(string).
           //    The reason for this is that the methods will always return false if the String is
@@ -329,7 +330,8 @@ final class ConfigurationManager {
         // default E-mail program on this computer is AMOS Mail?
         if (configuratie_regels[teller].indexOf(AMOS_MAIL_TXT) != -1) {
           amos_mail =
-              Boolean.valueOf(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+              ConfigurationValueParser.bool(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
           // NB You have to be carefull when using Boolean.valueOf(string) or
           // Boolean.parseBoolean(string).
           //    The reason for this is that the methods will always return false if the String is
@@ -341,14 +343,14 @@ final class ConfigurationManager {
         // RS232 GPS connection mode
         if (configuratie_regels[teller].indexOf(RS232_GPS_TYPE_TXT) != -1) {
           RS232_GPS_connection_mode =
-              Integer.parseInt(
+              ConfigurationValueParser.integer(
                   configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 GPS bits per second
         if (configuratie_regels[teller].indexOf(RS232_GPS_BITS_PER_SEC_TXT) != -1) {
           GPS_bits_per_second =
-              Integer.parseInt(
+              ConfigurationValueParser.integer(
                   configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
@@ -367,14 +369,15 @@ final class ConfigurationManager {
         // RS232 GPS sentence (RMC or GGA)
         if (configuratie_regels[teller].indexOf(RS232_GPS_SENTENCE_TXT) != -1) {
           RS232_GPS_sentence =
-              Integer.parseInt(
+              ConfigurationValueParser.integer(
                   configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // APR (Automated Pressure Reports)?
         if (configuratie_regels[teller].indexOf(APR_TXT) != -1) {
           APR =
-              Boolean.valueOf(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+              ConfigurationValueParser.bool(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
           // NB You have to be carefull when using Boolean.valueOf(string) or
           // Boolean.parseBoolean(string).
           //    The reason for this is that the methods will always return false if the String is
@@ -397,7 +400,8 @@ final class ConfigurationManager {
         // AWSR (Automatic Weather Station Reports)?
         if (configuratie_regels[teller].indexOf(AWSR_TXT) != -1) {
           AWSR =
-              Boolean.valueOf(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+              ConfigurationValueParser.bool(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
           // NB You have to be carefull when using Boolean.valueOf(string) or
           // Boolean.parseBoolean(string).
           //    The reason for this is that the methods will always return false if the String is
@@ -448,14 +452,14 @@ final class ConfigurationManager {
         // StarX, HMP155)
         if (configuratie_regels[teller].indexOf(RS232_INSTRUMENT_TYPE_TXT_II) != -1) {
           RS232_connection_mode_II =
-              Integer.parseInt(
+              ConfigurationValueParser.integer(
                   configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 2nd meteo instrument bits per sec
         if (configuratie_regels[teller].indexOf(RS232_BITS_PER_SEC_TXT_II) != -1) {
           bits_per_second_II =
-              Integer.parseInt(
+              ConfigurationValueParser.integer(
                   configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
@@ -542,7 +546,7 @@ final class ConfigurationManager {
         // pop-up dashboard? (true/false)
         if (configuratie_regels[teller].indexOf(POP_UP_DASHBOARD_TXT) != -1) {
           pop_up_screen =
-              Boolean.valueOf(
+              ConfigurationValueParser.bool(
                   configuratie_regels[teller].substring(
                       CONFIGURATION_FILE_POS_INHOUD)); // pop_up_dashboard =
           // Boolean.valueOf(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
@@ -590,7 +594,8 @@ final class ConfigurationManager {
         // [true/false]
         if (configuratie_regels[teller].indexOf(PORT_MODE_OPTION_TXT) != -1) {
           port_mode_option =
-              Boolean.valueOf(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+              ConfigurationValueParser.bool(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
           // NB You have to be carefull when using Boolean.valueOf(string) or
           // Boolean.parseBoolean(string).
           //    The reason for this is that the methods will always return false if the String is
