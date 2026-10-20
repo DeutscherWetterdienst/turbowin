@@ -225,7 +225,7 @@ public class main_RS232_RS422 {
                   System.out.println(e);
                 }
 
-                if (response != null && response.indexOf("EUCAWS") >= 0) {
+                if (SerialPortResponseMatcher.contains(response, "EUCAWS")) {
                   info =
                       "[AWS] found AWS on port: "
                           + serial_ports_portid_array[i].getDescriptivePortName();
@@ -289,11 +289,9 @@ public class main_RS232_RS422 {
                 System.out.println(e);
               }
 
-              if (response != null
-                  && (response.indexOf("$") >= 0
-                      || response.indexOf("$")
-                          >= 0)) // NB this is the response of only the last line of the readBuffer
-              {
+              // OMC-140 fills the 1024-byte buffer with leading rubbish and several messages; the
+              // "$" check is deliberately broad because the response of interest is the last line.
+              if (SerialPortResponseMatcher.contains(response, "$")) {
                 info =
                     "[AWS] found AWS on port: "
                         + serial_ports_portid_array[i].getDescriptivePortName();
@@ -365,7 +363,7 @@ public class main_RS232_RS422 {
                   System.out.println(e);
                 }
 
-                if (response != null && response.indexOf("AMOS") >= 0) {
+                if (SerialPortResponseMatcher.contains(response, "AMOS")) {
                   info =
                       "[AWS] found AWS on port: "
                           + serial_ports_portid_array[i].getDescriptivePortName();
@@ -777,7 +775,7 @@ public class main_RS232_RS422 {
                 // serialPort_test.closePort();
 
                 // if (response.indexOf("PTB220") >= 0)
-                if (response != null && response.indexOf("PTB220") >= 0) {
+                if (SerialPortResponseMatcher.contains(response, "PTB220")) {
                   info =
                       "[BAROMETER] found PTB220 on port: "
                           + serial_ports_portid_array[i].getDescriptivePortName();
@@ -792,7 +790,7 @@ public class main_RS232_RS422 {
                   break;
                 }
                 // else if (response.indexOf("PTB330") >= 0)
-                else if (response != null && response.indexOf("PTB330") >= 0) {
+                else if (SerialPortResponseMatcher.contains(response, "PTB330")) {
                   // NB after command "?" a BTB330 barometer will always return 4800 bit rate (or
                   // bit rate set for user port)
                   //    despite the PTB330 was opened via its service port (19200 bit rate)
@@ -900,7 +898,7 @@ public class main_RS232_RS422 {
                   System.out.println(e);
                 }
 
-                if (response != null && response.indexOf("MintakaDuo") >= 0) {
+                if (SerialPortResponseMatcher.contains(response, "MintakaDuo")) {
                   info =
                       "[BAROMETER] found Mintaka Duo on port: "
                           + serial_ports_portid_array[i].getDescriptivePortName();
@@ -914,7 +912,7 @@ public class main_RS232_RS422 {
                       serial_ports_portid_array[i].getDescriptivePortName();
                   // main.defaultPort = serial_ports_portid_array[i];
                   break;
-                } else if (response != null && response.indexOf("Mintaka Star") >= 0) {
+                } else if (SerialPortResponseMatcher.contains(response, "Mintaka Star")) {
                   info =
                       "[BAROMETER] found Mintaka Star on port: "
                           + serial_ports_portid_array[i].getDescriptivePortName();
@@ -1345,7 +1343,7 @@ public class main_RS232_RS422 {
                   }
                   // serialPort_test.closePort();
 
-                  if (response != null && response.indexOf("HMP155") >= 0) {
+                  if (SerialPortResponseMatcher.contains(response, "HMP155")) {
                     info =
                         "[THERMOMETER] found HMP155 on port: "
                             + serial_ports_portid_array[i].getDescriptivePortName();
@@ -2970,10 +2968,7 @@ public class main_RS232_RS422 {
               System.out.println(e);
             }
 
-            if (response != null
-                && (response.indexOf("$GP") >= 0
-                    || response.indexOf("$GL") >= 0
-                    || response.indexOf("$GN") >= 0)) {
+            if (SerialPortResponseMatcher.containsAny(response, "$GP", "$GL", "$GN")) {
               info =
                   "[GPS] found GPS on port: "
                       + serial_ports_portid_array[i].getDescriptivePortName();
