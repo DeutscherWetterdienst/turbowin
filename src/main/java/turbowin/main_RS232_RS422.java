@@ -2050,10 +2050,7 @@ public class main_RS232_RS422 {
           System.out.println(
               "[THERMOMETER] Writing \"" + "S" + "\" to " + main.defaultPort_descriptive_II);
           String messageString_stop = "s\r";
-          byte[] bytes_message_stop =
-              messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_stop, bytes_message_stop.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_stop);
 
           try {
             // Thread.sleep(2000);       // gaat eigenlijk ook altijd goed bij 1000
@@ -2069,10 +2066,7 @@ public class main_RS232_RS422 {
         System.out.println(
             "[THERMOMETER] Writing \"" + "ECHO OFF" + "\" to " + main.defaultPort_descriptive_II);
         String messageString_echo = "ECHO OFF\r";
-        byte[] bytes_message_echo =
-            messageString_echo.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-        serialPort_form.writeBytes(
-            bytes_message_echo, bytes_message_echo.length); // Write data to port
+        SerialPortCommandWorkflow.write(serialPort_form, messageString_echo);
 
         // FORM
         System.out.println(
@@ -2082,37 +2076,25 @@ public class main_RS232_RS422 {
                 + main.defaultPort_descriptive_II);
         String messageString_format =
             "form 6.1 ta \" \" 6.1 tw \" \" 6.1 td \" \" 6.1 rh \" \" #r #n\r";
-        byte[] bytes_message_format =
-            messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-        serialPort_form.writeBytes(
-            bytes_message_format, bytes_message_format.length); // Write data to port
+        SerialPortCommandWorkflow.write(serialPort_form, messageString_format);
 
         // NB INTV 60 s niet voor het form commando uitvoeren!!!!!!!
         System.out.println(
             "[THERMOMETER] Writing \"" + "INTV 60 s" + "\" to " + main.defaultPort_descriptive_II);
         String messageString_int = "intv 60 s\r";
-        byte[] bytes_message_int =
-            messageString_int.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-        serialPort_form.writeBytes(
-            bytes_message_int, bytes_message_int.length); // Write data to port
+        SerialPortCommandWorkflow.write(serialPort_form, messageString_int);
 
         // UNIT m (metric)
         System.out.println(
             "[THERMOMETER] Writing \"" + "unit m" + "\" to " + main.defaultPort_descriptive_II);
         String messageString_unit = "unit m\r";
-        byte[] bytes_message_unit =
-            messageString_unit.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-        serialPort_form.writeBytes(
-            bytes_message_unit, bytes_message_unit.length); // Write data to port
+        SerialPortCommandWorkflow.write(serialPort_form, messageString_unit);
 
         // RUN
         System.out.println(
             "[THERMOMETER] Writing \"" + "R" + "\" to " + main.defaultPort_descriptive_II);
         String messageString_cont_R = "r\r";
-        byte[] bytes_message_cont_R =
-            messageString_cont_R.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-        serialPort_form.writeBytes(
-            bytes_message_cont_R, bytes_message_cont_R.length); // Write data to port
+        SerialPortCommandWorkflow.write(serialPort_form, messageString_cont_R);
 
         try {
           Thread.sleep(1000); // gaat eigenlijk ook altijd goed bij 1000
@@ -2184,10 +2166,7 @@ public class main_RS232_RS422 {
           System.out.println(
               "[BAROMETER] Writing \"" + "S" + "\" to " + main.defaultPort_descriptive);
           String messageString_stop = "S\r";
-          byte[] bytes_message_stop =
-              messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_stop, bytes_message_stop.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_stop);
 
           // NB reset niet nodig (heeft geen effect)
 
@@ -2198,10 +2177,7 @@ public class main_RS232_RS422 {
           System.out.println(
               "[BAROMETER] Writing \"" + "asq" + "\" to " + main.defaultPort_descriptive);
           String messageString_stop = "asq\r"; // asq = terminate autosampling
-          byte[] bytes_message_stop =
-              messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_stop, bytes_message_stop.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_stop);
         } // else if (main.RS232_connection_mode == 4 || main.RS232_connection_mode == 5)
 
         try {
@@ -2220,10 +2196,7 @@ public class main_RS232_RS422 {
           System.out.println(
               "[BAROMETER] Writing \"" + "ECHO OFF" + "\" to " + main.defaultPort_descriptive);
           String messageString_echo = "ECHO OFF\r";
-          byte[] bytes_message_echo =
-              messageString_echo.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_echo, bytes_message_echo.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_echo);
         }
 
         if (main.RS232_connection_mode == 1) // PTB220
@@ -2241,10 +2214,7 @@ public class main_RS232_RS422 {
           // \" \" #r #n\r";
           // String messageString_format2 = "form \"0123456789 0123456789 01234567 \" P \" \" #r
           // #n\r"; // deze gaat noog net goed
-          byte[] bytes_message_format2 =
-              messageString_format2.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_format2, bytes_message_format2.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_format2);
         } // if (barometer_type.equals(PTB220))
         else if (main.RS232_connection_mode == 2) // PTB330
         {
@@ -2261,10 +2231,7 @@ public class main_RS232_RS422 {
                   + main.defaultPort_descriptive);
           String messageString_format =
               "form 4.2 P \" \" 4.2 HCP \" \" 4.2 QNH \" \" 3.1 P3H \" \" 1.1 A3H \" \" #r #n\r";
-          byte[] bytes_message_format =
-              messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_format, bytes_message_format.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_format);
 
         } //  else if (barometer_type.equals(PTB330_USER_PORT) || etc
         else if (main.RS232_connection_mode == 4) // Mintaka Duo
@@ -2277,10 +2244,7 @@ public class main_RS232_RS422 {
           String messageString_format = "as 60 TurboWin\r\n";
           // serialPort_form.writeBytes(messageString_format.getBytes());                    //
           // Write data to port
-          byte[] bytes_message_format =
-              messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_format, bytes_message_format.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_format);
 
         } // else if (main.RS232_connection_mode == 4)
         else if (main.RS232_connection_mode == 5) // Mintaka Star USB
@@ -2293,10 +2257,7 @@ public class main_RS232_RS422 {
           String messageString_format = "as 60 TurboWinG\r\n"; // note: turbowing !!
           // serialPort_form.writeBytes(messageString_format.getBytes());                    //
           // Write data to port
-          byte[] bytes_message_format =
-              messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_format, bytes_message_format.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_format);
 
         } // else if (main.RS232_connection_mode == 5)
         else if (main.RS232_connection_mode == 7) // Mintaka Star + StarX USB
@@ -2309,10 +2270,7 @@ public class main_RS232_RS422 {
           String messageString_format = "as 60 TURBOWINH\r\n"; // note: turbowinH !!
           // serialPort_form.writeBytes(messageString_format.getBytes());                    //
           // Write data to port
-          byte[] bytes_message_format =
-              messageString_format.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_format, bytes_message_format.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_format);
 
         } // else if (main.RS232_connection_mode == 7)
         else {
@@ -2327,10 +2285,7 @@ public class main_RS232_RS422 {
           System.out.println(
               "[BAROMETER] Writing \"" + "INTV 60 s" + "\" to " + main.defaultPort_descriptive);
           String messageString_int = "INTV 60 s\r";
-          byte[] bytes_message_int =
-              messageString_int.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_int, bytes_message_int.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_int);
 
           // flush??
         } // if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))    //
@@ -2342,10 +2297,7 @@ public class main_RS232_RS422 {
           System.out.println(
               "[BAROMETER] Writing \"" + "R" + "\" to " + main.defaultPort_descriptive);
           String messageString_cont_R = "R\r";
-          byte[] bytes_message_cont_R =
-              messageString_cont_R.getBytes(StandardCharsets.UTF_8); // Java 7+ only
-          serialPort_form.writeBytes(
-              bytes_message_cont_R, bytes_message_cont_R.length); // Write data to port
+          SerialPortCommandWorkflow.write(serialPort_form, messageString_cont_R);
 
           // flush ??
         } // if ((main.RS232_connection_mode == 1) || (main.RS232_connection_mode == 2))     //
