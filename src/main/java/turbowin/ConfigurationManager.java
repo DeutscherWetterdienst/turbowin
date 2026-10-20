@@ -2,8 +2,6 @@ package turbowin;
 
 import static turbowin.main.*;
 
-import com.fazecast.jSerialComm.SerialPort;
-
 /** Builds the legacy configuration-line representation from the application's settings. */
 final class ConfigurationManager {
 
@@ -242,58 +240,23 @@ final class ConfigurationManager {
 
         // RS232 INSTRUMENT data bits
         if (configuratie_regels[teller].indexOf(RS232_DATA_BITS_TXT) != -1) {
-          String hulp_data_bits =
-              configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-
-          switch (hulp_data_bits) {
-            case "7":
-              data_bits = 7;
-              break;
-            case "8":
-              data_bits = 8;
-              break;
-            default:
-              data_bits = 0; // non existing (data bits) value
-              break;
-          } // switch (hulp_data_bits)
+          data_bits =
+              SerialConfigurationValueParser.dataBits(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 INSTRUMENT parity
         if (configuratie_regels[teller].indexOf(RS232_PARITY_TXT) != -1) {
-          String hulp_parity = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-
-          switch (hulp_parity) {
-            case "0":
-              parity = SerialPort.NO_PARITY;
-              break;
-            case "1":
-              parity = SerialPort.ODD_PARITY;
-              break;
-            case "2":
-              parity = SerialPort.EVEN_PARITY;
-              break;
-            default:
-              parity = 99; // non existing (parity) value
-              break;
-          } // switch (hulp_parity)
+          parity =
+              SerialConfigurationValueParser.parity(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 INSTRUMENT stop bits
         if (configuratie_regels[teller].indexOf(RS232_STOP_BITS_TXT) != -1) {
-          String hulp_stop_bits =
-              configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-
-          switch (hulp_stop_bits) {
-            case "1":
-              stop_bits = SerialPort.ONE_STOP_BIT;
-              break;
-            case "2":
-              stop_bits = SerialPort.TWO_STOP_BITS;
-              break;
-            default:
-              stop_bits = 0; // non existing (stop bits) value
-              break;
-          } // switch (hulp_stop_bits)
+          stop_bits =
+              SerialConfigurationValueParser.stopBits(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 INSTRUMENT prefered COM port (Windows and Linux)
@@ -498,58 +461,23 @@ final class ConfigurationManager {
 
         // RS232 2nd meteo instrument data bits
         if (configuratie_regels[teller].indexOf(RS232_DATA_BITS_TXT_II) != -1) {
-          String hulp_data_bits =
-              configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-
-          switch (hulp_data_bits) {
-            case "7":
-              data_bits_II = 7;
-              break;
-            case "8":
-              data_bits_II = 8;
-              break;
-            default:
-              data_bits_II = 0; // non existing (data bits) value
-              break;
-          } // switch (hulp_data_bits)
+          data_bits_II =
+              SerialConfigurationValueParser.dataBits(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 2nd meteo instrument parity
         if (configuratie_regels[teller].indexOf(RS232_PARITY_TXT_II) != -1) {
-          String hulp_parity = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-
-          switch (hulp_parity) {
-            case "0":
-              parity_II = SerialPort.NO_PARITY;
-              break;
-            case "1":
-              parity_II = SerialPort.ODD_PARITY;
-              break;
-            case "2":
-              parity_II = SerialPort.EVEN_PARITY;
-              break;
-            default:
-              parity_II = 99; // non existing (parity) value
-              break;
-          } // switch (hulp_parity)
+          parity_II =
+              SerialConfigurationValueParser.parity(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 2nd imeteo instrument stop bits
         if (configuratie_regels[teller].indexOf(RS232_STOP_BITS_TXT_II) != -1) {
-          String hulp_stop_bits =
-              configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-
-          switch (hulp_stop_bits) {
-            case "1":
-              stop_bits_II = SerialPort.ONE_STOP_BIT;
-              break;
-            case "2":
-              stop_bits_II = SerialPort.TWO_STOP_BITS;
-              break;
-            default:
-              stop_bits_II = 0; // non existing (stop bits) value
-              break;
-          } // switch (hulp_stop_bits)
+          stop_bits_II =
+              SerialConfigurationValueParser.stopBits(
+                  configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
         }
 
         // RS232 2nd meteo instrument prefered COM port (Windows and Linux)
