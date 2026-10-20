@@ -1973,30 +1973,27 @@ public class main_RS232_RS422 {
         } else {
           // text with next AWSR update bottom status line TurboWin+ main screen (updated every
           // minute)
-          for (int i = (AWSR_system_hour_local + 1);
-              i < (AWSR_system_hour_local + 1 + AWSR_reporting_interval);
-              i++) {
-            // 24 hours or higher makes no difference for this computation
-            if (i % AWSR_reporting_interval == 0) {
-              cal_AWSR_system_date_time.add(
-                  Calendar.HOUR_OF_DAY, i - AWSR_system_hour_local); // add 1 - 5 hours
-              cal_AWSR_system_date_time.getTime();
+          Integer nextUploadHour =
+              AwsrNextUploadCalculator.nextUploadHour(
+                  AWSR_system_hour_local, AWSR_reporting_interval);
+          if (nextUploadHour != null) {
+            cal_AWSR_system_date_time.add(
+                Calendar.HOUR_OF_DAY, nextUploadHour - AWSR_system_hour_local);
+            cal_AWSR_system_date_time.getTime();
 
-              String next_AWSR_string =
-                  "[AWSR] next automated AWS report upload: "
-                      + cal_AWSR_system_date_time.get(Calendar.DAY_OF_MONTH)
-                      + " "
-                      + main.convert_month(cal_AWSR_system_date_time.get(Calendar.MONTH))
-                      + " "
-                      + cal_AWSR_system_date_time.get(Calendar.YEAR)
-                      + " "
-                      + cal_AWSR_system_date_time.get(Calendar.HOUR_OF_DAY)
-                      + ".00 UTC";
+            String next_AWSR_string =
+                "[AWSR] next automated AWS report upload: "
+                    + cal_AWSR_system_date_time.get(Calendar.DAY_OF_MONTH)
+                    + " "
+                    + main.convert_month(cal_AWSR_system_date_time.get(Calendar.MONTH))
+                    + " "
+                    + cal_AWSR_system_date_time.get(Calendar.YEAR)
+                    + " "
+                    + cal_AWSR_system_date_time.get(Calendar.HOUR_OF_DAY)
+                    + ".00 UTC";
 
-              main.jTextField4.setText(next_AWSR_string);
-              break;
-            }
-          } // for (int i = (APR_system_hour_local + 1); etc.
+            main.jTextField4.setText(next_AWSR_string);
+          }
         } // else
 
         cal_AWSR_system_date_time = null;
