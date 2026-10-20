@@ -507,14 +507,7 @@ final class ConfigurationManager {
             configuratie_regels[teller], APTR_AWSR_SEND_METHOD_TXT)) {
           APTR_AWSR_send_method = ConfigurationLineParser.value(configuratie_regels[teller]);
 
-          // from version 4.2: SMTP host, Gmail and Yahoo are not possible anymore (only possible
-          // 'Server Met. center' and Custom email) (when reading configaration settings from a
-          // previous TurboWin+ version)
-          if ((APTR_AWSR_send_method.equals(APTR_AWSR_SMTP_HOST))
-              || (APTR_AWSR_send_method.equals(APTR_AWSR_GMAIL))
-              || (APTR_AWSR_send_method.equals(APTR_AWSR_YAHOO_MAIL))) {
-            APTR_AWSR_send_method = "";
-          }
+          APTR_AWSR_send_method = AptrAwsrSendMethodNormalizer.normalize(APTR_AWSR_send_method);
         }
 
         // station ID
