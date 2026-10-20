@@ -42,29 +42,13 @@ public class main_RS232_RS422 {
     //
     // AWS connection (not used if barometer connected)
 
-    String info = "";
-
-    if (main.serialPort.isOpen()) {
-      info =
-          "[AWS] starting-com-port still open (" + main.serialPort.getDescriptivePortName() + ")";
-      main.log_turbowin_system_message(info);
-
-      main.serialPort.closePort(); // will be opened again later
-      // NB main.defaultPort and main.defaultPort_descriptive still preserve their start-up value
-
-      info =
-          "[AWS] starting-com-port now closed (" + main.serialPort.getDescriptivePortName() + ")";
-      main.log_turbowin_system_message(info);
-
-      main.defaultPort = null;
-      main.defaultPort_descriptive = null;
-    } else {
-      info = "[AWS] starting-com-port closed (" + main.serialPort.getDescriptivePortName() + ")";
-      main.log_turbowin_system_message(info);
-
-      main.defaultPort = null;
-      main.defaultPort_descriptive = null;
-    }
+    SerialPortResetWorkflow.reset(
+        main.serialPort,
+        "AWS",
+        () -> {
+          main.defaultPort = null;
+          main.defaultPort_descriptive = null;
+        });
   }
 
   public void RS422_Check_Serial_Ports(int completed_checks_serial_ports) {
@@ -538,68 +522,23 @@ public class main_RS232_RS422 {
     // NB after power break or temporarily device failure the (default/starting)serial port is still
     // open but the listener must be restarted
 
-    String info = "";
-
-    if (main.GPS_serialPort.isOpen()) {
-      info =
-          "[GPS] starting-com-port still open ("
-              + main.GPS_serialPort.getDescriptivePortName()
-              + ")";
-      main.log_turbowin_system_message(info);
-
-      main.GPS_serialPort.closePort(); // will be opened again later
-      // NB GPS_defaultPort and GPS_defaultPort_descriptive still preserve their start-up value
-
-      info =
-          "[GPS] starting-com-port now closed ("
-              + main.GPS_serialPort.getDescriptivePortName()
-              + ")";
-      main.log_turbowin_system_message(info);
-
-      GPS_defaultPort = null;
-      GPS_defaultPort_descriptive = null;
-    } else {
-      info =
-          "[GPS] starting-com-port closed (" + main.GPS_serialPort.getDescriptivePortName() + ")";
-      main.log_turbowin_system_message(info);
-
-      GPS_defaultPort = null;
-      GPS_defaultPort_descriptive = null;
-    }
+    SerialPortResetWorkflow.reset(
+        main.GPS_serialPort,
+        "GPS",
+        () -> {
+          GPS_defaultPort = null;
+          GPS_defaultPort_descriptive = null;
+        });
   }
 
   public void RS232_Check_Default_Serial_Port_II() {
-    String info = "";
-
-    if (main.serialPort_II.isOpen()) {
-      info =
-          "[THERMOMETER] starting-com-port still open ("
-              + main.serialPort_II.getDescriptivePortName()
-              + ")";
-      main.log_turbowin_system_message(info);
-
-      main.serialPort_II.closePort(); // will be opened again later
-      // NB main.defaultPort_II and main.defaultPort_descriptive_II still preserve their start-up
-      // value
-
-      info =
-          "[THERMOMETER] starting-com-port now closed ("
-              + main.serialPort_II.getDescriptivePortName()
-              + ")";
-      main.log_turbowin_system_message(info);
-
-      main.defaultPort_II = null;
-      main.defaultPort_descriptive_II = null;
-    } else {
-      info =
-          "[THERMOMETER] starting-com-port closed ("
-              + main.serialPort_II.getDescriptivePortName()
-              + ")";
-      main.log_turbowin_system_message(info);
-
-      main.defaultPort_II = null;
-      main.defaultPort_descriptive_II = null;
-    }
+    SerialPortResetWorkflow.reset(
+        main.serialPort_II,
+        "THERMOMETER",
+        () -> {
+          main.defaultPort_II = null;
+          main.defaultPort_descriptive_II = null;
+        });
   }
 
   public void RS232_Check_Default_Serial_Port() {
@@ -609,34 +548,13 @@ public class main_RS232_RS422 {
     // NB after power break or temporarily device failure the (default/starting)serial port is still
     // open but the listener must be restarted
 
-    String info = "";
-
-    if (main.serialPort.isOpen()) {
-      info =
-          "[BAROMETER] starting-com-port still open ("
-              + main.serialPort.getDescriptivePortName()
-              + ")";
-      main.log_turbowin_system_message(info);
-
-      main.serialPort.closePort(); // will be opened again later
-      // NB main.defaultPort and main.defaultPort_descriptive still preserve their start-up value
-
-      info =
-          "[BAROMETER] starting-com-port now closed ("
-              + main.serialPort.getDescriptivePortName()
-              + ")";
-      main.log_turbowin_system_message(info);
-
-      main.defaultPort = null;
-      main.defaultPort_descriptive = null;
-    } else {
-      info =
-          "[BAROMETER] starting-com-port closed (" + main.serialPort.getDescriptivePortName() + ")";
-      main.log_turbowin_system_message(info);
-
-      main.defaultPort = null;
-      main.defaultPort_descriptive = null;
-    }
+    SerialPortResetWorkflow.reset(
+        main.serialPort,
+        "BAROMETER",
+        () -> {
+          main.defaultPort = null;
+          main.defaultPort_descriptive = null;
+        });
   }
 
   public void RS232_Check_Serial_Ports_8(int completed_checks_serial_ports) {
