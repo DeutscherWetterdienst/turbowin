@@ -2021,13 +2021,7 @@ public class main_RS232_RS422 {
               main.defaultPort_II); // serialPort_form = new SerialPort(main.defaultPort);
       serialPort_form.openPort();
       if (serialPort_form.isOpen()) {
-        if (main.parity_II == 0) {
-          hulp_parity = "none";
-        } else if (main.parity_II == 1) {
-          hulp_parity = "odd";
-        } else if (main.parity_II == 2) {
-          hulp_parity = "even";
-        }
+        hulp_parity = SerialPortConfigurationWorkflow.parityDescription(main.parity_II);
 
         System.out.println(
             "[THERMOMETER] opening with "
@@ -2040,9 +2034,12 @@ public class main_RS232_RS422 {
                 + String.valueOf(main.stop_bits_II)
                 + " "
                 + main.defaultPort_descriptive_II);
-        serialPort_form.setComPortParameters(
-            main.bits_per_second_II, main.data_bits_II, main.stop_bits_II, main.parity_II);
-        serialPort_form.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+        SerialPortConfigurationWorkflow.configure(
+            serialPort_form,
+            main.bits_per_second_II,
+            main.data_bits_II,
+            main.stop_bits_II,
+            main.parity_II);
 
         // STOP
         for (int k = 0;
@@ -2164,13 +2161,7 @@ public class main_RS232_RS422 {
               main.defaultPort); // serialPort_form = new SerialPort(main.defaultPort);
       serialPort_form.openPort();
       if (serialPort_form.isOpen()) {
-        if (main.parity == 0) {
-          hulp_parity = "none";
-        } else if (main.parity == 1) {
-          hulp_parity = "odd";
-        } else if (main.parity == 2) {
-          hulp_parity = "even";
-        }
+        hulp_parity = SerialPortConfigurationWorkflow.parityDescription(main.parity);
 
         System.out.println(
             "[BAROMETER] opening with "
@@ -2183,9 +2174,8 @@ public class main_RS232_RS422 {
                 + String.valueOf(main.stop_bits)
                 + " "
                 + main.defaultPort_descriptive);
-        serialPort_form.setComPortParameters(
-            main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
-        serialPort_form.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+        SerialPortConfigurationWorkflow.configure(
+            serialPort_form, main.bits_per_second, main.data_bits, main.stop_bits, main.parity);
 
         if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2) // PTB220 or PRB330
         {
