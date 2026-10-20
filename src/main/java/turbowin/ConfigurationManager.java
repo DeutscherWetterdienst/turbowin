@@ -633,7 +633,8 @@ final class ConfigurationManager {
         // EUCAWS OBS_ID (intials added to the SMD input)
         if (ConfigurationLineMatcher.contains(configuratie_regels[teller], EUCAWS_OBS_ID_TXT)) {
           eucaws_obs_id =
-              Boolean.parseBoolean(ConfigurationLineParser.value(configuratie_regels[teller]));
+              ConfigurationValueParser.bool(
+                  ConfigurationLineParser.value(configuratie_regels[teller]));
         }
       } // if ((configuratie_regels[teller] != null) etc.
     } // for (teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++)
