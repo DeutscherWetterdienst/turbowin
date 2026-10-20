@@ -3134,8 +3134,6 @@ public class main_RS232_RS422 {
     //
     //
 
-    boolean GPS_date_time_ok = true;
-    String message = "";
     String message_fix_date_time = "";
     String message_fix_position = "";
     String mode_retrieval = "";
@@ -3155,66 +3153,14 @@ public class main_RS232_RS422 {
     // myposition.COG_APR_wind = Double.MAX_VALUE;
     // myposition.SOG_APR_wind = Double.MAX_VALUE;
 
-    if ((GPS_date.length() != 6) || (GPS_time.length() < 6)) {
-      GPS_date_time_ok = false;
-      message =
-          "[GPS] GPS date/time format not ok (GPS date = "
-              + GPS_date
-              + ", GPS time = "
-              + GPS_time
-              + ")";
-    }
-
+    GpsDateTimeValidator.Result dateTimeResult =
+        GpsDateTimeValidator.validate(
+            GPS_date, GPS_time, System::currentTimeMillis, TIMEDIFF_GPS_DATA);
+    boolean GPS_date_time_ok = dateTimeResult.valid();
+    String message = dateTimeResult.message();
     if (GPS_date_time_ok) {
-      SimpleDateFormat sdf9 =
-          new SimpleDateFormat(
-              "yyyyMMddHHmm"); // HH hour in day (0-23) note there is also hh (then also with am,
-      // pm)
-      sdf9.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-      String hulp_GPS_yyyyMMdd =
-          "20" + GPS_date.substring(4) + GPS_date.substring(2, 4) + GPS_date.substring(0, 2);
-      String hulp_GPS_HHmm = GPS_time.substring(0, 4);
-      String hulp_fix_datum_tijd_minuten =
-          hulp_GPS_yyyyMMdd + hulp_GPS_HHmm; // eg final result : 202303940927
-      Date hulp_fix_date = null;
-      try {
-        hulp_fix_date = sdf9.parse(hulp_fix_datum_tijd_minuten);
-
-        long system_sec = System.currentTimeMillis();
-        long timeDiff =
-            Math.abs(hulp_fix_date.getTime() - system_sec)
-                / (60 * 1000); // timeDiff in minutes (NB getTime() always produces msec since unix
-        // epoch)
-
-        // for GPS data storage (for calculation of obs course end speed)
-        //
-        store_fix_date_minutes =
-            hulp_fix_date.getTime()
-                / (60 * 1000); // the number of minutes since January 1, 1970, 00:00:00 URC
-
-        // System.out.println("+++ system_sec: " + system_sec);
-        // System.out.println("+++ hulp_fix_date: " + hulp_fix_date);
-        // System.out.println("+++ difference [minuten]: " + timeDiff); //differencs in min
-
-        // String record_pressure_present = null;
-
-        if (timeDiff > TIMEDIFF_GPS_DATA) // max 10 minutes difference GPS time <--> computer time
-        {
-          GPS_date_time_ok = false;
-          message =
-              "[GPS] GPS date/time obsolete; > "
-                  + (int) TIMEDIFF_GPS_DATA
-                  + " minutes old compared with computer date/time (time difference = "
-                  + timeDiff
-                  + " minutes)";
-        }
-      } // try
-      catch (ParseException ex) {
-        GPS_date_time_ok = false;
-        message = "[GPS] GPS date/time format not ok (" + ex + ")";
-      }
-    } // if (GPS_date_time_ok)
+      store_fix_date_minutes = dateTimeResult.minuteTimestamp();
+    }
 
     if (GPS_date_time_ok) {
       //
