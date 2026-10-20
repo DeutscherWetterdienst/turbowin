@@ -20,6 +20,20 @@ final class ProtectedWindowWorkflow {
     window.setVisible(true);
   }
 
+  static void openMaximized(
+      boolean passwordVerified,
+      Supplier<? extends JFrame> protectedWindow,
+      Supplier<? extends JFrame> passwordWindow,
+      Dimension passwordSize) {
+    JFrame window = select(passwordVerified, protectedWindow, passwordWindow);
+    if (passwordVerified) {
+      window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    } else {
+      window.setSize(passwordSize);
+    }
+    window.setVisible(true);
+  }
+
   static <T> T select(
       boolean passwordVerified,
       Supplier<? extends T> protectedWindow,

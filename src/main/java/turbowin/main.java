@@ -5118,18 +5118,8 @@ public class main extends javax.swing.JFrame {
     // TODO add your handling code here:
 
     mode = MAINTENANCE_SHOW_DATA;
-
-    if (main_support
-        .password_ok) // no password needed, direct to the show-all-maintenance-data display form
-    {
-      mymaintenancedata form = new mymaintenancedata();
-      form.setExtendedState(MAXIMIZED_BOTH); // full screen
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.openMaximized(
+        main_support.password_ok, mymaintenancedata::new, mypassword::new, new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Show_maintenance_data_actionPerformed
 
   private void Maintenance_Import_maintenance_data_actionPerformed(
@@ -5139,18 +5129,8 @@ public class main extends javax.swing.JFrame {
     // TODO add your handling code here:
 
     mode = MAINTENANCE_IMPORT_DATA;
-
-    if (main_support
-        .password_ok) // no password needed, direct to the show-all-maintenance-data display form
-    {
-      mymaintenancedata form = new mymaintenancedata();
-      form.setExtendedState(MAXIMIZED_BOTH); // full screen
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.openMaximized(
+        main_support.password_ok, mymaintenancedata::new, mypassword::new, new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Import_maintenance_data_actionPerformed
 
   private void Maintenance_Export_maintenance_data_actionPerformed(
@@ -5160,18 +5140,8 @@ public class main extends javax.swing.JFrame {
     // TODO add your handling code here:
 
     mode = MAINTENANCE_EXPORT_DATA;
-
-    if (main_support
-        .password_ok) // no password needed, direct to the show-all-maintenance-data display form
-    {
-      mymaintenancedata form = new mymaintenancedata();
-      form.setExtendedState(MAXIMIZED_BOTH); // full screen
-      form.setVisible(true);
-    } else {
-      mypassword form = new mypassword();
-      form.setSize(400, 300);
-      form.setVisible(true);
-    }
+    ProtectedWindowWorkflow.openMaximized(
+        main_support.password_ok, mymaintenancedata::new, mypassword::new, new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Export_maintenance_data_actionPerformed
 
   void Dashboard_AWS_hybrid_actionPerformed(
