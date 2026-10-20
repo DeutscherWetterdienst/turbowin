@@ -119,13 +119,13 @@ final class ConfigurationManager {
       if ((configuratie_regels[teller] != null)
           && (configuratie_regels[teller].compareTo("") != 0)) {
         // ship name
-        if (configuratie_regels[teller].indexOf(SHIP_NAME_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], SHIP_NAME_TXT)) {
           // zo ja, dan staat op een bepaalde pos (achter de : ) de inhoud
           ship_name = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // imo number
-        if (configuratie_regels[teller].indexOf(IMO_NUMBER_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], IMO_NUMBER_TXT)) {
           imo_number = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
@@ -143,150 +143,163 @@ final class ConfigurationManager {
         // }
 
         // time zone computer
-        if (configuratie_regels[teller].indexOf(TIME_ZONE_COMPUTER_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], TIME_ZONE_COMPUTER_TXT)) {
           time_zone_computer = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // recruiting country
-        if (configuratie_regels[teller].indexOf(RECRUITING_COUNTRY_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RECRUITING_COUNTRY_TXT)) {
           recruiting_country = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // method determining waves
-        if (configuratie_regels[teller].indexOf(METHOD_WAVES_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], METHOD_WAVES_TXT)) {
           method_waves = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // wind meta data
-        if (configuratie_regels[teller].indexOf(WIND_SOURCE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WIND_SOURCE_TXT)) {
           wind_source = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
-        if (configuratie_regels[teller].indexOf(MAX_HEIGHT_DECK_CARGO_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], MAX_HEIGHT_DECK_CARGO_TXT)) {
           max_height_deck_cargo = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
-        if (configuratie_regels[teller].indexOf(DIFF_SLL_WL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], DIFF_SLL_WL_TXT)) {
           diff_sll_wl = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // air pressure meta data
-        if (configuratie_regels[teller].indexOf(BAROMETER_ABOVE_SLL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], BAROMETER_ABOVE_SLL_TXT)) {
           barometer_above_sll = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
-        if (configuratie_regels[teller].indexOf(BAROMETER_KEEL_TO_SLL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], BAROMETER_KEEL_TO_SLL_TXT)) {
           keel_sll = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
-        if (configuratie_regels[teller].indexOf(PRESSURE_READING_MSL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], PRESSURE_READING_MSL_TXT)) {
           pressure_reading_msl_yes_no = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // air temp exposure
-        if (configuratie_regels[teller].indexOf(AIR_TEMP_EXPOSURE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], AIR_TEMP_EXPOSURE_TXT)) {
           air_temp_exposure = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // sst exposure
-        if (configuratie_regels[teller].indexOf(SST_EXPOSURE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], SST_EXPOSURE_TXT)) {
           sst_exposure = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // Obs E-mail recipient
-        if (configuratie_regels[teller].indexOf(OBS_EMAIL_RECIPIENT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], OBS_EMAIL_RECIPIENT_TXT)) {
           obs_email_recipient = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // Obs E-mail subject
-        if (configuratie_regels[teller].indexOf(OBS_EMAIL_SUBJECT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], OBS_EMAIL_SUBJECT_TXT)) {
           obs_email_subject = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // logs dir (for immt.log etc.)
-        if (configuratie_regels[teller].indexOf(LOGS_DIR_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], LOGS_DIR_TXT)) {
           logs_dir = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // logs E-mail recipient
-        if (configuratie_regels[teller].indexOf(LOGS_EMAIL_RECIPIENT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], LOGS_EMAIL_RECIPIENT_TXT)) {
           logs_email_recipient = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // wind units (knots or m/s)
-        if (configuratie_regels[teller].indexOf(WIND_UNITS_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WIND_UNITS_TXT)) {
           wind_units = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // RS232 INSTRUMENT connection mode (= RS232 connected instrument type -none, PTB220,
         // PTB330, SAWS-)
-        if (configuratie_regels[teller].indexOf(RS232_INSTRUMENT_TYPE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_INSTRUMENT_TYPE_TXT)) {
           RS232_connection_mode =
               ConfigurationValueParser.integer(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 INSTRUMENT bits per sec
-        if (configuratie_regels[teller].indexOf(RS232_BITS_PER_SEC_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_BITS_PER_SEC_TXT)) {
           bits_per_second =
               ConfigurationValueParser.integer(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 INSTRUMENT data bits
-        if (configuratie_regels[teller].indexOf(RS232_DATA_BITS_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_DATA_BITS_TXT)) {
           data_bits =
               SerialConfigurationValueParser.dataBits(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 INSTRUMENT parity
-        if (configuratie_regels[teller].indexOf(RS232_PARITY_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_PARITY_TXT)) {
           parity =
               SerialConfigurationValueParser.parity(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 INSTRUMENT stop bits
-        if (configuratie_regels[teller].indexOf(RS232_STOP_BITS_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_STOP_BITS_TXT)) {
           stop_bits =
               SerialConfigurationValueParser.stopBits(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 INSTRUMENT prefered COM port (Windows and Linux)
-        if (configuratie_regels[teller].indexOf(RS232_PREFERED_COM_PORT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_PREFERED_COM_PORT_TXT)) {
           prefered_COM_port_number = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // ic (instrument correction) barometer
-        if (configuratie_regels[teller].indexOf(IC_BAROMETER_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], IC_BAROMETER_TXT)) {
           barometer_instrument_correction =
               ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // obs format (FM13 or format 101)
-        if (configuratie_regels[teller].indexOf(OBS_FORMAT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], OBS_FORMAT_TXT)) {
           obs_format = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // format 101 call sign encryption (yes or no)
-        if (configuratie_regels[teller].indexOf(FORMAT_101_ENCRYPTION_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], FORMAT_101_ENCRYPTION_TXT)) {
           obs_101_encryption = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // format 101 email (body or attachement)
-        if (configuratie_regels[teller].indexOf(FORMAT_101_EMAIL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], FORMAT_101_EMAIL_TXT)) {
           obs_101_email = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // RS232 INSTRUMENT prefered COM port name (OS X)
-        if (configuratie_regels[teller].indexOf(RS232_PREF_COM_PORT_NAME_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_PREF_COM_PORT_NAME_TXT)) {
           prefered_COM_port_name = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // WOW publish?
-        if (configuratie_regels[teller].indexOf(WOW_PUBLISH_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WOW_PUBLISH_TXT)) {
           WOW =
               ConfigurationValueParser.bool(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
@@ -299,27 +312,29 @@ final class ConfigurationManager {
         }
 
         // WOW site id
-        if (configuratie_regels[teller].indexOf(WOW_SITE_ID_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WOW_SITE_ID_TXT)) {
           WOW_site_id = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // WOW pin
-        if (configuratie_regels[teller].indexOf(WOW_PIN_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WOW_PIN_TXT)) {
           WOW_site_pin = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // WOW reporting(upload) interval
-        if (configuratie_regels[teller].indexOf(WOW_REPORTING_INTERVAL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], WOW_REPORTING_INTERVAL_TXT)) {
           WOW_reporting_interval = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // WOW/APR average draught
-        if (configuratie_regels[teller].indexOf(WOW_APR_AVERAGE_DRAUGHT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], WOW_APR_AVERAGE_DRAUGHT_TXT)) {
           WOW_APR_average_draught = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // default E-mail program on this computer is AMOS Mail?
-        if (configuratie_regels[teller].indexOf(AMOS_MAIL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], AMOS_MAIL_TXT)) {
           amos_mail =
               ConfigurationValueParser.bool(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
@@ -332,38 +347,42 @@ final class ConfigurationManager {
         }
 
         // RS232 GPS connection mode
-        if (configuratie_regels[teller].indexOf(RS232_GPS_TYPE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_GPS_TYPE_TXT)) {
           RS232_GPS_connection_mode =
               ConfigurationValueParser.integer(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 GPS bits per second
-        if (configuratie_regels[teller].indexOf(RS232_GPS_BITS_PER_SEC_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_GPS_BITS_PER_SEC_TXT)) {
           GPS_bits_per_second =
               ConfigurationValueParser.integer(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 prefered GPS COM port (Windows and Linux)
-        if (configuratie_regels[teller].indexOf(RS232_GPS_COM_PORT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_GPS_COM_PORT_TXT)) {
           prefered_GPS_COM_port_number = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // RS232 prefered GPS COM port (OS X)
-        if (configuratie_regels[teller].indexOf(RS232_GPS_COM_PORT_NAME_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_GPS_COM_PORT_NAME_TXT)) {
           prefered_GPS_COM_port_name = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // RS232 GPS sentence (RMC or GGA)
-        if (configuratie_regels[teller].indexOf(RS232_GPS_SENTENCE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_GPS_SENTENCE_TXT)) {
           RS232_GPS_sentence =
               ConfigurationValueParser.integer(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // APR (Automated Pressure Reports)?
-        if (configuratie_regels[teller].indexOf(APR_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], APR_TXT)) {
           APR =
               ConfigurationValueParser.bool(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
@@ -376,17 +395,18 @@ final class ConfigurationManager {
         }
 
         // APR reporting(upload) interval
-        if (configuratie_regels[teller].indexOf(APR_REPORTING_INTERVAL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], APR_REPORTING_INTERVAL_TXT)) {
           APR_reporting_interval = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // upload URL
-        if (configuratie_regels[teller].indexOf(UPLOAD_URL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], UPLOAD_URL_TXT)) {
           upload_URL = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // AWSR (Automatic Weather Station Reports)?
-        if (configuratie_regels[teller].indexOf(AWSR_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], AWSR_TXT)) {
           AWSR =
               ConfigurationValueParser.bool(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
@@ -399,83 +419,92 @@ final class ConfigurationManager {
         }
 
         // AWSR reporting(upload) interval
-        if (configuratie_regels[teller].indexOf(AWSR_REPORTING_INTERVAL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], AWSR_REPORTING_INTERVAL_TXT)) {
           AWSR_reporting_interval = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // wind units graps/dasboard
-        if ((configuratie_regels[teller].indexOf(WIND_UNITS_DASHBOARD_TXT) != -1)) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], WIND_UNITS_DASHBOARD_TXT)) {
           wind_units_dashboard = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // ship type for visual dashboard
-        if (configuratie_regels[teller].indexOf(SHIP_TYPE_DASHBOARD_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], SHIP_TYPE_DASHBOARD_TXT)) {
           ship_type_dashboard = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // anemometer height above WL
-        if (configuratie_regels[teller].indexOf(HEIGHT_ANEMOMETER_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], HEIGHT_ANEMOMETER_TXT)) {
           height_anemometer = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // GUI mode (light/full)
-        if (configuratie_regels[teller].indexOf(GUI_MODE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], GUI_MODE_TXT)) {
           GUI_mode = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // GUI logo (EUMETNET/NOAAA/SOT)
-        if (configuratie_regels[teller].indexOf(GUI_LOGO_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], GUI_LOGO_TXT)) {
           GUI_logo = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // obs email cc
-        if (configuratie_regels[teller].indexOf(OBS_EMAIL_CC_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], OBS_EMAIL_CC_TXT)) {
           obs_email_cc = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // RS232 2nd meteo instrument connection mode (= RS232 connected instrument II type: none,
         // StarX, HMP155)
-        if (configuratie_regels[teller].indexOf(RS232_INSTRUMENT_TYPE_TXT_II) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_INSTRUMENT_TYPE_TXT_II)) {
           RS232_connection_mode_II =
               ConfigurationValueParser.integer(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 2nd meteo instrument bits per sec
-        if (configuratie_regels[teller].indexOf(RS232_BITS_PER_SEC_TXT_II) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_BITS_PER_SEC_TXT_II)) {
           bits_per_second_II =
               ConfigurationValueParser.integer(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 2nd meteo instrument data bits
-        if (configuratie_regels[teller].indexOf(RS232_DATA_BITS_TXT_II) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_DATA_BITS_TXT_II)) {
           data_bits_II =
               SerialConfigurationValueParser.dataBits(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 2nd meteo instrument parity
-        if (configuratie_regels[teller].indexOf(RS232_PARITY_TXT_II) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_PARITY_TXT_II)) {
           parity_II =
               SerialConfigurationValueParser.parity(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 2nd imeteo instrument stop bits
-        if (configuratie_regels[teller].indexOf(RS232_STOP_BITS_TXT_II) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_STOP_BITS_TXT_II)) {
           stop_bits_II =
               SerialConfigurationValueParser.stopBits(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
         }
 
         // RS232 2nd meteo instrument prefered COM port (Windows and Linux)
-        if (configuratie_regels[teller].indexOf(RS232_PREFERED_COM_PORT_TXT_II) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], RS232_PREFERED_COM_PORT_TXT_II)) {
           prefered_COM_port_number_II = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // AP[&T]R / AWSR send method
-        if (configuratie_regels[teller].indexOf(APTR_AWSR_SEND_METHOD_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], APTR_AWSR_SEND_METHOD_TXT)) {
           APTR_AWSR_send_method = ConfigurationLineParser.value(configuratie_regels[teller]);
 
           // from version 4.2: SMTP host, Gmail and Yahoo are not possible anymore (only possible
@@ -489,42 +518,45 @@ final class ConfigurationManager {
         }
 
         // station ID
-        if (configuratie_regels[teller].indexOf(STATION_ID_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], STATION_ID_TXT)) {
           station_ID = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // dashboard background image
-        if (configuratie_regels[teller].indexOf(DASHBOARD_BACKGROUND_IMAGE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], DASHBOARD_BACKGROUND_IMAGE_TXT)) {
           dashboard_background_image = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // your custom email address
-        if (configuratie_regels[teller].indexOf(YOUR_CUSTOM_ADDRESS_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], YOUR_CUSTOM_ADDRESS_TXT)) {
           your_custom_address = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // custom email server
-        if (configuratie_regels[teller].indexOf(CUSTOM_EMAIL_SERVER_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], CUSTOM_EMAIL_SERVER_TXT)) {
           custom_email_server = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // custom email password
-        if (configuratie_regels[teller].indexOf(CUSTOM_PASSWORD_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], CUSTOM_PASSWORD_TXT)) {
           custom_password = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // custom email security
-        if (configuratie_regels[teller].indexOf(CUSTOM_SECURITY_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], CUSTOM_SECURITY_TXT)) {
           custom_security = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // custom email port
-        if (configuratie_regels[teller].indexOf(CUSTOM_PORT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], CUSTOM_PORT_TXT)) {
           custom_port = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // pop-up dashboard? (true/false)
-        if (configuratie_regels[teller].indexOf(POP_UP_DASHBOARD_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], POP_UP_DASHBOARD_TXT)) {
           pop_up_screen =
               ConfigurationValueParser.bool(
                   configuratie_regels[teller].substring(
@@ -539,7 +571,8 @@ final class ConfigurationManager {
         }
 
         // pop-up dashboard interval
-        if (configuratie_regels[teller].indexOf(POP_UP_DASHBOARD_INTERVAL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], POP_UP_DASHBOARD_INTERVAL_TXT)) {
           pop_up_screen_interval =
               configuratie_regels[teller].substring(
                   CONFIGURATION_FILE_POS_INHOUD); // pop_up_dashboard_interval =
@@ -547,28 +580,31 @@ final class ConfigurationManager {
         }
 
         // dashboard ship deck color
-        if (configuratie_regels[teller].indexOf(DASHBOARD_SHIP_DECK_COLOR_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], DASHBOARD_SHIP_DECK_COLOR_TXT)) {
           ship_deck_color_String = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // custom email module (primary-jakarta, secondary-python)
-        if (configuratie_regels[teller].indexOf(CUSTOM_EMAIL_MODULE_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], CUSTOM_EMAIL_MODULE_TXT)) {
           custom_email_module = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // log files email send method (default or custom)
-        if (configuratie_regels[teller].indexOf(LOGS_EMAIL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], LOGS_EMAIL_TXT)) {
           log_files_email_send_method = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // eucaws upload/send method
-        if (configuratie_regels[teller].indexOf(EUCAWS_UPLOADS_METHOD_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], EUCAWS_UPLOADS_METHOD_TXT)) {
           eucaws_uploads_method = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // port mode option. deactivate APR/AWSR if ship speed is minimal; (< 1 knot / < 0.5 knot)
         // [true/false]
-        if (configuratie_regels[teller].indexOf(PORT_MODE_OPTION_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], PORT_MODE_OPTION_TXT)) {
           port_mode_option =
               ConfigurationValueParser.bool(
                   ConfigurationLineParser.value(configuratie_regels[teller]));
@@ -581,27 +617,28 @@ final class ConfigurationManager {
         }
 
         // listening LAN IP address
-        if (configuratie_regels[teller].indexOf(LAN_IP_ADDRESS_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], LAN_IP_ADDRESS_TXT)) {
           lan_ip_address = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // dashboard ship (LNG)tank color
-        if (configuratie_regels[teller].indexOf(DASHBOARD_SHIP_TANK_COLOR_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(
+            configuratie_regels[teller], DASHBOARD_SHIP_TANK_COLOR_TXT)) {
           ship_tank_color_String = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // dashboard font (hybrid dashboard)
-        if (configuratie_regels[teller].indexOf(DASHBOARD_FONT_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], DASHBOARD_FONT_TXT)) {
           dashboard_font = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // communication protocol client <-> server
-        if (configuratie_regels[teller].indexOf(COM_PROTOCOL_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], COM_PROTOCOL_TXT)) {
           server_com_protocol = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
         // EUCAWS OBS_ID (intials added to the SMD input)
-        if (configuratie_regels[teller].indexOf(EUCAWS_OBS_ID_TXT) != -1) {
+        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], EUCAWS_OBS_ID_TXT)) {
           eucaws_obs_id =
               Boolean.parseBoolean(ConfigurationLineParser.value(configuratie_regels[teller]));
         }
