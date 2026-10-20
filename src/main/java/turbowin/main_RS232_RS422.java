@@ -1710,19 +1710,7 @@ public class main_RS232_RS422 {
     // operational this will be 01308151229)
 
     cal_sensor_datum_tijd = new GregorianCalendar();
-    String number_sec =
-        sdf7.format(cal_sensor_datum_tijd.getTime()); // format sdf7 = "ss" (show only seconds)
-    switch (number_sec) {
-      case "59":
-        cal_sensor_datum_tijd.add(Calendar.SECOND, +1);
-        break;
-      case "58":
-        cal_sensor_datum_tijd.add(Calendar.SECOND, +2);
-        break;
-      case "57":
-        cal_sensor_datum_tijd.add(Calendar.SECOND, +3);
-        break;
-    }
+    SensorDataTimestamp.roundToNextMinuteWhenLate(cal_sensor_datum_tijd);
 
     // String file_naam = "sensor_data_" + main.sdf3.format(new Date()) + ".txt";
     String file_naam = "sensor_data_" + main.sdf3.format(cal_sensor_datum_tijd.getTime()) + ".txt";
@@ -1834,19 +1822,7 @@ public class main_RS232_RS422 {
     // operational this will be 01308151229)
 
     cal_sensor_datum_tijd = new GregorianCalendar();
-    String number_sec =
-        sdf7.format(cal_sensor_datum_tijd.getTime()); // format sdf7 = "ss" (show only seconds)
-    switch (number_sec) {
-      case "59":
-        cal_sensor_datum_tijd.add(Calendar.SECOND, +1);
-        break;
-      case "58":
-        cal_sensor_datum_tijd.add(Calendar.SECOND, +2);
-        break;
-      case "57":
-        cal_sensor_datum_tijd.add(Calendar.SECOND, +3);
-        break;
-    }
+    SensorDataTimestamp.roundToNextMinuteWhenLate(cal_sensor_datum_tijd);
 
     // String file_naam = "sensor_data_" + main.sdf3.format(new Date()) + ".txt";
     String file_naam = "sensor_data_" + main.sdf3.format(cal_sensor_datum_tijd.getTime()) + ".txt";
