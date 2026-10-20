@@ -1544,46 +1544,16 @@ public class main_RS232_RS422 {
     //
 
     // BufferedWriter out                                        = null;
-    boolean doorgaan = false;
-
     String file_naam = "sensor_data_II_" + main.sdf3.format(new Date()) + ".txt";
     String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + file_naam;
-
-    if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0)) {
-      // NB in Function RS232_initComponents_II() there was already checked on dir logs_dir
-      doorgaan = true;
-    }
-
-    if (doorgaan) {
-      try (BufferedWriter out =
-          new BufferedWriter(
-              new FileWriter(
-                  volledig_path_sensor_data,
-                  true))) // true means append the specified data to the file i.e. the pre-exist
-      // data in a file is not overwritten and the new data is appended after
-      // the pre-exist data.
-      {
-        // NB Alleen onderstaande zou al voldoende zijn als er geen aparte datum/tijd toegevoegd zou
-        // hoeven te worden
-        /// out.write(total_string);
-
-        if (main.total_string_II.indexOf("\n") != -1) {
-          // test-record_II = date time to be published on main screen to show the last update
-          // date-time
-          test_record_II =
-              main.sdf_tsl_2.format(new Date()) + " UTC"; // new Date() -> always in UTC
-
-          out.write(main.total_string_II.replaceAll("[\r\n]", ""));
-          out.write(main.sdf4.format(new Date())); // new Date() -> always in UTC
-          out.newLine();
-        } else {
-          out.write(main.total_string_II.replace("\r", ""));
-        }
-      } catch (IOException ex) {
-        String info = ex + "; unable to write to: " + volledig_path_sensor_data;
-        main.log_turbowin_system_message("[THERMOMETER] " + info);
-      }
-    } // if (doorgaan)
+    SensorDataFileWriter.append(
+        main.logs_dir,
+        volledig_path_sensor_data,
+        main.total_string_II,
+        "",
+        () -> main.sdf4.format(new Date()),
+        () -> test_record_II = main.sdf_tsl_2.format(new Date()) + " UTC",
+        "[THERMOMETER] ");
   }
 
   public void RS232_write_sensor_data_to_file() {
@@ -1618,46 +1588,18 @@ public class main_RS232_RS422 {
     // NB geen Swingworker hier gebruiken (worden dan alleen stukken geschreven)
     //
 
-    boolean doorgaan = false;
     // boolean total_string_ok                                   = false;
 
     String file_naam = "sensor_data_" + main.sdf3.format(new Date()) + ".txt";
     String volledig_path_sensor_data = main.logs_dir + java.io.File.separator + file_naam;
-
-    if ((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0)) {
-      // NB in Function RS232_initComponents() there was already checked on dir logs_dir
-      doorgaan = true;
-    }
-
-    if (doorgaan) {
-      try (BufferedWriter out =
-          new BufferedWriter(new FileWriter(volledig_path_sensor_data, true))) {
-        // NB Alleen onderstaande zou al voldoende zijn als er geen aparte datum/tijd toegevoegd zou
-        // hoeven te worden
-        /// out.write(total_string);
-
-        if (main.total_string.indexOf("\n") != -1) {
-          // test-record = date time to be published on main screen to show the last update
-          // date-time
-          test_record = main.sdf_tsl_2.format(new Date()) + " UTC"; // new Date() -> always in UTC
-
-          out.write(main.total_string.replaceAll("[\r\n]", ""));
-          out.write(main.sdf4.format(new Date())); // new Date() -> always in UTC
-          out.newLine();
-
-          // total_string_ok = true;                                        // for indicating
-          // (barometer) data is ready for displaying on main screen
-        } else {
-          out.write(main.total_string.replace("\r", ""));
-        }
-
-      } // try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_sensor_data,
-      // true)))
-      catch (IOException ex) {
-        String info = ex + "; unable to write to: " + volledig_path_sensor_data;
-        main.log_turbowin_system_message("[barometer] " + info);
-      }
-    }
+    SensorDataFileWriter.append(
+        main.logs_dir,
+        volledig_path_sensor_data,
+        main.total_string,
+        "",
+        () -> main.sdf4.format(new Date()),
+        () -> test_record = main.sdf_tsl_2.format(new Date()) + " UTC",
+        "[barometer] ");
   }
 
   public static void RS232_read_dasboard_values() {
