@@ -189,6 +189,16 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.true_wind_speed_from_AWS_present) {
+          Integer dashboardTrueWindSpeed =
+              AwsDashboardWindSpeedConverter.convert(
+                  mywind.double_true_wind_speed,
+                  mywind.int_true_wind_speed,
+                  main.wind_units,
+                  main.wind_units_dashboard);
+          if (dashboardTrueWindSpeed != null) {
+            dashboard_int_last_update_record_true_wind_speed = dashboardTrueWindSpeed;
+          }
+
           // NB 4 options:
           // 1) measured/observed in m/s   -> dashboard and graph in knots
           // 2) measured/observed in m/s   -> dashboard and graph in m/s
@@ -203,9 +213,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // rounding up! (11 m/s -> 21.4 knots -> roundend 21 knots = Bf 5 but 11 m/s = Bf 6
               // !!!)
-              dashboard_int_last_update_record_true_wind_speed =
-                  (int) Math.round(mywind.double_true_wind_speed * main.M_S_KNOT_CONVERSION);
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
@@ -213,8 +220,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
                   (int) Math.round(hulp_double_true_wind_speed_10m * main.M_S_KNOT_CONVERSION);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
-              dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed;
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
@@ -227,8 +232,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
           {
             if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1) // dashboard in knots
             {
-              dashboard_int_last_update_record_true_wind_speed = mywind.int_true_wind_speed;
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
@@ -236,9 +239,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
                   (int) Math.round(hulp_double_true_wind_speed_10m);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
-              dashboard_int_last_update_record_true_wind_speed =
-                  (int) Math.round(mywind.double_true_wind_speed * main.KNOT_M_S_CONVERSION);
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
@@ -254,6 +254,16 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.relative_wind_speed_from_AWS_present) {
+          Integer dashboardRelativeWindSpeed =
+              AwsDashboardWindSpeedConverter.convert(
+                  mywind.double_relative_wind_speed,
+                  mywind.int_relative_wind_speed,
+                  main.wind_units,
+                  main.wind_units_dashboard);
+          if (dashboardRelativeWindSpeed != null) {
+            dashboard_int_last_update_record_relative_wind_speed = dashboardRelativeWindSpeed;
+          }
+
           // NB 4 options:
           // 1) measured/observed in m/s   -> dashboard and graph in knots
           // 2) measured/observed in m/s   -> dashboard and graph in m/s
@@ -266,9 +276,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
           {
             if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1) // dashboard in knots
             {
-              dashboard_int_last_update_record_relative_wind_speed =
-                  (int) Math.round(mywind.double_relative_wind_speed * main.M_S_KNOT_CONVERSION);
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
@@ -276,8 +283,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
                   (int) Math.round(hulp_double_relative_wind_speed_10m * main.M_S_KNOT_CONVERSION);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
-              dashboard_int_last_update_record_relative_wind_speed = mywind.int_relative_wind_speed;
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
@@ -290,8 +295,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
           {
             if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1) // dashboard in knots
             {
-              dashboard_int_last_update_record_relative_wind_speed = mywind.int_relative_wind_speed;
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
@@ -299,9 +302,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
                   (int) Math.round(hulp_double_relative_wind_speed_10m);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
-              dashboard_int_last_update_record_relative_wind_speed =
-                  (int) Math.round(mywind.double_relative_wind_speed * main.KNOT_M_S_CONVERSION);
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
@@ -317,6 +317,16 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.true_wind_gust_from_AWS_present) {
+          Integer dashboardTrueWindGustSpeed =
+              AwsDashboardWindSpeedConverter.convert(
+                  mywind.double_true_wind_gust_speed,
+                  mywind.int_true_wind_gust_speed,
+                  main.wind_units,
+                  main.wind_units_dashboard);
+          if (dashboardTrueWindGustSpeed != null) {
+            dashboard_int_last_update_record_true_wind_gust = dashboardTrueWindGustSpeed;
+          }
+
           // NB 4 options:
           // 1) measured/observed in m/s   -> dashboard and graph in knots
           // 2) measured/observed in m/s   -> dashboard and graph in m/s
@@ -329,9 +339,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
           {
             if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1) // dashboard in knots
             {
-              dashboard_int_last_update_record_true_wind_gust =
-                  (int) Math.round(mywind.double_true_wind_gust_speed * main.M_S_KNOT_CONVERSION);
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
@@ -339,8 +346,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
                   (int) Math.round(hulp_double_true_wind_gust_speed_10m * main.M_S_KNOT_CONVERSION);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
-              dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
@@ -353,8 +358,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
           {
             if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1) // dashboard in knots
             {
-              dashboard_int_last_update_record_true_wind_gust = mywind.int_true_wind_gust_speed;
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
@@ -362,9 +365,6 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
                   (int) Math.round(hulp_double_true_wind_gust_speed_10m);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
-              dashboard_int_last_update_record_true_wind_gust =
-                  (int) Math.round(mywind.double_true_wind_gust_speed * main.KNOT_M_S_CONVERSION);
-
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
