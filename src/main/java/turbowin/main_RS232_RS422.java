@@ -7170,24 +7170,10 @@ public class main_RS232_RS422 {
         // string to double
         double hulp_double_air_temp = Double.parseDouble(mytemp.air_temp);
 
-        // Sn of TTT
-        if (hulp_double_air_temp < 0) {
-          mytemp.sn_TTT_code = "1";
-        } else {
-          mytemp.sn_TTT_code = "0";
-        }
-
-        // TTT
-        int num_TTT_code = (int) Math.floor(Math.abs(hulp_double_air_temp) * 10 + 0.5);
-        mytemp.TTT_code = Integer.toString(num_TTT_code); // convert to string
-
-        // NB TTT_code always 3 characters width e.g. 027 (accomplished via construction below)
-        int len = 3;
-        if (mytemp.TTT_code.length() < len) {
-          // pad on left with zeros
-          mytemp.TTT_code =
-              "0000000000".substring(0, len - mytemp.TTT_code.length()) + mytemp.TTT_code;
-        }
+        ImmtAirTemperatureCodeFormatter.Result code =
+            ImmtAirTemperatureCodeFormatter.format(hulp_double_air_temp);
+        mytemp.sn_TTT_code = code.signCode;
+        mytemp.TTT_code = code.temperatureCode;
       } catch (NumberFormatException ex) {
         mytemp.sn_TTT_code = "";
         mytemp.TTT_code = "";
