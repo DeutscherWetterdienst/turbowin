@@ -3359,156 +3359,22 @@ public class main_RS232_RS422 {
   }
 
   private static double[] RS232_GPS_NMEA_0183_Array_Retrieval(String mode_retrieval) {
-    // private void RS232_compute_APR_COG_SOG(double double_lat_start, double double_lon_start,
-    // double double_lat_end, double double_lon_end)
-    double double_lat_start = Double.MAX_VALUE;
-    double double_lon_start = Double.MAX_VALUE;
-    double double_lat_end = Double.MAX_VALUE;
-    double double_lon_end = Double.MAX_VALUE;
-    long time_interval_min = Long.MAX_VALUE;
-    boolean doorgaan = true;
-
-    if (mode_retrieval.equals(WIND_FM13_DASHBOARD)) {
-      // in FM13 the COG and SOG (for Ds and vs) are based on 180 minutes but for the APTR wind
-      // radar dashboard also the 10 minutes period is required
-      time_interval_min = 10;
-    } else if (mode_retrieval.equals(WIND_101_DASHBOARD)) {
-      // for the APTR wind radar dashboard the 10 minutes period is required
-      time_interval_min = 10;
-    } else // no mode_retrieval defined
-    {
-      if (main.obs_format.equals(main.FORMAT_101)) {
-        time_interval_min = 10;
-      } else if (main.obs_format.equals(main.FORMAT_FM13)) {
-        time_interval_min = 180;
-      } else {
-        // NB at start-up it is possible that "main.obs_format" is not yet determined (swingworker)
-        time_interval_min = Integer.MAX_VALUE;
-        doorgaan = false;
-      }
-    } // else (no mode_rerieval defined)
-
-    // TESTING //
-    // System.out.println("+++ time_interval_min = " + time_interval_min);
-    // System.out.println("+++ GPS_array_time[0] = " + GPS_array_time[0]);
-    // System.out.println("+++ GPS_array_time[10] = " + GPS_array_time[10]);
-
-    if (doorgaan) {
-      for (int m = MAX_GPS_ARRAY; m > 0; m--) {
-        if ((GPS_array_time[0] - GPS_array_time[m]) == time_interval_min) {
-          double_lat_start = GPS_array_pos[m][0];
-          double_lon_start = GPS_array_pos[m][1];
-
-          double_lat_end = GPS_array_pos[0][0];
-          double_lon_end = GPS_array_pos[0][1];
-
-          // TESTING START //
-          // System.out.println("+++ GPS data array indice match(" + time_interval_min + " based) =
-          // " + m);
-          //
-          // Date date_start = new Date(GPS_array_time[m] * (60 * 1000));        // Date argument in
-          // msec!
-          // System.out.println("+++ GPS data date-time UTC (" + time_interval_min + " ago) = " +
-          // main.sdf4.format(date_start));
-          //
-          // Date date_end = new Date(GPS_array_time[0] * (60 * 1000));        // Date argument in
-          // msec!
-          // System.out.println("+++ GPS data date-time UTC (0 ago) = " +
-          // main.sdf4.format(date_end));
-          //
-          // System.out.println("+++ GPS data lat start (" + time_interval_min + " ago) = " +
-          // double_lat_start);
-          // System.out.println("+++ GPS data lon start (" + time_interval_min + " ago) = " +
-          // double_lon_start);
-          // System.out.println("+++ GPS data lat end (0 ago) = " + double_lat_end);
-          // System.out.println("+++ GPS data lon end (0 ago) = " + double_lon_end);
-          // TESTING END //
-
-          break;
-        }
-      } // for (int m = MAX_GPS_ARRAY; m > 0; m--)
-    } //  if (doorgaan)
-
-    return new double[] {double_lat_start, double_lon_start, double_lat_end, double_lon_end};
+    long timeIntervalMinutes;
+    if (mode_retrieval.equals(WIND_FM13_DASHBOARD) || mode_retrieval.equals(WIND_101_DASHBOARD)) {
+      timeIntervalMinutes = 10;
+    } else if (main.obs_format.equals(main.FORMAT_101)) {
+      timeIntervalMinutes = 10;
+    } else if (main.obs_format.equals(main.FORMAT_FM13)) {
+      timeIntervalMinutes = 180;
+    } else {
+      return GPS_TRACK_HISTORY.retrieve(Integer.MAX_VALUE);
+    }
+    return GPS_TRACK_HISTORY.retrieve(timeIntervalMinutes);
   }
 
   private static void RS232_GPS_NMEA_0183_Array_Store(
       final double store_fix_lat, final double store_fix_lon, final long store_fix_date_minutes) {
-    // called from: RS232_GPS_NMEA_0183_Date_Position_Parsing() [main_RS232_RS422.java]
-
-    // storing GPS data from a separate (mini)GPS (not for Mintaka StarX with integrated gPS) in a
-    // array for obs coure and speed calculation
-    //
-    // NB start position: position 10 minutes (format#101) or 3 hours (FM13) ago
-    // NB end position: last saved position (= most recent position)
-    //
-    //
-    //
-    // Two arrays for position (double lat and double lon) and time (long)
-    // array [0]   -> most recent GPS string checked ok (so max TIMEDIFF_GPS_DATA old = eg 10
-    // minutes)
-    // array [1]   -> second last received GPS string checked ok
-    // array [2]   -> third last received GPS string checked ok
-    // etc...
-    //
-    // theoretically due to disruption etc. e.g.
-    // array[0] -> just received
-    // array[1] -> 25 minutes ago
-    // array[2] -> 26 minutes ago
-    // array[3] -> 40 minutes ago
-    // etc.
-    //
-    // but also sometimes same info in two consecutive array places!!
-    // array[0] -> just received
-    // array[1] -> 1 minutes ago
-    // array[2] -> 2 minutes ago !!
-    // array[3] -> 2 minutes ago !! // same GPS data as arry indice 2
-    // array[4] -> 3 minutes ago
-    // etc
-    //
-    // See above therefore MAX number array places not 180 (theoretical 3 hours = 180 minutes) but
-    // 200 (MAX_GPS_ARRAY)
-    //
-    //
-    //
-    // GPS_array_pos [0][0] -> lat [double; degrees; e.g. -30.56]
-    // GPS_array_pos [0][1] -> lon [double; degrees; e.g. 120.21]
-    // GPS_array_time [0] -> date-time [the number of minutes since January 1, 1970, 00:00:00 URC]
-    // // NB after getTime() -> the number of milliseconds since January 1, 1970, 00:00:00 URC (=
-    // Unix epoch)
-    // etc...
-    //
-    //
-
-    if ((store_fix_lat < (Double.MAX_VALUE - 1))
-        && (store_fix_lon < (Double.MAX_VALUE - 1))
-        && (store_fix_date_minutes < Long.MAX_VALUE)) {
-      // shift them all 1 array place
-      for (int m = MAX_GPS_ARRAY; m > 0; m--) {
-        GPS_array_pos[m][0] = GPS_array_pos[m - 1][0]; // latidude
-        GPS_array_pos[m][1] = GPS_array_pos[m - 1][1]; // longitude
-        GPS_array_time[m] = GPS_array_time[m - 1];
-      }
-      GPS_array_pos[0][0] = store_fix_lat; // most recent received (and checked ok) GPS string
-      GPS_array_pos[0][1] = store_fix_lon;
-      GPS_array_time[0] = store_fix_date_minutes;
-
-      // TESTING //
-      // for (int m = 0; m < 20; m++)
-      // {
-      //   System.out.println("+++ GPS_array_time[" + m + "]= " + GPS_array_time[m]);
-      // }
-      // for (int m = 0; m < 20; m++)
-      // {
-      //   System.out.println("+++ GPS_array_pos[" + m + "][0]= " + GPS_array_pos[m][0]);
-      //   System.out.println("+++ GPS_array_pos[" + m + "][1]= " + GPS_array_pos[m][1]);
-      // }
-      // Date date_print = new Date(store_fix_date_minutes * (60 * 1000));        // Date argument
-      // in msec!
-      // System.out.println("+++ GPS data date-time UTC last storage = " +
-      // main.sdf4.format(date_print));
-
-    } // if ( (store_fix_lat < (Double.MAX_VALUE - 1)) etc.
+    GPS_TRACK_HISTORY.store(store_fix_lat, store_fix_lon, store_fix_date_minutes);
   }
 
   private void RS232_GPS_NMEA_0183_GGA(String ontvangen_GPS_string) {
@@ -4031,11 +3897,7 @@ public class main_RS232_RS422 {
       RS232_GPS_NMEA_0183_init_new_data_received_check_timer();
 
       // GPS array's initialisation (used for course and speed last 10 minutes/3 hrs calculation)
-      for (int m = 0; m < MAX_GPS_ARRAY; m++) {
-        GPS_array_pos[m][0] = Double.MAX_VALUE; // latitude
-        GPS_array_pos[m][1] = Double.MAX_VALUE; // longitude
-        GPS_array_time[m] = Long.MAX_VALUE; // minutes sinds epoch (January 1, 1970)
-      }
+      GPS_TRACK_HISTORY.clear();
     } // if (GPS_defaultPort != null)
   }
 
@@ -8449,10 +8311,7 @@ public class main_RS232_RS422 {
   private Timer check_new_data_timer_II; // for checking sensor data not obsolete (thermometer)
   private Timer check_new_GPS_data_timer; // for checking sensor data not obsolete (GPS)
   private int check_new_GPS_data_timer_delay;
-  private static final double[][] GPS_array_pos =
-      new double[MAX_GPS_ARRAY + 1][2]; // [][0] = latitude and [][1] = longitude
-  private static final long[] GPS_array_time =
-      new long[MAX_GPS_ARRAY + 1]; // time in minutes since epoch
+  private static final GpsTrackHistory GPS_TRACK_HISTORY = new GpsTrackHistory(MAX_GPS_ARRAY);
   public static final String[] GPS_array_device_log = new String[MAX_GPS_ARRAY + 1];
   private boolean in_screen_pop_up_period = false; // screen pop-up (add visual obs)
 

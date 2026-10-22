@@ -149,15 +149,21 @@ public class Rs232GpsNmeaDatePositionParsingCharacterizationTest {
   }
 
   private static double[][] gpsArrayPositions() throws Exception {
-    Field field = main_RS232_RS422.class.getDeclaredField("GPS_array_pos");
-    field.setAccessible(true);
-    return (double[][]) field.get(null);
+    Field historyField = main_RS232_RS422.class.getDeclaredField("GPS_TRACK_HISTORY");
+    historyField.setAccessible(true);
+    GpsTrackHistory history = (GpsTrackHistory) historyField.get(null);
+    Field positionsField = GpsTrackHistory.class.getDeclaredField("positions");
+    positionsField.setAccessible(true);
+    return (double[][]) positionsField.get(history);
   }
 
   private static long[] gpsArrayTimes() throws Exception {
-    Field field = main_RS232_RS422.class.getDeclaredField("GPS_array_time");
-    field.setAccessible(true);
-    return (long[]) field.get(null);
+    Field historyField = main_RS232_RS422.class.getDeclaredField("GPS_TRACK_HISTORY");
+    historyField.setAccessible(true);
+    GpsTrackHistory history = (GpsTrackHistory) historyField.get(null);
+    Field timesField = GpsTrackHistory.class.getDeclaredField("times");
+    timesField.setAccessible(true);
+    return (long[]) timesField.get(history);
   }
 
   private static double[][] copyGpsArrayPositions(double[][] positions) {
