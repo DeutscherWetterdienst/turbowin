@@ -7024,26 +7024,9 @@ public class main_RS232_RS422 {
     // / = Not applicable (report from a coastal land station) or not reported (see Regulation
     // 12.3.1.2 (b))
 
-    if (myposition.SOG_APR < 1.0) {
-      myposition.vs_code = "0";
-    } else if (myposition.SOG_APR >= 1.0 && myposition.SOG_APR <= 5.0) {
-      myposition.vs_code = "1";
-    } else if (myposition.SOG_APR > 5.0 && myposition.SOG_APR <= 10.0) {
-      myposition.vs_code = "2";
-    } else if (myposition.SOG_APR > 10.0 && myposition.SOG_APR <= 15.0) {
-      myposition.vs_code = "3";
-    } else if (myposition.SOG_APR > 15.0 && myposition.SOG_APR <= 20.0) {
-      myposition.vs_code = "4";
-    } else if (myposition.SOG_APR > 20.0 && myposition.SOG_APR <= 25.0) {
-      myposition.vs_code = "5";
-    } else if (myposition.SOG_APR > 25.0 && myposition.SOG_APR <= 30.0) {
-      myposition.vs_code = "6";
-    } else if (myposition.SOG_APR > 30.0 && myposition.SOG_APR <= 35.0) {
-      myposition.vs_code = "7";
-    } else if (myposition.SOG_APR > 35.0 && myposition.SOG_APR <= 40.0) {
-      myposition.vs_code = "8";
-    } else if (myposition.SOG_APR > 40 && myposition.SOG_APR <= 99) {
-      myposition.vs_code = "9";
+    String speedCode = ImmtMovementCodeCalculator.speedCode(myposition.SOG_APR);
+    if (speedCode != null) {
+      myposition.vs_code = speedCode;
     }
 
     // NB WMO_NO_306.pdf
@@ -7069,38 +7052,11 @@ public class main_RS232_RS422 {
     // / Report from a coastal land station or displacement of ship not reported (in Ds only see
     // Regulation 12.3.1.2 (b))
 
-    if (myposition.SOG_APR < 1.0) // stopped
-    {
-      // by default: in case SOG is indicating stopped then SOG always stopped also!
-      myposition.Ds_code = "0";
+    String directionCode =
+        ImmtMovementCodeCalculator.directionCode(myposition.SOG_APR, myposition.COG_APR);
+    if (directionCode != null) {
+      myposition.Ds_code = directionCode;
     }
-    // else if (SOG >= 1.0 && SOG <= 999.9) // not stopped (halverwege de test maar veranderd om
-    // toch een richting tijdens laatste testjes te krijgen)
-    else if (myposition.SOG_APR >= 1.0 && myposition.SOG_APR <= 999999.9) // not stopped
-    {
-      if (myposition.COG_APR > 23.0 && myposition.COG_APR <= 67.0) {
-        myposition.Ds_code = "1";
-      } else if (myposition.COG_APR > 67.0 && myposition.COG_APR <= 112.0) {
-        myposition.Ds_code = "2";
-      } else if (myposition.COG_APR > 112.0 && myposition.COG_APR <= 157.0) {
-        myposition.Ds_code = "3";
-      } else if (myposition.COG_APR > 157.0 && myposition.COG_APR <= 202.0) {
-        myposition.Ds_code = "4";
-      } else if (myposition.COG_APR > 202.0 && myposition.COG_APR <= 247.0) {
-        myposition.Ds_code = "5";
-      } else if (myposition.COG_APR > 247.0 && myposition.COG_APR <= 292.0) {
-        myposition.Ds_code = "6";
-      } else if (myposition.COG_APR > 292.0 && myposition.COG_APR <= 337.0) {
-        myposition.Ds_code = "7";
-      } else if (myposition.COG_APR > 337.0 && myposition.COG_APR <= 360.0
-          || myposition.COG_APR > 0.0 && myposition.COG_APR <= 23.0) {
-        myposition.Ds_code = "8";
-      } else {
-        myposition.Ds_code =
-            "9"; // no information (could be Ds_code = "/" also, because two options to code Ds
-        // undefined)
-      }
-    } // else if (SOG >= 1.0 && SOG <= 99.9)
 
     // below for testing
     // System.out.println("+++ double_lat_start = " + double_lat_start);
