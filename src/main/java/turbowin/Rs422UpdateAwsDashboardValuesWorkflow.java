@@ -217,14 +217,16 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
-                  (int) Math.round(hulp_double_true_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
-                  (int) Math.round(hulp_double_true_wind_speed_10m);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
             }
           } else if (main.wind_units.indexOf(main.KNOTS)
               != -1) // wind_units 'as measured' set to knots by observer in Maintenance -> Station
@@ -236,14 +238,16 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
-                  (int) Math.round(hulp_double_true_wind_speed_10m);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
-                  (int) Math.round(hulp_double_true_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
             }
           }
         } else {
@@ -280,14 +284,20 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
-                  (int) Math.round(hulp_double_relative_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_relative_wind_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
-                  (int) Math.round(hulp_double_relative_wind_speed_10m);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_relative_wind_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             }
           } else if (main.wind_units.indexOf(main.KNOTS)
               != -1) // wind_units 'as measured' set to knots by observer in Maintenance -> Station
@@ -299,14 +309,20 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
-                  (int) Math.round(hulp_double_relative_wind_speed_10m);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_relative_wind_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
-                  (int) Math.round(hulp_double_relative_wind_speed_10m * main.M_S_KNOT_CONVERSION);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_relative_wind_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             }
           }
         } else {
@@ -343,14 +359,20 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
-                  (int) Math.round(hulp_double_true_wind_gust_speed_10m * main.M_S_KNOT_CONVERSION);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_gust_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
-                  (int) Math.round(hulp_double_true_wind_gust_speed_10m);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_gust_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             }
           } else if (main.wind_units.indexOf(main.KNOTS)
               != -1) // wind_units 'as measured' set to knots by observer in Maintenance -> Station
@@ -362,14 +384,20 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
-                  (int) Math.round(hulp_double_true_wind_gust_speed_10m);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_gust_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             } else if (main.wind_units_dashboard.indexOf(main.M_S) != -1) // dashboard in m/s
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
                   owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
-                  (int) Math.round(hulp_double_true_wind_gust_speed_10m * main.M_S_KNOT_CONVERSION);
+                  AwsDashboardWindSpeedAt10mConverter.convert(
+                      hulp_double_true_wind_gust_speed_10m,
+                      main.wind_units,
+                      main.wind_units_dashboard);
             }
           }
         } else {
