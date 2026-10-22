@@ -7126,17 +7126,8 @@ public class main_RS232_RS422 {
     } // if (doorgaan)
 
     if (doorgaan) {
-      int num_ppp_code = (int) Math.floor(local_double_pressure_amount_tendency * 10 + 0.5);
-
-      mybarograph.ppp_code = Integer.toString(num_ppp_code); // convert to string
-
-      // NB PPPP_code always 3 characters width e.g. 017 (accomplish via construction below)
-      int len = 3;
-      if (mybarograph.ppp_code.length() < len) {
-        // pad on left with zeros
-        mybarograph.ppp_code =
-            "0000000000".substring(0, len - mybarograph.ppp_code.length()) + mybarograph.ppp_code;
-      }
+      mybarograph.ppp_code =
+          PressureTendencyCodeFormatter.format(local_double_pressure_amount_tendency);
     } // if (doorgaan)
   }
 
