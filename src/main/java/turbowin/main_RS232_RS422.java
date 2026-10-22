@@ -6935,37 +6935,13 @@ public class main_RS232_RS422 {
     // http://www.movable-type.co.uk/scripts/latlong.html
     //
 
-    double R = 6371e3; // metres
-    double lat1_rad =
-        Math.toRadians(double_lat_start); // start latitude (latitude 10 min or 3 hours ago)
-    double lat2_rad = Math.toRadians(double_lat_end); // end latitude (most recent stored latitude)
-    double delta_lat_rad = Math.toRadians(double_lat_end - double_lat_start);
-    double delta_lon_rad = Math.toRadians(double_lon_end - double_lon_start);
-    // double SOG           = Double.MAX_VALUE;
-    // double COG           = Double.MAX_VALUE;
-
-    double delta_projected_lat =
-        Math.log(Math.tan(Math.PI / 4 + lat2_rad / 2) / Math.tan(Math.PI / 4 + lat1_rad / 2));
-
-    double q =
-        Math.abs(delta_projected_lat) > 10e-12
-            ? delta_lat_rad / delta_projected_lat
-            : Math.cos(lat1_rad);
-
-    // if (Math.abs(delta_lon_rad) > Math.PI) delta_lon_rad = delta_lon_rad > 0 ? -(2*Math.PI -
-    // delta_lon_rad) : (2*Math.PI + delta_lon_rad);
-    // if dLon over 180\u00B0 take shorter rhumb line across the anti-meridian:
-    if (delta_lon_rad > Math.PI) delta_lon_rad -= 2 * Math.PI;
-    if (delta_lon_rad < -Math.PI) delta_lon_rad += 2 * Math.PI;
-
-    double dist =
-        Math.sqrt(delta_lat_rad * delta_lat_rad + q * q * delta_lon_rad * delta_lon_rad) * R;
+    RhumbLineCalculator.Result rhumbLine =
+        RhumbLineCalculator.calculate(
+            double_lat_start, double_lon_start, double_lat_end, double_lon_end);
 
     // wind always 10 minutes based
-    myposition.SOG_APR_wind = (dist / 1852) * 6; // now SOG in knots
-
-    myposition.COG_APR_wind = Math.toDegrees(Math.atan2(delta_lon_rad, delta_projected_lat));
-    if (myposition.COG_APR_wind < 0) myposition.COG_APR_wind += 360.0;
+    myposition.SOG_APR_wind = (rhumbLine.distanceMeters / 1852) * 6; // now SOG in knots
+    myposition.COG_APR_wind = rhumbLine.courseDegrees;
 
     // SOG_APR_wind wind rounding to three decimals
     BigDecimal bd_SOG_APR_wind =
@@ -6996,42 +6972,19 @@ public class main_RS232_RS422 {
     // http://www.movable-type.co.uk/scripts/latlong.html
     //
 
-    double R = 6371e3; // metres
-    double lat1_rad =
-        Math.toRadians(double_lat_start); // start latitude (latitude 10 min or 3 hours ago)
-    double lat2_rad = Math.toRadians(double_lat_end); // end latitude (most recent stored latitude)
-    double delta_lat_rad = Math.toRadians(double_lat_end - double_lat_start);
-    double delta_lon_rad = Math.toRadians(double_lon_end - double_lon_start);
-    // double SOG           = Double.MAX_VALUE;
-    // double COG           = Double.MAX_VALUE;
-
-    double delta_projected_lat =
-        Math.log(Math.tan(Math.PI / 4 + lat2_rad / 2) / Math.tan(Math.PI / 4 + lat1_rad / 2));
-
-    double q =
-        Math.abs(delta_projected_lat) > 10e-12
-            ? delta_lat_rad / delta_projected_lat
-            : Math.cos(lat1_rad);
-
-    // if (Math.abs(delta_lon_rad) > Math.PI) delta_lon_rad = delta_lon_rad > 0 ? -(2*Math.PI -
-    // delta_lon_rad) : (2*Math.PI + delta_lon_rad);
-    // if dLon over 180\u00B0 take shorter rhumb line across the anti-meridian:
-    if (delta_lon_rad > Math.PI) delta_lon_rad -= 2 * Math.PI;
-    if (delta_lon_rad < -Math.PI) delta_lon_rad += 2 * Math.PI;
-
-    double dist =
-        Math.sqrt(delta_lat_rad * delta_lat_rad + q * q * delta_lon_rad * delta_lon_rad) * R;
+    RhumbLineCalculator.Result rhumbLine =
+        RhumbLineCalculator.calculate(
+            double_lat_start, double_lon_start, double_lat_end, double_lon_end);
 
     if (main.obs_format.equals(main.FORMAT_101)) {
       // 10 minutes based
-      myposition.SOG_APR = (dist / 1852) * 6; // now SOG in knots
+      myposition.SOG_APR = (rhumbLine.distanceMeters / 1852) * 6; // now SOG in knots
     } else if (main.obs_format.equals(main.FORMAT_FM13)) {
       // 180 minutes (3 hours, between positions to compute SOG and COG) based
-      myposition.SOG_APR = (dist / 1852) / 3; // now SOG in knots
+      myposition.SOG_APR = (rhumbLine.distanceMeters / 1852) / 3; // now SOG in knots
     }
 
-    myposition.COG_APR = Math.toDegrees(Math.atan2(delta_lon_rad, delta_projected_lat));
-    if (myposition.COG_APR < 0) myposition.COG_APR += 360.0;
+    myposition.COG_APR = rhumbLine.courseDegrees;
 
     // SOG_APR rounding to three decimals
     BigDecimal bd_SOG_APR =
