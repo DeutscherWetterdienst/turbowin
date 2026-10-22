@@ -6881,9 +6881,15 @@ public class main_RS232_RS422 {
       log_tag = "[APR]";
     }
 
-    if (main.port_mode_option
-        && (myposition.SOG_APR_wind > 0.0)
-        && (myposition.SOG_APR_wind < 0.5)) {
+    AptrAwsrUploadDecision.Action action =
+        AptrAwsrUploadDecision.decide(
+            main.port_mode_option,
+            myposition.SOG_APR_wind,
+            main.APTR_AWSR_send_method,
+            main.obs_format,
+            main.eucaws_uploads_method);
+
+    if (action == AptrAwsrUploadDecision.Action.CANCEL_LOW_SPEED) {
       // NB SOG_APR_wind always over the last 10 minutes. There is also a myposition.SOG_APR but
       // over 10 minutes [format 101] or 3 hours [FM13] depending the obs format
       // main.log_turbowin_system_message(log_tag + " upload cancelled; SOG = " +
@@ -6894,29 +6900,22 @@ public class main_RS232_RS422 {
               + " upload cancelled; SOG [10 min] = "
               + String.format("%.2f", myposition.SOG_APR_wind)
               + " knot (port mode option set via menu: Maintenance -> APR/APTR/AWSR settings)");
-    } else if (main.port_mode_option && (myposition.SOG_APR_wind > 100.0)) {
+    } else if (action == AptrAwsrUploadDecision.Action.CANCEL_UNAVAILABLE_SPEED) {
       main.log_turbowin_system_message(
           log_tag
               + " upload cancelled; SOG [10 min] = not available (port mode option set via menu: Maintenance -> APR/APTR/AWSR settings)");
     } else {
       // send the data
       //
-      if (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_SERVER)) {
-        if (main.obs_format.equals(main.FORMAT_101)
-            || (main.obs_format.equals(main.FORMAT_AWS)
-                && main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))) {
-          RS232_Send_Sensor_Data_to_APR_format101_Server_V2(retry); // format101 only; APR and AWSR
-        } else if (main.obs_format.equals(main.FORMAT_FM13)) {
-          RS232_Send_Sensor_Data_to_APR_FM13_Server(retry); // format FM13 only; APR and AWSR
-        } else {
-          main.log_turbowin_system_message(
-              "[APR] obs format unknown (must be format101 or FM13 or 'AWS + uploads via TurboWin+')");
-        }
-      } else if ((main.APTR_AWSR_send_method.equals(main.APTR_AWSR_SMTP_HOST))
-          || (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_GMAIL))
-          || (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_YAHOO_MAIL))
-          || (main.APTR_AWSR_send_method.equals(main.APTR_AWSR_CUSTOM_MAIL))) {
-        RS232_Output_obs_by_email_all_APR(); // for both, format101 and FM13; APR and AWSR
+      if (action == AptrAwsrUploadDecision.Action.SEND_FORMAT101_SERVER) {
+        RS232_Send_Sensor_Data_to_APR_format101_Server_V2(retry);
+      } else if (action == AptrAwsrUploadDecision.Action.SEND_FM13_SERVER) {
+        RS232_Send_Sensor_Data_to_APR_FM13_Server(retry);
+      } else if (action == AptrAwsrUploadDecision.Action.SEND_EMAIL) {
+        RS232_Output_obs_by_email_all_APR();
+      } else if (action == AptrAwsrUploadDecision.Action.UNKNOWN_FORMAT) {
+        main.log_turbowin_system_message(
+            "[APR] obs format unknown (must be format101 or FM13 or 'AWS + uploads via TurboWin+')");
       } else {
         main.log_turbowin_system_message("[APR] APTR-AWSR send method unknown");
       }
