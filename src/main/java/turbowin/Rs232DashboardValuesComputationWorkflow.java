@@ -238,19 +238,14 @@ final class Rs232DashboardValuesComputationWorkflow {
                   // pressure change (ppp; pressure change during last 3 hours)
                   // so pressure was ok, if the ppp is not ok make it invalid, pressure is leading!
                   try {
-                    dashboard_double_last_update_record_ppp =
-                        Double.parseDouble(dashboard_string_last_update_record_ppp);
-                    dashboard_double_last_update_record_ppp =
-                        Math.round(dashboard_double_last_update_record_ppp * 10)
-                            / 10.0d; // bv 2.19 -> 2.2
-
-                    if (dashboard_double_last_update_record_ppp > 100.0) {
-                      dashboard_double_last_update_record_ppp = Double.MAX_VALUE;
-                    }
-                  } catch (NumberFormatException e) {
-                    System.out.println("--- " + "Function RS232_compute_dasboard_values() " + e);
-                    dashboard_double_last_update_record_ppp = Double.MAX_VALUE;
+                    Double.parseDouble(dashboard_string_last_update_record_ppp);
+                  } catch (NumberFormatException exception) {
+                    System.out.println(
+                        "--- " + "Function RS232_compute_dasboard_values() " + exception);
                   }
+                  dashboard_double_last_update_record_ppp =
+                      DashboardPressureChangeCalculator.calculate(
+                          dashboard_string_last_update_record_ppp);
                 } // if (dashboard_double_last_update_record_pressure_ic_ok == true)
               } // if ((dashboard_string_last_update_record_pressure.equals("") == false) &&
               // (dashboard_string_last_update_record_pressure != null))

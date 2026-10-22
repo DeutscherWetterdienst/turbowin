@@ -61,10 +61,19 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
     main.barometer_instrument_correction = "";
     main_RS232_RS422.dashboard_double_last_update_record_ppp = 7.7;
 
-    startAndWaitFor("1000.00", "bad!!", "invalid-ppp");
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    PrintStream originalOut = System.out;
+    try {
+      System.setOut(new PrintStream(output, true));
+      startAndWaitFor("1000.00", "bad!!", "invalid-ppp");
+      waitForOutput(output, "Function RS232_compute_dasboard_values()");
+    } finally {
+      System.setOut(originalOut);
+    }
 
     assertEquals(1000.0, main_RS232_RS422.dashboard_double_last_update_record_pressure_ic, 0.0);
     assertEquals(Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_ppp, 0.0);
+    assertTrue(output.toString().contains("Function RS232_compute_dasboard_values()"));
   }
 
   @Test
