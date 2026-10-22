@@ -988,21 +988,7 @@ public final class mybarometer extends javax.swing.JFrame {
         // if ( (double_pressure_msl != main.INVALID) && (double_barometer_instrument_correction !=
         // main.INVALID) )
         if (double_pressure_msl_corrected != main.INVALID) {
-          int num_PPPP_code = (int) Math.floor(double_pressure_msl_corrected * 10 + 0.5);
-
-          // duizental van luchtdruk komt niet in de code
-          if (num_PPPP_code >= 10000) {
-            num_PPPP_code -= 10000;
-          }
-
-          PPPP_code = Integer.toString(num_PPPP_code); // convert to string
-
-          // NB PPPP_code always 4 characters width e.g. 0007 (accomplish via construction below)
-          int len = 4;
-          if (PPPP_code.length() < len) // pad on left with zeros
-          {
-            PPPP_code = "0000000000".substring(0, len - PPPP_code.length()) + PPPP_code;
-          }
+          PPPP_code = PressureCodeFormatter.format(double_pressure_msl_corrected);
         } // if (double_pressure_msl != INVALID)
       } // if (checks_ok == true)
 

@@ -651,25 +651,8 @@ final class Rs422ReadAndSendSensorDataForAwsrWorkflow {
                     }
 
                     if (double_pressure_msl_corrected != main.INVALID) {
-                      int num_PPPP_code =
-                          (int) Math.floor(double_pressure_msl_corrected * 10 + 0.5);
-
-                      // thousands of the air pressure value not in IMMT air pressure code
-                      if (num_PPPP_code >= 10000) {
-                        num_PPPP_code -= 10000;
-                      }
-
-                      mybarometer.PPPP_code = Integer.toString(num_PPPP_code); // convert to string
-
-                      // NB PPPP_code always 4 characters width e.g. 0007 (accomplish via
-                      // construction below)
-                      int len = 4;
-                      if (mybarometer.PPPP_code.length() < len) // pad on left with zeros
-                      {
-                        mybarometer.PPPP_code =
-                            "0000000000".substring(0, len - mybarometer.PPPP_code.length())
-                                + mybarometer.PPPP_code;
-                      }
+                      mybarometer.PPPP_code =
+                          PressureCodeFormatter.format(double_pressure_msl_corrected);
                     } // if (double_pressure_msl != INVALID)
                   } // if (pos2 - pos >= 2)
                 } // if (record.length() > number_read_commas + 12)

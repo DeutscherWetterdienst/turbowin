@@ -7086,23 +7086,7 @@ public class main_RS232_RS422 {
         double hulp_double_pressure_msl_corrected =
             Double.parseDouble(mybarometer.pressure_msl_corrected);
 
-        int num_PPPP_code = (int) Math.floor(hulp_double_pressure_msl_corrected * 10 + 0.5);
-
-        // remove the "thousands"
-        if (num_PPPP_code >= 10000) {
-          num_PPPP_code -= 10000;
-        }
-
-        mybarometer.PPPP_code = Integer.toString(num_PPPP_code); // convert to string
-
-        // NB PPPP_code always 4 characters width e.g. 0007 (accomplish via construction below)
-        int len = 4;
-        if (mybarometer.PPPP_code.length() < len) // pad on left with zeros
-        {
-          mybarometer.PPPP_code =
-              "0000000000".substring(0, len - mybarometer.PPPP_code.length())
-                  + mybarometer.PPPP_code;
-        }
+        mybarometer.PPPP_code = PressureCodeFormatter.format(hulp_double_pressure_msl_corrected);
       } catch (NumberFormatException ex) {
         mybarometer.PPPP_code = "";
       }
