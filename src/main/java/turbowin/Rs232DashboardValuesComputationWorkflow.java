@@ -206,52 +206,19 @@ final class Rs232DashboardValuesComputationWorkflow {
               if ((dashboard_string_last_update_record_pressure.equals("") == false)
                   && (dashboard_string_last_update_record_pressure != null)) {
                 // pressure at sensor height + apply ic
-                double dashboard_double_last_update_record_pressure;
                 try {
-                  dashboard_double_last_update_record_pressure =
-                      Double.parseDouble(dashboard_string_last_update_record_pressure);
-                  dashboard_double_last_update_record_pressure =
-                      Math.round(dashboard_double_last_update_record_pressure * 10)
-                          / 10.0d; // bv 998.19 -> 998.2
-                } catch (NumberFormatException e) {
-                  System.out.println("--- " + "Function RS232_compute_dasboard_values() " + e);
-                  dashboard_double_last_update_record_pressure = Double.MAX_VALUE;
+                  Double.parseDouble(dashboard_string_last_update_record_pressure);
+                } catch (NumberFormatException exception) {
+                  System.out.println(
+                      "--- " + "Function RS232_compute_dasboard_values() " + exception);
                 }
-
-                double dashboard_double_barometer_instrument_correction = 0.0;
-                if ((dashboard_double_last_update_record_pressure > 900.0)
-                    && (dashboard_double_last_update_record_pressure < 1100.0)) {
-                  if (main.barometer_instrument_correction.equals("")
-                      || (main.barometer_instrument_correction == null)) {
-                    // so in the case there was never an ic inserted
-                    dashboard_double_barometer_instrument_correction = 0.0;
-                  } else {
-                    dashboard_double_barometer_instrument_correction =
-                        Double.parseDouble(main.barometer_instrument_correction.trim());
-                  }
-
-                  if ((dashboard_double_barometer_instrument_correction > -4.0)
-                      && (dashboard_double_barometer_instrument_correction < 4.0)) {
-                    // 1 digit precision
-                    // NB example (double)Math.round(value * 100000d) / 100000d -> rounding for 5
-                    // digits precision
-                    dashboard_double_last_update_record_pressure_ic =
-                        Math.round(
-                                (dashboard_double_last_update_record_pressure
-                                        + dashboard_double_barometer_instrument_correction)
-                                    * 10d)
-                            / 10d;
-                    dashboard_double_last_update_record_pressure_ic_ok = true;
-                  } else // ic out of range -> consider ic = 0
-                  {
-                    // pressure_sensor_height = Double.toString(hulp_double_pressure_reading);
-                    // 1 digit precision
-                    dashboard_double_last_update_record_pressure_ic =
-                        Math.round(dashboard_double_last_update_record_pressure * 10d) / 10d;
-                    dashboard_double_last_update_record_pressure_ic_ok = true;
-                  }
-                } else {
-                  dashboard_double_last_update_record_pressure_ic_ok = false;
+                Double dashboardPressure =
+                    DashboardPressureCalculator.calculate(
+                        dashboard_string_last_update_record_pressure,
+                        main.barometer_instrument_correction);
+                if (dashboardPressure != null) {
+                  dashboard_double_last_update_record_pressure_ic = dashboardPressure;
+                  dashboard_double_last_update_record_pressure_ic_ok = true;
                 }
 
                 // only continue if the retrieved pressure was ok
