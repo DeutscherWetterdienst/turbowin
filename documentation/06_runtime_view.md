@@ -1,88 +1,109 @@
 # Runtime View
 
-## Recording Weather Observations
+The following scenarios describe implemented workflows. An observation is normally prepared
+from the current shared form state, not reloaded from a database before each output operation.
 
-**Description of the Scenario:**
+## Application startup
 
-A marine observer aboard a vessel uses TurboWin+ to record real-time weather observations, including parameters like wind speed, temperature, humidity, and sea state.
+1. The main window creates its components and delegates non-generated initialization to
+   [StartupCoordinator](../src/main/java/turbowin/StartupCoordinator.java).
+2. Startup initializes log date formats, resets observation values, detects paths/mode, creates
+   offline directories, and prepares communication and graph state.
+3. The command-line startup route opens the single-instance socket (default port `12345`, with
+   a command-line override). A theme restart skips opening a second instance socket.
+4. [ConfigurationReadWorkflow](../src/main/java/turbowin/ConfigurationReadWorkflow.java) reads
+   the selected `configuration.txt` in a `SwingWorker` and applies its values to global state.
+   Missing-file I/O errors are tolerated; this is not a guarantee that all globals are reset.
+5. Its completion callback calls
+   [StartupFinalizationWorkflow](../src/main/java/turbowin/StartupFinalizationWorkflow.java)
+   to perform startup logging/cleanup, metadata checks, connection initialization, and menu and
+   toolbar updates.
 
-**Textual Description of the Scenario:**
+Constructor completion and asynchronous startup finalization are different milestones. Startup
+can also display modal warning/date-time dialogs. The current startup mode is the installed
+desktop ("offline") mode; email and server transmission can still require network access.
 
-1. **Marine Observer** launches **TurboWin+** on the ship's computer.
-2. The application displays the **Observation Input Form**.
-3. The observer enters weather data into the form fields.
-4. The **Input Validation Module** performs real-time checks on the entered data for accuracy and completeness.
-5. If the data passes validation, the **Data Storage Module** saves the observation locally.
-6. If validation fails, the system prompts the observer to correct the errors before proceeding.
+## Entering and validating an observation
 
-**Notable Aspects of Interactions:**
+1. The observer enters station, date/time, position, and weather values through the main window
+   and specialized forms. Their handlers update shared values and coded/display fields.
+2. Output preparation composes an observation and applies the checks required by that output
+   path. File, manual email, and server workflows check required metadata, the log directory,
+   position/time sequence, and the land/sea mask, with additional destination settings as needed.
+3. The [clipboard workflow](../src/main/java/turbowin/ObservationClipboardWorkflow.java)
+   explicitly invokes level-two consistency checks and level-three confirmation checks before
+   its sequence/mask checks. Do not assume every output path invokes the identical validation
+   chain merely because these checks exist.
+4. If selected, `FORMAT_101` prepares the compressed observation through its legacy helper
+   pipeline. FM13 composition also supplies information used by pre-output checks.
+5. The chosen output workflow determines writing, logging, and reset behavior. Merely entering
+   a valid field does not durably save the whole observation.
 
-- **Real-time Validation:** Ensures that the data entered meets predefined criteria, reducing errors in reported observations.
-- **User Feedback Loop:** Immediate prompts guide the observer to correct any issues, enhancing data quality.
-- **Modular Interaction:** Separation of concerns where the input form, validation, and data storage interact seamlessly yet maintain modular independence.
+Validation can reject input or ask the observer to confirm an unusual value. It does not promise
+that every warning represents an error that must be corrected.
 
----
+## Manual observation email
 
-## Transmitting Observations to Meteorological Services
+1. [ObservationEmailManualWorkflow](../src/main/java/turbowin/ObservationEmailManualWorkflow.java)
+   composes and checks the current observation, verifies destination settings, and prepares
+   Format 101 data when selected.
+2. Its completion callback dispatches to the configured desktop, Jakarta, or Python path.
+3. The Jakarta/Python workflows prepare an `ObservationEmailRequest` and invoke their transport
+   in background work. `ObservationEmailTransportExecutor` uses a virtual-thread executor and
+   waits for the transport result within that background operation.
+4. The email worker's `done()` callback handles the returned status or invocation exception.
+   Reaching the transport call is not completion of observation logging/reset.
 
-**Description of the Scenario:**
+| Custom-email outcome | Completion behavior |
+| --- | --- |
+| Success | Schedule IMMT observation logging, reset observation values, and notify for a manual send. |
+| Generic transport failure or invalid send mode | Also log the observation and reset it; report the failure according to the handler and manual/automatic mode. |
+| Empty observation | Reset and report to the system log, but do not write an IMMT observation record. |
+| Invocation exception | The invocation-failure handler logs the error and notifies in manual mode; it does not invoke the observation-log/reset actions. |
+| Python module discovery/copy failure | Its dedicated handler logs the observation and resets it; diagnostics also involve the Python log. |
 
-After recording, the weather observations are transmitted to shore-based meteorological services for analysis and forecasting.
+See the [success](../src/main/java/turbowin/ObservationEmailSuccessHandler.java),
+[generic failure](../src/main/java/turbowin/ObservationEmailGenericFailureHandler.java), and
+[invocation failure](../src/main/java/turbowin/ObservationEmailInvocationFailureHandler.java)
+handlers for the distinct contracts. Desktop email delegates to the installed mail client and
+also has logging/reset side effects; opening that client is not confirmation of delivery.
+IMMT logging composes the record and starts a separate background writer; the email completion
+callback does not wait for that file write to finish.
+Neither a successful SMTP operation nor a desktop handoff proves that the meteorological
+service has received or accepted the observation.
 
-**Textual Description of the Scenario:**
+## Server and file output
 
-1. **TurboWin+** retrieves validated observations from the **Local Data Storage**.
-2. The application formats the data according to the **FM-13 SHIP code** or other required protocols via the **Data Formatting Module**.
-3. The formatted data is passed to the **Communication Interface Module**.
-4. The application establishes a connection with the **Ship's Communication System** (e.g. email).
-5. The data is transmitted to the **Meteorological Service Receiver** on shore.
-6. An acknowledgment is received and logged by **TurboWin+**.
+Server output dispatches to [Fm13ServerWorkflow](../src/main/java/turbowin/Fm13ServerWorkflow.java)
+or [Format101ServerWorkflow](../src/main/java/turbowin/Format101ServerWorkflow.java). HTTP response
+codes drive the result handling. The Format 101 client has bounded retries/backoff for connection
+failures; this is not a general retry guarantee for all transports. The server workflows offer
+manual retry dialogs. Success, and failure paths where retry is declined, can log/reset the
+observation. These response codes are not an end-to-end delivery acknowledgment.
 
-**Notable Aspects of Interactions:**
+File output asks for a destination and writes the appropriate representation. Its normal
+completion path logs/resets after reporting the write result, including a false write result.
+The [Format 101 file workflow](../src/main/java/turbowin/Format101FileOutputWorkflow.java) also
+retains legacy handling of an empty encoded line. Do not equate an output completion notification,
+an IMMT entry, or cleared input fields with a successfully written/transmitted observation.
 
-- **Protocol Compliance:** Data formatting ensures compatibility with international meteorological data standards.
-- **Error Handling:** The system manages transmission errors with retries and logs failures for later review.
+## Automatic instrument reporting
 
----
+Device-specific workflows read serial input and/or saved sensor files, apply format and freshness
+checks, update observation/dashboard values, and dispatch APR/APTR/AWSR output according to
+configuration and scheduling decisions. They are not simply the manual output flow on a timer.
 
-## Handling System Errors and Exceptions
+Historical Mintaka positions are selected for the requested timestamp using file order. An invalid
+matching duplicate clears an earlier valid position; a later valid match can restore it. A short
+physical record also clears it, while unrelated timestamps do not replace it. GPS, wind, and WOW/APR
+history workflows use this policy. See [record selection](08_concepts.md#sensor-record-contracts).
 
-**Description of the Scenario:**
+## Statistics, graphs, and failures
 
-The system responds to runtime errors and exceptions to maintain stability and inform the user.
+Observation statistics process local IMMT records for a selected period; graph and dashboard
+workflows read their relevant observation/sensor files. Maps and exports use the existing view
+workflows. There is no single independent analytics engine or query service behind these views.
 
-**Textual Description of the Scenario:**
-
-1. An unexpected error occurs in the **Data Formatting Module** during data transmission.
-2. The **Error Handling Module** catches the exception.
-3. The error details are logged in the **System Log**.
-4. The **User Interface Module** displays an error message to the observer with possible corrective actions.
-5. The system attempts to recover or safely shut down the affected module without impacting the entire application.
-
-**Notable Aspects of Interactions:**
-
-- **Robust Error Handling:** Prevents system crashes and preserves data integrity.
-- **User Guidance:** Informs the observer of issues and how they might be resolved.
-- **Logging and Monitoring:** Facilitates troubleshooting and future improvements by maintaining detailed logs.
-
----
-
-## Generating Reports and Analytics
-
-**Description of the Scenario:**
-
-Observers generate reports and analytics based on the collected weather data for onboard use or further study.
-
-**Textual Description of the Scenario:**
-
-1. The observer accesses the **Reporting Module** within **TurboWin+**.
-2. They select parameters and time frames for the desired report.
-3. The **Reporting Module** queries the **Local Data Storage** for relevant data.
-4. Data is processed and formatted into reports or visual charts by the **Analytics Engine**.
-5. The final report is displayed to the observer and can be exported or printed.
-
-**Notable Aspects of Interactions:**
-
-- **Customizable Reporting:** Users can tailor reports to specific needs.
-- **Efficient Data Processing:** Optimized queries and processing ensure quick report generation.
-- **Integration with Other Modules:** Seamless data flow from storage to reporting enhances user experience.
+Failure handling is local to each workflow: a dialog, system log entry, standard-output diagnostic,
+default value, cleared field, or silent rejection may be intentional. There is no central mechanism
+that guarantees all exceptions are logged, all state is retained, or every failure is recoverable.

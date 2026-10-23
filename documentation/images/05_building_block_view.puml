@@ -1,34 +1,57 @@
 @startuml
+!pragma layout smetana
 skinparam componentStyle rectangle
+top to bottom direction
+title TurboWin+ responsibilities (one desktop application)
 
-component "Vaisala PTB330/\nPTB220/HMP155" as Vaisala
-component "Mintaka Duo/\nStar/StarX" as Mintaka
-component "EUCAWS" as EUCAWS
-component "OMC-140 AWS" as OMC
-component "GPS Interface" as GPS
+actor "Ship observer" as Observer
+component "Instruments / GPS\nVaisala, Mintaka, EUCAWS, OMC-140" as Sensors
+component "Email server /\ndesktop mail client" as Email
+component "Observation server\nHTTP / HTTPS" as HTTP
+component "Native Format 101\nhelpers" as Native
 
 component "TurboWin+" as TurboWin {
-  component "User Interface" as UI
-  component "Quality Control" as QC
-  component "Data Storage" as Storage
+  component "Swing forms /\nlegacy entry points" as UI
+  component "Startup / configuration\nworkflows" as Startup
+  component "Device workflows /\nrecord parsers" as Acquisition
+  component "Shared mutable state\nmain, main_RS232_RS422, my*" as State
+  component "Output preparation /\ndispatch workflows" as Output
+  component "Validation /\ndomain calculations" as Validation
+  component "Observation coding /\nFormat 101 preparation" as Coding
+  component "Transport workflows /\nresult handlers" as Transport
+  component "Statistics / graphs / maps" as Views
+  folder "Local text files\nconfiguration, IMMT, system logs, sensor history" as Files
 }
 
-component "Human observations" as Observations
-component "Email Server" as Email
-component "HTTP Server" as HTTP
+Observer --> UI : enter observations
+Sensors --> Acquisition : records
+UI --> Startup : initialize
+Startup --> State : configuration / initialization
+UI --> State : input / display fields
+Acquisition --> State : measurements
+Acquisition --> Files : sensor history
+UI --> Output : choose output
+Output ..> State : reads / updates
+Output --> Validation : path-specific checks
+Output --> Coding : compose
+Output --> Transport : dispatch
+Output --> Files : logs / exports
+Startup --> Files : configuration
+UI --> Views
+Views --> Files : read logs / history
+Transport --> Email
+Transport --> HTTP
+Coding --> Native
 
-Vaisala --> UI : Sensor Data
-Mintaka --> UI : Sensor Data
-EUCAWS --> UI : Sensor Data
-OMC --> UI : Sensor Data
-GPS --> UI : Location Data
+note bottom of State
+  Logical responsibilities, not isolated services.
+  Many workflows also access globals directly;
+  not all shared-state dependencies are drawn.
+end note
 
-Observations --> UI : Entered Data
-
-UI --> QC
-QC --> Storage
-QC --> EUCAWS : Obervations
-QC --> Email
-QC --> HTTP
+note bottom of Files
+  File-based persistence, not a database.
+  Logging/reset is not proof of delivery.
+end note
 
 @enduml

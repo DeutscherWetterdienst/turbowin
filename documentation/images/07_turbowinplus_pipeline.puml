@@ -1,90 +1,48 @@
 @startuml
-skinparam rectangle {
-    BackgroundColor<<Build Stage>> LightBlue
-    BackgroundColor<<Artifacts>> LightYellow
-    BackgroundColor<<Optional Signing>> LightGray
-}
-
-title CI Pipeline for TurboWinPlus
-
-:Code change pushed to repository;
-
-partition "Build Stage" <<Build Stage>> {
-    fork
-        :jar;
-        note right
-            On Linux (amd64):
-            - Install build dependencies
-            - Run Gradle build
-        end note
-        -> turbowin-4.x.jar;
-    fork again
-        :test;
-        note right
-            On Linux (amd64):
-            - Install testing dependencies
-            - Set up virtual display
-            - Run tests with screen capture
-        end note
-        -> screen_capture.webm;
-    fork again
-        :deb;
-        note right
-            On Linux (amd64):
-            - Install build dependencies
-            - Build and package for Linux amd64
-        end note
-        -> turbowinplus_4.x-1_amd64.deb;
-    fork again
-        :rpm;
-        note right
-            On Linux (amd64):
-            - Install build dependencies
-            - Build and package for Linux amd64
-        end note
-        -> turbowinplus-4.x-1.x86_64.rpm;
-    fork again
-        :exe;
-        note right
-            On Windows Server 2022 (64-bit):
-            - Download JDK (64-bit) and WiX
-            - Build and package for Windows x64
-        end note
-        -> TurboWinPlus-4.x_64-bit.exe;
-    end fork
-}
-
-partition "Artifacts" <<Artifacts>> {
-    :Collect Artifacts;
+title TurboWin+ CI tasks (GitHub Actions and GitLab)
+start
+if (Manual JAR request?) then (yes)
+  :Linux amd64 / Java 21;
+  :task_linux.bash jar;
+  :Upload build/libs/;
+else (push / pull request)
+  fork
+    :Linux amd64 test job;
+    :Install X11 / Openbox / ffmpeg;
+    :Wait for Xvfb readiness;
+    :Start window manager and recording;
+    :Gradle test --no-daemon\n10-minute timeout + kill grace;
+    :Cleanup desktop / finalize recording\nPreserve test exit status;
+    :Attempt test artifact upload\nalso after failure;
     note right
-        Generated artifacts:
-        - Optional: turbowin-4.x.jar
-        - screen_capture.webm
-        - turbowinplus_4.x-1_amd64.deb
-        - turbowinplus-4.x-1.x86_64.rpm
-        - TurboWinPlus-4.x_64-bit.exe
+      GitHub: 20-minute job limit;
+      video, log, HTML and XML reports.
+      GitLab: video artifact; retry 2.
+      Upload only files actually produced.
     end note
-}
-
-partition "Optional Signing" <<Optional Signing>> {
-    if (Sign Installers and Packages?) then (Yes)
-        :Sign Installers and Packages;
-        note right
-            - Sign Windows executable
-            - Sign DEB package
-            - Sign RPM package
-        end note
-        :Signed Artifacts;
-        note right
-            Signed artifacts:
-            - turbowinplus_4.x-1_amd64.deb
-            - turbowinplus-4.x-1.x86_64.rpm
-            - TurboWinPlus-4.x_64-bit.exe
-        end note
-    else (No)
-        :Skip Signing;
-    endif
-}
-
-:Release of packages;
+  fork again
+    :Linux amd64 DEB;
+    :task_linux.bash deb\njlink + jpackage;
+    :Upload build/jpackage/;
+  fork again
+    :Linux ARM64 DEB;
+    :task_linux.bash deb\njlink + jpackage;
+    :Upload build/jpackage/;
+  fork again
+    :Linux amd64 RPM;
+    :task_linux.bash rpm\njlink + jpackage;
+    :Upload build/jpackage/;
+  fork again
+    :Windows x64 EXE;
+    :task_windows.ps1\nDownload JDK / WiX\njlink + jpackage;
+    :Upload build/jpackage/;
+  end fork
+endif
+note right
+  GitHub: separate workflows; JAR uses workflow_dispatch.
+  GitLab: one build stage; JAR is manual.
+  Email build settings required; dummy fallbacks only in GitHub test.
+  No signing or release-publication stage is implemented.
+end note
+stop
 @enduml
