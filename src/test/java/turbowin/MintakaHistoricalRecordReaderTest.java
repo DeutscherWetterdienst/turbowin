@@ -3,8 +3,10 @@ package turbowin;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.util.List;
 import org.junit.Test;
@@ -111,6 +113,48 @@ public class MintakaHistoricalRecordReaderTest {
             valid, MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, true));
       }
     } finally {
+      file.delete();
+    }
+  }
+
+  @Test
+  public void rejectsInvalidMatchingRecordsWithoutAddingDiagnostics() throws IOException {
+    File file = Files.createTempFile("turbowin-mintaka-history-silent", ".txt").toFile();
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    PrintStream originalOut = System.out;
+    try {
+      System.setOut(new PrintStream(output));
+      for (boolean starX : new boolean[] {false, true}) {
+        String payload = "1029.97,1029.97,-0.90,7, 52 41.9535N,  6 14.1943E,0,0,19";
+        if (starX) {
+          payload += ",20.0,50,19.0,10.0,0";
+        }
+        String valid =
+            payload + "*" + main_RS232_RS422.Mintaka_Star_Checksum(payload + "*") + TIMESTAMP;
+        String wrongCommaPayload = payload + ",extra";
+        String wrongCommaCount =
+            wrongCommaPayload
+                + "*"
+                + main_RS232_RS422.Mintaka_Star_Checksum(wrongCommaPayload + "*")
+                + TIMESTAMP;
+        for (String invalid : List.of("x" + TIMESTAMP, payload + "*ZZ" + TIMESTAMP, wrongCommaCount)) {
+          Files.write(file.toPath(), List.of(invalid));
+          assertNull(MintakaHistoricalRecordReader.readLatestValidRecord(file, TIMESTAMP, starX));
+          assertNull(MintakaHistoricalGpsReader.read(file, TIMESTAMP, starX));
+          assertNull(MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, starX));
+          assertNull(MintakaHistoricalGpsReader.readLatestMatching(file, TIMESTAMP, starX));
+          assertEquals("", output.toString());
+
+          Files.write(file.toPath(), List.of(valid, invalid));
+          // The latest-valid utility retains its policy; workflows use the file-order policy.
+          assertEquals(
+              valid, MintakaHistoricalRecordReader.readLatestValidRecord(file, TIMESTAMP, starX));
+          assertNull(MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, starX));
+          assertEquals("", output.toString());
+        }
+      }
+    } finally {
+      System.setOut(originalOut);
       file.delete();
     }
   }
