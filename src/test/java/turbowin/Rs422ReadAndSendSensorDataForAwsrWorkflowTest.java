@@ -71,7 +71,7 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
   public void selectsLastPeumbRecordAndPreservesFixedFieldConversions() throws Exception {
     RecordTime recordTime = recordTime();
     String first = awsRecord(recordTime, "12.345", "-123.456", "90.0", "2.83");
-    String last = awsRecord(recordTime, "-12.345", "123.456", "0.0", "2.83");
+    String last = awsRecord(recordTime, "-53.432", "123.456", "0.0", "2.83");
     writeSensorFile(
         "not-a-peumb-record\n"
             + awsRecord(recordTime, "9.000", "9.000", "45.0", "1.00")
@@ -84,9 +84,10 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
     waitFor(() -> !mydatetime.year.isEmpty());
     flushEdt();
 
-    assertEquals("12", myposition.latitude_degrees);
+    assertEquals("53", myposition.latitude_degrees);
     assertEquals(myposition.HEMISPHERE_SOUTH, myposition.latitude_hemisphere);
-    assertEquals(39, myposition.int_latitude_minutes);
+    assertEquals(26, myposition.int_latitude_minutes);
+    assertEquals("534", myposition.lalala_code);
     assertEquals("123", myposition.longitude_degrees);
     assertEquals(myposition.HEMISPHERE_EAST, myposition.longitude_hemisphere);
     assertEquals(27, myposition.int_longitude_minutes);

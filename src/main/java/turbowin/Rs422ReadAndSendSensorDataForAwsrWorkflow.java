@@ -256,7 +256,7 @@ final class Rs422ReadAndSendSensorDataForAwsrWorkflow {
                     } catch (NumberFormatException e) {
                     }
 
-                    double decimal_degrees_lat = Double.parseDouble(record_aws_latitude);
+                    double decimal_degrees_lat = Math.abs(Double.parseDouble(record_aws_latitude));
                     myposition.int_latitude_minutes =
                         (int)
                             Math.round(
