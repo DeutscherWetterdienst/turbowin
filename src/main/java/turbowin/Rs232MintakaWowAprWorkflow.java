@@ -591,10 +591,10 @@ final class Rs232MintakaWowAprWorkflow {
                           + "("
                           + date_time_SOG_COG_start
                           + ")");
+                }
               } else {
                 GPS_latitude_earlier = "";
                 GPS_longitude_earlier = "";
-                }
               }
 
             } // try

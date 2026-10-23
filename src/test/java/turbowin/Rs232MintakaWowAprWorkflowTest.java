@@ -273,7 +273,8 @@ public class Rs232MintakaWowAprWorkflowTest {
   @Test
   public void coordinateConversionAndTenMinuteMovementAreApplied() throws Exception {
     main.obs_format = main.FORMAT_101;
-    Date current = new Date();
+    // Match the reader's two-minute file margin, including at the start of an hour.
+    Date current = twoMinutesAgo();
     Date earlier = new Date(current.getTime() - 10 * 60 * 1000L);
     writeRecordInHour(
         starRecord(
@@ -282,7 +283,7 @@ public class Rs232MintakaWowAprWorkflowTest {
     writeRecordInHour(
         starRecord(
             starPayload("1000.0", "1.0", "2", "52 01.0000N", "004 00.0000E"), current),
-        twoMinutesAgo());
+        current);
 
     startWorkflow("MAIN_SCREEN", false, false);
 
@@ -297,7 +298,7 @@ public class Rs232MintakaWowAprWorkflowTest {
 
   @Test
   public void historicalTargetIsSelectedWhenNewerRecordFollowsIt() throws Exception {
-    Date current = new Date();
+    Date current = twoMinutesAgo();
     Date earlier = new Date(current.getTime() - 10 * 60 * 1000L);
     Date newer = new Date(earlier.getTime() + 60 * 1000L);
 
