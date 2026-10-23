@@ -8,6 +8,12 @@ final class MintakaHistoricalGpsReader {
 
   private MintakaHistoricalGpsReader() {}
 
+  static MintakaHistoricalGpsReading readLatestMatching(File file, String timestamp, boolean starX)
+      throws IOException {
+    String record = MintakaHistoricalRecordReader.readLatestMatchingRecord(file, timestamp, starX);
+    return record == null ? null : parseRecord(record, starX);
+  }
+
   static MintakaHistoricalGpsReading read(File file, String timestamp, boolean starX)
       throws IOException {
     return read(file, timestamp, starX, false);

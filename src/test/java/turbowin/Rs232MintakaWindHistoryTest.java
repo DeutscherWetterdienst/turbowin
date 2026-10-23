@@ -75,6 +75,37 @@ public class Rs232MintakaWindHistoryTest {
     assertEquals(" 004 00.0000E", main_RS232_RS422.GPS_longitude_earlier_wind);
   }
 
+  @Test
+  public void invalidChecksumDuplicateClearsTheEarlierWindPosition() throws Exception {
+    String valid = starRecord(" 52 00.0000N", " 004 00.0000E", main.sdf4.parse("201703152020"));
+    String invalid = valid.substring(0, valid.length() - 14) + "ZZ201703152020";
+    assertInvalidDuplicateClearsPosition(valid, invalid);
+  }
+
+  @Test
+  public void invalidCommaCountDuplicateClearsTheEarlierWindPosition() throws Exception {
+    String valid = starRecord(" 52 00.0000N", " 004 00.0000E", main.sdf4.parse("201703152020"));
+    String payload = valid.substring(0, valid.indexOf('*')) + ",extra";
+    String invalid =
+        payload + "*" + main_RS232_RS422.Mintaka_Star_Checksum(payload + "*") + "201703152020";
+    assertInvalidDuplicateClearsPosition(valid, invalid);
+  }
+
+  private void assertInvalidDuplicateClearsPosition(String valid, String invalid) throws Exception {
+    File historyFile = new File(main.logs_dir, "sensor_data_2017031520.txt");
+    // A later record for a different minute must not undo the duplicate's invalidation.
+    String newer = starRecord(" 53 00.0000N", " 005 00.0000E", main.sdf4.parse("201703152021"));
+    Files.writeString(
+        historyFile.toPath(),
+        valid + System.lineSeparator() + invalid + System.lineSeparator() + newer);
+
+    RS232_mintaka.RS232_Mintaka_Star_And_StarX_Determine_Position_Earlier_For_Wind(
+        "201703152030", false);
+
+    assertEquals("", main_RS232_RS422.GPS_latitude_earlier_wind);
+    assertEquals("", main_RS232_RS422.GPS_longitude_earlier_wind);
+  }
+
   private String starRecord(String latitude, String longitude, java.util.Date date) {
     String payload =
         "1000.00,1000.00,1.00,2," + latitude + "," + longitude + ",0,0,0";

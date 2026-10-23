@@ -10,6 +10,31 @@ final class MintakaHistoricalRecordReader {
 
   private MintakaHistoricalRecordReader() {}
 
+  /**
+   * Preserves the legacy history loop's file-order policy: an invalid matching duplicate clears
+   * an earlier valid position, and a later valid match can restore it. Unrelated timestamps do not
+   * replace the requested position; a short physical record clears it regardless of timestamp.
+   */
+  static String readLatestMatchingRecord(File sensorDataFile, String timestamp, boolean starX)
+      throws IOException {
+    if (!sensorDataFile.exists() || sensorDataFile.length() <= 0) {
+      return null;
+    }
+
+    String latestMatchingRecord = null;
+    try (BufferedReader in = new BufferedReader(new FileReader(sensorDataFile))) {
+      String record;
+      while ((record = in.readLine()) != null) {
+        if (record.length() <= 15) {
+          latestMatchingRecord = null;
+        } else if (hasTimestamp(record, timestamp)) {
+          latestMatchingRecord = isValidRecord(record, timestamp, starX) ? record : null;
+        }
+      }
+    }
+    return latestMatchingRecord;
+  }
+
   static String readLatestValidRecord(File sensorDataFile, String timestamp, boolean starX)
       throws IOException {
     return readLatestValidRecord(sensorDataFile, timestamp, starX, false);

@@ -47,6 +47,33 @@ public class MintakaHistoricalRecordReaderTest {
   }
 
   @Test
+  public void matchingRecordPolicyPreservesDuplicateOrderAndShortRecordInvalidation()
+      throws IOException {
+    File file = Files.createTempFile("turbowin-mintaka-history-duplicates", ".txt").toFile();
+    try {
+      String invalid = VALID_RECORD.replace("*1A", "*00");
+      String unrelated = VALID_RECORD.replace(TIMESTAMP, "201703152007");
+      Files.write(file.toPath(), List.of(VALID_RECORD, invalid, unrelated));
+      assertNull(MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, false));
+
+      Files.write(file.toPath(), List.of(invalid, VALID_RECORD, unrelated));
+      assertEquals(
+          VALID_RECORD,
+          MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, false));
+
+      Files.write(file.toPath(), List.of(VALID_RECORD, "short", unrelated));
+      assertNull(MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, false));
+
+      Files.write(file.toPath(), List.of("short", VALID_RECORD));
+      assertEquals(
+          VALID_RECORD,
+          MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, false));
+    } finally {
+      file.delete();
+    }
+  }
+
+  @Test
   public void rejectsWrongChecksumAndCommaCount() throws IOException {
     File file = Files.createTempFile("turbowin-mintaka-history-invalid", ".txt").toFile();
     try {
@@ -55,6 +82,34 @@ public class MintakaHistoricalRecordReaderTest {
       Files.write(file.toPath(), List.of(wrongChecksum, wrongCommaCount));
 
       assertNull(MintakaHistoricalRecordReader.readLatestValidRecord(file, TIMESTAMP, false));
+    } finally {
+      file.delete();
+    }
+  }
+
+  @Test
+  public void matchingRecordPolicyAlsoInvalidatesStarXDuplicates() throws IOException {
+    File file = Files.createTempFile("turbowin-mintaka-starx-duplicates", ".txt").toFile();
+    try {
+      String payload =
+          "1018.12,1018.13,0.00,0, 16 30.4429N, 88 21.9040W,0,2,7,29.4,85,27.4,26.7,60";
+      String valid =
+          payload + "*" + main_RS232_RS422.Mintaka_Star_Checksum(payload + "*") + TIMESTAMP;
+      String wrongChecksum = payload + "*ZZ" + TIMESTAMP;
+      String wrongCommaPayload = payload + ",extra";
+      String wrongCommaCount =
+          wrongCommaPayload
+              + "*"
+              + main_RS232_RS422.Mintaka_Star_Checksum(wrongCommaPayload + "*")
+              + TIMESTAMP;
+      for (String invalid : List.of(wrongChecksum, wrongCommaCount)) {
+        Files.write(file.toPath(), List.of(valid, invalid));
+        assertNull(MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, true));
+
+        Files.write(file.toPath(), List.of(invalid, valid));
+        assertEquals(
+            valid, MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, true));
+      }
     } finally {
       file.delete();
     }

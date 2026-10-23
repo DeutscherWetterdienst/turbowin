@@ -103,8 +103,8 @@ public class RS232_mintaka {
       {
         try {
           MintakaHistoricalGpsReading gpsFields =
-              MintakaHistoricalGpsReader.read(
-                  sensor_data_file_wind, date_time_SOG_COG_start_wind, StarX, true);
+              MintakaHistoricalGpsReader.readLatestMatching(
+                  sensor_data_file_wind, date_time_SOG_COG_start_wind, StarX);
           if (gpsFields != null) {
             GPS_latitude_earlier_wind = gpsFields.latitude;
             GPS_longitude_earlier_wind = gpsFields.longitude;
