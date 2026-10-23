@@ -8024,26 +8024,8 @@ public class main_RS232_RS422 {
     //	 MessageBox(info.c_str(), "TurboWin warning", MB_OK | MB_ICONWARNING);
     // } // else (hoogte anemometer niet ingevuld
 
-    final double Zo = 0.0002;
-    int int_height_anemometer = Integer.MAX_VALUE;
-    double wind_speed_10m = main.INVALID;
-
-    if (!main.height_anemometer.trim().equals("")) {
-      try {
-        int_height_anemometer = Integer.parseInt(main.height_anemometer);
-      } catch (NumberFormatException ex) {
-        int_height_anemometer = Integer.MAX_VALUE;
-      }
-    } // if (!main.height_anemometer.trim().equals(""))
-
-    if ((int_height_anemometer > 10 && int_height_anemometer < 200)
-        && (wind_speed_at_anemometer_height >= 0 && wind_speed_at_anemometer_height < 500)) {
-      double conversion_factor = Math.log(10 / Zo) / (Math.log(int_height_anemometer / Zo));
-
-      wind_speed_10m = wind_speed_at_anemometer_height * conversion_factor;
-    }
-
-    return wind_speed_10m;
+    return WindSpeedAt10mCalculator.calculate(
+        main.height_anemometer, wind_speed_at_anemometer_height);
   }
 
   public static final String WIND_FM13_DASHBOARD = "wind_FM13_dashboard";
