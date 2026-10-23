@@ -108,6 +108,9 @@ public class Rs422ReadAwsSensorDataForDisplayWorkflowTest {
     assertEquals("23", mywind.ship_ground_course);
     assertEquals(myposition.SPEED_6_10, myposition.speed);
     assertEquals("5.5", mywind.ship_ground_speed);
+    assertEquals(10.6578, mytemp.double_dew_point, 0.0001);
+    assertEquals("0", mytemp.sn_TdTdTd_code);
+    assertEquals("107", mytemp.TdTdTd_code);
 
     assertEquals("9 April 2026", main_RS232_RS422.dashboard_string_last_update_record_date);
     assertEquals("7:15", main_RS232_RS422.dashboard_string_last_update_record_time);

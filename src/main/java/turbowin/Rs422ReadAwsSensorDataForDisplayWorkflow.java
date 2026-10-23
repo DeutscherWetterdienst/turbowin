@@ -645,8 +645,12 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     int pos2 = laatste_record.indexOf(",", pos + 1);
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
-                      mytemp.double_rv =
-                          Double.parseDouble(laatste_record.substring(pos + 1, pos2)) / 100;
+                      try {
+                        mytemp.double_rv =
+                            Double.parseDouble(laatste_record.substring(pos + 1, pos2)) / 100;
+                      } catch (NumberFormatException exception) {
+                        mytemp.double_rv = main.INVALID;
+                      }
                       // NB "/100" for consistency with not AWS computed rh (see also
                       // main.temperatures_fields_update() and mytemp.OK_button_actioPerformed())
 
@@ -999,6 +1003,9 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
 
             // update data text fields on main screen
             //
+            if (main.air_temp_from_AWS_present && main.rh_from_AWS_present) {
+              DewPointStateUpdater.updateFromAwsValues();
+            }
             main.date_time_fields_update();
             main.position_fields_update();
             main.barometer_fields_update();

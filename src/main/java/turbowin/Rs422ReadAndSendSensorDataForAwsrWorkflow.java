@@ -770,8 +770,12 @@ final class Rs422ReadAndSendSensorDataForAwsrWorkflow {
                   int pos2 = laatste_record.indexOf(",", pos + 1);
                   if (pos2 - pos >= 2) // between conmmas at least 1 char (e.g. "87.5")
                   {
-                    mytemp.double_rv =
-                        Double.parseDouble(laatste_record.substring(pos + 1, pos2)) / 100;
+                    try {
+                      mytemp.double_rv =
+                          Double.parseDouble(laatste_record.substring(pos + 1, pos2)) / 100;
+                    } catch (NumberFormatException exception) {
+                      mytemp.double_rv = main.INVALID;
+                    }
                     // NB "/100" for consistency with not AWS computed rh (see also
                     // main.temperatures_fields_update() and mytemp.OK_button_actioPerformed())
 
@@ -1097,6 +1101,13 @@ final class Rs422ReadAndSendSensorDataForAwsrWorkflow {
             } // if (pos > 0)
           } while (pos > 0);
         } //  if (doorgaan_in_record == true && laatste_record != null)
+
+        if (doorgaan_in_record) {
+          // AWS supplies air temperature and RH separately.  Unlike the manual temperature form,
+          // this parser does not pass through mytemp.OK_button_actionperformed(), so calculate the
+          // dew point explicitly before the FM13 composer reads the code fields.
+          DewPointStateUpdater.updateFromAwsValues();
+        }
 
         // clear memory
         // check_presence_parameter_system_datum_tijd    = null;

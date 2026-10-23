@@ -133,8 +133,8 @@ final class TemperatureFieldsUpdater {
 
     /////// dew point or relative humidity
     //
-    // AWS mode displays measured relative humidity because no dew point is available; non-AWS mode
-    // displays the calculated dew point instead.
+    // AWS mode displays measured relative humidity; the calculated dew point is used for FM13
+    // coding. Non-AWS mode displays the calculated dew point instead.
     //
     //
     if (main.RS232_connection_mode == 3

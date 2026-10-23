@@ -98,6 +98,9 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
     assertEquals("0005", mybarometer.PPPP_code);
     assertEquals("20.5", mytemp.air_temp);
     assertEquals(0.53, mytemp.double_rv, 0.0001);
+    assertEquals(10.6578, mytemp.double_dew_point, 0.0001);
+    assertEquals("0", mytemp.sn_TdTdTd_code);
+    assertEquals("107", mytemp.TdTdTd_code);
     assertEquals("005", mywind.RWS_code);
     assertEquals("350", mywind.RWD_code);
     assertTrue(Files.readString(systemLogFile()).contains("send method unknown"));

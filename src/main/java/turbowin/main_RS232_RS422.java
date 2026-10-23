@@ -7673,6 +7673,9 @@ public class main_RS232_RS422 {
 
     if (main.jTextField36.getForeground().getRGB() != main.input_color_from_observer.getRGB()) {
       mytemp.air_temp = "";
+      mytemp.double_dew_point = main.INVALID;
+      mytemp.sn_TdTdTd_code = "";
+      mytemp.TdTdTd_code = "";
     }
 
     if (main.jTextField37.getForeground().getRGB() != main.input_color_from_observer.getRGB()) {
@@ -7683,6 +7686,8 @@ public class main_RS232_RS422 {
       mytemp.RH = "";
       mytemp.double_rv = main.INVALID; // double
       mytemp.double_dew_point = main.INVALID; // double
+      mytemp.sn_TdTdTd_code = "";
+      mytemp.TdTdTd_code = "";
     }
 
     if (main.jTextField40.getForeground().getRGB() != main.input_color_from_observer.getRGB()) {
@@ -7764,6 +7769,9 @@ public class main_RS232_RS422 {
     mytemp.sn_TTT_code = "";
     mytemp.TTT_code = "";
     mytemp.double_rv = main.INVALID; // double
+    mytemp.double_dew_point = main.INVALID;
+    mytemp.sn_TdTdTd_code = "";
+    mytemp.TdTdTd_code = "";
     mytemp.sea_water_temp = "";
     mytemp.ss_TsTsTs_code = "";
     mytemp.immt_sst_indicator = "";

@@ -782,45 +782,8 @@ public final class mytemp extends javax.swing.JFrame {
   }
 
   private void Compute_Dewpoint_From_RH(double num_RH, double temp) {
-    /* bij bereken met onderstaande formule: */
-    /* het kan zijn dat num_Tdew = b.v. -0.0000000258 bij Tdry = 0.0 C en r.v. = 100 % */
-    /* dit geeft dan een foute Sn (teken Tdew -> negatief i.p.v. 0 of positief */
-    /* daarom bij 100% r.v. Tdew gelijk maken aan Tdry */
-
-    // NB num_RH range: 0.0 - 1.0
-
-    boolean doorgaan;
-
-    // initialisation
-    double_dew_point = main.INVALID;
-
-    doorgaan = num_RH >= 0.0 && num_RH <= 1.0 && temp >= -75.0 && temp <= 75.0;
-
-    if (doorgaan) {
-      if (num_RH >= 0.99) // num_Rh = 1 = 100 % r.v.
-      {
-        double_dew_point = temp;
-      } else {
-        // initialisation (NB f_p will be used in function SVP() !!!!)
-        pressure = SP;
-        f_p = PRESSURE_DEPENDENCY;
-
-        if (mybarometer.pressure_msl_corrected.equals("") == false
-            && mybarometer.pressure_msl_corrected != null) {
-          hulp_double_pressure_msl_corrected =
-              Double.parseDouble(mybarometer.pressure_msl_corrected);
-          if (hulp_double_pressure_msl_corrected > 900.0
-              && hulp_double_pressure_msl_corrected < 1100.0) {
-            pressure = hulp_double_pressure_msl_corrected;
-            f_p = 1.0016 + 0.00000315 * pressure - 0.074 / pressure;
-          }
-        }
-
-        double_dew_point = c3 / (-1 + c2 / (Math.log((num_RH) * SVP(temp) / c1)));
-      }
-    } else {
-      double_dew_point = main.INVALID;
-    }
+    double_dew_point =
+        DewPointCalculator.calculate(num_RH, temp, mybarometer.pressure_msl_corrected);
 
     // System.out.println("temp = " + temp);
     // System.out.println("num_RH = " + num_RH);
