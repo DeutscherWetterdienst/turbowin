@@ -1,9 +1,44 @@
 package turbowin;
 
-/** Parses the pressure fields from a StarX dashboard record. */
+/** Parses pressure fields from comma-separated, fixed-position, and StarX dashboard records. */
 final class Rs232DashboardRecordParser {
 
   private Rs232DashboardRecordParser() {}
+
+  /**
+   * Parses modes 4–6, where the first comma-separated field is pressure and the third field is
+   * pressure change.
+   */
+  static Result parseCommaSeparated(String record) {
+    int firstComma = record.indexOf(',');
+    int secondComma = record.indexOf(',', firstComma + 1);
+    int thirdComma = record.indexOf(',', secondComma + 1);
+    return new Result(
+        record.substring(0, firstComma), record.substring(secondComma + 1, thirdComma), null);
+  }
+
+  /**
+   * Parses mode 1 as PTB220 and mode 2 as PTB330, extracting 7 pressure characters and 5 pressure
+   * change characters from their respective fixed offsets.
+   */
+  static Result parseFixedPosition(String record, int connectionMode) {
+    int pressurePosition;
+    int pressureChangePosition;
+    if (connectionMode == 1) {
+      pressurePosition = main.RECORD_P_BEGIN_POS_PTB220;
+      pressureChangePosition = main.RECORD_ppp_BEGIN_POS_PTB220;
+    } else if (connectionMode == 2) {
+      pressurePosition = main.RECORD_P_BEGIN_POS_PTB330;
+      pressureChangePosition = main.RECORD_ppp_BEGIN_POS_PTB330;
+    } else {
+      return null;
+    }
+
+    return new Result(
+        record.substring(pressurePosition, pressurePosition + 7),
+        record.substring(pressureChangePosition, pressureChangePosition + 5),
+        null);
+  }
 
   /**
    * Parses a StarX record with 13 comma-separated fields before the observation age, which is in

@@ -30,10 +30,6 @@ final class Rs232DashboardValuesComputationWorkflow {
         boolean checksum_ok = false;
         String dashboard_string_last_update_record_pressure = "";
         String dashboard_string_last_update_record_ppp = "";
-        int pos1 = 0; // position of the first "," in the last record
-        int pos2 = 0; // position of the second "," in the last record
-        int pos3 = 0; // position of the third "," in the last record
-
         // System.out.println("--- last_update_record = " + last_update_record);
 
         if (main.RS232_connection_mode == 1
@@ -82,20 +78,12 @@ final class Rs232DashboardValuesComputationWorkflow {
                   || main.RS232_connection_mode
                       == 6) // Mintaka Duo, Mintaka Star USB, Mintaka Star WiFi
               {
-                // NB pressure and ppp pos in the saved records is the same for Duo, Star and StarX
-                pos1 =
-                    last_update_record.indexOf(",", 0); // position of the first "," in the record
-                pos2 =
-                    last_update_record.indexOf(
-                        ",", pos1 + 1); // position of the second "," in the last record
-                pos3 =
-                    last_update_record.indexOf(
-                        ",", pos2 + 1); // position of the third "," in the last record
-
-                dashboard_string_last_update_record_pressure =
-                    last_update_record.substring(0, pos1);
-                dashboard_string_last_update_record_ppp =
-                    last_update_record.substring(pos2 + 1, pos3);
+                Rs232DashboardRecordParser.Result parsedRecord =
+                    Rs232DashboardRecordParser.parseCommaSeparated(last_update_record);
+                if (parsedRecord != null) {
+                  dashboard_string_last_update_record_pressure = parsedRecord.pressure;
+                  dashboard_string_last_update_record_ppp = parsedRecord.pressureChange;
+                }
               } else if (main.RS232_connection_mode == 7
                   || main.RS232_connection_mode == 8) // Mintaka StarX USB or Mintaka StarX WiFi
               {
@@ -112,52 +100,16 @@ final class Rs232DashboardValuesComputationWorkflow {
                   System.out.println(
                       "--- RS232_compute_dasboard_values() malformed StarX record");
                 }
-                /*
-                pos1 =
-                    last_update_record.indexOf(
-                        ",", 0); // ML hereafter; position of the first "," in the last record
-                pos2 =
-                    last_update_record.indexOf(
-                        ",",
-                        pos1 + 1); // ppp hereafter; position of the second "," in the last record
-                pos3 =
-                    last_update_record.indexOf(
-                        ",", pos2 + 1); // a hereafter; position of the third "," in the last record
-                pos4 =
-                    last_update_record.indexOf(",", pos3 + 1); // lat hereafter; position of the 4th "," in the last record
-                */
               } else if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
-                int type_record_pressure_begin_pos = 0;
-                int type_record_ppp_begin_pos = 0;
-                // int type_record_a_begin_pos            = 0;
-
-                if (main.RS232_connection_mode == 1) // PTB220
-                {
-                  type_record_pressure_begin_pos = main.RECORD_P_BEGIN_POS_PTB220;
-                  type_record_ppp_begin_pos = main.RECORD_ppp_BEGIN_POS_PTB220;
-                  // type_record_a_begin_pos          = main.RECORD_a_BEGIN_POS_PTB220;
-                } else if (main.RS232_connection_mode == 2) // PTB330
-                {
-                  type_record_pressure_begin_pos = main.RECORD_P_BEGIN_POS_PTB330;
-                  type_record_ppp_begin_pos = main.RECORD_ppp_BEGIN_POS_PTB330;
-                  // type_record_a_begin_pos            = main.RECORD_a_BEGIN_POS_PTB330;
+                Rs232DashboardRecordParser.Result parsedRecord =
+                    Rs232DashboardRecordParser.parseFixedPosition(
+                        last_update_record, main.RS232_connection_mode);
+                if (parsedRecord != null) {
+                  dashboard_string_last_update_record_pressure = parsedRecord.pressure;
+                  dashboard_string_last_update_record_ppp = parsedRecord.pressureChange;
                 }
-
-                dashboard_string_last_update_record_pressure =
-                    last_update_record.substring(
-                        type_record_pressure_begin_pos, type_record_pressure_begin_pos + 7);
-                dashboard_string_last_update_record_ppp =
-                    last_update_record.substring(
-                        type_record_ppp_begin_pos, type_record_ppp_begin_pos + 5);
-
-                // System.out.println("+++ dashboard_string_last_update_record_pressure = " +
-                // dashboard_string_last_update_record_pressure);
-
-                // String sensor_data_record_obs_a              =
-                // last_update_record.substring(type_record_a_begin_pos, type_record_a_begin_pos +
-                // 1);
               } // else if (main.RS232_connection_mode == 1 || main.RS232_connection_mode == 2)
 
               if ((dashboard_string_last_update_record_pressure.equals("") == false)
