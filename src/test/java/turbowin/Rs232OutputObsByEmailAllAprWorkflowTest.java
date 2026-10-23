@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -100,8 +101,8 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     originalFormat101Class = main.format_101_class;
     originalPythonEmailClass = main.python_email_class;
     originalJakartaEmailClass = main.jakarta_email_class;
-    replaceStaticTextFields(main.class, myposition.class, mybarometer.class, mybarograph.class,
-        mytemp.class);
+    replaceStaticTextFields(
+        main.class, myposition.class, mybarometer.class, mybarograph.class, mytemp.class);
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -215,6 +216,7 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     Rs232OutputObsByEmailAllAprWorkflow.start();
 
     waitFor(() -> pythonEmail.controlCenterCalled);
+    awaitAutomaticEmailCompletion();
     assertNull(main.jakarta_email_class);
   }
 
@@ -230,6 +232,7 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
 
     waitFor(() -> main.format_101_class != null);
     waitFor(() -> jakartaEmail.sendCalled);
+    awaitAutomaticEmailCompletion();
     assertNull(main.python_email_class);
   }
 
@@ -245,6 +248,13 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     myposition.Qc_code = "1";
     myposition.lalala_code = "234";
     myposition.lolololo_code = "5678";
+  }
+
+  private static void awaitAutomaticEmailCompletion() throws Exception {
+    // Calling the transport is not completion: done() still logs and resets the observation.
+    // Let that callback finish before the next test replaces the shared observation state.
+    waitFor(() -> mydatetime.year.isEmpty());
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void awaitLogContains(String expected) throws Exception {
