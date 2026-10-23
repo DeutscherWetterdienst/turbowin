@@ -322,6 +322,47 @@ public class Rs232MintakaWowAprWorkflowTest {
   }
 
   @Test
+  public void invalidChecksumDuplicateClearsTheEarlierWowAprPosition() throws Exception {
+    assertInvalidHistoricalDuplicateClearsPosition(false);
+  }
+
+  @Test
+  public void invalidCommaCountDuplicateClearsTheEarlierWowAprPosition() throws Exception {
+    assertInvalidHistoricalDuplicateClearsPosition(true);
+  }
+
+  private void assertInvalidHistoricalDuplicateClearsPosition(boolean wrongCommaCount)
+      throws Exception {
+    for (boolean starX : new boolean[] {false, true}) {
+      Date current = twoMinutesAgo();
+      Date earlier = new Date(current.getTime() - 10 * 60 * 1000L);
+      String extension = starX ? ",20.0,50,19.0,10.0,0" : "";
+      String payload =
+          starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E") + extension;
+      writeRecordInHour(starRecord(payload, earlier), earlier);
+      String invalid =
+          wrongCommaCount
+              ? starRecord(payload + ",extra", earlier)
+              : payload + "*ZZ" + main.sdf4.format(earlier);
+      writeRecordInHour(invalid, earlier);
+      writeRecordInHour(
+          starRecord(
+              starPayload("1000.0", "1.0", "2", "52 01.0000N", "004 01.0000E") + extension,
+              current),
+          current);
+
+      startWorkflow("MAIN_SCREEN", false, starX);
+
+      assertEquals("", main_RS232_RS422.GPS_latitude_earlier);
+      assertEquals("", main_RS232_RS422.GPS_longitude_earlier);
+      assertEquals("52 01.0000N", main_RS232_RS422.GPS_latitude);
+      assertEquals("004 01.0000E", main_RS232_RS422.GPS_longitude);
+      assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
+      assertEquals(Double.MAX_VALUE, myposition.COG_APR, 0.0);
+    }
+  }
+
+  @Test
   public void starXSensorBoundariesAreApplied() throws Exception {
     runWorkflowWithRecord(
         starRecord(
