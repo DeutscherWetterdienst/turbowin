@@ -29,17 +29,17 @@ final class MintakaDuoRecordReader {
     if (record == null) {
       if (rawRecord != null) {
         String failureReason = MintakaDuoRecordParser.failureReason(rawRecord);
-        if (failureReason == null) {
-          failureReason = "record";
+        // A missing characteristic after the third comma was rejected without a format message.
+        if (failureReason != null) {
+          System.out.println(
+              "--- "
+                  + diagnosticContext
+                  + ", format ("
+                  + failureReason
+                  + ") last retrieved record NOT ok (file: "
+                  + sensorDataFile
+                  + ")");
         }
-        System.out.println(
-            "--- "
-                + diagnosticContext
-                + ", format ("
-                + failureReason
-                + ") last retrieved record NOT ok (file: "
-                + sensorDataFile
-                + ")");
       }
       return null;
     }
