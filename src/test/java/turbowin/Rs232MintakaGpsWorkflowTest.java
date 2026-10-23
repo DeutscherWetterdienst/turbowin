@@ -297,6 +297,41 @@ public class Rs232MintakaGpsWorkflowTest {
     flushEdt();
   }
 
+  @Test
+  public void invalidChecksumDuplicateClearsTheEarlierGpsPosition() throws Exception {
+    assertInvalidHistoricalDuplicateClearsPosition(false);
+  }
+
+  @Test
+  public void invalidCommaCountDuplicateClearsTheEarlierGpsPosition() throws Exception {
+    assertInvalidHistoricalDuplicateClearsPosition(true);
+  }
+
+  private void assertInvalidHistoricalDuplicateClearsPosition(boolean wrongCommaCount)
+      throws Exception {
+    for (boolean starX : new boolean[] {false, true}) {
+      Date end = shifted(new Date(), -2);
+      Date start = shifted(end, -10);
+      String payload = starPayload(" 52 00.0000N", " 004 00.0000E", starX ? 13 : 8);
+      writeHistoryRecord(starRecord(payload, start));
+      String invalid =
+          wrongCommaCount
+              ? starRecord(payload + ",extra", start)
+              : payload + "*ZZ" + main.sdf4.format(start);
+      writeHistoryRecord(invalid);
+      writeCurrentRecord(
+          starRecord(starPayload(" 52 02.0000N", " 004 02.0000E", starX ? 13 : 8), end), true);
+
+      runWorkflow(starX);
+
+      assertEquals("", main_RS232_RS422.GPS_latitude_earlier);
+      assertEquals("", main_RS232_RS422.GPS_longitude_earlier);
+      // Invalid history must not discard the independent, valid current position.
+      assertEquals(" 52 02.0000N", main_RS232_RS422.GPS_latitude);
+      assertEquals(" 004 02.0000E", main_RS232_RS422.GPS_longitude);
+    }
+  }
+
   private void writePositionPair(
       boolean starX,
       Date end,

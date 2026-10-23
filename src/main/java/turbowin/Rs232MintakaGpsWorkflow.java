@@ -284,7 +284,8 @@ final class Rs232MintakaGpsWorkflow {
           {
             try {
               MintakaHistoricalGpsReading gpsFields =
-                  MintakaHistoricalGpsReader.read(sensor_data_file, date_time_SOG_COG_start, StarX);
+                  MintakaHistoricalGpsReader.readLatestMatching(
+                      sensor_data_file, date_time_SOG_COG_start, StarX);
               if (gpsFields != null) {
                 GPS_latitude_earlier = gpsFields.latitude;
                 GPS_longitude_earlier = gpsFields.longitude;
