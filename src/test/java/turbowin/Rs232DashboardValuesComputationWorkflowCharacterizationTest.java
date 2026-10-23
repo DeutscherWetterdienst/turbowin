@@ -158,6 +158,11 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
         "before-invalid-checksum", main_RS232_RS422.dashboard_string_last_update_record_date_time);
   }
 
+  @Test(expected = StringIndexOutOfBoundsException.class)
+  public void preservesLegacyFailureForMalformedStarXRecord() {
+    Rs232DashboardRecordParser.parseStarX(malformedStarXRecord());
+  }
+
   @Test
   public void parsesStarXPressureAndPppWhenChecksumAndAgeAreValid() throws Exception {
     main.RS232_connection_mode = 7;
@@ -223,6 +228,12 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
             "0",
             "0",
             observationAge);
+    String checksum = main_RS232_RS422.Mintaka_Star_Checksum(recordWithoutChecksum + "*");
+    return recordWithoutChecksum + "*" + checksum + "............";
+  }
+
+  private String malformedStarXRecord() {
+    String recordWithoutChecksum = "1004.00";
     String checksum = main_RS232_RS422.Mintaka_Star_Checksum(recordWithoutChecksum + "*");
     return recordWithoutChecksum + "*" + checksum + "............";
   }

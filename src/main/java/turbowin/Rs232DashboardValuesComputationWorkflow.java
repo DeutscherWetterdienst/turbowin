@@ -30,22 +30,9 @@ final class Rs232DashboardValuesComputationWorkflow {
         boolean checksum_ok = false;
         String dashboard_string_last_update_record_pressure = "";
         String dashboard_string_last_update_record_ppp = "";
-        String local_obs_age = "";
-        final int AGE_NOT_OK = 999999;
         int pos1 = 0; // position of the first "," in the last record
         int pos2 = 0; // position of the second "," in the last record
         int pos3 = 0; // position of the third "," in the last record
-        int pos4 = 0;
-        int pos5 = 0;
-        int pos6 = 0;
-        int pos7 = 0;
-        int pos8 = 0;
-        int pos9 = 0;
-        int pos10 = 0;
-        int pos11 = 0;
-        int pos12 = 0;
-        int pos13 = 0;
-        int pos14 = 0; // pos of the "*"
 
         // System.out.println("--- last_update_record = " + last_update_record);
 
@@ -115,6 +102,17 @@ final class Rs232DashboardValuesComputationWorkflow {
                 // NB pressure and ppp pos in the saved records is the same for Duo, Star and StarX
                 // StarX example: // 1009.73,1007.73,0.00,0, 52 41.9491N,  6
                 // 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
+                Rs232DashboardRecordParser.Result parsedRecord =
+                    Rs232DashboardRecordParser.parseStarX(last_update_record);
+                if (parsedRecord != null) {
+                  dashboard_string_last_update_record_pressure = parsedRecord.pressure;
+                  dashboard_string_last_update_record_ppp = parsedRecord.pressureChange;
+                  main.sensor_data_record_obs_pressure = parsedRecord.observationPressure;
+                } else {
+                  System.out.println(
+                      "--- RS232_compute_dasboard_values() malformed StarX record");
+                }
+                /*
                 pos1 =
                     last_update_record.indexOf(
                         ",", 0); // ML hereafter; position of the first "," in the last record
@@ -126,49 +124,8 @@ final class Rs232DashboardValuesComputationWorkflow {
                     last_update_record.indexOf(
                         ",", pos2 + 1); // a hereafter; position of the third "," in the last record
                 pos4 =
-                    last_update_record.indexOf(
-                        ",", pos3 + 1); // lat hereafter; position of the 4th "," in the last record
-                pos5 =
-                    last_update_record.indexOf(
-                        ",",
-                        pos4 + 1); // lon hereafter; position n of the 5th "," in the last record
-                pos6 =
-                    last_update_record.indexOf(
-                        ",",
-                        pos5 + 1); // course hereafter; position of the 6th "," in the last record
-                pos7 = last_update_record.indexOf(",", pos6 + 1); // speed hereafter
-                pos8 = last_update_record.indexOf(",", pos7 + 1); // elevation hereafter
-                pos9 = last_update_record.indexOf(",", pos8 + 1); // air temp
-                pos10 = last_update_record.indexOf(",", pos9 + 1); // RH
-                pos11 = last_update_record.indexOf(",", pos10 + 1); // wet bulb
-                pos12 = last_update_record.indexOf(",", pos11 + 1); // dew point
-                pos13 = last_update_record.indexOf(",", pos12 + 1); // observation age
-                pos14 = last_update_record.indexOf("*", pos13 + 1); // pos of the "*"
-
-                local_obs_age = last_update_record.substring(pos13 + 1, pos14);
-                main.sensor_data_record_obs_pressure = last_update_record.substring(0, pos1);
-
-                int int_local_obs_age = AGE_NOT_OK; // 999999 = random number but > 99.9
-                if ((local_obs_age.compareTo("") != 0)
-                    && (local_obs_age != null)
-                    && (local_obs_age.indexOf("*") == -1)) {
-                  try {
-                    int_local_obs_age = Integer.parseInt(local_obs_age.trim());
-                  } catch (NumberFormatException e) {
-                    int_local_obs_age = AGE_NOT_OK;
-                    System.out.println("--- " + "RS232_compute_dasboard_values() " + e);
-                  }
-                } // if ( (local_obs_age.compareTo("") != 0) etc.
-
-                if ((int_local_obs_age >= 0) && (int_local_obs_age <= MAX_AGE_STARX_OBS_DATA)) {
-                  dashboard_string_last_update_record_pressure =
-                      last_update_record.substring(0, pos1);
-                  dashboard_string_last_update_record_ppp =
-                      last_update_record.substring(pos2 + 1, pos3);
-                } else {
-                  dashboard_string_last_update_record_pressure = "";
-                  dashboard_string_last_update_record_ppp = "";
-                }
+                    last_update_record.indexOf(",", pos3 + 1); // lat hereafter; position of the 4th "," in the last record
+                */
               } else if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
