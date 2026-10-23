@@ -3,9 +3,51 @@ package turbowin;
 import static org.junit.Assert.assertEquals;
 
 import javax.swing.JTextField;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CloudFieldsUpdaterTest {
+
+  private final JTextField[] originalFields = new JTextField[7];
+  private final String[] originalCloudValues = new String[6];
+  private int originalConnectionMode;
+
+  @Before
+  public void saveState() {
+    originalFields[0] = main.jTextField30;
+    originalFields[1] = main.jTextField31;
+    originalFields[2] = main.jTextField32;
+    originalFields[3] = main.jTextField33;
+    originalFields[4] = main.jTextField34;
+    originalFields[5] = main.jTextField35;
+    originalFields[6] = main.jTextField4;
+    originalCloudValues[0] = mycl.cl_code;
+    originalCloudValues[1] = mycm.cm_code;
+    originalCloudValues[2] = mych.ch_code;
+    originalCloudValues[3] = mycloudcover.N;
+    originalCloudValues[4] = mycloudcover.Nh;
+    originalCloudValues[5] = mycloudcover.h;
+    originalConnectionMode = main.RS232_connection_mode;
+  }
+
+  @After
+  public void restoreState() {
+    main.jTextField30 = originalFields[0];
+    main.jTextField31 = originalFields[1];
+    main.jTextField32 = originalFields[2];
+    main.jTextField33 = originalFields[3];
+    main.jTextField34 = originalFields[4];
+    main.jTextField35 = originalFields[5];
+    main.jTextField4 = originalFields[6];
+    mycl.cl_code = originalCloudValues[0];
+    mycm.cm_code = originalCloudValues[1];
+    mych.ch_code = originalCloudValues[2];
+    mycloudcover.N = originalCloudValues[3];
+    mycloudcover.Nh = originalCloudValues[4];
+    mycloudcover.h = originalCloudValues[5];
+    main.RS232_connection_mode = originalConnectionMode;
+  }
 
   @Test
   public void formatsCloudCodesAndCoverValues() {

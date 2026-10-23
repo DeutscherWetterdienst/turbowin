@@ -18,6 +18,8 @@ public class ObservationComposerTest {
   private String originalWindSpeedCode;
   private String originalExtendedWindSpeedCode;
   private String originalMiddleCloudCode;
+  private String originalLowCloudCode;
+  private String originalHighCloudCode;
   private String originalSwellDirectionCode;
   private String originalSwellPeriodCode;
   private String originalSwellHeightCode;
@@ -38,6 +40,8 @@ public class ObservationComposerTest {
     originalWindSpeedCode = mywind.ff_code;
     originalExtendedWindSpeedCode = mywind.fff00_code;
     originalMiddleCloudCode = mycm.cm_code;
+    originalLowCloudCode = mycl.cl_code;
+    originalHighCloudCode = mych.ch_code;
     originalSwellDirectionCode = mywaves.Dw1_code;
     originalSwellPeriodCode = mywaves.Pw1_code;
     originalSwellHeightCode = mywaves.Hw1_code;
@@ -59,6 +63,8 @@ public class ObservationComposerTest {
     mywind.ff_code = originalWindSpeedCode;
     mywind.fff00_code = originalExtendedWindSpeedCode;
     mycm.cm_code = originalMiddleCloudCode;
+    mycl.cl_code = originalLowCloudCode;
+    mych.ch_code = originalHighCloudCode;
     mywaves.Dw1_code = originalSwellDirectionCode;
     mywaves.Pw1_code = originalSwellPeriodCode;
     mywaves.Hw1_code = originalSwellHeightCode;
@@ -107,6 +113,8 @@ public class ObservationComposerTest {
     mywind.ff_code = "12";
     mywind.fff00_code = "345";
     mycm.cm_code = "7b";
+    mycl.cl_code = "";
+    mych.ch_code = "";
     mywaves.Dw1_code = "99";
     myicing.Is_code = "1";
     myicing.EsEs_code = "02";
