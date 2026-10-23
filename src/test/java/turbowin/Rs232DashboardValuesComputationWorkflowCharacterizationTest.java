@@ -16,6 +16,7 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
   private double originalPressure;
   private double originalPpp;
   private String originalDateTime;
+  private String originalObservationPressure;
 
   @Before
   public void saveState() {
@@ -24,6 +25,7 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
     originalPressure = main_RS232_RS422.dashboard_double_last_update_record_pressure_ic;
     originalPpp = main_RS232_RS422.dashboard_double_last_update_record_ppp;
     originalDateTime = main_RS232_RS422.dashboard_string_last_update_record_date_time;
+    originalObservationPressure = main.sensor_data_record_obs_pressure;
     main.RS232_connection_mode = 1;
   }
 
@@ -34,6 +36,7 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
     main_RS232_RS422.dashboard_double_last_update_record_pressure_ic = originalPressure;
     main_RS232_RS422.dashboard_double_last_update_record_ppp = originalPpp;
     main_RS232_RS422.dashboard_string_last_update_record_date_time = originalDateTime;
+    main.sensor_data_record_obs_pressure = originalObservationPressure;
   }
 
   @Test
@@ -155,6 +158,17 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
         "before-invalid-checksum", main_RS232_RS422.dashboard_string_last_update_record_date_time);
   }
 
+  @Test
+  public void parsesStarXPressureAndPppWhenChecksumAndAgeAreValid() throws Exception {
+    main.RS232_connection_mode = 7;
+    main.barometer_instrument_correction = "";
+
+    startAndWaitForRecord(validStarXRecord("1004.00", "1.23", "10"), "starx");
+
+    assertEquals(1004.0, main_RS232_RS422.dashboard_double_last_update_record_pressure_ic, 0.0);
+    assertEquals(1.2, main_RS232_RS422.dashboard_double_last_update_record_ppp, 0.0);
+  }
+
   private void startAndWaitFor(String pressure, String ppp, String dateTime) throws Exception {
     startAndWaitForRecord(ptb220Record(pressure, ppp), dateTime);
   }
@@ -189,5 +203,27 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
 
   private String starXRecord(String pressure, String ppp) {
     return pressure + "," + ppp + ",0,0,0,0,0,0,0,0,0,0,0,10*00";
+  }
+
+  private String validStarXRecord(String pressure, String ppp, String observationAge) {
+    String recordWithoutChecksum =
+        String.join(
+            ",",
+            pressure,
+            "1004.00",
+            ppp,
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            "0",
+            observationAge);
+    String checksum = main_RS232_RS422.Mintaka_Star_Checksum(recordWithoutChecksum + "*");
+    return recordWithoutChecksum + "*" + checksum + "............";
   }
 }
