@@ -2,7 +2,10 @@ package turbowin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import org.junit.Test;
 
 public class Rs232DashboardRecordParserTest {
@@ -66,6 +69,65 @@ public class Rs232DashboardRecordParserTest {
   @Test
   public void returnsNullForInvalidStarXChecksum() {
     assertNull(Rs232DashboardRecordParser.parseStarX("1003.00,4.56,0,0,0,0,0,0,0,0,0,0,0,10*00"));
+  }
+
+  @Test
+  public void silentlyClearsDashboardFieldsForAnEmptyStarXObservationAge() {
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    PrintStream originalOut = System.out;
+    try {
+      System.setOut(new PrintStream(output));
+      Rs232DashboardRecordParser.Result result =
+          Rs232DashboardRecordParser.parseStarX(starXRecord("1003.00", "4.56", ""));
+
+      assertEquals("", result.pressure);
+      assertEquals("", result.pressureChange);
+      assertEquals("1003.00", result.observationPressure);
+      assertEquals("", output.toString());
+    } finally {
+      System.setOut(originalOut);
+    }
+  }
+
+  @Test
+  public void stillReportsNonEmptyMalformedStarXObservationAges() {
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    PrintStream originalOut = System.out;
+    try {
+      System.setOut(new PrintStream(output));
+      // Legacy parsing distinguished an empty field from non-empty whitespace and other text.
+      for (String age : new String[] {" ", "bad"}) {
+        output.reset();
+        Rs232DashboardRecordParser.Result result =
+            Rs232DashboardRecordParser.parseStarX(starXRecord("1003.00", "4.56", age));
+
+        assertEquals("", result.pressure);
+        assertEquals("", result.pressureChange);
+        assertEquals("1003.00", result.observationPressure);
+        assertTrue(
+            output
+                .toString()
+                .contains("--- RS232_compute_dasboard_values() java.lang.NumberFormatException"));
+      }
+    } finally {
+      System.setOut(originalOut);
+    }
+  }
+
+  @Test
+  public void preservesInclusiveStarXObservationAgeBounds() {
+    for (String age :
+        new String[] {"0", " 10 ", String.valueOf(main_RS232_RS422.MAX_AGE_STARX_OBS_DATA)}) {
+      Rs232DashboardRecordParser.Result result =
+          Rs232DashboardRecordParser.parseStarX(starXRecord("1003.00", "4.56", age));
+      assertEquals("1003.00", result.pressure);
+      assertEquals("4.56", result.pressureChange);
+    }
+    Rs232DashboardRecordParser.Result negative =
+        Rs232DashboardRecordParser.parseStarX(starXRecord("1003.00", "4.56", "-1"));
+    assertEquals("", negative.pressure);
+    assertEquals("", negative.pressureChange);
+    assertEquals("1003.00", negative.observationPressure);
   }
 
   @Test

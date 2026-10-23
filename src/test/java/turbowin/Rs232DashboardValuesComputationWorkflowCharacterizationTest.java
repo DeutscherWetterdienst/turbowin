@@ -1,6 +1,7 @@
 package turbowin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -161,6 +162,32 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
   @Test(expected = StringIndexOutOfBoundsException.class)
   public void preservesLegacyFailureForMalformedStarXRecord() {
     Rs232DashboardRecordParser.parseStarX(malformedStarXRecord());
+  }
+
+  @Test
+  public void emptyStarXAgePreservesPreviousDashboardWithoutANumberFormatDiagnostic()
+      throws Exception {
+    main.RS232_connection_mode = 7;
+    main_RS232_RS422.dashboard_double_last_update_record_pressure_ic = 1005.5;
+    main_RS232_RS422.dashboard_double_last_update_record_ppp = 7.7;
+    main_RS232_RS422.dashboard_string_last_update_record_date_time = "before-empty-age";
+
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    PrintStream originalOut = System.out;
+    try {
+      System.setOut(new PrintStream(output, true));
+      Rs232DashboardValuesComputationWorkflow.start(
+          "empty-age", validStarXRecord("1004.00", "1.23", ""));
+      waitForOutput(output, "dashboard_string_last_update_record_pressure = null/empty");
+    } finally {
+      System.setOut(originalOut);
+    }
+
+    assertEquals(1005.5, main_RS232_RS422.dashboard_double_last_update_record_pressure_ic, 0.0);
+    assertEquals(7.7, main_RS232_RS422.dashboard_double_last_update_record_ppp, 0.0);
+    assertEquals("before-empty-age", main_RS232_RS422.dashboard_string_last_update_record_date_time);
+    assertEquals("1004.00", main.sensor_data_record_obs_pressure);
+    assertFalse(output.toString().contains("NumberFormatException"));
   }
 
   @Test

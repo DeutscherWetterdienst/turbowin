@@ -61,11 +61,15 @@ final class Rs232DashboardRecordParser {
     }
 
     int starPosition = record.indexOf('*', commaPositions[12] + 1);
+    String observationAgeField = record.substring(commaPositions[12] + 1, starPosition);
+    // An absent age was invalid but silent; non-empty malformed ages still produce a diagnostic.
+    if (observationAgeField.isEmpty()) {
+      return new Result("", "", record.substring(0, commaPositions[0]));
+    }
 
     int observationAge;
     try {
-      observationAge =
-          Integer.parseInt(record.substring(commaPositions[12] + 1, starPosition).trim());
+      observationAge = Integer.parseInt(observationAgeField.trim());
     } catch (NumberFormatException exception) {
       System.out.println("--- RS232_compute_dasboard_values() " + exception);
       return new Result("", "", record.substring(0, commaPositions[0]));
