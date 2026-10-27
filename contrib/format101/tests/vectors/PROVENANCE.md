@@ -66,10 +66,9 @@ PYTHONPATH=python/src python3 tests/harness/generate_expected_hpk_linux.py \
 The campaign covers values just below, exactly at, and just above a half-unit SOG
 boundary, SOG clamping below and above its representable range, and half-unit or
 clamping boundaries involving temperature, latitude, and pressure offsets. The
-native encoder produced output for all nine cases. Java matches all nine outputs;
-Python currently differs only at SOG `0.25`, where Python's `round()` uses ties to
-even and Java's `Math.round()` matches the native output. This is an open rounding
-compatibility finding for the next implementation step.
+native encoder produced output for all nine cases. Java and Python now match all
+nine outputs; Python uses Java-compatible `Math.round()` semantics, including
+rounding an exact positive half-unit upward.
 
 Run the checked-in corpus without changing expected files:
 

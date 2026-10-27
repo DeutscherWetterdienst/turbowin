@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from pathlib import Path
 
 from format101.bitstream import write_bits
@@ -61,6 +62,15 @@ def parse_format101_txt(path: Path) -> list[tuple[bool, float | None]]:
     return parsed
 
 
+def _java_math_round(value: float) -> int:
+    """Match Java's ``Math.round(double)`` tie-breaking semantics."""
+    if math.isnan(value):
+        return 0
+    if math.isinf(value):
+        return (2**63 - 1) if value > 0 else -(2**63)
+    return math.floor(value + 0.5)
+
+
 def _quantize(entry: PilotEntry, value: float) -> int:
     """
     Quantize a physical value into a raw coded integer.
@@ -70,7 +80,7 @@ def _quantize(entry: PilotEntry, value: float) -> int:
     if entry.factor == 0:
         raw = 0
     else:
-        raw = round((value - entry.offset) / entry.factor)
+        raw = _java_math_round((value - entry.offset) / entry.factor)
 
     if raw < 0:
         raw = 0
