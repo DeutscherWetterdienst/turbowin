@@ -31,7 +31,16 @@ sourceSets {
         java {
             srcDirs += "$buildDir/generated/source/appinfo/java"
             srcDirs += "$buildDir/generated/source/emailsettings/java"
+            srcDir 'contrib/format101/java/src/main/java'
+            exclude 'format101/CliMain.java'
         }
+    }
+}
+
+tasks.named('processResources') {
+    from('contrib/format101/reference/config') {
+        include 'S-AWS-101_modl_pilote.csv'
+        into 'format101/config'
     }
 }
 

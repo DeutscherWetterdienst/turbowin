@@ -15,6 +15,14 @@ to encode/decode E‑SURFMAR half-compressed messages, in particular dataformat 
 - `java/`: Java encoder implementation
 - `tests/`: test vectors and harness scripts
 
+The root TurboWin Gradle build compiles the Java encoder as the `format101`
+library package, excluding its standalone CLI entry point. The pilot table is
+bundled as the classpath resource
+`/format101/config/S-AWS-101_modl_pilote.csv`. The library can therefore be
+called directly with `format101.Encoder`; it does not start a native helper or
+require the CLI. The application boundary still uses the legacy helper until a
+later checklist step.
+
 ## Compatibility status (TurboWin+ legacy)
 The Python encoder/decoder in `python/src/format101/` targets 1:1 compatibility with the
 TurboWin+ legacy workflow by default and matches the output of `teste_hc_TW.exe` on the
