@@ -70,6 +70,26 @@ native encoder produced output for all nine cases. Java and Python now match all
 nine outputs; Python uses Java-compatible `Math.round()` semantics, including
 rounding an exact positive half-unit upward.
 
+## Group-combination campaign
+
+The `groups/` subdirectory contains eight deterministic inputs generated with
+`generate_vectors.py --mode combo --per-combo 1 --seed 20261027`. They cover all
+visual, wave, and ice marker combinations (`000` through `111`). Marker-zero groups
+have their fields missing; marker-one groups contain a mixture of present and
+missing fields. The campaign also carries the legacy `001199` value of `1`, and its
+outputs exercise the variable-length group layout and final 6-bit/byte padding.
+
+Linux-native expected outputs were generated with:
+
+```bash
+PYTHONPATH=python/src python3 tests/harness/generate_expected_hpk_linux.py \
+  --dir tests/vectors/groups
+```
+
+Both Python and Java match all eight outputs. The `001199` ambiguity remains covered
+by these vectors and the original minimal vectors; its meaning is documented in
+[`known-limitations.md`](../../docs/known-limitations.md).
+
 Run the checked-in corpus without changing expected files:
 
 ```bash

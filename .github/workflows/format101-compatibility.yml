@@ -23,6 +23,13 @@ jobs:
       - name: Verify Java encoder against checked-in vectors
         working-directory: contrib/format101
         run: python3 tests/harness/verify_java_encoder_against_vectors.py --build
+      - name: Verify group combinations
+        working-directory: contrib/format101
+        env:
+          PYTHONPATH: python/src
+        run: |
+          python3 tests/harness/verify_python_encoder_against_vectors.py --dir tests/vectors/groups
+          python3 tests/harness/verify_java_encoder_against_vectors.py --dir tests/vectors/groups
 
   windows:
     runs-on: windows-latest
@@ -42,6 +49,13 @@ jobs:
       - name: Verify Java encoder against checked-in vectors
         working-directory: contrib/format101
         run: python tests/harness/verify_java_encoder_against_vectors.py --build
+      - name: Verify group combinations
+        working-directory: contrib/format101
+        env:
+          PYTHONPATH: ${{ github.workspace }}\contrib\format101\python\src
+        run: |
+          python tests/harness/verify_python_encoder_against_vectors.py --dir tests/vectors/groups
+          python tests/harness/verify_java_encoder_against_vectors.py --dir tests/vectors/groups
       - name: Verify native reference against checked-in vectors
         working-directory: contrib/format101
         run: python tests/harness/verify_reference_vectors_windows.py
