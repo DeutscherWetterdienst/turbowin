@@ -140,7 +140,37 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     awaitResponse(200);
 
     assertTrue(!main_RS232_RS422.format_101_obs.isEmpty());
-    assertTrue(Files.exists(immtFile().getParent().resolve("format_101/temp/HPK_format_101.txt")));
+    Path compressedFile = compressedFile();
+    assertTrue(Files.exists(compressedFile));
+    assertEquals(
+        main_RS232_RS422.format_101_obs + System.lineSeparator(),
+        Files.readString(compressedFile, StandardCharsets.ISO_8859_1));
+  }
+
+  @Test
+  public void failedJavaEncodingCannotReuseEarlierCompressedObservation() throws Exception {
+    AtomicInteger requests = new AtomicInteger();
+    startServer(
+        exchange -> {
+          requests.incrementAndGet();
+          exchange.sendResponseHeaders(200, -1);
+          exchange.close();
+        });
+    Path compressedFile = compressedFile();
+    Files.writeString(compressedFile, "STALE_OBSERVATION\n", StandardCharsets.ISO_8859_1);
+    Files.delete(
+        Path.of(
+            main.logs_dir,
+            main.FORMAT_101_ROOT_DIR,
+            "config",
+            "S-AWS-101_modl_pilote.csv"));
+
+    Rs232SendSensorDataToAprFormat101Workflow.start(false);
+
+    awaitResponse(main.INVALID_RESPONSE_FORMAT_101);
+    assertTrue(!Files.exists(compressedFile));
+    assertEquals(0, requests.get());
+    assertEquals("", main_RS232_RS422.format_101_obs);
   }
 
   @Test
@@ -314,6 +344,14 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
 
   private Path immtFile() {
     return Path.of(main.logs_dir, main.IMMT_LOG);
+  }
+
+  private Path compressedFile() {
+    return Path.of(
+        main.logs_dir,
+        main.FORMAT_101_ROOT_DIR,
+        main.FORMAT_101_TEMP_DIR,
+        "HPK_" + main.FORMAT_101_INPUT_FILE);
   }
 
   private void replaceStaticTextFields(Class<?>... classes) throws Exception {
