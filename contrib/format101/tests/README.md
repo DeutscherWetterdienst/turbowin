@@ -11,3 +11,7 @@ Planned test structure:
 Compatibility verifiers print passed, failed, and explicitly excluded counts. They
 return failure when the campaign has no input vectors or no tested vectors, so an
 empty or entirely excluded campaign cannot appear successful.
+
+The default `tests/vectors/exclusions.txt` manifest records each intentional
+exclusion and its reason. Generated campaigns must provide their own manifest with
+`--exclusions`; an invalid native output without a matching entry fails verification.

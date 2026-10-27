@@ -62,9 +62,11 @@ fields within those blocks are still marked present) can cause the reference enc
 (`teste_hc_TW*`) to output extremely long half-compressed messages.
 
 On the Processing Centre side, such messages would be rejected by a basic validator
-(e.g. length and allowed character range constraints). Therefore, the repository's
-encoder-compatibility tests skip vectors where the expected (reference) output fails
-Processing Centre validation, because such outputs are not practically usable.
+(e.g. length and allowed character range constraints). The repository's encoder-
+compatibility tests exclude only vectors listed with a reason in
+`tests/vectors/exclusions.txt`. An invalid reference output without an explicit
+manifest entry is a test failure. The input and expected output remain available
+for investigation.
 
 ---
 

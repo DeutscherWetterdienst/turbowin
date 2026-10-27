@@ -33,6 +33,23 @@ def validate_obs(obs_bytes: bytes) -> bool:
     return not any(0x20 <= b <= 0x3F for b in obs_bytes[10:])
 
 
+def load_exclusions(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    exclusions = {}
+    for line_number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "|" not in line:
+            raise ValueError(f"Invalid exclusion at {path}:{line_number}; expected STEM | REASON")
+        stem, reason = (part.strip() for part in line.split("|", 1))
+        if not stem or not reason or stem in exclusions:
+            raise ValueError(f"Invalid exclusion at {path}:{line_number}")
+        exclusions[stem] = reason
+    return exclusions
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument(
@@ -47,10 +64,16 @@ def main() -> int:
         default=DEFAULT_PILOTE,
         help="Pilot CSV to use (default: TurboWin+ legacy copy)",
     )
+    ap.add_argument(
+        "--exclusions",
+        type=Path,
+        help="Explicit exclusion manifest (default: <vector-dir>/exclusions.txt)",
+    )
     args = ap.parse_args()
 
     vectors_dir: Path = args.dir
     pilote_csv: Path = args.pilote
+    exclusions = load_exclusions(args.exclusions or vectors_dir / "exclusions.txt")
 
     vectors = sorted(vectors_dir.glob("*.format_101.txt"))
     passed = failed = excluded = 0
@@ -82,8 +105,13 @@ def main() -> int:
         exp = expected_path.read_text(encoding="latin1").splitlines()[0]
 
         if not validate_obs(exp.encode("latin1")):
-            print(f"[SKIP] {stem} (expected output would be rejected by validate_obs)")
-            excluded += 1
+            reason = exclusions.get(stem)
+            if reason is None:
+                print(f"[FAIL] {stem} (invalid reference output; add an explicit exclusion with a reason)")
+                failed += 1
+            else:
+                print(f"[EXCLUDED] {stem}: {reason}")
+                excluded += 1
             continue
 
         if got != exp:

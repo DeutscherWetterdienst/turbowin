@@ -1,0 +1,2 @@
+# STEM | reason for excluding the vector from normal compatibility verification
+presence_bits0_idNOPQRST | The native reference encoder produces an excessively long output that fails Processing Centre length and character validation for this inconsistent input. The input and expected native output remain checked in for investigation.
