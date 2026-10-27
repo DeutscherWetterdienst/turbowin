@@ -52,40 +52,52 @@ def main() -> int:
     vectors_dir: Path = args.dir
     pilote_csv: Path = args.pilote
 
-    ok = True
+    vectors = sorted(vectors_dir.glob("*.format_101.txt"))
+    passed = failed = excluded = 0
 
-    for input_path in sorted(vectors_dir.glob("*.format_101.txt")):
+    if not vectors:
+        print(f"[FAIL] No format_101 vectors found in {vectors_dir}")
+
+    for input_path in vectors:
         stem = input_path.stem.replace(".format_101", "")
         expected_path = vectors_dir / f"{stem}.expected.hpk.txt"
         if not expected_path.exists():
             print(f"[FAIL] Missing expected file: {expected_path}")
-            ok = False
+            failed += 1
             continue
 
         station_id = extract_identifier(stem)
 
-        msg = encode_format101_from_txt(
-            format101_txt=input_path,
-            pilote_csv=pilote_csv,
-            station_id=station_id,
-        )
+        try:
+            msg = encode_format101_from_txt(
+                format101_txt=input_path,
+                pilote_csv=pilote_csv,
+                station_id=station_id,
+            )
+        except Exception as exc:
+            print(f"[FAIL] {stem} ({exc})")
+            failed += 1
+            continue
         got = msg.to_hpk_line()
         exp = expected_path.read_text(encoding="latin1").splitlines()[0]
 
         if not validate_obs(exp.encode("latin1")):
             print(f"[SKIP] {stem} (expected output would be rejected by validate_obs)")
+            excluded += 1
             continue
 
         if got != exp:
-            ok = False
+            failed += 1
             print(f"[FAIL] {stem}")
             print(f"  station_id: {station_id!r}")
             print(f"  expected  : {exp!r}")
             print(f"  got       : {got!r}")
         else:
+            passed += 1
             print(f"[OK]   {stem}")
 
-    return 0 if ok else 1
+    print(f"Summary: passed={passed} failed={failed} excluded={excluded}")
+    return 0 if failed == 0 and passed > 0 else 1
 
 
 if __name__ == "__main__":

@@ -7,3 +7,7 @@ Planned test structure:
 
 - `tests/vectors/`: canonical input vectors and expected encoded message outputs
 - `tests/harness/`: scripts to run reference binaries and compare outputs
+
+Compatibility verifiers print passed, failed, and explicitly excluded counts. They
+return failure when the campaign has no input vectors or no tested vectors, so an
+empty or entirely excluded campaign cannot appear successful.
