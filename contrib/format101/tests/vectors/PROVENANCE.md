@@ -96,6 +96,37 @@ Both Python and Java match all eight outputs. The `001199` ambiguity remains cov
 by these vectors and the original minimal vectors; its meaning is documented in
 [`known-limitations.md`](../../docs/known-limitations.md).
 
+## Seeded campaign corpus
+
+The larger reproducible campaigns were generated with `generate_vectors.py`:
+
+| Directory | Mode | Seed | Inputs | Expected outputs |
+| --- | --- | ---: | ---: | ---: |
+| `generated_combo/` | `combo`, 10 per marker combination | 1234 | 80 | 80 |
+| `fuzz_1234/` | `random` | 1234 | 200 | 200 |
+
+Both campaigns were generated with the Linux native reference encoder using
+`generate_expected_hpk_linux.py`. The reference process returned legacy
+nonzero status codes for some inputs but produced an output file for every
+vector; the generator recorded those warnings and retained the outputs.
+
+Python and Java both match all 280 native outputs exactly, with no exclusions.
+
+Reproduce the campaigns with:
+
+```bash
+PYTHONPATH=python/src python3 tests/harness/generate_vectors.py \
+  --mode combo --per-combo 10 --seed 1234 \
+  --out-dir tests/vectors/generated_combo --prefix combo
+PYTHONPATH=python/src python3 tests/harness/generate_vectors.py \
+  --mode random --count 200 --seed 1234 \
+  --out-dir tests/vectors/fuzz_1234 --prefix fuzz
+PYTHONPATH=python/src python3 tests/harness/generate_expected_hpk_linux.py \
+  --dir tests/vectors/generated_combo
+PYTHONPATH=python/src python3 tests/harness/generate_expected_hpk_linux.py \
+  --dir tests/vectors/fuzz_1234
+```
+
 ## Application-preparation campaign
 
 The `application/` subdirectory contains two sanitized captures produced by

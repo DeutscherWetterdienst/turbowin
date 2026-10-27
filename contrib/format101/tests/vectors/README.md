@@ -100,7 +100,7 @@ uv run --project python python tests/harness/verify_reference_vectors_windows.py
 ### Fuzz campaign (random)
 
 ```powershell
-uv run --project python python tests/harness/generate_vectors.py --mode random --count 1000 --seed 1234 --out-dir tests/vectors/fuzz_1234 --prefix fuzz
+uv run --project python python tests/harness/generate_vectors.py --mode random --count 200 --seed 1234 --out-dir tests/vectors/fuzz_1234 --prefix fuzz
 uv run --project python python tests/harness/generate_expected_hpk_windows.py --dir tests/vectors/fuzz_1234
 uv run --project python python tests/harness/verify_python_encoder_against_vectors.py --dir tests/vectors/fuzz_1234
 uv run --project python python tests/harness/verify_java_encoder_against_vectors.py   --dir tests/vectors/fuzz_1234
