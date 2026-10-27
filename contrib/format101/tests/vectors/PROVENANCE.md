@@ -96,6 +96,34 @@ Both Python and Java match all eight outputs. The `001199` ambiguity remains cov
 by these vectors and the original minimal vectors; its meaning is documented in
 [`known-limitations.md`](../../docs/known-limitations.md).
 
+## Application-preparation campaign
+
+The `application/` subdirectory contains two sanitized captures produced by
+TurboWin's existing `FORMAT_101.write_input_for_101_compression()` method:
+
+| Input vector | Preparation scenario |
+| --- | --- |
+| `manual_preparation_idMAN001` | Manual observation with a fixed position, heading, relative wind, temperatures, pressure, and date; APR speed is missing. |
+| `automatic_apr_preparation_idAPR001` | Automatic/APR observation using the legacy `SOG_APR = 10.0` input, which produces `5.144 m/s` in the prepared file, with the same sanitized environmental values. |
+
+The position is `12°03′N, 45°06′E`; the date is 2026-10-27 12:00 UTC. The
+captures are synthetic and contain no operational station or observer data. They
+were generated outside the application UI by initializing the same static
+preparation fields used by the production method, then copying its generated
+`format_101.txt` file. This keeps the fixtures focused on the preparation
+contract while avoiding personal or operational data.
+
+Expected outputs were generated with the Linux native reference encoder:
+
+```bash
+PYTHONPATH=python/src python3 tests/harness/generate_expected_hpk_linux.py \
+  --dir tests/vectors/application
+```
+
+Java matches both native outputs exactly. Python currently differs from the
+native output at one encoded byte in each fixture; this is recorded as an open
+compatibility issue and is not hidden by excluding the application vectors.
+
 Run the checked-in corpus without changing expected files:
 
 ```bash

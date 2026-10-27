@@ -112,3 +112,10 @@ Linux and Windows. To force a rebuild:
 ```powershell
 uv run --project python python tests/harness/verify_java_encoder_against_vectors.py --build --dir tests/vectors/generated_combo
 ```
+
+## Application-preparation captures
+
+The `application/` directory contains sanitized `format_101.txt` files emitted
+by TurboWin's existing preparation method for manual and automatic/APR
+observations. Their provenance and the native generation command are recorded
+in [`PROVENANCE.md`](PROVENANCE.md).
