@@ -49,7 +49,8 @@ def main() -> int:
         pilote = pilote[1:]
 
     # Indices are after the 000000 operating-mode entry:
-    # 3=SOG, 11=latitude, 13=barometer pressure, 22=air temperature.
+    # 2=COG, 3=SOG, 11=latitude, 12=longitude, 13=barometer pressure,
+    # 22=air temperature.
     cases = {
         "boundary_sog_below_half_idSOGB01": (3, 0.24),
         "boundary_sog_halfway_idSOGH01": (3, 0.25),
@@ -60,6 +61,14 @@ def main() -> int:
         "boundary_lat_halfway_idLATH01": (11, -89.995),
         "boundary_pressure_below_min_idPRSM01": (13, 84995.0),
         "boundary_pressure_above_max_idPRSX01": (13, 105465.0),
+        "boundary_lat_min_idLATMIN": (11, -90.0),
+        "boundary_lat_max_idLATMAX": (11, 90.0),
+        "boundary_lon_min_idLONMIN": (12, -180.0),
+        "boundary_lon_max_idLONMAX": (12, 180.0),
+        "boundary_temp_min_idTMPMIN": (22, 223.15),
+        "boundary_temp_max_idTMPMAX": (22, 325.35),
+        "boundary_cog_min_idCOGMIN": (2, 0.0),
+        "boundary_cog_max_idCOGMAX": (2, 360.0),
     }
     args.out_dir.mkdir(parents=True, exist_ok=True)
     for stem, (index, value) in cases.items():
