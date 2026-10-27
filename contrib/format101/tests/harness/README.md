@@ -8,6 +8,10 @@ This directory contains small, self-contained scripts used to:
 
 Scripts in this directory are expected to be runnable from the repository root.
 
+The GitHub Actions workflow `format101-compatibility.yml` runs the checked-in campaign on Linux
+and Windows. It invokes the Python and Java verifiers without generating expected outputs; the
+Windows job also runs the native reference verification.
+
 ## Debugging Python encoder mismatches (recommended workflow)
 
 When the Python encoder does not match the reference output for a given vector:

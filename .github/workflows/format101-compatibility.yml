@@ -1,0 +1,47 @@
+name: format101-compatibility
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Verify Python encoder against checked-in vectors
+        working-directory: contrib/format101
+        env:
+          PYTHONPATH: python/src
+        run: python3 tests/harness/verify_python_encoder_against_vectors.py
+      - name: Verify Java encoder against checked-in vectors
+        working-directory: contrib/format101
+        run: python3 tests/harness/verify_java_encoder_against_vectors.py --build
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Verify Python encoder against checked-in vectors
+        working-directory: contrib/format101
+        env:
+          PYTHONPATH: ${{ github.workspace }}\contrib\format101\python\src
+        run: python tests/harness/verify_python_encoder_against_vectors.py
+      - name: Verify Java encoder against checked-in vectors
+        working-directory: contrib/format101
+        run: python tests/harness/verify_java_encoder_against_vectors.py --build
+      - name: Verify native reference against checked-in vectors
+        working-directory: contrib/format101
+        run: python tests/harness/verify_reference_vectors_windows.py

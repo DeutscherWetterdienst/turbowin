@@ -26,6 +26,11 @@ The reference expected outputs (`*.expected.hpk.txt`) are generated using the Wi
 `reference/bin/teste_hc_TW.exe`. Once generated, Python and Java verification can run on Linux or
 Windows without executing the reference binary.
 
+The GitHub Actions compatibility workflow runs the Python and Java verifiers on both Linux and
+Windows. Windows additionally checks the checked-in expected outputs against the native reference
+binary. These jobs never regenerate expected outputs; generation remains an explicit local Windows
+operation.
+
 ### Generate and verify combo campaign vectors
 
 ```powershell
