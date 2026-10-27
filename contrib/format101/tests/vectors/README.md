@@ -1,6 +1,7 @@
 # Test vectors
 
 This directory contains canonical input vectors and expected encoded message outputs.
+See [PROVENANCE.md](PROVENANCE.md) for asset hashes, corpus status, and reproducible commands.
 
 ## File types
 
