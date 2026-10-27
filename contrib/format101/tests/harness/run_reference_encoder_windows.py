@@ -5,9 +5,9 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-BIN = REPO_ROOT / "reference" / "binaries" / "format_101" / "teste_hc_TW.exe"
+BIN = REPO_ROOT / "reference" / "bin" / "teste_hc_TW.exe"
 PILOTE_CSV = (
-    REPO_ROOT / "miscellaneous" / "format_101" / "config" / "S-AWS-101_modl_pilote.csv"
+    REPO_ROOT / "reference" / "config" / "S-AWS-101_modl_pilote.csv"
 )
 TEMPLATE = "S-AWS-101"
 

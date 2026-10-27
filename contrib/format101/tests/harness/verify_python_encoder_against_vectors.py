@@ -8,7 +8,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_VECTORS_DIR = REPO_ROOT / "tests" / "vectors"
 DEFAULT_PILOTE = (
-    REPO_ROOT / "miscellaneous" / "format_101" / "config" / "S-AWS-101_modl_pilote.csv"
+    REPO_ROOT / "reference" / "config" / "S-AWS-101_modl_pilote.csv"
 )
 
 ID_RE = re.compile(r"_id([A-Za-z0-9]{1,7})$")

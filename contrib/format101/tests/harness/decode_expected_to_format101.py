@@ -13,8 +13,7 @@ def main() -> int:
         "--pilote",
         default=str(
             REPO_ROOT
-            / "miscellaneous"
-            / "format_101"
+            / "reference"
             / "config"
             / "S-AWS-101_modl_pilote.csv"
         ),

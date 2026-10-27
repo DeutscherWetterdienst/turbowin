@@ -8,7 +8,7 @@ from format101.spec import load_pilote_csv, pilote_key
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PILOTE = (
-    REPO_ROOT / "miscellaneous" / "format_101" / "config" / "S-AWS-101_modl_pilote.csv"
+    REPO_ROOT / "reference" / "config" / "S-AWS-101_modl_pilote.csv"
 )
 
 

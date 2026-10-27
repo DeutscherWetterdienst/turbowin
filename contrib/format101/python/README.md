@@ -38,7 +38,7 @@ This creates a virtual environment in `python/.venv` and installs dependencies
 ## Running the test harness (Windows)
 
 The harness scripts live in `tests/harness/` and must be executed from `contrib/format101`
-so that relative paths (to `tests/`, `reference/`, `miscellaneous/`) work correctly.
+so that relative paths to `tests/` and `reference/` work correctly.
 
 ### Verify all golden vectors (reference binary)
 

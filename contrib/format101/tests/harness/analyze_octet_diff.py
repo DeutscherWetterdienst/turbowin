@@ -6,7 +6,7 @@ from format101.encoder import encode_format101_from_txt
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_PILOTE = (
-    REPO_ROOT / "miscellaneous" / "format_101" / "config" / "S-AWS-101_modl_pilote.csv"
+    REPO_ROOT / "reference" / "config" / "S-AWS-101_modl_pilote.csv"
 )
 
 

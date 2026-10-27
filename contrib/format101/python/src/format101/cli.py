@@ -4,6 +4,12 @@ from pathlib import Path
 from format101.decoder import decode_hpk_line
 from format101.encoder import encode_format101_from_txt
 
+DEFAULT_PILOTE = (
+    Path(__file__).resolve().parents[3]
+    / "reference"
+    / "config"
+    / "S-AWS-101_modl_pilote.csv"
+)
 
 def main() -> int:
     ap = argparse.ArgumentParser(prog="format101")
@@ -12,7 +18,7 @@ def main() -> int:
     dec = sub.add_parser("decode", help="Decode a TurboWin+ HPK format_101 line")
     dec.add_argument(
         "--pilote",
-        default="miscellaneous/format_101/config/S-AWS-101_modl_pilote.csv",
+        default=DEFAULT_PILOTE,
         help="Path to pilot CSV (default: TurboWin+ legacy copy)",
     )
     dec.add_argument(
@@ -35,7 +41,7 @@ def main() -> int:
     )
     enc.add_argument(
         "--pilote",
-        default="miscellaneous/format_101/config/S-AWS-101_modl_pilote.csv",
+        default=DEFAULT_PILOTE,
         help="Path to pilot CSV (default: TurboWin+ legacy copy)",
     )
     enc.add_argument(
