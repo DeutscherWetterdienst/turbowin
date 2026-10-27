@@ -180,7 +180,7 @@ def main() -> int:
     )
     args = ap.parse_args()
 
-    vectors_dir: Path = args.dir
+    vectors_dir: Path = args.dir.resolve()
     exclusions = load_exclusions(args.exclusions or vectors_dir / "exclusions.txt")
     vectors = sorted(vectors_dir.glob("*.format_101.txt"))
     passed = failed = excluded = 0
