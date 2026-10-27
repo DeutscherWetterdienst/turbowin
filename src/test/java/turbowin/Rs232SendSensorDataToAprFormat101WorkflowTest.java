@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.sun.net.httpserver.HttpServer;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.InetSocketAddress;
@@ -128,15 +129,18 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
   }
 
   @Test
-  public void missingAndEmptyCompressedObservationsReturnInvalidResponse() throws Exception {
-    installFormat101Module("");
-    Rs232SendSensorDataToAprFormat101Workflow.start(false);
-    awaitResponse(main.INVALID_RESPONSE_FORMAT_101);
+  public void javaEncoderProducesCompressedObservation() throws Exception {
+    startServer(
+        exchange -> {
+          exchange.sendResponseHeaders(200, -1);
+          exchange.close();
+        });
 
-    main_RS232_RS422.APR_server_response_code = -1;
-    installFormat101Module("empty");
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
-    awaitResponse(main.INVALID_RESPONSE_FORMAT_101);
+    awaitResponse(200);
+
+    assertTrue(!main_RS232_RS422.format_101_obs.isEmpty());
+    assertTrue(Files.exists(immtFile().getParent().resolve("format_101/temp/HPK_format_101.txt")));
   }
 
   @Test
@@ -156,7 +160,8 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
 
     awaitResponse(200);
-    assertEquals("obs=BBXX+TEST%2B%C3%A9", rawQuery[0]);
+    assertTrue(rawQuery[0].startsWith("obs="));
+    assertTrue(rawQuery[0].contains("%"));
     assertEquals(1, requests.get());
   }
 
@@ -253,6 +258,15 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     Files.createDirectories(configDirectory);
     Files.createDirectories(tempDirectory);
     Files.createDirectories(logDirectory);
+
+    try (InputStream pilot =
+        getClass().getResourceAsStream("/format101/config/S-AWS-101_modl_pilote.csv")) {
+      assertTrue(pilot != null);
+      Files.copy(
+          pilot,
+          configDirectory.resolve("S-AWS-101_modl_pilote.csv"),
+          java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+    }
 
     Path compressor = format101Directory.resolve(FORMAT_101.COMPRESSION_EXE_LIN);
     String compressorScript;

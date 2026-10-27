@@ -1,5 +1,6 @@
 package turbowin;
 
+import format101.Encoder;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,6 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -734,6 +738,29 @@ public class FORMAT_101 {
   }
 
   public void compress_101(String identifier) {
+    Path pilotFile =
+        Path.of(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE));
+    Path tempDirectory =
+        Path.of(format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR));
+    Path inputFile = tempDirectory.resolve(main.FORMAT_101_INPUT_FILE);
+    Path outputFile = tempDirectory.resolve("HPK_" + main.FORMAT_101_INPUT_FILE);
+
+    try {
+      // The legacy compressor truncates identifiers longer than seven characters.
+      String effectiveIdentifier =
+          identifier.length() > 7 ? identifier.substring(0, 7) : identifier;
+      String hpkLine =
+          Encoder.encodeFromFormat101Txt(pilotFile, inputFile, effectiveIdentifier).toHpkLine();
+      Files.writeString(
+          outputFile, hpkLine + System.lineSeparator(), StandardCharsets.ISO_8859_1);
+      System.out.println("Compression process finished with status: 0");
+    } catch (IOException | RuntimeException ex) {
+      System.out.println("format 101 Java compression error: " + ex);
+    }
+  }
+
+  /** Retained for rollback and characterization of the pre-Java native path. */
+  private void compress_101_legacy(String identifier) {
     // NB in logs_dir always 'data_dir' already present (so a complete path)
 
     // The compression .exe file to execute

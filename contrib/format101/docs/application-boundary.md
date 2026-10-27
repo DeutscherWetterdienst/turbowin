@@ -1,16 +1,16 @@
-# Existing application Format 101 boundary
+# Application Format 101 boundary
 
-This is the characterization record for the legacy boundary in
-`src/main/java/turbowin/FORMAT_101.java`. It describes behavior that a new
-encoder must preserve or deliberately change in a separately reviewed step.
+This is the characterization record for the application boundary in
+`src/main/java/turbowin/FORMAT_101.java`. Preparation and consumption remain
+unchanged; compression now uses the in-process Java encoder. The former native
+compressor remains private rollback and characterization code only.
 
 ## Control flow
 
 `compress_and_decompress_101_control_center()` performs the following sequence:
 
-1. Selects the compression and decompression executable names from the detected
-   operating system.
-2. Checks for the compression executable below `main.logs_dir/format_101/` and,
+1. Selects the decompression executable name from the detected operating system.
+2. Checks for the decompression executable below `main.logs_dir/format_101/` and,
    when it is absent, attempts to create/copy the complete legacy module.
 3. Selects the compression identifier: `main.station_ID` when it is non-null
    and its untrimmed length is greater than two; otherwise the literal
@@ -18,13 +18,14 @@ encoder must preserve or deliberately change in a separately reviewed step.
    current code.
 4. Requires `format_101/temp/` to exist and deletes its direct entries before
    preparing a new observation.
-5. Writes the prepared input and invokes the native compressor.
+5. Writes the prepared input and invokes the Java encoder in process.
 6. Writes `config/HC_ident.txt`, then invokes the native decompressor.
 
 The method uses a `doorgaan` gate for setup, temp-directory cleanup, and
-identification-file failure. The compressor and decompressor process exit codes
-are printed and logged through their redirected output, but a nonzero compressor
-exit does not itself stop identification-file creation or decompression.
+identification-file failure. The decompressor process exit code is printed and
+logged through its redirected output. Java compression failures are logged, and
+the existing workflow remains responsible for handling missing or empty HPK
+output.
 
 ## Files and process contracts
 
@@ -34,14 +35,14 @@ All paths are below `main.logs_dir/format_101/`:
 | --- | --- |
 | Pilot/config input | `config/S-AWS-101_modl_pilote.csv` |
 | Prepared input | `temp/format_101.txt` |
-| Native compressed output | `temp/HPK_format_101.txt` (the native compressor derives the `HPK_` prefix) |
-| Compression log | `log/log_compression.txt` |
+| Compressed output | `temp/HPK_format_101.txt` (the Java encoder writes Latin-1 text and derives the `HPK_` prefix) |
+| Compression log | Java compression status is printed; the legacy native log is retained only for the private rollback path |
 | Identification record | `config/HC_ident.txt` |
 | Decompression log | `log/log_decompression.txt` |
 | Decompressed diagnostic output | `temp/do_not_send_decompressed_FM13_obs.txt` |
 
-The compressor runs with the `format_101/` directory as its working directory
-and receives:
+The former native compressor ran with the `format_101/` directory as its
+working directory and received:
 
 ```text
 <compression executable> config/S-AWS-101_modl_pilote.csv temp/format_101.txt <identifier> S-AWS-101
@@ -71,3 +72,9 @@ These observations are covered by
 `src/test/java/turbowin/Format101CharacterizationTest.java`, including path and
 argument assertions, representative prepared input, identification-file
 contents, stale-entry removal, and missing-temp failure.
+
+The Java encoder reads the pilot table and prepared input directly, writes the
+encoded observation to `HPK_format_101.txt` using ISO-8859-1, and does not start
+a compressor subprocess. Native decoding remains part of the application
+workflow, and its diagnostic output is still written to
+`do_not_send_decompressed_FM13_obs.txt`.
