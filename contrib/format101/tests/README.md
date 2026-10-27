@@ -15,3 +15,14 @@ empty or entirely excluded campaign cannot appear successful.
 The default `tests/vectors/exclusions.txt` manifest records each intentional
 exclusion and its reason. Generated campaigns must provide their own manifest with
 `--exclusions`; an invalid native output without a matching entry fails verification.
+
+Supported-vector structure can be checked with:
+
+```bash
+python3 tests/harness/validate_supported_vectors.py \
+  --dir tests/vectors/application \
+  --dir tests/vectors/boundaries \
+  --dir tests/vectors/groups \
+  --dir tests/vectors/generated_combo \
+  --dir tests/vectors/fuzz_1234
+```

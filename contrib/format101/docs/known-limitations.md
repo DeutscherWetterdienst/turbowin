@@ -68,6 +68,34 @@ compatibility tests exclude only vectors listed with a reason in
 manifest entry is a test failure. The input and expected output remain available
 for investigation.
 
+## 4) Supported input contract and inconsistent group fields
+
+The supported `format_101.txt` contract is deliberately narrower than “any
+numeric file accepted by the native executable”:
+
+- the file begins with operating mode `0` and contains exactly the 57 value
+  lines defined after the `000000` pilot entry;
+- each value line is either `0` (missing) or `1 <finite numeric value>`;
+- the `410000` visual marker and the two `408000` chain markers are 0/1
+  control values; and
+- fields belonging to a group whose own marker is 0 are missing. The markers
+  also control which later blocks are emitted, so fields after a stopping
+  marker are ignored by the encoder; they are nevertheless checked against
+  their own marker for input consistency.
+
+`tests/harness/validate_supported_vectors.py` checks this structural contract
+for the checked-in supported campaigns. It does not impose additional numeric
+range restrictions here; quantization and clamping remain part of the pilot
+table compatibility behavior.
+
+`presence_bits0_idNOPQRST` intentionally violates the group-field rule: it
+sets fields in all three groups present while all three markers are zero. The native
+reference emits a 781-byte result for it, whereas Java and Python follow the
+control markers and emit a normal short message. This input is therefore
+outside the supported contract, remains in the corpus for investigation, and
+is excluded only through the explicit manifest entry in
+`tests/vectors/exclusions.txt`.
+
 ---
 
 ## Notes
