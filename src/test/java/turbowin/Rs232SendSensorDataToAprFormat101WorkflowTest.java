@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.sun.net.httpserver.HttpServer;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -130,8 +132,10 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
 
   @Test
   public void javaEncoderProducesCompressedObservation() throws Exception {
+    String[] rawQuery = new String[1];
     startServer(
         exchange -> {
+          rawQuery[0] = exchange.getRequestURI().getRawQuery();
           exchange.sendResponseHeaders(200, -1);
           exchange.close();
         });
@@ -145,6 +149,22 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     assertEquals(
         main_RS232_RS422.format_101_obs + System.lineSeparator(),
         Files.readString(compressedFile, StandardCharsets.ISO_8859_1));
+    assertEquals(
+        ServerObservationRequestBuilder.format101Url(main.upload_URL, main_RS232_RS422.format_101_obs)
+            .substring(main.upload_URL.length()),
+        rawQuery[0]);
+    assertEquals(
+        main_RS232_RS422.format_101_obs,
+        Format101FileReader.readFirstLine(compressedFile.toFile()));
+    assertEquals(
+        main_RS232_RS422.format_101_obs,
+        Format101EmailContentResolver.resolve(main.FORMAT_101_BODY, compressedFile.toFile()));
+
+    Clipboard clipboard = new Clipboard("format 101 integration test");
+    ObservationClipboardWriter.write(clipboard, main_RS232_RS422.format_101_obs);
+    assertEquals(
+        main_RS232_RS422.format_101_obs,
+        clipboard.getContents(null).getTransferData(DataFlavor.stringFlavor));
   }
 
   @Test
