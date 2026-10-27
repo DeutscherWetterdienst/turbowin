@@ -329,8 +329,6 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
           "#!/bin/sh\nprintf '%s\\n' '" + output + "' > temp/HPK_format_101.txt\n";
     }
     writeExecutable(compressor, compressorScript);
-    writeExecutable(
-        format101Directory.resolve(FORMAT_101.DECOMPRESSION_EXE_LIN), "#!/bin/sh\nexit 0\n");
   }
 
   private void startServer(com.sun.net.httpserver.HttpHandler handler) throws Exception {

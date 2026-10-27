@@ -118,19 +118,8 @@ public class FORMAT_101 {
       compress_101(compression_identifier);
     }
 
-    //
-    /////////////////////// decompression /////////////////
-    //
-    if (doorgaan == true) {
-      return_status = write_HC_identification_file(compression_identifier);
-      if (return_status != 0) {
-        doorgaan = false;
-      }
-    } // if (doorgaan == true)
-
-    if (doorgaan == true) {
-      decompress_101();
-    }
+    // The HPK file is the complete application output. Native decoding was only
+    // a diagnostic side effect and is intentionally not part of the workflow.
   }
 
   private int check_format_101_module() {
