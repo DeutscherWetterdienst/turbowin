@@ -1,4 +1,5 @@
 import argparse
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -9,13 +10,18 @@ PILOTE = (
     REPO_ROOT / "reference" / "config" / "S-AWS-101_modl_pilote.csv"
 )
 JAVA_DIR = REPO_ROOT / "java"
-GRADLEW = JAVA_DIR / "gradlew.bat"
+GRADLEW = JAVA_DIR / ("gradlew.bat" if os.name == "nt" else "gradlew")
 
 # Gradle application plugin installDist layout:
 # java/build/install/<applicationName>/bin/<applicationName>.bat
 # Here, settings.gradle sets rootProject.name = "format101-java"
-INSTALLDIST_BAT = (
-    JAVA_DIR / "build" / "install" / "format101-java" / "bin" / "format101-java.bat"
+INSTALLDIST_LAUNCHER = (
+    JAVA_DIR
+    / "build"
+    / "install"
+    / "format101-java"
+    / "bin"
+    / ("format101-java.bat" if os.name == "nt" else "format101-java")
 )
 
 ID_RE = re.compile(r"_id([A-Za-z0-9]{1,7})$")
@@ -43,17 +49,17 @@ def hex_tail_bytes(b: bytes, n: int = 16) -> str:
     return " ".join(f"{x:02x}" for x in t)
 
 
+def script_command(script: Path, *args: str) -> list[str]:
+    if os.name == "nt":
+        return ["cmd", "/c", str(script), *args]
+    return [str(script), *args]
+
+
 def run_install_dist_build() -> None:
     if not GRADLEW.exists():
         raise RuntimeError(f"Missing Gradle wrapper: {GRADLEW}")
 
-    cmd = [
-        "cmd",
-        "/c",
-        str(GRADLEW),
-        "--no-daemon",
-        "installDist",
-    ]
+    cmd = script_command(GRADLEW, "--no-daemon", "installDist")
     proc = subprocess.run(
         cmd,
         cwd=JAVA_DIR,
@@ -67,13 +73,11 @@ def run_install_dist_build() -> None:
 
 
 def run_java_install_dist(pilote: Path, format101: Path, station_id: str) -> bytes:
-    if not INSTALLDIST_BAT.exists():
-        raise FileNotFoundError(f"Missing installDist launcher: {INSTALLDIST_BAT}")
+    if not INSTALLDIST_LAUNCHER.exists():
+        raise FileNotFoundError(f"Missing installDist launcher: {INSTALLDIST_LAUNCHER}")
 
-    cmd = [
-        "cmd",
-        "/c",
-        str(INSTALLDIST_BAT),
+    cmd = script_command(
+        INSTALLDIST_LAUNCHER,
         "encode",
         "--pilote",
         str(pilote),
@@ -81,7 +85,7 @@ def run_java_install_dist(pilote: Path, format101: Path, station_id: str) -> byt
         str(format101),
         "--station-id",
         station_id,
-    ]
+    )
     proc = subprocess.run(
         cmd,
         cwd=REPO_ROOT,
@@ -101,16 +105,14 @@ def run_java_via_gradle(pilote: Path, format101: Path, station_id: str) -> bytes
     if not GRADLEW.exists():
         raise RuntimeError(f"Missing Gradle wrapper: {GRADLEW}")
 
-    cmd = [
-        "cmd",
-        "/c",
-        str(GRADLEW),
+    cmd = script_command(
+        GRADLEW,
         "--no-daemon",
         "run",
         "--quiet",
         "--args",
         f"encode --pilote {pilote} --format101 {format101} --station-id {station_id}",
-    ]
+    )
     proc = subprocess.run(
         cmd,
         cwd=JAVA_DIR,
@@ -126,15 +128,14 @@ def run_java_via_gradle(pilote: Path, format101: Path, station_id: str) -> bytes
     return proc.stdout
 
 
-def extract_last_line_as_latin1(stdout_bytes: bytes) -> tuple[str, bytes]:
+def extract_last_line(stdout_bytes: bytes) -> bytes:
     """
-    Return (decoded_line, raw_line_bytes) from process stdout.
-
-    We avoid text=True / encoding=... here to be robust against Windows code pages.
+    Return the last output line without changing payload bytes.
     """
-    lines = stdout_bytes.splitlines()
-    last = lines[-1] if lines else b""
-    return last.decode("latin1", errors="replace"), last
+    lines = stdout_bytes.split(b"\n")
+    while lines and lines[-1] == b"":
+        lines.pop()
+    return lines[-1].removesuffix(b"\r") if lines else b""
 
 
 def main() -> int:
@@ -148,7 +149,7 @@ def main() -> int:
     ap.add_argument(
         "--build",
         action="store_true",
-        help="Run 'gradlew.bat --no-daemon installDist' before verifying (recommended after Java code changes)",
+        help="Run the platform's Gradle wrapper with --no-daemon installDist before verifying",
     )
     ap.add_argument(
         "--prefer-gradle",
@@ -163,7 +164,7 @@ def main() -> int:
     if args.build:
         run_install_dist_build()
 
-    use_install_dist = INSTALLDIST_BAT.exists() and not args.prefer_gradle
+    use_install_dist = INSTALLDIST_LAUNCHER.exists() and not args.prefer_gradle
     if not use_install_dist:
         if not GRADLEW.exists():
             raise RuntimeError("Neither installDist launcher nor Gradle wrapper found")
@@ -178,7 +179,7 @@ def main() -> int:
 
         station_id = extract_identifier(stem)
 
-        exp = expected_path.read_bytes().splitlines()[0]
+        exp = extract_last_line(expected_path.read_bytes())
         if not validate_obs(exp):
             print(f"[SKIP] {stem} (expected output would be rejected by validate_obs)")
             continue
@@ -193,15 +194,14 @@ def main() -> int:
             print(f"[FAIL] {stem} ({e})")
             continue
 
-        got_line, got_line_bytes = extract_last_line_as_latin1(stdout_bytes)
+        got_line_bytes = extract_last_line(stdout_bytes)
 
-        exp_line = exp.decode("latin1", errors="replace")
-        if got_line != exp_line:
+        if got_line_bytes != exp:
             ok = False
             print(f"[FAIL] {stem}")
             print(f"  station_id: {station_id!r}")
-            print(f"  expected  : {exp_line!r}")
-            print(f"  got       : {got_line!r}")
+            print(f"  expected  : {exp.decode('latin1', errors='replace')!r}")
+            print(f"  got       : {got_line_bytes.decode('latin1', errors='replace')!r}")
             print(f"  exp_len   : {len(exp)}")
             print(f"  got_len   : {len(got_line_bytes)}")
             print(f"  exp_tail16: {hex_tail_bytes(exp)}")

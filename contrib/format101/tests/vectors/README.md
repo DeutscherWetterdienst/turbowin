@@ -105,7 +105,8 @@ uv run --project python python tests/harness/verify_python_encoder_against_vecto
 uv run --project python python tests/harness/verify_java_encoder_against_vectors.py   --dir tests/vectors/fuzz_1234
 ```
 
-The Java verification script uses the Gradle `installDist` launcher if available. To force a rebuild:
+The Java verification script uses the platform's Gradle `installDist` launcher if available on both
+Linux and Windows. To force a rebuild:
 
 ```powershell
 uv run --project python python tests/harness/verify_java_encoder_against_vectors.py --build --dir tests/vectors/generated_combo

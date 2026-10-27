@@ -20,10 +20,11 @@ The Python encoder/decoder in `python/src/format101/` targets 1:1 compatibility 
 TurboWin+ legacy workflow by default and matches the output of `teste_hc_TW.exe` on the
 current golden vectors in `tests/vectors/`.
 
-## Running test campaigns (Windows)
+## Running test campaigns
 
 The reference expected outputs (`*.expected.hpk.txt`) are generated using the Windows reference binary
-`reference/bin/teste_hc_TW.exe`.
+`reference/bin/teste_hc_TW.exe`. Once generated, Python and Java verification can run on Linux or
+Windows without executing the reference binary.
 
 ### Generate and verify combo campaign vectors
 
