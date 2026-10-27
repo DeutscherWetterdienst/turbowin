@@ -58,4 +58,10 @@ jobs:
           python tests/harness/verify_java_encoder_against_vectors.py --dir tests/vectors/groups
       - name: Verify native reference against checked-in vectors
         working-directory: contrib/format101
-        run: python tests/harness/verify_reference_vectors_windows.py
+        run: |
+          python tests/harness/verify_reference_vectors_windows.py
+          python tests/harness/verify_reference_vectors_windows.py --dir tests/vectors/application
+          python tests/harness/verify_reference_vectors_windows.py --dir tests/vectors/boundaries
+          python tests/harness/verify_reference_vectors_windows.py --dir tests/vectors/groups
+          python tests/harness/verify_reference_vectors_windows.py --dir tests/vectors/generated_combo
+          python tests/harness/verify_reference_vectors_windows.py --dir tests/vectors/fuzz_1234
