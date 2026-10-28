@@ -103,6 +103,7 @@ import javax.swing.JPopupMenu;
 *
 *
 * ---------------------------------------------------------------------------------------------------------------------
+* Historical Java Web Start storage paths (muffin persistence is no longer active):
 * - muffin: // Windows 7        bv : C:\Users\hometrainer\AppData\LocalLow\Sun\Java\Deployment\cache\6.0\muffin
 *           // XP               bv : C:\Documents and Settings\stam\Local Settings\Application Data\Sun\Java\Deployment\cache\6.0\muffin
 * ---------------------------------------------------------------------------------------------------------------------
@@ -130,6 +131,7 @@ import javax.swing.JPopupMenu;
 *              - zie FORMAT_101.java voor extra dirs en files voor semi compressed berichten versturen
 *              - NB voor volledig overzicht zie doc: "turbowin+_folder_structuur.docx"
 *
+* HISTORICAL JNLP BEHAVIOR ONLY; current startup uses configuration files, not muffins:
 * NB WHEN STARTED WITH turbowin_jws_offline.jnlp AND turbowin_plus_offline.cmd IS IN THE SAME DIR
 *    THEN THE META DATA WILL ONLY BE STORED AND RETRIEVED FROM CONFIGURATION FILES AND NOT FROM/TO MUFFINS!
 *    DELETE/RENAME turbowin_plus_offline.cmd TO USE MUFFINS
@@ -201,12 +203,10 @@ import javax.swing.JPopupMenu;
 
 *
 * ----------------------------------------------------------------------------------------------------------------------
-* configuration data (bv call sign, imo nummer, hoogte deklading etc) wordt op 3 plaatsen weggeschreven: !!!
-*   - 1x in muffin (java cache)
-*   - 2x in configuration.txt - logs_dir (user defined in online mode sub dir in offline mode -dir waar immt.log staat-)
-*                             - data_dir (system defined -dir waar turbowin_jws.jar staat- NB kan zijn dat user-dir write protected is bv bij
-*                                         installatie in de Program Files !! -> komt dan verder geen melding, dit is bij installatie script
-*                                         aan te passen zie [DIRS] section, permissions etc. bij inno setup)
+* Current configuration persistence: see documentation/configuration_persistence.md.
+* Settings are written asynchronously to configuration.txt in each non-empty logs_dir and data_dir.
+* Startup initializes logs_dir below the writable data root; loading can replace it with a saved value.
+* Reading prefers the logs copy when present, otherwise the data-root copy. Muffins are historical.
 *
 *
 * main.configuratie_regels[0 - 14]                              -> station data
@@ -6936,9 +6936,7 @@ public class main extends javax.swing.JFrame {
       12345; // for checking only one instance is running  // random large port number
   private static ServerSocket s; // do not delete!
   public static String output_dir = null; // for function Kopieeren_Waarnemers_En_Aantallen()
-  static String hulp_dir =
-      ""; // for writing configuration.txt file in data_dir (system defined) AND logs_dir (user
-  // defined) (backup for muffin)
+  static String hulp_dir = ""; // directory selected for the asynchronous configuration.txt read
   // private URL url_php;
 
   String output_file = "";

@@ -114,7 +114,8 @@ final class ConfigurationManager {
     //   - lees_configuratie_regels() [main.java]
     //   - Maintenance_Import_maintenance_data_actionPerformed() [main.java]
 
-    /* put collected meta data from muffin (or configuration file if read muffin failed) into appropriate global vars */
+    // Apply recognized labeled lines from startup loading or import to the existing global
+    // settings.
     for (int teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++) {
       if ((configuratie_regels[teller] != null)
           && (configuratie_regels[teller].compareTo("") != 0)) {
@@ -578,7 +579,7 @@ final class ConfigurationManager {
           ship_deck_color_String = ConfigurationLineParser.value(configuratie_regels[teller]);
         }
 
-        // custom email module (primary-jakarta, secondary-python)
+        // Custom email module; normalize the retired Python value after applying all lines.
         if (ConfigurationLineMatcher.contains(
             configuratie_regels[teller], CUSTOM_EMAIL_MODULE_TXT)) {
           custom_email_module = ConfigurationLineParser.value(configuratie_regels[teller]);

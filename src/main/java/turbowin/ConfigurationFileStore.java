@@ -10,10 +10,11 @@ import java.io.IOException;
 /**
  * Reads and writes the line-oriented TurboWin configuration file.
  *
- * <p>The file is the legacy indexed representation of the configuration array: file line {@code
- * n} corresponds to configuration array entry {@code n}; production callers use 100 entries. The
- * writer deliberately uses {@link BufferedWriter#newLine()} so the file follows the platform line
- * separator used by the original implementation.
+ * <p>Production callers use a 100-entry line array. Writing skips null and empty entries; reading
+ * clears the array and fills it sequentially with at most 100 physical lines. Array positions need
+ * not survive a round trip: settings are identified by their labels when applied. The writer uses
+ * {@link BufferedWriter#newLine()} for platform line separators, and both operations use the
+ * default charset of {@link FileReader} and {@link FileWriter}.
  */
 final class ConfigurationFileStore {
 

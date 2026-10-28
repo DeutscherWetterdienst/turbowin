@@ -31,8 +31,6 @@ final class MaintenanceDataImportWorkflow {
           while ((file_line = in.readLine()) != null) {
             // System.out.println("+++ 1] " + file_line);
 
-            // NB e.g. configuratie_regels[2]  = "wind source        : estimated; true speed and
-            // true direction"
             // read all lines from import file and check for presence of ship name and call sign
             if (file_line.indexOf(main.SHIP_NAME_TXT) != -1) {
               ship_name_txt_present = true;
@@ -68,8 +66,6 @@ final class MaintenanceDataImportWorkflow {
             while ((file_line = in2.readLine()) != null) {
               // System.out.println("+++ 2] " + file_line);
 
-              // NB e.g. configuratie_regels[2]  = "wind source        : estimated; true speed and
-              // true direction"
               // read all lines from configuration file
               main.configuratie_regels[teller] = file_line;
               teller++;
@@ -87,7 +83,7 @@ final class MaintenanceDataImportWorkflow {
           // put collected meta data from configuration file into appropriate global vars
           main.meta_data_from_configuration_regels_into_global_vars();
 
-          // write meta (station) data to muffins or configuration files
+          // Start saving the imported settings to the configuration files.
           main.schrijf_configuratie_regels();
 
           // user feedback string

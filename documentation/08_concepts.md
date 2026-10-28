@@ -37,9 +37,13 @@ read/write workflows; `ConfigurationPersistenceWorkflow` retains the compatibili
 
 The reader prefers `configuration.txt` in `logs_dir` and falls back to the data root when the log
 copy is absent. If neither file exists, it retains the normal non-empty-directory fallback for
-first use. Read I/O failures are tolerated and the existing line array is then applied. Writing
+first use. Reading clears the line array before opening the selected file. Read I/O failures are
+tolerated; whatever lines were read are applied to existing globals, without retrying the other
+copy. Missing settings leave their global values unchanged. Writing
 starts separate background writes to each non-empty data/log directory. Those writes are not a
-single atomic transaction and have different failure notification paths.
+single atomic transaction and have different failure notification paths. Historical Java Web Start
+"muffin" storage is no longer used. See the [configuration walkthrough](configuration_persistence.md)
+for the file format, directory selection, import/export behavior, and asynchronous limitations.
 
 The installed desktop uses platform data directories with `logs` and `amver` subdirectories.
 `-Dturbowin.data.dir=...` overrides the data directory, notably for isolated tests. See the

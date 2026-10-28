@@ -8,9 +8,8 @@ import javax.swing.JOptionPane;
 /**
  * Calculates and initializes the fixed offline log and AMVER directories.
  *
- * <p>In offline mode, these directories are always subdirectories of the application's main
- * directory (the directory containing the installed JAR) and are intentionally not
- * user-configurable.
+ * <p>Startup selects subdirectories of the writable data root, independently of the installed JAR
+ * location. Configuration loading happens later and can replace logs_dir with a saved value.
  */
 final class StartupDirectorySetup {
 
