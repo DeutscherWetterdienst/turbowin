@@ -123,37 +123,50 @@ public class FORMAT_101 {
   }
 
   private int check_format_101_module() {
-    int format_101_module_status = 0;
-    // String info = "";
-
-    if (main.logs_dir.trim().equals("") == false && main.logs_dir.trim().length() >= 2) {
-      // NB see function copy_format_101_module() for a message if "logs_dir" do not exist
-
-      // NB e.g. exeFile = "C:\Program Files (x86)\TurboWin+\logs\format_101\teste_hc_TW.exe"
-      final File exeFile = new File(format101Path(main.FORMAT_101_ROOT_DIR, compression_exe));
-      if (exeFile.exists() == false) {
-        format_101_module_status = 1;
-
-        // info = "--- did not find: " + main.logs_dir + java.io.File.separator +
-        // main.FORMAT_101_ROOT_DIR + java.io.File.separator + COMPRESSION_EXE;
-        // System.out.println(info);
-        main.log_turbowin_system_message(
-            "[FORMAT-101] did not find: "
-                + format101Path(main.FORMAT_101_ROOT_DIR, compression_exe));
-      } else {
-        format_101_module_status = 0;
-
-        // info = "--- found: format 101 compression executable (" + COMPRESSION_EXE + ")";
-        // System.out.println(info);
-        main.log_turbowin_system_message(
-            "[FORMAT-101] found: format 101 compression executable (" + compression_exe + ")");
-      }
+    if (main.logs_dir.trim().length() < 2) {
+      return 1;
     }
 
-    return format_101_module_status;
+    File pilotFile =
+        new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE));
+    if (!pilotFile.exists()) {
+      main.log_turbowin_system_message("[FORMAT-101] did not find: " + pilotFile);
+      return 1;
+    }
+
+    main.log_turbowin_system_message("[FORMAT-101] found: " + pilotFile);
+    return 0;
   }
 
   private int copy_format_101_module() {
+    if (main.logs_dir.trim().length() < 2) {
+      JOptionPane.showMessageDialog(
+          null,
+          "logs folder unknown, select: Maintenance -> Log files settings and retry",
+          main.APPLICATION_NAME,
+          JOptionPane.WARNING_MESSAGE);
+      return 1;
+    }
+
+    try {
+      Files.createDirectories(Path.of(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR)));
+      Files.createDirectories(Path.of(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_LOG_DIR)));
+      Files.createDirectories(Path.of(format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR)));
+      copyResourceToFile(
+          main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + BUFR_TABLE,
+          new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE)));
+      main.log_turbowin_system_message("[FORMAT-101] copied Java encoder configuration");
+      return 0;
+    } catch (IOException ex) {
+      main.log_turbowin_system_message(
+          "[FORMAT-101] error copying Java encoder configuration: " + ex);
+      return 1;
+    }
+  }
+
+  /** Retained for historical characterization until native helper retirement is complete. */
+  @SuppressWarnings("unused")
+  private int copy_format_101_module_legacy() {
     int format_101_module_status = 0;
     boolean doorgaan = true;
     String info = "";

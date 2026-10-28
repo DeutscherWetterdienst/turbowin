@@ -178,12 +178,13 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
         });
     Path compressedFile = compressedFile();
     Files.writeString(compressedFile, "STALE_OBSERVATION\n", StandardCharsets.ISO_8859_1);
-    Files.delete(
+    Files.writeString(
         Path.of(
             main.logs_dir,
             main.FORMAT_101_ROOT_DIR,
             "config",
-            "S-AWS-101_modl_pilote.csv"));
+            "S-AWS-101_modl_pilote.csv"),
+        "malformed pilot table\n");
 
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
 
