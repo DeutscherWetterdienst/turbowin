@@ -490,8 +490,7 @@ public final class about extends javax.swing.JFrame {
     // print the integrated libraries and modules (2 or 3 lines)
     //
     String lib_string_1 =
-        main.APPLICATION_MET_MODULES; // e.g. "MAWSbin_TW (MF); teste_hc_TW (MF); email_tbw_43
-    // (KNMI);"
+        main.APPLICATION_MET_MODULES; // e.g. "Java Format 101 encoder; email_tbw_43 (KNMI);"
     jLabel16.setText("libraries-1: " + lib_string_1);
 
     String lib_string_2 = "";

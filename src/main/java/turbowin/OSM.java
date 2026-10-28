@@ -161,14 +161,8 @@ public class OSM {
         main.log_turbowin_system_message(
             "[OSM] start copying complete format OSM module from jar to: " + main.logs_dir);
 
-        // message (because it could be that virus scanner is complaining about compression exe
-        // (teste_hc_TW.exe))
-        // String info_message = "format 101 module will be copied from source to destination\n
-        // note: in case you get a warning of your virus scanner, " + COMPRESSION_EXE + " and " +
-        // DECOMPRESSION_EXE + " are essential parts of " + main.APPLICATION_NAME + " !";
-        // JOptionPane.showMessageDialog(null, info_message, main.APPLICATION_NAME + " info",
-        // JOptionPane.WARNING_MESSAGE);
-        // note veplaatst naar obsformat.java (i.v.m messagebox niet goed in APR mode)
+        // A previous version copied native Format 101 helpers here; OSM now only needs its own
+        // resources.
 
         // create dir "OSM" (e.g. "C:\Program Files (x86)\TurboWin+\logs\OSM")
         //
