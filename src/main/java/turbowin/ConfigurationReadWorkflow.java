@@ -21,8 +21,22 @@ final class ConfigurationReadWorkflow {
     return "";
   }
 
+  static String configurationDirectoryForRead(String logsDirectory, String dataDirectory) {
+    if (logsDirectory != null
+        && !logsDirectory.isEmpty()
+        && new File(logsDirectory, CONFIGURATION_FILE).isFile()) {
+      return logsDirectory;
+    }
+    if (dataDirectory != null
+        && !dataDirectory.isEmpty()
+        && new File(dataDirectory, CONFIGURATION_FILE).isFile()) {
+      return dataDirectory;
+    }
+    return configurationDirectory(logsDirectory, dataDirectory);
+  }
+
   static void read(main owner) {
-    main.hulp_dir = configurationDirectory(logs_dir, data_dir);
+    main.hulp_dir = configurationDirectoryForRead(logs_dir, data_dir);
 
     if (!main.hulp_dir.isEmpty()) {
       new SwingWorker<Void, Void>() {

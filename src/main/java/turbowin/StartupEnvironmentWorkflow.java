@@ -1,5 +1,7 @@
 package turbowin;
 
+import java.nio.file.Path;
+
 /** Coordinates startup environment detection and initialization. */
 final class StartupEnvironmentWorkflow {
 
@@ -12,7 +14,16 @@ final class StartupEnvironmentWorkflow {
       String linuxLauncherFile) {
     String os = OSDetector.getOSString();
     // Tests can use a writable sandbox without changing the installed platform defaults.
-    main.data_dir = System.getProperty("turbowin.data.dir", StartupEnvironment.dataDirectory(os));
+    String configuredDataDirectory = System.getProperty("turbowin.data.dir");
+    main.data_dir =
+        configuredDataDirectory != null
+            ? configuredDataDirectory
+            : StartupEnvironment.dataDirectory(os);
+    if (configuredDataDirectory == null) {
+      LegacyDataMigration.migrate(
+          StartupEnvironment.legacyDataDirectories(System.getProperty("user.dir")),
+          Path.of(main.data_dir));
+    }
     System.out.println("data dir = " + main.data_dir);
 
     // JNLP BasicService.isOffline() is not guaranteed to report the true client state; use the

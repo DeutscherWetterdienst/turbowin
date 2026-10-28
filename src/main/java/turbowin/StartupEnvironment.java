@@ -1,6 +1,8 @@
 package turbowin;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Calculates startup paths and offline-mode flags without touching application state.
@@ -17,6 +19,14 @@ final class StartupEnvironment {
       return "C:" + File.separator + "ProgramData" + File.separator + "TurboWinPlus";
     }
     return File.separator + "opt" + File.separator + "turbowinplus" + File.separator + "data";
+  }
+
+  static List<Path> legacyDataDirectories(String userDirectory) {
+    // Versions before 3e742663c stored the same user data below user.dir.
+    if (userDirectory != null && !userDirectory.isEmpty()) {
+      return List.of(Path.of(userDirectory));
+    }
+    return List.of();
   }
 
   static OfflineMode detectOfflineMode(

@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import org.junit.Test;
 
 public class StartupEnvironmentTest {
@@ -19,6 +21,16 @@ public class StartupEnvironmentTest {
     assertEquals(
         File.separator + "opt" + File.separator + "turbowinplus" + File.separator + "data",
         StartupEnvironment.dataDirectory("LINUX"));
+  }
+
+  @Test
+  public void listsTheHistoricalUserDataDirectory() {
+    String userDirectory = "C:" + File.separator + "TurboWin";
+
+    assertEquals(
+        List.of(Path.of(userDirectory)),
+        StartupEnvironment.legacyDataDirectories(userDirectory));
+    assertEquals(List.of(), StartupEnvironment.legacyDataDirectories(""));
   }
 
   @Test

@@ -35,15 +35,15 @@ Configuration remains the legacy human-readable `configuration.txt` line format.
 is split across `ConfigurationFileStore`, line/value parsers, `ConfigurationManager`, and the
 read/write workflows; `ConfigurationPersistenceWorkflow` retains the compatibility entry points.
 
-The reader chooses a non-empty `logs_dir`, otherwise a non-empty `data_dir`. This is directory
-selection, not a second-file retry if the chosen file is missing. Read I/O failures are tolerated
-and the existing line array is then applied. Writing starts separate background writes to each
-non-empty data/log directory. Those writes are not a single atomic transaction and have different
-failure notification paths.
+The reader prefers `configuration.txt` in `logs_dir` and falls back to the data root when the log
+copy is absent. If neither file exists, it retains the normal non-empty-directory fallback for
+first use. Read I/O failures are tolerated and the existing line array is then applied. Writing
+starts separate background writes to each non-empty data/log directory. Those writes are not a
+single atomic transaction and have different failure notification paths.
 
 The installed desktop uses platform data directories with `logs` and `amver` subdirectories.
 `-Dturbowin.data.dir=...` overrides the data directory, notably for isolated tests. See the
-[deployment view](07_deployment_view.md) for paths and permissions.
+[deployment view](07_deployment_view.md) for paths, permissions, and the legacy-data migration.
 
 IMMT observations, system diagnostics, sensor histories, exports, and configuration are different
 files with different lifecycles. IMMT logging/reset is triggered by specific output paths, including

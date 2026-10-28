@@ -24,6 +24,12 @@ and user permissions must permit writing there. Tests can use the `turbowin.data
 property to redirect startup data into a temporary directory. Configuration writes also target
 the data/log directories; see [persistence concepts](08_concepts.md#configuration-and-local-persistence).
 
+On startup without a `turbowin.data.dir` override, the application checks the historical
+`user.dir` location used before commit `3e742663c`. It merges `configuration.txt`, `logs`, and
+`amver` into the current root when destination entries do not already exist. The source is
+retained so an upgrade can be rolled back or inspected. Application resources and launcher
+marker files are not part of this migration.
+
 The application currently starts in installed desktop ("offline") mode. This is distinct from
 having no network connection: observation uploads, custom email, and external web resources still
 use network services when selected.

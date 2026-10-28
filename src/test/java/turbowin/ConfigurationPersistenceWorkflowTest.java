@@ -2,6 +2,8 @@ package turbowin;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.nio.file.Files;
 import org.junit.Test;
 
 public class ConfigurationPersistenceWorkflowTest {
@@ -20,6 +22,23 @@ public class ConfigurationPersistenceWorkflowTest {
   @Test
   public void returnsEmptyDirectoryWhenNoConfigurationDirectoryExists() {
     assertEquals("", ConfigurationPersistenceWorkflow.configurationDirectory(null, ""));
+  }
+
+  @Test
+  public void readsDataConfigurationWhenLogsDirectoryHasNoConfiguration() throws Exception {
+    File logs = Files.createTempDirectory("turbowin-logs").toFile();
+    File data = Files.createTempDirectory("turbowin-data").toFile();
+    try {
+      Files.writeString(new File(data, main.CONFIGURATION_FILE).toPath(), "old settings\n");
+
+      assertEquals(
+          data.getPath(),
+          ConfigurationReadWorkflow.configurationDirectoryForRead(logs.getPath(), data.getPath()));
+    } finally {
+      new File(data, main.CONFIGURATION_FILE).delete();
+      logs.delete();
+      data.delete();
+    }
   }
 
   @Test
