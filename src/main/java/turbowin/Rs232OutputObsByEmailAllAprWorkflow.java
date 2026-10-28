@@ -100,14 +100,7 @@ final class Rs232OutputObsByEmailAllAprWorkflow {
           if (doorgaan == true) {
             if (main.obs_format.equals(main.FORMAT_FM13)) {
               boolean manual_send = false;
-              if (main.custom_email_module.equals(main.PYTHON_EMAIL)) {
-                main.Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(
-                    manual_send); // via python email app
-              } else // use the primary email module
-              {
-                main.Output_obs_by_email_jakarta_FM13_format_101(
-                    manual_send); // via jakarta email module
-              }
+              main.Output_obs_by_email_jakarta_FM13_format_101(manual_send);
             } else if (main.obs_format.equals(main.FORMAT_101)
                 || (main.obs_format.equals(main.FORMAT_AWS)
                     && main.eucaws_uploads_method.equals(
@@ -116,15 +109,7 @@ final class Rs232OutputObsByEmailAllAprWorkflow {
             // eucaws own iridium modem)
             {
               boolean manual_send = false;
-              if (main.custom_email_module.equals(main.PYTHON_EMAIL)) {
-                main.Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(
-                    manual_send); // via python email app
-
-              } else // use the primary email module
-              {
-                main.Output_obs_by_email_jakarta_FM13_format_101(
-                    manual_send); // via jakarta email module
-              }
+              main.Output_obs_by_email_jakarta_FM13_format_101(manual_send);
             } else {
               String info = "obs format unknown (select: Maintenance -> Obs format setting)";
               main.log_turbowin_system_message(log_tag + " " + info);

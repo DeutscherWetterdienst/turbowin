@@ -208,16 +208,16 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
   }
 
   @Test
-  public void fm13RoutesToPythonEmailModule() throws Exception {
-    RecordingPythonEmail pythonEmail = new RecordingPythonEmail();
-    main.custom_email_module = main.PYTHON_EMAIL;
-    main.python_email_class = pythonEmail;
+  public void fm13RoutesToJakartaEmailModule() throws Exception {
+    RecordingJakartaEmail jakartaEmail = new RecordingJakartaEmail();
+    main.custom_email_module = main.JAKARTA_EMAIL;
+    main.jakarta_email_class = jakartaEmail;
 
     Rs232OutputObsByEmailAllAprWorkflow.start();
 
-    waitFor(() -> pythonEmail.controlCenterCalled);
+    waitFor(() -> jakartaEmail.sendCalled);
     awaitAutomaticEmailCompletion();
-    assertNull(main.jakarta_email_class);
+    assertNull(main.python_email_class);
   }
 
   @Test

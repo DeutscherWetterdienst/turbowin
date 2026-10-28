@@ -103,31 +103,14 @@ final class ObservationEmailManualWorkflow {
                 owner.Output_obs_by_email_FM13(); // default email app via desktop
               } else {
                 boolean manual_send = true;
-
-                if (custom_email_module.equals(PYTHON_EMAIL)) {
-                  Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(
-                      manual_send); // via python email app
-
-                } else // primary email module
-                {
-                  Output_obs_by_email_jakarta_FM13_format_101(
-                      manual_send); // via jakarta email module
-                }
+                Output_obs_by_email_jakarta_FM13_format_101(manual_send);
               }
             } else if (obs_format.equals(FORMAT_101)) {
               if (email_send_mode.equals(EMAIL_SEND_DEFAULT)) {
                 owner.Output_obs_by_email_format_101(); // default email app via desktop
               } else {
                 boolean manual_send = true;
-
-                if (custom_email_module.equals(PYTHON_EMAIL)) {
-                  Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(
-                      manual_send); // via python email app
-
-                } else {
-                  Output_obs_by_email_jakarta_FM13_format_101(
-                      manual_send); // via jakarta email module
-                }
+                Output_obs_by_email_jakarta_FM13_format_101(manual_send);
               }
             } else {
               String info = "obs format unknown (select: Maintenance -> Obs format setting)";
