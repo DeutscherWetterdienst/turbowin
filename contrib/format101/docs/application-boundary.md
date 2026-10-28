@@ -9,10 +9,9 @@ compressor remains private rollback and characterization code only.
 
 `compress_and_decompress_101_control_center()` performs the following sequence:
 
-1. Selects the legacy module executable name for compatibility provisioning.
-2. Checks for the legacy module below `main.logs_dir/format_101/` and, when it is
-   absent, attempts to create/copy the module. Decoder provisioning is scheduled
-   for removal; the workflow no longer executes a native helper.
+1. Checks for the Java pilot table below `main.logs_dir/format_101/` and, when it
+   is absent, creates the application directories and copies that table from the
+   bundled resource.
 3. Selects the compression identifier: `main.station_ID` when it is non-null
    and its untrimmed length is greater than two; otherwise the literal
    `unknown`. Masked and normal call signs are not fallback sources in the
@@ -75,6 +74,5 @@ contents, stale-entry removal, and missing-temp failure.
 The Java encoder reads the pilot table and prepared input directly, writes the
 encoded observation to `HPK_format_101.txt` using ISO-8859-1, and does not start
 a compressor subprocess. Native decoding is no longer part of the application
-workflow. The native decoder and its configuration remain only until the
-separate production-resource cleanup step is completed; reference copies remain
-available under `contrib/format101/reference/`.
+workflow. Native helper resources are retained only as compatibility references
+under `contrib/format101/reference/`.
