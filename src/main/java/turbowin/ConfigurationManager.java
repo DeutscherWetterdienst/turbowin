@@ -672,5 +672,13 @@ final class ConfigurationManager {
     } else {
       prefered_COM_port_II = prefered_COM_port_number_II; // Windows and Linux
     }
+
+    normalizeEmailModule();
+  }
+
+  static void normalizeEmailModule() {
+    if (PYTHON_EMAIL.equals(custom_email_module)) {
+      custom_email_module = JAKARTA_EMAIL;
+    }
   }
 }
