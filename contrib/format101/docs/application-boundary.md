@@ -12,19 +12,18 @@ compressor remains private rollback and characterization code only.
 1. Checks for the Java pilot table below `main.logs_dir/format_101/` and, when it
    is absent, creates the application directories and copies that table from the
    bundled resource.
-3. Selects the compression identifier: `main.station_ID` when it is non-null
+2. Selects the compression identifier: `main.station_ID` when it is non-null
    and its untrimmed length is greater than two; otherwise the literal
    `unknown`. Masked and normal call signs are not fallback sources in the
    current code.
-4. Requires `format_101/temp/` to exist and deletes its direct entries before
+3. Requires `format_101/temp/` to exist and deletes its direct entries before
    preparing a new observation.
-5. Writes the prepared input and invokes the Java encoder in process.
-6. Leaves the generated HPK file for the reporting consumer.
+4. Writes the prepared input and invokes the Java encoder in process.
+5. Leaves the generated HPK file for the reporting consumer.
 
 The method uses a `doorgaan` gate for setup and temp-directory cleanup. No native
-decoder is invoked. Java compression failures are logged, and
-the existing workflow remains responsible for handling missing or empty HPK
-output.
+decoder is invoked. Java compression failures are logged, and the existing
+workflow remains responsible for handling missing or empty HPK output.
 
 ## Files and process contracts
 
@@ -62,14 +61,14 @@ caller.
 
 Before preparation, temp cleanup removes stale direct files and directories.
 If the temp directory is missing, cleanup returns failure and the control
-center skips compression and decompression. This prevents an old compressed
-output from being silently reused, but the native compressor's own missing or
-empty output is not independently validated by the legacy boundary.
+center skips compression. This prevents an old compressed output from being
+silently reused. Java encoder failures are caught by `compress_101`; the
+workflow consumers then handle missing or empty HPK output.
 
 These observations are covered by
 `src/test/java/turbowin/Format101CharacterizationTest.java`, including path and
-argument assertions, representative prepared input, identification-file
-contents, stale-entry removal, and missing-temp failure.
+argument assertions, representative prepared input, stale-entry removal, and
+missing-temp failure.
 
 The Java encoder reads the pilot table and prepared input directly, writes the
 encoded observation to `HPK_format_101.txt` using ISO-8859-1, and does not start
