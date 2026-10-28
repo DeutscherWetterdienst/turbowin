@@ -87,8 +87,8 @@ one. Rejection, logging, and clearing/retaining existing readings must be consid
 
 ## Communication, themes, and external resources
 
-Output paths include files/clipboard, desktop email, Jakarta SMTP, the Python email helper, server
-HTTP/HTTPS, and configured automatic reports. Transport result handling, retries, and cleanup
+Output paths include files/clipboard, desktop email, Jakarta SMTP, server HTTP/HTTPS, and
+configured automatic reports. Transport result handling, retries, and cleanup
 belong to the specific path; there is no uniform delivery guarantee.
 
 `theme_mode` and theme workflows support the different lighting conditions aboard ship. Theme

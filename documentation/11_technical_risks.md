@@ -33,8 +33,9 @@ extraction alone does not establish their removal.
   specific; an HTTP/SMTP result is not confirmation of downstream meteorological processing.
 - Platform data directories require writable permissions. Configuration copies are separate
   writes, not an atomic backup transaction; missing configuration can leave existing globals.
-- Python email helpers remain runtime dependencies. A successful ARM64 package build does not
-  establish instrument-driver compatibility on that target.
+- Jakarta SMTP delivery remains dependent on the configured server, credentials, security mode,
+  and network connectivity. A successful ARM64 package build does not establish instrument-driver
+  compatibility on that target.
 - HTTP versus HTTPS and configured email security depend on the selected path/settings. Generated
   email build constants and diagnostic output also require care when handling credentials/data.
 - Manual observation quality still depends on observer input and interpretation despite the

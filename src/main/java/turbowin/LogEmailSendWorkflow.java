@@ -22,10 +22,8 @@ final class LogEmailSendWorkflow {
         Integer responseCode = 0;
 
         if (log_files_email_send_method.equals(LOGS_CUSTOM_EMAIL)) {
-          // NB use the CUSTOM email method BUT this is only possible for the CUSTOM jakarta
-          // module not for the CUSTOM python module
-          //    so even if python email module is selected in CUSTOM (Maintenance -> Email
-          // settings) jakarta email module will be used!!
+          // Custom email delivery uses Jakarta Mail. Legacy python_email configuration values
+          // are normalized while loading configuration.
           if (jakarta_email_class == null) {
             jakarta_email_class = new Jakarta_Email();
           }

@@ -184,7 +184,7 @@ import javax.swing.JPopupMenu;
 *                         - LOGO_NOAA
 *                         - LOGO_SOT
 *
-* global var email_module - PYTHON_EMAIL
+* global var email_module - legacy PYTHON_EMAIL (migrated to JAKARTA_EMAIL)
 *                         - JAKARTA_EMAIL
 *
 * global var log_files_email_send_method - LOGS_DEFAULT_EMAIL
@@ -6805,7 +6805,7 @@ public class main extends javax.swing.JFrame {
   // public var's
   public static final String APPLICATION_NAME =
       "TurboWin+"; // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-  public static final String APPLICATION_MET_MODULES = "Java Format 101 encoder; email_tbw_43;";
+  public static final String APPLICATION_MET_MODULES = "Java Format 101 encoder; Jakarta Mail;";
   public static final String DASHBOARD_LOGO = "logo-sot.png"; // i.a. single dashboard barometer
   public static String application_mode =
       ""; // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]
@@ -6855,7 +6855,7 @@ public class main extends javax.swing.JFrame {
   public static String custom_password = ""; // meta data (myemailsettings.java) // NB = encrypted!!
   public static String custom_security = ""; // meta data (myemailsettings.java)
   public static String custom_email_module =
-      ""; // meta data (myemailsettings.java) [PYTHON_EMAIL or JAKARTA_EMAIL]
+      ""; // meta data (myemailsettings.java) [legacy PYTHON_EMAIL or JAKARTA_EMAIL]
   public static String log_files_email_send_method =
       ""; // meta data (myemailsettings.java) [LOGS_DEFAULT_EMAIL or LOGS_CUSTOM_EMAIL]
   public static String server_com_protocol =

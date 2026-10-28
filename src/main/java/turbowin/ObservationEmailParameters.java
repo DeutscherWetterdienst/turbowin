@@ -3,10 +3,10 @@ package turbowin;
 /**
  * Holds the SMTP parameters shared by the observation email transports.
  *
- * <p>The Python email module requires the literal {@code "null"} marker instead of an empty
- * string for omitted arguments. Custom security values are {@code CUSTOM_TLS_STARTTLS},
- * {@code CUSTOM_TLS}, {@code CUSTOM_SSL_STARTTLS}, or {@code CUSTOM_SSL}; hosts may be values such
- * as {@code smtp.mail.special.com} and ports such as {@code 587}. FM13 does not use an attachment,
+ * <p>The Jakarta Mail adapter uses the literal {@code "null"} marker instead of an empty string
+ * for omitted arguments. Custom security values are {@code CUSTOM_TLS_STARTTLS}, {@code
+ * CUSTOM_TLS}, {@code CUSTOM_SSL_STARTTLS}, or {@code CUSTOM_SSL}; hosts may be values such as
+ * {@code smtp.mail.special.com} and ports such as {@code 587}. FM13 does not use an attachment,
  * while Format 101 may request one with the {@code "yes"} marker.
  */
 final class ObservationEmailParameters {
