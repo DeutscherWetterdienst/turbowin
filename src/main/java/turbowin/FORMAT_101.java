@@ -21,51 +21,29 @@ public class FORMAT_101 {
   // Legacy SOG_APR and fallback speed codes are in knots; FORMAT 101 stores m/s to three decimals.
   private static final double LEGACY_KNOTS_TO_METERS_PER_SECOND = 0.5144444;
 
-  // for compression required:
-  //                             - dir: format_101 [with file: teste_hc_TW.exe (Windows) or
-  // teste_hc_TW (Linux)]
-  //                             - sub dir: format_101/config [with fixed file:
-  // S-AWS-101_modl_pilote.csv]
-  //                             - sub dir: format_101/temp [empty]
-  //                             - sub dir: format_101/log [empty]
-  //
-
-  // for decompression extra required:
-  //                             - dir: format_101 [with file: MAWSbin.exe (Windows) or MAWSbin
-  // (Linux)]
-  //                             - sub dir: format_101/config [with fixed files:
-  // S-AWS-101_modl_meta.csv and file: DataType.txt
-  //                               note file: HC_ident.txt, also required in sub dir
-  // format_101/config, WILL ALWAYS BE RECREATED BY TURBOWIN+
-  //
-
   public void compress_and_decompress_101_control_center() {
     int return_status = 0;
     boolean doorgaan = true;
     String compression_identifier = "unknown";
 
     //
-    //////// determine OS (for selecting the correct compression and decompression modules)
+    //////// determine OS for the retained native rollback path
     //
     OSDetector.OSType ostype = OSDetector.detect_OS();
     switch (ostype) {
       case LINUX:
         compression_exe = COMPRESSION_EXE_LIN;
-        decompression_exe = DECOMPRESSION_EXE_LIN;
         break;
       case WINDOWS:
         compression_exe = COMPRESSION_EXE_WIN;
-        decompression_exe = DECOMPRESSION_EXE_WIN;
         break;
       default:
         compression_exe = COMPRESSION_EXE_WIN;
-        decompression_exe = DECOMPRESSION_EXE_WIN;
         break;
     }
 
     //
-    /////////////// for compression and decompression if necessary copy all format 101 related files
-    // from jar to destination ///////////
+    /////////////// copy the Java encoder configuration if necessary ///////////
     //
     return_status = check_format_101_module();
     if (return_status
@@ -82,7 +60,7 @@ public class FORMAT_101 {
     }
 
     //
-    /////////////// for compression and decompression compression_identifier ///////////
+    /////////////// determine the compression identifier ///////////
     //
     if (doorgaan == true) {
       // NB if station ID or masked call sign (= masked station ID) iserted -> use this for obs else
@@ -164,322 +142,6 @@ public class FORMAT_101 {
     }
   }
 
-  /** Retained for historical characterization until native helper retirement is complete. */
-  @SuppressWarnings("unused")
-  private int copy_format_101_module_legacy() {
-    int format_101_module_status = 0;
-    boolean doorgaan = true;
-    String info = "";
-
-    // NB the complete instantiation of class format_101 is already done in a swingworker! so not
-    // necessary to use a swingworker here for file copying etc.
-
-    // NB in offline_mode:  logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
-    // NB in logs_dir always 'data_dir' already present (so a complete path)
-
-    // check if logs folder exists (because this will be the root folder of all the format_101 dirs
-    // and files)
-    if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
-      doorgaan = false;
-      info = "logs folder unknown, select: Maintenance -> Log files settings and retry";
-      JOptionPane.showMessageDialog(
-          null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-    }
-
-    // check if compression exe exists, if not create all format 101 dirs (again) and copy all the
-    // necessary format 101 fiies
-    if (doorgaan == true) {
-      // NB e.g. exeFile = "C:\Program Files (x86)\TurboWin+\logs\format_101\teste_hc_TW.exe"
-      final File exeFile =
-          new File(
-              main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + compression_exe);
-      if (exeFile.exists() == false) {
-        // create format 101 (sub)dirs and copy all the necessary files from the turbowin_jws.jar
-        // resource to the newly created dirs
-        //
-        // info = "--- start copying complete format 101 module from jar to: " + main.logs_dir;
-        // System.out.println(info);
-        main.log_turbowin_system_message(
-            "[FORMAT-101] start copying complete format 101 module from jar to: " + main.logs_dir);
-
-        // message (because it could be that virus scanner is complaining about compression exe
-        // (teste_hc_TW.exe))
-        // String info_message = "format 101 module will be copied from source to destination\n
-        // note: in case you get a warning of your virus scanner, " + COMPRESSION_EXE + " and " +
-        // DECOMPRESSION_EXE + " are essential parts of " + main.APPLICATION_NAME + " !";
-        // JOptionPane.showMessageDialog(null, info_message, main.APPLICATION_NAME + " info",
-        // JOptionPane.WARNING_MESSAGE);
-        // note veplaatst naar obsformat.java (i.v.m messagebox niet goed in APR mode)
-
-        // create dir "format_101" (e.g. "C:\Program Files (x86)\TurboWin+\logs\format_101")
-        //
-        String format_101_dir = format101Path(main.FORMAT_101_ROOT_DIR);
-        final File dir_format_101 = new File(format_101_dir);
-        dir_format_101.mkdir();
-
-        // create sub dir "format_101\config" (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\format_101\config")
-        //
-        String format_101_config_dir =
-            format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR);
-        final File dir_format_101_config = new File(format_101_config_dir);
-        dir_format_101_config.mkdir();
-
-        // create sub dir "format_101\log" (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\format_101\log")
-        //
-        String format_101_log_dir = format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_LOG_DIR);
-        final File dir_format_101_log = new File(format_101_log_dir);
-        dir_format_101_log.mkdir();
-
-        // create sub dir "format_101\temp" (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\format_101\temp")
-        //
-        String format_101_temp_dir =
-            format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR);
-        final File dir_format_101_temp = new File(format_101_temp_dir);
-        dir_format_101_temp.mkdir();
-
-        // copy compression exe file (e.g teste_hc_TW.exe or teste_hc_TW_64)
-        //
-        try {
-          copyResourceToFile(
-              main.FORMAT_101_ROOT_DIR + "/" + compression_exe,
-              new File(format101Path(main.FORMAT_101_ROOT_DIR, compression_exe)));
-          // info = "--- success when copying " + COMPRESSION_EXE + " from jar to: " + main.logs_dir
-          // + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // COMPRESSION_EXE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] success when copying "
-                  + compression_exe
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + compression_exe);
-        } catch (IOException ex) {
-          // info = "+++ error when copying " + COMPRESSION_EXE + " from jar to: " + main.logs_dir +
-          // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // COMPRESSION_EXE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] error when copying "
-                  + compression_exe
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + compression_exe);
-        }
-        // on Linux systems set "allow executing file as program"
-        OSDetector.OSType ostype = OSDetector.detect_OS();
-        switch (ostype) {
-          case LINUX:
-            File f = new File(format101Path(main.FORMAT_101_ROOT_DIR, compression_exe));
-            if (!f.canExecute()) {
-              if (f.setExecutable(
-                  true, false)) // NB parameters: 1st=boolean executable, 2nd=boolean ownerOnly
-              {
-                main.log_turbowin_system_message(
-                    "[FORMAT-101] success when setting "
-                        + format101Path(main.FORMAT_101_ROOT_DIR, compression_exe)
-                        + " as executable");
-              } else {
-                main.log_turbowin_system_message(
-                    "[FORMAT-101] failed when setting "
-                        + format101Path(main.FORMAT_101_ROOT_DIR, compression_exe)
-                        + " as executable");
-              }
-            } // if (!f.canExecute())
-            break;
-          default:
-            break;
-        } // switch (ostype)
-
-        // copy decompression exe file (e.g MAWSbin_TW.exe or MAWSbin_TW_64)
-        //
-        try {
-          copyResourceToFile(
-              main.FORMAT_101_ROOT_DIR + "/" + decompression_exe,
-              new File(format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe)));
-          // info = "--- success when copying " + DECOMPRESSION_EXE + " from jar to: " +
-          // main.logs_dir + java.io.File.separator + main.FORMAT_101_ROOT_DIR +
-          // java.io.File.separator + DECOMPRESSION_EXE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] success when copying "
-                  + decompression_exe
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + decompression_exe);
-        } catch (IOException ex) {
-          // info = "+++ error when copying " + DECOMPRESSION_EXE + " from jar to: " + main.logs_dir
-          // + java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // DECOMPRESSION_EXE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] error when copying "
-                  + decompression_exe
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + decompression_exe);
-        }
-        // on Linux systems set "allow executing file as program"
-        switch (ostype) {
-          case LINUX:
-            File f = new File(format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe));
-            if (!f.canExecute()) {
-              if (f.setExecutable(true, false)) {
-                main.log_turbowin_system_message(
-                    "[FORMAT-101] success when setting "
-                        + format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe)
-                        + " as executable");
-              } else {
-                main.log_turbowin_system_message(
-                    "[FORMAT-101] failed when setting "
-                        + format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe)
-                        + " as executable");
-              }
-            } // if (!f.canExecute())
-            break;
-          default:
-            break;
-        } //  switch (ostype)
-
-        // copy bufr table (S-AWS-101_modl_pilote.csv) [required for compression]
-        //
-        try {
-          copyResourceToFile(
-              main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + BUFR_TABLE,
-              new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE)));
-          // info = "--- success when copying " + BUFR_TABLE + " from jar to: " + main.logs_dir +
-          // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // FORMAT_101_CONFIG_DIR + java.io.File.separator + BUFR_TABLE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] success when copying "
-                  + BUFR_TABLE
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + FORMAT_101_CONFIG_DIR
-                  + java.io.File.separator
-                  + BUFR_TABLE);
-        } catch (IOException ex) {
-          // info = "+++ error when copying " + BUFR_TABLE + " from jar to: " + main.logs_dir +
-          // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // FORMAT_101_CONFIG_DIR + java.io.File.separator + BUFR_TABLE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] error when copying "
-                  + BUFR_TABLE
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + FORMAT_101_CONFIG_DIR
-                  + java.io.File.separator
-                  + BUFR_TABLE);
-        }
-
-        // copy meta table (S-AWS-101_modl_meta.csv) [required for decompression]
-        //
-        try {
-          copyResourceToFile(
-              main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + META_TABLE,
-              new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, META_TABLE)));
-          // info = "--- success when copying " + META_TABLE + " from jar to: " + main.logs_dir +
-          // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // FORMAT_101_CONFIG_DIR + java.io.File.separator + META_TABLE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] success when copying "
-                  + META_TABLE
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + FORMAT_101_CONFIG_DIR
-                  + java.io.File.separator
-                  + META_TABLE);
-        } catch (IOException ex) {
-          // info = "+++ error when copying " + META_TABLE + " from jar to: " + main.logs_dir +
-          // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // FORMAT_101_CONFIG_DIR + java.io.File.separator + META_TABLE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] error when copying "
-                  + META_TABLE
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + FORMAT_101_CONFIG_DIR
-                  + java.io.File.separator
-                  + META_TABLE);
-        }
-
-        // copy data type (DataType.txt) [required for decompression]
-        //
-        try {
-          copyResourceToFile(
-              main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + DATA_TYPE,
-              new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, DATA_TYPE)));
-          // info = "--- success when copying " + DATA_TYPE + " from jar to: " + main.logs_dir +
-          // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // FORMAT_101_CONFIG_DIR + java.io.File.separator + DATA_TYPE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101] success when copying "
-                  + DATA_TYPE
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + FORMAT_101_CONFIG_DIR
-                  + java.io.File.separator
-                  + DATA_TYPE);
-        } catch (IOException ex) {
-          // info = "+++ error when copying " + DATA_TYPE + " from jar to: " + main.logs_dir +
-          // java.io.File.separator + main.FORMAT_101_ROOT_DIR + java.io.File.separator +
-          // FORMAT_101_CONFIG_DIR + java.io.File.separator + DATA_TYPE;
-          // System.out.println(info);
-          main.log_turbowin_system_message(
-              "[FORMAT-101]error when copying "
-                  + DATA_TYPE
-                  + " from jar to: "
-                  + main.logs_dir
-                  + java.io.File.separator
-                  + main.FORMAT_101_ROOT_DIR
-                  + java.io.File.separator
-                  + FORMAT_101_CONFIG_DIR
-                  + java.io.File.separator
-                  + DATA_TYPE);
-        }
-      } //  if (exeFile.exists() == false)
-    } // if (doorgaan == true)
-
-    return format_101_module_status;
-  }
 
   private void copyResourceToFile(String resourcePath, File destination) throws IOException {
     // JAR resource paths must use "/"; File.separator does not work for resources on Windows.
@@ -516,25 +178,6 @@ public class FORMAT_101 {
     return process.waitFor();
   }
 
-  private List<String> buildDecompressionArguments(
-      File executable, String compressedFile, String decompressedFile) {
-    final List<String> args = new ArrayList<>();
-    args.add(executable.getAbsolutePath());
-    args.add("-n");
-    args.add(main.imo_number);
-    args.add("-f");
-    args.add(compressedFile);
-    args.add("-i");
-    args.add(HC_IDENT_FILE);
-    args.add("-r");
-    args.add(FORMAT_101_CONFIG_DIR);
-    args.add("-h"); // mandatory
-    args.add("-l");
-    args.add("-o");
-    args.add(decompressedFile);
-    return args;
-  }
-
   private List<String> buildCompressionArguments(
       File executable, String bufrFile, String identifier) {
     final List<String> args = new ArrayList<>();
@@ -549,57 +192,6 @@ public class FORMAT_101 {
     // by the compression program
     args.add(TEMPLATE_NUMBER); // "S-AWS-101";
     return args;
-  }
-
-  private int write_HC_identification_file(String identifier) {
-    // NB this function is only necessary for decompression
-    // NB the file (HC_IDENT_FILE) created by this function must be placed in the config dir
-    // (expected by the decompression C routines)
-
-    // NB in offline_mode:  logs_dir = data_dir + java.io.File.separator + OFFLINE_LOGS_DIR;
-    // NB in logs_dir always 'data_dir' already present (so a complete path)
-
-    int exit_status = 0;
-    final String volledig_path_HC_ident_file =
-        format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, HC_IDENT_FILE);
-
-    try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path_HC_ident_file))) {
-      // e.g. ;500;HC101;1;Test HC format 101;INMC_SC;S-AWS-101
-
-      out.write(";");
-      out.write(
-          main.imo_number); // Christophe Billon [email 11-04-2014]: MEMBER is a number for the ship
-      // to identify it - you can define it the way you want (normally it
-      // corresponds to the Inmarsat fleet member or Iridium IMEI).
-      out.write(";");
-      // out.write(main.call_sign); // or MASKED call sign ??????
-      out.write(identifier); // call sign or station ID or masked call sign (=masked station ID)
-      out.write(";");
-      out.write("1");
-      out.write(";");
-      out.write(main.ship_name);
-      out.write(";");
-      out.write("INMC_SC");
-      out.write(";");
-      out.write(TEMPLATE_NUMBER); // TEMPLATE_NUMBER e.g. S-AWS-101
-
-      out.newLine(); // newLine(): write a line separator. The line separator string is defined by
-      // the system property line.separator, and is not necessarily a single newline
-      // ('\n') character.
-
-    } // try
-    catch (IOException ex) {
-      // JOptionPane.showMessageDialog(null, "unable to write to: " + volledig_path_HC_ident_file,
-      // main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-      String info =
-          "+++ unable to write to: "
-              + volledig_path_HC_ident_file
-              + " (function: write_HC_identification_file())";
-      System.out.println(info);
-      exit_status = 1;
-    } // catch
-
-    return exit_status;
   }
 
   private int check_and_clear_format_101_temp_folder() {
@@ -647,96 +239,6 @@ public class FORMAT_101 {
     } // else
 
     return exit_status;
-  }
-
-  private void decompress_101() {
-    // e.g.: MAWSbin_TW.exe -n 1234567 -f temp/HPK_format_101.txt -i HC_ident.txt -h -r config -l -o
-    // temp/decompressed_FM13_message.txt > temp/decompressed.txt
-    //
-    //
-    // email Christophe Billon 9-4-2014:
-    // MAWSbin_TW.exe -n [MEMBER] -f data/HPK_fic_data_test_hc_S-AWS-101_complete.txt -i
-    // HC_ident.txt -h -r config -l > data/decompressed.txt
-    // MEMBER is a number for the ship to identify it - you can define it the way you want (normally
-    // it corresponds to the Inmarsat fleet member or Iridium IMEI).
-    //
-    //
-    // You also have to update  the HC_ident.txt file with a new line corresponding to the call sign
-    // PPPP and its  MEMBER number :
-    //
-    // ; [MEMBER] ;PPPP;1; [ The name of the ship ]  ;INMC_SC;S-AWS-101
-
-    // NB in logs_dir always 'data_dir' already present (so a complete path)
-
-    final File exeFile = new File(format101Path(main.FORMAT_101_ROOT_DIR, decompression_exe));
-    final File log_outputFile =
-        new File(
-            format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_LOG_DIR, "log_decompression.txt"));
-
-    final String volledig_path_format_101_compressed_file =
-        format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR)
-            + java.io.File.separator
-            + "HPK_"
-            + main.FORMAT_101_INPUT_FILE; // NB adding "HPK_" to the input file name is
-    // automatically done by the C-code compression functions
-    final String volledig_path_decompressed_FM13_file =
-        format101Path(
-            main.FORMAT_101_ROOT_DIR,
-            main.FORMAT_101_TEMP_DIR,
-            "do_not_send_decompressed_FM13_obs.txt");
-
-    final List<String> args =
-        buildDecompressionArguments(
-            exeFile,
-            volledig_path_format_101_compressed_file,
-            volledig_path_decompressed_FM13_file);
-
-    // print the complete argument list (only for checking in output console)
-    System.out.println();
-    System.out.println("Decompression process argument list:");
-    for (int i = 0; i < args.size(); i++) {
-      System.out.print("[" + i + "] = ");
-      System.out.println(args.get(i));
-    }
-    System.out.println();
-
-    final ProcessBuilder processBuilder = new ProcessBuilder(args);
-
-    configureProcessBuilder(processBuilder, log_outputFile);
-
-    // Start the process and wait for it to finish.
-    Process process = null;
-    try {
-      process = processBuilder.start();
-
-      int exitStatus = 0;
-      try {
-        // NB waitFor
-        // Causes the current thread to wait, if necessary, until the process represented by this
-        // Process object has terminated.
-        // This method returns immediately if the subprocess has already terminated. If the
-        // subprocess has not yet terminated,
-        // the calling thread will be blocked until the subprocess exits.
-        //
-        // Returns:
-        //    the exit value of the subprocess represented by this Process object. By convention,
-        // the value 0 indicates normal termination.
-        exitStatus = waitForProcess(process);
-      } catch (InterruptedException ex) {
-        String info = "InterruptedException in function decompress (" + ex + ")";
-        System.out.println(info);
-        // JOptionPane.showMessageDialog(null, "format 101 decompress error; " + info,
-        // main.APPLICATION_NAME, JOptionPane.INFORMATION_MESSAGE);
-      }
-      System.out.println("Decompression process finished with status: " + exitStatus);
-    } // try
-    catch (IOException ex) {
-      String info = "IOException in function decompress (" + ex + ")";
-      System.out.println(info);
-      // JOptionPane.showMessageDialog(null, "format 101 decompress error; " + info,
-      // main.APPLICATION_NAME, JOptionPane.INFORMATION_MESSAGE);
-
-    } // catch
   }
 
   public void compress_101(String identifier) {
@@ -2339,7 +1841,6 @@ public class FORMAT_101 {
   }
 
   public static String compression_exe;
-  public static String decompression_exe;
 
   private final double CELCIUS_TO_KELVIN_FACTOR = 273.15; // add to Celcius to obtain Kelvin
   private final String FORMAT_101_CONFIG_DIR = "config";
@@ -2347,17 +1848,11 @@ public class FORMAT_101 {
   // NB see main.java: public final String FORMAT_101_ROOT_DIR      = "format_101";
   // NB see main.java: public final String FORMAT_101_TEMP_DIR      = "temp";
   public static final String COMPRESSION_EXE_WIN = "teste_hc_TW.exe"; // Windows version
-  public static final String DECOMPRESSION_EXE_WIN = "MAWSbin_TW.exe"; // Windows version
   public static final String COMPRESSION_EXE_LIN =
       "teste_hc_TW_64"; // Linux version (only for 64 bit Linux OS)
-  public static final String DECOMPRESSION_EXE_LIN =
-      "MAWSbin_TW_64"; // Linux version (only for 64 bit Linux OS)
   private final String BUFR_TABLE = "S-AWS-101_modl_pilote.csv"; // for compression
-  private final String META_TABLE = "S-AWS-101_modl_meta.csv"; // for decompression
-  private final String DATA_TYPE = "DataType.txt"; // for decompression
   private final String SOURCE_INPUT_COMPRESSION =
       "temp/format_101.txt"; // nb doesn't work with a java separator (probably due to the working
   // of the semi comression C program) !!
   private final String TEMPLATE_NUMBER = "S-AWS-101";
-  private final String HC_IDENT_FILE = "HC_ident.txt";
 } // public class FORMAT_101

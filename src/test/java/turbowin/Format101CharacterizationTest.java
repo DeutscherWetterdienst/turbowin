@@ -18,35 +18,6 @@ public class Format101CharacterizationTest {
   @Rule public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
   @Test
-  public void writesExpectedHostIdentificationRecord() throws Exception {
-    String originalLogsDirectory = main.logs_dir;
-    String originalImoNumber = main.imo_number;
-    String originalShipName = main.ship_name;
-
-    try {
-      File logsDirectory = temporaryFolder.newFolder("logs");
-      File configDirectory =
-          new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "config");
-      assertTrue(configDirectory.mkdirs());
-
-      main.logs_dir = logsDirectory.getPath();
-      main.imo_number = "1234567";
-      main.ship_name = "Test Ship";
-
-      invokePrivate("write_HC_identification_file", new Class<?>[] {String.class}, "TEST-ID");
-
-      File identificationFile = new File(configDirectory, "HC_ident.txt");
-      assertEquals(
-          ";1234567;TEST-ID;1;Test Ship;INMC_SC;S-AWS-101" + System.lineSeparator(),
-          Files.readString(identificationFile.toPath()));
-    } finally {
-      main.logs_dir = originalLogsDirectory;
-      main.imo_number = originalImoNumber;
-      main.ship_name = originalShipName;
-    }
-  }
-
-  @Test
   public void buildsFormat101PathsBelowTheConfiguredLogsDirectory() throws Exception {
     String originalLogsDirectory = main.logs_dir;
 
@@ -55,11 +26,14 @@ public class Format101CharacterizationTest {
       main.logs_dir = logsDirectory.getPath();
 
       assertEquals(
-          new File(logsDirectory, "format_101/config/HC_ident.txt").getPath(),
+          new File(logsDirectory, "format_101/config/S-AWS-101_modl_pilote.csv").getPath(),
           invokePrivate(
               "format101Path",
               new Class<?>[] {String[].class},
-              (Object) new String[] {main.FORMAT_101_ROOT_DIR, "config", "HC_ident.txt"}));
+              (Object)
+                  new String[] {
+                    main.FORMAT_101_ROOT_DIR, "config", "S-AWS-101_modl_pilote.csv"
+                  }));
     } finally {
       main.logs_dir = originalLogsDirectory;
     }
@@ -116,39 +90,6 @@ public class Format101CharacterizationTest {
               new File("/tmp/format101-compress"),
               "/tmp/bufr-table.csv",
               "TEST-ID"));
-    } finally {
-      main.imo_number = originalImoNumber;
-    }
-  }
-
-  @Test
-  public void preservesDecompressionCommandArguments() throws Exception {
-    String originalImoNumber = main.imo_number;
-
-    try {
-      main.imo_number = "1234567";
-
-      assertEquals(
-          Arrays.asList(
-              "/tmp/format101-decompress",
-              "-n",
-              "1234567",
-              "-f",
-              "/tmp/compressed.txt",
-              "-i",
-              "HC_ident.txt",
-              "-r",
-              "config",
-              "-h",
-              "-l",
-              "-o",
-              "/tmp/decompressed.txt"),
-          invokePrivate(
-              "buildDecompressionArguments",
-              new Class<?>[] {File.class, String.class, String.class},
-              new File("/tmp/format101-decompress"),
-              "/tmp/compressed.txt",
-              "/tmp/decompressed.txt"));
     } finally {
       main.imo_number = originalImoNumber;
     }
