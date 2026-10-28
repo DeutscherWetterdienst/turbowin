@@ -57,21 +57,6 @@ public class ObservationEmailWorkflowCharacterizationTest {
   }
 
   @Test
-  public void PythonModuleFailureResetsAndNotifiesOnlyManualSends() {
-    List<String> actions = new ArrayList<>();
-
-    ObservationEmailPythonModuleFailureHandler.handle(
-        true,
-        () -> actions.add("log"),
-        () -> actions.add("reset"),
-        message -> actions.add("warning: " + message));
-
-    assertEquals(
-        List.of("log", "reset", "warning: " + ObservationEmailPythonModuleFailureHandler.MESSAGE),
-        actions);
-  }
-
-  @Test
   public void invocationFailureLogsAndShowsManualWarning() {
     List<String> actions = new ArrayList<>();
 

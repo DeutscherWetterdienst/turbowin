@@ -6002,11 +6002,6 @@ public class main extends javax.swing.JFrame {
     JakartaObservationEmailWorkflow.start(manual_send);
   }
 
-  public static void Output_obs_by_email_Localhost_Gmail_Yahoo_FM13_format_101(
-      boolean manual_send) {
-    PythonObservationEmailWorkflow.start(manual_send);
-  }
-
   void Output_obs_by_email_FM13() {
     Fm13DesktopEmailWorkflow.start();
   }
@@ -7212,7 +7207,6 @@ public class main extends javax.swing.JFrame {
   public static main mainClass; // class
   public static FORMAT_101 format_101_class; // class
   public static OSM osm_class; // class
-  public static Python_Email python_email_class; // class
   public static Jakarta_Email jakarta_email_class; // class
   public static main_support support_class; // class
 

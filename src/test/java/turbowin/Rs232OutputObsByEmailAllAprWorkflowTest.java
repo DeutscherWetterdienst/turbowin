@@ -62,7 +62,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
   private boolean originalApr;
   private boolean originalAwsr;
   private FORMAT_101 originalFormat101Class;
-  private Python_Email originalPythonEmailClass;
   private Jakarta_Email originalJakartaEmailClass;
 
   @Before
@@ -99,7 +98,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     originalApr = main.APR;
     originalAwsr = main.AWSR;
     originalFormat101Class = main.format_101_class;
-    originalPythonEmailClass = main.python_email_class;
     originalJakartaEmailClass = main.jakarta_email_class;
     replaceStaticTextFields(
         main.class, myposition.class, mybarometer.class, mybarograph.class, mytemp.class);
@@ -126,7 +124,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     main.APR = true;
     main.AWSR = false;
     main.format_101_class = null;
-    main.python_email_class = null;
     main.jakarta_email_class = null;
     setRequiredObservationData();
   }
@@ -165,7 +162,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     main.APR = originalApr;
     main.AWSR = originalAwsr;
     main.format_101_class = originalFormat101Class;
-    main.python_email_class = originalPythonEmailClass;
     main.jakarta_email_class = originalJakartaEmailClass;
     restoreStaticTextFields();
   }
@@ -178,7 +174,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
 
     awaitLogContains("[APR] Email address recipient not inserted");
     assertEquals(main.FORMAT_FM13, main.obs_format);
-    assertNull(main.python_email_class);
     assertNull(main.jakarta_email_class);
   }
 
@@ -192,7 +187,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     main.logs_dir = "";
     Rs232OutputObsByEmailAllAprWorkflow.start();
     waitFor(() -> !main.UNDEFINED.equals(main.obs_write));
-    assertNull(main.python_email_class);
     assertNull(main.jakarta_email_class);
   }
 
@@ -203,7 +197,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     Rs232OutputObsByEmailAllAprWorkflow.start();
 
     awaitLogContains("[APR] obs format unknown");
-    assertNull(main.python_email_class);
     assertNull(main.jakarta_email_class);
   }
 
@@ -217,7 +210,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
 
     waitFor(() -> jakartaEmail.sendCalled);
     awaitAutomaticEmailCompletion();
-    assertNull(main.python_email_class);
   }
 
   @Test
@@ -233,7 +225,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     waitFor(() -> main.format_101_class != null);
     waitFor(() -> jakartaEmail.sendCalled);
     awaitAutomaticEmailCompletion();
-    assertNull(main.python_email_class);
   }
 
   private void setRequiredObservationData() {
@@ -312,16 +303,6 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
       Thread.sleep(10);
     }
     assertTrue("Timed out waiting for APR email workflow", condition.getAsBoolean());
-  }
-
-  private static final class RecordingPythonEmail extends Python_Email {
-    private volatile boolean controlCenterCalled;
-
-    @Override
-    public boolean python_email_control_center() {
-      controlCenterCalled = true;
-      return false;
-    }
   }
 
   private static final class RecordingJakartaEmail extends Jakarta_Email {
