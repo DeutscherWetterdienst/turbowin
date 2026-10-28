@@ -91,6 +91,14 @@ Output paths include files/clipboard, desktop email, Jakarta SMTP, server HTTP/H
 configured automatic reports. Transport result handling, retries, and cleanup
 belong to the specific path; there is no uniform delivery guarantee.
 
+### Legacy email configuration
+
+Existing configuration files may still contain the historical `python_email` module value.
+TurboWin normalizes that value to `jakarta_email` when loading the configuration, preserving the
+SMTP host, port, security, credentials, and recipient settings. The normalized value is written
+the next time the configuration is saved. The retired Python helper and its architecture-specific
+binaries are no longer supported or shipped.
+
 `theme_mode` and theme workflows support the different lighting conditions aboard ship. Theme
 restart, system tray support, browsers/maps, and packaged help/resources remain tied to desktop
 and platform behavior. Format 101 encoding runs through the in-process Java library; the separate
