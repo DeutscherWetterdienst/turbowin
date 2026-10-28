@@ -34,8 +34,8 @@ desktop ("offline") mode; email and server transmission can still require networ
    explicitly invokes level-two consistency checks and level-three confirmation checks before
    its sequence/mask checks. Do not assume every output path invokes the identical validation
    chain merely because these checks exist.
-4. If selected, `FORMAT_101` prepares the compressed observation through its legacy helper
-   pipeline. FM13 composition also supplies information used by pre-output checks.
+4. If selected, `FORMAT_101` prepares the compressed observation through the in-process Java
+   encoder. FM13 composition also supplies information used by pre-output checks.
 5. The chosen output workflow determines writing, logging, and reset behavior. Merely entering
    a valid field does not durably save the whole observation.
 

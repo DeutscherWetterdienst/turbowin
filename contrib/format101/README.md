@@ -20,8 +20,8 @@ library package, excluding its standalone CLI entry point. The pilot table is
 bundled as the classpath resource
 `/format101/config/S-AWS-101_modl_pilote.csv`. The library can therefore be
 called directly with `format101.Encoder`; it does not start a native helper or
-require the CLI. The application boundary still uses the legacy helper until a
-later checklist step.
+require the CLI. The TurboWin application boundary now uses this Java encoder
+in process and does not package native Format 101 helpers.
 
 ## Compatibility status (TurboWin+ legacy)
 The Python encoder/decoder in `python/src/format101/` targets 1:1 compatibility with the

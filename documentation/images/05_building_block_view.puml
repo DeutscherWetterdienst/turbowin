@@ -8,7 +8,7 @@ actor "Ship observer" as Observer
 component "Instruments / GPS\nVaisala, Mintaka, EUCAWS, OMC-140" as Sensors
 component "Email server /\ndesktop mail client" as Email
 component "Observation server\nHTTP / HTTPS" as HTTP
-component "Native Format 101\nhelpers" as Native
+component "Java Format 101\nencoder" as Format101
 
 component "TurboWin+" as TurboWin {
   component "Swing forms /\nlegacy entry points" as UI
@@ -41,7 +41,7 @@ UI --> Views
 Views --> Files : read logs / history
 Transport --> Email
 Transport --> HTTP
-Coding --> Native
+Coding --> Format101
 
 note bottom of State
   Logical responsibilities, not isolated services.

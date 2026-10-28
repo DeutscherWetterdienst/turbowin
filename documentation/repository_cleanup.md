@@ -49,18 +49,19 @@ The repository should not contain:
 
 Git LFS is no longer used.
 
-## Remaining legacy helper binaries
+## Retained reference helper binaries
 
-A small number of helper binaries still remain in the repository because they are currently required for application functionality:
+A small number of helper binaries remain only as compatibility references; they are not included
+in production application resources:
 
-- `src/main/resources/turbowin/format_101/MAWSbin_TW.exe`
-- `src/main/resources/turbowin/format_101/MAWSbin_TW_64`
-- `src/main/resources/turbowin/format_101/teste_hc_TW.exe`
-- `src/main/resources/turbowin/format_101/teste_hc_TW_64`
+- `contrib/format101/reference/bin/MAWSbin_TW.exe`
+- `contrib/format101/reference/bin/MAWSbin_TW_64`
+- `contrib/format101/reference/bin/teste_hc_TW.exe`
+- `contrib/format101/reference/bin/teste_hc_TW_64`
 - `src/main/resources/turbowin/python_binaries/email_tbw_43`
 - `src/main/resources/turbowin/python_binaries/email_tbw_43.exe`
 
-These are technical debt and should be replaced, externalized, or reworked in the future if possible.
+They are used only for deliberate compatibility-vector generation and verification.
 
 ## Pilot charts
 

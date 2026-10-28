@@ -2,7 +2,8 @@
 
 TurboWin+ is installed locally on ship-based and fixed sea stations. Current packaging jobs target
 Windows x64, Linux DEB on amd64/ARM64, and Linux RPM on amd64. Java portability does not guarantee
-that every hardware driver, desktop integration, or native Format 101 helper works on every platform.
+that every hardware driver or desktop integration works on every platform. Format 101 encoding
+is implemented in Java and no native Format 101 helper is packaged with the application.
 
 ## Runtime and writable data
 
@@ -55,7 +56,8 @@ The platform scripts share [variables.json](../scripts/variables.json):
 The Linux script installs operating-system packages and expects an appropriate privileged
 APT/microdnf environment and `JAVA_HOME`; it is intended for the CI containers, not an ordinary
 unprivileged workstation command. The Windows script downloads the configured Liberica JDK and
-WiX tools. Native helper compatibility remains a separate concern from successful packaging.
+WiX tools. Format 101 reference binaries used by compatibility tests are not production runtime
+assets.
 
 ## Continuous integration
 

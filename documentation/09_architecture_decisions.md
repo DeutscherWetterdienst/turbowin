@@ -6,8 +6,8 @@ record of previously undocumented historical motives or commitments to future re
 ## Java 21, Swing, and packaged runtimes
 
 The application uses Java 21 and Swing. Java provides a shared implementation across deployment
-platforms, while `jlink`/`jpackage` supply an application runtime in the installers. Serial hardware,
-desktop APIs, and native helpers still impose platform-specific constraints.
+platforms, while `jlink`/`jpackage` supply an application runtime in the installers. Serial hardware
+and desktop APIs still impose platform-specific constraints.
 
 ## Preserve behavior while extracting responsibilities
 
@@ -31,9 +31,9 @@ mechanics without imposing one validity, freshness, or record-selection policy o
 ## Files and legacy formats remain the interoperability boundary
 
 Configuration text, IMMT logs, FM13 observations, and Format 101 data retain their existing external
-representations. The application continues to use native Format 101 helpers. The separate
-compatibility tooling supports replacement research/testing but is not wired in as a production
-substitute. Output logging and reset are workflow side effects, not a transactional delivery record.
+representations. Format 101 encoding uses the in-process Java library. Native reference binaries
+remain in the separate compatibility tooling for regression comparison, not as production
+dependencies. Output logging and reset are workflow side effects, not a transactional delivery record.
 
 ## Background work with workflow-specific completion
 

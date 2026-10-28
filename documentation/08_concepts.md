@@ -93,5 +93,6 @@ belong to the specific path; there is no uniform delivery guarantee.
 
 `theme_mode` and theme workflows support the different lighting conditions aboard ship. Theme
 restart, system tray support, browsers/maps, and packaged help/resources remain tied to desktop
-and platform behavior. Format 101's native helpers are still used by the application; the separate
-[compatibility tooling](../contrib/format101/README.md) is not a completed production replacement.
+and platform behavior. Format 101 encoding runs through the in-process Java library; the separate
+[compatibility tooling](../contrib/format101/README.md) retains native reference binaries only for
+regression comparison and investigation.
