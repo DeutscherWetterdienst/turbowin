@@ -91,8 +91,9 @@ public final class myemailsettings extends javax.swing.JFrame {
     jRadioButton7.setSelected(false); // TLS
     jRadioButton8.setSelected(false); // SSL
     jCheckBox1.setSelected(true); // STARTTLS
-    jRadioButton1.setSelected(false); // default email module (java-jakarta)
-    jRadioButton2.setSelected(false); // default email module (python)
+    jRadioButton1.setSelected(true); // Jakarta Mail is the only supported custom module
+    jRadioButton2.setSelected(false);
+    jRadioButton2.setVisible(false); // retained temporarily for form compatibility
 
     // [LOGS]
     jTextField3.setText(""); // logs email recipient
@@ -165,17 +166,10 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     jTextField16.setText(main.custom_port);
 
-    if (main.custom_email_module.equals(main.JAKARTA_EMAIL)) {
-      jRadioButton1.setSelected(true); // jakarta email
-      jRadioButton2.setSelected(false); // python email
-    } else if (main.custom_email_module.equals(main.PYTHON_EMAIL)) {
-      jRadioButton1.setSelected(false);
-      jRadioButton2.setSelected(true);
-    } else {
-      // so if nothing was selected before -> jakarta email module will be set as default
-      jRadioButton1.setSelected(true);
-      jRadioButton2.setSelected(false);
-    }
+    // Legacy python_email values are normalized during configuration loading.
+    // Always display Jakarta Mail as the only supported custom module.
+    jRadioButton1.setSelected(true);
+    jRadioButton2.setSelected(false);
 
     if (main.custom_security.equals(main.CUSTOM_TLS)) {
       jRadioButton7.setSelected(true);
@@ -440,10 +434,11 @@ public final class myemailsettings extends javax.swing.JFrame {
     jLabel12.setText("email module to be used");
 
     buttonGroup5.add(jRadioButton1);
-    jRadioButton1.setText("primary (java)");
+    jRadioButton1.setText("Jakarta Mail");
 
     buttonGroup5.add(jRadioButton2);
-    jRadioButton2.setText("secondary (python)");
+    jRadioButton2.setText("legacy Python (unsupported)");
+    jRadioButton2.setVisible(false);
 
     javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
     jPanel8.setLayout(jPanel8Layout);
@@ -1010,14 +1005,8 @@ public final class myemailsettings extends javax.swing.JFrame {
       }
     }
 
-    // email module (python, jakarta) for sending observations
-    if (jRadioButton1.isSelected() == true) // java (jakarta) email module
-    {
-      main.custom_email_module = main.JAKARTA_EMAIL;
-    } else if (jRadioButton2.isSelected() == true) // python email module
-    {
-      main.custom_email_module = main.PYTHON_EMAIL;
-    }
+    // Jakarta Mail is the only supported custom email module.
+    main.custom_email_module = main.JAKARTA_EMAIL;
 
     // [LOGS] (immt etc)
     main.logs_email_recipient = jTextField3.getText().trim();
