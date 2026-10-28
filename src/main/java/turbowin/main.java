@@ -6810,7 +6810,7 @@ public class main extends javax.swing.JFrame {
   // public var's
   public static final String APPLICATION_NAME =
       "TurboWin+"; // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
-  public static final String APPLICATION_MET_MODULES = "MAWSbin_TW; teste_hc_TW; email_tbw_43;";
+  public static final String APPLICATION_MET_MODULES = "Java Format 101 encoder; email_tbw_43;";
   public static final String DASHBOARD_LOGO = "logo-sot.png"; // i.a. single dashboard barometer
   public static String application_mode =
       ""; // e.g. web mode (set in initComponents2 [main.java] and [main_RS232_RS422.java]

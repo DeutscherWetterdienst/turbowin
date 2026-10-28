@@ -2,6 +2,7 @@ package turbowin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import format101.Encoder;
@@ -16,6 +17,10 @@ public class Format101LibraryIntegrationTest {
   @Test
   public void bundlesPilotTableAndEncodesWithoutCliOrNativeProcess() throws Exception {
     String resourceName = "/format101/config/S-AWS-101_modl_pilote.csv";
+    assertNull(getClass().getResourceAsStream("/format101/MAWSbin_TW_64"));
+    assertNull(getClass().getResourceAsStream("/format101/MAWSbin_TW.exe"));
+    assertNull(getClass().getResourceAsStream("/format101/teste_hc_TW_64"));
+    assertNull(getClass().getResourceAsStream("/format101/teste_hc_TW.exe"));
     try (InputStream resource = getClass().getResourceAsStream(resourceName)) {
       assertNotNull(resource);
 

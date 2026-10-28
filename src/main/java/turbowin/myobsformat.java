@@ -414,37 +414,6 @@ public final class myobsformat extends javax.swing.JFrame {
       }
     } // if ( (doorgaan == true) && (main.obs_format.equals(main.FORMAT_AWS)) )
 
-    if ((doorgaan == true) && (main.obs_format.equals(main.FORMAT_101))
-        || ((main.obs_format.equals(main.FORMAT_AWS)
-            && (main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))))) {
-      // NB also eucaws + 'uploads via turbowin': format101 by default
-
-      // only Windows virus scanners (so not Linux) tend to warn for the compression and
-      // decompression programs
-      OSDetector.OSType ostype = OSDetector.detect_OS();
-      switch (ostype) {
-        case WINDOWS:
-          FORMAT_101.compression_exe = FORMAT_101.COMPRESSION_EXE_WIN;
-          FORMAT_101.decompression_exe = FORMAT_101.DECOMPRESSION_EXE_WIN;
-
-          String info_message =
-              "In case you get a warning of your virus scanner: "
-                  + "\""
-                  + FORMAT_101.compression_exe
-                  + "\""
-                  + " and "
-                  + "\""
-                  + FORMAT_101.decompression_exe
-                  + "\""
-                  + " are essential parts of "
-                  + main.APPLICATION_NAME
-                  + " required for coding and decoding of format 101";
-          JOptionPane.showMessageDialog(
-              null, info_message, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
-          break;
-      } // switch (ostype)
-    } // if ( (doorgaan == true) etc.
-
     //
     /////// write new (obs) configuration settings to file(s)
     //
