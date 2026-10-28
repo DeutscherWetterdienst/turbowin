@@ -158,19 +158,46 @@ public class JakartaEmailLocalSmtpTest {
     }
   }
 
+  @Test
+  public void reportsAuthenticationFailure() throws Exception {
+    try (FakeSmtpServer server = new FakeSmtpServer(false, true)) {
+      int status =
+          new Jakarta_Email()
+              .send_jakarta_email_obs(
+                  main.CUSTOM_TLS,
+                  "127.0.0.1",
+                  "wrong-password",
+                  "recipient@example.org",
+                  "sender@example.org",
+                  "Subject",
+                  "Body",
+                  "null",
+                  Integer.toString(server.port()),
+                  "null");
+
+      assertEquals(1, status);
+    }
+  }
+
   private static final class FakeSmtpServer implements AutoCloseable {
     private final ServerSocket serverSocket;
     private final AtomicReference<String> receivedMessage = new AtomicReference<>();
     private final Thread serverThread;
     private final boolean rejectRecipients;
+    private final boolean rejectAuthentication;
 
     FakeSmtpServer() throws IOException {
-      this(false);
+      this(false, false);
     }
 
     FakeSmtpServer(boolean rejectRecipients) throws IOException {
+      this(rejectRecipients, false);
+    }
+
+    FakeSmtpServer(boolean rejectRecipients, boolean rejectAuthentication) throws IOException {
       serverSocket = new ServerSocket(0);
       this.rejectRecipients = rejectRecipients;
+      this.rejectAuthentication = rejectAuthentication;
       serverThread = new Thread(this::serve, "fake-smtp-server");
       serverThread.start();
     }
@@ -205,7 +232,12 @@ public class JakartaEmailLocalSmtpTest {
           String command = line.toUpperCase();
           if (command.startsWith("EHLO") || command.startsWith("HELO")) {
             respond(writer, "250-localhost");
+            if (rejectAuthentication) {
+              respond(writer, "250-AUTH LOGIN PLAIN");
+            }
             respond(writer, "250 OK");
+          } else if (command.startsWith("AUTH")) {
+            respond(writer, "535 Authentication failed");
           } else if (command.startsWith("MAIL FROM")) {
             respond(writer, "250 OK");
           } else if (command.startsWith("RCPT TO")) {
