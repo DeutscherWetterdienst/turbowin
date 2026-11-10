@@ -1758,7 +1758,7 @@ public final class mystationdata extends javax.swing.JFrame {
     }
 
     if (doorgaan == true) {
-      // write meta (station) data to muffins or configuration files
+      // Save settings to the configuration files.
       main.schrijf_configuratie_regels();
 
       /* update station ID and ship name on main screen progress */
@@ -1833,7 +1833,7 @@ public final class mystationdata extends javax.swing.JFrame {
 
         StationDataImportWorkflow.start(import_file, this::initStationComponents);
 
-        // write meta (station) data to muffins or configuration files
+        // Save settings to the configuration files.
         main.schrijf_configuratie_regels();
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)

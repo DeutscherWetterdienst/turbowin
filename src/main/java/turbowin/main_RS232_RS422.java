@@ -183,7 +183,7 @@ public class main_RS232_RS422 {
                       + serial_ports_portid_array[i].getDescriptivePortName());
               String messageString_info = "?\r\n"; // or "?\r"
               byte[] bytes_message =
-                  messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  messageString_info.getBytes(StandardCharsets.UTF_8);
               serialPort_test.writeBytes(bytes_message, bytes_message.length); // Write data to port
               written_bytes =
                   serialPort_test.writeBytes(
@@ -321,7 +321,7 @@ public class main_RS232_RS422 {
                       + serial_ports_portid_array[i].getDescriptivePortName());
               String messageString_info = "?\r\n"; // or "?\r"
               byte[] bytes_message =
-                  messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  messageString_info.getBytes(StandardCharsets.UTF_8);
               serialPort_test.writeBytes(bytes_message, bytes_message.length); // Write data to port
               written_bytes =
                   serialPort_test.writeBytes(
@@ -705,7 +705,7 @@ public class main_RS232_RS422 {
                         + serial_ports_portid_array[i].getDescriptivePortName());
                 String messageString_stop = "s\r";
                 byte[] bytes_message_stop =
-                    messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                    messageString_stop.getBytes(StandardCharsets.UTF_8);
                 serialPort_test.writeBytes(
                     bytes_message_stop, bytes_message_stop.length); // Write data to port
                 written_bytes =
@@ -745,7 +745,7 @@ public class main_RS232_RS422 {
                 // serialPort_test.writeBytes(messageString_info.getBytes());                     //
                 // Write data to port
                 byte[] bytes_message_info =
-                    messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                    messageString_info.getBytes(StandardCharsets.UTF_8);
                 serialPort_test.writeBytes(
                     bytes_message_info, bytes_message_info.length); // Write data to port
 
@@ -834,7 +834,7 @@ public class main_RS232_RS422 {
               // serialPort_test.writeBytes(messageString_stop.getBytes());                     //
               // Write data to port
               byte[] bytes_message_stop =
-                  messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                  messageString_stop.getBytes(StandardCharsets.UTF_8);
               serialPort_test.writeBytes(
                   bytes_message_stop, bytes_message_stop.length); // Write data to port
               written_bytes =
@@ -869,7 +869,7 @@ public class main_RS232_RS422 {
                 // serialPort_test.writeBytes(messageString_info.getBytes());                     //
                 // Write data to port
                 byte[] bytes_message_info =
-                    messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                    messageString_info.getBytes(StandardCharsets.UTF_8);
                 serialPort_test.writeBytes(
                     bytes_message_info, bytes_message_info.length); // Write data to port
 
@@ -1251,7 +1251,7 @@ public class main_RS232_RS422 {
                 // serial_ports_portid_array[i].getDescriptivePortName());
                 // String messageString_smode_stop = "SMODE STOP\r";
                 // byte[] bytes_message_smode_stop =
-                // messageString_smode_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                // messageString_smode_stop.getBytes(StandardCharsets.UTF_8);
                 // serialPort_test.writeBytes(bytes_message_smode_stop,
                 // bytes_message_smode_stop.length);       // Write data to port
                 // try
@@ -1275,7 +1275,7 @@ public class main_RS232_RS422 {
                           + serial_ports_portid_array[i].getDescriptivePortName());
                   String messageString_stop = "s\r";
                   byte[] bytes_message_stop =
-                      messageString_stop.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                      messageString_stop.getBytes(StandardCharsets.UTF_8);
                   serialPort_test.writeBytes(
                       bytes_message_stop, bytes_message_stop.length); // Write data to port
                   written_bytes =
@@ -1315,7 +1315,7 @@ public class main_RS232_RS422 {
                   // serialPort_test.writeBytes(messageString_info.getBytes());
                   // // Write data to port
                   byte[] bytes_message_info =
-                      messageString_info.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+                      messageString_info.getBytes(StandardCharsets.UTF_8);
                   serialPort_test.writeBytes(
                       bytes_message_info, bytes_message_info.length); // Write data to port
 
@@ -2593,14 +2593,6 @@ public class main_RS232_RS422 {
     //
     // called from specific_connection_initComponents() [main.java]
     //
-
-    // http://www.snip2code.com/Snippet/1044/Java--read-from-USB-using-RXTX-library
-    // FOR LINUX:
-    // #==================================================================#
-    // WARNING! - DO NOT SET THE FOLLOWING PROPERTY WITH RXTX LIBRARY, IT
-    // CAUSES A PROGRAM LOCK:
-    // serialPort.notifyOnOutputEmpty(true);
-    // #==================================================================#
 
     // start timer for checking every 1 minute if there is new AWS meteo sensor data available
     // (because if last data > 5 minutes old 'gray' data on main screen)
@@ -6337,41 +6329,15 @@ public class main_RS232_RS422 {
   }
 
   public void RS232_initComponents() {
-    // called from specific_connection_initComponents() [main.java] which is called from
-    // read_muffin() [main.java] or lees_configuratie_regels() [main.java]
+    // Initialized after configuration loading by ConnectionInitializationWorkflow.
 
     ///////// only used for PTB220/PTB330/Mintaka Duo/Mintaka Star USB barometers (not for EUCAWS
     // and not for Mintaka Star WiFi) ////////
-
-    // http://www.snip2code.com/Snippet/1044/Java--read-from-USB-using-RXTX-library
-    // FOR LINUX:
-    // #==================================================================#
-    // WARNING! - DO NOT SET THE FOLLOWING PROPERTY WITH RXTX LIBRARY, IT
-    // CAUSES A PROGRAM LOCK:
-    // serialPort.notifyOnOutputEmpty(true);
-    // #==================================================================#
 
     // start timer for checking every 1 minute if there is newbarometer sensor data available
     // (because if last data > 5 minutes old 'gray' data on main screen)
     // last_new_data_received_TimeMillis = 0;
     // RS232_And_WiFi_init_new_sensor_data_received_check_timer();
-
-    // System.loadLibrary("C:\\Users\\hometrainer\\Documents\\NetBeansProjects\\turbowin_jws\\rxtxSerial.dll"); // gaat fout omdat het geen path mag zijn (alleen de library name)
-
-    // NB load dll via applet or java web start
-    //    You can definitely accomplish this. I have a working applet in production that does
-    // exactly this.
-    //    Even if your applet is signed, you still need to use the Access Controller to access the
-    // dll, you cannot just call "loadlibrary".
-    //    You can add this to the Java policy file however this is not recommended due to 1. You
-    // probably do not have access to the users java configuration. 2.
-    //    Even if this is for your own company use, managing the policy file is a pain as users will
-    // download some JRE and your policy file is either overwritten or ignored.
-    //    You best bet is to sign your jar, making sure to wrap your load library code in a
-    // privileged block of code like this.
-    //
-    //    You can Also use System.loadlibrary(mydll.dll) but you have to have the dll folder on the
-    // path in windows so the applet can find it.
 
     // for writing info data to status line (bottom of screen)
     // sdf2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");                            // HH hour in day
@@ -6470,8 +6436,7 @@ public class main_RS232_RS422 {
   }
 
   public void RS232_initComponents_II() {
-    // called from specific_connection_initComponents() [main.java] which is called from
-    // read_muffin() [main.java] or lees_configuratie_regels() [main.java]
+    // Initialized after configuration loading by ConnectionInitializationWorkflow.
 
     ///////// only used 2nd instrument HMP155 (not for for PTB220/PTB330/Mintaka Duo/Mintaka Star
     // USB barometers and not for EUCAWS and not for Mintaka Star WiFi) ////////

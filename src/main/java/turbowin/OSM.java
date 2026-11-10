@@ -88,7 +88,7 @@ public class OSM {
     if (main.logs_dir.trim().equals("") == false && main.logs_dir.trim().length() >= 2) {
       // NB see function copy_OSM_module() for a message if "logs_dir" do not exist
 
-      // NB e.g. leaflet_js_File = "C:\Program Files (x86)\TurboWin+\logs\OSM\leaflet.js"
+      // Leaflet resources are stored below the configured logs directory.
       final File leaflet_js_File =
           new File(
               main.logs_dir
@@ -144,7 +144,6 @@ public class OSM {
     // check if leaflet.js exists, if not create all OSM dirs (again) and copy all the necessary OSM
     // fiies
     if (doorgaan == true) {
-      // NB e.g. leaflet_js_File = "C:\Program Files (x86)\TurboWin+\logs\OSM\leaflet_js"
       final File leaflet_js_File =
           new File(
               main.logs_dir
@@ -153,7 +152,7 @@ public class OSM {
                   + java.io.File.separator
                   + LEAFLET_JS);
       if (leaflet_js_File.exists() == false) {
-        // create OSM (sub)dirs and copy all the necessary files from the turbowin_jws.jar resource
+        // create OSM (sub)dirs and copy all the necessary files from the application resources
         // to the newly created dirs
         //
         // info = "--- start copying complete format 101 module from jar to: " + main.logs_dir;
@@ -164,29 +163,26 @@ public class OSM {
         // A previous version copied native Format 101 helpers here; OSM now only needs its own
         // resources.
 
-        // create dir "OSM" (e.g. "C:\Program Files (x86)\TurboWin+\logs\OSM")
+        // Create OSM below logs_dir.
         //
         String OSM_dir = main.logs_dir + java.io.File.separator + OSM_ROOT_DIR;
         final File dir_OSM = new File(OSM_dir);
         dir_OSM.mkdir();
 
-        // create sub dir "OSM\OSMPublicTransport" (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\OSM\OSMPublicTransport")
+        // Create the OSMPublicTransport tile directory.
         //
         String OSMPublicTranspor_dir = OSM_dir + java.io.File.separator + OSM_PUBLIC_TRANSPORT_DIR;
         final File dir_OSMPublicTranspor = new File(OSMPublicTranspor_dir);
         dir_OSMPublicTranspor.mkdir();
 
         //
-        // create sub sub dir "OSM\OSMPublicTransport\2" (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\OSM\OSMPublicTransport\2")
+        // Create zoom level 2.
         //
         String OSMPublicTransport_2_dir = OSMPublicTranspor_dir + java.io.File.separator + "2";
         final File dir_OSMPublicTransport_2 = new File(OSMPublicTransport_2_dir);
         dir_OSMPublicTransport_2.mkdir();
 
-        // create sub dir's "OSM\OSMPublicTransport\2\0" etc. (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\OSM\OSMPublicTransport\2\0")
+        // Create the tile-column directories for zoom level 2.
         //
         for (int i = 0; i <= 3; i++) // sub-sub-sub dir's 0,1,2,3
         {
@@ -263,15 +259,13 @@ public class OSM {
         } // for (int i = 0; i <= 3; i++)
 
         //
-        // create sub sub dir "OSM\OSMPublicTransport\3" (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\OSM\OSMPublicTransport\3")
+        // Create zoom level 3.
         //
         String OSMPublicTransport_3_dir = OSMPublicTranspor_dir + java.io.File.separator + "3";
         final File dir_OSMPublicTransport_3 = new File(OSMPublicTransport_3_dir);
         dir_OSMPublicTransport_3.mkdir();
 
-        // create sub dir's "OSM\OSMPublicTransport\3\0" etc. (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\OSM\OSMPublicTransport\3\0")
+        // Create the tile-column directories for zoom level 3.
         //
         for (int i = 0; i <= 7; i++) // sub-sub-sub dir's 0,1,2,3,4,5,6,7
         {
@@ -348,15 +342,13 @@ public class OSM {
         } // for (int i = 0; i <= 7; i++)
 
         //
-        // create sub sub dir "OSM\OSMPublicTransport\4" (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\OSM\OSMPublicTransport\4")
+        // Create zoom level 4.
         //
         String OSMPublicTransport_4_dir = OSMPublicTranspor_dir + java.io.File.separator + "4";
         final File dir_OSMPublicTransport_4 = new File(OSMPublicTransport_4_dir);
         dir_OSMPublicTransport_4.mkdir();
 
-        // create sub dir's "OSM\OSMPublicTransport\4\0" etc. (e.g. "C:\Program Files
-        // (x86)\TurboWin+\logs\OSM\OSMPublicTransport\4\0")
+        // Create the tile-column directories for zoom level 4.
         //
         for (int i = 0; i <= 15; i++) // sub-sub-sub dir's 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
         {
@@ -727,23 +719,8 @@ public class OSM {
     Desktop desktop = null;
 
     if (os.equals("LINUX")) {
-      // LINUX: first try runtime procedure
-      //        second try Desktop procedure
-      //
-      // why?: on Fedora strange results if first Desktop method was invoked, then the browser only
-      // opens as soon as TurboWin+ itself is closed....
-      //       (so no error on Desktop procedure/method but strange behavior)
-      //       In several correspondance items you can find that the Desktop method is not workig
-      // fine on Linux
-      //
-      // related to: hardware accelarator of the webbrowser?
-      // (https://stackoverflow.com/questions/69037458/selenium-chromedriver-gives-initializesandbox-called-with-multiple-threads-in)
-      //         because the following errors in output window NetBeans IDE when trying to open URL
-      //         libva error: vaGetDriverNameByIndex() failed with unknown libva error, driver_name
-      // = (null)
-      //         [5757:5757:1122/165659.328325:ERROR:sandbox_linux.cc(376)] InitializeSandbox()
-      // called with multiple threads in process gpu-process.
-      //
+      // Try platform commands before Desktop.browse: on Fedora, the Desktop call was observed
+      // to delay opening the browser until TurboWin exited, without reporting an error.
 
       if (((main.logs_dir != null) && (main.logs_dir.compareTo("") != 0))) {
         ensureOsmDirectory();

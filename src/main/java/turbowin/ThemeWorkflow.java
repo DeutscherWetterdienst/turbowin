@@ -61,8 +61,7 @@ final class ThemeWorkflow {
     }
 
     try {
-      // Java 6 update 10 and JDK 7 use different Nimbus class packages; searching installed
-      // look-and-feels keeps this compatible across those versions.
+      // Resolve Nimbus from the look-and-feels installed in the current runtime.
       for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
         if ("Nimbus".equals(info.getName())) {
           UIManager.setLookAndFeel(info.getClassName());

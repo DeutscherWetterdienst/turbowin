@@ -57,24 +57,6 @@ final class ApplicationShutdownWorkflow {
       // if ( ((RS232_connection_mode == 1) || (RS232_connection_mode == 2) ||
       // (RS232_connection_mode == 3) || (RS232_connection_mode == 4)) && (defaultPort != null) )
       if ((RS232_connection_mode != 0) && (defaultPort != null)) {
-        //
-        // NB RxTx Serial ?
-        // close() for Linux for a proper clean up of a port stale lock file (e.g.
-        // /var/lock/LCK...ttyUSB0), not appropiate to Windows
-        // unfortunately it didn't help (see also:
-        // http://www.raspberrypi.org/forums/viewtopic.php?f=81&t=32186)
-        //
-        // The problem with file lock is likely due to the lock-file being created with root
-        // permissions (sudo),
-        // however the IDE is being ran under user mode. Either you will have to make the lock file
-        // create in user-mode,
-        // change the ownership of the lock, or run the IDE in root. Running it in root shouldn't be
-        // a big issue.
-        //
-        //
-        // NB in case of WiFi: defaultport == null
-        //
-        //
         if (main.serialPort != null) {
           // try
           // {
@@ -103,8 +85,6 @@ final class ApplicationShutdownWorkflow {
 
       // serial communication GPS
       if ((RS232_GPS_connection_mode != 0) && (main_RS232_RS422.GPS_defaultPort != null)) {
-        // only necessary in case of RxTx serial?
-        // if (main_RS232_RS422.GPS_serialPort != null)
         if (main.GPS_serialPort != null) {
           // try
           // {

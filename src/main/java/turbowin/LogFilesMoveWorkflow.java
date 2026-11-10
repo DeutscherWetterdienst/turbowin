@@ -25,16 +25,6 @@ final class LogFilesMoveWorkflow {
     // Note: temp_dir only for move_mode_logs = MOVE_TO_EMAIL; in move_mode_logs = MOVE_TO_DISK temp_dir is a dummy
     */
 
-    /*
-    // Note:  If you intend to distribute your program as an unsigned Java Web Start application,
-    //      then instead of using the JFileChooser API you should use the file services provided
-    //      by the JNLP API. These services FileOpenService and FileSaveService not only
-    //      provide support for choosing files in a restricted environment, but also take care of
-    //      actually opening and saving them. An example of using these services is in JWSFileChooserDemo.
-    //      Documentation for using the JNLP API can be found in the Java Web Start lesson.
-    //     (http://java.sun.com/docs/books/tutorial/uiswing/components/filechooser.html)
-    */
-
     boolean doorgaan = false;
     boolean doorgaan_captain = true;
 

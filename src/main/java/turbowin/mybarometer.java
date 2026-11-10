@@ -1018,7 +1018,7 @@ public final class mybarometer extends javax.swing.JFrame {
       /* save ic (instrument correction) barometer */
       if (local_AWS_connected == false) // NOT AWS connected mode
       {
-        // write meta (station) data to muffins or configuration files
+        // Save settings to the configuration files.
         main.schrijf_configuratie_regels();
       } // if (local_AWS_connected == false)
 

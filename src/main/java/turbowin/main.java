@@ -20,124 +20,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 /*
-*
-* ---------------------------------------------------------------------------------------------------------------------
-* Ive installed previous versions of jdk1.6.0_17, and then after installing netbeans 7, I upgrade jdk to version jdk1.6.0_25.
-*
-* Now, everytime I start Netbeans, it always show me this message :
-*
-* Cannot locate java installation in specified jdkhome:
-* C:\Program Files\Java\jdk1.6.0_17
-* Do you want to try to use default version?
-*
-* If I click Yes, the next time Netbeans started, the same message appear.
-*
-* So to remove this, I change netbeans.conf in C:\Program Files\NetBeans 7.0\etc.
-*
-* Change netbeans_jdkhome like this :
-* netbeans_jdkhome=C:\Program Files\Java\jdk1.6.0_25?
-* ---------------------------------------------------------------------------------------------------------------------
-* Wanneer .jar file direct wordt opgestart heb je geen invloed op de java heap memory
-* (wel via java web start in de jnlp file of via cmd batch file)
-*
-* dus wanneer direct via jar file aanpassen in java control panel:
-* http://www.wikihow.com/Increase-Java-Memory-in-Windows-7
-*
-* ---------------------------------------------------------------------------------------------------------------------
-*
-* na een copy van de ene PC naar een andere:
-*         - indien reference problems, resolve door te verwijzen naar:
-*         - ../backup/jnlp_jar/jnlp.jar
-*         - ../backup/jssc_jar/jssc.jar
-*
-* IDE: hierna after a clean build:
-*         - copy icons dir from turbowin_jws\backup\build_classes\      -> turbowin_jws\build\classes\turbowin\
-*         - copy format_101 dir from turbowin_jws\backup\build_classes\ -> turbowin_jws\build\classes\turbowin\
-*         - copy python dir from turbowin_jws\backup\build_classes\     -> turbowin_jws\build\classes\turbowin\
-*         - copy OSM dir from turbowin_jws\backup\build_classes\        -> turbowin_jws\build\classes\turbowin\
-*         - [not JPMS version?] recreate dir dist\logs ????
-*         - [not JPMS version?] copy the file  \backup\software\jnlp\turbowin_jws_offline.jnlp to turbowin_jws\dist\  ????? alleen voor turboweb nodig ???
-*         - [not JPMS version?] copy the file  \backup\software\cmd\turbowin_plus_offline.cmd to turbowin_jws\dist\   ????? alleen voor 32 bit versie nodig ???
-*
-* ---------------------------------------------------------------------------------------------------------------------
-* IDE: Bij properties -> Build -> Compiling: Compile on Save uitzetten!!
-* IDE: Bij Properties -> Build -> Compiling: -Xlint:unchecked
-*
-* IDE: Tools -> Options -> Editor -> Formatting: number of spaces per indent: 3
-*                                                                  Tab size : 3
-*
-* IDE: Tools -> Options -> Editor -> Hints:  probable bugs     : unused assignment                     : uitgezet
-*                                            suggestions       : split declaration                     : uitgezet
-*                                            JDK 1.5 and later : use switch over strings where possible: uitgezet
-*                                                              : convert to try-with-resources         : uitgezet
-* ---------------------------------------------------------------------------------------------------------------------
-* om JNLP API (b.v.voor BasicService) ter beschikking te hebben
-* met rechtermuisknop klikken op "turbowin_jws" -> properties -> libraries -> compile -> add jar/folder
-* C:\Program Files\Java\jdk1.6.0\sample\jnlp\servlet
-* in dist komt dan (automatisch) een sub-dir lib  met daarin jnlp.jar
-*
-* Als compiler alsnog jnlp.jar niet kan vinden dan verwijzen naar jnlp.jar in de dist/lib folder
-* ( "turbowin_jws" -> properties -> libraries -> compile -> add jar/folder ->
-* C:\Program Files\NetBeans 6.5.1\projects\turbowin_jws\dist\lib)
-*
-* ook deze jnlp.jar moet gesigned worden + aangemeld in de turbowin_jws.jnlp file
-*
-* vanaf JDK7: jnlp.jar via download:  "Java SE Development Kit 7u21 Demos and Samples Downloads" (ergens unzippen en dan verwijzen naar ...\samples\jnlp\servlet\jnlp.jar)
-* voor het gemak ook onder \...\backup\jnlp_jar gezet
-*
-* ---------------------------------------------------------------------------------------------------------------------
-*
-* SELF SIGNED [niet meer geldig/geaccepteerd bij nieuwere JREs]
-* java web start applicaties moeten "getekend" zijn
-* 1. key genereren bv: "c:\program files\java\jdk1.6.0_10\bin\keytool" -genkey -keystore myKeys -alias keyalias -keypass Martin
-* 2. signen bv       : "C:\program files\Java\jdk1.6.0_10\bin\jarsigner" -verbose -keystore myKeys "C:\program files\netbeans-6.5\projects\turbowin_jws\dist\turbowin_jws.jar" keyalias
-* (zie de specifieke .cmd files in "C:\Program Files\NetBeans 6.5\projects\turbowin_jws\backup\java_web_start" met hierin deze commando's)
-*
-*
-* CERTIFICATE
-* - jnlp.jar, jssc.jar/jSerialCoomm-1.3.11.jar en turbowin_jws.jar moeten gesigned worden
-* - NB vanaf versie 1.7 update 25 moet de manifest in de jars gewijzigd worden voor permisions en codebase (anders warning in console) [gebeurt met manifest_input.cmd]
-* - NB vanaf versie 1.7 update 45 moet de manifest in de jars gewijzigd worden voor application-name (anders warning in console) [gebeurt met manifest_input.cmd]
-* - NB manifest_input.cmd is nodig om permissies, application name and codebase te zetten. Omdat dit de eerste keer gebeurt (bv na clean build) geeft een volgende
-*      keer runnen manifest_input.cmd in feite een update (wat manifest_input.cmd met "umf" doet) warnings for duplicate entry -> DIT GEEFT NIETS
-*
-*
-* ---------------------------------------------------------------------------------------------------------------------
-* Historical Java Web Start storage paths (muffin persistence is no longer active):
-* - muffin: // Windows 7        bv : C:\Users\hometrainer\AppData\LocalLow\Sun\Java\Deployment\cache\6.0\muffin
-*           // XP               bv : C:\Documents and Settings\stam\Local Settings\Application Data\Sun\Java\Deployment\cache\6.0\muffin
-* ---------------------------------------------------------------------------------------------------------------------
-* - Bij overgang JDK 6 naar JDK 7:  - bij project properties (rechtermuisklik turbowin_jws -> properties -> sources) source/binary format evetueel veranderen van JDK 6 naar JDK 7 (bij JDK 6 wordt er gecheckt tegen JDK6 eigenschappen; bij JDK7 wordt er -ook- gecheckt tegen java 1.7 -nieuwe- eigenschappen)
-*                                   - bij project properties (rechtermuisklik turbowin_jws -> properties -> libraries) java platform: JDK 1.7
-*                                   - bij project properties (rechtermuisklik turbowin_jws -> properties -> libraries) compile time libraries: ...\jdk1_7_0_17_samples\sample\jnlp\servlet\jnlp.jar
-*                                   - ook jarsigner_jnlp.cmd, keytool_turbowin_jws.cmd en jarsigner_turbowin_jws.cmd aanpassen
-*
-* ----------------------------------------------------------------------------------------------------------------------
-*
-* wellicht interessant : https://blogs.oracle.com/jtc/entry/serial_port_communication_for_java
-*
-* NB VANAF VERSIE 2.4.0 JSSC ALS SERIAL COMMUNICATIE LIBRARY (BEHOEFT GEEN APARTE OS AFHANKELIJKE DRIVER INSTALLATIE)
-*
-*-----------------------------------------------------------------------------------------------------------------------
-* directory structuur in offline mode
-*              - main dir - turbowin_jws.jar
-*              - main dir - turbowin_plus_offline.cmd (indien deze file aanwezig dan wordt turbowin_jws_offline.jnlp genegeerd)
-*              - main dir - turbowin_jws_offline.jnlp (wanneer turbowin_plus_offline.cmd afwezig dan via de jnlp methode)
-*              - sub dir lib (met files jnlp.jar, jssc.jar en ??AbsoluteLayout.jar??)
-*              - sub dir help (met zelfde files als zoals op knmi turbowin internet server)
-*              - sub dir logs (deze is echter niet noodzakelijk, indien niet aanwezig automatisch aagemaakt door TurboWin+)
-*              - sub dir docs met ........
-*              - sub dir amver (deze is echter niet noodzakelijk, indien niet aanwezig automatisch aagemaakt door TurboWin+)
-*              - zie FORMAT_101.java voor extra dirs en files voor semi compressed berichten versturen
-*              - NB voor volledig overzicht zie doc: "turbowin+_folder_structuur.docx"
-*
-* HISTORICAL JNLP BEHAVIOR ONLY; current startup uses configuration files, not muffins:
-* NB WHEN STARTED WITH turbowin_jws_offline.jnlp AND turbowin_plus_offline.cmd IS IN THE SAME DIR
-*    THEN THE META DATA WILL ONLY BE STORED AND RETRIEVED FROM CONFIGURATION FILES AND NOT FROM/TO MUFFINS!
-*    DELETE/RENAME turbowin_plus_offline.cmd TO USE MUFFINS
-*
-* ----------------------------------------------------------------------------------------------------------------------
-*
+* Build, test, and packaging instructions: documentation/contributing_and_testing.md
+* and documentation/07_deployment_view.md.
 *
 * global var: RS232_connection_mode:    0 = no instrument; serial connection or WiFi (default)
 *             (instrument type)         1 = barometer Vaisala PTB220 serial
@@ -275,7 +159,7 @@ import javax.swing.JPopupMenu;
 * main.configuratie_regels[77]                                  => pop-up dashboard [true/false]
 * main.configuratie_regels[78]                                  => pop-up dashboard interval (1, 3, 6 hours)
 * main.configuratie_regels[79]                                  => dashboard ship deck color
-* main.configuratie_regels[80]                                  => custom email module (jakarta or python)
+* main.configuratie_regels[80]                                  => custom email module (jakarta; legacy python values are migrated)
 * main.configuratie_regels[81]                                  => logs email method (pc-default or custom)
 * main.configuratie_regels[82]                                  => eucaws upload method (eucaws modem or turbowin)
 * main.configuratie_regels[83]                                  => port mode option; deactivate_APR_AWSR_ship_speed_minimal [true/false]
@@ -286,50 +170,14 @@ import javax.swing.JPopupMenu;
 * main.configuratie_regels[88]                                  => eucaws obs id (if added to SMD input)
 *
 *
-*+++++++++++++++++++ NB IF NEW ENTRY, IT IS ONLY NECESSARY TO APPEND THESE TWO FUNCTIONS: ++++++++++++++++++++
-*                              - fill_configuratie_array() [main.java]
-*                              - meta_data_from_configuration_regels_into_global_vars()[main.java]
+* Configuration entries are built and applied in ConfigurationManager.
+* See documentation/configuration_persistence.md for the format and persistence workflow.
 *
-*
-* lezen via: - lees_configuratie_regels()
-*
-* schrijven via: - schrijf_configuratie_regels()
-*
-* maar zie ook: - meta_data_from_configuration_regels_into_global_vars() [main.java]
-*          - OK_button_actionPerformed [mystationdata.java]
-*          - OK_button_actionPerformed [mylogfiles.java]
-*          - OK_button_actionPerformed [myemailsettings.java]
-*          - OK_button_actionPerformed [RS232_settings.java]
-*          - OK_button_actionPerformed [mywind.java]
-*          - OK_button_actionPerformed [mybarometer.java]
-*          - OK_button_actionPerformed [myobsformat.java]
-*          - OK_button_actionPerformed [WOW_settings.java]
-*          - OK_button_actionPerformed [myserversettings.java]
-*
-* ---------------------------------------------------------------------------------------------------------------------
-*
-* NB input/output in een GUI altijd via een SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215)
-*
-* NB java.io.File.separator gebruiken i.p.v. "/" of "\"
-*
-*
-* ---------------------------------------------------------------------------------------------------------------------
-* CHECK ONLY SINGLE INSTANCE OF TURBOWIN+ IS RUNNING:
-*
-* only jnlp mode can use the single instance running check
-*
-* in offline mode: So by removing the file turbowin_plus_offline.cmd and invoking turbowin+ via turbowin_jws_offline.jnlp there will be a single instance running check
-* online mode: is always started via the jnlp file -> always single instance running check
+* StartupConfigurationWorkflow uses a server socket for the desktop single-instance check.
 *
 * ---------------------------------------------------------------------------------------------------------------------
 * UPDATE IN/TERVAL PARAMETERS
 * update date-time field main screen every minute if GPS is connected (both, APR and MANUAL mode)
-*
-* ---------------------------------------------------------------------------------------------------------------------
-** The following functions are using the serial communication library
-*      - main_windowClosing() [main.java]
-*      - Output_obs_to_AWS_actionPerformed() [main.java]
-*      - ......
 *
 * ---------------------------------------------------------------------------------------------------------------------
 * logging/dispalying examples:
@@ -6385,11 +6233,9 @@ public class main extends javax.swing.JFrame {
   public static final String MOVE_TO_DISK = "move_to_disk";
   public static final String LOGS_ZIP = "logs.zip";
   private final String JNLP_OFFLINE_FILE =
-      "turbowin_jws_offline.jnlp"; // deze file zal aanwezig zijn als alleen in offline mode gewerkt
-  // wordt (wordt dan door KNMI er bij geleverd)
+      "turbowin_jws_offline.jnlp"; // legacy startup marker; does not enable Web Start
   private final String CMD_OFFLINE_FILE =
-      "turbowin_plus_offline.cmd"; // deze file zal aanwezig zijn als alleen in offline mode gewerkt
-  // wordt (wordt dan door KNMI er bij geleverd)
+      "turbowin_plus_offline.cmd"; // legacy command-line startup marker
   private final String TURBOWIN_LAUNCHER_FILE = "turbowin_launcher.bat";
   private final String TURBOWIN_LAUNCHER_FILE_LINUX = "turbowin_launcher";
   static final String EMAIL_SEND_DEFAULT = "email_send_default";

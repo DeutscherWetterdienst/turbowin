@@ -332,7 +332,7 @@ public class DASHBOARD_view extends javax.swing.JFrame {
               main.dashboard_background_image = "";
               repaint();
 
-              // write meta data to muffins or configuration files
+              // Save settings to the configuration files.
               main.schrijf_configuratie_regels();
             } // if (result == JOptionPane.YES_OPTION)
           }
@@ -374,7 +374,7 @@ public class DASHBOARD_view extends javax.swing.JFrame {
       if (result == JFileChooser.APPROVE_OPTION) {
         main.dashboard_background_image = chooser.getSelectedFile().getPath();
 
-        // write meta data to muffins or configuration files
+        // Save settings to the configuration files.
         main.schrijf_configuratie_regels();
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)

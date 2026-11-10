@@ -213,9 +213,7 @@ public class main_support {
   }
 
   public void log_memory_statistics() {
-    // called from: - read_muffin() [main.java]
-    //              - lees_configuratie_regels()[main.java]
-    //              - main_windowClosing()[main.java]
+    // Log diagnostics during startup finalization and shutdown.
 
     // print memory statistics
     // (https://stackoverflow.com/questions/3571203/what-are-runtime-getruntime-totalmemory-and-freememory)
@@ -270,8 +268,7 @@ public class main_support {
   }
 
   public void log_java_version() {
-    // called from: - read_muffin()
-    //              - lees_configuratie_regels()
+    // Log the runtime selected by the installed launcher.
 
     String java_version = System.getProperty("java.runtime.version");
     String java_name = System.getProperty("java.vm.name");

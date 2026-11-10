@@ -48,8 +48,7 @@ final class ConnectionInitializationWorkflow {
       javax.swing.JCheckBox aprCheckBox,
       javax.swing.JCheckBox awsrCheckBox) {
 
-    // called from: - read_muffin() [main.java]
-    //              - lees_configuratie_regels() [main.java]
+    // Used during startup finalization after configuration loading.
 
     //
     //////// RS232/RS422/WiFi //////

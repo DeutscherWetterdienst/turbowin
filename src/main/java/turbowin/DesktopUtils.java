@@ -46,22 +46,8 @@ public class DesktopUtils {
     if ("LINUX".equalsIgnoreCase(os)) {
       // LINUX: try different commands before falling back to Desktop API.
       //
-      // LINUX: first try runtime procedure
-      //        second try Desktop procedure
-      //
-      // why?: on Fedora strange results if first Desktop method was invoked, then the browser only
-      // opens as soon as TurboWin+ itself is closed....
-      //       (so no error on Desktop procedure/method but strange behavior)
-      //       In several correspondance items you can find that the Desktop method is not workig
-      // fine on Linux
-      //
-      // related to: hardware accelarator of the webbrowser?
-      // (https://stackoverflow.com/questions/69037458/selenium-chromedriver-gives-initializesandbox-called-with-multiple-threads-in)
-      //         because the following errors in output window NetBeans IDE when trying to open URL
-      //         libva error: vaGetDriverNameByIndex() failed with unknown libva error, driver_name
-      // = (null)
-      //         [5757:5757:1122/165659.328325:ERROR:sandbox_linux.cc(376)] InitializeSandbox()
-      // called with multiple threads in process gpu-process.
+      // Try platform commands before Desktop.browse: on Fedora, the Desktop call was observed
+      // to delay opening the browser until TurboWin exited, without reporting an error.
       if (!openWithRuntimeFallback(linkUrl)) {
         code = -1;
       }

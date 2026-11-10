@@ -309,16 +309,6 @@ public class Jakarta_Email {
         // create a message
         MimeMessage msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(send_from)); // set From email field
-        // InternetAddress[] address = {new InternetAddress(send_to)};                          //
-        // The Address class is an abstract class that models the addresses (To and From addresses)
-        // in an email message; its subclasses support the actual implementations. Usually, its
-        // javax.mail.internet.InternetAddress subclass, which denotes an Internet email address, is
-        // commonly used.
-        // msg.setRecipients(Message.RecipientType.TO, address);                                //
-        // setRecipients(Message.RecipientType type, String addresses) it s used to set the stated
-        // recipient type to the provided addresses. The possible defined address types are TO
-        // (Message.RecipientType.TO), CC (Message.RecipientType.CC), and BCC
-        // (Message.RecipientType.BCC).
         msg.setRecipients(
             Message.RecipientType.TO, InternetAddress.parse(send_to, false)); // set To email field
         if (!send_cc.equals("null")) {
@@ -335,10 +325,7 @@ public class Jakarta_Email {
         if (attachment.equals("yes")) {
           // NB in TurboWin+ an attachment only possible for format101 not possible if format = FM13
 
-          // e.g.
-          // "C:\NetBeansProjects\turbowin_jws\dist\jlink\turbowin_jws\bin\logs\format_101\temp\HPK_format_101.txt"
-          //       NB "HPK_" + main.FORMAT_101_INPUT_FILE; (file for format 101 (NB outputfile is
-          // automatically "HPK_" + input file))
+          // Format 101 output uses the HPK_ prefix under logs_dir/format_101/temp.
           final File attachment_file =
               new File(
                   main.logs_dir
@@ -529,24 +516,13 @@ public class Jakarta_Email {
         // create a message
         MimeMessage msg = new MimeMessage(session);
         msg.setFrom(new InternetAddress(send_from)); // set From email field
-        // InternetAddress[] address = {new InternetAddress(send_to)};                 // The
-        // Address class is an abstract class that models the addresses (To and From addresses) in
-        // an email message; its subclasses support the actual implementations. Usually, its
-        // javax.mail.internet.InternetAddress subclass, which denotes an Internet email address, is
-        // commonly used.
-        // msg.setRecipients(Message.RecipientType.TO, address);                       //
-        // setRecipients(Message.RecipientType type, String addresses) it s used to set the stated
-        // recipient type to the provided addresses. The possible defined address types are TO
-        // (Message.RecipientType.TO), CC (Message.RecipientType.CC), and BCC
-        // (Message.RecipientType.BCC).
         msg.setRecipients(
             Message.RecipientType.TO, InternetAddress.parse(send_to)); // set To email field
         msg.setSubject(subject); // set email subject field
         msg.setSentDate(new Date());
 
         if (attachment.equals("yes")) {
-          // e.g.: C:\NetBeansProjects\turbowin_jws\dist\jlink\turbowin_jws\bin\logs\temp\Happy
-          // Sailor VIII logs.zip
+          // Log archives are prepared under logs_dir/temp using the ship name.
           final File attachment_file =
               new File(
                   main.logs_dir

@@ -8,9 +8,7 @@ final class ConfigurationValidator {
   private ConfigurationValidator() {}
 
   static String findWarning() {
-    // called from: - read_muffin() [main.java]
-    //              - lees_configuratie_regels() [main.java]
-    //
+    // Used during startup finalization after configuration loading.
 
     String info = "";
 

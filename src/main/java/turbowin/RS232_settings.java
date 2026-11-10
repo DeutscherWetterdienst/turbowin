@@ -1671,7 +1671,7 @@ public final class RS232_settings extends javax.swing.JFrame {
     ////////////////// save the RS232 (RS422) settings data ///////////////////////
     //
     if (doorgaan == true) {
-      // write meta (station) data to muffins or configuration files
+      // Save settings to the configuration files.
       main.schrijf_configuratie_regels();
 
       /* message */
@@ -2354,7 +2354,6 @@ public final class RS232_settings extends javax.swing.JFrame {
     //////////////////// data model instrument stop bits per second /////////////////
     //
     //
-    /* --------------------- JAVA 7 --------------- */
     // NB open the GUI form, select the JComboBox component, go to Properties -> Code and set "Type
     // Parameters" property to <Integer>.
     ComboBoxModel<Integer> model_stop_bits =

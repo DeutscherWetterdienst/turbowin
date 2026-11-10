@@ -261,7 +261,7 @@ public final class mylogfiles extends javax.swing.JFrame {
     }
 
     if (doorgaan) {
-      // write meta (station) data to muffins or configuration files
+      // Save settings to the configuration files.
       main.schrijf_configuratie_regels();
 
       /* message */
@@ -285,16 +285,6 @@ public final class mylogfiles extends javax.swing.JFrame {
   private void Log_files_folder_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Log_files_folder_button_actionPerformed
     // TODO add your handling code here:
-
-    /*
-    Note:  If you intend to distribute your program as an unsigned Java Web Start application,
-            then instead of using the JFileChooser API you should use the file services provided
-            by the JNLP API. These services FileOpenService and FileSaveService not only
-            provide support for choosing files in a restricted environment, but also take care of
-            actually opening and saving them. An example of using these services is in JWSFileChooserDemo.
-            Documentation for using the JNLP API can be found in the Java Web Start lesson.
-           (http://java.sun.com/docs/books/tutorial/uiswing/components/filechooser.html)
-    */
 
     // pop-up the file/directory chooser dialog box
     // JFileChooser chooser = new JFileChooser(".");                // present dir

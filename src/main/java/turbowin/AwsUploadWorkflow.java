@@ -26,7 +26,7 @@ final class AwsUploadWorkflow {
       if (main.serialPort.isOpen()) {
         // serialPort.writeBytes(obs_for_AWS_string.getBytes());              // Write data to port
         byte[] bytes_message_obs =
-            obs_for_AWS_string.getBytes(StandardCharsets.UTF_8); // Java 7+ only
+            obs_for_AWS_string.getBytes(StandardCharsets.UTF_8);
         if (main.serialPort.writeBytes(bytes_message_obs, bytes_message_obs.length)
             != -1) // Write data to port
         {

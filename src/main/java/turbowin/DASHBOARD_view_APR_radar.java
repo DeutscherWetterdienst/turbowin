@@ -49,7 +49,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
   public class HitLinkMouseListener extends MouseAdapter {}
 
   private void save_ship_dashboard_selection() {
-    // write meta data to muffins or configuration files
+    // Save settings to the configuration files.
 
     if (DASHBOARD_view_APR_radar.deck_color != null) {
       main.ship_deck_color_String =
@@ -2553,7 +2553,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.PASSENGER_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2570,7 +2570,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.NEUTRAL_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2587,7 +2587,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.RESEARCH_VESSEL;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2604,7 +2604,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.RO_RO_SHIP_1;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2621,7 +2621,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.RO_RO_SHIP_2;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2638,7 +2638,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.FERRY;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2655,7 +2655,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.GENERAL_CARGO_CLASSIC;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2672,7 +2672,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.REEFER_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2689,7 +2689,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.FRUIT_JUICE_TANKER;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -2790,7 +2790,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
             main.ship_type_dashboard = main.YACHT;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -3030,7 +3030,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
               main.dashboard_background_image = "";
               repaint();
 
-              // write meta data to muffins or configuration files
+              // Save settings to the configuration files.
               main.schrijf_configuratie_regels();
             } // if (result == JOptionPane.YES_OPTION)
           }
@@ -3079,7 +3079,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
       if (result == JFileChooser.APPROVE_OPTION) {
         main.dashboard_background_image = chooser.getSelectedFile().getPath();
 
-        // write meta data to muffins or configuration files
+        // Save settings to the configuration files.
         main.schrijf_configuratie_regels();
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)

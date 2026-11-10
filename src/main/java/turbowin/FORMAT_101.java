@@ -46,15 +46,11 @@ public class FORMAT_101 {
     /////////////// copy the Java encoder configuration if necessary ///////////
     //
     return_status = check_format_101_module();
-    if (return_status
-        != 0) // compression exe not found so now try to create dires and copy format 101 module
-    // files
-    {
+    // If encoder configuration is missing, create directories and copy the bundled table.
+    if (return_status != 0) {
       return_status = copy_format_101_module();
-      if (return_status
-          != 0) // now if return_status = 0 compete format 101 module was copied sucessfully from
-      // jar to "logs_dir"
-      {
+      // Stop preparation if the configuration could not be copied to logs_dir.
+      if (return_status != 0) {
         doorgaan = false;
       }
     }

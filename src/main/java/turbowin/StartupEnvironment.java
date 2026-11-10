@@ -8,7 +8,7 @@ import java.util.List;
  * Calculates startup paths and offline-mode flags without touching application state.
  *
  * <p>The current TurboWin deployment is intentionally offline-only. The marker flags remain
- * available because legacy JNLP and launcher startup routes still use them.
+ * available for compatibility; detecting a JNLP marker does not enable a Web Start route.
  */
 final class StartupEnvironment {
 
@@ -36,8 +36,7 @@ final class StartupEnvironment {
       String launcherFile,
       String linuxLauncherFile) {
     File dataDirectoryFile = new File(dataDirectory);
-    // The offline JNLP marker is present for the supplied offline JNLP route and absent in
-    // TurboWeb's online deployment.
+    // Record the legacy marker independently of the installed desktop startup route.
     boolean viaJnlp = new File(dataDirectoryFile, jnlpOfflineFile).exists();
     // Preserve the legacy default: the command-line startup route is selected when no marker is
     // present, and the command-line or launcher markers explicitly select the same route.

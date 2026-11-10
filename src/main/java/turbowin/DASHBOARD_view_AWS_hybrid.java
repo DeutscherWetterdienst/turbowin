@@ -113,7 +113,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.CONTAINER_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -130,7 +130,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.CONTAINER_SHIP_2;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -147,7 +147,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.BULK_CARRIER;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -164,7 +164,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.BULK_CARRIER_2;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -181,7 +181,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.OIL_TANKER;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -198,7 +198,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.LNG_TANKER;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -215,7 +215,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.LNG_TANKER_II;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -232,7 +232,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.PASSENGER_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -249,7 +249,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.NEUTRAL_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -266,7 +266,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.GENERAL_CARGO_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -283,7 +283,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_2;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -300,7 +300,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.GENERAL_CARGO_SHIP_3;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -317,7 +317,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.HEAVY_LIFT_1;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -334,7 +334,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.HEAVY_LIFT_2;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -351,7 +351,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.RESEARCH_VESSEL;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -365,7 +365,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.RO_RO_SHIP_1;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -379,7 +379,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.RO_RO_SHIP_2;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -393,7 +393,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.FERRY;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -407,7 +407,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.GENERAL_CARGO_CLASSIC;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -421,7 +421,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.REEFER_SHIP;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -435,7 +435,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.FRUIT_JUICE_TANKER;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -455,7 +455,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             // save_ship_dashboard_selection();
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -471,7 +471,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             // save_ship_dashboard_selection();
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -487,7 +487,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             // save_ship_dashboard_selection();
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -503,7 +503,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             // save_ship_dashboard_selection();
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -519,7 +519,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             // save_ship_dashboard_selection();
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -535,7 +535,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             // save_ship_dashboard_selection();
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -551,7 +551,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.YACHT;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -568,7 +568,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.ship_type_dashboard = main.CHEMICAL_TANKER;
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -581,7 +581,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
           public void actionPerformed(ActionEvent e) {
             main.ship_type_dashboard = main.SAILING_YACHT;
             repaint();
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -594,7 +594,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
           public void actionPerformed(ActionEvent e) {
             main.ship_type_dashboard = main.CATAMARAN;
             repaint();
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -610,7 +610,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.dashboard_font = "0";
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });
@@ -624,7 +624,7 @@ public class DASHBOARD_view_AWS_hybrid extends javax.swing.JFrame {
             main.dashboard_font = "1";
             repaint();
 
-            // write meta data to muffins or configuration files
+            // Save settings to the configuration files.
             main.schrijf_configuratie_regels();
           }
         });

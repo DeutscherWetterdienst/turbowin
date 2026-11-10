@@ -1413,7 +1413,7 @@ public final class mywind extends javax.swing.JFrame {
       main.configuratie_regels[14] = "";
       main.configuratie_regels[14] = main.DIFF_SLL_WL_TXT + main.diff_sll_wl.trim();
 
-      // write meta (station) data to muffins or configuration files
+      // Save settings to the configuration files.
       main.schrijf_configuratie_regels();
 
       /* update wind fields on main screen */

@@ -8,9 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-// import javax.xml.bind.DatatypeConverter;                           // needed for Java 6 but
-// doesn't exist in Java 12
-import java.util.Base64; // Java 8 and higher
+import java.util.Base64;
 // import java.util.Scanner;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -1052,11 +1050,8 @@ public final class myemailsettings extends javax.swing.JFrame {
       cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivparameterspec);
       byte[] cipherText = cipher.doFinal(plainText.getBytes("UTF8"));
 
-      Base64.Encoder encoder = Base64.getEncoder(); // Java 8 and higher
+      Base64.Encoder encoder = Base64.getEncoder();
       encryptedText = encoder.encodeToString(cipherText);
-
-      // encryptedText = DatatypeConverter.printBase64Binary(cipherText);           // Java 6 and 7
-      // but not possible Java 12 and higher.
     } catch (NoSuchAlgorithmException
         | NoSuchPaddingException
         | UnsupportedEncodingException
@@ -1085,10 +1080,8 @@ public final class myemailsettings extends javax.swing.JFrame {
       IvParameterSpec ivparameterspec = new IvParameterSpec(key);
       cipher.init(Cipher.DECRYPT_MODE, secretKey, ivparameterspec);
 
-      Base64.Decoder decoder = Base64.getDecoder(); // Java 8 and higher
+      Base64.Decoder decoder = Base64.getDecoder();
       byte[] cipherText = decoder.decode(encryptedText.getBytes("UTF8"));
-      // byte[] cipherText = DatatypeConverter.parseBase64Binary(encryptedText);     // Java 6/7 but
-      // not availble in Java 12 etc.
 
       decryptedText = new String(cipher.doFinal(cipherText), "UTF-8");
     } catch (NoSuchAlgorithmException

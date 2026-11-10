@@ -121,6 +121,14 @@ Keep corrections scoped to the behavior under review. Characterize a suspected r
 fixing it where practical, preserve comments explaining why, and describe intentional behavior
 changes explicitly. Do not infer that an odd legacy rule is a bug from style alone.
 
+When cleaning up comments, check claims against the current implementation and build. Remove
+instructions for retired tools or deployments; keep explanations of units, WMO codes, record
+layouts, compatibility rules, timing, and observed platform workarounds. Prefer a short explanation
+of the current constraint over copied troubleshooting transcripts or stale caller lists. Preserve
+form-editor markers used alongside `.form` files. Keep build/setup instructions in this guide and
+the deployment view rather than duplicating them in Java headers. Historical source remains
+available through Git.
+
 ## Formatting and documentation
 
 Java formatting is configured with Spotless/google-java-format. `./gradlew spotlessCheck` checks
