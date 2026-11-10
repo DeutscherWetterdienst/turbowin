@@ -78,9 +78,33 @@ Completion of the save method does not mean the files are finished. The two copi
 single transaction: one can succeed while the other fails. A failed copy does not block the other
 copy or later saves. Data-root write errors go to standard output; log-directory write errors
 display a warning on the EDT referring to the captured destination, without blocking the save
-queue. Ordering applies within this process; the daemon queue is not drained automatically on
-process exit. Atomic replacement protects against partial file contents; it does not add power-loss
-durability or automatic recovery of temporary files left by a process crash.
+queue. Ordering applies within this process. Atomic replacement protects against partial file
+contents; it does not add power-loss durability or automatic recovery of temporary files left by
+a process crash.
+
+## Saving before exit
+
+Window close, menu Exit, and tray Exit use the same shutdown handler. After the existing exit
+confirmation, it queues a final snapshot of current settings and waits for the configuration save
+queue. A progress dialog prevents further UI edits while Swing continues processing events.
+Saves submitted by an already-running workflow during this wait are also drained before the
+completion callback. Repeated exit requests do not start additional shutdown attempts.
+The progress dialog also offers Cancel exit, allowing normal use to resume if storage is slow.
+Cancellation does not interrupt an in-progress file write, and its eventual completion cannot
+trigger the cancelled exit.
+
+The latest save request must succeed at every configured destination before shutdown proceeds
+automatically. An older failed snapshot does not block exit if the final snapshot succeeds.
+Failures identify the affected configuration files and offer Retry saving, Cancel exit, or Exit
+without saving. Closing that decision dialog cancels exit. Retry captures current settings again
+and attempts both copies; cancelling keeps connections and the application running and leaves
+the save queue available. Ordinary log-copy warnings from these attempts are suppressed in favor
+of the shutdown decision dialog. With no configured destinations, exit also requires a decision.
+
+Only after successful saving or an explicit choice to exit without saving does the handler close
+serial connections, remove the tray icon if needed, log shutdown, and exit. This waits for
+configuration writes, not every background operation or system-log write. Forced termination,
+crashes, and the duplicate-instance startup rejection do not drain the daemon save queue.
 
 ## File format
 

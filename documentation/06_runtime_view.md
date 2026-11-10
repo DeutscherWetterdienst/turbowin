@@ -25,6 +25,22 @@ Constructor completion and asynchronous startup finalization are different miles
 can also display modal warning/date-time dialogs. The current startup mode is the installed
 desktop ("offline") mode; email and server transmission can still require network access.
 
+## Application shutdown
+
+Window close, menu Exit, and tray Exit delegate to
+[ApplicationShutdownWorkflow](../src/main/java/turbowin/ApplicationShutdownWorkflow.java).
+After confirmation, it queues a final configuration snapshot and waits asynchronously for queued
+saves, including later submissions made while waiting. A modal progress dialog keeps the EDT
+dispatching events while preventing further UI edits.
+The observer can cancel exit while waiting; pending writes continue without triggering shutdown
+when they finish.
+
+If the latest save fails, the observer can retry saving, cancel exit, or explicitly exit without
+saving. Cancelling preserves connections and normal operation. Connection cleanup and process
+exit happen only after saving succeeds or the observer chooses to exit despite the failure.
+This wait covers configuration writes; other asynchronous work, including the final system-log
+message, is not drained. See [configuration persistence](configuration_persistence.md#saving-before-exit).
+
 ## Entering and validating an observation
 
 1. The observer enters station, date/time, position, and weather values through the main window

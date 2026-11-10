@@ -55,6 +55,11 @@ files intact. Valid partial files preserve omitted settings. Maintenance require
 ship-name and call-sign labels; station-data import preserves the logs directory in offline mode.
 Successful imports queue saves, whose completion remains asynchronous.
 
+Normal application exit queues a final configuration snapshot and waits for the save queue while
+Swing continues dispatching events. A failed final save offers retry, cancellation, or explicit
+exit without saving. Connections remain open until saving succeeds or exit is explicitly chosen;
+cancelling leaves the save queue available. Forced process termination cannot provide this wait.
+
 The installed desktop uses platform data directories with `logs` and `amver` subdirectories.
 `-Dturbowin.data.dir=...` overrides the data directory, notably for isolated tests. See the
 [deployment view](07_deployment_view.md) for paths, permissions, and the legacy-data migration.
