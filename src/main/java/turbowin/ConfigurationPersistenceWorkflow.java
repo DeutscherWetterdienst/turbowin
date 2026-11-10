@@ -20,8 +20,9 @@ final class ConfigurationPersistenceWorkflow {
    * Builds configuration lines from the current global settings and starts separate background
    * writes of configuration.txt to each non-empty data_dir and logs_dir.
    *
-   * <p>The files retain the legacy configuration format. The writes overwrite existing files and
-   * are not an atomic transaction; returning from this method does not mean saving has finished.
+   * <p>Both background writes use the same snapshot of lines and destination paths. Each file is
+   * replaced atomically, retaining the legacy format. The two copies are not a single transaction;
+   * returning from this method does not mean saving has finished.
    */
   static void write() {
     ConfigurationWriteWorkflow.write();

@@ -39,9 +39,10 @@ The reader prefers `configuration.txt` in `logs_dir` and falls back to the data 
 copy is absent. If neither file exists, it retains the normal non-empty-directory fallback for
 first use. Reading clears the line array before opening the selected file. Read I/O failures are
 tolerated; whatever lines were read are applied to existing globals, without retrying the other
-copy. Missing settings leave their global values unchanged. Writing
-starts separate background writes to each non-empty data/log directory. Those writes are not a
-single atomic transaction and have different failure notification paths. Historical Java Web Start
+copy. Missing settings leave their global values unchanged. Saving captures the configuration
+lines and destination paths before starting separate background writes to each non-empty data/log
+directory. Each file is replaced atomically; the two copies are not a single transaction and have
+different failure notification paths. Historical Java Web Start
 "muffin" storage is no longer used. See the [configuration walkthrough](configuration_persistence.md)
 for the file format, directory selection, import/export behavior, and asynchronous limitations.
 

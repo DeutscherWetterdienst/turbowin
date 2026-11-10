@@ -57,11 +57,23 @@ updates station identity, checks metadata, creates menus, initializes connection
 menu/toolbar availability. The current callback does not call `SwingWorker.get()`: an exception
 while applying malformed settings does not prevent it from attempting startup finalization.
 
-Saving first rebuilds the line array from globals, then starts an independent worker for each
-non-empty data/log directory. Each worker overwrites its file directly. Completion of the save
-method does not mean the files are finished, and the two copies are not an atomic backup pair.
-Data-root write errors go to standard output; log-directory write errors display a warning.
-Workers share the mutable array and directory globals rather than taking an immutable snapshot.
+Saving first rebuilds the line array from globals and copies the lines and both destination paths
+before starting either background worker. Each non-empty data/log directory gets an independent
+write using that same snapshot. Subsequent changes to the global array or paths cannot change
+an already scheduled save.
+
+Each worker writes a uniquely named temporary file in the destination directory, closes it, then
+atomically replaces `configuration.txt`. A failed write or replacement removes the temporary file
+and leaves the previous configuration in place. Filesystems that do not support atomic replacement
+report a save error; there is no non-atomic fallback. Existing configuration symlinks are followed
+so their targets are replaced, and existing POSIX access modes are preserved. New files retain
+regular-file permissions subject to the process umask on POSIX filesystems.
+
+Completion of the save method does not mean the files are finished. The two copies are not a
+single transaction: one can succeed while the other fails, and concurrent saves can complete out
+of order. Data-root write errors go to standard output; log-directory write errors display a
+warning referring to the captured destination. This protects against partial file contents; it
+does not add power-loss durability or automatic recovery of temporary files left by a process crash.
 
 ## File format
 
