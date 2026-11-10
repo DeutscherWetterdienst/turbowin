@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-/** Queues configuration snapshots for ordered background writes to both directories. */
+/** Queues configuration snapshots for ordered background writes to the data directory. */
 final class ConfigurationWriteWorkflow {
 
   private static SaveAttempt latestSave = new SaveAttempt();
@@ -50,36 +50,16 @@ final class ConfigurationWriteWorkflow {
 
   private static synchronized void write(
       Consumer<SwingWorker<Void, Void>> startWorker, ConfigurationWriter writer) {
-    // Keep snapshot capture and both submissions together, including for concurrent callers.
+    // Keep snapshot capture and submission together, including for concurrent callers.
     fill_configuratie_array();
     final String[] lines = configuratie_regels.clone();
     final String dataDirectory = data_dir;
-    final String logsDirectory = logs_dir;
     final SaveAttempt attempt = new SaveAttempt();
     latestSave = attempt;
 
-    if ((dataDirectory == null || dataDirectory.isEmpty())
-        && (logsDirectory == null || logsDirectory.isEmpty())) {
+    if (dataDirectory == null || dataDirectory.isEmpty()) {
       attempt.failures.add("No configuration directory is configured.");
-    }
-
-    if (dataDirectory != null && !dataDirectory.isEmpty()) {
-      startWorker.accept(
-          new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-              try {
-                writer.write(dataDirectory, lines, MAX_AANTAL_CONFIGURATIEREGELS);
-              } catch (IOException | RuntimeException ex) {
-                attempt.failed(dataDirectory, ex);
-                System.out.println("--- Function schrijf_configuratie_regels(): " + ex);
-              }
-              return null;
-            }
-          });
-    }
-
-    if (logsDirectory != null && !logsDirectory.isEmpty()) {
+    } else {
       startWorker.accept(
           new SwingWorker<Void, Void>() {
             private boolean failed;
@@ -87,10 +67,11 @@ final class ConfigurationWriteWorkflow {
             @Override
             protected Void doInBackground() throws Exception {
               try {
-                writer.write(logsDirectory, lines, MAX_AANTAL_CONFIGURATIEREGELS);
+                writer.write(dataDirectory, lines, MAX_AANTAL_CONFIGURATIEREGELS);
               } catch (IOException | RuntimeException ex) {
-                attempt.failed(logsDirectory, ex);
+                attempt.failed(dataDirectory, ex);
                 failed = true;
+                System.out.println("--- Function schrijf_configuratie_regels(): " + ex);
               }
               return null;
             }
@@ -104,7 +85,7 @@ final class ConfigurationWriteWorkflow {
                   && attempt.exitGeneration == exitGeneration) {
                 JOptionPane.showMessageDialog(
                     null,
-                    "unable to write to: " + logsDirectory + File.separator + CONFIGURATION_FILE,
+                    "unable to write to: " + dataDirectory + File.separator + CONFIGURATION_FILE,
                     APPLICATION_NAME + " error",
                     JOptionPane.WARNING_MESSAGE);
               }

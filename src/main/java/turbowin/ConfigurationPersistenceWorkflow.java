@@ -16,35 +16,15 @@ final class ConfigurationPersistenceWorkflow {
     return ConfigurationReadWorkflow.configurationDirectory(logsDirectory, dataDirectory);
   }
 
-  /**
-   * Builds configuration lines from the current global settings and queues background writes of
-   * configuration.txt to each non-empty data_dir and logs_dir.
-   *
-   * <p>Both writes use the same snapshot of lines and destination paths. Saves run in submission
-   * order so older snapshots cannot overwrite newer ones. Each file is replaced atomically,
-   * retaining the legacy format. A failed copy does not prevent the other copy or later saves from
-   * being attempted. The two copies are not a single transaction; returning from this method does
-   * not mean saving has finished.
-   */
+  /** Queues an immutable snapshot for an atomic save to data_dir/configuration.txt. */
   static void write() {
     ConfigurationWriteWorkflow.write();
   }
 
   /**
-   * Loads configuration.txt asynchronously and schedules startup finalization.
-   *
-   * <p>The reader tries logs_dir, then data_dir if the preferred copy is missing, unreadable,
-   * malformed, or contains no recognized settings. Values are parsed into temporary settings before
-   * being applied on the EDT. Diagnostics identify the selected copy and recovery reasons.
-   *
-   * <p>Missing settings in a valid partial file preserve existing values. If neither copy is
-   * usable, existing settings and lines are retained and startup still finalizes. If both directory
-   * names are empty, no read or startup finalization is scheduled.
-   *
-   * <p>After the configuration has been read and converted into the global configuration variables,
-   * the read workflow completes the startup sequence. This includes startup logging and cleanup,
-   * station metadata and UI initialization, connection initialization, and updating menu and
-   * toolbar availability according to the loaded configuration.
+   * Loads only data_dir/configuration.txt, validating settings before applying them on the EDT.
+   * Missing or invalid configuration preserves existing settings. Startup finalizes after loading
+   * when a data directory is configured.
    */
   static void read(main owner) {
     ConfigurationReadWorkflow.read(owner);

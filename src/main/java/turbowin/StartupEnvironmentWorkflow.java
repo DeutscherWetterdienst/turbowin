@@ -20,9 +20,7 @@ final class StartupEnvironmentWorkflow {
             ? configuredDataDirectory
             : StartupEnvironment.dataDirectory(os);
     if (configuredDataDirectory == null) {
-      LegacyDataMigration.migrate(
-          LegacyInstallationLocator.find(System.getProperty("user.dir"), os),
-          Path.of(main.data_dir));
+      LegacyDataMigration.migrate(LegacyInstallationLocator.find(os), Path.of(main.data_dir));
     }
     System.out.println("data dir = " + main.data_dir);
 

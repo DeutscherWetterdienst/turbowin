@@ -2,7 +2,6 @@ package turbowin;
 
 import static turbowin.main.*;
 
-import java.io.File;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import javax.swing.SwingWorker;
@@ -13,27 +12,7 @@ final class ConfigurationReadWorkflow {
   private ConfigurationReadWorkflow() {}
 
   static String configurationDirectory(String logsDirectory, String dataDirectory) {
-    if (logsDirectory != null && !logsDirectory.isEmpty()) {
-      return logsDirectory;
-    }
-    if (dataDirectory != null && !dataDirectory.isEmpty()) {
-      return dataDirectory;
-    }
-    return "";
-  }
-
-  static String configurationDirectoryForRead(String logsDirectory, String dataDirectory) {
-    if (logsDirectory != null
-        && !logsDirectory.isEmpty()
-        && new File(logsDirectory, CONFIGURATION_FILE).isFile()) {
-      return logsDirectory;
-    }
-    if (dataDirectory != null
-        && !dataDirectory.isEmpty()
-        && new File(dataDirectory, CONFIGURATION_FILE).isFile()) {
-      return dataDirectory;
-    }
-    return configurationDirectory(logsDirectory, dataDirectory);
+    return dataDirectory == null ? "" : dataDirectory;
   }
 
   static void read(main owner) {
@@ -41,15 +20,14 @@ final class ConfigurationReadWorkflow {
   }
 
   static void read(Runnable completeStartup, Consumer<String> report) {
-    final String logsDirectory = logs_dir;
     final String dataDirectory = data_dir;
-    main.hulp_dir = configurationDirectoryForRead(logsDirectory, dataDirectory);
+    main.hulp_dir = configurationDirectory(null, dataDirectory);
 
     if (!main.hulp_dir.isEmpty()) {
       new SwingWorker<ConfigurationLoader.Result, Void>() {
         @Override
         protected ConfigurationLoader.Result doInBackground() {
-          return ConfigurationLoader.load(logsDirectory, dataDirectory);
+          return ConfigurationLoader.load(dataDirectory);
         }
 
         @Override

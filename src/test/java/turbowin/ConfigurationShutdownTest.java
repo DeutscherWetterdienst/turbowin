@@ -66,7 +66,7 @@ public class ConfigurationShutdownTest {
   }
 
   @Test
-  public void exitWaitsForDelayedSaveAndBothFinalCopiesWithoutBlockingEdt() throws Exception {
+  public void exitWaitsForDelayedSaveAndFinalConfigurationWithoutBlockingEdt() throws Exception {
     verifyDelayedExit(false, false);
   }
 
@@ -101,7 +101,7 @@ public class ConfigurationShutdownTest {
               throw new IOException("Simulated older save failure");
             }
           }
-          if (directory.equals(logs.toString()) && lines[0].contains("Later imported ship")) {
+          if (directory.equals(data.toString()) && lines[0].contains("Later imported ship")) {
             laterStarted.countDown();
             try {
               if (!releaseLater.await(5, TimeUnit.SECONDS)) {
@@ -149,8 +149,8 @@ public class ConfigurationShutdownTest {
     assertEquals(1, exits.get());
     assertEquals(0, cancellations.get());
     assertTrue(result.get().successful());
-    assertEquals(saveDuringWait ? 6 : 4, attempts.get());
-    assertCopiesContain(saveDuringWait ? "Later imported ship" : "Current ship");
+    assertEquals(saveDuringWait ? 3 : 2, attempts.get());
+    assertConfigurationContains(saveDuringWait ? "Later imported ship" : "Current ship");
   }
 
   @Test
@@ -185,7 +185,7 @@ public class ConfigurationShutdownTest {
     assertTrue(drained.await(5, TimeUnit.SECONDS));
     SwingUtilities.invokeAndWait(() -> {});
     assertEquals("Late save completion must not revive a cancelled exit", 0, exits.get());
-    assertCopiesContain("Current ship");
+    assertConfigurationContains("Current ship");
   }
 
   @Test
@@ -194,20 +194,20 @@ public class ConfigurationShutdownTest {
     startRequest(
         (directory, lines, maximum) -> {
           attempts.incrementAndGet();
-          if (directory.equals(logs.toString())) {
-            throw new IOException("Simulated logs-copy failure");
+          if (directory.equals(data.toString())) {
+            throw new IOException("Simulated configuration failure");
           }
           ConfigurationWriteWorkflow.writeConfigurationFile(directory, lines, maximum);
         },
         saved -> ApplicationExitRequest.Decision.CANCEL);
     awaitCompletion();
 
-    assertEquals(2, attempts.get());
+    assertEquals(1, attempts.get());
     assertEquals(0, exits.get());
     assertEquals(1, cancellations.get());
     assertEquals(1, result.get().failures().size());
     assertTrue(
-        result.get().failures().get(0).contains(logs.resolve(main.CONFIGURATION_FILE).toString()));
+        result.get().failures().get(0).contains(data.resolve(main.CONFIGURATION_FILE).toString()));
     assertEquals("previous logs\n", Files.readString(logs.resolve(main.CONFIGURATION_FILE)));
 
     main.ship_name = "Saved after cancellation";
@@ -215,18 +215,18 @@ public class ConfigurationShutdownTest {
     CountDownLatch savedAgain = new CountDownLatch(1);
     ConfigurationWriteWorkflow.awaitPendingSaves(saved -> savedAgain.countDown());
     assertTrue(savedAgain.await(5, TimeUnit.SECONDS));
-    assertCopiesContain("Saved after cancellation");
+    assertConfigurationContains("Saved after cancellation");
   }
 
   @Test
-  public void retrySavesBothCopiesAgainBeforeExiting() throws Exception {
+  public void retrySavesConfigurationAgainBeforeExiting() throws Exception {
     AtomicInteger attempts = new AtomicInteger();
     AtomicInteger decisions = new AtomicInteger();
     AtomicBoolean failOnce = new AtomicBoolean(true);
     startRequest(
         (directory, lines, maximum) -> {
           attempts.incrementAndGet();
-          if (directory.equals(logs.toString()) && failOnce.getAndSet(false)) {
+          if (directory.equals(data.toString()) && failOnce.getAndSet(false)) {
             throw new IOException("Simulated first-attempt failure");
           }
           ConfigurationWriteWorkflow.writeConfigurationFile(directory, lines, maximum);
@@ -237,11 +237,11 @@ public class ConfigurationShutdownTest {
         });
     awaitCompletion();
 
-    assertEquals(4, attempts.get());
+    assertEquals(2, attempts.get());
     assertEquals(1, decisions.get());
     assertEquals(1, exits.get());
     assertEquals(0, cancellations.get());
-    assertCopiesContain("Current ship");
+    assertConfigurationContains("Current ship");
   }
 
   @Test
@@ -254,7 +254,7 @@ public class ConfigurationShutdownTest {
         saved -> {
           decisions.incrementAndGet();
           assertEquals(0, exits.get());
-          assertEquals(2, saved.failures().size());
+          assertEquals(1, saved.failures().size());
           return ApplicationExitRequest.Decision.EXIT_WITHOUT_SAVING;
         });
     awaitCompletion();
@@ -282,7 +282,7 @@ public class ConfigurationShutdownTest {
   @Test
   public void missingDestinationsAreReportedRatherThanClaimingSettingsWereSaved() throws Exception {
     main.data_dir = "";
-    main.logs_dir = "";
+    // A logs directory cannot substitute for a missing data directory.
     startRequest(
         ConfigurationWriteWorkflow::writeConfigurationFile,
         saved -> ApplicationExitRequest.Decision.CANCEL);
@@ -328,9 +328,9 @@ public class ConfigurationShutdownTest {
     assertTrue("Exit decisions and cleanup must run on the EDT", completedOnEdt.get());
   }
 
-  private void assertCopiesContain(String shipName) throws Exception {
+  private void assertConfigurationContains(String shipName) throws Exception {
     String saved = Files.readString(data.resolve(main.CONFIGURATION_FILE));
     assertTrue(saved.contains(main.SHIP_NAME_TXT + shipName));
-    assertEquals(saved, Files.readString(logs.resolve(main.CONFIGURATION_FILE)));
+    assertEquals("previous logs\n", Files.readString(logs.resolve(main.CONFIGURATION_FILE)));
   }
 }

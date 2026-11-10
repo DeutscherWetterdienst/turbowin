@@ -21,16 +21,12 @@ final class LegacyInstallationLocator {
 
   private LegacyInstallationLocator() {}
 
-  static List<Path> find(String workingDirectory, String os) {
-    return find(workingDirectory, os, System.getenv(), Path.of("/usr/local/bin"));
+  static List<Path> find(String os) {
+    return find(os, System.getenv(), Path.of("/usr/local/bin"));
   }
 
-  static List<Path> find(
-      String workingDirectory, String os, Map<String, String> environment, Path unixBin) {
+  static List<Path> find(String os, Map<String, String> environment, Path unixBin) {
     Set<Path> candidates = new LinkedHashSet<>();
-    for (Path directory : StartupEnvironment.legacyDataDirectories(workingDirectory)) {
-      add(candidates, directory);
-    }
     if ("WINDOWS".equals(os)) {
       for (String name : List.of("ProgramFiles(x86)", "ProgramW6432", "ProgramFiles")) {
         String directory = environment.get(name);

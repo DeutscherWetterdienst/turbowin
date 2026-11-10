@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +30,9 @@ final class LegacyDataMigration {
       return;
     }
     Path target = targetDirectory.toAbsolutePath().normalize();
-    // Never introduce a preferred legacy logs copy beside an existing modern root copy.
-    boolean configurationSelected = hasConfiguration(target);
+    // Only the current data-root file is authoritative.
+    boolean configurationSelected =
+        Files.exists(target.resolve(CONFIGURATION_FILE), LinkOption.NOFOLLOW_LINKS);
     for (Path legacyDirectory : legacyDirectories) {
       if (legacyDirectory == null) {
         continue;
@@ -43,25 +43,18 @@ final class LegacyDataMigration {
       }
       if (!configurationSelected && hasConfiguration(legacy)) {
         ConfigurationLoader.Result selected =
-            ConfigurationLoader.load(
+            ConfigurationLoader.loadLegacy(
                 legacy.resolve(OFFLINE_LOGS_DIR).toString(), legacy.toString());
         selected.messages().forEach(System.out::println);
         if (selected.loaded()) {
           configurationSelected = true;
           String[] lines = selected.lines().clone();
-          boolean defaultLogs = rebaseInstallationLogs(lines, legacy, target);
-          List<Path> destinations = new ArrayList<>();
-          destinations.add(target.resolve(CONFIGURATION_FILE));
-          // With a custom logs folder, this copy would never be updated by subsequent saves.
-          if (defaultLogs) {
-            destinations.add(target.resolve(OFFLINE_LOGS_DIR).resolve(CONFIGURATION_FILE));
-          }
-          for (Path destination : destinations) {
-            try {
-              copyConfigurationIfAbsent(lines, destination);
-            } catch (IOException | SecurityException ex) {
-              reportFailure(selected.source(), destination, ex);
-            }
+          rebaseInstallationLogs(lines, legacy, target);
+          Path destination = target.resolve(CONFIGURATION_FILE);
+          try {
+            copyConfigurationIfAbsent(lines, destination);
+          } catch (IOException | SecurityException ex) {
+            reportFailure(selected.source(), destination, ex);
           }
         }
       }
@@ -86,8 +79,7 @@ final class LegacyDataMigration {
             LinkOption.NOFOLLOW_LINKS);
   }
 
-  private static boolean rebaseInstallationLogs(String[] lines, Path legacy, Path target) {
-    boolean defaultLogs = true;
+  private static void rebaseInstallationLogs(String[] lines, Path legacy, Path target) {
     for (int index = 0; index < lines.length; index++) {
       String line = lines[index];
       if (line != null && line.startsWith(LOGS_DIR_TXT)) {
@@ -106,14 +98,8 @@ final class LegacyDataMigration {
           }
         }
         lines[index] = LOGS_DIR_TXT + value;
-        try {
-          defaultLogs = Path.of(value).normalize().equals(target.resolve(OFFLINE_LOGS_DIR));
-        } catch (InvalidPathException ex) {
-          defaultLogs = false;
-        }
       }
     }
-    return defaultLogs;
   }
 
   private static boolean pointsToInstallationLogs(String value, Path legacy) {

@@ -35,8 +35,8 @@ public class ConfigurationReadWorkflowTest {
   private String originalGpsPort;
   private String originalEmailModule;
   private String[] originalLines;
-  private Path preferred;
-  private Path backup;
+  private Path logsFile;
+  private Path dataFile;
 
   @Before
   public void setUp() throws Exception {
@@ -58,8 +58,8 @@ public class ConfigurationReadWorkflowTest {
     main.RS232_connection_mode = 0;
     Arrays.fill(main.configuratie_regels, "");
     main.configuratie_regels[0] = main.SHIP_NAME_TXT + main.ship_name;
-    preferred = Path.of(main.logs_dir, main.CONFIGURATION_FILE);
-    backup = Path.of(main.data_dir, main.CONFIGURATION_FILE);
+    logsFile = Path.of(main.logs_dir, main.CONFIGURATION_FILE);
+    dataFile = Path.of(main.data_dir, main.CONFIGURATION_FILE);
   }
 
   @After
@@ -79,46 +79,44 @@ public class ConfigurationReadWorkflowTest {
   }
 
   @Test
-  public void malformedPreferredCopyFallsBackWithoutLeakingItsEarlierSettings() throws Exception {
+  public void ignoresMalformedLogsConfiguration() throws Exception {
     Files.writeString(
-        preferred,
+        logsFile,
         main.SHIP_NAME_TXT + "Rejected ship\n" + main.RS232_INSTRUMENT_TYPE_TXT + "invalid\n");
-    Files.writeString(backup, main.WIND_SOURCE_TXT + "backup wind source\n");
+    Files.writeString(dataFile, main.WIND_SOURCE_TXT + "saved wind source\n");
 
     List<String> messages = loadAndFinishStartup();
 
     assertEquals("Existing ship", main.ship_name);
-    assertEquals("backup wind source", main.wind_source);
+    assertEquals("saved wind source", main.wind_source);
     assertEquals(main.data_dir, main.hulp_dir);
-    assertEquals(main.WIND_SOURCE_TXT + "backup wind source", main.configuratie_regels[0]);
+    assertEquals(main.WIND_SOURCE_TXT + "saved wind source", main.configuratie_regels[0]);
+    assertTrue(
+        messages.toString(), messages.stream().noneMatch(m -> m.contains(logsFile.toString())));
     assertTrue(
         messages.toString(),
-        messages.stream().anyMatch(m -> m.contains(preferred.toString()) && m.contains("line 2")));
-    assertTrue(
-        messages.toString(),
-        messages.stream().anyMatch(m -> m.contains("loaded") && m.contains(backup.toString())));
+        messages.stream().anyMatch(m -> m.contains("loaded") && m.contains(dataFile.toString())));
   }
 
   @Test
-  public void olderPartialPreferredCopyPreservesSettingsItDoesNotContain() throws Exception {
+  public void canonicalPartialFilePreservesSettingsItDoesNotContain() throws Exception {
     Files.writeString(
-        preferred, main.SHIP_NAME_TXT + "Older ship\nunknown future option : ignored\n");
-    Files.writeString(backup, main.WIND_SOURCE_TXT + "must not load backup\n");
+        dataFile, main.SHIP_NAME_TXT + "Older ship\nunknown future option : ignored\n");
+    Files.writeString(logsFile, main.WIND_SOURCE_TXT + "must not load logs\n");
 
     loadAndFinishStartup();
 
     assertEquals("Older ship", main.ship_name);
     assertEquals("existing wind source", main.wind_source);
-    assertEquals(main.logs_dir, main.hulp_dir);
+    assertEquals(main.data_dir, main.hulp_dir);
   }
 
   @Test
-  public void unusableCopiesRetainExistingSettingsAndStillFinishStartup() throws Exception {
+  public void invalidCanonicalFileDoesNotFallBackToValidLogsFile() throws Exception {
     String[] before = main.configuratie_regels.clone();
+    Files.writeString(logsFile, main.SHIP_NAME_TXT + "Stale logs ship\n");
     Files.writeString(
-        preferred, main.SHIP_NAME_TXT + "Rejected ship\n" + main.RS232_GPS_TYPE_TXT + "invalid\n");
-    Files.writeString(
-        backup,
+        dataFile,
         main.SHIP_NAME_TXT + "Also rejected\n" + main.RS232_INSTRUMENT_TYPE_TXT + "invalid\n");
 
     List<String> messages = loadAndFinishStartup();
@@ -152,9 +150,7 @@ public class ConfigurationReadWorkflowTest {
       worker.run();
       worker.get(5, TimeUnit.SECONDS);
     }
-    assertEquals(
-        Files.readString(Path.of(main.data_dir, main.CONFIGURATION_FILE)),
-        Files.readString(custom.resolve(main.CONFIGURATION_FILE)));
+    assertFalse(Files.exists(custom.resolve(main.CONFIGURATION_FILE)));
     assertFalse(Files.exists(Path.of(main.data_dir, "logs", main.CONFIGURATION_FILE)));
 
     main.ship_name = "Restart placeholder";
@@ -168,6 +164,7 @@ public class ConfigurationReadWorkflowTest {
 
   @Test
   public void firstUseWithoutEitherCopyFinishesWithExistingDefaults() throws Exception {
+    Files.writeString(logsFile, main.SHIP_NAME_TXT + "Stale logs ship\n");
     loadAndFinishStartup();
 
     assertEquals("Existing ship", main.ship_name);

@@ -14,14 +14,24 @@ final class ConfigurationLoader {
 
   private ConfigurationLoader() {}
 
-  static Result load(String logsDirectory, String dataDirectory) {
-    return load(logsDirectory, dataDirectory, ConfigurationFileStore::read);
+  static Result load(String dataDirectory) {
+    Set<Path> candidates = new LinkedHashSet<>();
+    addCandidate(candidates, dataDirectory);
+    return loadCandidates(candidates, ConfigurationFileStore::read);
   }
 
-  static Result load(String logsDirectory, String dataDirectory, Reader reader) {
+  static Result loadLegacy(String logsDirectory, String dataDirectory) {
+    return loadLegacy(logsDirectory, dataDirectory, ConfigurationFileStore::read);
+  }
+
+  static Result loadLegacy(String logsDirectory, String dataDirectory, Reader reader) {
     Set<Path> candidates = new LinkedHashSet<>();
     addCandidate(candidates, logsDirectory);
     addCandidate(candidates, dataDirectory);
+    return loadCandidates(candidates, reader);
+  }
+
+  private static Result loadCandidates(Set<Path> candidates, Reader reader) {
     List<String> messages = new ArrayList<>();
     for (Path candidate : candidates) {
       if (Files.notExists(candidate)) {

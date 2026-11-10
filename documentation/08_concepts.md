@@ -35,16 +35,12 @@ Configuration remains the legacy human-readable `configuration.txt` line format.
 is split across `ConfigurationFileStore`, line/value parsers, `ConfigurationManager`, and the
 read/write workflows; `ConfigurationPersistenceWorkflow` retains the compatibility entry points.
 
-The reader prefers `configuration.txt` in `logs_dir` and falls back to the data root when that
-copy is missing, unreadable, malformed, or contains no recognized settings. Each copy is read and
-parsed into temporary settings before any globals change. If neither copy is usable, existing
-settings and lines are retained and startup still finalizes. Diagnostics identify the selected
-copy and recovery reasons. Missing settings in a valid partial file leave their global values
-unchanged. Saving captures the configuration lines and destination paths before queuing writes
-to each non-empty data/log directory. A single
-background queue preserves save submission order, so older snapshots cannot overwrite newer ones.
-A failed copy does not block the other copy or subsequent saves. Each file is replaced atomically;
-the two copies are not a single transaction and have different failure notification paths.
+The reader loads only `configuration.txt` in the data root and validates all settings before
+applying them. Missing or invalid files preserve existing settings and lines; startup still
+finalizes. Missing entries in a valid partial file leave their global values unchanged.
+Saving captures the configuration lines and data-root destination before queuing one atomic
+write. A single background queue preserves submission order. Failed writes do not block later
+saves. The logs-folder setting controls operational logs and does not create a second configuration.
 Historical Java Web Start "muffin" storage is no longer used.
 See the [configuration walkthrough](configuration_persistence.md)
 for the file format, directory selection, import/export behavior, and asynchronous limitations.
@@ -61,7 +57,7 @@ exit without saving. Connections remain open until saving succeeds or exit is ex
 cancelling leaves the save queue available. Forced process termination cannot provide this wait.
 
 The installed desktop uses platform data directories with `logs` and `amver` subdirectories.
-Legacy migration checks the working directory and known Windows, Debian, and versioned RPM
+Legacy migration checks known Windows, Debian, and versioned RPM
 layouts, retaining source files and existing destination files. It rebases installation-local
 logs folders while preserving custom locations; explicit import keeps its separate logs-folder
 rules. See the [legacy storage observations](legacy_storage_observations.md).

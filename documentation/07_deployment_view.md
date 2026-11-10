@@ -21,38 +21,36 @@ Current default writable roots from
 
 Desktop startup creates `logs` (including system logs) and `amver` below that root. Installation
 and user permissions must permit writing there. Tests can use the `turbowin.data.dir` system
-property to redirect startup data into a temporary directory. Configuration writes also target
-the data/log directories; see [persistence concepts](08_concepts.md#configuration-and-local-persistence).
+property to redirect startup data into a temporary directory. Configuration writes target only
+`<data root>/configuration.txt`; see [persistence concepts](08_concepts.md#configuration-and-local-persistence).
 
 On startup without a `turbowin.data.dir` override, the application checks these legacy locations
 in order, independently of the new application's installation directory:
 
-1. The launch working directory (`user.dir`), retaining compatibility with custom installations.
-2. On Windows, `TurboWin+\bin` under the `ProgramFiles(x86)`, `ProgramW6432`, and `ProgramFiles`
+1. On Windows, `TurboWin+\bin` under the `ProgramFiles(x86)`, `ProgramW6432`, and `ProgramFiles`
    environment directories, with conventional `C:\Program Files (x86)` and `C:\Program Files`
    fallbacks. Duplicate normalized paths are checked once.
-3. On non-Windows systems, `/usr/local/bin/TurboWin+-<version>/turbowin_jws/bin`, highest numeric
+2. On non-Windows systems, `/usr/local/bin/TurboWin+-<version>/turbowin_jws/bin`, highest numeric
    version first (final releases before prereleases of the same version), followed by
    `/usr/local/bin/turbowin_jws/bin`. Only the known versioned directory pattern is enumerated;
    startup does not search the entire filesystem.
 
 These layouts reflect [reported legacy installation checks](legacy_storage_observations.md).
-Unlisted custom locations can still be used by launching from their `bin` directory or explicitly
-importing a configuration.
+The launch working directory (`user.dir`) is not searched. Configurations from unlisted custom
+locations can be imported explicitly.
 
-If either configuration copy already exists in the current data root, legacy settings are not
+If `configuration.txt` already exists in the current data root, legacy settings are not
 introduced beside it. Otherwise migration selects the first usable legacy configuration, trying
 that installation's `logs/configuration.txt` before its `configuration.txt`. Missing, unreadable,
 malformed, empty, and unknown-only copies do not prevent trying the next copy or installation.
 The selected file is parsed before copying; no live settings change during migration.
 
 Migration rebases a saved logs folder that points to the source installation's own `logs`
-directory to `<new data root>/logs`. It writes that validated snapshot to both new configuration
-locations. Absolute custom logs folders retain their values, and relative custom folders are
-resolved against the legacy `bin` directory to retain their location. With a custom folder,
-only the data-root configuration is created: a copy in the default logs folder would become
-stale because subsequent saves go to the custom folder. Explicit import does not perform this
-automatic rebasing.
+directory to `<new data root>/logs`. It writes that validated snapshot only to
+`<new data root>/configuration.txt`. Absolute custom logs folders retain their values, and relative
+custom folders are resolved against the legacy `bin` directory to retain their location. Explicit
+import does not perform this automatic rebasing. All later saves update only the data-root file,
+regardless of the logs-folder setting.
 
 The migration also merges missing files from legacy `logs` and `amver` directories in discovery
 order. Existing destination files win, including conflicts between histories from multiple

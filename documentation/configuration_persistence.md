@@ -10,7 +10,7 @@ text representation, not a second independent settings model.
 Java Web Start provided persistent local storage, commonly called "muffins", through its JNLP
 persistence service. Older TurboWin comments describe saving metadata there and keeping two
 `configuration.txt` copies as backups. The current installed application has no active muffin
-reader or writer. Its persistence uses the two text files directly. Historical muffin paths,
+reader or writer. Its persistence uses one text file in the data root. Historical muffin paths,
 `read_muffin()` references in comments, and `MUFFIN_LINE_SEPARATOR` do not describe an active
 storage mechanism. Renaming launcher markers does not restore muffin support.
 
@@ -19,13 +19,12 @@ storage mechanism. Renaming launcher markers does not restore muffin support.
 ```mermaid
 flowchart TD
     A[Startup selects writable data root] --> B[Initialize logs_dir to data root / logs]
-    B --> C[Try logs configuration, then data configuration on failure]
+    B --> C[Read data root / configuration.txt]
     C --> D[Background worker reads and parses temporary settings]
-    D --> E[EDT applies first valid copy or retains existing settings]
+    D --> E[EDT applies validated settings or retains existing settings]
     E --> F[EDT callback finalizes UI and connections]
     G[Settings dialogs update globals] --> H[Save snapshots lines and paths into one ordered queue]
     H --> I[Background write to data_dir / configuration.txt]
-    I --> J[Background write to logs_dir / configuration.txt]
 ```
 
 `main.lees_configuratie_regels()` and `main.schrijf_configuratie_regels()` delegate through
@@ -35,45 +34,37 @@ file I/O. The same line format is used by maintenance import/export.
 
 The data root defaults to `C:\ProgramData\TurboWinPlus` on Windows and `/opt/turbowinplus/data`
 elsewhere. `-Dturbowin.data.dir=...` overrides it and disables automatic legacy migration.
-Otherwise startup checks `user.dir` and the known Windows, Debian, and versioned RPM installation
+Otherwise startup checks the known Windows, Debian, and versioned RPM installation
 layouts before loading; see the [deployment view](07_deployment_view.md#runtime-and-writable-data).
 Current startup always selects installed desktop ("offline") mode, which still permits networking.
 
-The reader tries `configuration.txt` under `logs_dir` first, then under `data_dir` if the first
-copy is missing, unreadable, or contains malformed recognized values. Empty files and files with
-no recognized settings are also rejected. Each attempt uses a separate temporary line array and
-parses all recognized values before applying any of them. It does not merge copies or compare
-modification dates. Missing entries in a valid partial file preserve existing global values,
-normally field defaults on a fresh process or previous values on a theme restart. If neither copy
-is usable, both globals and the existing line array are retained. Diagnostics identify the selected
-file and recovery reasons. Rejected values are not included in parser diagnostics.
-If both directory names are empty, no read or startup finalization is scheduled.
-Loading does not itself write or repair a configuration file.
+The reader loads only `data_dir/configuration.txt`. Missing, unreadable, malformed, empty,
+and unknown-only files leave existing settings and lines intact. Parsing finishes before any
+settings are applied. Missing entries in a valid partial file preserve existing global values.
+Diagnostics identify the file and rejection reason without exposing rejected values. If the data
+directory is empty, no read or startup finalization is scheduled. Loading does not write or repair
+a file. A configuration in a logs folder is never a startup fallback.
 
-Startup initially sets `logs_dir` to `<data root>/logs`, but applying a saved `logs dir` entry can
-replace it, even in offline mode. Thus the directory used to locate the startup file and the
-directory used for subsequent logs/saves can differ. `data_dir` is selected by startup, not loaded
-from a configuration entry.
+Startup initially sets `logs_dir` to `<data root>/logs`, but applying a saved logs-folder entry can
+replace it. This changes operational logs, not where configuration is stored. `data_dir` is
+selected by startup and cannot be changed by a configuration entry.
 
-Automatic migration treats installation-local logs folders separately: it rewrites only a path
-pointing to the legacy installation's own `logs` directory to the new default. Custom folders
-retain their location. For custom folders, migration creates only the data-root configuration,
-avoiding a stale preferred copy in the default logs directory after later saves. Existing modern
-configuration files are preserved. Explicit maintenance import continues to apply the supplied
-logs-folder setting without rebasing it.
+Automatic migration tries both legacy locations, logs first and then the installation's bin root.
+It creates only `<new data root>/configuration.txt`, preserving any existing canonical file.
+Installation-local logs paths are rebased to the new default; custom folders retain their location.
+Explicit maintenance import applies the supplied logs-folder setting without rebasing it.
 
 After the background read and parsing, the Swing completion callback retrieves the worker result,
 applies an accepted file, and reports diagnostics. It then logs startup, cleans old system logs,
 updates station identity, checks metadata, creates menus, initializes connections, and updates
-menu/toolbar availability. Startup finalization also runs when neither copy is usable or the
+menu/toolbar availability. Startup finalization also runs when the file is unusable or the
 background worker fails.
 
-Saving first rebuilds the line array from globals and copies the lines and both destination paths.
-Snapshot capture and submission are synchronized so each request places both writes together into
-one background queue, data first and then logs. Each non-empty destination is attempted using that
-same snapshot. Subsequent changes to the global array or paths cannot change an already queued
-save. Older requests finish their write attempts before newer requests begin, preventing an older
-snapshot from overwriting a newer one within this process.
+Saving rebuilds the line array from globals and captures the lines and data-root destination.
+Snapshot capture and submission are synchronized. One background queue preserves request order,
+so an older snapshot cannot overwrite a newer one within this process. Changes to globals cannot
+alter a queued save. Imports and shutdown use the same single-file save workflow. An empty data
+directory is an error, even when a logs directory is available.
 
 Each write uses a uniquely named temporary file in the destination directory, closes it, then
 atomically replaces `configuration.txt`. A failed write or replacement removes the temporary file
@@ -82,13 +73,11 @@ report a save error; there is no non-atomic fallback. Existing configuration sym
 so their targets are replaced, and existing POSIX access modes are preserved. New files retain
 regular-file permissions subject to the process umask on POSIX filesystems.
 
-Completion of the save method does not mean the files are finished. The two copies are not a
-single transaction: one can succeed while the other fails. A failed copy does not block the other
-copy or later saves. Data-root write errors go to standard output; log-directory write errors
-display a warning on the EDT referring to the captured destination, without blocking the save
-queue. Ordering applies within this process. Atomic replacement protects against partial file
-contents; it does not add power-loss durability or automatic recovery of temporary files left by
-a process crash.
+Returning from the save method does not mean the file has finished saving. A failed write is
+reported to standard output and displays a warning on the EDT without blocking later saves.
+During shutdown, failures use the retry/cancel/exit decision dialog instead. Atomic replacement prevents partial
+file contents; it does not add power-loss durability or automatic recovery of temporary files
+left by a process crash.
 
 ## Saving before exit
 
@@ -101,13 +90,12 @@ The progress dialog also offers Cancel exit, allowing normal use to resume if st
 Cancellation does not interrupt an in-progress file write, and its eventual completion cannot
 trigger the cancelled exit.
 
-The latest save request must succeed at every configured destination before shutdown proceeds
+The latest save request must save the data-root configuration before shutdown proceeds
 automatically. An older failed snapshot does not block exit if the final snapshot succeeds.
 Failures identify the affected configuration files and offer Retry saving, Cancel exit, or Exit
 without saving. Closing that decision dialog cancels exit. Retry captures current settings again
-and attempts both copies; cancelling keeps connections and the application running and leaves
-the save queue available. Ordinary log-copy warnings from these attempts are suppressed in favor
-of the shutdown decision dialog. With no configured destinations, exit also requires a decision.
+and attempts the same file again; cancelling keeps connections and the application running and leaves
+the save queue available. With no configured data directory, exit also requires a decision.
 
 Only after successful saving or an explicit choice to exit without saving does the handler close
 serial connections, remove the tray icon if needed, log shutdown, and exit. This waits for
@@ -164,14 +152,11 @@ metadata. It excludes `logs dir` in offline mode, captured when the import start
 require the maintenance identity labels. Its EDT completion callback applies a valid import,
 starts saving, and refreshes the station form. Failure is logged without saving or refreshing the
 form. An import source that is also a save destination is read and closed before saving begins.
-The configuration writes remain asynchronous: refreshing either form is not proof that the files
-have finished saving, and a later save error does not roll back the applied import.
+The configuration writes remain asynchronous: refreshing either form is not proof that the file
+has finished saving, and a later save error does not roll back the applied import.
 
 Maintenance display rebuilds the array from current globals. Maintenance export writes the
 current array to the chosen file without first rebuilding it, then refreshes the display. An
 export therefore reflects the array available when its worker runs, which can lag unsaved global
 changes. Accepted imports update the shared array on the EDT; exports and ordinary saves use that
 array as described above.
-
-These details describe the existing implementation. In particular, fallback on a missing copy,
-recovery from a failed read, and completion of asynchronous saving are separate behaviors.

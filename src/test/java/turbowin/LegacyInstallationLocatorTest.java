@@ -20,33 +20,38 @@ public class LegacyInstallationLocatorTest {
     Path x86 = temporaryFolder.newFolder("Program Files (x86)").toPath();
     Path x64 = temporaryFolder.newFolder("Program Files").toPath();
 
-    List<Path> found =
-        LegacyInstallationLocator.find(
-            working.toString(),
-            "WINDOWS",
-            Map.of(
-                "ProgramFiles(x86)",
-                x86.toString(),
-                "ProgramW6432",
-                x64.toString(),
-                "ProgramFiles",
-                x64.toString()),
-            temporaryFolder.getRoot().toPath());
+    String originalWorkingDirectory = System.getProperty("user.dir");
+    List<Path> found;
+    try {
+      System.setProperty("user.dir", working.toString());
+      found =
+          LegacyInstallationLocator.find(
+              "WINDOWS",
+              Map.of(
+                  "ProgramFiles(x86)",
+                  x86.toString(),
+                  "ProgramW6432",
+                  x64.toString(),
+                  "ProgramFiles",
+                  x64.toString()),
+              temporaryFolder.getRoot().toPath());
+    } finally {
+      System.setProperty("user.dir", originalWorkingDirectory);
+    }
 
+    assertFalse(found.contains(working));
     assertEquals(
-        List.of(working, x86.resolve("TurboWin+/bin"), x64.resolve("TurboWin+/bin")),
-        found.subList(0, 3));
+        List.of(x86.resolve("TurboWin+/bin"), x64.resolve("TurboWin+/bin")), found.subList(0, 2));
     assertEquals(1, found.stream().filter(x64.resolve("TurboWin+/bin")::equals).count());
   }
 
   @Test
-  public void workingDirectoryKeepsPriorityAndIsDeduplicated() throws Exception {
+  public void programFilesLocationsAreDeduplicated() throws Exception {
     Path programFiles = temporaryFolder.newFolder("Program Files (x86)").toPath();
     Path bin = programFiles.resolve("TurboWin+/bin");
 
     List<Path> found =
         LegacyInstallationLocator.find(
-            bin.resolve("../bin").toString(),
             "WINDOWS",
             Map.of("ProgramFiles(x86)", programFiles.toString()),
             temporaryFolder.getRoot().toPath());
@@ -65,7 +70,7 @@ public class LegacyInstallationLocatorTest {
     Files.createFile(unixBin.resolve("TurboWin+-99.0.0"));
     Files.createDirectories(unixBin.resolve("turbowin_jws/bin"));
 
-    List<Path> found = LegacyInstallationLocator.find("", "LINUX", Map.of(), unixBin);
+    List<Path> found = LegacyInstallationLocator.find("LINUX", Map.of(), unixBin);
 
     assertEquals(
         List.of(
@@ -83,6 +88,6 @@ public class LegacyInstallationLocatorTest {
     Path notDirectory = temporaryFolder.newFile("not-a-directory").toPath();
     assertEquals(
         List.of(notDirectory.resolve("turbowin_jws/bin")),
-        LegacyInstallationLocator.find(null, "LINUX", Map.of(), notDirectory));
+        LegacyInstallationLocator.find("LINUX", Map.of(), notDirectory));
   }
 }

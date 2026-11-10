@@ -52,9 +52,7 @@ public class LegacyDataMigrationTest {
       assertEquals(
           Files.getPosixFilePermissions(reference),
           Files.getPosixFilePermissions(target.resolve(main.CONFIGURATION_FILE)));
-      assertEquals(
-          Files.getPosixFilePermissions(reference),
-          Files.getPosixFilePermissions(target.resolve("logs/configuration.txt")));
+      assertFalse(Files.exists(target.resolve("logs/configuration.txt")));
     }
   }
 
@@ -89,19 +87,16 @@ public class LegacyDataMigrationTest {
 
     LegacyDataMigration.migrate(
         LegacyInstallationLocator.find(
-            working.toString(),
-            "WINDOWS",
-            Map.of("ProgramFiles(x86)", programFiles.toString()),
-            working),
+            "WINDOWS", Map.of("ProgramFiles(x86)", programFiles.toString()), working),
         target);
 
-    assertMigratedCopies(target, "Windows ship", target.resolve("logs").toString());
+    assertMigratedConfiguration(target, "Windows ship", target.resolve("logs").toString());
     assertEquals(original, Files.readString(legacy.resolve("logs/configuration.txt")));
     assertFalse(Files.exists(legacy.resolve("configuration.txt")));
   }
 
   @Test
-  public void prefersValidLogsCopyAndPublishesTheSameSettingsToBothDestinations() throws Exception {
+  public void prefersValidLegacyLogsCopyAndPublishesOneConfiguration() throws Exception {
     Path legacy = temporaryFolder.newFolder("legacy").toPath();
     Path target = temporaryFolder.newFolder("target").toPath();
     Files.createDirectory(legacy.resolve("logs"));
@@ -112,7 +107,7 @@ public class LegacyDataMigrationTest {
 
     LegacyDataMigration.migrate(List.of(legacy), target);
 
-    assertMigratedCopies(target, "Logs ship", target.resolve("logs").toString());
+    assertMigratedConfiguration(target, "Logs ship", target.resolve("logs").toString());
     assertEquals(root, Files.readString(legacy.resolve("configuration.txt")));
     assertEquals(logs, Files.readString(legacy.resolve("logs/configuration.txt")));
   }
@@ -129,7 +124,7 @@ public class LegacyDataMigrationTest {
 
     LegacyDataMigration.migrate(List.of(legacy), target);
 
-    assertMigratedCopies(target, "Root ship", target.resolve("logs").toString());
+    assertMigratedConfiguration(target, "Root ship", target.resolve("logs").toString());
   }
 
   @Test
@@ -149,7 +144,7 @@ public class LegacyDataMigrationTest {
       assertFalse(Files.exists(target.resolve("logs/configuration.txt")));
       assertEquals(
           target.resolve("configuration.txt"),
-          ConfigurationLoader.load(target.resolve("logs").toString(), target.toString()).source());
+          ConfigurationLoader.load(target.toString()).source());
     }
   }
 
@@ -184,24 +179,7 @@ public class LegacyDataMigrationTest {
     assertEquals(current, Files.readString(target.resolve("configuration.txt")));
     assertFalse(Files.exists(target.resolve("logs/configuration.txt")));
     assertEquals(
-        target.resolve("configuration.txt"),
-        ConfigurationLoader.load(target.resolve("logs").toString(), target.toString()).source());
-  }
-
-  @Test
-  public void existingModernLogsConfigurationAlsoPreventsImportingAnotherConfiguration()
-      throws Exception {
-    Path legacy = temporaryFolder.newFolder("legacy").toPath();
-    Path target = temporaryFolder.newFolder("target").toPath();
-    Files.createDirectory(target.resolve("logs"));
-    Files.writeString(legacy.resolve("configuration.txt"), configuration("Legacy ship", "logs"));
-    String current = configuration("Current ship", target.resolve("logs").toString());
-    Files.writeString(target.resolve("logs/configuration.txt"), current);
-
-    LegacyDataMigration.migrate(List.of(legacy), target);
-
-    assertEquals(current, Files.readString(target.resolve("logs/configuration.txt")));
-    assertFalse(Files.exists(target.resolve("configuration.txt")));
+        target.resolve("configuration.txt"), ConfigurationLoader.load(target.toString()).source());
   }
 
   @Test
@@ -229,8 +207,7 @@ public class LegacyDataMigrationTest {
     Path target = temporaryFolder.newFolder("target").toPath();
     Files.createDirectories(legacy);
 
-    LegacyDataMigration.migrate(
-        LegacyInstallationLocator.find(null, "LINUX", Map.of(), unixBin), target);
+    LegacyDataMigration.migrate(LegacyInstallationLocator.find("LINUX", Map.of(), unixBin), target);
 
     assertFalse(Files.exists(target.resolve("configuration.txt")));
     assertFalse(Files.exists(target.resolve("logs/configuration.txt")));
@@ -255,10 +232,9 @@ public class LegacyDataMigrationTest {
         older.resolve("logs/configuration.txt"),
         configuration("RPM ship", older.resolve("logs").toString()));
 
-    LegacyDataMigration.migrate(
-        LegacyInstallationLocator.find(working.toString(), "LINUX", Map.of(), unixBin), target);
+    LegacyDataMigration.migrate(LegacyInstallationLocator.find("LINUX", Map.of(), unixBin), target);
 
-    assertMigratedCopies(target, "RPM ship", target.resolve("logs").toString());
+    assertMigratedConfiguration(target, "RPM ship", target.resolve("logs").toString());
   }
 
   @Test
@@ -275,21 +251,20 @@ public class LegacyDataMigrationTest {
 
     LegacyDataMigration.migrate(List.of(legacy), target);
 
-    assertMigratedCopies(target, "First ship", target.resolve("logs").toString());
+    assertMigratedConfiguration(target, "First ship", target.resolve("logs").toString());
   }
 
   private static String configuration(String ship, String logsDirectory) {
     return main.SHIP_NAME_TXT + ship + "\n" + main.LOGS_DIR_TXT + logsDirectory + "\n";
   }
 
-  private static void assertMigratedCopies(Path target, String ship, String logsDirectory)
+  private static void assertMigratedConfiguration(Path target, String ship, String logsDirectory)
       throws Exception {
     String data = Files.readString(target.resolve("configuration.txt"));
     assertTrue(data, data.contains(main.SHIP_NAME_TXT + ship));
     assertTrue(data, data.contains(main.LOGS_DIR_TXT + logsDirectory));
-    assertEquals(data, Files.readString(target.resolve("logs/configuration.txt")));
-    assertTrue(
-        ConfigurationLoader.load(target.resolve("logs").toString(), target.toString()).loaded());
+    assertFalse(Files.exists(target.resolve("logs/configuration.txt")));
+    assertTrue(ConfigurationLoader.load(target.toString()).loaded());
   }
 
   @Test

@@ -20,7 +20,7 @@ public class ConfigurationLoaderTest {
     Files.createFile(logs.resolve(main.CONFIGURATION_FILE));
     Files.writeString(data.resolve(main.CONFIGURATION_FILE), main.WIND_SOURCE_TXT + "backup\n");
     ConfigurationLoader.Result result =
-        ConfigurationLoader.load(
+        ConfigurationLoader.loadLegacy(
             logs.toString(),
             data.toString(),
             (file, lines, maximum) -> {
@@ -42,7 +42,8 @@ public class ConfigurationLoaderTest {
     Path data = temporaryFolder.newFolder("data").toPath();
     Files.createDirectory(logs.resolve(main.CONFIGURATION_FILE));
     Files.writeString(data.resolve(main.CONFIGURATION_FILE), main.SHIP_NAME_TXT + "backup\n");
-    ConfigurationLoader.Result result = ConfigurationLoader.load(logs.toString(), data.toString());
+    ConfigurationLoader.Result result =
+        ConfigurationLoader.loadLegacy(logs.toString(), data.toString());
     assertEquals(data.resolve(main.CONFIGURATION_FILE), result.source());
     assertTrue(result.messages().toString().contains("unable to read"));
   }
@@ -54,11 +55,11 @@ public class ConfigurationLoaderTest {
     Files.writeString(data.resolve(main.CONFIGURATION_FILE), main.SHIP_NAME_TXT + "backup\n");
     assertEquals(
         data.resolve(main.CONFIGURATION_FILE),
-        ConfigurationLoader.load(logs.toString(), data.toString()).source());
+        ConfigurationLoader.loadLegacy(logs.toString(), data.toString()).source());
     for (String content : new String[] {"", "unknown setting : ignored\n"}) {
       Files.writeString(logs.resolve(main.CONFIGURATION_FILE), content);
       ConfigurationLoader.Result result =
-          ConfigurationLoader.load(logs.toString(), data.toString());
+          ConfigurationLoader.loadLegacy(logs.toString(), data.toString());
       assertEquals(data.resolve(main.CONFIGURATION_FILE), result.source());
       assertTrue(result.messages().toString().contains("no recognized settings"));
     }
@@ -72,7 +73,7 @@ public class ConfigurationLoaderTest {
     Files.createFile(data.resolve(main.CONFIGURATION_FILE));
     AtomicInteger reads = new AtomicInteger();
     ConfigurationLoader.Result result =
-        ConfigurationLoader.load(
+        ConfigurationLoader.loadLegacy(
             logs.toString(),
             data.toString(),
             (file, lines, maximum) -> {
@@ -90,7 +91,8 @@ public class ConfigurationLoaderTest {
     Files.writeString(
         logs.resolve(main.CONFIGURATION_FILE),
         main.RS232_INSTRUMENT_TYPE_TXT + "secret-invalid-value\n");
-    ConfigurationLoader.Result result = ConfigurationLoader.load(logs.toString(), logs.toString());
+    ConfigurationLoader.Result result =
+        ConfigurationLoader.loadLegacy(logs.toString(), logs.toString());
     assertFalse(result.loaded());
     assertEquals(2, result.messages().size());
     assertTrue(result.messages().toString().contains("line 1"));

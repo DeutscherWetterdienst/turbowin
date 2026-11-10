@@ -9,8 +9,8 @@ import org.junit.Test;
 public class ConfigurationPersistenceWorkflowTest {
 
   @Test
-  public void prefersLogsDirectoryForConfiguration() {
-    assertEquals("logs", ConfigurationPersistenceWorkflow.configurationDirectory("logs", "data"));
+  public void usesDataDirectoryRegardlessOfLogsDirectory() {
+    assertEquals("data", ConfigurationPersistenceWorkflow.configurationDirectory("logs", "data"));
   }
 
   @Test
@@ -33,7 +33,7 @@ public class ConfigurationPersistenceWorkflowTest {
 
       assertEquals(
           data.getPath(),
-          ConfigurationReadWorkflow.configurationDirectoryForRead(logs.getPath(), data.getPath()));
+          ConfigurationReadWorkflow.configurationDirectory(logs.getPath(), data.getPath()));
     } finally {
       new File(data, main.CONFIGURATION_FILE).delete();
       logs.delete();

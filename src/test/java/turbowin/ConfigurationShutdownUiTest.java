@@ -160,7 +160,7 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
 
   @Test
   public void failedSaveDialogCanCancelAndRestoreOwnerInteraction() throws Exception {
-    blockLogsDirectory();
+    blockDataDirectory();
     startExit();
 
     DialogFixture failure = dialog("Unable to save settings");
@@ -178,11 +178,11 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
 
   @Test
   public void retryButtonSavesCurrentSettingsAfterStorageIsRepaired() throws Exception {
-    Path blockedLogs = blockLogsDirectory();
+    Path blockedData = blockDataDirectory();
     startExit();
     DialogFixture failure = dialog("Unable to save settings");
-    Files.delete(blockedLogs);
-    Files.createDirectory(blockedLogs);
+    Files.delete(blockedData);
+    Files.createDirectory(blockedData);
     GuiActionRunner.execute(() -> main.ship_name = "Ship changed before retry");
 
     failure.button(JButtonMatcher.withText("Retry saving")).click();
@@ -190,14 +190,14 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
 
     assertEquals(1, exits.get());
     assertEquals(0, cancellations.get());
-    String saved = Files.readString(data.resolve(main.CONFIGURATION_FILE));
+    String saved = Files.readString(blockedData.resolve(main.CONFIGURATION_FILE));
     assertTrue(saved.contains(main.SHIP_NAME_TXT + "Ship changed before retry"));
-    assertEquals(saved, Files.readString(blockedLogs.resolve(main.CONFIGURATION_FILE)));
+    assertFalse(Files.exists(logs.resolve(main.CONFIGURATION_FILE)));
   }
 
   @Test
   public void exitWithoutSavingButtonRequiresExplicitClick() throws Exception {
-    blockLogsDirectory();
+    blockDataDirectory();
     startExit();
 
     DialogFixture failure = dialog("Unable to save settings");
@@ -211,7 +211,7 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
 
   @Test
   public void closingFailureDialogCancelsExit() throws Exception {
-    blockLogsDirectory();
+    blockDataDirectory();
     startExit();
 
     dialog("Unable to save settings").close();
@@ -221,9 +221,9 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
     assertEquals(1, cancellations.get());
   }
 
-  private Path blockLogsDirectory() throws Exception {
-    Path blocked = temporaryFolder.newFile("blocked-logs").toPath();
-    GuiActionRunner.execute(() -> main.logs_dir = blocked.toString());
+  private Path blockDataDirectory() throws Exception {
+    Path blocked = temporaryFolder.newFile("blocked-data").toPath();
+    GuiActionRunner.execute(() -> main.data_dir = blocked.toString());
     return blocked;
   }
 

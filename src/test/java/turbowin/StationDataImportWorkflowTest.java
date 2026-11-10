@@ -66,7 +66,7 @@ public class StationDataImportWorkflowTest {
 
   @After
   public void tearDown() throws Exception {
-    // Completion assertions wait for the import callback and both configuration writes.
+    // Completion assertions wait for the import callback and the configuration save.
     SwingUtilities.invokeAndWait(() -> {});
     main.data_dir = originalDataDirectory;
     main.logs_dir = originalLogsDirectory;
@@ -82,7 +82,7 @@ public class StationDataImportWorkflowTest {
   }
 
   @Test
-  public void persistsImportedSettingsToBothConfigurationFiles() throws Exception {
+  public void persistsImportedSettingsOnlyToDataRoot() throws Exception {
     Path source = temporaryFolder.newFile("import.txt").toPath();
     writeImport(source);
 
@@ -129,7 +129,6 @@ public class StationDataImportWorkflowTest {
 
     assertTrue("Import did not refresh the station form", refreshed.await(5, TimeUnit.SECONDS));
     awaitSavedSettings(dataConfiguration, expectedLastLine);
-    awaitSavedSettings(logsConfiguration, expectedLastLine);
 
     assertTrue("Station form must be refreshed on the EDT", refreshedOnEdt.get());
     assertEquals("Imported ship", displayedShipName.get());
@@ -140,7 +139,7 @@ public class StationDataImportWorkflowTest {
         "Offline import must preserve the current logs directory",
         expectedLogsDirectory,
         main.logs_dir);
-    assertEquals(Files.readString(dataConfiguration), Files.readString(logsConfiguration));
+    assertEquals(main.SHIP_NAME_TXT + "Previous ship" + "\n", Files.readString(logsConfiguration));
   }
 
   private static void awaitSavedSettings(Path file, String expectedLastLine) throws Exception {

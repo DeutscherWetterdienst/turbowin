@@ -172,7 +172,7 @@ public class ConfigurationImportWorkflowTest {
     String saved = Files.readString(dataFile);
     assertTrue(saved.contains(main.SHIP_NAME_TXT + "Imported ship"));
     assertTrue(saved.contains(main.WIND_SOURCE_TXT + "existing wind"));
-    assertEquals(saved, Files.readString(logsFile));
+    assertEquals(EXISTING_FILE, Files.readString(logsFile));
   }
 
   @Test
@@ -289,17 +289,16 @@ public class ConfigurationImportWorkflowTest {
       boolean saved = false;
       do {
         List<String> dataLines = Files.readAllLines(dataFile);
-        List<String> logsLines = Files.readAllLines(logsFile);
         saved =
             dataLines.contains(main.SHIP_NAME_TXT + "Imported ship")
                 && dataLines.contains(finalLine)
-                && dataLines.equals(logsLines);
+                && Files.readString(logsFile).equals(EXISTING_FILE);
         if (saved) {
           break;
         }
         Thread.sleep(10);
       } while (System.nanoTime() < deadline);
-      assertTrue("Accepted import was not saved to both copies", saved);
+      assertTrue("Accepted import was not saved to the data-root configuration", saved);
     }
     return result;
   }

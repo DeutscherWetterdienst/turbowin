@@ -48,12 +48,12 @@ public class ConfigurationWriteWorkflowTest {
   }
 
   @Test
-  public void overlappingSavesFinishWithNewestSettingsInBothCopies() throws Exception {
+  public void overlappingSavesFinishWithNewestSettingsInSingleFile() throws Exception {
     verifyOrderedSaves(false);
   }
 
   @Test
-  public void failedOlderWriteDoesNotBlockOtherCopyOrNewerSave() throws Exception {
+  public void failedOlderWriteDoesNotBlockNewerSave() throws Exception {
     verifyOrderedSaves(true);
   }
 
@@ -67,7 +67,7 @@ public class ConfigurationWriteWorkflowTest {
     CountDownLatch firstStarted = new CountDownLatch(1);
     CountDownLatch releaseFirst = new CountDownLatch(1);
     CountDownLatch newerStarted = new CountDownLatch(1);
-    CountDownLatch completed = new CountDownLatch(4);
+    CountDownLatch completed = new CountDownLatch(2);
     List<String> attempts = Collections.synchronizedList(new ArrayList<>());
     ConfigurationWriteWorkflow.ConfigurationWriter writer =
         (directory, lines, maximum) -> {
@@ -102,7 +102,11 @@ public class ConfigurationWriteWorkflowTest {
       main.data_dir = data.toString();
       main.logs_dir = logs.toString();
       main.ship_name = "Older ship";
-      ConfigurationWriteWorkflow.write(writer);
+      if (failFirstWrite) {
+        ConfigurationWriteWorkflow.saveBeforeExit(saved -> {}, writer);
+      } else {
+        ConfigurationWriteWorkflow.write(writer);
+      }
       firstScheduled = true;
       assertTrue("First save did not start", firstStarted.await(5, TimeUnit.SECONDS));
 
@@ -115,22 +119,22 @@ public class ConfigurationWriteWorkflowTest {
       releaseFirst.countDown();
       assertTrue("Queued saves did not finish", completed.await(5, TimeUnit.SECONDS));
 
-      assertEquals(List.of("older data", "older logs", "newer data", "newer logs"), attempts);
+      assertEquals(List.of("older data", "newer data"), attempts);
       String saved = Files.readString(data.resolve(main.CONFIGURATION_FILE));
       assertTrue(saved.contains(main.SHIP_NAME_TXT + "Newer ship"));
       assertFalse(saved.contains("Older ship"));
-      assertEquals(saved, Files.readString(logs.resolve(main.CONFIGURATION_FILE)));
+      assertFalse(Files.exists(logs.resolve(main.CONFIGURATION_FILE)));
     } finally {
       releaseFirst.countDown();
       try {
         if (!bothScheduled) {
-          completed.countDown();
           completed.countDown();
         }
         if (firstScheduled) {
           assertTrue("Save queue did not drain", completed.await(5, TimeUnit.SECONDS));
         }
       } finally {
+        ConfigurationWriteWorkflow.cancelExit();
         main.data_dir = originalDataDirectory;
         main.logs_dir = originalLogsDirectory;
         main.ship_name = originalShipName;
@@ -160,8 +164,7 @@ public class ConfigurationWriteWorkflowTest {
           worker -> {
             pendingWrites.add(worker);
             if (pendingWrites.size() == 1) {
-              // The first worker may start before the second is scheduled. Both must use the
-              // same original snapshot, even if another settings change rebuilds the array.
+              // A queued worker must retain its snapshot when globals change.
               main.data_dir = laterData.toString();
               main.logs_dir = laterLogs.toString();
               main.ship_name = "Later ship";
@@ -169,7 +172,7 @@ public class ConfigurationWriteWorkflowTest {
             }
           });
 
-      assertEquals(2, pendingWrites.size());
+      assertEquals(1, pendingWrites.size());
       for (SwingWorker<Void, Void> worker : pendingWrites) {
         worker.execute();
         worker.get(5, TimeUnit.SECONDS);
@@ -178,14 +181,12 @@ public class ConfigurationWriteWorkflowTest {
       assertTrue(
           "The original data destination was lost",
           Files.isRegularFile(data.resolve(main.CONFIGURATION_FILE)));
-      assertTrue(
-          "The original logs destination was lost",
-          Files.isRegularFile(logs.resolve(main.CONFIGURATION_FILE)));
+      assertFalse(Files.exists(logs.resolve(main.CONFIGURATION_FILE)));
       String savedData = Files.readString(data.resolve(main.CONFIGURATION_FILE));
       assertTrue(savedData.contains(main.SHIP_NAME_TXT + "Ship at save time"));
       assertTrue(savedData.contains(main.LOGS_DIR_TXT + logs));
       assertFalse(savedData.contains("Later ship"));
-      assertEquals(savedData, Files.readString(logs.resolve(main.CONFIGURATION_FILE)));
+      assertFalse(Files.exists(logs.resolve(main.CONFIGURATION_FILE)));
       assertFalse(Files.exists(laterData.resolve(main.CONFIGURATION_FILE)));
       assertFalse(Files.exists(laterLogs.resolve(main.CONFIGURATION_FILE)));
     } finally {
@@ -196,6 +197,7 @@ public class ConfigurationWriteWorkflowTest {
           worker.get(5, TimeUnit.SECONDS);
         }
       } finally {
+        ConfigurationWriteWorkflow.cancelExit();
         main.data_dir = originalDataDirectory;
         main.logs_dir = originalLogsDirectory;
         main.ship_name = originalShipName;

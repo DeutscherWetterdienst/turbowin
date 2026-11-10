@@ -6,14 +6,17 @@
 ## Context
 
 Older installations stored `configuration.txt`, `logs`, and `amver` below the historical
-`user.dir` location. The application now uses the system-wide data root defined by
+installation bin directory. The application now uses the system-wide data root defined by
 `StartupEnvironment`. Leaving existing data behind would make an upgrade appear to lose settings
 and history.
 
 ## Decision
 
-On startup, when no `turbowin.data.dir` override is active, inspect the historical location and
-merge only the legacy `configuration.txt`, `logs`, and `amver` entries into the current data root.
+On startup, when no `turbowin.data.dir` override is active, inspect known Windows, Debian, and versioned RPM installation locations. The launch working
+directory (`user.dir`) is not a discovery input. Try each installation’s `logs/configuration.txt`
+then its bin-root `configuration.txt`, validating before selecting settings. Write the selected
+settings only to `<data root>/configuration.txt`; ordinary reads and saves use that single file.
+Merge legacy `logs` and `amver` histories separately, excluding legacy configuration copies.
 Do not overwrite destination entries that already exist. Retain the source data for inspection or
 rollback; launcher marker files and application resources are not migration inputs.
 
