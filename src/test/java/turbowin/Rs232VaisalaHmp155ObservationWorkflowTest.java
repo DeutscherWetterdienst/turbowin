@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.awt.Window;
@@ -19,7 +17,6 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -197,10 +194,18 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     writeRecord(airTemp, wetBulbTemp, dewPoint, rh, recordDate);
     main.obs_file_datum_tijd = new GregorianCalendar();
     Rs232VaisalaHmp155ObservationWorkflow.start();
-    waitFor(
-        () ->
-            mytemp.air_temp.equals(padded(airTemp)) && main.obs_file_datum_tijd == null);
-    flushEdt();
+    // Wait for the final UI update. The raw air-temperature value can be cleared by done()
+    // validation, so observing that temporary value races with the EDT at lower boundaries.
+    AtomicReference<String> displayedHumidity = new AtomicReference<>();
+    long deadline = System.nanoTime() + 5_000_000_000L;
+    do {
+      SwingUtilities.invokeAndWait(() -> displayedHumidity.set(mytemp.jTextField4.getText()));
+      if (padded(rh).equals(displayedHumidity.get())) {
+        return;
+      }
+      Thread.sleep(10);
+    } while (System.nanoTime() < deadline);
+    assertEquals("Timed out waiting for HMP155 UI completion", padded(rh), displayedHumidity.get());
   }
 
   private void runErrorRecord(String record) throws Exception {
@@ -235,7 +240,13 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
       String airTemp, String wetBulbTemp, String dewPoint, String rh, Date recordDate)
       throws Exception {
     String record =
-        field(airTemp) + " " + field(wetBulbTemp) + " " + field(dewPoint) + " " + field(rh)
+        field(airTemp)
+            + " "
+            + field(wetBulbTemp)
+            + " "
+            + field(dewPoint)
+            + " "
+            + field(rh)
             + " "
             + main.sdf4.format(recordDate);
     writeRawRecord(record);
@@ -245,9 +256,7 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     Calendar fileDate = new GregorianCalendar();
     fileDate.add(Calendar.MINUTE, -2);
     File file =
-        new File(
-            main.logs_dir,
-            "sensor_data_II_" + main.sdf3.format(fileDate.getTime()) + ".txt");
+        new File(main.logs_dir, "sensor_data_II_" + main.sdf3.format(fileDate.getTime()) + ".txt");
     Files.writeString(file.toPath(), record + System.lineSeparator());
   }
 

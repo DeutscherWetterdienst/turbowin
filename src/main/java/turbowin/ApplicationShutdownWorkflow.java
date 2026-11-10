@@ -4,6 +4,7 @@ import static turbowin.main.*;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
+import java.awt.Frame;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -84,8 +85,8 @@ final class ApplicationShutdownWorkflow {
         .start();
   }
 
-  private static void saveBeforeExit(
-      main owner, Consumer<ConfigurationWriteWorkflow.SaveResult> completed, Runnable cancel) {
+  static void saveBeforeExit(
+      Frame owner, Consumer<ConfigurationWriteWorkflow.SaveResult> completed, Runnable cancel) {
     JDialog progress = new JDialog(owner, "Saving settings", Dialog.ModalityType.APPLICATION_MODAL);
     progress.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     JPanel content = new JPanel(new BorderLayout(0, 12));
@@ -113,8 +114,8 @@ final class ApplicationShutdownWorkflow {
     progress.setVisible(true);
   }
 
-  private static ApplicationExitRequest.Decision decideAfterSaveFailure(
-      main owner, ConfigurationWriteWorkflow.SaveResult result) {
+  static ApplicationExitRequest.Decision decideAfterSaveFailure(
+      Frame owner, ConfigurationWriteWorkflow.SaveResult result) {
     Object[] options = {"Retry saving", "Cancel exit", "Exit without saving"};
     int decision =
         JOptionPane.showOptionDialog(

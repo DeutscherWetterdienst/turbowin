@@ -77,6 +77,14 @@ Reports are generated at:
 The CI task also creates `test-run.log` and `screen_capture.webm`. Do not commit generated reports,
 recordings, or release outputs.
 
+`ConfigurationShutdownUiTest` exercises the production saving/decision dialogs in an isolated
+window, using a callback instead of terminating the test JVM. It checks cancellation during a
+delayed save, retry after storage is repaired, cancellation after failure, explicit exit despite
+failure, and closing the failure dialog. Run it with a real display or the Xvfb/Openbox setup
+above, filtering with `--tests turbowin.ConfigurationShutdownUiTest` for a focused run.
+It captures the waiting and failure dialogs under `build/reports/gui-smoke/` for visual review.
+It does not exercise the platform tray or terminate and restart an application process.
+
 ## Test isolation and completion
 
 Tests that touch `main`, `main_RS232_RS422`, or `my*` classes must save and restore the relevant
