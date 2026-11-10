@@ -1,6 +1,7 @@
 package turbowin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.nio.file.Files;
@@ -12,6 +13,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -127,6 +129,41 @@ public class ConfigurationReadWorkflowTest {
     assertTrue(
         messages.toString(),
         messages.stream().anyMatch(m -> m.contains("retaining existing settings")));
+  }
+
+  @Test
+  public void migratedCustomLogsFolderKeepsNewerSavesAuthoritativeOnNextStartup() throws Exception {
+    Path legacy = temporaryFolder.newFolder("legacy-installation").toPath();
+    Path custom = temporaryFolder.newFolder("custom-logs").toPath();
+    main.logs_dir = Path.of(main.data_dir, "logs").toString();
+    Files.createDirectories(Path.of(main.logs_dir));
+    String original = main.SHIP_NAME_TXT + "Migrated ship\n" + main.LOGS_DIR_TXT + custom + "\n";
+    Files.writeString(legacy.resolve(main.CONFIGURATION_FILE), original);
+    LegacyDataMigration.migrate(List.of(legacy), Path.of(main.data_dir));
+
+    loadAndFinishStartup();
+
+    assertEquals("Migrated ship", main.ship_name);
+    assertEquals(custom.toString(), main.logs_dir);
+    main.ship_name = "Newer saved ship";
+    List<SwingWorker<Void, Void>> writes = new ArrayList<>();
+    ConfigurationWriteWorkflow.write(writes::add);
+    for (SwingWorker<Void, Void> worker : writes) {
+      worker.run();
+      worker.get(5, TimeUnit.SECONDS);
+    }
+    assertEquals(
+        Files.readString(Path.of(main.data_dir, main.CONFIGURATION_FILE)),
+        Files.readString(custom.resolve(main.CONFIGURATION_FILE)));
+    assertFalse(Files.exists(Path.of(main.data_dir, "logs", main.CONFIGURATION_FILE)));
+
+    main.ship_name = "Restart placeholder";
+    main.logs_dir = Path.of(main.data_dir, "logs").toString();
+    loadAndFinishStartup();
+
+    assertEquals("Newer saved ship", main.ship_name);
+    assertEquals(custom.toString(), main.logs_dir);
+    assertEquals(original, Files.readString(legacy.resolve(main.CONFIGURATION_FILE)));
   }
 
   @Test

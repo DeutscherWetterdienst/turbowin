@@ -24,11 +24,42 @@ and user permissions must permit writing there. Tests can use the `turbowin.data
 property to redirect startup data into a temporary directory. Configuration writes also target
 the data/log directories; see [persistence concepts](08_concepts.md#configuration-and-local-persistence).
 
-On startup without a `turbowin.data.dir` override, the application checks the historical
-`user.dir` location used before commit `3e742663c`. It merges `configuration.txt`, `logs`, and
-`amver` into the current root when destination entries do not already exist. The source is
-retained so an upgrade can be rolled back or inspected. Application resources and launcher
-marker files are not part of this migration.
+On startup without a `turbowin.data.dir` override, the application checks these legacy locations
+in order, independently of the new application's installation directory:
+
+1. The launch working directory (`user.dir`), retaining compatibility with custom installations.
+2. On Windows, `TurboWin+\bin` under the `ProgramFiles(x86)`, `ProgramW6432`, and `ProgramFiles`
+   environment directories, with conventional `C:\Program Files (x86)` and `C:\Program Files`
+   fallbacks. Duplicate normalized paths are checked once.
+3. On non-Windows systems, `/usr/local/bin/TurboWin+-<version>/turbowin_jws/bin`, highest numeric
+   version first (final releases before prereleases of the same version), followed by
+   `/usr/local/bin/turbowin_jws/bin`. Only the known versioned directory pattern is enumerated;
+   startup does not search the entire filesystem.
+
+These layouts reflect [reported legacy installation checks](legacy_storage_observations.md).
+Unlisted custom locations can still be used by launching from their `bin` directory or explicitly
+importing a configuration.
+
+If either configuration copy already exists in the current data root, legacy settings are not
+introduced beside it. Otherwise migration selects the first usable legacy configuration, trying
+that installation's `logs/configuration.txt` before its `configuration.txt`. Missing, unreadable,
+malformed, empty, and unknown-only copies do not prevent trying the next copy or installation.
+The selected file is parsed before copying; no live settings change during migration.
+
+Migration rebases a saved logs folder that points to the source installation's own `logs`
+directory to `<new data root>/logs`. It writes that validated snapshot to both new configuration
+locations. Absolute custom logs folders retain their values, and relative custom folders are
+resolved against the legacy `bin` directory to retain their location. With a custom folder,
+only the data-root configuration is created: a copy in the default logs folder would become
+stale because subsequent saves go to the custom folder. Explicit import does not perform this
+automatic rebasing.
+
+The migration also merges missing files from legacy `logs` and `amver` directories in discovery
+order. Existing destination files win, including conflicts between histories from multiple
+installations; configuration files use the separate validated selection above. Source files are
+retained for rollback and inspection. Application resources, launcher markers, and symlinked
+history entries are not copied. Migration failures are reported and do not replace existing files;
+normal startup still checks whether the new data root is writable.
 
 The application currently starts in installed desktop ("offline") mode. This is distinct from
 having no network connection: observation uploads, custom email, and external web resources still

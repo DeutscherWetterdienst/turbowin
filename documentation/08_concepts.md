@@ -61,7 +61,12 @@ exit without saving. Connections remain open until saving succeeds or exit is ex
 cancelling leaves the save queue available. Forced process termination cannot provide this wait.
 
 The installed desktop uses platform data directories with `logs` and `amver` subdirectories.
-`-Dturbowin.data.dir=...` overrides the data directory, notably for isolated tests. See the
+Legacy migration checks the working directory and known Windows, Debian, and versioned RPM
+layouts, retaining source files and existing destination files. It rebases installation-local
+logs folders while preserving custom locations; explicit import keeps its separate logs-folder
+rules. See the [legacy storage observations](legacy_storage_observations.md).
+`-Dturbowin.data.dir=...` overrides the data directory and disables automatic migration, notably
+for isolated tests. See the
 [deployment view](07_deployment_view.md) for paths, permissions, and the legacy-data migration.
 
 IMMT observations, system diagnostics, sensor histories, exports, and configuration are different

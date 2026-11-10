@@ -34,8 +34,9 @@ flowchart TD
 file I/O. The same line format is used by maintenance import/export.
 
 The data root defaults to `C:\ProgramData\TurboWinPlus` on Windows and `/opt/turbowinplus/data`
-elsewhere. `-Dturbowin.data.dir=...` overrides it. Before loading, startup can migrate old files
-from `user.dir`; see the [deployment view](07_deployment_view.md#runtime-and-writable-data).
+elsewhere. `-Dturbowin.data.dir=...` overrides it and disables automatic legacy migration.
+Otherwise startup checks `user.dir` and the known Windows, Debian, and versioned RPM installation
+layouts before loading; see the [deployment view](07_deployment_view.md#runtime-and-writable-data).
 Current startup always selects installed desktop ("offline") mode, which still permits networking.
 
 The reader tries `configuration.txt` under `logs_dir` first, then under `data_dir` if the first
@@ -53,6 +54,13 @@ Startup initially sets `logs_dir` to `<data root>/logs`, but applying a saved `l
 replace it, even in offline mode. Thus the directory used to locate the startup file and the
 directory used for subsequent logs/saves can differ. `data_dir` is selected by startup, not loaded
 from a configuration entry.
+
+Automatic migration treats installation-local logs folders separately: it rewrites only a path
+pointing to the legacy installation's own `logs` directory to the new default. Custom folders
+retain their location. For custom folders, migration creates only the data-root configuration,
+avoiding a stale preferred copy in the default logs directory after later saves. Existing modern
+configuration files are preserved. Explicit maintenance import continues to apply the supplied
+logs-folder setting without rebasing it.
 
 After the background read and parsing, the Swing completion callback retrieves the worker result,
 applies an accepted file, and reports diagnostics. It then logs startup, cleans old system logs,

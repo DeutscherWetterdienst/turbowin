@@ -65,7 +65,7 @@ final class ConfigurationFileStore {
     }
   }
 
-  private static Path createTemporaryFile(Path target) throws IOException {
+  static Path createTemporaryFile(Path target) throws IOException {
     String prefix = "." + target.getFileName() + "-";
     if (Files.getFileStore(target.getParent())
         .supportsFileAttributeView(PosixFileAttributeView.class)) {
