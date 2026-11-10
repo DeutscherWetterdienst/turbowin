@@ -1832,9 +1832,6 @@ public final class mystationdata extends javax.swing.JFrame {
         import_file = chooser.getSelectedFile().getPath();
 
         StationDataImportWorkflow.start(import_file, this::initStationComponents);
-
-        // Save settings to the configuration files.
-        main.schrijf_configuratie_regels();
       } // if (result == JFileChooser.APPROVE_OPTION
     } // if (doorgaan == true)
   } // GEN-LAST:event_import_button_actionPerformed

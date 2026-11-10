@@ -99,9 +99,13 @@ requires the labels, not non-empty values. It does not exclude `logs dir`. Its s
 does not wait for the resulting configuration writes to finish.
 
 Station-data import uses the same global settings parser, so it can apply settings beyond station
-metadata. It excludes `logs dir` in offline mode and refreshes the station form after applying the
-lines. Its caller starts saving immediately after scheduling import; that save does not wait for
-the import worker and therefore is not proof that imported values reached disk.
+metadata. It excludes `logs dir` in offline mode. After the background worker has read and applied
+the lines, its EDT completion callback checks for a worker exception, starts saving the imported
+settings, and refreshes the station form. The caller does not start a separate save while the
+import is still running, so an import source that is also a save destination is read before being
+overwritten. The configuration writes remain asynchronous: refreshing the form is not proof that
+the files have finished saving. Read I/O errors are still logged and tolerated as before; this
+workflow does not provide transactional rollback of partial imports.
 
 Maintenance display rebuilds the array from current globals. Maintenance export writes the
 current array to the chosen file without first rebuilding it, then refreshes the display. An

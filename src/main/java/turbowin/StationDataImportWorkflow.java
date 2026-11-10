@@ -3,9 +3,10 @@ package turbowin;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 
-/** Owns asynchronous import of station data from a configuration file. */
+/** Imports station data asynchronously, then saves settings and refreshes the form on the EDT. */
 final class StationDataImportWorkflow {
 
   private StationDataImportWorkflow() {}
@@ -53,15 +54,28 @@ final class StationDataImportWorkflow {
         /* put collected meta data from configuration file into appropriate global vars */
         main.meta_data_from_configuration_regels_into_global_vars();
 
-        /* and put global vars into this station data form */
-        updateStationData.run();
-
         return null;
       } // protected Void doInBackground() throws Exception
 
       @Override
       protected void done() {
-        /* niets */
+        try {
+          get();
+          // Saving must follow import: the source may itself be one of the files being saved.
+          main.schrijf_configuratie_regels();
+          updateStationData.run();
+        } catch (InterruptedException ex) {
+          Thread.currentThread().interrupt();
+          main.log_turbowin_system_message(
+              "[GENERAL] station data import interrupted (" + ex + ")");
+        } catch (ExecutionException ex) {
+          main.log_turbowin_system_message(
+              "[GENERAL] error importing station data from '"
+                  + importFile
+                  + "' ("
+                  + ex.getCause()
+                  + ")");
+        }
       }
     }.execute(); // new SwingWorker<Void, Void>()
   }
