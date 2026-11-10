@@ -17,12 +17,14 @@ final class ConfigurationPersistenceWorkflow {
   }
 
   /**
-   * Builds configuration lines from the current global settings and starts separate background
-   * writes of configuration.txt to each non-empty data_dir and logs_dir.
+   * Builds configuration lines from the current global settings and queues background writes of
+   * configuration.txt to each non-empty data_dir and logs_dir.
    *
-   * <p>Both background writes use the same snapshot of lines and destination paths. Each file is
-   * replaced atomically, retaining the legacy format. The two copies are not a single transaction;
-   * returning from this method does not mean saving has finished.
+   * <p>Both writes use the same snapshot of lines and destination paths. Saves run in submission
+   * order so older snapshots cannot overwrite newer ones. Each file is replaced atomically,
+   * retaining the legacy format. A failed copy does not prevent the other copy or later saves from
+   * being attempted. The two copies are not a single transaction; returning from this method does
+   * not mean saving has finished.
    */
   static void write() {
     ConfigurationWriteWorkflow.write();

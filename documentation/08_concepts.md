@@ -40,11 +40,13 @@ copy is missing, unreadable, malformed, or contains no recognized settings. Each
 parsed into temporary settings before any globals change. If neither copy is usable, existing
 settings and lines are retained and startup still finalizes. Diagnostics identify the selected
 copy and recovery reasons. Missing settings in a valid partial file leave their global values
-unchanged. Saving captures the configuration
-lines and destination paths before starting separate background writes to each non-empty data/log
-directory. Each file is replaced atomically; the two copies are not a single transaction and have
-different failure notification paths. Historical Java Web Start
-"muffin" storage is no longer used. See the [configuration walkthrough](configuration_persistence.md)
+unchanged. Saving captures the configuration lines and destination paths before queuing writes
+to each non-empty data/log directory. A single
+background queue preserves save submission order, so older snapshots cannot overwrite newer ones.
+A failed copy does not block the other copy or subsequent saves. Each file is replaced atomically;
+the two copies are not a single transaction and have different failure notification paths.
+Historical Java Web Start "muffin" storage is no longer used.
+See the [configuration walkthrough](configuration_persistence.md)
 for the file format, directory selection, import/export behavior, and asynchronous limitations.
 
 The installed desktop uses platform data directories with `logs` and `amver` subdirectories.

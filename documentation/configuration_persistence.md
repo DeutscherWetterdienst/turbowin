@@ -23,9 +23,9 @@ flowchart TD
     C --> D[Background worker reads and parses temporary settings]
     D --> E[EDT applies first valid copy or retains existing settings]
     E --> F[EDT callback finalizes UI and connections]
-    G[Settings dialogs update globals] --> H[Save rebuilds configuratie_regels]
+    G[Settings dialogs update globals] --> H[Save snapshots lines and paths into one ordered queue]
     H --> I[Background write to data_dir / configuration.txt]
-    H --> J[Background write to logs_dir / configuration.txt]
+    I --> J[Background write to logs_dir / configuration.txt]
 ```
 
 `main.lees_configuratie_regels()` and `main.schrijf_configuratie_regels()` delegate through
@@ -60,12 +60,14 @@ updates station identity, checks metadata, creates menus, initializes connection
 menu/toolbar availability. Startup finalization also runs when neither copy is usable or the
 background worker fails.
 
-Saving first rebuilds the line array from globals and copies the lines and both destination paths
-before starting either background worker. Each non-empty data/log directory gets an independent
-write using that same snapshot. Subsequent changes to the global array or paths cannot change
-an already scheduled save.
+Saving first rebuilds the line array from globals and copies the lines and both destination paths.
+Snapshot capture and submission are synchronized so each request places both writes together into
+one background queue, data first and then logs. Each non-empty destination is attempted using that
+same snapshot. Subsequent changes to the global array or paths cannot change an already queued
+save. Older requests finish their write attempts before newer requests begin, preventing an older
+snapshot from overwriting a newer one within this process.
 
-Each worker writes a uniquely named temporary file in the destination directory, closes it, then
+Each write uses a uniquely named temporary file in the destination directory, closes it, then
 atomically replaces `configuration.txt`. A failed write or replacement removes the temporary file
 and leaves the previous configuration in place. Filesystems that do not support atomic replacement
 report a save error; there is no non-atomic fallback. Existing configuration symlinks are followed
@@ -73,10 +75,12 @@ so their targets are replaced, and existing POSIX access modes are preserved. Ne
 regular-file permissions subject to the process umask on POSIX filesystems.
 
 Completion of the save method does not mean the files are finished. The two copies are not a
-single transaction: one can succeed while the other fails, and concurrent saves can complete out
-of order. Data-root write errors go to standard output; log-directory write errors display a
-warning referring to the captured destination. This protects against partial file contents; it
-does not add power-loss durability or automatic recovery of temporary files left by a process crash.
+single transaction: one can succeed while the other fails. A failed copy does not block the other
+copy or later saves. Data-root write errors go to standard output; log-directory write errors
+display a warning on the EDT referring to the captured destination, without blocking the save
+queue. Ordering applies within this process; the daemon queue is not drained automatically on
+process exit. Atomic replacement protects against partial file contents; it does not add power-loss
+durability or automatic recovery of temporary files left by a process crash.
 
 ## File format
 
