@@ -49,6 +49,12 @@ Historical Java Web Start "muffin" storage is no longer used.
 See the [configuration walkthrough](configuration_persistence.md)
 for the file format, directory selection, import/export behavior, and asynchronous limitations.
 
+Maintenance and station-data imports also read and parse a temporary buffer before applying
+settings on the EDT. Read or validation failures leave live settings and saved configuration
+files intact. Valid partial files preserve omitted settings. Maintenance requires the legacy
+ship-name and call-sign labels; station-data import preserves the logs directory in offline mode.
+Successful imports queue saves, whose completion remains asynchronous.
+
 The installed desktop uses platform data directories with `logs` and `amver` subdirectories.
 `-Dturbowin.data.dir=...` overrides the data directory, notably for isolated tests. See the
 [deployment view](07_deployment_view.md) for paths, permissions, and the legacy-data migration.

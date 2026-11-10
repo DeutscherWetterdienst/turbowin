@@ -1,82 +1,55 @@
 package turbowin;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import javax.swing.SwingWorker;
 
-/** Imports station data asynchronously, then saves settings and refreshes the form on the EDT. */
+/** Validates station imports in the background, then saves and refreshes on the EDT. */
 final class StationDataImportWorkflow {
 
   private StationDataImportWorkflow() {}
 
-  static void start(String importFile, Runnable updateStationData) {
-    new SwingWorker<Void, Void>() {
+  static void start(String source, Runnable updateStationData) {
+    start(
+        source,
+        updateStationData,
+        main::schrijf_configuratie_regels,
+        main::log_turbowin_system_message,
+        ConfigurationFileStore::read);
+  }
+
+  static void start(
+      String source,
+      Runnable updateStationData,
+      Runnable save,
+      Consumer<String> report,
+      ConfigurationImportReader.Reader reader) {
+    final boolean preserveLogsDirectory = main.offline_mode;
+    new SwingWorker<ConfigurationImportReader.Result, Void>() {
       @Override
-      protected Void doInBackground() throws Exception {
-        int teller;
-        String file_line;
-
-        // String volledig_path = hulp_dir + java.io.File.separator + CONFIGURATION_FILE;
-        String volledig_path = importFile;
-
-        for (teller = 0; teller < main.MAX_AANTAL_CONFIGURATIEREGELS; teller++) {
-          main.configuratie_regels[teller] = "";
-        }
-
-        /* read all lines from configuration file */
-        try (BufferedReader in = new BufferedReader(new FileReader(volledig_path))) {
-          teller = 0;
-          while ((file_line = in.readLine()) != null) {
-            // do not immport the log dir! (because log dir could be changed after a new
-            // install, mainly problems in standalone mode -> fixed logs dir)
-            if (((file_line.indexOf(main.LOGS_DIR_TXT) == -1) && (main.offline_mode == true))
-                || (main.offline_mode == false)) {
-              main.configuratie_regels[teller] = file_line;
-            }
-
-            teller++;
-
-            /* for safety */
-            if (teller >= main.MAX_AANTAL_CONFIGURATIEREGELS) {
-              break;
-            }
-          } // while((file_line = in.readLine()) != null)
-        } // try
-        catch (IOException ex) {
-          // JOptionPane.showMessageDialog(null, "Error reading file configuration.txt",
-          // main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-          String info = "[GENERAL] error reading file 'configuration.txt' (" + ex + ")";
-          main.log_turbowin_system_message(info);
-        } // catch
-
-        /* put collected meta data from configuration file into appropriate global vars */
-        main.meta_data_from_configuration_regels_into_global_vars();
-
-        return null;
-      } // protected Void doInBackground() throws Exception
+      protected ConfigurationImportReader.Result doInBackground() throws Exception {
+        return ConfigurationImportReader.read(source, false, preserveLogsDirectory, reader);
+      }
 
       @Override
       protected void done() {
         try {
-          get();
-          // Saving must follow import: the source may itself be one of the files being saved.
-          main.schrijf_configuratie_regels();
+          get().apply();
+          // The source may itself be one of the files being saved.
+          save.run();
           updateStationData.run();
         } catch (InterruptedException ex) {
           Thread.currentThread().interrupt();
-          main.log_turbowin_system_message(
-              "[GENERAL] station data import interrupted (" + ex + ")");
+          report.accept("[GENERAL] station data import interrupted; settings unchanged");
         } catch (ExecutionException ex) {
-          main.log_turbowin_system_message(
-              "[GENERAL] error importing station data from '"
-                  + importFile
-                  + "' ("
-                  + ex.getCause()
-                  + ")");
+          report.accept(
+              "[GENERAL] unable to import station data from '"
+                  + source
+                  + "': "
+                  + ex.getCause().getMessage()
+                  + "; settings unchanged");
         }
       }
-    }.execute(); // new SwingWorker<Void, Void>()
+    }.execute();
   }
 }

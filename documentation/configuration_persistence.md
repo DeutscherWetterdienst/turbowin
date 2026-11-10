@@ -114,24 +114,32 @@ configuration builder; the file store does no encryption of its own.
 
 ## Import and export
 
-Maintenance import checks for the ship-name and call-sign labels within the first 100 lines,
-then reads up to 100 lines, applies them, and starts saving the resulting globals. The check
-requires the labels, not non-empty values. It does not exclude `logs dir`. Its success message
-does not wait for the resulting configuration writes to finish.
+Maintenance and station-data imports use `ConfigurationImportReader` to read up to 100 lines into
+a private buffer and parse recognized values in the background. No live settings or shared lines
+change while reading or parsing. A read error, malformed recognized value, or file with no
+recognized settings rejects the import without applying or saving it. Diagnostics report the
+failure without including rejected values. Missing settings in a valid older partial file retain
+their current values, and unknown labels are ignored.
 
-Station-data import uses the same global settings parser, so it can apply settings beyond station
-metadata. It excludes `logs dir` in offline mode. After the background worker has read and applied
-the lines, its EDT completion callback checks for a worker exception, starts saving the imported
-settings, and refreshes the station form. The caller does not start a separate save while the
-import is still running, so an import source that is also a save destination is read before being
-overwritten. The configuration writes remain asynchronous: refreshing the form is not proof that
-the files have finished saving. Read I/O errors are still logged and tolerated as before; this
-workflow does not provide transactional rollback of partial imports.
+Maintenance import additionally requires the ship-name and call-sign labels in that same buffer;
+it reads the source only once. The check requires the labels, not non-empty values. It does not
+exclude `logs dir`. Its EDT completion callback applies a valid import, starts saving, reports
+success or failure, and refreshes the maintenance display in either case. The success message
+confirms that the import was applied and saving was queued; it does not wait for saving to finish.
+
+Station-data import uses the same settings parser, so it can apply settings beyond station
+metadata. It excludes `logs dir` in offline mode, captured when the import starts, and does not
+require the maintenance identity labels. Its EDT completion callback applies a valid import,
+starts saving, and refreshes the station form. Failure is logged without saving or refreshing the
+form. An import source that is also a save destination is read and closed before saving begins.
+The configuration writes remain asynchronous: refreshing either form is not proof that the files
+have finished saving, and a later save error does not roll back the applied import.
 
 Maintenance display rebuilds the array from current globals. Maintenance export writes the
 current array to the chosen file without first rebuilding it, then refreshes the display. An
 export therefore reflects the array available when its worker runs, which can lag unsaved global
-changes. Import/export and ordinary saves all share that array.
+changes. Accepted imports update the shared array on the EDT; exports and ordinary saves use that
+array as described above.
 
 These details describe the existing implementation. In particular, fallback on a missing copy,
 recovery from a failed read, and completion of asynchronous saving are separate behaviors.
