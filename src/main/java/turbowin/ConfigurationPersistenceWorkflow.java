@@ -31,12 +31,12 @@ final class ConfigurationPersistenceWorkflow {
   /**
    * Loads configuration.txt asynchronously and schedules startup finalization.
    *
-   * <p>The reader prefers an existing file in logs_dir, then one in data_dir. If neither file
-   * exists, it selects the first non-empty directory in the same order. An I/O error while reading
-   * the selected file does not trigger a retry from the other directory.
+   * <p>The reader tries logs_dir, then data_dir if the preferred copy is missing, unreadable,
+   * malformed, or contains no recognized settings. Values are parsed into temporary settings before
+   * being applied on the EDT. Diagnostics identify the selected copy and recovery reasons.
    *
-   * <p>Reading clears the line array before opening the file, then applies recognized settings to
-   * the existing global variables. Missing settings do not reset those variables. If both directory
+   * <p>Missing settings in a valid partial file preserve existing values. If neither copy is
+   * usable, existing settings and lines are retained and startup still finalizes. If both directory
    * names are empty, no read or startup finalization is scheduled.
    *
    * <p>After the configuration has been read and converted into the global configuration variables,

@@ -2,7 +2,7 @@ package turbowin;
 
 import static turbowin.main.*;
 
-/** Builds the legacy configuration-line representation from the application's settings. */
+/** Builds legacy configuration lines and stages parsed values before applying live settings. */
 final class ConfigurationManager {
 
   private ConfigurationManager() {}
@@ -100,545 +100,598 @@ final class ConfigurationManager {
     configuratie_regels[83] = main.PORT_MODE_OPTION_TXT + main.port_mode_option;
     configuratie_regels[84] = main.LAN_IP_ADDRESS_TXT + main.lan_ip_address;
     configuratie_regels[85] = main.DASHBOARD_SHIP_TANK_COLOR_TXT + main.ship_tank_color_String;
-    configuratie_regels[86] =
-        main.DASHBOARD_FONT_TXT + main.dashboard_font; // for hybrid dashboard
-    configuratie_regels[87] =
-        main.COM_PROTOCOL_TXT + main.server_com_protocol; // HTTPS / HTTP
+    configuratie_regels[86] = main.DASHBOARD_FONT_TXT + main.dashboard_font; // for hybrid dashboard
+    configuratie_regels[87] = main.COM_PROTOCOL_TXT + main.server_com_protocol; // HTTPS / HTTP
     configuratie_regels[88] =
         main.EUCAWS_OBS_ID_TXT + String.valueOf(main.eucaws_obs_id); // boolean
   }
 
   static void applyConfigurationLines() {
-    // called from:
-    //   - import_button_actionPerformed() [tmystationdata.java]
-    //   - lees_configuratie_regels() [main.java]
-    //   - Maintenance_Import_maintenance_data_actionPerformed() [main.java]
-
-    // Apply recognized labeled lines from startup loading or import to the existing global
-    // settings.
-    for (int teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++) {
-      if ((configuratie_regels[teller] != null)
-          && (configuratie_regels[teller].compareTo("") != 0)) {
-        // ship name
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], SHIP_NAME_TXT)) {
-          // zo ja, dan staat op een bepaalde pos (achter de : ) de inhoud
-          ship_name = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // imo number
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], IMO_NUMBER_TXT)) {
-          imo_number = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // call sign
-        // if (configuratie_regels[teller].indexOf(CALL_SIGN_TXT) != -1)
-        // {
-        //   call_sign = configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // masked call sign
-        // if (configuratie_regels[teller].indexOf(MASKED_CALL_SIGN_TXT) != -1)
-        // {
-        //   masked_call_sign =
-        // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        // }
-
-        // time zone computer
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], TIME_ZONE_COMPUTER_TXT)) {
-          time_zone_computer = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // recruiting country
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RECRUITING_COUNTRY_TXT)) {
-          recruiting_country = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // method determining waves
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], METHOD_WAVES_TXT)) {
-          method_waves = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // wind meta data
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WIND_SOURCE_TXT)) {
-          wind_source = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], MAX_HEIGHT_DECK_CARGO_TXT)) {
-          max_height_deck_cargo = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], DIFF_SLL_WL_TXT)) {
-          diff_sll_wl = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // air pressure meta data
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], BAROMETER_ABOVE_SLL_TXT)) {
-          barometer_above_sll = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], BAROMETER_KEEL_TO_SLL_TXT)) {
-          keel_sll = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], PRESSURE_READING_MSL_TXT)) {
-          pressure_reading_msl_yes_no = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // air temp exposure
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], AIR_TEMP_EXPOSURE_TXT)) {
-          air_temp_exposure = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // sst exposure
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], SST_EXPOSURE_TXT)) {
-          sst_exposure = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // Obs E-mail recipient
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], OBS_EMAIL_RECIPIENT_TXT)) {
-          obs_email_recipient = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // Obs E-mail subject
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], OBS_EMAIL_SUBJECT_TXT)) {
-          obs_email_subject = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // logs dir (for immt.log etc.)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], LOGS_DIR_TXT)) {
-          logs_dir = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // logs E-mail recipient
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], LOGS_EMAIL_RECIPIENT_TXT)) {
-          logs_email_recipient = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // wind units (knots or m/s)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WIND_UNITS_TXT)) {
-          wind_units = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // RS232 INSTRUMENT connection mode (= RS232 connected instrument type -none, PTB220,
-        // PTB330, SAWS-)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_INSTRUMENT_TYPE_TXT)) {
-          RS232_connection_mode =
-              ConfigurationValueParser.integer(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 INSTRUMENT bits per sec
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_BITS_PER_SEC_TXT)) {
-          bits_per_second =
-              ConfigurationValueParser.integer(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 INSTRUMENT data bits
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_DATA_BITS_TXT)) {
-          data_bits =
-              SerialConfigurationValueParser.dataBits(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 INSTRUMENT parity
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_PARITY_TXT)) {
-          parity =
-              SerialConfigurationValueParser.parity(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 INSTRUMENT stop bits
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_STOP_BITS_TXT)) {
-          stop_bits =
-              SerialConfigurationValueParser.stopBits(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 INSTRUMENT prefered COM port (Windows and Linux)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_PREFERED_COM_PORT_TXT)) {
-          prefered_COM_port_number = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // ic (instrument correction) barometer
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], IC_BAROMETER_TXT)) {
-          barometer_instrument_correction =
-              ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // obs format (FM13 or format 101)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], OBS_FORMAT_TXT)) {
-          obs_format = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // format 101 call sign encryption (yes or no)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], FORMAT_101_ENCRYPTION_TXT)) {
-          obs_101_encryption = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // format 101 email (body or attachement)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], FORMAT_101_EMAIL_TXT)) {
-          obs_101_email = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // RS232 INSTRUMENT prefered COM port name (OS X)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_PREF_COM_PORT_NAME_TXT)) {
-          prefered_COM_port_name = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // WOW publish?
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WOW_PUBLISH_TXT)) {
-          WOW =
-              ConfigurationValueParser.bool(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-          // NB You have to be carefull when using Boolean.valueOf(string) or
-          // Boolean.parseBoolean(string).
-          //    The reason for this is that the methods will always return false if the String is
-          // not equal to "true" (the case is ignored).
-          //    For example: Boolean.valueOf("YES") -> false
-          //    BUT no problem here because automatically genenerated in WOW settings
-        }
-
-        // WOW site id
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WOW_SITE_ID_TXT)) {
-          WOW_site_id = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // WOW pin
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], WOW_PIN_TXT)) {
-          WOW_site_pin = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // WOW reporting(upload) interval
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], WOW_REPORTING_INTERVAL_TXT)) {
-          WOW_reporting_interval = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // WOW/APR average draught
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], WOW_APR_AVERAGE_DRAUGHT_TXT)) {
-          WOW_APR_average_draught = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // default E-mail program on this computer is AMOS Mail?
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], AMOS_MAIL_TXT)) {
-          amos_mail =
-              ConfigurationValueParser.bool(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-          // NB You have to be carefull when using Boolean.valueOf(string) or
-          // Boolean.parseBoolean(string).
-          //    The reason for this is that the methods will always return false if the String is
-          // not equal to "true" (the case is ignored).
-          //    For example: Boolean.valueOf("YES") -> false
-          //    BUT no problem here because automatically genenerated in email settings
-        }
-
-        // RS232 GPS connection mode
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_GPS_TYPE_TXT)) {
-          RS232_GPS_connection_mode =
-              ConfigurationValueParser.integer(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 GPS bits per second
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_GPS_BITS_PER_SEC_TXT)) {
-          GPS_bits_per_second =
-              ConfigurationValueParser.integer(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 prefered GPS COM port (Windows and Linux)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_GPS_COM_PORT_TXT)) {
-          prefered_GPS_COM_port_number = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // RS232 prefered GPS COM port (OS X)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_GPS_COM_PORT_NAME_TXT)) {
-          prefered_GPS_COM_port_name = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // RS232 GPS sentence (RMC or GGA)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_GPS_SENTENCE_TXT)) {
-          RS232_GPS_sentence =
-              ConfigurationValueParser.integer(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // APR (Automated Pressure Reports)?
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], APR_TXT)) {
-          APR =
-              ConfigurationValueParser.bool(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-          // NB You have to be carefull when using Boolean.valueOf(string) or
-          // Boolean.parseBoolean(string).
-          //    The reason for this is that the methods will always return false if the String is
-          // not equal to "true" (the case is ignored).
-          //    For example: Boolean.valueOf("YES") -> false
-          //    BUT no problem here because automatically genenerated in APR settings
-        }
-
-        // APR reporting(upload) interval
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], APR_REPORTING_INTERVAL_TXT)) {
-          APR_reporting_interval = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // upload URL
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], UPLOAD_URL_TXT)) {
-          upload_URL = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // AWSR (Automatic Weather Station Reports)?
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], AWSR_TXT)) {
-          AWSR =
-              ConfigurationValueParser.bool(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-          // NB You have to be carefull when using Boolean.valueOf(string) or
-          // Boolean.parseBoolean(string).
-          //    The reason for this is that the methods will always return false if the String is
-          // not equal to "true" (the case is ignored).
-          //    For example: Boolean.valueOf("YES") -> false
-          //    BUT no problem here because automatically genenerated in AWSR settings
-        }
-
-        // AWSR reporting(upload) interval
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], AWSR_REPORTING_INTERVAL_TXT)) {
-          AWSR_reporting_interval = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // wind units graps/dasboard
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], WIND_UNITS_DASHBOARD_TXT)) {
-          wind_units_dashboard = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // ship type for visual dashboard
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], SHIP_TYPE_DASHBOARD_TXT)) {
-          ship_type_dashboard = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // anemometer height above WL
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], HEIGHT_ANEMOMETER_TXT)) {
-          height_anemometer = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // GUI mode (light/full)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], GUI_MODE_TXT)) {
-          GUI_mode = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // GUI logo (EUMETNET/NOAAA/SOT)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], GUI_LOGO_TXT)) {
-          GUI_logo = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // obs email cc
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], OBS_EMAIL_CC_TXT)) {
-          obs_email_cc = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // RS232 2nd meteo instrument connection mode (= RS232 connected instrument II type: none,
-        // StarX, HMP155)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_INSTRUMENT_TYPE_TXT_II)) {
-          RS232_connection_mode_II =
-              ConfigurationValueParser.integer(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 2nd meteo instrument bits per sec
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_BITS_PER_SEC_TXT_II)) {
-          bits_per_second_II =
-              ConfigurationValueParser.integer(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 2nd meteo instrument data bits
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_DATA_BITS_TXT_II)) {
-          data_bits_II =
-              SerialConfigurationValueParser.dataBits(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 2nd meteo instrument parity
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], RS232_PARITY_TXT_II)) {
-          parity_II =
-              SerialConfigurationValueParser.parity(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 2nd imeteo instrument stop bits
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_STOP_BITS_TXT_II)) {
-          stop_bits_II =
-              SerialConfigurationValueParser.stopBits(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-
-        // RS232 2nd meteo instrument prefered COM port (Windows and Linux)
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], RS232_PREFERED_COM_PORT_TXT_II)) {
-          prefered_COM_port_number_II = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // AP[&T]R / AWSR send method
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], APTR_AWSR_SEND_METHOD_TXT)) {
-          APTR_AWSR_send_method = ConfigurationLineParser.value(configuratie_regels[teller]);
-
-          APTR_AWSR_send_method = AptrAwsrSendMethodNormalizer.normalize(APTR_AWSR_send_method);
-        }
-
-        // station ID
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], STATION_ID_TXT)) {
-          station_ID = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // dashboard background image
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], DASHBOARD_BACKGROUND_IMAGE_TXT)) {
-          dashboard_background_image = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // your custom email address
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], YOUR_CUSTOM_ADDRESS_TXT)) {
-          your_custom_address = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // custom email server
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], CUSTOM_EMAIL_SERVER_TXT)) {
-          custom_email_server = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // custom email password
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], CUSTOM_PASSWORD_TXT)) {
-          custom_password = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // custom email security
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], CUSTOM_SECURITY_TXT)) {
-          custom_security = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // custom email port
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], CUSTOM_PORT_TXT)) {
-          custom_port = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // pop-up dashboard? (true/false)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], POP_UP_DASHBOARD_TXT)) {
-          pop_up_screen =
-              ConfigurationValueParser.bool(
-                  configuratie_regels[teller].substring(
-                      CONFIGURATION_FILE_POS_INHOUD)); // pop_up_dashboard =
-          // Boolean.valueOf(configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
-          // NB You have to be carefull when using Boolean.valueOf(string) or
-          // Boolean.parseBoolean(string).
-          //    The reason for this is that the methods will always return false if the String is
-          // not equal to "true" (the case is ignored).
-          //    For example: Boolean.valueOf("YES") -> false
-          //    BUT no problem here because automatically genenerated in APR settings
-        }
-
-        // pop-up dashboard interval
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], POP_UP_DASHBOARD_INTERVAL_TXT)) {
-          pop_up_screen_interval =
-              configuratie_regels[teller].substring(
-                  CONFIGURATION_FILE_POS_INHOUD); // pop_up_dashboard_interval =
-          // configuratie_regels[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
-        }
-
-        // dashboard ship deck color
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], DASHBOARD_SHIP_DECK_COLOR_TXT)) {
-          ship_deck_color_String = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // Custom email module; normalize the retired Python value after applying all lines.
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], CUSTOM_EMAIL_MODULE_TXT)) {
-          custom_email_module = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // log files email send method (default or custom)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], LOGS_EMAIL_TXT)) {
-          log_files_email_send_method = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // eucaws upload/send method
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], EUCAWS_UPLOADS_METHOD_TXT)) {
-          eucaws_uploads_method = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // port mode option. deactivate APR/AWSR if ship speed is minimal; (< 1 knot / < 0.5 knot)
-        // [true/false]
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], PORT_MODE_OPTION_TXT)) {
-          port_mode_option =
-              ConfigurationValueParser.bool(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-          // NB You have to be carefull when using Boolean.valueOf(string) or
-          // Boolean.parseBoolean(string).
-          //    The reason for this is that the methods will always return false if the String is
-          // not equal to "true" (the case is ignored).
-          //    For example: Boolean.valueOf("YES") -> false
-          //    BUT no problem here because automatically genenerated in APR/AWSR settings
-        }
-
-        // listening LAN IP address
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], LAN_IP_ADDRESS_TXT)) {
-          lan_ip_address = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // dashboard ship (LNG)tank color
-        if (ConfigurationLineMatcher.contains(
-            configuratie_regels[teller], DASHBOARD_SHIP_TANK_COLOR_TXT)) {
-          ship_tank_color_String = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // dashboard font (hybrid dashboard)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], DASHBOARD_FONT_TXT)) {
-          dashboard_font = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // communication protocol client <-> server
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], COM_PROTOCOL_TXT)) {
-          server_com_protocol = ConfigurationLineParser.value(configuratie_regels[teller]);
-        }
-
-        // EUCAWS OBS_ID (intials added to the SMD input)
-        if (ConfigurationLineMatcher.contains(configuratie_regels[teller], EUCAWS_OBS_ID_TXT)) {
-          eucaws_obs_id =
-              ConfigurationValueParser.bool(
-                  ConfigurationLineParser.value(configuratie_regels[teller]));
-        }
-      } // if ((configuratie_regels[teller] != null) etc.
+    applyConfiguration(parseConfigurationLines(main.configuratie_regels));
+  }
+
+  static ConfigurationSettings parseConfigurationLines(String[] lines) {
+    ConfigurationSettings settings = new ConfigurationSettings();
+    for (int teller = 0; teller < Math.min(lines.length, MAX_AANTAL_CONFIGURATIEREGELS); teller++) {
+      if ((lines[teller] != null) && (lines[teller].compareTo("") != 0)) {
+        try {
+          // ship name
+          if (ConfigurationLineMatcher.contains(lines[teller], SHIP_NAME_TXT)) {
+            // zo ja, dan staat op een bepaalde pos (achter de : ) de inhoud
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> ship_name = parsed);
+          }
+
+          // imo number
+          if (ConfigurationLineMatcher.contains(lines[teller], IMO_NUMBER_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> imo_number = parsed);
+          }
+
+          // call sign
+          // if (lines[teller].indexOf(CALL_SIGN_TXT) != -1)
+          // {
+          //   call_sign = lines[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+          // }
+
+          // masked call sign
+          // if (lines[teller].indexOf(MASKED_CALL_SIGN_TXT) != -1)
+          // {
+          //   masked_call_sign =
+          // lines[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+          // }
+
+          // time zone computer
+          if (ConfigurationLineMatcher.contains(lines[teller], TIME_ZONE_COMPUTER_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> time_zone_computer = parsed);
+          }
+
+          // recruiting country
+          if (ConfigurationLineMatcher.contains(lines[teller], RECRUITING_COUNTRY_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> recruiting_country = parsed);
+          }
+
+          // method determining waves
+          if (ConfigurationLineMatcher.contains(lines[teller], METHOD_WAVES_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> method_waves = parsed);
+          }
+
+          // wind meta data
+          if (ConfigurationLineMatcher.contains(lines[teller], WIND_SOURCE_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> wind_source = parsed);
+          }
+
+          if (ConfigurationLineMatcher.contains(lines[teller], MAX_HEIGHT_DECK_CARGO_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> max_height_deck_cargo = parsed);
+          }
+
+          if (ConfigurationLineMatcher.contains(lines[teller], DIFF_SLL_WL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> diff_sll_wl = parsed);
+          }
+
+          // air pressure meta data
+          if (ConfigurationLineMatcher.contains(lines[teller], BAROMETER_ABOVE_SLL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> barometer_above_sll = parsed);
+          }
+
+          if (ConfigurationLineMatcher.contains(lines[teller], BAROMETER_KEEL_TO_SLL_TXT)) {
+            settings.add(ConfigurationLineParser.value(lines[teller]), parsed -> keel_sll = parsed);
+          }
+
+          if (ConfigurationLineMatcher.contains(lines[teller], PRESSURE_READING_MSL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> pressure_reading_msl_yes_no = parsed);
+          }
+
+          // air temp exposure
+          if (ConfigurationLineMatcher.contains(lines[teller], AIR_TEMP_EXPOSURE_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> air_temp_exposure = parsed);
+          }
+
+          // sst exposure
+          if (ConfigurationLineMatcher.contains(lines[teller], SST_EXPOSURE_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> sst_exposure = parsed);
+          }
+
+          // Obs E-mail recipient
+          if (ConfigurationLineMatcher.contains(lines[teller], OBS_EMAIL_RECIPIENT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> obs_email_recipient = parsed);
+          }
+
+          // Obs E-mail subject
+          if (ConfigurationLineMatcher.contains(lines[teller], OBS_EMAIL_SUBJECT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> obs_email_subject = parsed);
+          }
+
+          // logs dir (for immt.log etc.)
+          if (ConfigurationLineMatcher.contains(lines[teller], LOGS_DIR_TXT)) {
+            settings.add(ConfigurationLineParser.value(lines[teller]), parsed -> logs_dir = parsed);
+          }
+
+          // logs E-mail recipient
+          if (ConfigurationLineMatcher.contains(lines[teller], LOGS_EMAIL_RECIPIENT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> logs_email_recipient = parsed);
+          }
+
+          // wind units (knots or m/s)
+          if (ConfigurationLineMatcher.contains(lines[teller], WIND_UNITS_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> wind_units = parsed);
+          }
+
+          // RS232 INSTRUMENT connection mode (= RS232 connected instrument type -none, PTB220,
+          // PTB330, SAWS-)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_INSTRUMENT_TYPE_TXT)) {
+            settings.add(
+                ConfigurationValueParser.integer(ConfigurationLineParser.value(lines[teller])),
+                parsed -> RS232_connection_mode = parsed);
+          }
+
+          // RS232 INSTRUMENT bits per sec
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_BITS_PER_SEC_TXT)) {
+            settings.add(
+                ConfigurationValueParser.integer(ConfigurationLineParser.value(lines[teller])),
+                parsed -> bits_per_second = parsed);
+          }
+
+          // RS232 INSTRUMENT data bits
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_DATA_BITS_TXT)) {
+            settings.add(
+                SerialConfigurationValueParser.dataBits(
+                    ConfigurationLineParser.value(lines[teller])),
+                parsed -> data_bits = parsed);
+          }
+
+          // RS232 INSTRUMENT parity
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_PARITY_TXT)) {
+            settings.add(
+                SerialConfigurationValueParser.parity(ConfigurationLineParser.value(lines[teller])),
+                parsed -> parity = parsed);
+          }
+
+          // RS232 INSTRUMENT stop bits
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_STOP_BITS_TXT)) {
+            settings.add(
+                SerialConfigurationValueParser.stopBits(
+                    ConfigurationLineParser.value(lines[teller])),
+                parsed -> stop_bits = parsed);
+          }
+
+          // RS232 INSTRUMENT prefered COM port (Windows and Linux)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_PREFERED_COM_PORT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> prefered_COM_port_number = parsed);
+          }
+
+          // ic (instrument correction) barometer
+          if (ConfigurationLineMatcher.contains(lines[teller], IC_BAROMETER_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> barometer_instrument_correction = parsed);
+          }
+
+          // obs format (FM13 or format 101)
+          if (ConfigurationLineMatcher.contains(lines[teller], OBS_FORMAT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> obs_format = parsed);
+          }
+
+          // format 101 call sign encryption (yes or no)
+          if (ConfigurationLineMatcher.contains(lines[teller], FORMAT_101_ENCRYPTION_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> obs_101_encryption = parsed);
+          }
+
+          // format 101 email (body or attachement)
+          if (ConfigurationLineMatcher.contains(lines[teller], FORMAT_101_EMAIL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> obs_101_email = parsed);
+          }
+
+          // RS232 INSTRUMENT prefered COM port name (OS X)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_PREF_COM_PORT_NAME_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> prefered_COM_port_name = parsed);
+          }
+
+          // WOW publish?
+          if (ConfigurationLineMatcher.contains(lines[teller], WOW_PUBLISH_TXT)) {
+            settings.add(
+                ConfigurationValueParser.bool(ConfigurationLineParser.value(lines[teller])),
+                parsed -> WOW = parsed);
+            // NB You have to be carefull when using Boolean.valueOf(string) or
+            // Boolean.parseBoolean(string).
+            //    The reason for this is that the methods will always return false if the String is
+            // not equal to "true" (the case is ignored).
+            //    For example: Boolean.valueOf("YES") -> false
+            //    BUT no problem here because automatically genenerated in WOW settings
+          }
+
+          // WOW site id
+          if (ConfigurationLineMatcher.contains(lines[teller], WOW_SITE_ID_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> WOW_site_id = parsed);
+          }
+
+          // WOW pin
+          if (ConfigurationLineMatcher.contains(lines[teller], WOW_PIN_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> WOW_site_pin = parsed);
+          }
+
+          // WOW reporting(upload) interval
+          if (ConfigurationLineMatcher.contains(lines[teller], WOW_REPORTING_INTERVAL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> WOW_reporting_interval = parsed);
+          }
+
+          // WOW/APR average draught
+          if (ConfigurationLineMatcher.contains(lines[teller], WOW_APR_AVERAGE_DRAUGHT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> WOW_APR_average_draught = parsed);
+          }
+
+          // default E-mail program on this computer is AMOS Mail?
+          if (ConfigurationLineMatcher.contains(lines[teller], AMOS_MAIL_TXT)) {
+            settings.add(
+                ConfigurationValueParser.bool(ConfigurationLineParser.value(lines[teller])),
+                parsed -> amos_mail = parsed);
+            // NB You have to be carefull when using Boolean.valueOf(string) or
+            // Boolean.parseBoolean(string).
+            //    The reason for this is that the methods will always return false if the String is
+            // not equal to "true" (the case is ignored).
+            //    For example: Boolean.valueOf("YES") -> false
+            //    BUT no problem here because automatically genenerated in email settings
+          }
+
+          // RS232 GPS connection mode
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_GPS_TYPE_TXT)) {
+            settings.add(
+                ConfigurationValueParser.integer(ConfigurationLineParser.value(lines[teller])),
+                parsed -> RS232_GPS_connection_mode = parsed);
+          }
+
+          // RS232 GPS bits per second
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_GPS_BITS_PER_SEC_TXT)) {
+            settings.add(
+                ConfigurationValueParser.integer(ConfigurationLineParser.value(lines[teller])),
+                parsed -> GPS_bits_per_second = parsed);
+          }
+
+          // RS232 prefered GPS COM port (Windows and Linux)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_GPS_COM_PORT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> prefered_GPS_COM_port_number = parsed);
+          }
+
+          // RS232 prefered GPS COM port (OS X)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_GPS_COM_PORT_NAME_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> prefered_GPS_COM_port_name = parsed);
+          }
+
+          // RS232 GPS sentence (RMC or GGA)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_GPS_SENTENCE_TXT)) {
+            settings.add(
+                ConfigurationValueParser.integer(ConfigurationLineParser.value(lines[teller])),
+                parsed -> RS232_GPS_sentence = parsed);
+          }
+
+          // APR (Automated Pressure Reports)?
+          if (ConfigurationLineMatcher.contains(lines[teller], APR_TXT)) {
+            settings.add(
+                ConfigurationValueParser.bool(ConfigurationLineParser.value(lines[teller])),
+                parsed -> APR = parsed);
+            // NB You have to be carefull when using Boolean.valueOf(string) or
+            // Boolean.parseBoolean(string).
+            //    The reason for this is that the methods will always return false if the String is
+            // not equal to "true" (the case is ignored).
+            //    For example: Boolean.valueOf("YES") -> false
+            //    BUT no problem here because automatically genenerated in APR settings
+          }
+
+          // APR reporting(upload) interval
+          if (ConfigurationLineMatcher.contains(lines[teller], APR_REPORTING_INTERVAL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> APR_reporting_interval = parsed);
+          }
+
+          // upload URL
+          if (ConfigurationLineMatcher.contains(lines[teller], UPLOAD_URL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> upload_URL = parsed);
+          }
+
+          // AWSR (Automatic Weather Station Reports)?
+          if (ConfigurationLineMatcher.contains(lines[teller], AWSR_TXT)) {
+            settings.add(
+                ConfigurationValueParser.bool(ConfigurationLineParser.value(lines[teller])),
+                parsed -> AWSR = parsed);
+            // NB You have to be carefull when using Boolean.valueOf(string) or
+            // Boolean.parseBoolean(string).
+            //    The reason for this is that the methods will always return false if the String is
+            // not equal to "true" (the case is ignored).
+            //    For example: Boolean.valueOf("YES") -> false
+            //    BUT no problem here because automatically genenerated in AWSR settings
+          }
+
+          // AWSR reporting(upload) interval
+          if (ConfigurationLineMatcher.contains(lines[teller], AWSR_REPORTING_INTERVAL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> AWSR_reporting_interval = parsed);
+          }
+
+          // wind units graps/dasboard
+          if (ConfigurationLineMatcher.contains(lines[teller], WIND_UNITS_DASHBOARD_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> wind_units_dashboard = parsed);
+          }
+
+          // ship type for visual dashboard
+          if (ConfigurationLineMatcher.contains(lines[teller], SHIP_TYPE_DASHBOARD_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> ship_type_dashboard = parsed);
+          }
+
+          // anemometer height above WL
+          if (ConfigurationLineMatcher.contains(lines[teller], HEIGHT_ANEMOMETER_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> height_anemometer = parsed);
+          }
+
+          // GUI mode (light/full)
+          if (ConfigurationLineMatcher.contains(lines[teller], GUI_MODE_TXT)) {
+            settings.add(ConfigurationLineParser.value(lines[teller]), parsed -> GUI_mode = parsed);
+          }
+
+          // GUI logo (EUMETNET/NOAAA/SOT)
+          if (ConfigurationLineMatcher.contains(lines[teller], GUI_LOGO_TXT)) {
+            settings.add(ConfigurationLineParser.value(lines[teller]), parsed -> GUI_logo = parsed);
+          }
+
+          // obs email cc
+          if (ConfigurationLineMatcher.contains(lines[teller], OBS_EMAIL_CC_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> obs_email_cc = parsed);
+          }
+
+          // RS232 2nd meteo instrument connection mode (= RS232 connected instrument II type: none,
+          // StarX, HMP155)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_INSTRUMENT_TYPE_TXT_II)) {
+            settings.add(
+                ConfigurationValueParser.integer(ConfigurationLineParser.value(lines[teller])),
+                parsed -> RS232_connection_mode_II = parsed);
+          }
+
+          // RS232 2nd meteo instrument bits per sec
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_BITS_PER_SEC_TXT_II)) {
+            settings.add(
+                ConfigurationValueParser.integer(ConfigurationLineParser.value(lines[teller])),
+                parsed -> bits_per_second_II = parsed);
+          }
+
+          // RS232 2nd meteo instrument data bits
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_DATA_BITS_TXT_II)) {
+            settings.add(
+                SerialConfigurationValueParser.dataBits(
+                    ConfigurationLineParser.value(lines[teller])),
+                parsed -> data_bits_II = parsed);
+          }
+
+          // RS232 2nd meteo instrument parity
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_PARITY_TXT_II)) {
+            settings.add(
+                SerialConfigurationValueParser.parity(ConfigurationLineParser.value(lines[teller])),
+                parsed -> parity_II = parsed);
+          }
+
+          // RS232 2nd imeteo instrument stop bits
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_STOP_BITS_TXT_II)) {
+            settings.add(
+                SerialConfigurationValueParser.stopBits(
+                    ConfigurationLineParser.value(lines[teller])),
+                parsed -> stop_bits_II = parsed);
+          }
+
+          // RS232 2nd meteo instrument prefered COM port (Windows and Linux)
+          if (ConfigurationLineMatcher.contains(lines[teller], RS232_PREFERED_COM_PORT_TXT_II)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> prefered_COM_port_number_II = parsed);
+          }
+
+          // AP[&T]R / AWSR send method
+          if (ConfigurationLineMatcher.contains(lines[teller], APTR_AWSR_SEND_METHOD_TXT)) {
+            settings.add(
+                AptrAwsrSendMethodNormalizer.normalize(
+                    ConfigurationLineParser.value(lines[teller])),
+                parsed -> APTR_AWSR_send_method = parsed);
+          }
+
+          // station ID
+          if (ConfigurationLineMatcher.contains(lines[teller], STATION_ID_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> station_ID = parsed);
+          }
+
+          // dashboard background image
+          if (ConfigurationLineMatcher.contains(lines[teller], DASHBOARD_BACKGROUND_IMAGE_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> dashboard_background_image = parsed);
+          }
+
+          // your custom email address
+          if (ConfigurationLineMatcher.contains(lines[teller], YOUR_CUSTOM_ADDRESS_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> your_custom_address = parsed);
+          }
+
+          // custom email server
+          if (ConfigurationLineMatcher.contains(lines[teller], CUSTOM_EMAIL_SERVER_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> custom_email_server = parsed);
+          }
+
+          // custom email password
+          if (ConfigurationLineMatcher.contains(lines[teller], CUSTOM_PASSWORD_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> custom_password = parsed);
+          }
+
+          // custom email security
+          if (ConfigurationLineMatcher.contains(lines[teller], CUSTOM_SECURITY_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> custom_security = parsed);
+          }
+
+          // custom email port
+          if (ConfigurationLineMatcher.contains(lines[teller], CUSTOM_PORT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> custom_port = parsed);
+          }
+
+          // pop-up dashboard? (true/false)
+          if (ConfigurationLineMatcher.contains(lines[teller], POP_UP_DASHBOARD_TXT)) {
+            settings.add(
+                ConfigurationValueParser.bool(
+                    lines[teller].substring(CONFIGURATION_FILE_POS_INHOUD)),
+                parsed -> pop_up_screen = parsed); // pop_up_dashboard =
+            // Boolean.valueOf(lines[teller].substring(CONFIGURATION_FILE_POS_INHOUD));
+            // NB You have to be carefull when using Boolean.valueOf(string) or
+            // Boolean.parseBoolean(string).
+            //    The reason for this is that the methods will always return false if the String is
+            // not equal to "true" (the case is ignored).
+            //    For example: Boolean.valueOf("YES") -> false
+            //    BUT no problem here because automatically genenerated in APR settings
+          }
+
+          // pop-up dashboard interval
+          if (ConfigurationLineMatcher.contains(lines[teller], POP_UP_DASHBOARD_INTERVAL_TXT)) {
+            settings.add(
+                lines[teller].substring(CONFIGURATION_FILE_POS_INHOUD),
+                parsed -> pop_up_screen_interval = parsed); // pop_up_dashboard_interval =
+            // lines[teller].substring(CONFIGURATION_FILE_POS_INHOUD);
+          }
+
+          // dashboard ship deck color
+          if (ConfigurationLineMatcher.contains(lines[teller], DASHBOARD_SHIP_DECK_COLOR_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> ship_deck_color_String = parsed);
+          }
+
+          // Custom email module; normalize the retired Python value after applying all lines.
+          if (ConfigurationLineMatcher.contains(lines[teller], CUSTOM_EMAIL_MODULE_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> custom_email_module = parsed);
+          }
+
+          // log files email send method (default or custom)
+          if (ConfigurationLineMatcher.contains(lines[teller], LOGS_EMAIL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> log_files_email_send_method = parsed);
+          }
+
+          // eucaws upload/send method
+          if (ConfigurationLineMatcher.contains(lines[teller], EUCAWS_UPLOADS_METHOD_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> eucaws_uploads_method = parsed);
+          }
+
+          // port mode option. deactivate APR/AWSR if ship speed is minimal; (< 1 knot / < 0.5 knot)
+          // [true/false]
+          if (ConfigurationLineMatcher.contains(lines[teller], PORT_MODE_OPTION_TXT)) {
+            settings.add(
+                ConfigurationValueParser.bool(ConfigurationLineParser.value(lines[teller])),
+                parsed -> port_mode_option = parsed);
+            // NB You have to be carefull when using Boolean.valueOf(string) or
+            // Boolean.parseBoolean(string).
+            //    The reason for this is that the methods will always return false if the String is
+            // not equal to "true" (the case is ignored).
+            //    For example: Boolean.valueOf("YES") -> false
+            //    BUT no problem here because automatically genenerated in APR/AWSR settings
+          }
+
+          // listening LAN IP address
+          if (ConfigurationLineMatcher.contains(lines[teller], LAN_IP_ADDRESS_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> lan_ip_address = parsed);
+          }
+
+          // dashboard ship (LNG)tank color
+          if (ConfigurationLineMatcher.contains(lines[teller], DASHBOARD_SHIP_TANK_COLOR_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> ship_tank_color_String = parsed);
+          }
+
+          // dashboard font (hybrid dashboard)
+          if (ConfigurationLineMatcher.contains(lines[teller], DASHBOARD_FONT_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]), parsed -> dashboard_font = parsed);
+          }
+
+          // communication protocol client <-> server
+          if (ConfigurationLineMatcher.contains(lines[teller], COM_PROTOCOL_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> server_com_protocol = parsed);
+          }
+
+          // EUCAWS OBS_ID (intials added to the SMD input)
+          if (ConfigurationLineMatcher.contains(lines[teller], EUCAWS_OBS_ID_TXT)) {
+            settings.add(
+                ConfigurationValueParser.bool(ConfigurationLineParser.value(lines[teller])),
+                parsed -> eucaws_obs_id = parsed);
+          }
+        } catch (IllegalArgumentException | IndexOutOfBoundsException ex) {
+          throw new IllegalArgumentException(
+              "invalid configuration value on line " + (teller + 1), ex);
+        }
+      } // if ((lines[teller] != null) etc.
     } // for (teller = 0; teller < MAX_AANTAL_CONFIGURATIEREGELS; teller++)
+
+    return settings;
+  }
+
+  static void applyConfiguration(ConfigurationSettings settings) {
+    settings.apply();
 
     // 1st meteo instrument: generic name "prefered_COM_port" will be used [main_RS232_RS422.java]
     //

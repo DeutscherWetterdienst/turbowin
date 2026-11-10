@@ -19,9 +19,9 @@ storage mechanism. Renaming launcher markers does not restore muffin support.
 ```mermaid
 flowchart TD
     A[Startup selects writable data root] --> B[Initialize logs_dir to data root / logs]
-    B --> C[Select logs configuration if present, otherwise data configuration]
-    C --> D[Background worker reads lines into configuratie_regels]
-    D --> E[Apply recognized labels to global settings]
+    B --> C[Try logs configuration, then data configuration on failure]
+    C --> D[Background worker reads and parses temporary settings]
+    D --> E[EDT applies first valid copy or retains existing settings]
     E --> F[EDT callback finalizes UI and connections]
     G[Settings dialogs update globals] --> H[Save rebuilds configuratie_regels]
     H --> I[Background write to data_dir / configuration.txt]
@@ -38,24 +38,27 @@ elsewhere. `-Dturbowin.data.dir=...` overrides it. Before loading, startup can m
 from `user.dir`; see the [deployment view](07_deployment_view.md#runtime-and-writable-data).
 Current startup always selects installed desktop ("offline") mode, which still permits networking.
 
-The reader selects an existing `configuration.txt` under `logs_dir` first, then under `data_dir`.
-It does not merge the copies or compare modification dates. If neither exists, it tries the first
-non-empty directory in that same order. If both directory names are empty, it schedules nothing,
-including no startup finalization. An I/O failure reading the selected file does not retry the
-other copy. The line array is cleared before the file is opened, so a missing file leaves an empty
-array; an interrupted read can leave partial contents. Applying missing entries preserves the
-current global values, which are normally field defaults on a fresh process, but may be previous
-values on a theme restart. Loading does not itself write a new configuration file.
+The reader tries `configuration.txt` under `logs_dir` first, then under `data_dir` if the first
+copy is missing, unreadable, or contains malformed recognized values. Empty files and files with
+no recognized settings are also rejected. Each attempt uses a separate temporary line array and
+parses all recognized values before applying any of them. It does not merge copies or compare
+modification dates. Missing entries in a valid partial file preserve existing global values,
+normally field defaults on a fresh process or previous values on a theme restart. If neither copy
+is usable, both globals and the existing line array are retained. Diagnostics identify the selected
+file and recovery reasons. Rejected values are not included in parser diagnostics.
+If both directory names are empty, no read or startup finalization is scheduled.
+Loading does not itself write or repair a configuration file.
 
 Startup initially sets `logs_dir` to `<data root>/logs`, but applying a saved `logs dir` entry can
 replace it, even in offline mode. Thus the directory used to locate the startup file and the
 directory used for subsequent logs/saves can differ. `data_dir` is selected by startup, not loaded
 from a configuration entry.
 
-After the background read, the Swing completion callback logs startup, cleans old system logs,
+After the background read and parsing, the Swing completion callback retrieves the worker result,
+applies an accepted file, and reports diagnostics. It then logs startup, cleans old system logs,
 updates station identity, checks metadata, creates menus, initializes connections, and updates
-menu/toolbar availability. The current callback does not call `SwingWorker.get()`: an exception
-while applying malformed settings does not prevent it from attempting startup finalization.
+menu/toolbar availability. Startup finalization also runs when neither copy is usable or the
+background worker fails.
 
 Saving first rebuilds the line array from globals and copies the lines and both destination paths
 before starting either background worker. Each non-empty data/log directory gets an independent
@@ -95,7 +98,9 @@ most 100 physical lines. Applying settings scans all entries and matches the pad
 substring matching, then takes the value starting at character offset 21. It does not dispatch by
 array index or parse an arbitrary `key: value` syntax. Preserve the label padding when editing a
 file. Recognized repeated settings are applied in file order, so the later value wins if parsing
-completes. Unknown lines are ignored; malformed recognized values can throw parsing exceptions.
+completes. Unknown lines are ignored; malformed recognized values reject the entire candidate
+before any of its settings are applied. Legacy boolean coercion and serial-code conversions remain
+unchanged; validation does not impose new ranges on values that previously remained strings.
 
 The store uses `FileReader`/`FileWriter` default character encoding and platform line endings.
 Some values are parsed as integers or booleans; others remain strings. After applying settings,

@@ -2,6 +2,7 @@ package turbowin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import com.fazecast.jSerialComm.SerialPort;
@@ -119,5 +120,34 @@ public class ConfigurationApplyCharacterizationTest {
     assertEquals("COM-A", main.prefered_COM_port);
     assertEquals("GPS-1", main.prefered_GPS_COM_port);
     assertFalse(main.eucaws_obs_id);
+  }
+
+  @Test
+  public void parsedValuesAreStagedAndRepeatedLabelsKeepFileOrder() {
+    main.ship_name = "Existing ship";
+    String[] lines = {main.SHIP_NAME_TXT + "First", main.SHIP_NAME_TXT + "Last"};
+    ConfigurationSettings settings = ConfigurationManager.parseConfigurationLines(lines);
+    assertEquals("Existing ship", main.ship_name);
+    lines[1] = main.SHIP_NAME_TXT + "Changed after parsing";
+
+    settings.apply();
+
+    assertEquals("Last", main.ship_name);
+  }
+
+  @Test
+  public void malformedNumericEntryDoesNotPartiallyApplyEarlierSettings() {
+    main.ship_name = "Existing ship";
+    main.wind_source = "existing wind source";
+    main.RS232_connection_mode = 0;
+    main.configuratie_regels[0] = main.SHIP_NAME_TXT + "Rejected ship";
+    main.configuratie_regels[1] = main.WIND_SOURCE_TXT + "rejected wind source";
+    main.configuratie_regels[2] = main.RS232_INSTRUMENT_TYPE_TXT + "not-a-number";
+
+    assertThrows(IllegalArgumentException.class, ConfigurationManager::applyConfigurationLines);
+
+    assertEquals("Existing ship", main.ship_name);
+    assertEquals("existing wind source", main.wind_source);
+    assertEquals(0, main.RS232_connection_mode);
   }
 }

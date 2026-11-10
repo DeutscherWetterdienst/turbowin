@@ -35,11 +35,12 @@ Configuration remains the legacy human-readable `configuration.txt` line format.
 is split across `ConfigurationFileStore`, line/value parsers, `ConfigurationManager`, and the
 read/write workflows; `ConfigurationPersistenceWorkflow` retains the compatibility entry points.
 
-The reader prefers `configuration.txt` in `logs_dir` and falls back to the data root when the log
-copy is absent. If neither file exists, it retains the normal non-empty-directory fallback for
-first use. Reading clears the line array before opening the selected file. Read I/O failures are
-tolerated; whatever lines were read are applied to existing globals, without retrying the other
-copy. Missing settings leave their global values unchanged. Saving captures the configuration
+The reader prefers `configuration.txt` in `logs_dir` and falls back to the data root when that
+copy is missing, unreadable, malformed, or contains no recognized settings. Each copy is read and
+parsed into temporary settings before any globals change. If neither copy is usable, existing
+settings and lines are retained and startup still finalizes. Diagnostics identify the selected
+copy and recovery reasons. Missing settings in a valid partial file leave their global values
+unchanged. Saving captures the configuration
 lines and destination paths before starting separate background writes to each non-empty data/log
 directory. Each file is replaced atomically; the two copies are not a single transaction and have
 different failure notification paths. Historical Java Web Start

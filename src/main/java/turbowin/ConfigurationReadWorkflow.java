@@ -3,7 +3,8 @@ package turbowin;
 import static turbowin.main.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import javax.swing.SwingWorker;
 
 /** Loads configuration asynchronously and finalizes application startup. */
@@ -36,26 +37,42 @@ final class ConfigurationReadWorkflow {
   }
 
   static void read(main owner) {
-    main.hulp_dir = configurationDirectoryForRead(logs_dir, data_dir);
+    read(() -> StartupFinalizationWorkflow.complete(owner), main::log_turbowin_system_message);
+  }
+
+  static void read(Runnable completeStartup, Consumer<String> report) {
+    final String logsDirectory = logs_dir;
+    final String dataDirectory = data_dir;
+    main.hulp_dir = configurationDirectoryForRead(logsDirectory, dataDirectory);
 
     if (!main.hulp_dir.isEmpty()) {
-      new SwingWorker<Void, Void>() {
+      new SwingWorker<ConfigurationLoader.Result, Void>() {
         @Override
-        protected Void doInBackground() throws Exception {
-          String path = main.hulp_dir + File.separator + CONFIGURATION_FILE;
-          try {
-            ConfigurationFileStore.read(
-                new File(path), configuratie_regels, MAX_AANTAL_CONFIGURATIEREGELS);
-          } catch (IOException e) {
-            // The configuration file may not exist on first use.
-          }
-          meta_data_from_configuration_regels_into_global_vars();
-          return null;
+        protected ConfigurationLoader.Result doInBackground() {
+          return ConfigurationLoader.load(logsDirectory, dataDirectory);
         }
 
         @Override
         protected void done() {
-          StartupFinalizationWorkflow.complete(owner);
+          try {
+            ConfigurationLoader.Result result = get();
+            if (result.loaded()) {
+              ConfigurationManager.applyConfiguration(result.settings());
+              System.arraycopy(result.lines(), 0, configuratie_regels, 0, result.lines().length);
+              main.hulp_dir = result.source().getParent().toString();
+            }
+            result.messages().forEach(report);
+          } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            report.accept("[CONFIGURATION] loading interrupted; retaining existing settings");
+          } catch (ExecutionException ex) {
+            report.accept(
+                "[CONFIGURATION] unexpected loading failure ("
+                    + ex.getCause().getClass().getSimpleName()
+                    + "); retaining existing settings");
+          } finally {
+            completeStartup.run();
+          }
         }
       }.execute();
     }

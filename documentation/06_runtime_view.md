@@ -12,12 +12,14 @@ from the current shared form state, not reloaded from a database before each out
 3. The command-line startup route opens the single-instance socket (default port `12345`, with
    a command-line override). A theme restart skips opening a second instance socket.
 4. [ConfigurationReadWorkflow](../src/main/java/turbowin/ConfigurationReadWorkflow.java) reads
-   the selected `configuration.txt` in a `SwingWorker` and applies its values to global state.
-   Missing-file I/O errors are tolerated; this is not a guarantee that all globals are reset.
-5. Its completion callback calls
+   and parses `configuration.txt` in a `SwingWorker`, trying logs first and then the data root
+   if the preferred copy is unusable. Parsing uses temporary settings without changing globals.
+5. Its completion callback applies the first valid copy, reports selection/recovery diagnostics,
+   and calls
    [StartupFinalizationWorkflow](../src/main/java/turbowin/StartupFinalizationWorkflow.java)
    to perform startup logging/cleanup, metadata checks, connection initialization, and menu and
-   toolbar updates.
+   toolbar updates. If neither copy is usable, existing settings are retained and finalization
+   still runs.
 
 Constructor completion and asynchronous startup finalization are different milestones. Startup
 can also display modal warning/date-time dialogs. The current startup mode is the installed
