@@ -99,7 +99,7 @@ public final class about extends javax.swing.JFrame {
           }
         });
 
-    jLabel2.setFont(new java.awt.Font("Segoe Print", 1, 10)); // NOI18N
+    jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
     jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel2.setText("Turbo/TurboWin/TurboWin+ since 1990");
 
