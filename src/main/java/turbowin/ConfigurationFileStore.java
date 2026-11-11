@@ -28,6 +28,63 @@ final class ConfigurationFileStore {
 
   private ConfigurationFileStore() {}
 
+  static final String BACKUP_FILE = main.CONFIGURATION_FILE + ".bak";
+
+  /** Saves active settings, retaining the previous valid version before replacement. */
+  static void save(File file, String[] lines, int maximumLines) throws IOException {
+    if (ConfigurationManager.parseConfigurationLines(lines).isEmpty()) {
+      throw new IOException("No recognized settings to save");
+    }
+    Path active = file.toPath().toAbsolutePath();
+    if (Files.exists(active)) {
+      String[] previous = new String[main.MAX_AANTAL_CONFIGURATIEREGELS];
+      read(file, previous, previous.length);
+      boolean valid;
+      try {
+        valid = !ConfigurationManager.parseConfigurationLines(previous).isEmpty();
+      } catch (IllegalArgumentException ex) {
+        valid = false;
+      }
+      if (valid) {
+        Path backup = active.resolveSibling(BACKUP_FILE);
+        if (Files.exists(backup) && Files.isSameFile(active, backup)) {
+          throw new IOException("Configuration and backup refer to the same file");
+        }
+        StringBuilder replacement = new StringBuilder();
+        for (int index = 0; index < maximumLines; index++) {
+          if (lines[index] != null && !lines[index].isEmpty()) {
+            replacement.append(lines[index]).append(System.lineSeparator());
+          }
+        }
+        String existing;
+        try (FileReader in = new FileReader(file)) {
+          StringBuilder text = new StringBuilder();
+          char[] buffer = new char[4096];
+          int count;
+          while ((count = in.read(buffer)) != -1) text.append(buffer, 0, count);
+          existing = text.toString();
+        }
+        if (!existing.contentEquals(replacement)) {
+          writeAtomically(backup.toFile(), out -> out.write(existing), active);
+        }
+      } else {
+        // Preserve rejected contents for inspection before a later save repairs the active file.
+        Path damaged = Files.createTempFile(active.getParent(), "configuration-", ".damaged");
+        try {
+          Files.copy(
+              active,
+              damaged,
+              StandardCopyOption.REPLACE_EXISTING,
+              StandardCopyOption.COPY_ATTRIBUTES);
+        } catch (IOException ex) {
+          Files.deleteIfExists(damaged);
+          throw ex;
+        }
+      }
+    }
+    write(file, lines, maximumLines);
+  }
+
   static void write(File file, String[] lines, int maximumLines) throws IOException {
     writeAtomically(
         file,
@@ -42,6 +99,11 @@ final class ConfigurationFileStore {
   }
 
   static void writeAtomically(File file, ContentWriter writeContent) throws IOException {
+    writeAtomically(file, writeContent, null);
+  }
+
+  private static void writeAtomically(File file, ContentWriter writeContent, Path permissionsSource)
+      throws IOException {
     Path target = file.toPath().toAbsolutePath();
     // FileWriter followed configuration symlinks; replace their target rather than the link.
     if (Files.isSymbolicLink(target)) {
@@ -49,9 +111,10 @@ final class ConfigurationFileStore {
     }
     Path temporary = createTemporaryFile(target);
     try {
+      Path permissionFile = permissionsSource == null ? target : permissionsSource;
       PosixFileAttributeView attributes =
-          Files.getFileAttributeView(target, PosixFileAttributeView.class);
-      if (attributes != null && Files.exists(target)) {
+          Files.getFileAttributeView(permissionFile, PosixFileAttributeView.class);
+      if (attributes != null && Files.exists(permissionFile)) {
         // Restore the exact mode after creation, since the process umask can remove access bits.
         Files.setPosixFilePermissions(temporary, attributes.readAttributes().permissions());
       }

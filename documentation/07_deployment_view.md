@@ -39,7 +39,7 @@ These layouts reflect [reported legacy installation checks](legacy_storage_obser
 The launch working directory (`user.dir`) is not searched. Configurations from unlisted custom
 locations can be imported explicitly.
 
-If `configuration.txt` already exists in the current data root, legacy settings are not
+If `configuration.txt` or its `.bak` backup already exists in the current data root, legacy settings are not
 introduced beside it. Otherwise migration selects the first usable legacy configuration, trying
 that installation's `logs/configuration.txt` before its `configuration.txt`. Missing, unreadable,
 malformed, empty, and unknown-only copies do not prevent trying the next copy or installation.

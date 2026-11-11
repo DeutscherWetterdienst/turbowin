@@ -22,9 +22,9 @@ final class ConfigurationPersistenceWorkflow {
   }
 
   /**
-   * Loads only data_dir/configuration.txt, validating settings before applying them on the EDT.
-   * Missing or invalid configuration preserves existing settings. Startup finalizes after loading
-   * when a data directory is configured.
+   * Loads data_dir/configuration.txt or its previous-valid backup, validating before applying on
+   * the EDT. If neither is usable, existing settings are preserved. Backup recovery notifies the
+   * user. Startup finalizes after loading when a data directory is configured.
    */
   static void read(main owner) {
     ConfigurationReadWorkflow.read(owner);

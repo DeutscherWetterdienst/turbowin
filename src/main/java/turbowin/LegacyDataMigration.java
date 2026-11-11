@@ -32,7 +32,9 @@ final class LegacyDataMigration {
     Path target = targetDirectory.toAbsolutePath().normalize();
     // Only the current data-root file is authoritative.
     boolean configurationSelected =
-        Files.exists(target.resolve(CONFIGURATION_FILE), LinkOption.NOFOLLOW_LINKS);
+        Files.exists(target.resolve(CONFIGURATION_FILE), LinkOption.NOFOLLOW_LINKS)
+            || Files.exists(
+                target.resolve(ConfigurationFileStore.BACKUP_FILE), LinkOption.NOFOLLOW_LINKS);
     for (Path legacyDirectory : legacyDirectories) {
       if (legacyDirectory == null) {
         continue;

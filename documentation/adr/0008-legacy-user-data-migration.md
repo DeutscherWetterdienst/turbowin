@@ -17,7 +17,8 @@ directory (`user.dir`) is not a discovery input. Try each installation’s `logs
 then its bin-root `configuration.txt`, validating before selecting settings. Write the selected
 settings only to `<data root>/configuration.txt`; ordinary reads and saves use that single file.
 Merge legacy `logs` and `amver` histories separately, excluding legacy configuration copies.
-Do not overwrite destination entries that already exist. Retain the source data for inspection or
+Do not overwrite destination entries that already exist. An existing current configuration backup
+also prevents introducing legacy settings, allowing normal startup recovery to select it. Retain the source data for inspection or
 rollback; launcher marker files and application resources are not migration inputs.
 
 ## Consequences

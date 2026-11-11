@@ -171,6 +171,32 @@ public class ConfigurationReadWorkflowTest {
     assertEquals("existing wind source", main.wind_source);
   }
 
+  @Test
+  public void recoveryNotifiesOnEdtAndLeavesRepairUntilNextSave() throws Exception {
+    Files.writeString(dataFile, main.RS232_GPS_TYPE_TXT + "invalid\n");
+    Files.writeString(
+        dataFile.resolveSibling(ConfigurationFileStore.BACKUP_FILE),
+        main.SHIP_NAME_TXT + "Recovered ship\n");
+    CountDownLatch completed = new CountDownLatch(1);
+    List<String> notices = new ArrayList<>();
+    AtomicBoolean notifiedOnEdt = new AtomicBoolean();
+    SwingUtilities.invokeAndWait(
+        () ->
+            ConfigurationReadWorkflow.read(
+                completed::countDown,
+                message -> {},
+                message -> {
+                  notifiedOnEdt.set(SwingUtilities.isEventDispatchThread());
+                  notices.add(message);
+                }));
+    assertTrue(completed.await(5, TimeUnit.SECONDS));
+    assertEquals("Recovered ship", main.ship_name);
+    assertEquals(1, notices.size());
+    assertTrue(notices.get(0).contains("configuration.txt.bak"));
+    assertTrue(notifiedOnEdt.get());
+    assertEquals(main.RS232_GPS_TYPE_TXT + "invalid\n", Files.readString(dataFile));
+  }
+
   private static List<String> loadAndFinishStartup() throws Exception {
     List<String> messages = new ArrayList<>();
     CountDownLatch completed = new CountDownLatch(1);

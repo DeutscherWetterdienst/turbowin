@@ -10,7 +10,7 @@ text representation, not a second independent settings model.
 Java Web Start provided persistent local storage, commonly called "muffins", through its JNLP
 persistence service. Older TurboWin comments describe saving metadata there and keeping two
 `configuration.txt` copies as backups. The current installed application has no active muffin
-reader or writer. Its persistence uses one text file in the data root. Historical muffin paths,
+reader or writer. Its persistence uses an active text file and a previous-valid backup in the data root. Historical muffin paths,
 `read_muffin()` references in comments, and `MUFFIN_LINE_SEPARATOR` do not describe an active
 storage mechanism. Renaming launcher markers does not restore muffin support.
 
@@ -19,7 +19,7 @@ storage mechanism. Renaming launcher markers does not restore muffin support.
 ```mermaid
 flowchart TD
     A[Startup selects writable data root] --> B[Initialize logs_dir to data root / logs]
-    B --> C[Read data root / configuration.txt]
+    B --> C[Try active configuration, then previous-valid backup]
     C --> D[Background worker reads and parses temporary settings]
     D --> E[EDT applies validated settings or retains existing settings]
     E --> F[EDT callback finalizes UI and connections]
@@ -38,19 +38,21 @@ Otherwise startup checks the known Windows, Debian, and versioned RPM installati
 layouts before loading; see the [deployment view](07_deployment_view.md#runtime-and-writable-data).
 Current startup always selects installed desktop ("offline") mode, which still permits networking.
 
-The reader loads only `data_dir/configuration.txt`. Missing, unreadable, malformed, empty,
-and unknown-only files leave existing settings and lines intact. Parsing finishes before any
-settings are applied. Missing entries in a valid partial file preserve existing global values.
-Diagnostics identify the file and rejection reason without exposing rejected values. If the data
-directory is empty, no read or startup finalization is scheduled. Loading does not write or repair
-a file. A configuration in a logs folder is never a startup fallback.
+The reader tries `data_dir/configuration.txt`, then `configuration.txt.bak` if the active file is
+missing, unreadable, malformed, empty, or contains no recognized settings. If neither is usable,
+existing settings and lines remain intact. Parsing finishes before any settings are applied.
+Missing entries in a valid partial file preserve existing global values. Diagnostics identify the
+file and rejection reason without exposing rejected values. If the data directory is empty, no
+read or startup finalization is scheduled. Loading does not write or repair a file. Backup
+recovery displays a warning; the next ordinary save repairs the active file. A configuration in a
+logs folder is never a startup fallback.
 
 Startup initially sets `logs_dir` to `<data root>/logs`, but applying a saved logs-folder entry can
 replace it. This changes operational logs, not where configuration is stored. `data_dir` is
 selected by startup and cannot be changed by a configuration entry.
 
 Automatic migration tries both legacy locations, logs first and then the installation's bin root.
-It creates only `<new data root>/configuration.txt`, preserving any existing canonical file.
+It creates only `<new data root>/configuration.txt`, preserving any existing canonical file or backup.
 Installation-local logs paths are rebased to the new default; custom folders retain their location.
 Explicit maintenance import applies the supplied logs-folder setting without rebasing it.
 
@@ -78,6 +80,28 @@ reported to standard output and displays a warning on the EDT without blocking l
 During shutdown, failures use the retry/cancel/exit decision dialog instead. Atomic replacement prevents partial
 file contents; it does not add power-loss durability or automatic recovery of temporary files
 left by a process crash.
+
+## Previous-valid backup and recovery
+
+`configuration.txt` is authoritative. `configuration.txt.bak` holds the previous valid contents;
+it is not a second active configuration. Before replacing a valid active file with different
+contents, saving atomically updates the backup. Identical saves retain the previous backup.
+The first save creates no backup. Backup failures abort the save and leave the active file intact.
+If active replacement fails after backup creation, the backup holds the still-current contents.
+The two replacements are individually atomic, not a single transaction.
+
+Missing or invalid active settings never replace a valid backup. Before repairing an invalid
+active file, saving copies its exact contents to a uniquely named `configuration-*.damaged` file
+beside it for inspection. Failure to preserve those contents aborts repair. Recovery itself
+leaves the damaged file untouched. A subsequent save creates the repaired active file while
+retaining the valid backup. Unreadable active files cause a save failure rather than being
+silently replaced. Backups retain the active file's POSIX permissions.
+
+Automatic migration does not replace settings when either the active file or its backup exists.
+Legacy discovery still reads only the two historical configuration locations. Explicit exports
+remain independent files and do not rotate the automatic backup. Damaged inspection files are
+retained until manually removed. This backup does not protect against loss of the data directory;
+use manual exports or external backups for that.
 
 ## Saving before exit
 

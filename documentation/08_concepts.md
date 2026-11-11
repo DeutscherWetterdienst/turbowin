@@ -35,15 +35,17 @@ Configuration remains the legacy human-readable `configuration.txt` line format.
 is split across `ConfigurationFileStore`, line/value parsers, `ConfigurationManager`, and the
 read/write workflows; `ConfigurationPersistenceWorkflow` retains the compatibility entry points.
 
-The reader loads only `configuration.txt` in the data root and validates all settings before
-applying them. Missing or invalid files preserve existing settings and lines; startup still
-finalizes. Missing entries in a valid partial file leave their global values unchanged.
-Saving captures the configuration lines and data-root destination before queuing one atomic
-write. A single background queue preserves submission order. Failed writes do not block later
-saves. The logs-folder setting controls operational logs and does not create a second configuration.
-Historical Java Web Start "muffin" storage is no longer used.
-See the [configuration walkthrough](configuration_persistence.md)
-for the file format, directory selection, import/export behavior, and asynchronous limitations.
+The reader loads `configuration.txt` in the data root, falling back to the validated
+`configuration.txt.bak` when necessary and notifying the user on recovery. If neither file is
+usable, existing settings and lines are preserved; startup still finalizes. Missing entries in a
+valid partial file leave their global values unchanged. Saving captures the configuration lines
+and data-root destination before queuing one atomic write, first preserving a different valid
+active version in the backup. Invalid active contents are preserved separately for inspection
+before repair. A single background queue preserves submission order. Failed writes do not block
+later saves. The logs-folder setting controls operational logs and does not create a second
+configuration. Historical Java Web Start "muffin" storage is no longer used. See the
+[configuration walkthrough](configuration_persistence.md) for the file format, directory
+selection, import/export behavior, and asynchronous limitations.
 
 Maintenance and station-data imports also read and parse a temporary buffer before applying
 settings on the EDT. Read or validation failures leave live settings and saved configuration

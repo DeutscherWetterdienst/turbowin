@@ -27,14 +27,14 @@ public class ConfigurationWriteWorkflowTest {
   public void writesConfigurationFileToRequestedDirectory() throws Exception {
     File dataDirectory = Files.createTempDirectory("turbowin-config-data").toFile();
     File logsDirectory = Files.createTempDirectory("turbowin-config-logs").toFile();
-    String[] lines = {"first", "", "last"};
+    String[] lines = {main.SHIP_NAME_TXT + "First", "", main.WIND_SOURCE_TXT + "Last"};
     try {
       ConfigurationWriteWorkflow.writeConfigurationFile(
           dataDirectory.getPath(), lines, lines.length);
       ConfigurationWriteWorkflow.writeConfigurationFile(
           logsDirectory.getPath(), lines, lines.length);
 
-      String expected = "first" + System.lineSeparator() + "last" + System.lineSeparator();
+      String expected = lines[0] + System.lineSeparator() + lines[2] + System.lineSeparator();
       assertEquals(
           expected, Files.readString(new File(dataDirectory, main.CONFIGURATION_FILE).toPath()));
       assertEquals(

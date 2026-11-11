@@ -32,7 +32,7 @@ final class ConfigurationWriteWorkflow {
 
   static void writeConfigurationFile(String directory, String[] lines, int maximumLines)
       throws IOException {
-    ConfigurationFileStore.write(
+    ConfigurationFileStore.save(
         new File(directory + File.separator + CONFIGURATION_FILE), lines, maximumLines);
   }
 

@@ -17,6 +17,10 @@ final class ConfigurationLoader {
   static Result load(String dataDirectory) {
     Set<Path> candidates = new LinkedHashSet<>();
     addCandidate(candidates, dataDirectory);
+    if (dataDirectory != null && !dataDirectory.isEmpty()) {
+      candidates.add(
+          Path.of(dataDirectory, ConfigurationFileStore.BACKUP_FILE).toAbsolutePath().normalize());
+    }
     return loadCandidates(candidates, ConfigurationFileStore::read);
   }
 
@@ -73,6 +77,10 @@ final class ConfigurationLoader {
 
   record Result(
       Path source, String[] lines, ConfigurationSettings settings, List<String> messages) {
+    boolean recovered() {
+      return loaded() && source.getFileName().toString().equals(ConfigurationFileStore.BACKUP_FILE);
+    }
+
     boolean loaded() {
       return source != null;
     }
