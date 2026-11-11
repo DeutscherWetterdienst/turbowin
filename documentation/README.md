@@ -19,6 +19,12 @@ shares mutable state across Swing forms and legacy coordinator classes.
 11. [Remaining risks and technical debt](11_technical_risks.md)
 12. [Glossary](12_glossary.md)
 
+## Configuration and upgrades
+
+- [Configuration paths and migration guide](configuration_migration.md)
+- [Configuration persistence, backup recovery, and import/export](configuration_persistence.md)
+- [Reported legacy storage observations](legacy_storage_observations.md)
+
 ## Working on the repository
 
 - [Contributor and testing guide](contributing_and_testing.md)

@@ -5,6 +5,9 @@ TurboWin keeps its active settings in mutable static fields in `main`, such as `
 between runs. The `configuratie_regels` array (Dutch for "configuration lines") is an intermediate
 text representation, not a second independent settings model.
 
+For full old and new paths, discovery order, and upgrade instructions, see the
+[configuration paths and migration guide](configuration_migration.md).
+
 ## What happened to muffins?
 
 Java Web Start provided persistent local storage, commonly called "muffins", through its JNLP

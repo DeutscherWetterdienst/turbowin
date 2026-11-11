@@ -18,5 +18,6 @@ Elevation, directory permissions, shortcut working directories, and VirtualStore
 not recorded. Other Windows and Linux versions from the proposed test matrix remain unconfirmed.
 
 Automatic discovery and migration are described in the
+[configuration paths and migration guide](configuration_migration.md) and
 [deployment view](07_deployment_view.md#runtime-and-writable-data). Explicit maintenance import
 retains its separate behavior, including importing an explicitly supplied logs-folder setting.
