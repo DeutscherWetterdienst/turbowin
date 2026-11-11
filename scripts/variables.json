@@ -1,7 +1,7 @@
 {
   "APP_NAME": "TurboWin",
   "LICENSE_FILE": "LICENSE",
-  "VENDOR": "KNMI",
+  "VENDOR": "Deutscher Wetterdienst (DWD)",
   "MODULE_NAME_MAIN_CLASS": "turbowin/turbowin.main",
   "ICON_PATH_LINUX": "src/main/resources/turbowin/install_ico/TurboWin_install_3_256x256x32.png",
   "ICON_PATH_WINDOWS": "src/main/resources/turbowin/install_ico/TurboWin_install.ico",
