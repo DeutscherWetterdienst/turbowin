@@ -570,12 +570,12 @@ public final class mycloudcover extends javax.swing.JFrame {
           }
         });
 
-    jLabel13.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel13.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel13.setForeground(new java.awt.Color(0, 0, 255));
     jLabel13.setText(
         "This program computes a 'height of base of lowest cloud' advice if cloud classification, latitude, air temp, wet bulb temp and present weather are available");
 
-    jLabel17.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel17.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel17.setForeground(new java.awt.Color(0, 0, 255));
     jLabel17.setText("This advice can always be over ruled by checking another button");
 

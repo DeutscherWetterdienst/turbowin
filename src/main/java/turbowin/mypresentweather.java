@@ -261,71 +261,71 @@ public final class mypresentweather extends javax.swing.JFrame {
     jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel3.setText("specific weather condition");
 
-    jLabel4.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel4.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel4.setForeground(new java.awt.Color(0, 0, 255));
     jLabel4.setText("for all general and");
 
-    jLabel5.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel5.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel5.setForeground(new java.awt.Color(0, 0, 255));
     jLabel5.setText("specific weather");
 
-    jLabel6.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel6.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel6.setForeground(new java.awt.Color(0, 0, 255));
     jLabel6.setText("conditions: the ");
 
-    jLabel7.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel7.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel7.setForeground(new java.awt.Color(0, 0, 255));
     jLabel7.setText("topmost applicable");
 
-    jLabel8.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel8.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel8.setForeground(new java.awt.Color(0, 0, 255));
     jLabel8.setText("weather condition");
 
-    jLabel9.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel9.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel9.setForeground(new java.awt.Color(0, 0, 255));
     jLabel9.setText("shall be selected");
 
-    jLabel10.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel10.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel10.setForeground(new java.awt.Color(0, 0, 255));
     jLabel10.setText("NOTE");
 
-    jLabel11.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel11.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel11.setForeground(new java.awt.Color(0, 0, 255));
     jLabel11.setText("present weather");
 
-    jLabel12.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel12.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel12.setForeground(new java.awt.Color(0, 0, 255));
     jLabel12.setText("shall describe");
 
-    jLabel13.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel13.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel13.setForeground(new java.awt.Color(0, 0, 255));
     jLabel13.setText("the weather at");
 
-    jLabel14.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel14.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel14.setForeground(new java.awt.Color(0, 0, 255));
     jLabel14.setText("time of obs or ");
 
-    jLabel15.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel15.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel15.setForeground(new java.awt.Color(0, 0, 255));
     jLabel15.setText("(where specially");
 
-    jLabel16.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel16.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel16.setForeground(new java.awt.Color(0, 0, 255));
     jLabel16.setText("mentioned)");
 
-    jLabel17.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel17.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel17.setForeground(new java.awt.Color(0, 0, 255));
     jLabel17.setText("during  the");
 
-    jLabel18.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel18.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel18.setForeground(new java.awt.Color(0, 0, 255));
     jLabel18.setText("period of one");
 
-    jLabel19.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel19.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel19.setForeground(new java.awt.Color(0, 0, 255));
     jLabel19.setText("hr immediately");
 
-    jLabel21.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel21.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel21.setForeground(new java.awt.Color(0, 0, 255));
     jLabel21.setText("preceding it");
 

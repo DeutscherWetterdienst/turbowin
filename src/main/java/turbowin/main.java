@@ -2234,20 +2234,20 @@ public class main extends javax.swing.JFrame {
     jTextField4.setEditable(false);
     jTextField4.setFocusable(false);
 
-    jLabel4.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel4.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel4.setText("Turbo+");
 
-    jLabel39.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+    jLabel39.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_STANDARD)); // NOI18N
     jLabel39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel39.setText(
         "--- adding data: input menu, popup menu, toolbar icons or click on the text labels or fields ---");
 
-    jLabel6.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel6.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel6.setText("-");
 
-    jLabel41.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel41.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel41.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel41.setText("-");
 

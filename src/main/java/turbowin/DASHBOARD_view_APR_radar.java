@@ -3193,7 +3193,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
 
     jPanel5.setPreferredSize(new java.awt.Dimension(250, 613));
 
-    jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+    jLabel3.setFont(SwingUiUtils.uiFont(java.awt.Font.BOLD, SwingUiUtils.UI_FONT_TITLE)); // NOI18N
     jLabel3.setText("--- MANUAL DATA INPUT ---");
 
     jPanel6.setBackground(new java.awt.Color(0, 191, 255));

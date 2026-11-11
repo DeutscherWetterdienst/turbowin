@@ -660,12 +660,12 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     jLabel5.setText("logs email recipient");
 
-    jLabel6.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel6.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel6.setForeground(new java.awt.Color(0, 0, 255));
     jLabel6.setText(
         "These log files include important data which is of particular value for climate studies");
 
-    jLabel7.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel7.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel7.setForeground(new java.awt.Color(0, 0, 255));
     jLabel7.setText(
         "Downloading of the log files should be done at routine intervals (ideally not exceeding 6 months)");

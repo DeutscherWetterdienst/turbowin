@@ -99,7 +99,7 @@ public final class about extends javax.swing.JFrame {
           }
         });
 
-    jLabel2.setFont(new java.awt.Font("SansSerif", 1, 10)); // NOI18N
+    jLabel2.setFont(SwingUiUtils.uiFont(java.awt.Font.BOLD, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel2.setText("Turbo/TurboWin/TurboWin+ since 1990");
 
@@ -108,43 +108,43 @@ public final class about extends javax.swing.JFrame {
         new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
     jPanel3.setPreferredSize(new java.awt.Dimension(572, 194));
 
-    jLabel4.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+    jLabel4.setFont(SwingUiUtils.uiFont(java.awt.Font.BOLD, SwingUiUtils.UI_FONT_STANDARD)); // NOI18N
     jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel4.setText("jLabel4");
 
     jLabel6.setBackground(new java.awt.Color(51, 153, 255));
-    jLabel6.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel6.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel6.setText("jLabel6");
 
-    jLabel11.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel11.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel11.setText("jLabel11");
 
-    jLabel12.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel12.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel12.setText("jLabel12");
 
-    jLabel1.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel1.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel1.setText("jLabel1");
 
-    jLabel13.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel13.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel13.setText("jLabel13");
 
-    jLabel3.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel3.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel3.setText("jLabel3");
 
-    jLabel5.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel5.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel5.setText("jLabel5");
 
-    jLabel14.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel14.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel14.setText("jLabel14");
 
-    jLabel16.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel16.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel16.setText("jLabel16");
 
-    jLabel15.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel15.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel15.setText("jLabel15");
 
-    jLabel17.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel17.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel17.setText("jLabel17");
 
     javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);

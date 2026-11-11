@@ -205,68 +205,68 @@ public final class myoneswellsystem extends javax.swing.JFrame {
     jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jPanel2.setPreferredSize(new java.awt.Dimension(92, 284));
 
-    jLabel8.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel8.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel8.setForeground(new java.awt.Color(0, 0, 255));
     jLabel8.setText("meter        feet");
 
-    jLabel9.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel9.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel9.setForeground(new java.awt.Color(0, 0, 255));
     jLabel9.setText("1               3");
 
-    jLabel10.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel10.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel10.setForeground(new java.awt.Color(0, 0, 255));
     jLabel10.setText("2               7");
 
-    jLabel11.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel11.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel11.setForeground(new java.awt.Color(0, 0, 255));
     jLabel11.setText("3               10");
 
-    jLabel12.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel12.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel12.setForeground(new java.awt.Color(0, 0, 255));
     jLabel12.setText("4               13");
 
-    jLabel13.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel13.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel13.setForeground(new java.awt.Color(0, 0, 255));
     jLabel13.setText("5               16");
 
-    jLabel14.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel14.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel14.setForeground(new java.awt.Color(0, 0, 255));
     jLabel14.setText("6               20");
 
-    jLabel15.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel15.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel15.setForeground(new java.awt.Color(0, 0, 255));
     jLabel15.setText("7               23");
     jLabel15.setToolTipText("");
 
-    jLabel16.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel16.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel16.setForeground(new java.awt.Color(0, 0, 255));
     jLabel16.setText("8               26");
 
-    jLabel17.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel17.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel17.setForeground(new java.awt.Color(0, 0, 255));
     jLabel17.setText("9               30");
 
-    jLabel18.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel18.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel18.setForeground(new java.awt.Color(0, 0, 255));
     jLabel18.setText("10             33");
 
-    jLabel19.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel19.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel19.setForeground(new java.awt.Color(0, 0, 255));
     jLabel19.setText("11             36");
 
-    jLabel20.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel20.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel20.setForeground(new java.awt.Color(0, 0, 255));
     jLabel20.setText("12             40");
 
-    jLabel21.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel21.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel21.setForeground(new java.awt.Color(0, 0, 255));
     jLabel21.setText("13             43");
 
-    jLabel22.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel22.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel22.setForeground(new java.awt.Color(0, 0, 255));
     jLabel22.setText("14             46");
 
-    jLabel23.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
+    jLabel23.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel23.setForeground(new java.awt.Color(0, 0, 255));
     jLabel23.setText("15             50");
 
