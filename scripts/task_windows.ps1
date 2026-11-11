@@ -69,7 +69,7 @@ Write-Output "App version is $env:APP_VERSION"
   --name $env:APP_NAME `
   --app-version $env:APP_VERSION `
   --license-file $env:LICENSE_FILE `
-  --vendor $env:VENDOR `
+  --vendor "$($env:VENDOR)" `
   --icon $env:ICON_PATH_WINDOWS `
   --win-upgrade-uuid "73902787-F60E-40DE-B64B-CA593EE0A5E0" `
   --win-menu `

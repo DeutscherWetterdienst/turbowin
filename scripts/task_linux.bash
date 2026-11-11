@@ -121,14 +121,14 @@ case "$TASK" in
       --type deb \
       --resource-dir src/main/resources/jpackage \
       --runtime-image build/image \
-      --module ${MODULE_NAME_MAIN_CLASS} \
+      --module "$MODULE_NAME_MAIN_CLASS" \
       --java-options '-Dapp.dir=$APPDIR' \
       --dest build/jpackage \
-      --name ${APP_NAME} \
-      --app-version ${APP_VERSION} \
-      --license-file ${LICENSE_FILE} \
-      --vendor ${VENDOR} \
-      --icon ${ICON_PATH_LINUX}
+      --name "$APP_NAME" \
+      --app-version "$APP_VERSION" \
+      --license-file "$LICENSE_FILE" \
+      --vendor "$VENDOR" \
+      --icon "$ICON_PATH_LINUX"
     ;;
   rpm)
     echo "Running rpm packaging task..."
@@ -144,14 +144,14 @@ case "$TASK" in
       --type rpm \
       --resource-dir src/main/resources/jpackage \
       --runtime-image build/image \
-      --module ${MODULE_NAME_MAIN_CLASS} \
+      --module "$MODULE_NAME_MAIN_CLASS" \
       --java-options '-Dapp.dir=$APPDIR' \
       --dest build/jpackage \
-      --name ${APP_NAME} \
-      --app-version ${APP_VERSION} \
-      --license-file ${LICENSE_FILE} \
-      --vendor ${VENDOR} \
-      --icon ${ICON_PATH_LINUX}
+      --name "$APP_NAME" \
+      --app-version "$APP_VERSION" \
+      --license-file "$LICENSE_FILE" \
+      --vendor "$VENDOR" \
+      --icon "$ICON_PATH_LINUX"
     ;;
   *)
     echo "Unknown task: $TASK"
