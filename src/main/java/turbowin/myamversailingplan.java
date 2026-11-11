@@ -134,10 +134,10 @@ public final class myamversailingplan extends javax.swing.JFrame {
 
     jLabel2.setText("call sign");
 
-    jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel3.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel3.setText("vessel");
 
-    jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel4.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel4.setText("time of departure [UTC]");
 
     jLabel5.setText("day");
@@ -146,13 +146,13 @@ public final class myamversailingplan extends javax.swing.JFrame {
 
     jLabel7.setText("minute");
 
-    jLabel8.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel8.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel8.setText("current course");
 
-    jLabel9.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel9.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel9.setText("speed (remainder voyage)");
 
-    jLabel10.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel10.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel10.setText("departure");
 
     jLabel11.setText("port");
@@ -161,10 +161,10 @@ public final class myamversailingplan extends javax.swing.JFrame {
 
     jLabel13.setText("lon [ddd-mm W/E]");
 
-    jLabel14.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel14.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel14.setText("destination");
 
-    jLabel15.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel15.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel15.setText("ETA destination [UTC]");
 
     jLabel16.setText("port");
@@ -195,7 +195,7 @@ public final class myamversailingplan extends javax.swing.JFrame {
 
     jLabel33.setText("[00-59]");
 
-    jLabel34.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel34.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel34.setText("current position");
 
     jLabel35.setText("lat [dd-mm N/S]");
@@ -1035,13 +1035,13 @@ public final class myamversailingplan extends javax.swing.JFrame {
 
     jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-    jLabel22.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel22.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel22.setText("radio guard*");
 
-    jLabel23.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel23.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel23.setText("medical*");
 
-    jLabel24.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+    jLabel24.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
     jLabel24.setText("relay*");
 
     jCheckBox1.setText("none");
@@ -1254,7 +1254,7 @@ public final class myamversailingplan extends javax.swing.JFrame {
 
     jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-    jLabel41.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+    jLabel41.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
     jLabel41.setText("Remarks*");
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);

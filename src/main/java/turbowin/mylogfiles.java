@@ -50,25 +50,25 @@ public final class mylogfiles extends javax.swing.JFrame {
           }
         });
 
-    jLabel2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel2.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel2.setForeground(new java.awt.Color(0, 0, 255));
     jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel2.setText(
         "The log files include important data which is of particular value for climate studies and research.\n");
 
-    jLabel3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel3.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel3.setForeground(new java.awt.Color(0, 0, 255));
     jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel3.setText(
         "Downloading of the log files should be done at routine intervals (ideally not exceeding six months) either by a visiting PMO ");
 
-    jLabel4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel4.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel4.setForeground(new java.awt.Color(0, 0, 255));
     jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel4.setText(
         "or by the ships observers themselves. Do not copy or move the log files with another program.");
 
-    jLabel5.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel5.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel5.setForeground(new java.awt.Color(0, 0, 255));
     jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel5.setText("In this program select Maintenance -> Move log files");

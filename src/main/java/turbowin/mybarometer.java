@@ -257,7 +257,7 @@ public final class mybarometer extends javax.swing.JFrame {
           }
         });
 
-    jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+    jLabel10.setFont(new java.awt.Font("SansSerif", 1, 11)); // NOI18N
     jLabel10.setForeground(java.awt.Color.red);
     jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 

@@ -110,7 +110,7 @@ public class RS232_grafiek extends JPanel {
 
     Graphics2D g2 = (Graphics2D) g; // device
 
-    // Font font_xx = new Font("Verdana", Font.BOLD, 12);
+    // Font font_xx = new Font("SansSerif", Font.BOLD, 12);
     // g2.setFont(font_xx);
 
     Color color_raster = null;
@@ -343,7 +343,7 @@ public class RS232_grafiek extends JPanel {
             g2.setPaint(color_date_time);
 
             // Font font_datum = new Font("Serif", Font.BOLD, 14);
-            Font font_datum = new Font("Verdana", Font.BOLD, 11);
+            Font font_datum = new Font("SansSerif", Font.BOLD, 11);
             g2.setFont(font_datum);
             String test_aanduiding_datum = "02-12-2016";
             FontRenderContext context_datum = g2.getFontRenderContext();
@@ -550,7 +550,7 @@ public class RS232_grafiek extends JPanel {
         if (string_aanduiding.equals("") == false) {
           // NB color is the color of the raster
           // Font font_sensor_level_text = new Font("Serif", Font.BOLD, 14);
-          Font font_sensor_level_text = new Font("Verdana", Font.BOLD, 11);
+          Font font_sensor_level_text = new Font("SansSerif", Font.BOLD, 11);
           g2.setFont(font_sensor_level_text);
 
           FontRenderContext context_sensor_level_font = g2.getFontRenderContext();
@@ -1061,7 +1061,7 @@ public class RS232_grafiek extends JPanel {
           }
 
           // Font font_datum_tijd_parameter = new Font("Serif", Font.BOLD, 14);
-          Font font_datum_tijd_parameter = new Font("Verdana", Font.BOLD, 11);
+          Font font_datum_tijd_parameter = new Font("SansSerif", Font.BOLD, 11);
           g2.setFont(font_datum_tijd_parameter);
 
           FontRenderContext context_datum_tijd_parameter = g2.getFontRenderContext();

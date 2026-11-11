@@ -856,7 +856,7 @@ public final class RS232_settings extends javax.swing.JFrame {
 
     jLabel18.setText("2nd instrument port settings");
 
-    jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+    jLabel11.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel11.setText("* leave blank for default");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

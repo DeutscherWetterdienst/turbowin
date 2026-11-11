@@ -70,27 +70,27 @@ public final class mypastweather extends javax.swing.JFrame {
           }
         });
 
-    jLabel1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel1.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel1.setForeground(new java.awt.Color(0, 0, 255));
     jLabel1.setText(
         "Past weather shall be selected in such way thet Past weather and Present weather together give as complete a description as possible  of the weather in the");
 
-    jLabel2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel2.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel2.setForeground(new java.awt.Color(0, 0, 255));
     jLabel2.setText(
         "time interval concerned. For example if the type of weather undergoes a complete change during the time interval concerned, Past weather shall describe");
 
-    jLabel3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel3.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel3.setForeground(new java.awt.Color(0, 0, 255));
     jLabel3.setText(
         "the weather prevailing before the type of weather indicated by Present weather");
 
-    jLabel5.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel5.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel5.setForeground(new java.awt.Color(0, 0, 255));
     jLabel5.setText(
         "The period covered by Past weather shall be: six hours for observations at 0000, 0600, 1200 1800 UTC; three hours for observations at 0300, 0900, 1500, ");
 
-    jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel6.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel6.setForeground(new java.awt.Color(0, 0, 255));
     jLabel6.setText(
         "2100 UTC; one hour for observations at 0100, 0200, 0400, 0500, 0700, 0800, 1000, 1100, 1300, 1400, 1600, 1700, 1900, 2000, 2200, 2300 UTC");

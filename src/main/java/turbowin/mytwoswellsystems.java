@@ -329,67 +329,67 @@ public final class mytwoswellsystems extends javax.swing.JFrame {
 
     jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-    jLabel15.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel15.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel15.setForeground(new java.awt.Color(0, 0, 255));
     jLabel15.setText("meter         feet");
 
-    jLabel16.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel16.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel16.setForeground(new java.awt.Color(0, 0, 255));
     jLabel16.setText("1               3");
 
-    jLabel17.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel17.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel17.setForeground(new java.awt.Color(0, 0, 255));
     jLabel17.setText("2               7");
 
-    jLabel18.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel18.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel18.setForeground(new java.awt.Color(0, 0, 255));
     jLabel18.setText("3               10");
 
-    jLabel19.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel19.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel19.setForeground(new java.awt.Color(0, 0, 255));
     jLabel19.setText("4               13");
 
-    jLabel20.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel20.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel20.setForeground(new java.awt.Color(0, 0, 255));
     jLabel20.setText("5               16");
 
-    jLabel21.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel21.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel21.setForeground(new java.awt.Color(0, 0, 255));
     jLabel21.setText("6               20");
 
-    jLabel22.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel22.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel22.setForeground(new java.awt.Color(0, 0, 255));
     jLabel22.setText("7               23");
 
-    jLabel23.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel23.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel23.setForeground(new java.awt.Color(0, 0, 255));
     jLabel23.setText("8               26");
 
-    jLabel24.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel24.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel24.setForeground(new java.awt.Color(0, 0, 255));
     jLabel24.setText("9               30");
 
-    jLabel25.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel25.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel25.setForeground(new java.awt.Color(0, 0, 255));
     jLabel25.setText("10             33");
 
-    jLabel26.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel26.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel26.setForeground(new java.awt.Color(0, 0, 255));
     jLabel26.setText("11             36");
 
-    jLabel27.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel27.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel27.setForeground(new java.awt.Color(0, 0, 255));
     jLabel27.setText("12             40");
 
-    jLabel28.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel28.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel28.setForeground(new java.awt.Color(0, 0, 255));
     jLabel28.setText("13             43");
 
-    jLabel29.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel29.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel29.setForeground(new java.awt.Color(0, 0, 255));
     jLabel29.setText("14             46");
 
-    jLabel30.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel30.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel30.setForeground(new java.awt.Color(0, 0, 255));
     jLabel30.setText("15             50");
 

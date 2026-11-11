@@ -224,59 +224,59 @@ public final class mywaves extends javax.swing.JFrame {
 
     jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-    jLabel4.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel4.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel4.setForeground(new java.awt.Color(0, 0, 255));
     jLabel4.setText("Bf      sea (metres)*");
 
-    jLabel5.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel5.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel5.setForeground(new java.awt.Color(0, 0, 255));
     jLabel5.setText("0             0.0");
 
-    jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel6.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel6.setForeground(new java.awt.Color(0, 0, 255));
     jLabel6.setText("1             0.1");
 
-    jLabel8.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel8.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel8.setForeground(new java.awt.Color(0, 0, 255));
     jLabel8.setText("2             0.2");
 
-    jLabel10.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel10.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel10.setForeground(new java.awt.Color(0, 0, 255));
     jLabel10.setText("3             0.6");
 
-    jLabel11.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel11.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel11.setForeground(new java.awt.Color(0, 0, 255));
     jLabel11.setText("4             1.0");
 
-    jLabel12.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel12.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel12.setForeground(new java.awt.Color(0, 0, 255));
     jLabel12.setText("5             2.0");
 
-    jLabel13.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel13.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel13.setForeground(new java.awt.Color(0, 0, 255));
     jLabel13.setText("6             3.0");
 
-    jLabel15.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel15.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel15.setForeground(new java.awt.Color(0, 0, 255));
     jLabel15.setText("7             4.0");
 
-    jLabel16.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel16.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel16.setForeground(new java.awt.Color(0, 0, 255));
     jLabel16.setText("8             5.5");
 
-    jLabel17.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel17.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel17.setForeground(new java.awt.Color(0, 0, 255));
     jLabel17.setText("9             7.0");
 
-    jLabel18.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel18.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel18.setForeground(new java.awt.Color(0, 0, 255));
     jLabel18.setText("10           9.0");
 
-    jLabel19.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel19.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel19.setForeground(new java.awt.Color(0, 0, 255));
     jLabel19.setText("11          11.5");
 
-    jLabel20.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel20.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel20.setForeground(new java.awt.Color(0, 0, 255));
     jLabel20.setText("12          14.0");
 
@@ -454,21 +454,21 @@ public final class mywaves extends javax.swing.JFrame {
                     .addComponent(jLabel20)
                     .addContainerGap()));
 
-    jLabel21.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel21.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel21.setForeground(new java.awt.Color(0, 0, 255));
     jLabel21.setText("* probable mean sea");
     jLabel21.setMaximumSize(new java.awt.Dimension(113, 11));
     jLabel21.setMinimumSize(new java.awt.Dimension(90, 11));
     jLabel21.setPreferredSize(new java.awt.Dimension(113, 11));
 
-    jLabel22.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel22.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel22.setForeground(new java.awt.Color(0, 0, 255));
     jLabel22.setText("height in the open sea");
     jLabel22.setMaximumSize(new java.awt.Dimension(90, 11));
     jLabel22.setMinimumSize(new java.awt.Dimension(90, 11));
     jLabel22.setPreferredSize(new java.awt.Dimension(90, 11));
 
-    jLabel23.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel23.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel23.setForeground(new java.awt.Color(0, 0, 255));
     jLabel23.setText("remote from land");
     jLabel23.setMaximumSize(new java.awt.Dimension(43, 11));
@@ -518,67 +518,67 @@ public final class mywaves extends javax.swing.JFrame {
     jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jPanel4.setPreferredSize(new java.awt.Dimension(92, 284));
 
-    jLabel24.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel24.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel24.setForeground(new java.awt.Color(0, 0, 255));
     jLabel24.setText("meter         feet");
 
-    jLabel25.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel25.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel25.setForeground(new java.awt.Color(0, 0, 255));
     jLabel25.setText("1               3");
 
-    jLabel26.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel26.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel26.setForeground(new java.awt.Color(0, 0, 255));
     jLabel26.setText("2               7");
 
-    jLabel27.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel27.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel27.setForeground(new java.awt.Color(0, 0, 255));
     jLabel27.setText("3               10");
 
-    jLabel28.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel28.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel28.setForeground(new java.awt.Color(0, 0, 255));
     jLabel28.setText("4               13");
 
-    jLabel29.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel29.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel29.setForeground(new java.awt.Color(0, 0, 255));
     jLabel29.setText("5               16");
 
-    jLabel30.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel30.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel30.setForeground(new java.awt.Color(0, 0, 255));
     jLabel30.setText("6               20");
 
-    jLabel31.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel31.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel31.setForeground(new java.awt.Color(0, 0, 255));
     jLabel31.setText("7               23");
 
-    jLabel32.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel32.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel32.setForeground(new java.awt.Color(0, 0, 255));
     jLabel32.setText("8               26");
 
-    jLabel33.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel33.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel33.setForeground(new java.awt.Color(0, 0, 255));
     jLabel33.setText("9               30");
 
-    jLabel34.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel34.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel34.setForeground(new java.awt.Color(0, 0, 255));
     jLabel34.setText("10             33");
 
-    jLabel35.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel35.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel35.setForeground(new java.awt.Color(0, 0, 255));
     jLabel35.setText("11             36");
 
-    jLabel36.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel36.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel36.setForeground(new java.awt.Color(0, 0, 255));
     jLabel36.setText("12             40");
 
-    jLabel37.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel37.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel37.setForeground(new java.awt.Color(0, 0, 255));
     jLabel37.setText("13             43");
 
-    jLabel38.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel38.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel38.setForeground(new java.awt.Color(0, 0, 255));
     jLabel38.setText("14             46");
 
-    jLabel39.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+    jLabel39.setFont(new java.awt.Font("SansSerif", 0, 10)); // NOI18N
     jLabel39.setForeground(new java.awt.Color(0, 0, 255));
     jLabel39.setText("15             50");
 

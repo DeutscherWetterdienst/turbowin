@@ -391,7 +391,7 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="vessel"/>
           </Properties>
@@ -399,7 +399,7 @@
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="time of departure [UTC]"/>
           </Properties>
@@ -428,7 +428,7 @@
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="current course"/>
           </Properties>
@@ -436,7 +436,7 @@
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="speed (remainder voyage)"/>
           </Properties>
@@ -448,7 +448,7 @@
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="departure"/>
           </Properties>
@@ -477,7 +477,7 @@
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="destination"/>
           </Properties>
@@ -485,7 +485,7 @@
         <Component class="javax.swing.JLabel" name="jLabel15">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="ETA destination [UTC]"/>
           </Properties>
@@ -575,7 +575,7 @@
         <Component class="javax.swing.JLabel" name="jLabel34">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="current position"/>
           </Properties>
@@ -851,7 +851,7 @@
         <Component class="javax.swing.JLabel" name="jLabel22">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="radio guard*"/>
           </Properties>
@@ -861,7 +861,7 @@
         <Component class="javax.swing.JLabel" name="jLabel23">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="medical*"/>
           </Properties>
@@ -869,7 +869,7 @@
         <Component class="javax.swing.JLabel" name="jLabel24">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="13" style="1"/>
+              <Font name="SansSerif" size="13" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="relay*"/>
           </Properties>
@@ -956,7 +956,7 @@
         <Component class="javax.swing.JLabel" name="jLabel41">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="11" style="1"/>
+              <Font name="SansSerif" size="11" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Remarks*"/>
           </Properties>

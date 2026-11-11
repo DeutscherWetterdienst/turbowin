@@ -940,7 +940,7 @@
     <Component class="javax.swing.JLabel" name="jLabel11">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="10" style="0"/>
+          <Font name="SansSerif" size="10" style="0"/>
         </Property>
         <Property name="text" type="java.lang.String" value="* leave blank for default"/>
       </Properties>
