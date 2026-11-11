@@ -524,7 +524,7 @@ public class RS232_view extends javax.swing.JFrame {
   }
 
   private Timer createSensorDataTimer(ActionListener actionListener) {
-    // main loop for retrieving sensor data from file (file was and is filled by TurboWin+)
+    // main loop for retrieving sensor data from file (file was and is filled by TurboWin)
     Timer timer = new Timer(DELAY_SENSOR_DATA_FILE_OPHALEN_LOOP, actionListener);
     timer.setRepeats(true); // false = only one action
     timer.setInitialDelay(

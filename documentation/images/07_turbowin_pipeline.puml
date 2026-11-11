@@ -1,5 +1,5 @@
 @startuml
-title TurboWin+ CI tasks (GitHub Actions and GitLab)
+title TurboWin CI tasks (GitHub Actions and GitLab)
 start
 if (Manual JAR request?) then (yes)
   :Linux amd64 / Java 21;

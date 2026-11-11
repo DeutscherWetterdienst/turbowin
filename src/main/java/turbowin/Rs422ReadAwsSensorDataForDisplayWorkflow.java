@@ -20,7 +20,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
 
   void start() {
     // check the presence of the various meteo parameters in the data received from AWS (data stored
-    // by TurboWin+ in sensor data files)
+    // by TurboWin in sensor data files)
 
     // called from: Function RS422_V3_write_sensor_data_to_file() [file main_RS232_RS422.java]
     //
@@ -513,7 +513,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       mywind.ship_heading = Integer.toString(int_ship_heading);
 
                       main.true_heading_from_AWS_present = true;
-                      // NB heading is not displayed on TurboWin+ main screen (only on wind input
+                      // NB heading is not displayed on TurboWin main screen (only on wind input
                       // form)
 
                       // System.out.println("+++ parameter Heading is aanwezig");
@@ -698,7 +698,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
 
                       // convert if necessary and round to integer
                       if (main.wind_units.indexOf(main.M_S)
-                          == -1) //  not m/s so convert to knots (see TurboWin+ menu:
+                          == -1) //  not m/s so convert to knots (see TurboWin menu:
                       {
                         int_relative_wind_speed =
                             (int)
@@ -774,7 +774,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                           Double.parseDouble(record_aws_true_wind_speed);
 
                       if (main.wind_units.indexOf(main.M_S)
-                          == -1) //  not m/s so convert to knots (see TurboWin+ menu:
+                          == -1) //  not m/s so convert to knots (see TurboWin menu:
                       {
                         int_true_wind_speed =
                             (int)
@@ -845,7 +845,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       // convert if necessary and round to integer
                       if (main.wind_units.indexOf(main.M_S)
                           == -1) //  not originally measured/observed in m/s so convert to knots
-                      // (see TurboWin+ menu: Maintenance -> Station data)
+                      // (see TurboWin menu: Maintenance -> Station data)
                       {
                         int_true_wind_gust_speed =
                             (int)
@@ -903,11 +903,11 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                 //
                 // supply voltage [format VV.v]
                 //
-                // -- not for displaying in TurboWin+
+                // -- not for displaying in TurboWin
                 //
                 // internal temperature [format sTT.t]
                 //
-                // -- not for displaying in TurboWin+
+                // -- not for displaying in TurboWin
                 //
                 // VOT (visual observation acquisition trigger) [format sNNN]
                 //
@@ -988,15 +988,15 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
 
                 // SPARE
                 //
-                // -- not for displaying in TurboWin+
+                // -- not for displaying in TurboWin
                 //
                 //
                 // SPARE
-                // -- not for displaying in TurboWin+
+                // -- not for displaying in TurboWin
                 //
                 // SPARE
                 //
-                // -- not for displaying in TurboWin+
+                // -- not for displaying in TurboWin
                 //
               } // if (pos > 0)
             } while (pos > 0);

@@ -1855,7 +1855,7 @@ public class main_RS232_RS422 {
     } // if (doorgaan)
 
     if (peumb_update) {
-      // read the AWS data which was saved before by TurboWin+ from a sensor data file
+      // read the AWS data which was saved before by TurboWin from a sensor data file
       //
       // NB DIT ZOU BETER KUNNEN DOOR GELIJK UIT DE message_peumb string te lezen !!!!!!!
       //
@@ -1919,7 +1919,7 @@ public class main_RS232_RS422 {
             // NB in this stage we are sure the date-time is correct! + we are sure position is
             // available!
 
-            // read the AWS data which was saved before by TurboWin+ from a sensor data file
+            // read the AWS data which was saved before by TurboWin from a sensor data file
             RS422_Read_And_Send_Sensor_Data_For_AWSR(
                 retry); // nB in this function also the date-time of the last saved record will be
             // checked
@@ -1969,7 +1969,7 @@ public class main_RS232_RS422 {
           // text will be visible only a few minutes (till the retry upload)
           main.jTextField4.setText("[AWSR] retry AWS report upload within a few minutes");
         } else {
-          // text with next AWSR update bottom status line TurboWin+ main screen (updated every
+          // text with next AWSR update bottom status line TurboWin main screen (updated every
           // minute)
           Integer nextUploadHour =
               AwsrNextUploadCalculator.nextUploadHour(
@@ -2371,11 +2371,11 @@ public class main_RS232_RS422 {
 
               // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT
               // GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten
-              // TurboWin+)
+              // TurboWin)
 
               // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT
               // GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten
-              // TurboWin+)
+              // TurboWin)
 
               // message obsolete data only the first time
               if (main.obsolate_data_flag == false) {
@@ -2387,7 +2387,7 @@ public class main_RS232_RS422 {
 
                 if (main.RS232_connection_mode == 10) // OMC-140 ethernet
                 {
-                  // do nothing port 0.0.0.0:60004 will alway stay open as long as TurboWin+/Web is
+                  // do nothing port 0.0.0.0:60004 will alway stay open as long as TurboWin/Web is
                   // running (Windows power shell command "netstat -aon")
                 } //  if (main.RS232_connection_mode == 10)
                 else if ((main.RS232_connection_mode == 3)
@@ -2550,7 +2550,7 @@ public class main_RS232_RS422 {
             //
             if (main.RS232_connection_mode == 3) // EUCAWS serial
             {
-              // NB in EUCAWS mode TurboWin+ will not upload/send the data itself so no autmatically
+              // NB in EUCAWS mode TurboWin will not upload/send the data itself so no autmatically
               // cleaning/resetting of the display/parameters
               //    as long as the user do not select: "Output -> obs to AWS" so this automatic
               // reset at every whole hour to be sure
@@ -3501,8 +3501,8 @@ public class main_RS232_RS422 {
         //    Theroretically an outdated GPS position can be unfairly marked as ok only a few
         // minutes per day
         //    eg 18-12-2015 03.14 UTC last GPS date. Now current date-time 19-12-2015 02:00 UTC so
-        // GPS position set invalid by TurboWin+
-        //    but if current date-time 19-12-2015 03:13 UTC -> TurboWin+ set it ok because only
+        // GPS position set invalid by TurboWin
+        //    but if current date-time 19-12-2015 03:13 UTC -> TurboWin set it ok because only
         // times (and not date) can be compared
         //
         GregorianCalendar cal_systeem_datum_tijd_NMEA_GGA =
@@ -4275,7 +4275,7 @@ public class main_RS232_RS422 {
             boolean WOW_settings_ok = RS232_check_WOW_settings();
 
             if (WOW_settings_ok) {
-              // read the barometer data which was saved before by TurboWin+ from a sensor data file
+              // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
@@ -4356,7 +4356,7 @@ public class main_RS232_RS422 {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
-              // read the barometer data which was saved before by TurboWin+ from a sensor data file
+              // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
@@ -4422,7 +4422,7 @@ public class main_RS232_RS422 {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
-              // read the barometer data which was saved before by TurboWin+ from a sensor data file
+              // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
@@ -4487,7 +4487,7 @@ public class main_RS232_RS422 {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
-              // read the barometer data which was saved before by TurboWin+ from a sensor data file
+              // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
@@ -4524,7 +4524,7 @@ public class main_RS232_RS422 {
             main.jTextField4.setText(
                 "[APR] retry automated pressure report upload within a few minutes");
           } else {
-            // text with next APR update bottom status line TurboWin+ main screen (updated every
+            // text with next APR update bottom status line TurboWin main screen (updated every
             // minute, directly linked to incoming sensor data of every minute)
             for (int i = (APR_system_hour_local + 1);
                 i < (APR_system_hour_local + 1 + Integer.valueOf(main.APR_reporting_interval));
@@ -4875,7 +4875,7 @@ public class main_RS232_RS422 {
 
               // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT
               // GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten
-              // TurboWin+)
+              // TurboWin)
 
               // message obsolete data only the first time
               if (main.obsolate_data_flag_II == false) {
@@ -5045,7 +5045,7 @@ public class main_RS232_RS422 {
 
               // MOET DEZE ACTIONLISTNER EXPLICIET GESTOPT WORDEN ALS EEN EXIT DOOR GEBRUIKER WORDT
               // GEGEVEN ????????? (check in console op vreemde foutmeldingen na afsluiten
-              // TurboWin+)
+              // TurboWin)
 
               // message obsolete data only the first time
               if (main.obsolate_data_flag == false) {
@@ -5079,7 +5079,7 @@ public class main_RS232_RS422 {
                     || main.RS232_connection_mode == 8) // Mintaka Star WiFi or Mintaka StarX Wifi
                 {
                   // do nothing the opened UDP port (e.g. 0.0.0.0:60004) will alway stay open as
-                  // long as TurboWin+/Web is running (Windows power shell command "netstat -aon")
+                  // long as TurboWin/Web is running (Windows power shell command "netstat -aon")
                   /*
                   // NB WiFi listener restart every hour
                   cal_WiFi_system_date_time = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));   // system date time in UTC of this moment
@@ -5091,7 +5091,7 @@ public class main_RS232_RS422 {
                   {
                   WiFi_worker.cancel(true);
                   //WiFi_worker = null;     // NB null do not prevent a Bindexception,;
-                  // NB2 a Bindexception is not an issue because it means TurboWin+ is still bind to (UDP)WiFi,
+                  // NB2 a Bindexception is not an issue because it means TurboWin is still bind to (UDP)WiFi,
                   //     it would be an issue if it was bind to onother process/application
                   String message = "[WIFI] sensor data listener thread cancelling";
                   main.log_turbowin_system_message(message);
@@ -5436,7 +5436,7 @@ public class main_RS232_RS422 {
             /* ... */
           }
           main.pop_up_form.setVisible(true);
-          // NB main.pop_up_form.setAlwaysOnTop(true); : could block the TurboWIn+ app is another
+          // NB main.pop_up_form.setAlwaysOnTop(true); : could block the TurboWin app is another
           // messageBox requires some action (like OK button to indicate that APR not valid etc.)
         }
       } // if (APR_AWS_minutes_before_screen_pop_up <= main.APR_AWS_SCREEN_POP_UP_MINUTES_TO_HOUR)
@@ -5473,7 +5473,7 @@ public class main_RS232_RS422 {
             "yyyyMMddHHmm"); // HH hour in day (0-23) note there is also hh (then also with am, pm)
     main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    // for pop-up air pressure when clicking tray icon (TurboWin+ minimized/iconfied)
+    // for pop-up air pressure when clicking tray icon (TurboWin minimized/iconfied)
     sdf8 = new SimpleDateFormat("dd MMM yyyy HH.mm");
     sdf8.setTimeZone(TimeZone.getTimeZone("UTC")); // <----- DEZE = ESSENTIEEL
 
@@ -5499,7 +5499,7 @@ public class main_RS232_RS422 {
 
     String message = "";
     if (!main.lan_ip_address.equals(
-        "")) // user inserted a custom ip address (e.g. 192.168.4.1) TurboWin+ should listening to
+        "")) // user inserted a custom ip address (e.g. 192.168.4.1) TurboWin should listening to
     // (Mintaka ENet box in Maersk mode -fixed ip address-)
     {
       message = "[LAN] start listening on " + main.lan_ip_address;
@@ -5827,7 +5827,7 @@ public class main_RS232_RS422 {
                 // NB in this stage we are sure the date-time is correct! + we are sure position is
                 // available!
 
-                // read the thermometer data which was saved before by TurboWin+ from a sensor data
+                // read the thermometer data which was saved before by TurboWin from a sensor data
                 // II file
                 RS232_vaisala.RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR(
                     "APR", retry);
@@ -5863,7 +5863,7 @@ public class main_RS232_RS422 {
                 // NB in this stage we are sure the date-time is correct! + we are sure position is
                 // available!
 
-                // read the thermometer data which was saved before by TurboWin+ from a sensor data
+                // read the thermometer data which was saved before by TurboWin from a sensor data
                 // II file
                 RS232_vaisala.RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR(
                     "APR", retry);
@@ -5885,7 +5885,7 @@ public class main_RS232_RS422 {
               main.jTextField4.setText(
                   "[APR] retry automated pressure report upload within a few minutes");
             } else {
-              // text with next APR update bottom status line TurboWin+ main screen (updated every
+              // text with next APR update bottom status line TurboWin main screen (updated every
               // minute)
               for (int i = (APR_system_hour_local + 1);
                   i < (APR_system_hour_local + 1 + Integer.valueOf(main.APR_reporting_interval));
@@ -6106,7 +6106,7 @@ public class main_RS232_RS422 {
             boolean WOW_settings_ok = RS232_check_WOW_settings();
 
             if (WOW_settings_ok) {
-              // read the barometer data which was saved before by TurboWin+ from a sensor data file
+              // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
@@ -6193,7 +6193,7 @@ public class main_RS232_RS422 {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
-              // read the barometer data which was saved before by TurboWin+ from a sensor data file
+              // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
@@ -6253,7 +6253,7 @@ public class main_RS232_RS422 {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
-              // read the barometer data which was saved before by TurboWin+ from a sensor data file
+              // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
               {
@@ -6290,7 +6290,7 @@ public class main_RS232_RS422 {
             main.jTextField4.setText(
                 "[APR] retry automated pressure report upload within a few minutes");
           } else {
-            // text with next APR update bottom status line TurboWin+ main screen (updated every
+            // text with next APR update bottom status line TurboWin main screen (updated every
             // minute)
             if (!main.APR_reporting_interval.equals("")) {
               for (int i = (APR_system_hour_local + 1);
@@ -6356,7 +6356,7 @@ public class main_RS232_RS422 {
             "yyyyMMddHHmm"); // HH hour in day (0-23) note there is also hh (then also with am, pm)
     main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    // for pop-up air pressure when clicking tray icon (TurboWin+ minimized/iconfied)
+    // for pop-up air pressure when clicking tray icon (TurboWin minimized/iconfied)
     sdf8 = new SimpleDateFormat("dd MMM yyyy HH.mm");
     sdf8.setTimeZone(TimeZone.getTimeZone("UTC")); // <----- DEZE = ESSENTIEEL
 
@@ -6458,7 +6458,7 @@ public class main_RS232_RS422 {
             "yyyyMMddHHmm"); // HH hour in day (0-23) note there is also hh (then also with am, pm)
     main.sdf4.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-    // for pop-up air pressure when clicking tray icon (TurboWin+ minimized/iconfied)
+    // for pop-up air pressure when clicking tray icon (TurboWin minimized/iconfied)
     // sdf8 = new SimpleDateFormat("dd MMM yyyy HH.mm");
     // sdf8.setTimeZone(TimeZone.getTimeZone("UTC"));                                   // <-----
     // DEZE = ESSENTIEEL
@@ -6586,7 +6586,7 @@ public class main_RS232_RS422 {
         && (main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN) == false)) {
       // NB AWS mode is always reporting with format101
       message =
-          "[AWSR] In AWSR mode the obs format must be FM13 or 101 or 'AWS + uploads via TurboWin+' (select: Maintenance -> Obs format setting)";
+          "[AWSR] In AWSR mode the obs format must be FM13 or 101 or 'AWS + uploads via TurboWin' (select: Maintenance -> Obs format setting)";
       main.log_turbowin_system_message(message);
     }
 
@@ -6880,7 +6880,7 @@ public class main_RS232_RS422 {
         RS232_Output_obs_by_email_all_APR();
       } else if (action == AptrAwsrUploadDecision.Action.UNKNOWN_FORMAT) {
         main.log_turbowin_system_message(
-            "[APR] obs format unknown (must be format101 or FM13 or 'AWS + uploads via TurboWin+')");
+            "[APR] obs format unknown (must be format101 or FM13 or 'AWS + uploads via TurboWin')");
       } else {
         main.log_turbowin_system_message("[APR] APTR-AWSR send method unknown");
       }
@@ -7544,7 +7544,7 @@ public class main_RS232_RS422 {
       mydatetime.day = Integer.toString(system_day_of_month); // for progress main screen
       mydatetime.hour = Integer.toString(system_hour_of_day); // for progress main screen
 
-      /* update date and time on TurboWin+ main screen */
+      /* update date and time on TurboWin main screen */
       main.date_time_fields_update();
 
       // determine code figures for month (not for operational obs only for IMMT storage)

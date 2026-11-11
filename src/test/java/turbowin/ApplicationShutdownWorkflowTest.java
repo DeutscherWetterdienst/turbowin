@@ -20,16 +20,16 @@ public class ApplicationShutdownWorkflowTest {
   public void buildsBasicExitMessageWithoutActiveConnections() {
     assertEquals(
         "Are you sure you want to exit this application?",
-        ApplicationShutdownWorkflow.buildExitMessage("TurboWin+", false, false, false));
+        ApplicationShutdownWorkflow.buildExitMessage("TurboWin", false, false, false));
   }
 
   @Test
   public void includesMonitoringAndUploadWarningsWhenNeeded() {
-    String message = ApplicationShutdownWorkflow.buildExitMessage("TurboWin+", true, true, false);
+    String message = ApplicationShutdownWorkflow.buildExitMessage("TurboWin", true, true, false);
 
     assertTrue(message.contains("will stop with monitoring and collecting"));
     assertTrue(message.contains("will stop with automated reports upload"));
-    assertTrue(message.contains("minimise TurboWin+ instead of closing"));
+    assertTrue(message.contains("minimise TurboWin instead of closing"));
     assertTrue(message.contains("\n\n ("));
     assertFalse(message.contains("\\n"));
   }

@@ -140,7 +140,7 @@ final class Rs232VaisalaWowAprWorkflow {
 
           JOptionPane.showMessageDialog(
               null,
-              "WOW in TurboWin+ is disabled",
+              "WOW in TurboWin is disabled",
               main.APPLICATION_NAME,
               JOptionPane.WARNING_MESSAGE);
         } // if (destination.equals("WOW"))

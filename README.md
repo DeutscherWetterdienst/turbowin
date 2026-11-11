@@ -1,6 +1,6 @@
-# TurboWin+
+# TurboWin
 
-TurboWin+ is software for collecting high-quality, real-time meteorological observation data on ships.
+TurboWin is software for collecting high-quality, real-time meteorological observation data on ships.
 
 ## Repository policy
 

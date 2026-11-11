@@ -45,7 +45,7 @@ public final class about extends javax.swing.JFrame {
     jLabel17 = new javax.swing.JLabel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    setTitle("About TurboWin+");
+    setTitle("About TurboWin");
     setMinimumSize(new java.awt.Dimension(600, 700));
     setResizable(false);
 
@@ -65,7 +65,7 @@ public final class about extends javax.swing.JFrame {
     jLabel7.setForeground(new java.awt.Color(51, 0, 255));
     jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel7.setText(
-        "<html><u>TurboWin+ is free software and open-source software (GPLv3)</u></html>");
+        "<html><u>TurboWin is free software and open-source software (GPLv3)</u></html>");
     jLabel7.addMouseListener(
         new java.awt.event.MouseAdapter() {
           public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -83,7 +83,7 @@ public final class about extends javax.swing.JFrame {
 
     jLabel8.setForeground(new java.awt.Color(51, 0, 255));
     jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    jLabel8.setText("<html><u>TurboWin+ supports the Voluntary Observing Ship Scheme</u></html>");
+    jLabel8.setText("<html><u>TurboWin supports the Voluntary Observing Ship Scheme</u></html>");
     jLabel8.addMouseListener(
         new java.awt.event.MouseAdapter() {
           public void mouseClicked(java.awt.event.MouseEvent evt) {

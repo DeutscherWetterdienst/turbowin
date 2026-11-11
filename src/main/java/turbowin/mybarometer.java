@@ -684,7 +684,7 @@ public final class mybarometer extends javax.swing.JFrame {
         && (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_YES))) {
       // PTB220, PTB330, MintakaDuo, Mintaka Star USB or Mintaka Star WiFi connected
       String info =
-          "TurboWin+ will always retrieve the pressure at instrument level (never at MSL) of the connected barometer\n";
+          "TurboWin will always retrieve the pressure at instrument level (never at MSL) of the connected barometer\n";
       info += "Please change the appropriate settings\n";
       info +=
           "(see: Maintenance -> Station data -> air pressure meta data -> does the reading indicate MSL pressure: no)";

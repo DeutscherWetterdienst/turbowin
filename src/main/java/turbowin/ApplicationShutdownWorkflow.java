@@ -188,7 +188,7 @@ final class ApplicationShutdownWorkflow {
       tray.remove(trayIcon);
     }
 
-    // TurboWin+ stopped message to log
+    // TurboWin stopped message to log
     log_turbowin_system_message(
         "[GENERAL] stopped "
             + APPLICATION_NAME

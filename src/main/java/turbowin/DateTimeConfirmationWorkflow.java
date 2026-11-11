@@ -191,7 +191,7 @@ final class DateTimeConfirmationWorkflow {
       mydatetime.day = Integer.toString(obs_day_of_month); // for progress main screen
       mydatetime.hour = Integer.toString(obs_hour_of_day); // for progress main screen
 
-      /* update date and time on TurboWin+ main screen */
+      /* update date and time on TurboWin main screen */
       date_time_fields_update();
 
       // determine code figures for month (not for operational obs only for IMMT storage)

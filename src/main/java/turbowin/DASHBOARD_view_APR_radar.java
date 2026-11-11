@@ -67,7 +67,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
   private void initComponents1()
         // public static void initComponents1()
       {
-    // if autmatically opened (pop-up request thicked, see TurboWin+ APR maintenance menu) set this
+    // if autmatically opened (pop-up request thicked, see TurboWin APR maintenance menu) set this
     // APR radar dashboard always on top, but NOT if manually opened!
     if (isAlwaysOnTopSupported() && (main.dashboard_was_automatically_opened == true)) {
       try {

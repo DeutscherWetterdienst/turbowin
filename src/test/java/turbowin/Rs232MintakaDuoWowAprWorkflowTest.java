@@ -204,7 +204,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     String dialogMessage = runPressureRecord("1000.0", "WOW", new Date());
 
     if (!GraphicsEnvironment.isHeadless()) {
-      assertEquals("WOW in TurboWin+ is disabled", dialogMessage);
+      assertEquals("WOW in TurboWin is disabled", dialogMessage);
     }
     assertEquals("", mybarometer.pressure_reading_corrected);
   }

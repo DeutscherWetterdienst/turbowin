@@ -2113,7 +2113,7 @@ final class Rs232MintakaWowAprWorkflow {
           if (destination.equals("WOW")) {
             JOptionPane.showMessageDialog(
                 null,
-                "WOW in TurboWin+ is disabled",
+                "WOW in TurboWin is disabled",
                 main.APPLICATION_NAME,
                 JOptionPane.WARNING_MESSAGE);
             /*

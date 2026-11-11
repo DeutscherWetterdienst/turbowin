@@ -323,7 +323,7 @@ public class Jakarta_Email {
         // mail.smtp.charset=UTF-8
 
         if (attachment.equals("yes")) {
-          // NB in TurboWin+ an attachment only possible for format101 not possible if format = FM13
+          // NB in TurboWin an attachment only possible for format101 not possible if format = FM13
 
           // Format 101 output uses the HPK_ prefix under logs_dir/format_101/temp.
           final File attachment_file =

@@ -14,10 +14,10 @@ public class StartupEnvironmentTest {
   @Test
   public void selectsPlatformDataDirectories() {
     assertEquals(
-        "C:" + File.separator + "ProgramData" + File.separator + "TurboWinPlus",
+        "C:" + File.separator + "ProgramData" + File.separator + "TurboWin",
         StartupEnvironment.dataDirectory("WINDOWS"));
     assertEquals(
-        File.separator + "opt" + File.separator + "turbowinplus" + File.separator + "data",
+        File.separator + "opt" + File.separator + "turbowin" + File.separator + "data",
         StartupEnvironment.dataDirectory("LINUX"));
   }
 

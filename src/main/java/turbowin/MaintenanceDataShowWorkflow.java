@@ -31,7 +31,7 @@ final class MaintenanceDataShowWorkflow {
 
         // extend title with full path of the system log txt file (can be used to point the observer
         // to the file for eg forwarding to a Met Centre in case of problems)
-        // setTitle("TurboWin+ system log [" + volledig_path_turbowin_system_logs + "]");
+        // setTitle("TurboWin system log [" + volledig_path_turbowin_system_logs + "]");
 
         return null;
       } // protected Void doInBackground() throws Exception

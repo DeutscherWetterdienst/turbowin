@@ -24,8 +24,8 @@ LAUNCHER_AS_SERVICE_SCRIPTS
 case "$1" in
     remove|upgrade|deconfigure)
 # Move original binary and configuration files back to their original locations before uninstallation
-mv /opt/turbowinplus/bin/TurboWinPlus.run /opt/turbowinplus/bin/TurboWinPlus
-mv /opt/turbowinplus/lib/app/TurboWinPlus.run.cfg /opt/turbowinplus/lib/app/TurboWinPlus.cfg
+mv /opt/turbowin/bin/TurboWin.run /opt/turbowin/bin/TurboWin
+mv /opt/turbowin/lib/app/TurboWin.run.cfg /opt/turbowin/lib/app/TurboWin.cfg
 DESKTOP_COMMANDS_UNINSTALL
 LAUNCHER_AS_SERVICE_COMMANDS_UNINSTALL
     ;;

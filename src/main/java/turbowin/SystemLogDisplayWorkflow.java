@@ -34,7 +34,7 @@ final class SystemLogDisplayWorkflow {
 
         // extend title with full path of the system log txt file (can be used to point the observer
         // to the file for eg forwarding to a Met Centre in case of a problems)
-        owner.setTitle("TurboWin+ system log [" + volledig_path_turbowin_system_logs + "]");
+        owner.setTitle("TurboWin system log [" + volledig_path_turbowin_system_logs + "]");
 
         try (BufferedReader in =
             new BufferedReader(
@@ -46,11 +46,11 @@ final class SystemLogDisplayWorkflow {
         } // try
         catch (FileNotFoundException ex) {
           String info =
-              "[GENERAL] reading error 'TurboWin+ system log' file or no TurboWin+ events logged for the current month";
+              "[GENERAL] reading error 'TurboWin system log' file or no TurboWin events logged for the current month";
           main.log_turbowin_system_message(info);
           doorgaan = false;
         } catch (IOException ex) {
-          String info = "[GENERAL] error 'TurboWin+ system log' file (" + ex + ")";
+          String info = "[GENERAL] error 'TurboWin system log' file (" + ex + ")";
           main.log_turbowin_system_message(info);
           doorgaan = false;
         } // catch
@@ -78,11 +78,11 @@ final class SystemLogDisplayWorkflow {
             }
           } catch (FileNotFoundException ex) {
             String info =
-                "[GENERAL] reading error 'TurboWin+ system log' file or no TurboWin+ events logged for the current month";
+                "[GENERAL] reading error 'TurboWin system log' file or no TurboWin events logged for the current month";
             main.log_turbowin_system_message(info);
             doorgaan = false;
           } catch (IOException ex) {
-            String info = "[GENERAL] error 'TurboWin+ system log' file (" + ex + ")";
+            String info = "[GENERAL] error 'TurboWin system log' file (" + ex + ")";
             main.log_turbowin_system_message(info);
             doorgaan = false;
           } // catch

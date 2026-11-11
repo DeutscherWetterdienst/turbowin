@@ -149,7 +149,7 @@ public final class myobsformat extends javax.swing.JFrame {
         });
 
     buttonGroup3.add(jRadioButton4);
-    jRadioButton4.setText("uploads via TurboWin+ (Maintenance -> APR / APTR / AWSR settings)");
+    jRadioButton4.setText("uploads via TurboWin (Maintenance -> APR / APTR / AWSR settings)");
     jRadioButton4.addItemListener(
         new java.awt.event.ItemListener() {
           public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -379,13 +379,13 @@ public final class myobsformat extends javax.swing.JFrame {
     // obs format EUCAWS-AWS, so we have to check upload method too (eucaws or turbowin)
     //
     if ((doorgaan == true) && (main.obs_format.equals(main.FORMAT_AWS))) {
-      /////// EUCAWS uploads (EUCAWS or TurboWin+)
+      /////// EUCAWS uploads (EUCAWS or TurboWin)
       //
       if (jRadioButton3.isSelected() == true) // uploads via EUCAWS device (iridium modem)
       {
         main.eucaws_uploads_method = main.UPLOADS_VIA_EUCAWS;
         doorgaan = true;
-      } else if (jRadioButton4.isSelected() == true) // uploads via TurboWin+ (ship's internet)
+      } else if (jRadioButton4.isSelected() == true) // uploads via TurboWin (ship's internet)
       {
         main.eucaws_uploads_method = main.UPLOADS_VIA_TURBOWIN;
         doorgaan = true;
@@ -422,7 +422,7 @@ public final class myobsformat extends javax.swing.JFrame {
       main.schrijf_configuratie_regels();
 
       /* message */
-      String info = "Changes will take full effect after a TurboWin+ restart";
+      String info = "Changes will take full effect after a TurboWin restart";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
 
@@ -495,7 +495,7 @@ public final class myobsformat extends javax.swing.JFrame {
           evt) { // GEN-FIRST:event_EUCAWS_uploads_via_turbowin_itemStateChanged
     // TODO add your handling code here:
 
-    // obs uploads/sending via TurboWin+ then there is no SMD input (SMD input always via iridium
+    // obs uploads/sending via TurboWin then there is no SMD input (SMD input always via iridium
     // modem of the EUCAWS)
 
     jCheckBox1.setSelected(false); // add OBS_ID to SMD input

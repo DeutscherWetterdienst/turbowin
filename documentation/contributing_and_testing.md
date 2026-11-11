@@ -150,7 +150,7 @@ changing a diagram. From the repository root, using PlantUML 1.2025.4:
 ```bash
 java -jar /path/to/plantuml.jar -charset UTF-8 -tsvg \
   documentation/images/05_building_block_view.puml \
-  documentation/images/07_turbowinplus_pipeline.puml
+  documentation/images/07_turbowin_pipeline.puml
 ```
 
 The component diagram selects PlantUML's Smetana layout, so these diagrams do not require an

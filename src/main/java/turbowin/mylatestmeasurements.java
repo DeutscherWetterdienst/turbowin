@@ -343,11 +343,11 @@ public class mylatestmeasurements extends javax.swing.JFrame {
                 doorgaan_in_record = false;
               }
 
-              // If the by TurboWin+ added date and time are OK and number of commas in the record
+              // If the by TurboWin added date and time are OK and number of commas in the record
               // is OK then continue
               //
               if (doorgaan_in_record == true) {
-                // System.out.println("+++ If the by TurboWin+ added date and time are OK and number
+                // System.out.println("+++ If the by TurboWin added date and time are OK and number
                 // of commas in the record is OK then continue " + record);
 
                 // initialisation

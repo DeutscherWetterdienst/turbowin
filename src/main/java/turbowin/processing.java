@@ -19,7 +19,7 @@ public final class processing extends javax.swing.JFrame {
     jLabel1 = new javax.swing.JLabel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    setTitle("TurboWin+");
+    setTitle("TurboWin");
 
     jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel1.setText("Please wait, Processsing...");

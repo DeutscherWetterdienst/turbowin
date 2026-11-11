@@ -408,7 +408,7 @@ public class FORMAT_101 {
 
     // final int NBMAXELEM = 100;//1024;                                   // see compression.h
     // [TurboWin]
-    final int NBMAXELEM = 57; // 0 - 56 incl. array places (fixed number in TurboWin+)
+    final int NBMAXELEM = 57; // 0 - 56 incl. array places (fixed number in TurboWin)
     final int COMPRESSED_UNDEF_VALUE = 0; // see tmycompression.cpp [TurboWin]
 
     // int mode_oper;

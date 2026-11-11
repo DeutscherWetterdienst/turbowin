@@ -1440,9 +1440,9 @@ public final class RS232_settings extends javax.swing.JFrame {
             main.PRESSURE_READING_MSL_TXT + main.pressure_reading_msl_yes_no.trim();
 
         info =
-            "TurboWin+ will always retrieve the pressure at instrument level (never at MSL) of the connected barometer\n";
+            "TurboWin will always retrieve the pressure at instrument level (never at MSL) of the connected barometer\n";
         info +=
-            "TurboWin+ has automatically changed the setting \"does the reading indicate MSL pressure\" to \"no\" (see: Maintenance -> Station data)";
+            "TurboWin has automatically changed the setting \"does the reading indicate MSL pressure\" to \"no\" (see: Maintenance -> Station data)";
         JOptionPane.showMessageDialog(
             null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
         doorgaan = true;
@@ -1598,7 +1598,7 @@ public final class RS232_settings extends javax.swing.JFrame {
       }
     }
 
-    // Mintaka Star LAN IP address (the IP address TurboWin+ is listening to if ENet box is
+    // Mintaka Star LAN IP address (the IP address TurboWin is listening to if ENet box is
     // connected)
     if (doorgaan) {
       if (main.lan_ip_address.length() > 0) {

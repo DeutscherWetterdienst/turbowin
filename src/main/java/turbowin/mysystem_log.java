@@ -22,7 +22,7 @@ public class mysystem_log extends javax.swing.JFrame {
     jTextArea1 = new javax.swing.JTextArea();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    setTitle("TurboWin+ system log");
+    setTitle("TurboWin system log");
 
     jTextArea1.setEditable(false);
     jTextArea1.setColumns(20);

@@ -2561,7 +2561,7 @@ public final class myamversailingplan extends javax.swing.JFrame {
                 + "//"
                 + "\n";
 
-        // NB In TurboWin+ line I not optional for Deviation Report
+        // NB In TurboWin line I not optional for Deviation Report
         // if (amver_sp_port_des_name.length() > 0)   // optional for DR
         // {
         email_body +=

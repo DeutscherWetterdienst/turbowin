@@ -376,7 +376,7 @@
           <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="--- minimise TurboWin+ after AP[&amp;T]R or AWSR settings are set ---"/>
+        <Property name="text" type="java.lang.String" value="--- minimise TurboWin after AP[&amp;T]R or AWSR settings are set ---"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
@@ -385,7 +385,7 @@
           <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="--- enable TurboWin+ autostart to continue automatic reporting after a computer restart ---"/>
+        <Property name="text" type="java.lang.String" value="--- enable TurboWin autostart to continue automatic reporting after a computer restart ---"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel6">

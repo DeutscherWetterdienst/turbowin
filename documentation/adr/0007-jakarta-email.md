@@ -5,7 +5,7 @@
 
 ## Context
 
-TurboWin+ had a Python email module, architecture-specific helper binaries, and a Java/Jakarta SMTP
+TurboWin had a Python email module, architecture-specific helper binaries, and a Java/Jakarta SMTP
 path. Maintaining two custom transports duplicated configuration, failure handling, and packaging
 concerns.
 

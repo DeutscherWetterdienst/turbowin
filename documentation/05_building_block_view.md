@@ -1,6 +1,6 @@
 # Building Block View
 
-TurboWin+ is one Swing desktop application. Manual observations and connected instruments feed
+TurboWin is one Swing desktop application. Manual observations and connected instruments feed
 the current observation state; validation, coding, logging, and output workflows use that state.
 Supported interfaces include Vaisala, Mintaka, EUCAWS, OMC-140 AWS, and GPS.
 

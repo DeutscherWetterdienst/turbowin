@@ -863,7 +863,7 @@ public class OSM {
         new BufferedWriter(new FileWriter(full_path_leaflet_maps_html_file))) {
       if (main.OSM_mode.equals(main.OSM_ONLINE_MANUAL)
           || main.OSM_mode.equals(main.OSM_ONLINE_AWS_VISUAL)) {
-        OsmMapHtmlWriter.writeOnlineShell(out, "TurboWin+ Obs's Map (internet)");
+        OsmMapHtmlWriter.writeOnlineShell(out, "TurboWin Obs's Map (internet)");
       } // if (main.OSM_mode.equals(main.OSM_ONLINE_MANUAL) ||
       // main.OSM_mode.equals(main.OSM_ONLINE_AWS_VISUAL))
       else if (main.OSM_mode.equals(main.OSM_OFFLINE_MANUAL)
@@ -871,7 +871,7 @@ public class OSM {
       {
         OsmMapHtmlWriter.writeOfflineShell(
             out,
-            "TurboWin+ Obs's Map (offline)",
+            "TurboWin Obs's Map (offline)",
             "var iconOptions = { iconUrl: 'marker_red_meet.png', iconAnchor: [10, 25], iconPopup: [0, -20] };");
       } // else if (main.OSM_mode.equals(main.OSM_OFFLINE_MANUAL) ||
       // main.OSM_mode.equals(main.OSM_OFFLINE_AWS_VISUAL))
@@ -1339,12 +1339,12 @@ public class OSM {
     try (BufferedWriter out =
         new BufferedWriter(new FileWriter(full_path_leaflet_maps_html_file))) {
       if (main.OSM_mode.equals(main.OSM_ONLINE_AWS_SENSOR)) {
-        OsmMapHtmlWriter.writeOnlineShell(out, "TurboWin+ AWS sensor Map (internet)");
+        OsmMapHtmlWriter.writeOnlineShell(out, "TurboWin AWS sensor Map (internet)");
       } // if (main.OSM_mode.equals(main.OSM_ONLINE_AWS_SENSOR))
       else if (main.OSM_mode.equals(main.OSM_OFFLINE_AWS_SENSOR)) {
         OsmMapHtmlWriter.writeOfflineShell(
             out,
-            "TurboWin+ AWS sensor Map (offline)",
+            "TurboWin AWS sensor Map (offline)",
             "var iconOptions = { iconUrl: 'marker_red_meet.png', iconAnchor: [10, 2] };");
       } // else if (main.OSM_mode.equals(main.OSM_OFFLINE_AWS_SENSOR))
 

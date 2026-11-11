@@ -1,5 +1,5 @@
 # Introduction and Goals
-TurboWin+ is a software for collecting high-quality, real-time meteorological observation data on ships. It enables the monitoring and verification of the data accuracy before transmitting it a to a weather service.
+TurboWin is a software for collecting high-quality, real-time meteorological observation data on ships. It enables the monitoring and verification of the data accuracy before transmitting it a to a weather service.
 It was made possible by E-SURFMAR and KNMI, with contributions from several National Meteorological Services and endorsement by the WMO (World Meteorological Organization).
 
 ## Requirements Overview

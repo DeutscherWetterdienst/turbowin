@@ -46,7 +46,7 @@ final class OutputMenuStateUpdater {
       jMenuItem46.setEnabled(false); // Obs to AWS (so also disabled for OMC-140!!)
     }
 
-    // EUCAWS connected but uploads via TurboWin+
+    // EUCAWS connected but uploads via TurboWin
     if ((RS232_connection_mode == 3) && (eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN))) {
       // disable the "Obs to AWS" menu item
       jMenuItem46.setEnabled(false);

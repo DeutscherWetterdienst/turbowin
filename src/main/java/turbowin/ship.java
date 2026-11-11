@@ -4874,14 +4874,14 @@ public class ship {
 
     double bridge_height = 10;
     if (wind_rose_diameter
-        > BRIDGE_DRAW_LIMIT) // >= e.g. when 4K screen resolution + TurboWin+ full screen
+        > BRIDGE_DRAW_LIMIT) // >= e.g. when 4K screen resolution + TurboWin full screen
     {
       bridge_height = 14;
     }
 
     double acc_height = bridge_height * 7;
     if (wind_rose_diameter
-        > BRIDGE_DRAW_LIMIT) // >= e.g. when 4K screen resolution + TurboWin+ full screen
+        > BRIDGE_DRAW_LIMIT) // >= e.g. when 4K screen resolution + TurboWin full screen
     {
       acc_height = bridge_height * 10;
     }

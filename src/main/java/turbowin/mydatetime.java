@@ -603,7 +603,7 @@ public final class mydatetime extends javax.swing.JFrame {
   public static String hour = "";
   public static String minute =
       "00"; // 00 default for manual obs but overwritten by AWS (SMD output data displayed on
-  // TurboWin+ main screen)
+  // TurboWin main screen)
   public static String MM_code = ""; // month of year (always 2 char)
   public static String YY_code = ""; // day of the month (always 2 char)
   public static String GG_code = ""; // hour of obs       (always 2 char)

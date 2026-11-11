@@ -42,7 +42,7 @@ final class OfflineStartupWorkflow {
       return null;
     } catch (IOException e) {
       JOptionPane.showMessageDialog(
-          null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+          null, "TurboWin is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
       System.exit(0);
       return null;
     }

@@ -35,7 +35,7 @@ flowchart TD
 `ConfigurationManager` converts between globals and text lines; `ConfigurationFileStore` performs
 file I/O. The same line format is used by maintenance import/export.
 
-The data root defaults to `C:\ProgramData\TurboWinPlus` on Windows and `/opt/turbowinplus/data`
+The data root defaults to `C:\ProgramData\TurboWin` on Windows and `/opt/turbowin/data`
 elsewhere. `-Dturbowin.data.dir=...` overrides it and disables automatic legacy migration.
 Otherwise startup checks the known Windows, Debian, and versioned RPM installation
 layouts before loading; see the [deployment view](07_deployment_view.md#runtime-and-writable-data).

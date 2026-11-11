@@ -17,7 +17,7 @@ final class Rs422ReadAndSendSensorDataForAwsrWorkflow {
 
   void start(final boolean retry) {
     // check the presence of the various meteo parameters in the data received from an AWS (data
-    // stored by TurboWin+ in sensor data files)
+    // stored by TurboWin in sensor data files)
 
     // called from: Function RS422_V3_write_sensor_data_to_file() [file main_RS232_RS422.java]
     //

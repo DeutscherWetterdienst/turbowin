@@ -5,7 +5,7 @@
 
 ## Context
 
-TurboWin+ is a desktop Java application deployed across Windows and Linux systems. The build,
+TurboWin is a desktop Java application deployed across Windows and Linux systems. The build,
 dependency, test, and installer paths had to become reproducible while retaining platform-specific
 serial and desktop integrations.
 

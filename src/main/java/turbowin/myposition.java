@@ -1549,7 +1549,7 @@ public final class myposition extends javax.swing.JFrame {
       out.write("  <meta charset=utf-8 />");
       out.newLine();
       out.newLine();
-      out.write("  <title>TurboWin+</title>");
+      out.write("  <title>TurboWin</title>");
       out.newLine();
       out.write(
           "  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />");

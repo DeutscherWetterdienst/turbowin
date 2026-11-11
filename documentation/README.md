@@ -1,4 +1,4 @@
-# TurboWin+ documentation
+# TurboWin documentation
 
 This directory describes the current application using the [arc42 structure](about-arc42.md).
 The extracted workflows and parsers improve navigation and testing, but the application still

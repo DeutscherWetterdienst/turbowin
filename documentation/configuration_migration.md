@@ -12,10 +12,10 @@ directory. Its default paths are:
 
 | Purpose | Windows | Linux / non-Windows branch |
 | --- | --- | --- |
-| Active settings | `C:\ProgramData\TurboWinPlus\configuration.txt` | `/opt/turbowinplus/data/configuration.txt` |
-| Previous valid settings | `C:\ProgramData\TurboWinPlus\configuration.txt.bak` | `/opt/turbowinplus/data/configuration.txt.bak` |
-| Default operational logs | `C:\ProgramData\TurboWinPlus\logs\` | `/opt/turbowinplus/data/logs/` |
-| AMVER data | `C:\ProgramData\TurboWinPlus\amver\` | `/opt/turbowinplus/data/amver/` |
+| Active settings | `C:\ProgramData\TurboWin\configuration.txt` | `/opt/turbowin/data/configuration.txt` |
+| Previous valid settings | `C:\ProgramData\TurboWin\configuration.txt.bak` | `/opt/turbowin/data/configuration.txt.bak` |
+| Default operational logs | `C:\ProgramData\TurboWin\logs\` | `/opt/turbowin/data/logs/` |
+| AMVER data | `C:\ProgramData\TurboWin\amver\` | `/opt/turbowin/data/amver/` |
 
 There is one active configuration. Startup tries that file first and validates the backup only
 if the active file cannot be used. Saves update the active file and, when its valid contents
@@ -44,9 +44,9 @@ copy has a later modification time. The copies are not merged and timestamps are
 
 | Legacy layout | Installation bin directory | New active configuration |
 | --- | --- | --- |
-| Windows | `C:\Program Files (x86)\TurboWin+\bin` or `C:\Program Files\TurboWin+\bin` | `C:\ProgramData\TurboWinPlus\configuration.txt` |
-| Debian | `/usr/local/bin/turbowin_jws/bin` | `/opt/turbowinplus/data/configuration.txt` |
-| RPM | `/usr/local/bin/TurboWin+-<version>/turbowin_jws/bin` | `/opt/turbowinplus/data/configuration.txt` |
+| Windows | `C:\Program Files (x86)\TurboWin+\bin` or `C:\Program Files\TurboWin+\bin` | `C:\ProgramData\TurboWin\configuration.txt` |
+| Debian | `/usr/local/bin/turbowin_jws/bin` | `/opt/turbowin/data/configuration.txt` |
+| RPM | `/usr/local/bin/TurboWin+-<version>/turbowin_jws/bin` | `/opt/turbowin/data/configuration.txt` |
 
 Windows discovery checks the `ProgramFiles(x86)`, `ProgramW6432`, and `ProgramFiles` environment
 directories, in that order, then the two conventional `C:` locations above. Duplicate normalized
@@ -97,7 +97,7 @@ current directories. `[CONFIGURATION]` diagnostics identify files loaded or reje
 
 For example, an RPM 4.6 configuration pointing to
 `/usr/local/bin/TurboWin+-4.6.0/turbowin_jws/bin/logs` is rewritten to
-`/opt/turbowinplus/data/logs`. A custom `/srv/ship-logs` stays unchanged. A custom `../ship-logs`
+`/opt/turbowin/data/logs`. A custom `/srv/ship-logs` stays unchanged. A custom `../ship-logs`
 is resolved relative to the old `bin` directory so it continues to refer to its original location.
 Empty or unresolvable custom values are preserved. Explicit imports do not perform this rebasing.
 

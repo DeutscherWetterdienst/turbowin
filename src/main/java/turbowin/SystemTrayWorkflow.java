@@ -52,9 +52,9 @@ final class SystemTrayWorkflow {
         tray = SystemTray.getSystemTray();
 
         // set tool tip text
-        trayIcon.setToolTip("TurboWin+ weather observations");
+        trayIcon.setToolTip("TurboWin weather observations");
 
-        // message pop-up (left mouse click on TurboWin+ system tray icon)
+        // message pop-up (left mouse click on TurboWin system tray icon)
         //     NB The only way to display a "dynamic" tooltip that pops up when the mouse cursor
         // hovers over the tray icon
         //
@@ -63,7 +63,7 @@ final class SystemTrayWorkflow {
               @Override
               public void mouseClicked(MouseEvent e) {
                 //// test begin ////
-                // trayIcon.displayMessage("TurboWin+", "test", MessageType.INFO);
+                // trayIcon.displayMessage("TurboWin", "test", MessageType.INFO);
                 /////// test end ////
 
                 // if (e.getButton() == MouseEvent.BUTTON1)           // left mouse button
@@ -73,7 +73,7 @@ final class SystemTrayWorkflow {
                   /// test begin
                   // JOptionPane.showMessageDialog(null, "test", main.APPLICATION_NAME + " test left
                   // mouse button clicked", JOptionPane.INFORMATION_MESSAGE);
-                  // trayIcon.displayMessage("TurboWin+", "test left mouse button clicked",
+                  // trayIcon.displayMessage("TurboWin", "test left mouse button clicked",
                   // MessageType.INFO);
                   /// test end
 
@@ -198,7 +198,7 @@ final class SystemTrayWorkflow {
                         // "true wind dir at sensor height: " + mywind.int_true_wind_dir + " degr";
                       } // if ( (int_day >= 1) && (int_day <= 31) )
 
-                      // trayIcon.displayMessage("TurboWin+", info, MessageType.INFO);
+                      // trayIcon.displayMessage("TurboWin", info, MessageType.INFO);
                       JOptionPane.showMessageDialog(
                           null, info, main.APPLICATION_NAME, JOptionPane.INFORMATION_MESSAGE);
 
@@ -207,18 +207,18 @@ final class SystemTrayWorkflow {
                       info =
                           "no sensor data available"; // eg just after start-up (takes 1 minute to
                       // start collecting)
-                      // trayIcon.displayMessage("TurboWin+", info, MessageType.INFO);
+                      // trayIcon.displayMessage("TurboWin", info, MessageType.INFO);
                       JOptionPane.showMessageDialog(
                           null, info, main.APPLICATION_NAME, JOptionPane.INFORMATION_MESSAGE);
                     } // catch
 
                   } // else if ( (RS232_connection_mode == 3 || RS232_connection_mode == 9 ||
                   // RS232_connection_mode == 11) && (defaultPort != null) )
-                  else // TurboWin+ stand-alone mode (no serial connection to barometer or AWS and
+                  else // TurboWin stand-alone mode (no serial connection to barometer or AWS and
                   // no WiFi)
                   {
-                    info = "right click icon to maximize or exit TurboWin+";
-                    // trayIcon.displayMessage("TurboWin+", info, MessageType.INFO);
+                    info = "right click icon to maximize or exit TurboWin";
+                    // trayIcon.displayMessage("TurboWin", info, MessageType.INFO);
                     JOptionPane.showMessageDialog(
                         null, info, main.APPLICATION_NAME, JOptionPane.INFORMATION_MESSAGE);
                   } // else
@@ -547,9 +547,9 @@ final class SystemTrayWorkflow {
 
         // menu items 'exit' and 'restore (maximize)' always present!
         //
-        MenuItem restoreItem = new MenuItem("Maximize TurboWin+");
+        MenuItem restoreItem = new MenuItem("Maximize TurboWin");
         popup.add(restoreItem);
-        MenuItem exitItem = new MenuItem("Exit TurboWin+");
+        MenuItem exitItem = new MenuItem("Exit TurboWin");
         popup.add(exitItem);
 
         // exit program
@@ -590,7 +590,7 @@ final class SystemTrayWorkflow {
           // {
           tray.add(trayIcon);
           // }
-          // trayIcon.displayMessage("TurboWin+", "test", MessageType.INFO);
+          // trayIcon.displayMessage("TurboWin", "test", MessageType.INFO);
         } catch (AWTException e) {
           System.out.println("+++ TrayIcon could not be added.");
         }

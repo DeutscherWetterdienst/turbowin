@@ -1766,7 +1766,7 @@ public final class mystationdata extends javax.swing.JFrame {
 
       /* message */
       // info = "Changes will take effect inmediatelly. Not necessary to restart";
-      info = "Changes will take full effect after a TurboWin+ restart";
+      info = "Changes will take full effect after a TurboWin restart";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
 
@@ -1804,9 +1804,9 @@ public final class mystationdata extends javax.swing.JFrame {
 
     String info =
         "If this is not the first time use of this program then you can import previous (automatically) saved station data\n";
-    info += "The location of the station data file depends on the TurboWin+ installation folder\n";
+    info += "The location of the station data file depends on the TurboWin installation folder\n";
     info +=
-        "If the location of the station data file (configuration.txt) is not known you can do, before importing, a file search on your disk outside TurboWin+";
+        "If the location of the station data file (configuration.txt) is not known you can do, before importing, a file search on your disk outside TurboWin";
 
     int reply =
         JOptionPane.showConfirmDialog(

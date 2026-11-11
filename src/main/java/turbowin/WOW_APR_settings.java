@@ -252,12 +252,12 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
 
     jLabel3.setForeground(java.awt.Color.blue);
     jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    jLabel3.setText("--- minimise TurboWin+ after AP[&T]R or AWSR settings are set ---");
+    jLabel3.setText("--- minimise TurboWin after AP[&T]R or AWSR settings are set ---");
 
     jLabel4.setForeground(java.awt.Color.blue);
     jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel4.setText(
-        "--- enable TurboWin+ autostart to continue automatic reporting after a computer restart ---");
+        "--- enable TurboWin autostart to continue automatic reporting after a computer restart ---");
 
     jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
     jPanel6.setPreferredSize(new java.awt.Dimension(384, 95));
@@ -1647,7 +1647,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
         && (main.eucaws_uploads_method.equals(main.UPLOADS_VIA_TURBOWIN) == false)) {
       // NB AWS mode is always reporting with format101
       info =
-          "[AWSR] In AWSR mode the obs format must be FM13 or 101 or 'AWS + uploads via TurboWin+' (select: Maintenance -> Obs format setting)";
+          "[AWSR] In AWSR mode the obs format must be FM13 or 101 or 'AWS + uploads via TurboWin' (select: Maintenance -> Obs format setting)";
       JOptionPane.showMessageDialog(
           null,
           info,

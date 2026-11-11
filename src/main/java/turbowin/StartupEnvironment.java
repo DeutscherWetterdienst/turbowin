@@ -14,9 +14,9 @@ final class StartupEnvironment {
 
   static String dataDirectory(String os) {
     if (os.equals("WINDOWS")) {
-      return "C:" + File.separator + "ProgramData" + File.separator + "TurboWinPlus";
+      return "C:" + File.separator + "ProgramData" + File.separator + "TurboWin";
     }
-    return File.separator + "opt" + File.separator + "turbowinplus" + File.separator + "data";
+    return File.separator + "opt" + File.separator + "turbowin" + File.separator + "data";
   }
 
   static OfflineMode detectOfflineMode(

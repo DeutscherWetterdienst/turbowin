@@ -62,7 +62,7 @@ public class HttpStatusMapper {
     CODE_TO_TEXT.put(505, "HTTP Version not supported (HTTP code 505)");
     CODE_TO_TEXT.put(511, "Authentication Required (HTTP code 511)");
 
-    // 7xx: TurboWin+/server Error (custom/self-defined errors) [2 sections]
+    // 7xx: TurboWin/server Error (custom/self-defined errors) [2 sections]
     //// start first self defined section (must be coordinated with server [index_webstart_101.php])
     // //////
     CODE_TO_TEXT.put(700, "obs invalid format");

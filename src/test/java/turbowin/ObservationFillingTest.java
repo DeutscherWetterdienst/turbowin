@@ -311,7 +311,7 @@ public class ObservationFillingTest extends AbstractUiTest {
 
   private void closeRestartDialog() throws InterruptedException {
     DialogFixture turboWinInfoFrame =
-        WindowFinder.findDialog(new DialogTitleMatcher("TurboWin+ info")).using(this.robot());
+        WindowFinder.findDialog(new DialogTitleMatcher("TurboWin info")).using(this.robot());
 
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
     turboWinInfoFrame

@@ -17,7 +17,7 @@ public class OsmMapHtmlCharacterizationTest {
   public void writesOnlineObservationMapShell() throws Exception {
     String html = writeObservationMap(main.OSM_ONLINE_MANUAL);
 
-    assertTrue(html.contains("<title>TurboWin+ Obs's Map (internet)</title>"));
+    assertTrue(html.contains("<title>TurboWin Obs's Map (internet)</title>"));
     assertTrue(html.contains(main.LEAFLET_CSS_URL));
     assertTrue(html.contains("L.esri.basemapLayer(\"Topographic\").addTo(map);"));
     assertTrue(html.endsWith("</html>\n"));
@@ -27,7 +27,7 @@ public class OsmMapHtmlCharacterizationTest {
   public void writesOfflineObservationMapShell() throws Exception {
     String html = writeObservationMap(main.OSM_OFFLINE_MANUAL);
 
-    assertTrue(html.contains("<title>TurboWin+ Obs's Map (offline)</title>"));
+    assertTrue(html.contains("<title>TurboWin Obs's Map (offline)</title>"));
     assertTrue(html.contains("href=\"leaflet.css\""));
     assertTrue(html.contains("L.tileLayer('OSMPublicTransport/{z}/{x}/{y}.png'"));
     assertTrue(html.endsWith("</html>\n"));
@@ -57,7 +57,7 @@ public class OsmMapHtmlCharacterizationTest {
   public void writesOnlineAwsSensorMapShell() throws Exception {
     String html = writeAwsSensorMap(main.OSM_ONLINE_AWS_SENSOR);
 
-    assertTrue(html.contains("<title>TurboWin+ AWS sensor Map (internet)</title>"));
+    assertTrue(html.contains("<title>TurboWin AWS sensor Map (internet)</title>"));
     assertTrue(html.contains(main.LEAFLET_ESRI_URL));
     assertTrue(html.contains("L.esri.basemapLayer(\"Topographic\").addTo(map);"));
     assertTrue(html.endsWith("</html>\n"));
@@ -67,7 +67,7 @@ public class OsmMapHtmlCharacterizationTest {
   public void writesOfflineAwsSensorMapShell() throws Exception {
     String html = writeAwsSensorMap(main.OSM_OFFLINE_AWS_SENSOR);
 
-    assertTrue(html.contains("<title>TurboWin+ AWS sensor Map (offline)</title>"));
+    assertTrue(html.contains("<title>TurboWin AWS sensor Map (offline)</title>"));
     assertTrue(html.contains("src=\"leaflet.js\""));
     assertTrue(html.contains("L.tileLayer('OSMPublicTransport/{z}/{x}/{y}.png'"));
     assertFalse(html.contains("L.marker(["));

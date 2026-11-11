@@ -990,7 +990,7 @@ final class ImmtLogWorkflow {
                //System.out.println("+++ GERMANY ok");
 
                // NB ONLY for Germany:
-               //    convert TurboWin+ format storage of observer to TurboWin storage (replace ; by space and only use sure name + (first) initial
+               //    convert TurboWin format storage of observer to TurboWin storage (replace ; by space and only use sure name + (first) initial
                //    Stam;M;1st off;-;       ->      Stam M
                String selected_observer = "";
 

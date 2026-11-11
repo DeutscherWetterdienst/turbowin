@@ -22,7 +22,7 @@ public class mydevice_log extends javax.swing.JFrame {
     jTextArea1 = new javax.swing.JTextArea();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-    setTitle("turboWin+ device log");
+    setTitle("TurboWin device log");
 
     jTextArea1.setEditable(false);
     jTextArea1.setColumns(20);
@@ -139,7 +139,7 @@ public class mydevice_log extends javax.swing.JFrame {
     // eg http://www.javacreed.com/swing-worker-example/
 
     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-    setTitle("TurboWin+ device log");
+    setTitle("TurboWin device log");
 
     DeviceLogWorkflow.start(this, newline);
 

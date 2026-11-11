@@ -8,8 +8,8 @@ public class StartupEnvironmentWorkflowTest {
 
   @Test
   public void createsOfflineAndOnlineApplicationLabels() {
-    assertEquals("TurboWin+ ", StartupEnvironmentWorkflow.applicationLabel("TurboWin+", true));
+    assertEquals("TurboWin ", StartupEnvironmentWorkflow.applicationLabel("TurboWin", true));
     assertEquals(
-        "TurboWin+ web mode", StartupEnvironmentWorkflow.applicationLabel("TurboWin+", false));
+        "TurboWin web mode", StartupEnvironmentWorkflow.applicationLabel("TurboWin", false));
   }
 }

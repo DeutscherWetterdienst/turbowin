@@ -163,7 +163,7 @@ import javax.swing.JPopupMenu;
 * main.configuratie_regels[81]                                  => logs email method (pc-default or custom)
 * main.configuratie_regels[82]                                  => eucaws upload method (eucaws modem or turbowin)
 * main.configuratie_regels[83]                                  => port mode option; deactivate_APR_AWSR_ship_speed_minimal [true/false]
-* main.configuratie_regels[84]                                  => LAN IP addrees; (IP address TurboWin+ is listening to if Mintaka ENet box is connected)
+* main.configuratie_regels[84]                                  => LAN IP addrees; (IP address TurboWin is listening to if Mintaka ENet box is connected)
 * main.configuratie_regels[85]                                  => dashboard ship (LNG)tank color
 * main.configuratie_regels[86]                                  => dashboard_font;                          // for hybrid dashboard
 * main.configuratie_regels[87]                                  => communication protocol client <-> server (HTTPS-HTTP]
@@ -182,7 +182,7 @@ import javax.swing.JPopupMenu;
 * ---------------------------------------------------------------------------------------------------------------------
 * logging/dispalying examples:
 *               - main.log_turbowin_system_message(message);  // NB inclusive System.out.printLn
-*               - JOptionPane.showMessageDialog(null, "TurboWin+ is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+*               - JOptionPane.showMessageDialog(null, "TurboWin is already running", main.APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
 *               - System.out.println("test");
 *
 **/
@@ -6650,7 +6650,7 @@ public class main extends javax.swing.JFrame {
 
   // public var's
   public static final String APPLICATION_NAME =
-      "TurboWin+"; // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
+      "TurboWin"; // NB DO NOT FORGET TO BUILD ALL AFTER A CHANGE OF THIS STRING
   public static final String APPLICATION_MET_MODULES = "Java Format 101 encoder; Jakarta Mail;";
   public static final String DASHBOARD_LOGO = "logo-sot.png"; // i.a. single dashboard barometer
   public static String application_mode =
@@ -6883,7 +6883,7 @@ public class main extends javax.swing.JFrame {
       mode_grafiek; // first initialisation in initComponents2() later in Functions:
   // Graphs_Airtemp_Sensor_Data_actionPerformed() etc.
   public static String lan_ip_address =
-      ""; // IP address TurboWin+ is listening to if Mintaka ENet box is connected
+      ""; // IP address TurboWin is listening to if Mintaka ENet box is connected
   public static SimpleDateFormat sdf3;
   public static SimpleDateFormat sdf4;
   public static SimpleDateFormat sdf_tsl_1; // TurboWin system logs

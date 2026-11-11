@@ -1441,7 +1441,7 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
     } // if (main.VOT_from_AWS_present)
     else // no VOT_from_aws_present
     {
-      if (main.AWSR) // e.g. OMC-140 and 'EUCAWS + uploads via TurboWin+' (but NOT 'EUCAWS + uploads
+      if (main.AWSR) // e.g. OMC-140 and 'EUCAWS + uploads via TurboWin' (but NOT 'EUCAWS + uploads
       // via own iridium modem' or APR)
       {
         cal_AWSR_system_d_time =

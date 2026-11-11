@@ -1,6 +1,6 @@
 # Deployment View
 
-TurboWin+ is installed locally on ship-based and fixed sea stations. Current packaging jobs target
+TurboWin is installed locally on ship-based and fixed sea stations. Current packaging jobs target
 Windows x64, Linux DEB on amd64/ARM64, and Linux RPM on amd64. Java portability does not guarantee
 that every hardware driver or desktop integration works on every platform. Format 101 encoding
 is implemented in Java and no native Format 101 helper is packaged with the application.
@@ -16,8 +16,8 @@ Current default writable roots from
 
 | Platform branch | Data root |
 | --- | --- |
-| Windows | `C:\ProgramData\TurboWinPlus` |
-| Non-Windows | `/opt/turbowinplus/data` |
+| Windows | `C:\ProgramData\TurboWin` |
+| Non-Windows | `/opt/turbowin/data` |
 
 Desktop startup creates `logs` (including system logs) and `amver` below that root. Installation
 and user permissions must permit writing there. Tests can use the `turbowin.data.dir` system
@@ -100,7 +100,7 @@ assets.
 
 ## Continuous integration
 
-![Current build and test jobs](images/07_turbowinplus_pipeline.svg)
+![Current build and test jobs](images/07_turbowin_pipeline.svg)
 
 [GitHub Actions](../.github/workflows/) defines separate test and platform packaging workflows
 on pushes/pull requests; the JAR workflow is manually dispatched. [.gitlab-ci.yml](../.gitlab-ci.yml)

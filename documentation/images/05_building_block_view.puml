@@ -2,7 +2,7 @@
 !pragma layout smetana
 skinparam componentStyle rectangle
 top to bottom direction
-title TurboWin+ responsibilities (one desktop application)
+title TurboWin responsibilities (one desktop application)
 
 actor "Ship observer" as Observer
 component "Instruments / GPS\nVaisala, Mintaka, EUCAWS, OMC-140" as Sensors
@@ -10,7 +10,7 @@ component "Email server /\ndesktop mail client" as Email
 component "Observation server\nHTTP / HTTPS" as HTTP
 component "Java Format 101\nencoder" as Format101
 
-component "TurboWin+" as TurboWin {
+component "TurboWin" as TurboWin {
   component "Swing forms /\nlegacy entry points" as UI
   component "Startup / configuration\nworkflows" as Startup
   component "Device workflows /\nrecord parsers" as Acquisition

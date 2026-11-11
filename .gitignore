@@ -19,5 +19,5 @@ nbdist/
 # macOS
 .DS_Store
 
-# TurboWin+
+# TurboWin
 configuration.txt
