@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.beryx.jlink' version '4.0.2'
     id 'com.diffplug.spotless' version '8.6.0'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group = 'turbowin'
@@ -24,6 +25,11 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.assertj:assertj-swing-junit:3.17.1'
+}
+
+javafx {
+    version = '21.0.6'
+    modules = ['javafx.controls']
 }
 
 sourceSets {

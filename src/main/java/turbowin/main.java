@@ -3942,9 +3942,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudcover_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudcover_menu_actionPerformed
-    mycloudcover form = new mycloudcover();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    CloudCoverJavaFxWindow.open();
   } // GEN-LAST:event_Input_Cloudcover_menu_actionPerformed
 
   void Input_Presentweather_menu_actionPerformed(

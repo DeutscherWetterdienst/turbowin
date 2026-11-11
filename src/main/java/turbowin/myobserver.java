@@ -867,9 +867,7 @@ public final class myobserver extends javax.swing.JFrame {
     // }
     // else
     // {
-    mycloudcover form = new mycloudcover();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    CloudCoverJavaFxWindow.open();
     // }
   }
 

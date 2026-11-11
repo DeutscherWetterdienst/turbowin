@@ -858,9 +858,7 @@ public final class mych extends javax.swing.JFrame {
   }
 
   private void next_screen() {
-    mycloudcover form = new mycloudcover();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    CloudCoverJavaFxWindow.open();
   }
 
   /**

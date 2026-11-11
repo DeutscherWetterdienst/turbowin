@@ -1199,7 +1199,7 @@ public final class mycloudcover extends javax.swing.JFrame {
     // height lowest clouds in the sky
 
     // compute h advice
-    int h_advies = Compute_h_advice();
+    int h_advies = computeHeightAdvice();
 
     if (h_advies == -9) // cloudless
     jRadioButton23.setSelected(true);
@@ -1216,7 +1216,7 @@ public final class mycloudcover extends javax.swing.JFrame {
     else jRadioButton34.setSelected(true); // not determined
   }
 
-  private int Compute_h_advice() {
+  static int computeHeightAdvice() {
     int h_advies = main.INVALID;
     int local_int_Cl;
     int local_int_Cm;
