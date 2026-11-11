@@ -1,0 +1,47 @@
+.cloud-cover-root {
+    -fx-background-color: linear-gradient(to bottom right, #f8fbff, #e8f0f8);
+    -fx-font-family: "System";
+}
+
+.heading {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #16324f;
+}
+
+.hint {
+    -fx-text-fill: #526779;
+    -fx-font-size: 13px;
+}
+
+.choice-group {
+    -fx-background-color: rgba(255, 255, 255, 0.86);
+    -fx-background-radius: 10px;
+    -fx-border-color: #c8d6e5;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(26, 54, 80, 0.12), 8, 0.2, 0, 2);
+    -fx-pref-width: 230px;
+}
+
+.group-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #234d6f;
+    -fx-padding: 0 0 6px 0;
+}
+
+.radio-button {
+    -fx-text-fill: #243746;
+    -fx-padding: 3px 0;
+}
+
+.button {
+    -fx-background-radius: 6px;
+    -fx-padding: 7px 14px;
+}
+
+.button:default {
+    -fx-background-color: #236da3;
+    -fx-text-fill: white;
+}

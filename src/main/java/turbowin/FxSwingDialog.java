@@ -51,7 +51,14 @@ final class FxSwingDialog {
       // JavaFX must stay available after the last embedded window is closed.
       Platform.setImplicitExit(false);
       if (!closed.get()) {
-        Scene scene = sceneFactory.apply(() -> SwingUtilities.invokeLater(dialog::dispose));
+        Scene scene =
+            sceneFactory.apply(() -> {
+              if (SwingUtilities.isEventDispatchThread()) {
+                dialog.dispose();
+              } else {
+                SwingUtilities.invokeLater(dialog::dispose);
+              }
+            });
         if (!closed.get()) {
           panel.setScene(scene);
         }

@@ -3,6 +3,9 @@ package turbowin;
 import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.TimeUnit;
+import javafx.scene.Scene;
+import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.data.TableCell;
@@ -29,7 +32,7 @@ public class ObservationFillingTest extends AbstractUiTest {
   }
 
   @Test
-  public void testFillingOutAllValuesForAFM13() throws InterruptedException {
+  public void testFillingOutAllValuesForAFM13() throws Exception {
     addObserverInformation();
 
     fillAllStationData();
@@ -277,22 +280,27 @@ public class ObservationFillingTest extends AbstractUiTest {
     clickOkButtonInFrame(lowCloudsFrame);
   }
 
-  private void fillTotalCloudCoverInformation() throws InterruptedException {
+  private void fillTotalCloudCoverInformation() throws Exception {
     this.frame
         .label(JLabelMatcher.withText("Total cloud cov"))
         .requireVisible()
         .requireEnabled()
         .click();
-    FrameFixture lowCloudsFrame =
-        WindowFinder.findFrame(
-                new FrameTitleMatcher(
+    DialogFixture lowCloudsFrame =
+        WindowFinder.findDialog(
+                new DialogTitleMatcher(
                     "Total cloud cover, amount of Cl (Cm) and height of base of lowest cloud"))
             .using(this.robot());
-    lowCloudsFrame.panel("total").radioButton(new RadioButtonMatcher("4/8")).click();
-    lowCloudsFrame.panel("cl").radioButton(new RadioButtonMatcher("3/8")).click();
-    lowCloudsFrame.panel("low").radioButton(new RadioButtonMatcher("1000 - 2000 ft")).click();
-
-    clickOkButtonInFrame(lowCloudsFrame);
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) lowCloudsFrame.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      scene.getRoot().applyCss();
+      CloudCoverFxTestSupport.choose(scene, "total", mycloudcover.N_4_8);
+      CloudCoverFxTestSupport.choose(scene, "cl", mycloudcover.NH_3_8);
+      CloudCoverFxTestSupport.choose(scene, "low", mycloudcover.H_300_600);
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void addObserverInformation() throws InterruptedException {
