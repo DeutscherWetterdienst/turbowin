@@ -1,6 +1,8 @@
 package turbowin;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import java.util.function.LongSupplier;
 
 /**
@@ -16,7 +18,12 @@ final class SensorDataRecordAgeCalculator {
   }
 
   static long ageMinutes(String timestamp, LongSupplier nowMillis) throws ParseException {
-    long recordMillis = main.sdf4.parse(timestamp).getTime();
+    // Do not use main.sdf4 here.  It is mutable application state and asynchronous sensor
+    // workers can outlive code that temporarily reconfigures it (tests do this as well).  The
+    // sensor record format is fixed, so use an independent UTC parser for this calculation.
+    SimpleDateFormat recordFormat = new SimpleDateFormat("yyyyMMddHHmm");
+    recordFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    long recordMillis = recordFormat.parse(timestamp).getTime();
     return Math.abs(recordMillis - nowMillis.getAsLong()) / (60 * 1000);
   }
 }
