@@ -4,13 +4,14 @@ import re
 import subprocess
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+FORMAT101_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[4]
 
 PILOTE = (
-    REPO_ROOT / "reference" / "config" / "S-AWS-101_modl_pilote.csv"
+    FORMAT101_ROOT / "reference" / "config" / "S-AWS-101_modl_pilote.csv"
 )
-JAVA_DIR = REPO_ROOT / "java"
-GRADLEW = JAVA_DIR / ("gradlew.bat" if os.name == "nt" else "gradlew")
+JAVA_DIR = FORMAT101_ROOT / "java"
+GRADLEW = REPO_ROOT / ("gradlew.bat" if os.name == "nt" else "gradlew")
 
 # Gradle application plugin installDist layout:
 # java/build/install/<applicationName>/bin/<applicationName>.bat
@@ -76,7 +77,7 @@ def run_install_dist_build() -> None:
     if not GRADLEW.exists():
         raise RuntimeError(f"Missing Gradle wrapper: {GRADLEW}")
 
-    cmd = script_command(GRADLEW, "--no-daemon", "installDist")
+    cmd = script_command(GRADLEW, "--no-daemon", "-p", str(JAVA_DIR), "installDist")
     proc = subprocess.run(
         cmd,
         cwd=JAVA_DIR,
@@ -125,6 +126,8 @@ def run_java_via_gradle(pilote: Path, format101: Path, station_id: str) -> bytes
     cmd = script_command(
         GRADLEW,
         "--no-daemon",
+        "-p",
+        str(JAVA_DIR),
         "run",
         "--quiet",
         "--args",
@@ -160,7 +163,7 @@ def main() -> int:
     ap.add_argument(
         "--dir",
         type=Path,
-        default=REPO_ROOT / "tests" / "vectors",
+        default=FORMAT101_ROOT / "tests" / "vectors",
         help="Directory containing *.format_101.txt vectors (default: tests/vectors)",
     )
     ap.add_argument(
@@ -194,7 +197,7 @@ def main() -> int:
     use_install_dist = INSTALLDIST_LAUNCHER.exists() and not args.prefer_gradle
     if not use_install_dist:
         if not GRADLEW.exists():
-            raise RuntimeError("Neither installDist launcher nor Gradle wrapper found")
+            raise RuntimeError("Neither installDist launcher nor repository Gradle wrapper found")
 
     for input_path in vectors:
         stem = input_path.stem.replace(".format_101", "")
