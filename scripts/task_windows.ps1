@@ -18,26 +18,53 @@ if (Test-Path $variablesPath) {
 
 Write-Output "Running exe packaging task on Windows..."
 
-# Set up JDK download URL
-$env:JDK_X64_WINDOWS_URL = "https://download.bell-sw.com/java/$($env:JDK_WINDOWS_VERSION)/bellsoft-jdk$($env:JDK_WINDOWS_VERSION)-windows-amd64.zip"
-Write-Output "JDK_X64_WINDOWS_URL: $env:JDK_X64_WINDOWS_URL"
 Write-Output "WIX_BINARIES_WINDOWS_URL: $env:WIX_BINARIES_WINDOWS_URL"
 
-# Download the required archives
-Invoke-WebRequest -Uri $env:JDK_X64_WINDOWS_URL -OutFile jdk_x64_windows.zip
+# Use a preinstalled Java 25 when the runner provides one. GitHub Actions supplies Temurin via
+# setup-java; GitLab-hosted Windows runners provide OpenJDK. Keep the BellSoft download as a
+# fallback for local or older runners.
+$javaHomeCandidate = $env:JAVA_HOME
+if (-not $javaHomeCandidate) {
+    $javaCommand = Get-Command java.exe -ErrorAction SilentlyContinue
+    if ($javaCommand) {
+        $javaHomeCandidate = Split-Path (Split-Path $javaCommand.Source -Parent) -Parent
+    }
+}
+
+$java25Available = $false
+if ($javaHomeCandidate -and (Test-Path "$javaHomeCandidate/bin/java.exe")) {
+    $javaVersionOutput = (& "$javaHomeCandidate/bin/java.exe" -version 2>&1 | Out-String)
+    $java25Available = $javaVersionOutput -match 'version "25([.]|[-])'
+}
+
+if (-not $java25Available) {
+    # Set up the fallback JDK download URL.
+    $env:JDK_X64_WINDOWS_URL = "https://download.bell-sw.com/java/$($env:JDK_WINDOWS_VERSION)/bellsoft-jdk$($env:JDK_WINDOWS_VERSION)-windows-amd64.zip"
+    Write-Output "Using fallback JDK: $env:JDK_X64_WINDOWS_URL"
+    Invoke-WebRequest -Uri $env:JDK_X64_WINDOWS_URL -OutFile jdk_x64_windows.zip
+}
+
+# WiX is needed by jpackage for the Windows installer.
 Invoke-WebRequest -Uri $env:WIX_BINARIES_WINDOWS_URL -OutFile wix-binaries.zip
 
 # List downloaded files
-Get-Item jdk_x64_windows.zip | Select-Object Name, Length
+if (Test-Path jdk_x64_windows.zip) {
+    Get-Item jdk_x64_windows.zip | Select-Object Name, Length
+}
 Get-Item wix-binaries.zip | Select-Object Name, Length
 
-# Expand the archives
-Expand-Archive -Path jdk_x64_windows.zip -DestinationPath jdk_x64_windows
+# Expand the downloaded archives
+if (Test-Path jdk_x64_windows.zip) {
+    Expand-Archive -Path jdk_x64_windows.zip -DestinationPath jdk_x64_windows
+}
 Expand-Archive -Path wix-binaries.zip -DestinationPath wix-binaries
 
-# Set JAVA_HOME based on JDK version (dropping the build number)
-$VersionWithoutBuild = $env:JDK_WINDOWS_VERSION -split "\+" | Select-Object -First 1
-$env:JAVA_HOME = "jdk_x64_windows/jdk-$VersionWithoutBuild"
+# Set JAVA_HOME to the selected Java 25 installation.
+if (-not $java25Available) {
+    $VersionWithoutBuild = $env:JDK_WINDOWS_VERSION -split "\+" | Select-Object -First 1
+    $javaHomeCandidate = "jdk_x64_windows/jdk-$VersionWithoutBuild"
+}
+$env:JAVA_HOME = $javaHomeCandidate
 Write-Output "JAVA_HOME is set to: $env:JAVA_HOME"
 
 # Copy WiX binaries into the JDK bin folder

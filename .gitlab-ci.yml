@@ -61,6 +61,7 @@ exe-amd64:
   tags:
     - saas-windows-medium-amd64
   script:
+    - java -version
     - powershell -File scripts/task_windows.ps1
   artifacts:
     paths:
