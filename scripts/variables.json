@@ -6,5 +6,6 @@
   "ICON_PATH_LINUX": "src/main/resources/turbowin/install_ico/TurboWin_install_3_256x256x32.png",
   "ICON_PATH_WINDOWS": "src/main/resources/turbowin/install_ico/TurboWin_install.ico",
   "JDK_WINDOWS_VERSION": "25.0.5.0.3+5",
-  "WIX_BINARIES_WINDOWS_URL": "https://github.com/wixtoolset/wix3/releases/download/wix3141rtm/wix314-binaries.zip"
+  "WIX_BINARIES_WINDOWS_URL": "https://download.dwd.de/pub/turbowin/archive/tools/windows/installer-xml-toolset/3.14.1/wix314-binaries.zip",
+  "WIX_BINARIES_WINDOWS_SHA256": "6ac824e1642d6f7277d0ed7ea09411a508f6116ba6fae0aa5f2c7daa2ff43d31"
 }

@@ -11,6 +11,7 @@ if (Test-Path $variablesPath) {
     $env:ICON_PATH_WINDOWS = $variables.ICON_PATH_WINDOWS
     $env:JDK_WINDOWS_VERSION = $variables.JDK_WINDOWS_VERSION
     $env:WIX_BINARIES_WINDOWS_URL = $variables.WIX_BINARIES_WINDOWS_URL
+    $env:WIX_BINARIES_WINDOWS_SHA256 = $variables.WIX_BINARIES_WINDOWS_SHA256
 } else {
     Write-Error "Error: $variablesPath not found."
     exit 1
@@ -46,6 +47,11 @@ if (-not $java25Available) {
 
 # WiX is needed by jpackage for the Windows installer.
 Invoke-WebRequest -Uri $env:WIX_BINARIES_WINDOWS_URL -OutFile wix-binaries.zip
+$actualWixSha256 = (Get-FileHash -Algorithm SHA256 -Path wix-binaries.zip).Hash.ToLowerInvariant()
+if ($actualWixSha256 -ne $env:WIX_BINARIES_WINDOWS_SHA256.ToLowerInvariant()) {
+    throw "WiX archive checksum mismatch. Expected $env:WIX_BINARIES_WINDOWS_SHA256 but got $actualWixSha256."
+}
+Write-Output "WiX archive SHA-256 verified: $actualWixSha256"
 
 # List downloaded files
 if (Test-Path jdk_x64_windows.zip) {
