@@ -4,7 +4,7 @@ stages:
 jar:
   stage: build
   when: manual
-  image: eclipse-temurin:21-jdk-noble
+  image: eclipse-temurin:25-jdk-noble
   script:
     - ./scripts/task_linux.bash jar
   artifacts:
@@ -14,7 +14,7 @@ jar:
 
 test:
   stage: build
-  image: eclipse-temurin:21-jdk-noble
+  image: eclipse-temurin:25-jdk-noble
   script:
     - ./scripts/task_linux.bash test
   retry: 2
@@ -26,7 +26,7 @@ test:
 
 deb-amd64:
   stage: build
-  image: eclipse-temurin:21-jdk-noble
+  image: eclipse-temurin:25-jdk-noble
   script:
     - ./scripts/task_linux.bash deb
   artifacts:
@@ -38,7 +38,7 @@ deb-arm64:
   stage: build
   tags:
     - saas-linux-small-arm64
-  image: eclipse-temurin:21-jdk-noble
+  image: eclipse-temurin:25-jdk-noble
   script:
     - ./scripts/task_linux.bash deb
   artifacts:
@@ -48,7 +48,7 @@ deb-arm64:
 
 rpm-amd64:
   stage: build
-  image: eclipse-temurin:21-jdk-ubi9-minimal
+  image: eclipse-temurin:25-jdk-ubi10-minimal
   script:
     - ./scripts/task_linux.bash rpm
   artifacts:

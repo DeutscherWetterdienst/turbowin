@@ -2,7 +2,7 @@
 
 ## Prerequisites and scope
 
-Use a Java 21 JDK and the repository's Gradle wrapper. Application code/resources live under
+Use a Java 25 JDK and the repository's Gradle wrapper. Application code/resources live under
 `src/main/`, and JUnit/AssertJ Swing tests under `src/test/`. Format 101 compatibility tooling has
 its own [instructions and campaigns](../contrib/format101/README.md); it is not automatically
 verified by the root application's `test` task.

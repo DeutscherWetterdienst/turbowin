@@ -7,7 +7,7 @@ is implemented in Java and no native Format 101 helper is packaged with the appl
 
 ## Runtime and writable data
 
-The build requires a Java 21 JDK. `jlink` creates the runtime image used by `jpackage` installers,
+The build requires a Java 25 JDK. `jlink` creates the runtime image used by `jpackage` installers,
 so those installations do not require a separately installed Java runtime. A standalone JAR is
 not the same deployment: it does not bundle a runtime or all dependency JARs.
 

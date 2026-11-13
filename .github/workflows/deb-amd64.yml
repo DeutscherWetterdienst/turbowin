@@ -8,7 +8,7 @@ jobs:
   deb-amd64:
     runs-on: ubuntu-latest
     container:
-      image: eclipse-temurin:21-jdk-noble
+      image: eclipse-temurin:25-jdk-noble
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

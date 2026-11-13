@@ -8,7 +8,7 @@ jobs:
   rpm-amd64:
     runs-on: ubuntu-latest
     container:
-      image: eclipse-temurin:21-jdk-ubi9-minimal
+      image: eclipse-temurin:25-jdk-ubi10-minimal
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

@@ -11,7 +11,7 @@ serial and desktop integrations.
 
 ## Decision
 
-Use Gradle as the build and dependency entry point, Java 21 as the build/runtime baseline, and
+Use Gradle as the build and dependency entry point, Java 25 as the build/runtime baseline, and
 `jlink`/`jpackage` to produce installers containing their runtime. CI builds and tests the supported
 platform targets, including Linux amd64 and ARM64 packages and Windows x64. Platform scripts and
 the wrapper remain the supported entry points; generated packages and release artifacts stay out of

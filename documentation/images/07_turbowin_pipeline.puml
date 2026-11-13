@@ -2,7 +2,7 @@
 title TurboWin CI tasks (GitHub Actions and GitLab)
 start
 if (Manual JAR request?) then (yes)
-  :Linux amd64 / Java 21;
+  :Linux amd64 / Java 25;
   :task_linux.bash jar;
   :Upload build/libs/;
 else (push / pull request)

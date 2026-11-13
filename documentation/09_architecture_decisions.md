@@ -3,9 +3,9 @@
 These describe choices visible in the current implementation and their tradeoffs. They are not a
 record of previously undocumented historical motives or commitments to future redesigns.
 
-## Java 21, Swing, and packaged runtimes
+## Java 25, Swing, and packaged runtimes
 
-The application uses Java 21 and Swing. Java provides a shared implementation across deployment
+The application uses Java 25 and Swing. Java provides a shared implementation across deployment
 platforms, while `jlink`/`jpackage` supply an application runtime in the installers. Serial hardware
 and desktop APIs still impose platform-specific constraints.
 
