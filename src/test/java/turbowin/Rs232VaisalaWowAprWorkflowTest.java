@@ -249,6 +249,28 @@ public class Rs232VaisalaWowAprWorkflowTest {
   }
 
   @Test
+  public void secondInstrumentTemperatureIsUsedForPressureReduction() throws Exception {
+    main.RS232_connection_mode_II = 1;
+    main.barometer_above_sll = "20";
+    main.barometer_instrument_correction = "0";
+    writeHmpRecord("30.0", "20.0", "10.0", "50.0", new Date());
+    runPressureRecord("1000.0", "1.0", "3", "APR", new Date());
+    assertEquals("1002.25", mybarometer.pressure_msl_corrected);
+  }
+
+  @Test
+  public void obsoleteSecondInstrumentTemperatureUsesFallback() throws Exception {
+    main.RS232_connection_mode_II = 1;
+    main.barometer_above_sll = "20";
+    main.barometer_instrument_correction = "0";
+    mytemp.air_temp = "-20.0";
+    writeHmpRecord("30.0", "20.0", "10.0", "50.0",
+        new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
+    runPressureRecord("1000.0", "1.0", "3", "APR", new Date());
+    assertEquals("1002.37", mybarometer.pressure_msl_corrected);
+  }
+
+  @Test
   public void mainScreenUpdatesPressureAndTendencyFieldsAndReadsSecondInstrument() throws Exception {
     main.RS232_connection_mode_II = 1;
     main.jTextField9 = new JTextField();

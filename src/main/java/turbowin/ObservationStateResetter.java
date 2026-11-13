@@ -34,6 +34,7 @@ final class ObservationStateResetter {
     mybarograph.pressure_amount_tendency = "";
 
     // barometer
+    mybarometer.clearManualReduction();
     mybarometer.pressure_reading = "";
     mybarometer.pressure_msl = "";
     mybarometer.PPPP_code = "";

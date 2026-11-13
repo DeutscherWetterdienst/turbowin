@@ -706,7 +706,10 @@ final class Rs232MintakaWowAprWorkflow {
             main.sensor_data_record_obs_pressure = sensor_data_record_WOW_pressure_hpa; // nodig?
 
             if ((return_string.length() > pos_comma + 1) && (pos_comma != -1)) {
-              sensor_data_record_WOW_air_temp = return_string.substring(pos_comma + 1);
+              String[] observationFields = return_string.split(",", -1);
+              if (observationFields.length > 3) {
+                sensor_data_record_WOW_air_temp = observationFields[3];
+              }
             }
           } catch (InterruptedException | ExecutionException ex) {
             sensor_data_record_WOW_pressure_hpa = "";
@@ -737,7 +740,8 @@ final class Rs232MintakaWowAprWorkflow {
               // instrument correction)
               WOW_height_correction_pressure =
                   RS232_WOW_APR_compute_air_pressure_height_correction(
-                      hulp_double_WOW_pressure_reading);
+                      hulp_double_WOW_pressure_reading,
+                      StarX ? sensor_data_record_WOW_air_temp : null);
 
               String message_b =
                   "[WOW] pressure at sensor height = "
@@ -981,7 +985,8 @@ final class Rs232MintakaWowAprWorkflow {
               // CONVERT TO MSL (+ apply barometer instrument correction)
               APR_height_correction_pressure =
                   RS232_WOW_APR_compute_air_pressure_height_correction(
-                      hulp_double_APR_pressure_reading);
+                      hulp_double_APR_pressure_reading,
+                      StarX ? sensor_data_record_APR_air_temp : null);
 
               if (destination.equals("MAIN_SCREEN") == false) {
                 String message_b =

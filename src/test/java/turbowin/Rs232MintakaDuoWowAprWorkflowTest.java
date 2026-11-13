@@ -222,6 +222,16 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     assertEquals(0.5, mytemp.double_rv, 0.001);
   }
 
+  @Test
+  public void secondInstrumentTemperatureIsUsedForPressureReduction() throws Exception {
+    main.RS232_connection_mode_II = 1;
+    main.barometer_above_sll = "20";
+    main.barometer_instrument_correction = "0";
+    writeHmpRecord("30.0", "20.0", "10.0", "50.0", new Date());
+    runPressureRecord("1000.0", "APR", new Date());
+    assertEquals("1002.25", mybarometer.pressure_msl_corrected);
+  }
+
   private String runPressureRecord(String pressure, String destination, Date recordDate)
       throws Exception {
     resetModel();

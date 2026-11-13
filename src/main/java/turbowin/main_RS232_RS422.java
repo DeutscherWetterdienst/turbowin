@@ -7225,14 +7225,17 @@ public class main_RS232_RS422 {
 
   public static double RS232_WOW_APR_compute_air_pressure_height_correction(
       double double_pressure_reading) {
+    // Pressure-only instruments have no associated outside air temperature.
+    return RS232_WOW_APR_compute_air_pressure_height_correction(double_pressure_reading, null);
+  }
+
+  public static double RS232_WOW_APR_compute_air_pressure_height_correction(
+      double double_pressure_reading, String airTemperature) {
     // NB this function is used for height air pressure conversion from station level to mean sea
     // level for the WOW site and/or APR
     // NB before this function is called the WOW/APR settings were checked
 
     double height_correction_pressure = Double.MAX_VALUE;
-    double temp;
-    double term_1;
-    double term_2;
     double double_barometer_instrument_correction = 0;
     double double_barometer_above_sll = 0;
     double double_keel_sll = 0;
@@ -7317,18 +7320,9 @@ public class main_RS232_RS422 {
 
       double_hoogte_barometer = double_keel_sll + double_barometer_above_sll - double_draught;
 
-      temp =
-          15.0 + CELCIUS_TO_KELVIN_FACTOR; // so calculated with a default air temperature (15.0 C)
-      // !!!!
-      term_1 = double_pressure_reading_corrected * double_hoogte_barometer;
-      term_2 = 29.27 * temp;
-
-      if (term_2 != 0) // prevent exception (in principle will never be 0))
-      {
-        height_correction_pressure = term_1 / term_2;
-      } else {
-        height_correction_pressure = 0.0;
-      }
+      height_correction_pressure =
+          SeaLevelPressureReduction.heightCorrection(
+              double_pressure_reading_corrected, double_hoogte_barometer, airTemperature);
 
       // round to two digits behind the "."
       height_correction_pressure = Math.round(height_correction_pressure * 100.0) / 100.0;
@@ -8156,7 +8150,6 @@ public class main_RS232_RS422 {
 
   private final StringBuilder message_peumb = new StringBuilder();
 
-  private static final double CELCIUS_TO_KELVIN_FACTOR = 273.15;
   final double M_S_TO_KNOTS = 1.94384;
 
   public static String test_record = "";

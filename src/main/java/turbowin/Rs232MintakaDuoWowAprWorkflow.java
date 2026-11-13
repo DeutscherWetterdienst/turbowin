@@ -26,6 +26,8 @@ final class Rs232MintakaDuoWowAprWorkflow {
     //                                    - MAIN_SCREEN
 
     new SwingWorker<String, Void>() {
+      private String airTemperature;
+
       @Override
       protected String doInBackground() throws Exception {
         main.obs_file_datum_tijd = new GregorianCalendar();
@@ -92,9 +94,10 @@ final class Rs232MintakaDuoWowAprWorkflow {
         // HMP155 connected? (2nd meteo instrument)
         //
         if (main.RS232_connection_mode_II == 1) {
-          RS232_vaisala
-              .RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument(
-                  destination);
+          airTemperature =
+              RS232_vaisala
+                  .RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument(
+                      destination);
         }
 
         return sensor_data_record_WOW_APR_pressure_hpa;
@@ -146,7 +149,7 @@ final class Rs232MintakaDuoWowAprWorkflow {
               // CONVERT TO MSL (+ apply barometer instrument correction)
               double APR_height_correction_pressure =
                   RS232_WOW_APR_compute_air_pressure_height_correction(
-                      hulp_double_APR_pressure_reading);
+                      hulp_double_APR_pressure_reading, airTemperature);
 
               if (destination.equals("MAIN_SCREEN") == false) {
                 String message_b =

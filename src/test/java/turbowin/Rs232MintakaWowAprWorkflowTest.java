@@ -363,6 +363,40 @@ public class Rs232MintakaWowAprWorkflowTest {
   }
 
   @Test
+  public void starXPressureReductionUsesCurrentTemperatureInsteadOfSharedState() throws Exception {
+    main.barometer_above_sll = "20";
+    mytemp.air_temp = "-20.0";
+    runWorkflowWithRecord(
+        starRecord(
+            starXPayload("1000.0", "1.0", "2", "30.0", "50", "20.0", "10.0", "0"), new Date()),
+        "MAIN_SCREEN",
+        true);
+    assertEquals("1002.25", mybarometer.pressure_msl_corrected);
+  }
+
+  @Test
+  public void invalidStarXTemperatureFallsBackWithoutDroppingPressure() throws Exception {
+    main.barometer_above_sll = "20";
+    runWorkflowWithRecord(
+        starRecord(
+            starXPayload("1000.0", "1.0", "2", "999.9", "50", "20.0", "10.0", "0"), new Date()),
+        "MAIN_SCREEN",
+        true);
+    assertEquals("1002.37", mybarometer.pressure_msl_corrected);
+  }
+
+  @Test
+  public void pressureOnlyInstrumentDoesNotUseSharedTemperature() throws Exception {
+    main.barometer_above_sll = "20";
+    mytemp.air_temp = "30.0";
+    runWorkflowWithRecord(
+        starRecord(starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), new Date()),
+        "MAIN_SCREEN",
+        false);
+    assertEquals("1002.37", mybarometer.pressure_msl_corrected);
+  }
+
+  @Test
   public void starXSensorBoundariesAreApplied() throws Exception {
     runWorkflowWithRecord(
         starRecord(

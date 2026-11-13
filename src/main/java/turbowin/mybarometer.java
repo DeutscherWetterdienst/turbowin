@@ -530,11 +530,44 @@ public final class mybarometer extends javax.swing.JFrame {
     }
   }
 
+  private record ManualReduction(
+      double pressure, double height, double lakeCorrection, String previousResult) {}
+
+  private static ManualReduction manualReduction;
+
+  static void clearManualReduction() {
+    manualReduction = null;
+  }
+
+  // Temperature is normally entered after pressure in the observation sequence.
+  static boolean refreshManualPressureReduction() {
+    ManualReduction reduction = manualReduction;
+    if (reduction == null
+        || !reduction.previousResult().equals(pressure_msl_corrected)
+        || !Double.toString(reduction.pressure()).equals(pressure_reading_corrected)
+        || PPPP_code.isEmpty()
+        || !main.PRESSURE_READING_MSL_NO.equals(main.pressure_reading_msl_yes_no)) {
+      return false;
+    }
+    double pressure =
+        reduction.pressure()
+            + SeaLevelPressureReduction.heightCorrection(
+                reduction.pressure(), reduction.height(), mytemp.air_temp)
+            + reduction.lakeCorrection();
+    pressure_msl_corrected = Double.toString(Math.floor(pressure * 10 + 0.5) / 10);
+    PPPP_code = PressureCodeFormatter.format(pressure);
+    manualReduction =
+        new ManualReduction(
+            reduction.pressure(),
+            reduction.height(),
+            reduction.lakeCorrection(),
+            pressure_msl_corrected);
+    return true;
+  }
+
   private void MSL_Herleiding_Luchtdruk() {
+    clearManualReduction();
     double hoogte_corr;
-    double temp;
-    double term_1;
-    double term_2;
     double double_hoogte_barometer;
     double double_barometer_above_sll = 0.0;
     double double_keel_sll = 0.0;
@@ -604,19 +637,9 @@ public final class mybarometer extends javax.swing.JFrame {
         double_hoogte_barometer =
             double_keel_sll + double_barometer_above_sll - double_deepest_draft;
 
-        temp =
-            15.0 + CELCIUS_TO_KELVIN_FACTOR; // hier wordt dus van standaard temp (15.0 C) uitgegaan
-        // !!!!
-        term_1 = double_pressure_reading_corrected * double_hoogte_barometer;
-        term_2 = 29.27 * temp;
-
-        if (term_2 != 0.0) // exception voorkomen (hier zal hij in principe nooit inkomen)
-        {
-          hoogte_corr = term_1 / term_2;
-        } else {
-          hoogte_corr = 0.0;
-          Reset_All_Barometer_Vars(); // in this function "checks_ok" set false
-        }
+        hoogte_corr =
+            SeaLevelPressureReduction.heightCorrection(
+                double_pressure_reading_corrected, double_hoogte_barometer, mytemp.air_temp);
 
         // at Great lakes? (for extra height correction value)
         double great_lakes_corr = main_RS232_RS422.check_at_Great_Lakes();
@@ -656,6 +679,12 @@ public final class mybarometer extends javax.swing.JFrame {
           double hulp_double_pressure_msl = (double) hulp_int_pressure_msl / 10;
 
           pressure_msl_corrected = Double.toString(hulp_double_pressure_msl); // convert to string
+          manualReduction =
+              new ManualReduction(
+                  double_pressure_reading_corrected,
+                  double_hoogte_barometer,
+                  great_lakes_corr < 50.0 ? great_lakes_corr : 0.0,
+                  pressure_msl_corrected);
         } // if (checks_ok == true)
       } // if (checks_ok == true)
     } // reading doesn't indicate MSL pressure
@@ -760,6 +789,7 @@ public final class mybarometer extends javax.swing.JFrame {
 
   private void Reset_All_Barometer_Vars() {
     // scope this module + myturbowin.java main module (all of type: static)
+    clearManualReduction();
     PPPP_code = "";
     pressure_reading_corrected = "";
     pressure_msl_corrected = "";
@@ -1089,7 +1119,6 @@ public final class mybarometer extends javax.swing.JFrame {
   // End of variables declaration//GEN-END:variables
 
   // constants
-  private final double CELCIUS_TO_KELVIN_FACTOR = 273.15; // add to Celcius to obtain Kelvin
   private final String BAROMETER_HELP_DIR = "barometer.pdf";
 
   // scope this module + myturbowin.java main module (all of type: static)

@@ -1240,6 +1240,9 @@ public final class mytemp extends javax.swing.JFrame {
     /*
     ////////// finish
     */
+    if (mybarometer.refreshManualPressureReduction()) {
+      main.barometer_fields_update();
+    }
     if (checks_ok == true) {
       /* update temperature fields on main screen */
       main.temperatures_fields_update();

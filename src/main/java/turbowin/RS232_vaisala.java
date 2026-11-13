@@ -167,7 +167,7 @@ public class RS232_vaisala {
     Rs232VaisalaHmp155AprWorkflow.start(destination, retry);
   }
 
-  public static void RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument(
+  public static String RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument(
       final String destination) {
     // called from: - RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR()
     //              - RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR()
@@ -196,6 +196,7 @@ public class RS232_vaisala {
     mytemp.double_dew_point = main.INVALID;
     mytemp.double_rv = main.INVALID; // range 0.0 - 1.0 (or invalid) !!!!
 
+    String airTemperature = null;
     Boolean laatste_record_ok = false;
     main.obs_file_datum_tijd = new GregorianCalendar();
     main.obs_file_datum_tijd.add(
@@ -420,6 +421,8 @@ public class RS232_vaisala {
           hulp_double_air_temp = Double.parseDouble(mytemp.air_temp.trim());
 
           if ((hulp_double_air_temp > -99.9) && (hulp_double_air_temp < 99.9)) {
+            // Return the current measurement without locale-dependent display formatting.
+            airTemperature = Double.toString(hulp_double_air_temp);
             DecimalFormat df = new DecimalFormat("0.0"); // rounding 1 decimal
             mytemp.air_temp = df.format(hulp_double_air_temp);
 
@@ -616,5 +619,6 @@ public class RS232_vaisala {
         }
       }
     } // else
+    return airTemperature;
   }
 }

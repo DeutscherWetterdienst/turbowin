@@ -16,6 +16,23 @@ single immutable observation snapshot shared by all operations.
 visible fields. Disposing a window is separate from releasing sockets, timers, workers, or serial
 resources. The contributor guide explains the corresponding [test isolation rules](contributing_and_testing.md#test-isolation-and-completion).
 
+## Sea-level pressure reduction
+
+`SeaLevelPressureReduction` computes the existing height correction from instrument-corrected
+station pressure, barometer height, and outside air temperature in Celsius. It uses a finite
+temperature strictly between -70 and +70 °C, matching the StarX input limits; missing, flagged,
+malformed, or out-of-range values fall back to 15 °C. Sensor readers remain responsible for
+checking record age and integrity before supplying a temperature.
+
+Manual pressure entry uses the current observation temperature. Confirming temperature later
+recalculates the manual MSL pressure and its pressure code, including when temperature is removed.
+The saved manual calculation context is cleared on pressure/observation reset and is not used
+for readings already at mean sea level. Automatic StarX reporting passes the temperature from
+the same retrieved observation. Vaisala and Mintaka Duo reporting use the freshly read HMP155
+temperature when that second instrument is configured; otherwise they use the fallback.
+Instrument corrections, Great Lakes corrections, and each workflow's existing rounding remain
+in place.
+
 ## Background work and Swing completion
 
 `SwingWorker.doInBackground()` runs away from the event-dispatch thread (EDT); `done()` runs on
