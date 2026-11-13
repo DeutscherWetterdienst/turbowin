@@ -268,12 +268,17 @@ public class main_support {
   }
 
   public void log_java_version() {
-    // Log the runtime selected by the installed launcher.
+    log_turbowin_system_message("[GENERAL] Operating system: " + SystemInfo.operatingSystem());
+    log_turbowin_system_message("[GENERAL] Java: " + SystemInfo.javaRuntime());
 
-    String java_version = System.getProperty("java.runtime.version");
-    String java_name = System.getProperty("java.vm.name");
-
-    log_turbowin_system_message("[GENERAL] Java: " + java_version + "; " + java_name);
+    String linuxDistribution = SystemInfo.linuxDistribution();
+    String desktopEnvironment = SystemInfo.desktopEnvironment();
+    if (!linuxDistribution.isEmpty()) {
+      log_turbowin_system_message("[GENERAL] Linux distribution: " + linuxDistribution);
+    }
+    if (!desktopEnvironment.isEmpty()) {
+      log_turbowin_system_message("[GENERAL] Desktop environment: " + desktopEnvironment);
+    }
   }
 
   public boolean position_sequence_check() {

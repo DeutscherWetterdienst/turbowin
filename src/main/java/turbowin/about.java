@@ -440,22 +440,12 @@ public final class about extends javax.swing.JFrame {
 
     jLabel4.setText(main.APPLICATION_NAME + " " + TurboWinAppInfo.APPLICATION_VERSION);
 
-    // NB September 2023: for Windows 11, Microsoft still uses 10.0 as version number (if using
-    // System.getProperty("os.version") and "System.getenv("OS_VERSION"") !
-    jLabel6.setText(
-        "operating system: "
-            + System.getProperty("os.name")
-            + " version "
-            + System.getProperty("os.version")
-            + " running on "
-            + System.getProperty("os.arch"));
+    jLabel6.setText("operating system: " + SystemInfo.operatingSystem());
     jLabel11.setText("app dir: " + System.getProperty("app.dir"));
     jLabel12.setText("logs dir: " + main.logs_dir);
     jLabel1.setText(
         "java: "
-            + System.getProperty("java.runtime.version")
-            + "; "
-            + System.getProperty("java.vm.name"));
+            + SystemInfo.javaRuntime());
 
     // NB See also Function log_memory_statistics() [main_support.java]
     //
@@ -485,7 +475,16 @@ public final class about extends javax.swing.JFrame {
     // NB System.getProperty("java.runtime version") gives very little added value
 
     jLabel3.setText("default charset: " + Charset.defaultCharset());
-    jLabel5.setText("locale default: " + Locale.getDefault()); // en_GB: language_COUNTRY
+    String linuxDistribution = SystemInfo.linuxDistribution();
+    String desktopEnvironment = SystemInfo.desktopEnvironment();
+    String linuxDetails =
+        linuxDistribution.isEmpty() && desktopEnvironment.isEmpty()
+            ? ""
+            : "; Linux: "
+                + (linuxDistribution.isEmpty() ? "distribution unknown" : linuxDistribution)
+                + (desktopEnvironment.isEmpty() ? "" : "; desktop " + desktopEnvironment);
+    jLabel5.setText(
+        "locale default: " + Locale.getDefault() + linuxDetails); // en_GB: language_COUNTRY
 
     // print the integrated libraries and modules (2 or 3 lines)
     //
