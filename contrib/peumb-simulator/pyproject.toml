@@ -1,0 +1,33 @@
+[project]
+name = "peumb-simulator"
+version = "0.1.0"
+description = "Synthetic PEUMB AWS telegram simulator for TurboWin demos"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy>=1.8",
+    "pytest>=8.0",
+    "ruff==0.15.4",
+]
+
+[project.scripts]
+peumb-simulator = "peumb_simulator.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.mypy]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_any_generics = true
