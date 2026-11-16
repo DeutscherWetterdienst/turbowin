@@ -93,6 +93,7 @@ chmod +x /opt/turbowin/bin/TurboWin
 
 %pre
 package_type=rpm
+COMMON_SCRIPTS
 LAUNCHER_AS_SERVICE_SCRIPTS
 if [ "$1" = 2 ]; then
   true; LAUNCHER_AS_SERVICE_COMMANDS_UNINSTALL
@@ -100,6 +101,7 @@ fi
 
 %preun
 package_type=rpm
+COMMON_SCRIPTS
 # Move original binary and configuration files back to their original locations before uninstallation
 mv /opt/turbowin/bin/TurboWin.run /opt/turbowin/bin/TurboWin
 mv /opt/turbowin/lib/app/TurboWin.run.cfg /opt/turbowin/lib/app/TurboWin.cfg
