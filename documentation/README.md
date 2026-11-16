@@ -24,6 +24,7 @@ shares mutable state across Swing forms and legacy coordinator classes.
 - [Configuration paths and migration guide](configuration_migration.md)
 - [Configuration persistence, backup recovery, and import/export](configuration_persistence.md)
 - [EUCAWS observation input and field mapping](eucaws_observations.md)
+- [FM13 and Inmarsat Special Access Code 41](fm13_inmarsat.md)
 - [Reported legacy storage observations](legacy_storage_observations.md)
 
 ## Working on the repository
