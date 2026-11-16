@@ -41,6 +41,23 @@ Otherwise startup checks the known Windows, Debian, and versioned RPM installati
 layouts before loading; see the [deployment view](07_deployment_view.md#runtime-and-writable-data).
 Current startup always selects installed desktop ("offline") mode, which still permits networking.
 
+## Recruiting country
+
+The `recruiting country` setting is the country responsible for recruiting or managing the
+ship. It is selected in `Maintenance -> Station data`, stored as the country name together with
+its two-letter ISO code, and is required for a valid station configuration. It has the following
+country-specific effects:
+
+| Selection | Effect |
+| --- | --- |
+| Any country | The two-letter ISO code is written to positions 79–80 of generated IMMT records. |
+| `UNITED STATES US` | The latest-observation dashboard shows air temperature and sea-surface temperature in both °C and °F. |
+| `UNITED KINGDOM GB` | Saving the station data presets the observation e-mail subject to `SXVX88 EGRR ddhhmm`. |
+| `GERMANY DE` | Observer and captain log forms use a full Christian-name column instead of the usual initials-oriented column. |
+
+No other country-specific behavior is currently active. In particular, an older German-specific
+conversion of observer names in IMMT logs remains only as commented historical code.
+
 The reader tries `data_dir/configuration.txt`, then `configuration.txt.bak` if the active file is
 missing, unreadable, malformed, empty, or contains no recognized settings. If neither is usable,
 existing settings and lines remain intact. Parsing finishes before any settings are applied.
