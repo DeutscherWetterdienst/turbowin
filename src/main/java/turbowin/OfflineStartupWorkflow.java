@@ -37,7 +37,7 @@ final class OfflineStartupWorkflow {
 
     System.out.println("--- server port for checking multiple instances running = " + port);
     try {
-      return new ServerSocket(port, 10, InetAddress.getLocalHost());
+      return new ServerSocket(port, 10, InetAddress.getLoopbackAddress());
     } catch (java.net.UnknownHostException e) {
       return null;
     } catch (IOException e) {
