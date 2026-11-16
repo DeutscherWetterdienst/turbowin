@@ -23,6 +23,7 @@ shares mutable state across Swing forms and legacy coordinator classes.
 
 - [Configuration paths and migration guide](configuration_migration.md)
 - [Configuration persistence, backup recovery, and import/export](configuration_persistence.md)
+- [EUCAWS observation input and field mapping](eucaws_observations.md)
 - [Reported legacy storage observations](legacy_storage_observations.md)
 
 ## Working on the repository
