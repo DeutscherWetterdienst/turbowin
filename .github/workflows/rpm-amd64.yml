@@ -19,9 +19,36 @@ jobs:
           TURBOWIN_EMAIL_CHARACTER_ENCODING: ${{ secrets.TURBOWIN_EMAIL_CHARACTER_ENCODING }}
           TURBOWIN_EMAIL_CIPHER_TRANSFORMATION: ${{ secrets.TURBOWIN_EMAIL_CIPHER_TRANSFORMATION }}
           TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM: ${{ secrets.TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM }}
-      - name: Upload RPM artifacts
+      - name: Upload RPM installer
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: rpm-amd64-artifacts
           path: build/jpackage/*
+          retention-days: 7
+  rpm-amd64-lifecycle:
+    needs: rpm-amd64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Download RPM installer
+        uses: actions/download-artifact@v4
+        with:
+          name: rpm-amd64-artifacts
+          path: build/jpackage
+      - name: Install RPM smoke-test dependencies
+        run: sudo apt-get update --quiet=2 && sudo apt-get install --quiet=2 --yes rpm xvfb xdg-utils procps
+      - name: Test RPM installer lifecycle
+        run: |
+          package=$(find build/jpackage -maxdepth 1 -type f -name '*.rpm' -print -quit)
+          test -n "$package"
+          sudo ./scripts/package_smoke_test_rpm.bash "$package"
+      - name: Upload RPM smoke-test diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpm-amd64-smoke-diagnostics
+          path: build/package-smoke
+          if-no-files-found: warn
           retention-days: 7

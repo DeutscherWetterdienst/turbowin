@@ -19,9 +19,25 @@ jobs:
           TURBOWIN_EMAIL_CHARACTER_ENCODING: ${{ secrets.TURBOWIN_EMAIL_CHARACTER_ENCODING }}
           TURBOWIN_EMAIL_CIPHER_TRANSFORMATION: ${{ secrets.TURBOWIN_EMAIL_CIPHER_TRANSFORMATION }}
           TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM: ${{ secrets.TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM }}
-      - name: Upload DEB artifacts
+      - name: Install DEB smoke-test dependencies
+        run: apt-get update --quiet=2 && apt-get install --quiet=2 --yes xvfb procps
+      - name: Test DEB installer lifecycle
+        run: |
+          package=$(find build/jpackage -maxdepth 1 -type f -name '*.deb' -print -quit)
+          test -n "$package"
+          ./scripts/package_smoke_test_deb.bash "$package"
+      - name: Upload DEB installer
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: deb-amd64-artifacts
           path: build/jpackage/*
+          retention-days: 7
+      - name: Upload DEB smoke-test diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-amd64-smoke-diagnostics
+          path: build/package-smoke
+          if-no-files-found: warn
           retention-days: 7
