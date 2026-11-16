@@ -40,9 +40,15 @@ public class ObservationFillingTest extends AbstractUiTest {
 
     fillPressureInformation();
 
+    // With no temperature yet, 990 hPa at 13 m uses the 15 °C fallback: 991.5 hPa.
+    new JTextComponentFixture(robot(), main.jTextField10).requireText("991.5 hPa");
+
     fillPressureTendencyInformation();
 
     fillAirTemperatureInformation();
+
+    // Entering 5 °C after pressure must update the reduction to 991.6 hPa.
+    new JTextComponentFixture(robot(), main.jTextField10).requireText("991.6 hPa");
 
     fillTrueWindInformation();
 
@@ -379,7 +385,7 @@ public class ObservationFillingTest extends AbstractUiTest {
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
     JTextComponentFixture fm13Field = this.frame.textBox("fm13_field");
     assertEquals(
-        "BBXX 00000 29103 99101 10122 41494 40105 10050 20050 49915 51050 74765 83246 22212 00050 20510 80050=",
+        "BBXX 00000 29103 99101 10122 41494 40105 10050 20050 49916 51050 74765 83246 22212 00050 20510 80050=",
         fm13Field.text());
   }
 
