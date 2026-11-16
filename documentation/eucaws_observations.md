@@ -86,3 +86,34 @@ position is retained by the surrounding commas.
 
 Position, date, and time are not part of the outgoing `$PTBWP` string; they come from the EUCAWS
 device/input workflow and are used separately by TurboWin for display and logging.
+
+## EUCAWS operating cycle
+
+The serial connection and the Iridium transmission are two different communication paths:
+
+1. The EUCAWS supplies current sensor data to TurboWin over the serial connection approximately
+   once per minute. TurboWin checks for new AWS data every 60 seconds, stores the incoming record,
+   and refreshes the displayed sensor values. Incoming data older than the configured freshness
+   limit is shown as obsolete.
+2. The EUCAWS normally transmits its scheduled observation over Iridium once per hour, at the
+   full hour. This transmission is performed by the EUCAWS, not by TurboWin.
+3. The EUCAWS includes a visual-observation trigger (VOT) in its incoming data. When the VOT says
+   that an observation may be entered, TurboWin changes the status text to green and enables
+   `Output -> Obs to AWS`. Before that point, the status is red and the EUCAWS-specific output
+   action is disabled. The exact lead time is supplied by the EUCAWS; in normal operation it is
+   commonly about 20 minutes before the scheduled transmission.
+4. The optional visual-observation reminder window is controlled by the reminder settings. The
+   current implementation opens the reminder during the last 10 minutes before the configured
+   transmission hour (the interval itself can be configured, for example, hourly, every three
+   hours, or every six hours). It is therefore not a fixed five-minute rule.
+5. After `Output -> Obs to AWS` is used, TurboWin clears the observation fields after the send
+   attempt. This both prevents the same manual values from being submitted again and provides a
+   visible indication that the observation cycle was processed. In EUCAWS serial mode TurboWin
+   also performs a safety reset at 00:01 UTC of each hour.
+6. At the next minute update, the current sensor values received from the EUCAWS are displayed
+   again. They are not the old manual observation values; they are a new incoming sensor record.
+
+The fully manual observation workflow is separate from this EUCAWS-triggered cycle. It can be
+used at any time when TurboWin is operating in a manual observation mode. The EUCAWS-specific
+VOT restriction applies to `Output -> Obs to AWS` when the EUCAWS device is responsible for the
+scheduled Iridium transmission.
