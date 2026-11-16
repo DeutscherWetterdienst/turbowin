@@ -22,6 +22,11 @@ Run a test locally after building its installer (as root or in a disposable VM/c
 ./scripts/package_smoke_test_rpm.bash build/jpackage/TurboWin-6.0.0.rpm
 ```
 
+To set the Debian package maintainer email without storing it in Git, export
+`TURBOWIN_EMAIL_DEB_MAINTAINER` before running the DEB packaging task. GitHub Actions supplies it
+from the `TURBOWIN_EMAIL_DEB_MAINTAINER` secret; GitLab CI can define a masked project variable with
+the same name. The DEB packaging task fails fast if it is unset or empty.
+
 On Windows PowerShell, run the EXE test in an elevated disposable runner:
 
 ```powershell

@@ -109,6 +109,11 @@ case "$TASK" in
     ;;
   deb)
     echo "Running deb packaging task..."
+    if [ -z "${TURBOWIN_EMAIL_DEB_MAINTAINER:-}" ]; then
+      echo "Error: TURBOWIN_EMAIL_DEB_MAINTAINER is not set or is empty."
+      exit 1
+    fi
+    export DEB_MAINTAINER_EMAIL="$TURBOWIN_EMAIL_DEB_MAINTAINER"
     echo "JAVA_HOME: ${JAVA_HOME}"
     ls -lh "${JAVA_HOME}"
     apt-get install --quiet=2 --yes fakeroot binutils
@@ -128,6 +133,7 @@ case "$TASK" in
       --app-version "$APP_VERSION" \
       --license-file "$LICENSE_FILE" \
       --vendor "$VENDOR" \
+      --linux-deb-maintainer "$DEB_MAINTAINER_EMAIL" \
       --icon "$ICON_PATH_LINUX"
     ;;
   rpm)

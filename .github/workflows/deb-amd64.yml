@@ -19,6 +19,7 @@ jobs:
           TURBOWIN_EMAIL_CHARACTER_ENCODING: ${{ secrets.TURBOWIN_EMAIL_CHARACTER_ENCODING }}
           TURBOWIN_EMAIL_CIPHER_TRANSFORMATION: ${{ secrets.TURBOWIN_EMAIL_CIPHER_TRANSFORMATION }}
           TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM: ${{ secrets.TURBOWIN_EMAIL_AES_ENCRYPTION_ALGORITHM }}
+          TURBOWIN_EMAIL_DEB_MAINTAINER: ${{ secrets.TURBOWIN_EMAIL_DEB_MAINTAINER }}
       - name: Install DEB smoke-test dependencies
         run: apt-get update --quiet=2 && apt-get install --quiet=2 --yes xvfb procps
       - name: Test DEB installer lifecycle
