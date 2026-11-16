@@ -18,7 +18,7 @@ final class AboutLinkWorkflow {
 
         String link_url = "";
         if (linkSubject.equals(sotVosLink)) {
-          link_url = "https://www.ocean-ops.org/sot/vos/";
+          link_url = "https://sot.ocean-ops.org/vos.html";
         } else if (linkSubject.equals(gitlabLink)) {
           link_url = "https://github.com/DeutscherWetterdienst/turbowin";
         }
