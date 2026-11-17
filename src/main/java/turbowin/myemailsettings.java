@@ -91,6 +91,7 @@ public final class myemailsettings extends javax.swing.JFrame {
     jRadioButton7.setSelected(false); // TLS
     jRadioButton8.setSelected(false); // SSL
     jCheckBox1.setSelected(true); // STARTTLS
+    jComboBox2.setSelectedIndex(1); // STARTTLS (587)
     jRadioButton1.setSelected(true); // Jakarta Mail is the only supported custom module
     jRadioButton2.setSelected(false);
     jRadioButton2.setVisible(false); // retained temporarily for form compatibility
@@ -193,6 +194,13 @@ public final class myemailsettings extends javax.swing.JFrame {
       jRadioButton8.setSelected(false); // SSL
       jCheckBox1.setSelected(false); // recipient
     }
+    if (SmtpSecurityMode.PLAIN.equals(normalizedSecurity)) {
+      jComboBox2.setSelectedIndex(0);
+    } else if (SmtpSecurityMode.IMPLICIT_TLS.equals(normalizedSecurity)) {
+      jComboBox2.setSelectedIndex(2);
+    } else {
+      jComboBox2.setSelectedIndex(1);
+    }
 
     // [LOGS]
     jTextField3.setText(main.logs_email_recipient); // logs (immt etc) adress recipient
@@ -254,6 +262,7 @@ public final class myemailsettings extends javax.swing.JFrame {
     jRadioButton7 = new javax.swing.JRadioButton();
     jRadioButton8 = new javax.swing.JRadioButton();
     jCheckBox1 = new javax.swing.JCheckBox();
+    jComboBox2 = new javax.swing.JComboBox<>();
     jLabel12 = new javax.swing.JLabel();
     jRadioButton1 = new javax.swing.JRadioButton();
     jRadioButton2 = new javax.swing.JRadioButton();
@@ -441,6 +450,12 @@ public final class myemailsettings extends javax.swing.JFrame {
     jRadioButton8.setText("Implicit TLS (465)");
 
     jCheckBox1.setText("STARTTLS (587)");
+    jComboBox2.setModel(
+        new javax.swing.DefaultComboBoxModel<>(
+            new String[] {"Unencrypted (local relay)", "STARTTLS (587)", "Implicit TLS (465)"}));
+    jRadioButton7.setVisible(false);
+    jRadioButton8.setVisible(false);
+    jCheckBox1.setVisible(false);
 
     jLabel12.setText("email module to be used");
 
@@ -586,12 +601,9 @@ public final class myemailsettings extends javax.swing.JFrame {
                                         javax.swing.LayoutStyle.ComponentPlacement.RELATED,
                                         javax.swing.GroupLayout.DEFAULT_SIZE,
                                         Short.MAX_VALUE)
-                                    .addComponent(jRadioButton7)
+                                    .addComponent(jComboBox2)
                                     .addPreferredGap(
                                         javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jRadioButton8)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jCheckBox1)
                                     .addContainerGap(210, Short.MAX_VALUE))))
             .addGroup(
                 jPanel8Layout
@@ -640,9 +652,7 @@ public final class myemailsettings extends javax.swing.JFrame {
                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRadioButton7)
-                            .addComponent(jRadioButton8)
-                            .addComponent(jCheckBox1))
+                            .addComponent(jComboBox2))
                     .addGap(18, 18, 18)
                     .addGroup(
                         jPanel8Layout
@@ -1084,16 +1094,7 @@ public final class myemailsettings extends javax.swing.JFrame {
       main.custom_password = "";
     }
 
-    // The checkbox takes precedence: it represents STARTTLS on port 587.
-    if (STARTTLS_local) {
-      main.custom_security = SmtpSecurityMode.STARTTLS;
-    } else if (jRadioButton8.isSelected()) {
-      main.custom_security = SmtpSecurityMode.IMPLICIT_TLS;
-    } else if (jRadioButton7.isSelected()) {
-      main.custom_security = SmtpSecurityMode.PLAIN;
-    } else {
-      main.custom_security = "";
-    }
+    main.custom_security = selectedSmtpMode();
 
     // Jakarta Mail is the only supported custom email module.
     main.custom_email_module = main.JAKARTA_EMAIL;
@@ -1210,13 +1211,13 @@ public final class myemailsettings extends javax.swing.JFrame {
   }
 
   private String selectedSmtpMode() {
-    if (jCheckBox1.isSelected()) {
+    if ("STARTTLS (587)".equals(jComboBox2.getSelectedItem())) {
       return SmtpSecurityMode.STARTTLS;
     }
-    if (jRadioButton8.isSelected()) {
+    if ("Implicit TLS (465)".equals(jComboBox2.getSelectedItem())) {
       return SmtpSecurityMode.IMPLICIT_TLS;
     }
-    if (jRadioButton7.isSelected()) {
+    if ("Unencrypted (local relay)".equals(jComboBox2.getSelectedItem())) {
       return SmtpSecurityMode.PLAIN;
     }
     return "";
@@ -1234,6 +1235,13 @@ public final class myemailsettings extends javax.swing.JFrame {
           jRadioButton7.setSelected(SmtpSecurityMode.PLAIN.equals(security));
           jRadioButton8.setSelected(SmtpSecurityMode.IMPLICIT_TLS.equals(security));
           jCheckBox1.setSelected(SmtpSecurityMode.STARTTLS.equals(security));
+          if (SmtpSecurityMode.PLAIN.equals(security)) {
+            jComboBox2.setSelectedIndex(0);
+          } else if (SmtpSecurityMode.IMPLICIT_TLS.equals(security)) {
+            jComboBox2.setSelectedIndex(2);
+          } else if (SmtpSecurityMode.STARTTLS.equals(security)) {
+            jComboBox2.setSelectedIndex(1);
+          }
         });
   }
 
@@ -1330,6 +1338,7 @@ public final class myemailsettings extends javax.swing.JFrame {
   private javax.swing.JButton jButton3;
   private javax.swing.JButton jButton4;
   private javax.swing.JComboBox<SmtpProviderProfile> jComboBox1;
+  private javax.swing.JComboBox<String> jComboBox2;
   private javax.swing.JCheckBox jCheckBox1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel10;
