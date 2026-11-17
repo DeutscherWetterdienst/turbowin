@@ -2663,6 +2663,48 @@ public class main_RS232_RS422 {
     }
   }
 
+  /** Stops the active communication workers so connection settings can be reapplied live. */
+  public void stopCommunication() {
+    cancelWorker(RS232_worker);
+    cancelWorker(RS232_worker_II);
+    cancelWorker(RS422_worker);
+    cancelWorker(RS232_GPS_worker);
+    cancelWorker(WiFi_worker);
+    cancelWorker(Ethernet_worker);
+
+    stopTimer(check_new_data_timer);
+    stopTimer(check_new_data_timer_II);
+    stopTimer(check_new_GPS_data_timer);
+
+    closePort(main.serialPort);
+    closePort(main.serialPort_II);
+    closePort(main.GPS_serialPort);
+    main.serialPort = null;
+    main.serialPort_II = null;
+    main.GPS_serialPort = null;
+    main.defaultPort = null;
+    main.defaultPort_II = null;
+    GPS_defaultPort = null;
+  }
+
+  private static void cancelWorker(javax.swing.SwingWorker<?, ?> worker) {
+    if (worker != null) {
+      worker.cancel(true);
+    }
+  }
+
+  private static void stopTimer(Timer timer) {
+    if (timer != null) {
+      timer.stop();
+    }
+  }
+
+  private static void closePort(SerialPort port) {
+    if (port != null && port.isOpen()) {
+      port.closePort();
+    }
+  }
+
   private class RS422_V3_Class_Receive_Sensor_Data extends SwingWorker<String, String> {
     /////////////////// AWS serial only /////////////////
     //

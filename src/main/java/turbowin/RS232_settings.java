@@ -1672,12 +1672,13 @@ public final class RS232_settings extends javax.swing.JFrame {
     ////////////////// save the RS232 (RS422) settings data ///////////////////////
     //
     if (doorgaan == true) {
+      main.mainClass.applyConnectionSettings();
       // Save settings to the configuration files.
       main.schrijf_configuratie_regels();
 
       /* message */
       info = "";
-      info = "Changes will take effect after restarting " + main.APPLICATION_NAME;
+      info = "Changes have been applied immediately";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
 

@@ -3849,6 +3849,17 @@ public class main extends javax.swing.JFrame {
         jCheckBox2);
   }
 
+  /** Reapplies connection settings without recreating the main window. */
+  void applyConnectionSettings() {
+    RS232_RS422.stopCommunication();
+    specific_connection_initComponents();
+    disable_graph_menu_items();
+    disable_dashboard_and_maps_menu_items();
+    disable_and_enable_output_menu_items();
+    set_APR_toolbar();
+    set_AWSR_toolbar();
+  }
+
   public static void disable_and_enable_output_menu_items() {
     OutputMenuStateUpdater.update();
   }
