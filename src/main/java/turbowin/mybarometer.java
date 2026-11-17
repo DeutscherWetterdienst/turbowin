@@ -7,6 +7,9 @@ public final class mybarometer extends javax.swing.JFrame {
   /** Creates new form mybarometer */
   public mybarometer() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField1);
+    NumericInputWorkflow.decimal(jTextField2);
+    NumericInputWorkflow.decimal(jTextField3);
     initComponents2();
     initSynopparameters();
     setLocation(main.x_pos_frame, main.y_pos_frame);

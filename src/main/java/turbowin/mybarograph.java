@@ -8,6 +8,7 @@ public final class mybarograph extends javax.swing.JFrame {
   /** Creates new form mybarograph */
   public mybarograph() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField1);
     initComponents2();
     initSynopparameters();
     setLocation(main.x_pos_frame, main.y_pos_frame);

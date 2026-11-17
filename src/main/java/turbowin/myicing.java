@@ -7,6 +7,7 @@ public final class myicing extends javax.swing.JFrame {
   /** Creates new form myicing */
   public myicing() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField1);
     initComponents2();
     initSynopparameters();
     setLocation(main.x_pos_frame, main.y_pos_frame);

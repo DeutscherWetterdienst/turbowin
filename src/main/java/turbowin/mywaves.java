@@ -7,6 +7,8 @@ public final class mywaves extends javax.swing.JFrame {
   /** Creates new form mywaves */
   public mywaves() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField1);
+    NumericInputWorkflow.decimal(jTextField2);
     initComponents2();
     initSynopparameters();
     setLocation(main.x_pos_frame, main.y_pos_frame);

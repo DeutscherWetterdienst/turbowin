@@ -8,6 +8,14 @@ public final class calculator extends javax.swing.JFrame {
   /** Creates new form calculator */
   public calculator() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField1);
+    NumericInputWorkflow.decimal(jTextField3);
+    NumericInputWorkflow.decimal(jTextField5);
+    NumericInputWorkflow.decimal(jTextField7);
+    NumericInputWorkflow.decimal(jTextField9);
+    NumericInputWorkflow.decimal(jTextField11);
+    NumericInputWorkflow.decimal(jTextField13);
+    NumericInputWorkflow.decimal(jTextField15);
     initComponents2();
     setLocation(main.x_pos_calculator_frame, main.y_pos_calculator_frame);
   }

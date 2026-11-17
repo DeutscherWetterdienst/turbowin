@@ -53,6 +53,12 @@ public class barometer_comparison extends javax.swing.JFrame {
   /** Creates new form barometer_comparison */
   public barometer_comparison() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField2);
+    NumericInputWorkflow.decimal(jTextField3);
+    NumericInputWorkflow.decimal(jTextField6);
+    NumericInputWorkflow.decimal(jTextField7);
+    NumericInputWorkflow.decimal(jTextField8);
+    NumericInputWorkflow.decimal(jTextField9);
     initBarometerComparisonComponents();
     setLocation(main.x_pos_main_frame, main.y_pos_main_frame);
   }

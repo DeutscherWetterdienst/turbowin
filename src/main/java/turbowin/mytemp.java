@@ -50,6 +50,10 @@ public final class mytemp extends javax.swing.JFrame {
   /** Creates new form mytemp */
   public mytemp() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField1);
+    NumericInputWorkflow.decimal(jTextField2);
+    NumericInputWorkflow.decimal(jTextField3);
+    NumericInputWorkflow.decimal(jTextField4);
     initComponents2();
     initSynopparameters();
     setLocation(main.x_pos_frame, main.y_pos_frame);

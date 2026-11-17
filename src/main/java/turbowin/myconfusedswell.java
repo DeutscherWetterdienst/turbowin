@@ -7,6 +7,8 @@ public final class myconfusedswell extends javax.swing.JFrame {
   /** Creates new form myconfusedswell */
   public myconfusedswell() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField1);
+    NumericInputWorkflow.decimal(jTextField2);
     initComponents2();
     initSynopparameters();
     setLocation(main.x_pos_frame, main.y_pos_frame);

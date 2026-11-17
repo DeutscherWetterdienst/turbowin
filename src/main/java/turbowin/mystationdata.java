@@ -13,6 +13,13 @@ public final class mystationdata extends javax.swing.JFrame {
   /** Creates new form mystationdata */
   public mystationdata() {
     initComponents();
+    NumericInputWorkflow.integer(jTextField2);
+    NumericInputWorkflow.decimal(jTextField3);
+    NumericInputWorkflow.decimal(jTextField5);
+    NumericInputWorkflow.decimal(jTextField6);
+    NumericInputWorkflow.decimal(jTextField7);
+    NumericInputWorkflow.decimal(jTextField8);
+    NumericInputWorkflow.decimal(jTextField9);
     initComponents2();
     initStationComponents();
     setLocation(main.x_pos_main_frame, main.y_pos_main_frame);

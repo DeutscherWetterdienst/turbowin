@@ -12,6 +12,13 @@ public final class mywind extends javax.swing.JFrame {
   /** Creates new form mywind */
   public mywind() {
     initComponents();
+    NumericInputWorkflow.integerOr(jTextField1, "variable", "calm");
+    NumericInputWorkflow.decimal(jTextField2);
+    NumericInputWorkflow.integer(jTextField3);
+    NumericInputWorkflow.decimal(jTextField4);
+    NumericInputWorkflow.integer(jTextField5);
+    NumericInputWorkflow.decimal(jTextField6);
+    NumericInputWorkflow.decimal(jTextField7);
     initComponents2();
     // lees_wind_source_uit_file();
     initSynopparameters();

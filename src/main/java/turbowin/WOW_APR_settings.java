@@ -8,6 +8,8 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
   /** Creates new form WOW_settings */
   public WOW_APR_settings() {
     initComponents();
+    NumericInputWorkflow.decimal(jTextField4);
+    NumericInputWorkflow.decimal(jTextField5);
     initComponents2();
     setLocation(main.x_pos_main_frame, main.y_pos_main_frame);
   }

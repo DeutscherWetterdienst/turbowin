@@ -45,6 +45,7 @@ public final class myemailsettings extends javax.swing.JFrame {
   /** Creates new form myemailsettings */
   public myemailsettings() {
     initComponents();
+    NumericInputWorkflow.integer(jTextField16);
     initEmailComponents();
     setLocation(main.x_pos_main_frame, main.y_pos_main_frame);
   }
