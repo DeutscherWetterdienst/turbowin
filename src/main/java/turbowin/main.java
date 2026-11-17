@@ -2708,12 +2708,6 @@ public class main extends javax.swing.JFrame {
     jMenuBar1.add(jMenu4);
 
     jMenu5.setText("Themes");
-    jMenu5.addActionListener(
-        new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Themes_5_actionPerformed(evt);
-          }
-        });
 
     jMenuItem31.setText("Day");
     jMenuItem31.addActionListener(
@@ -2750,15 +2744,6 @@ public class main extends javax.swing.JFrame {
           }
         });
     jMenu5.add(jMenuItem22);
-
-    jMenuItem76.setText("Transparent");
-    jMenuItem76.addActionListener(
-        new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Themes_5_actionPerformed(evt);
-          }
-        });
-    jMenu5.add(jMenuItem76);
 
     jMenuBar1.add(jMenu5);
 
@@ -5166,11 +5151,6 @@ public class main extends javax.swing.JFrame {
     form.setSize(1000, 700);
     form.setVisible(true);
   } // GEN-LAST:event_Info_barometer_comparison_menu_actionPerformed
-
-  void Themes_5_actionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_5_actionPerformed
-    ThemeWorkflow.applyTransparent();
-  } // GEN-LAST:event_Themes_5_actionPerformed
 
   private void APR_toolbar_itemStateChanged(
       java.awt.event.ItemEvent evt) { // GEN-FIRST:event_APR_toolbar_itemStateChanged

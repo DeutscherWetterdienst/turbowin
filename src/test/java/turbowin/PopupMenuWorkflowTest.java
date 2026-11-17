@@ -30,8 +30,7 @@ public class PopupMenuWorkflowTest {
           "Day colours",
           "Night colours",
           "Sunrise colours",
-          "Sunset colours",
-          "Transparent"
+          "Sunset colours"
         },
         PopupMenuWorkflow.menuLabels());
   }

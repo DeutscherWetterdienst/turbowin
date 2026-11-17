@@ -393,9 +393,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Themes"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Themes_5_actionPerformed"/>
-          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem31">
               <Properties>
@@ -427,14 +424,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Themes_4_actionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem76">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Transparent"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Themes_5_actionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
