@@ -30,6 +30,36 @@ public class Jakarta_Email {
     props = new Properties();
   }
 
+  public int testConnection(
+      final String smtp_mode,
+      final String smtp_host_local,
+      final String smtp_password_local,
+      final String smtp_username_local,
+      final String smtp_port_local) {
+    try {
+      set_jakarta_email_props(
+          smtp_mode,
+          smtp_host_local,
+          smtp_password_local,
+          smtp_username_local,
+          smtp_username_local,
+          smtp_port_local);
+      Session session = Session.getInstance(props, null);
+      SMTPTransport transport = (SMTPTransport) session.getTransport("smtp");
+      try {
+        transport.connect();
+      } finally {
+        if (transport.isConnected()) {
+          transport.close();
+        }
+      }
+      return 0;
+    } catch (Exception ex) {
+      System.out.println("[EMAIL] SMTP connection test failed: " + ex.getMessage());
+      return 1;
+    }
+  }
+
   private void set_jakarta_email_props(
       final String smtp_mode,
       final String smtp_host_local,
@@ -65,6 +95,7 @@ public class Jakarta_Email {
     boolean debug = false;
 
     // Properties props = new Properties();
+    props.clear();
     props.put("mail.smtp.timeout", "60000"); // 1000 = 1 sec; 60000 = 1 min
     props.put("mail.smtp.connectiontimeout", "60000");
     props.put(

@@ -267,6 +267,8 @@ public final class myemailsettings extends javax.swing.JFrame {
     jSeparator1 = new javax.swing.JSeparator();
     jButton1 = new javax.swing.JButton();
     jButton2 = new javax.swing.JButton();
+    jButton3 = new javax.swing.JButton();
+    jButton4 = new javax.swing.JButton();
     jLabel11 = new javax.swing.JLabel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -851,6 +853,22 @@ public final class myemailsettings extends javax.swing.JFrame {
           }
         });
 
+    jButton3.setText("Test connection");
+    jButton3.addActionListener(
+        new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+            testConnection_button_actionPerformed(evt);
+          }
+        });
+
+    jButton4.setText("Send test e-mail");
+    jButton4.addActionListener(
+        new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+            sendTestEmail_button_actionPerformed(evt);
+          }
+        });
+
     jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     jLabel11.setText("* optional");
 
@@ -918,6 +936,18 @@ public final class myemailsettings extends javax.swing.JFrame {
                         javax.swing.GroupLayout.PREFERRED_SIZE,
                         80,
                         javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(
+                        jButton3,
+                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                        125,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(
+                        jButton4,
+                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                        135,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
     layout.setVerticalGroup(
         layout
@@ -965,6 +995,16 @@ public final class myemailsettings extends javax.swing.JFrame {
                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(
                                 jButton2,
+                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                25,
+                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(
+                                jButton3,
+                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                25,
+                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(
+                                jButton4,
                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                 25,
                                 javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1054,6 +1094,105 @@ public final class myemailsettings extends javax.swing.JFrame {
     setVisible(false);
     dispose();
   } // GEN-LAST:event_OK_button_actionPerformed
+
+  private void testConnection_button_actionPerformed(java.awt.event.ActionEvent evt) {
+    runSmtpTest(false);
+  }
+
+  private void sendTestEmail_button_actionPerformed(java.awt.event.ActionEvent evt) {
+    runSmtpTest(true);
+  }
+
+  private void runSmtpTest(boolean sendTestEmail) {
+    final String host = jTextField14.getText().trim();
+    final String port = jTextField16.getText().trim();
+    final String username = jTextField17.getText().trim();
+    final String sender = jTextField13.getText().trim();
+    final String recipient = jTextField1.getText().trim();
+    final String password =
+        jTextField15.getText().equals(password_stars)
+            ? decrypt(main.custom_password)
+            : jTextField15.getText().trim();
+    final String mode = selectedSmtpMode();
+
+    if (host.isEmpty() || port.isEmpty() || mode.isEmpty()) {
+      JOptionPane.showMessageDialog(
+          this,
+          "Please enter an SMTP server, port and security mode first.",
+          main.APPLICATION_NAME + " warning",
+          JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+    if (sendTestEmail && (recipient.isEmpty() || sender.isEmpty())) {
+      JOptionPane.showMessageDialog(
+          this,
+          "Please enter both a recipient and a sender address for the test e-mail.",
+          main.APPLICATION_NAME + " warning",
+          JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+
+    jButton3.setEnabled(false);
+    jButton4.setEnabled(false);
+    new javax.swing.SwingWorker<Integer, Void>() {
+      @Override
+      protected Integer doInBackground() {
+        Jakarta_Email email = new Jakarta_Email();
+        if (!sendTestEmail) {
+          return email.testConnection(mode, host, password, username, port);
+        }
+        return email.send_jakarta_email_obs_with_username(
+            mode,
+            host,
+            password,
+            recipient,
+            sender,
+            "TurboWin SMTP test",
+            "This is a test e-mail from TurboWin.",
+            "null",
+            port,
+            "null",
+            username);
+      }
+
+      @Override
+      protected void done() {
+        jButton3.setEnabled(true);
+        jButton4.setEnabled(true);
+        try {
+          int status = get();
+          JOptionPane.showMessageDialog(
+              myemailsettings.this,
+              status == 0
+                  ? (sendTestEmail
+                      ? "Test e-mail sent successfully."
+                      : "SMTP connection succeeded.")
+                  : (sendTestEmail ? "Test e-mail could not be sent." : "SMTP connection failed."),
+              main.APPLICATION_NAME + (status == 0 ? " info" : " error"),
+              status == 0 ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+          JOptionPane.showMessageDialog(
+              myemailsettings.this,
+              "SMTP test failed: " + ex.getMessage(),
+              main.APPLICATION_NAME + " error",
+              JOptionPane.ERROR_MESSAGE);
+        }
+      }
+    }.execute();
+  }
+
+  private String selectedSmtpMode() {
+    if (jCheckBox1.isSelected()) {
+      return SmtpSecurityMode.STARTTLS;
+    }
+    if (jRadioButton8.isSelected()) {
+      return SmtpSecurityMode.IMPLICIT_TLS;
+    }
+    if (jRadioButton7.isSelected()) {
+      return SmtpSecurityMode.PLAIN;
+    }
+    return "";
+  }
 
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
@@ -1145,6 +1284,8 @@ public final class myemailsettings extends javax.swing.JFrame {
   private javax.swing.ButtonGroup buttonGroup6;
   private javax.swing.JButton jButton1;
   private javax.swing.JButton jButton2;
+  private javax.swing.JButton jButton3;
+  private javax.swing.JButton jButton4;
   private javax.swing.JCheckBox jCheckBox1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel10;
