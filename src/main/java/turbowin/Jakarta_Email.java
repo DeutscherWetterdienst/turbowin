@@ -55,9 +55,56 @@ public class Jakarta_Email {
       }
       return 0;
     } catch (Exception ex) {
+      logSmtpException("connection test", ex);
       System.out.println("[EMAIL] SMTP connection test failed: " + ex.getMessage());
       return 1;
     }
+  }
+
+  private static void logSmtpResponse(String operation, String response) {
+    String safeResponse =
+        response == null ? "" : response.replace('\n', ' ').replace('\r', ' ').trim();
+    String status = extractSmtpStatus(safeResponse);
+    main.log_turbowin_system_message(
+        "[EMAIL][SMTP] operation="
+            + operation
+            + " status="
+            + status
+            + " response="
+            + (safeResponse.isEmpty() ? "none" : safeResponse));
+  }
+
+  private static void logSmtpException(String operation, Exception exception) {
+    String message = exception.getMessage();
+    String status = extractSmtpStatus(message);
+    main.log_turbowin_system_message(
+        "[EMAIL][SMTP] operation="
+            + operation
+            + " status="
+            + status
+            + " exception="
+            + (message == null
+                ? exception.getClass().getSimpleName()
+                : message.replace('\n', ' ')));
+  }
+
+  private static String extractSmtpStatus(String text) {
+    if (text != null) {
+      for (int index = 0; index <= text.length() - 3; index++) {
+        char first = text.charAt(index);
+        char second = text.charAt(index + 1);
+        char third = text.charAt(index + 2);
+        if (first >= '2'
+            && first <= '5'
+            && second >= '0'
+            && second <= '9'
+            && third >= '0'
+            && third <= '9') {
+          return text.substring(index, index + 3);
+        }
+      }
+    }
+    return "unknown";
   }
 
   private void set_jakarta_email_props(
@@ -359,7 +406,7 @@ public class Jakarta_Email {
             transp.connect(smtp_host_local, send_from, smtp_password_local);
             transp.sendMessage(msg, msg.getAllRecipients());
           } finally {
-            System.out.println("--- last email server response: " + transp.getLastServerResponse());
+            logSmtpResponse("observation send", transp.getLastServerResponse());
             transp.close();
           }
         } // else
@@ -368,6 +415,7 @@ public class Jakarta_Email {
         main.log_turbowin_system_message("[EMAIL] obs email sent successfully");
 
       } catch (MessagingException e) {
+        logSmtpException("observation send", e);
         // System.out.println("\n--Exception handling in send_jakarta_email.java: " + e);
 
         // Handle SMTP-specific exceptions.
@@ -585,7 +633,7 @@ public class Jakarta_Email {
             transp.connect(smtp_host_local, send_from, smtp_password_local);
             transp.sendMessage(msg, msg.getAllRecipients());
           } finally {
-            System.out.println("--- last email server response: " + transp.getLastServerResponse());
+            logSmtpResponse("log send", transp.getLastServerResponse());
             transp.close();
           }
         } // else
@@ -594,6 +642,7 @@ public class Jakarta_Email {
             "[EMAIL] meteo logs successfully sent from " + send_from + " to " + send_to);
         exitStatus = 200; // success
       } catch (MessagingException e) {
+        logSmtpException("log send", e);
         // System.out.println("\n--Exception handling in send_jakarta_email.java: " + e);
 
         // Handle SMTP-specific exceptions.
