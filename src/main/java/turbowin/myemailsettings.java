@@ -170,22 +170,19 @@ public final class myemailsettings extends javax.swing.JFrame {
     jRadioButton1.setSelected(true);
     jRadioButton2.setSelected(false);
 
-    if (main.custom_security.equals(main.CUSTOM_TLS)) {
+    String normalizedSecurity = SmtpSecurityMode.normalize(main.custom_security, main.custom_port);
+    if (SmtpSecurityMode.PLAIN.equals(normalizedSecurity)) {
       jRadioButton7.setSelected(true);
       jRadioButton8.setSelected(false);
       jCheckBox1.setSelected(false);
-    } else if (main.custom_security.equals(main.CUSTOM_TLS_STARTTLS)) {
+    } else if (SmtpSecurityMode.STARTTLS.equals(normalizedSecurity)) {
       jRadioButton7.setSelected(true);
       jRadioButton8.setSelected(false);
       jCheckBox1.setSelected(true);
-    } else if (main.custom_security.equals(main.CUSTOM_SSL)) {
+    } else if (SmtpSecurityMode.IMPLICIT_TLS.equals(normalizedSecurity)) {
       jRadioButton7.setSelected(false);
       jRadioButton8.setSelected(true);
       jCheckBox1.setSelected(false);
-    } else if (main.custom_security.equals(main.CUSTOM_SSL_STARTTLS)) {
-      jRadioButton7.setSelected(false);
-      jRadioButton8.setSelected(true);
-      jCheckBox1.setSelected(true);
     } else // custom security mode: not inserted = not activated (NB in custom security mode all
     // email items must be present/set!)
     {
@@ -423,12 +420,12 @@ public final class myemailsettings extends javax.swing.JFrame {
     jLabel22.setText("port");
 
     buttonGroup4.add(jRadioButton7);
-    jRadioButton7.setText("TLS");
+    jRadioButton7.setText("Unencrypted (local relay)");
 
     buttonGroup4.add(jRadioButton8);
-    jRadioButton8.setText("SSL");
+    jRadioButton8.setText("Implicit TLS (465)");
 
-    jCheckBox1.setText("STARTTLS");
+    jCheckBox1.setText("STARTTLS (587)");
 
     jLabel12.setText("email module to be used");
 
@@ -987,21 +984,15 @@ public final class myemailsettings extends javax.swing.JFrame {
       main.custom_password = "";
     }
 
-    // security (TLS, SSL, STARTTLS)
-    if (jRadioButton7.isSelected() == true) // TLS
-    {
-      if (STARTTLS_local == true) {
-        main.custom_security = main.CUSTOM_TLS_STARTTLS;
-      } else {
-        main.custom_security = main.CUSTOM_TLS;
-      }
-    } else if (jRadioButton8.isSelected() == true) // SSL
-    {
-      if (STARTTLS_local == true) {
-        main.custom_security = main.CUSTOM_SSL_STARTTLS;
-      } else {
-        main.custom_security = main.CUSTOM_SSL;
-      }
+    // The checkbox takes precedence: it represents STARTTLS on port 587.
+    if (STARTTLS_local) {
+      main.custom_security = SmtpSecurityMode.STARTTLS;
+    } else if (jRadioButton8.isSelected()) {
+      main.custom_security = SmtpSecurityMode.IMPLICIT_TLS;
+    } else if (jRadioButton7.isSelected()) {
+      main.custom_security = SmtpSecurityMode.PLAIN;
+    } else {
+      main.custom_security = "";
     }
 
     // Jakarta Mail is the only supported custom email module.

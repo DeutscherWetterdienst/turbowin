@@ -728,6 +728,7 @@ final class ConfigurationManager {
     }
 
     normalizeEmailModule();
+    custom_security = SmtpSecurityMode.normalize(custom_security, custom_port);
   }
 
   static void normalizeEmailModule() {

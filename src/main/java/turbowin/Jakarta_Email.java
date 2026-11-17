@@ -88,51 +88,16 @@ public class Jakarta_Email {
       props.put("mail.debug", "true");
     }
 
-    if (smtp_mode.equals(main.CUSTOM_SSL)) {
+    String normalizedSmtpMode = SmtpSecurityMode.normalize(smtp_mode, smtp_port_local);
+    if (SmtpSecurityMode.IMPLICIT_TLS.equals(normalizedSmtpMode)) {
       props.put(
           "mail.smtp.ssl.enable",
           "true"); // If set to true, use SSL to connect and use the SSL port by default
-
-      if ((smtp_host_local != null)
-          && (smtp_host_local.toLowerCase().contains("gmail")
-              || smtp_host_local.toLowerCase().contains("outlook"))) {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      } else {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      }
-    } else if (smtp_mode.equals(main.CUSTOM_SSL_STARTTLS)) {
-      props.put(
-          "mail.smtp.ssl.enable",
-          "true"); // If set to true, use SSL to connect and use the SSL port by default
-      if ((smtp_host_local != null)
-          && (smtp_host_local.toLowerCase().contains("gmail")
-              || smtp_host_local.toLowerCase().contains("outlook"))) {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      } else {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      }
-      props.put("mail.smtp.starttls.enable", "true");
-      props.put("mail.smtp.starttls.required", "true");
-    } else if (smtp_mode.equals(main.CUSTOM_TLS)) {
-      if ((smtp_host_local != null)
-          && (smtp_host_local.toLowerCase().contains("gmail")
-              || smtp_host_local.toLowerCase().contains("outlook"))) {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      } else {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      }
-    } else if (smtp_mode.equals(main.CUSTOM_TLS_STARTTLS)) {
-      if ((smtp_host_local != null)
-          && (smtp_host_local.toLowerCase().contains("gmail")
-              || smtp_host_local
-                  .toLowerCase()
-                  .contains(
-                      "outlook"))) // (test 26-aug-2022: via gmail: TLsv1.3: handshake_failure)
-      {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      } else {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
-      }
+      props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
+    } else if (SmtpSecurityMode.PLAIN.equals(normalizedSmtpMode)) {
+      // No TLS properties: this mode is reserved for explicitly configured local relays.
+    } else if (SmtpSecurityMode.STARTTLS.equals(normalizedSmtpMode)) {
+      props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       props.put("mail.smtp.starttls.enable", "true");
       props.put("mail.smtp.starttls.required", "true");
     }
