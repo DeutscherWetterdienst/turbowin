@@ -112,7 +112,7 @@ public class StationDataImportWorkflowTest {
 
   private void importAndAwaitSavedSettings(Path source) throws Exception {
     String expectedLogsDirectory = main.logs_dir;
-    String expectedLastLine = main.EUCAWS_OBS_ID_TXT + main.eucaws_obs_id;
+    String expectedLastLine = main.CUSTOM_USERNAME_TXT + main.custom_smtp_username;
     CountDownLatch refreshed = new CountDownLatch(1);
     AtomicBoolean refreshedOnEdt = new AtomicBoolean();
     AtomicReference<String> displayedShipName = new AtomicReference<>();
