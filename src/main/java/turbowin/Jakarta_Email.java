@@ -26,8 +26,60 @@ import org.eclipse.angus.mail.smtp.SMTPTransport;
 
 public class Jakarta_Email {
 
+  private static final int MAX_SMTP_ATTEMPTS = 3;
+  private static final long SMTP_RETRY_DELAY_MILLIS = 250L;
+
   public Jakarta_Email() {
     props = new Properties();
+  }
+
+  private void sendWithRetry(
+      Session session,
+      MimeMessage message,
+      String host,
+      String username,
+      String password,
+      String operation)
+      throws MessagingException {
+    for (int attempt = 1; attempt <= MAX_SMTP_ATTEMPTS; attempt++) {
+      try {
+        if (password == null || password.isEmpty()) {
+          Transport.send(message);
+        } else {
+          SMTPTransport transport = (SMTPTransport) session.getTransport("smtp");
+          try {
+            transport.connect(host, username, password);
+            transport.sendMessage(message, message.getAllRecipients());
+          } finally {
+            logSmtpResponse(operation + " attempt=" + attempt, transport.getLastServerResponse());
+            transport.close();
+          }
+        }
+        return;
+      } catch (MessagingException exception) {
+        logSmtpException(operation + " attempt=" + attempt, exception);
+        if (!isTemporarySmtpFailure(exception) || attempt == MAX_SMTP_ATTEMPTS) {
+          throw exception;
+        }
+        main.log_turbowin_system_message(
+            "[EMAIL][SMTP] operation="
+                + operation
+                + " retry="
+                + (attempt + 1)
+                + " reason=temporary status="
+                + extractSmtpStatus(exception.getMessage()));
+        try {
+          Thread.sleep(SMTP_RETRY_DELAY_MILLIS);
+        } catch (InterruptedException interrupted) {
+          Thread.currentThread().interrupt();
+          throw exception;
+        }
+      }
+    }
+  }
+
+  private static boolean isTemporarySmtpFailure(Exception exception) {
+    return extractSmtpStatus(exception.getMessage()).startsWith("4");
   }
 
   public int testConnection(
@@ -395,22 +447,13 @@ public class Jakarta_Email {
           msg.setText(body, "UTF-8");
         }
 
-        // send
-        if (smtp_password_local == null || smtp_password_local.equals("")) {
-          // the simple send method
-          Transport.send(msg);
-        } else {
-          // the extendent send method
-          SMTPTransport transp =
-              (SMTPTransport) session.getTransport("smtp"); // NB "smtp" AND NOT "SMTP"!!
-          try {
-            transp.connect(smtp_host_local, send_from, smtp_password_local);
-            transp.sendMessage(msg, msg.getAllRecipients());
-          } finally {
-            logSmtpResponse("observation send", transp.getLastServerResponse());
-            transp.close();
-          }
-        } // else
+        sendWithRetry(
+            session,
+            msg,
+            smtp_host_local,
+            smtp_username_local,
+            smtp_password_local,
+            "observation send");
 
         // System.out.println("--- send_jakarta_email module: Mail was sent successfully.");
         main.log_turbowin_system_message("[EMAIL] obs email sent successfully");
@@ -622,22 +665,8 @@ public class Jakarta_Email {
           msg.setText(body, "UTF-8");
         }
 
-        // send
-        if (smtp_password_local == null || smtp_password_local.equals("")) {
-          // the simple send method
-          Transport.send(msg);
-        } else {
-          // the extendent send method
-          SMTPTransport transp =
-              (SMTPTransport) session.getTransport("smtp"); // NB "smtp" AND NOT "SMTP"!!
-          try {
-            transp.connect(smtp_host_local, send_from, smtp_password_local);
-            transp.sendMessage(msg, msg.getAllRecipients());
-          } finally {
-            logSmtpResponse("log send", transp.getLastServerResponse());
-            transp.close();
-          }
-        } // else
+        sendWithRetry(
+            session, msg, smtp_host_local, smtp_username_local, smtp_password_local, "log send");
 
         main.log_turbowin_system_message(
             "[EMAIL] meteo logs successfully sent from " + send_from + " to " + send_to);
