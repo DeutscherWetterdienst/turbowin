@@ -34,6 +34,7 @@ public class Jakarta_Email {
       final String smtp_mode,
       final String smtp_host_local,
       final String smtp_password_local,
+      final String smtp_username_local,
       final String send_from,
       final String smtp_port_local) {
     // NB
@@ -80,7 +81,8 @@ public class Jakarta_Email {
     // specified the protocol's default port number is used.
     props.put(
         "mail.smtp.user",
-        send_from); // The user name to use when connecting to mail servers using the specified
+        smtp_username_local); // The user name to use when connecting to mail servers using the
+    // specified
     // protocol. Overrides the mail.user property.
     props.put("mail.smtp.password", smtp_password_local);
     // props.put("mail.smtp.auth", "true");
@@ -176,6 +178,32 @@ public class Jakarta_Email {
       final String send_cc,
       final String smtp_port_local,
       final String attachment) {
+    return send_jakarta_email_obs_with_username(
+        smtp_mode,
+        smtp_host_local,
+        smtp_password_local,
+        send_to,
+        send_from,
+        subject,
+        body,
+        send_cc,
+        smtp_port_local,
+        attachment,
+        send_from);
+  }
+
+  public int send_jakarta_email_obs_with_username(
+      final String smtp_mode,
+      final String smtp_host_local,
+      final String smtp_password_local,
+      final String send_to,
+      final String send_from,
+      final String subject,
+      final String body,
+      final String send_cc,
+      final String smtp_port_local,
+      final String attachment,
+      final String smtp_username_local) {
     // called from: - Output_obs_by_email_jakarta_FM13_format_101() ---doInBackground--- [main.java]
     //
 
@@ -200,7 +228,12 @@ public class Jakarta_Email {
       //
 
       set_jakarta_email_props(
-          smtp_mode, smtp_host_local, smtp_password_local, send_from, smtp_port_local);
+          smtp_mode,
+          smtp_host_local,
+          smtp_password_local,
+          smtp_username_local,
+          send_from,
+          smtp_port_local);
 
       Session session = Session.getInstance(props, null);
       /*
@@ -394,6 +427,30 @@ public class Jakarta_Email {
       final String body,
       final String smtp_port_local,
       final String attachment) {
+    return send_jakarta_email_logs_with_username(
+        smtp_mode,
+        smtp_host_local,
+        smtp_password_local,
+        send_to,
+        send_from,
+        subject,
+        body,
+        smtp_port_local,
+        attachment,
+        send_from);
+  }
+
+  public int send_jakarta_email_logs_with_username(
+      final String smtp_mode,
+      final String smtp_host_local,
+      final String smtp_password_local,
+      final String send_to,
+      final String send_from,
+      final String subject,
+      final String body,
+      final String smtp_port_local,
+      final String attachment,
+      final String smtp_username_local) {
     // called from: - Maintenance_Move_log_files_by_email_actionPerformed() --- doInBackground ---
     // [main.java]
     //
@@ -420,7 +477,12 @@ public class Jakarta_Email {
       // https://eclipse-ee4j.github.io/mail/docs/api/jakarta.mail/jakarta/mail/package-summary.html
 
       set_jakarta_email_props(
-          smtp_mode, smtp_host_local, smtp_password_local, send_from, smtp_port_local);
+          smtp_mode,
+          smtp_host_local,
+          smtp_password_local,
+          smtp_username_local,
+          send_from,
+          smtp_port_local);
 
       Session session = Session.getInstance(props, null);
 

@@ -8,6 +8,7 @@ final class ObservationEmailRequest {
   private final String password;
   private final String recipient;
   private final String sender;
+  private final String smtpUsername;
   private final String subject;
   private final String body;
   private final String cc;
@@ -20,6 +21,7 @@ final class ObservationEmailRequest {
       String password,
       String recipient,
       String sender,
+      String smtpUsername,
       String subject,
       String body,
       String cc,
@@ -30,6 +32,7 @@ final class ObservationEmailRequest {
     this.password = password;
     this.recipient = recipient;
     this.sender = sender;
+    this.smtpUsername = smtpUsername;
     this.subject = subject;
     this.body = body;
     this.cc = cc;
@@ -48,8 +51,44 @@ final class ObservationEmailRequest {
       String cc,
       String port,
       String attachment) {
+    return from(
+        smtpMode,
+        smtpHost,
+        password,
+        recipient,
+        sender,
+        sender,
+        subject,
+        body,
+        cc,
+        port,
+        attachment);
+  }
+
+  static ObservationEmailRequest from(
+      String smtpMode,
+      String smtpHost,
+      String password,
+      String recipient,
+      String sender,
+      String smtpUsername,
+      String subject,
+      String body,
+      String cc,
+      String port,
+      String attachment) {
     return new ObservationEmailRequest(
-        smtpMode, smtpHost, password, recipient, sender, subject, body, cc, port, attachment);
+        smtpMode,
+        smtpHost,
+        password,
+        recipient,
+        sender,
+        smtpUsername,
+        subject,
+        body,
+        cc,
+        port,
+        attachment);
   }
 
   String smtpMode() {
@@ -70,6 +109,10 @@ final class ObservationEmailRequest {
 
   String sender() {
     return sender;
+  }
+
+  String smtpUsername() {
+    return smtpUsername;
   }
 
   String subject() {

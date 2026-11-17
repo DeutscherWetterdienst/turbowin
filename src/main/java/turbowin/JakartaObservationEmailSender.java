@@ -11,7 +11,7 @@ final class JakartaObservationEmailSender implements ObservationEmailSender {
 
   @Override
   public int send(ObservationEmailRequest request) {
-    return email.send_jakarta_email_obs(
+    return email.send_jakarta_email_obs_with_username(
         request.smtpMode(),
         request.smtpHost(),
         request.password(),
@@ -21,6 +21,7 @@ final class JakartaObservationEmailSender implements ObservationEmailSender {
         request.body(),
         request.cc(),
         request.port(),
-        request.attachment());
+        request.attachment(),
+        request.smtpUsername());
   }
 }

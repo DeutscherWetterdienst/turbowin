@@ -156,6 +156,7 @@ import javax.swing.JPopupMenu;
 * main.configuratie_regels[74]                                  => custom email password
 * main.configuratie_regels[75]                                  => custom email security
 * main.configuratie_regels[76]                                  => custom email port
+* main.configuratie_regels[89]                                  => custom SMTP username
 * main.configuratie_regels[77]                                  => pop-up dashboard [true/false]
 * main.configuratie_regels[78]                                  => pop-up dashboard interval (1, 3, 6 hours)
 * main.configuratie_regels[79]                                  => dashboard ship deck color
@@ -6478,6 +6479,8 @@ public class main extends javax.swing.JFrame {
   public static final String CUSTOM_SECURITY_TXT =
       "custom security    : "; // t/m : is 20 characters
   public static final String CUSTOM_PORT_TXT = "custom port        : "; // t/m : is 20 characters
+  public static final String CUSTOM_USERNAME_TXT =
+      "custom SMTP user   : "; // t/m : is 20 characters
   public static final String POP_UP_DASHBOARD_TXT =
       "pop-up dashboard   : "; // t/m : is 20 characters
   public static final String POP_UP_DASHBOARD_INTERVAL_TXT =
@@ -6691,6 +6694,7 @@ public class main extends javax.swing.JFrame {
   public static String smtp_host_port = ""; // meta data (myemailsettings.java)
   public static String your_custom_address = ""; // meta data (myemailsettings.java)
   public static String custom_email_server = ""; // meta data (myemailsettings.java)
+  public static String custom_smtp_username = ""; // meta data (myemailsettings.java)
   public static String custom_port = ""; // meta data (myemailsettings.java)
   public static String custom_password = ""; // meta data (myemailsettings.java) // NB = encrypted!!
   public static String custom_security = ""; // meta data (myemailsettings.java)

@@ -53,7 +53,7 @@ final class LogEmailSendWorkflow {
           }
 
           responseCode =
-              jakarta_email_class.send_jakarta_email_logs(
+              jakarta_email_class.send_jakarta_email_logs_with_username(
                   smtp_mode,
                   smtp_host_local,
                   smtp_password_local_plain,
@@ -62,7 +62,10 @@ final class LogEmailSendWorkflow {
                   email_subject,
                   email_body,
                   smtp_port_local,
-                  attachment);
+                  attachment,
+                  custom_smtp_username.trim().isEmpty()
+                      ? your_custom_address
+                      : custom_smtp_username);
         } else {
           Desktop desktop = null;
 

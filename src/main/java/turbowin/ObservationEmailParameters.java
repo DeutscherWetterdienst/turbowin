@@ -16,6 +16,7 @@ final class ObservationEmailParameters {
   private final String smtpMode;
   private final String smtpHost;
   private final String smtpPassword;
+  private final String smtpUsername;
   private final String recipient;
   private final String sender;
   private final String subject;
@@ -27,6 +28,7 @@ final class ObservationEmailParameters {
       String smtpMode,
       String smtpHost,
       String smtpPassword,
+      String smtpUsername,
       String recipient,
       String sender,
       String subject,
@@ -36,6 +38,7 @@ final class ObservationEmailParameters {
     this.smtpMode = smtpMode;
     this.smtpHost = smtpHost;
     this.smtpPassword = smtpPassword;
+    this.smtpUsername = smtpUsername.trim().isEmpty() ? sender : smtpUsername;
     this.recipient = recipient;
     this.sender = sender;
     this.subject = subject;
@@ -54,10 +57,26 @@ final class ObservationEmailParameters {
       String cc,
       String port,
       boolean includeAttachment) {
+    return forCustomSettings(
+        security, host, password, sender, recipient, sender, subject, cc, port, includeAttachment);
+  }
+
+  static ObservationEmailParameters forCustomSettings(
+      String security,
+      String host,
+      String password,
+      String username,
+      String recipient,
+      String sender,
+      String subject,
+      String cc,
+      String port,
+      boolean includeAttachment) {
     return new ObservationEmailParameters(
         security,
         host,
         password,
+        username,
         recipient,
         sender,
         subject,
@@ -76,6 +95,10 @@ final class ObservationEmailParameters {
 
   String smtpPassword() {
     return smtpPassword;
+  }
+
+  String smtpUsername() {
+    return smtpUsername;
   }
 
   String recipient() {

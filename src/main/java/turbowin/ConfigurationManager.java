@@ -104,6 +104,7 @@ final class ConfigurationManager {
     configuratie_regels[87] = main.COM_PROTOCOL_TXT + main.server_com_protocol; // HTTPS / HTTP
     configuratie_regels[88] =
         main.EUCAWS_OBS_ID_TXT + String.valueOf(main.eucaws_obs_id); // boolean
+    configuratie_regels[89] = main.CUSTOM_USERNAME_TXT + main.custom_smtp_username;
   }
 
   static void applyConfigurationLines() {
@@ -583,6 +584,13 @@ final class ConfigurationManager {
                 ConfigurationLineParser.value(lines[teller]), parsed -> custom_port = parsed);
           }
 
+          // custom SMTP username; old configuration files do not contain this line
+          if (ConfigurationLineMatcher.contains(lines[teller], CUSTOM_USERNAME_TXT)) {
+            settings.add(
+                ConfigurationLineParser.value(lines[teller]),
+                parsed -> custom_smtp_username = parsed);
+          }
+
           // pop-up dashboard? (true/false)
           if (ConfigurationLineMatcher.contains(lines[teller], POP_UP_DASHBOARD_TXT)) {
             settings.add(
@@ -728,6 +736,9 @@ final class ConfigurationManager {
     }
 
     normalizeEmailModule();
+    if (custom_smtp_username.trim().isEmpty()) {
+      custom_smtp_username = your_custom_address;
+    }
     custom_security = SmtpSecurityMode.normalize(custom_security, custom_port);
   }
 

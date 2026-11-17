@@ -84,6 +84,7 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     // [CUSTOM]
     jTextField13.setText(""); // Email address
+    jTextField17.setText(""); // SMTP username
     jTextField14.setText(""); // server
     jTextField15.setText(""); // password
     jTextField16.setText(""); // port
@@ -157,6 +158,7 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     // [CUSTOM]
     jTextField13.setText(main.your_custom_address);
+    jTextField17.setText(main.custom_smtp_username);
     jTextField14.setText(main.custom_email_server);
 
     if (main.custom_password.equals("") == false) {
@@ -238,6 +240,8 @@ public final class myemailsettings extends javax.swing.JFrame {
     jPanel8 = new javax.swing.JPanel();
     jLabel19 = new javax.swing.JLabel();
     jTextField13 = new javax.swing.JTextField();
+    jLabel23 = new javax.swing.JLabel();
+    jTextField17 = new javax.swing.JTextField();
     jLabel20 = new javax.swing.JLabel();
     jTextField14 = new javax.swing.JTextField();
     jLabel21 = new javax.swing.JLabel();
@@ -413,6 +417,8 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     jLabel19.setText("[SMTP] your email address");
 
+    jLabel23.setText("SMTP username");
+
     jLabel20.setText("server");
 
     jLabel21.setText("password");
@@ -460,6 +466,21 @@ public final class myemailsettings extends javax.swing.JFrame {
                                         javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(
                                         jTextField13,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        200,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(
+                                jPanel8Layout
+                                    .createSequentialGroup()
+                                    .addComponent(
+                                        jLabel23,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        175,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(
+                                        jTextField17,
                                         javax.swing.GroupLayout.PREFERRED_SIZE,
                                         200,
                                         javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -592,6 +613,16 @@ public final class myemailsettings extends javax.swing.JFrame {
                             .addComponent(jRadioButton7)
                             .addComponent(jRadioButton8)
                             .addComponent(jCheckBox1))
+                    .addGap(18, 18, 18)
+                    .addGroup(
+                        jPanel8Layout
+                            .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(
+                                jTextField17,
+                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(18, 18, 18)
                     .addGroup(
                         jPanel8Layout
@@ -969,6 +1000,7 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     // [CUSTOM]
     main.your_custom_address = jTextField13.getText().trim();
+    main.custom_smtp_username = jTextField17.getText().trim();
     main.custom_email_server = jTextField14.getText().trim();
     custom_password_plain = jTextField15.getText().trim();
     main.custom_port = jTextField16.getText().trim();
@@ -1149,6 +1181,8 @@ public final class myemailsettings extends javax.swing.JFrame {
   private javax.swing.JTextField jTextField14;
   private javax.swing.JTextField jTextField15;
   private javax.swing.JTextField jTextField16;
+  private javax.swing.JTextField jTextField17;
+  private javax.swing.JLabel jLabel23;
   private javax.swing.JTextField jTextField2;
   private javax.swing.JTextField jTextField3;
   private javax.swing.JTextField jTextField4;
