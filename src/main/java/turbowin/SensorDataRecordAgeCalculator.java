@@ -6,8 +6,8 @@ import java.util.TimeZone;
 import java.util.function.LongSupplier;
 
 /**
- * Calculates absolute sensor-record age in whole minutes from the final 12-character
- * {@code YYYYMMDDHHmm} timestamp field.
+ * Calculates absolute sensor-record age in whole minutes from the final 12-character {@code
+ * YYYYMMDDHHmm} timestamp field.
  */
 final class SensorDataRecordAgeCalculator {
 

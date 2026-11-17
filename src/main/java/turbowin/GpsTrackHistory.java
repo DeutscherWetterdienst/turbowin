@@ -5,13 +5,13 @@ package turbowin;
  *
  * <p>Entries are newest first: position {@code [0][0]} is latitude, {@code [0][1]} is longitude,
  * and each timestamp is minutes since the Unix epoch. Format 101 requests a 10-minute interval;
- * FM13 requests 180 minutes. The history is intentionally larger than 180 entries because gaps
- * and duplicate readings mean that minutes and entries do not correspond one-to-one.
+ * FM13 requests 180 minutes. The history is intentionally larger than 180 entries because gaps and
+ * duplicate readings mean that minutes and entries do not correspond one-to-one.
  *
  * <p>Invalid positions and timestamps use {@link Double#MAX_VALUE} and {@link Long#MAX_VALUE}.
  * Retrieval returns latitude and longitude for the older position followed by latitude and
- * longitude for the newest position. During startup, when the format is unknown, callers use
- * {@code Integer.MAX_VALUE} as the interval and receive the invalid sentinels.
+ * longitude for the newest position. During startup, when the format is unknown, callers use {@code
+ * Integer.MAX_VALUE} as the interval and receive the invalid sentinels.
  */
 final class GpsTrackHistory {
 

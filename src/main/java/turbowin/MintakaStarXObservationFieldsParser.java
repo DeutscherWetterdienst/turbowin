@@ -15,10 +15,9 @@ package turbowin;
  *
  * <p>Using zero-based field positions, latitude is 4 and longitude is 5; course is 6, speed is 7,
  * elevation is 8, air temperature is 9, relative humidity is 10, wet-bulb temperature is 11, dew
- * point is 12, and observation age is 13. Latitude is {@code ddd mm.mmmm[N|S]}, longitude is
- * {@code ddd mm.mmmm[E|W]}, course is true course, speed is in knots, elevation is in meters,
- * relative humidity is 0–100, temperatures are in degrees Celsius, and observation age is in
- * seconds.
+ * point is 12, and observation age is 13. Latitude is {@code ddd mm.mmmm[N|S]}, longitude is {@code
+ * ddd mm.mmmm[E|W]}, course is true course, speed is in knots, elevation is in meters, relative
+ * humidity is 0–100, temperatures are in degrees Celsius, and observation age is in seconds.
  */
 final class MintakaStarXObservationFieldsParser {
 

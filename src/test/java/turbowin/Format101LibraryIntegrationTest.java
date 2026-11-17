@@ -32,8 +32,7 @@ public class Format101LibraryIntegrationTest {
       Path format101 = directory.resolve("format_101.txt");
       Files.writeString(format101, input, StandardCharsets.UTF_8);
 
-      Encoder.EncodedMessage message =
-          Encoder.encodeFromFormat101Txt(pilote, format101, "T01");
+      Encoder.EncodedMessage message = Encoder.encodeFromFormat101Txt(pilote, format101, "T01");
 
       assertEquals("T01", message.stationId());
       assertEquals("    T01", message.stationIdRaw());

@@ -60,13 +60,11 @@ public class Rs232MintakaWindHistoryTest {
     GregorianCalendar newer = (GregorianCalendar) target.clone();
     newer.add(Calendar.MINUTE, 1);
 
-    String targetRecord =
-        starRecord(" 52 00.0000N", " 004 00.0000E", target.getTime());
+    String targetRecord = starRecord(" 52 00.0000N", " 004 00.0000E", target.getTime());
     String newerRecord = starRecord(" 53 00.0000N", " 005 00.0000E", newer.getTime());
     File historyFile =
         new File(main.logs_dir, "sensor_data_" + main.sdf3.format(target.getTime()) + ".txt");
-    Files.writeString(
-        historyFile.toPath(), targetRecord + System.lineSeparator() + newerRecord);
+    Files.writeString(historyFile.toPath(), targetRecord + System.lineSeparator() + newerRecord);
 
     RS232_mintaka.RS232_Mintaka_Star_And_StarX_Determine_Position_Earlier_For_Wind(
         main.sdf4.format(end.getTime()), false);
@@ -107,8 +105,7 @@ public class Rs232MintakaWindHistoryTest {
   }
 
   private String starRecord(String latitude, String longitude, java.util.Date date) {
-    String payload =
-        "1000.00,1000.00,1.00,2," + latitude + "," + longitude + ",0,0,0";
+    String payload = "1000.00,1000.00,1.00,2," + latitude + "," + longitude + ",0,0,0";
     return payload
         + "*"
         + main_RS232_RS422.Mintaka_Star_Checksum(payload + "*")

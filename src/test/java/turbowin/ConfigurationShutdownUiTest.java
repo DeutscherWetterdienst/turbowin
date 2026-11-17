@@ -82,14 +82,13 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
     main.ship_name = "Graphical smoke test ship";
     setUpRobot();
     JFrame owner =
-        GuiActionRunner.execute(
-            () -> {
-              JFrame window = new JFrame("TurboWin shutdown smoke test");
-              JButton usable = new JButton("Still running");
-              usable.addActionListener(event -> usableButtonClicks.incrementAndGet());
-              window.add(usable);
-              return window;
-            });
+        GuiActionRunner.execute(() -> {
+          JFrame window = new JFrame("TurboWin shutdown smoke test");
+          JButton usable = new JButton("Still running");
+          usable.addActionListener(event -> usableButtonClicks.incrementAndGet());
+          window.add(usable);
+          return window;
+        });
     frame = new FrameFixture(robot(), owner);
     frame.show(new Dimension(500, 300));
   }
@@ -97,12 +96,11 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
   @After
   public void tearDown() throws Exception {
     try {
-      GuiActionRunner.execute(
-          () -> {
-            if (request != null) {
-              request.cancelExit();
-            }
-          });
+      GuiActionRunner.execute(() -> {
+        if (request != null) {
+          request.cancelExit();
+        }
+      });
       releaseWriter.countDown();
       CountDownLatch drained = new CountDownLatch(1);
       ConfigurationWriteWorkflow.awaitPendingSaves(saved -> drained.countDown());
@@ -123,19 +121,18 @@ public class ConfigurationShutdownUiTest extends AssertJSwingTestCaseTemplate {
   @Test
   public void progressDialogCanCancelExitWhileAWriteIsBlocked() throws Exception {
     CountDownLatch started = new CountDownLatch(1);
-    ConfigurationWriteWorkflow.write(
-        (directory, lines, maximum) -> {
-          started.countDown();
-          try {
-            if (!releaseWriter.await(20, TimeUnit.SECONDS)) {
-              throw new IOException("Timed out waiting to release graphical test save");
-            }
-          } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IOException(ex);
-          }
-          ConfigurationWriteWorkflow.writeConfigurationFile(directory, lines, maximum);
-        });
+    ConfigurationWriteWorkflow.write((directory, lines, maximum) -> {
+      started.countDown();
+      try {
+        if (!releaseWriter.await(20, TimeUnit.SECONDS)) {
+          throw new IOException("Timed out waiting to release graphical test save");
+        }
+      } catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+        throw new IOException(ex);
+      }
+      ConfigurationWriteWorkflow.writeConfigurationFile(directory, lines, maximum);
+    });
     assertTrue(started.await(5, TimeUnit.SECONDS));
     startExit();
 

@@ -98,12 +98,11 @@ public class ConfigurationImportWorkflowTest {
   @Test
   public void interruptedReadAfterIdentityLabelsDoesNotApplyOrSavePartialData() throws Exception {
     Outcome result =
-        importFile(
-            (file, lines, maximum) -> {
-              lines[0] = main.SHIP_NAME_TXT + "Rejected ship";
-              lines[1] = main.CALL_SIGN_TXT + "IGNORED";
-              throw new IOException("simulated interrupted read");
-            });
+        importFile((file, lines, maximum) -> {
+          lines[0] = main.SHIP_NAME_TXT + "Rejected ship";
+          lines[1] = main.CALL_SIGN_TXT + "IGNORED";
+          throw new IOException("simulated interrupted read");
+        });
 
     assertRejected(result);
     assertTrue(result.message.get().contains("simulated interrupted read"));
@@ -142,13 +141,12 @@ public class ConfigurationImportWorkflowTest {
     AtomicInteger reads = new AtomicInteger();
 
     Outcome result =
-        importFile(
-            (file, lines, maximum) -> {
-              reads.incrementAndGet();
-              ConfigurationFileStore.read(file, lines, maximum);
-              assertEquals("Existing ship", main.ship_name);
-              assertArrayEquals(beforeLines, main.configuratie_regels);
-            });
+        importFile((file, lines, maximum) -> {
+          reads.incrementAndGet();
+          ConfigurationFileStore.read(file, lines, maximum);
+          assertEquals("Existing ship", main.ship_name);
+          assertArrayEquals(beforeLines, main.configuratie_regels);
+        });
 
     assertTrue(result.success.get());
     assertEquals(1, reads.get());
@@ -254,31 +252,30 @@ public class ConfigurationImportWorkflowTest {
           }
           finished.countDown();
         };
-    SwingUtilities.invokeAndWait(
-        () -> {
-          if (maintenance) {
-            MaintenanceDataImportWorkflow.start(
-                source.toString(),
-                refresh,
-                (success, message) -> {
-                  result.success.set(success);
-                  result.message.set(message);
-                },
-                save,
-                checkedReader);
-          } else {
-            StationDataImportWorkflow.start(
-                source.toString(),
-                refresh,
-                save,
-                message -> {
-                  callbackOnEdt.set(SwingUtilities.isEventDispatchThread());
-                  result.message.set(message);
-                  finished.countDown();
-                },
-                checkedReader);
-          }
-        });
+    SwingUtilities.invokeAndWait(() -> {
+      if (maintenance) {
+        MaintenanceDataImportWorkflow.start(
+            source.toString(),
+            refresh,
+            (success, message) -> {
+              result.success.set(success);
+              result.message.set(message);
+            },
+            save,
+            checkedReader);
+      } else {
+        StationDataImportWorkflow.start(
+            source.toString(),
+            refresh,
+            save,
+            message -> {
+              callbackOnEdt.set(SwingUtilities.isEventDispatchThread());
+              result.message.set(message);
+              finished.countDown();
+            },
+            checkedReader);
+      }
+    });
     assertTrue("Import completion timed out", finished.await(5, TimeUnit.SECONDS));
     SwingUtilities.invokeAndWait(() -> {});
     assertFalse("Import must read off the EDT", readOnEdt.get());

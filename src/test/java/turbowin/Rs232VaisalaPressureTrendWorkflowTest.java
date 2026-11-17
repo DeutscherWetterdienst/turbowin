@@ -153,11 +153,10 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
     writeRecord("1.0", "2", new Date(System.currentTimeMillis() - 10 * 60 * 1000L));
     main.obs_file_datum_tijd = new GregorianCalendar();
     Rs232VaisalaPressureTrendWorkflow.start();
-    waitFor(
-        () ->
-            main.sensor_data_record_obs_ppp.isEmpty()
-                && main.sensor_data_record_obs_a.isEmpty()
-                && main.obs_file_datum_tijd == null);
+    waitFor(() ->
+        main.sensor_data_record_obs_ppp.isEmpty()
+            && main.sensor_data_record_obs_a.isEmpty()
+            && main.obs_file_datum_tijd == null);
     flushEdt();
 
     assertEquals("", main.sensor_data_record_obs_ppp);
@@ -170,11 +169,10 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
     writeRecord(ppp, a, recordDate);
     main.obs_file_datum_tijd = new GregorianCalendar();
     Rs232VaisalaPressureTrendWorkflow.start();
-    waitFor(
-        () ->
-            main.sensor_data_record_obs_ppp.equals(padded(ppp))
-                && main.sensor_data_record_obs_a.equals(a)
-                && main.obs_file_datum_tijd == null);
+    waitFor(() ->
+        main.sensor_data_record_obs_ppp.equals(padded(ppp))
+            && main.sensor_data_record_obs_a.equals(a)
+            && main.obs_file_datum_tijd == null);
     flushEdt();
   }
 
@@ -183,8 +181,7 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
     Calendar fileDate = new GregorianCalendar();
     fileDate.add(Calendar.MINUTE, -2);
     File file =
-        new File(
-            main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate.getTime()) + ".txt");
+        new File(main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate.getTime()) + ".txt");
     Files.writeString(file.toPath(), record + System.lineSeparator());
   }
 
@@ -215,11 +212,12 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
   }
 
   private void setButtons(boolean selected) {
-    setButtonReferences(new JRadioButton[] {
-      new JRadioButton(), new JRadioButton(), new JRadioButton(), new JRadioButton(),
-      new JRadioButton(), new JRadioButton(), new JRadioButton(), new JRadioButton(),
-      new JRadioButton(), new JRadioButton(), new JRadioButton(), new JRadioButton()
-    });
+    setButtonReferences(
+        new JRadioButton[] {
+          new JRadioButton(), new JRadioButton(), new JRadioButton(), new JRadioButton(),
+          new JRadioButton(), new JRadioButton(), new JRadioButton(), new JRadioButton(),
+          new JRadioButton(), new JRadioButton(), new JRadioButton(), new JRadioButton()
+        });
     for (JRadioButton button : currentButtons()) {
       button.setSelected(selected);
     }

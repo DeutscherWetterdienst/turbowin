@@ -198,13 +198,7 @@ public class Rs232MintakaGpsWorkflowTest {
     Date end = new Date();
     Date start = shifted(end, -10);
     writePositionPair(
-        false,
-        end,
-        start,
-        " 52 00.0000N",
-        " 004 01.6300E",
-        " 52 00.0000N",
-        " 004 00.0000E");
+        false, end, start, " 52 00.0000N", " 004 01.6300E", " 52 00.0000N", " 004 00.0000E");
 
     runWorkflow(false);
 
@@ -224,13 +218,7 @@ public class Rs232MintakaGpsWorkflowTest {
     Date end = new Date();
     Date start = shifted(end, -10);
     writePositionPair(
-        true,
-        end,
-        start,
-        " 12 00.0000S",
-        " 034 00.0000W",
-        " 12 00.0000S",
-        " 034 00.0000W");
+        true, end, start, " 12 00.0000S", " 034 00.0000W", " 12 00.0000S", " 034 00.0000W");
 
     runWorkflow(true);
 
@@ -282,8 +270,7 @@ public class Rs232MintakaGpsWorkflowTest {
 
     writeHistoryRecord(starRecord(starPayload(" 52 00.0000N", " 004 00.0000E", 8), start));
     writeHistoryRecord(starRecord(starPayload(" 53 00.0000N", " 005 00.0000E", 8), newer));
-    writeCurrentRecord(
-        starRecord(starPayload(" 52 02.0000N", " 004 02.0000E", 8), end), true);
+    writeCurrentRecord(starRecord(starPayload(" 52 02.0000N", " 004 02.0000E", 8), end), true);
 
     runWorkflow(false);
 
@@ -348,12 +335,7 @@ public class Rs232MintakaGpsWorkflowTest {
   }
 
   private String starPayload(String latitude, String longitude, int commaCount) {
-    String payload =
-        "1000.00,1000.00,1.00,2,"
-            + latitude
-            + ","
-            + longitude
-            + ",0,0,0";
+    String payload = "1000.00,1000.00,1.00,2," + latitude + "," + longitude + ",0,0,0";
     if (commaCount == 13) {
       payload += ",20.0,50,19.0,10.0,0";
     } else if (commaCount == 9) {

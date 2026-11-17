@@ -11,8 +11,8 @@ final class MintakaHistoricalRecordReader {
   private MintakaHistoricalRecordReader() {}
 
   /**
-   * Preserves the legacy history loop's file-order policy: an invalid matching duplicate clears
-   * an earlier valid position, and a later valid match can restore it. Unrelated timestamps do not
+   * Preserves the legacy history loop's file-order policy: an invalid matching duplicate clears an
+   * earlier valid position, and a later valid match can restore it. Unrelated timestamps do not
    * replace the requested position; a short physical record clears it regardless of timestamp.
    */
   static String readLatestMatchingRecord(File sensorDataFile, String timestamp, boolean starX)

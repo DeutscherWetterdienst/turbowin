@@ -85,17 +85,18 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
 
     assertEquals("9 April 2026", main_RS232_RS422.dashboard_string_last_update_record_date);
     assertEquals("7:15", main_RS232_RS422.dashboard_string_last_update_record_time);
-    assertEquals(
-        "12\u00B021' S", main_RS232_RS422.dashboard_string_last_update_record_latitude);
-    assertEquals(
-        "123\u00B027' E", main_RS232_RS422.dashboard_string_last_update_record_longitude);
+    assertEquals("12\u00B021' S", main_RS232_RS422.dashboard_string_last_update_record_latitude);
+    assertEquals("123\u00B027' E", main_RS232_RS422.dashboard_string_last_update_record_longitude);
     assertEquals("23", main_RS232_RS422.dashboard_string_last_update_record_COG);
     assertEquals("180", main_RS232_RS422.dashboard_string_last_update_record_heading);
     assertEquals(
-        1006.6, main_RS232_RS422.dashboard_double_last_update_record_sensor_level_pressure_ic, 0.001);
+        1006.6,
+        main_RS232_RS422.dashboard_double_last_update_record_sensor_level_pressure_ic,
+        0.001);
     assertEquals(
         1000.5, main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic, 0.001);
-    assertEquals(2.3, main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency, 0.001);
+    assertEquals(
+        2.3, main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency, 0.001);
     assertEquals(20.5, main_RS232_RS422.dashboard_double_last_update_record_air_temp, 0.001);
     assertEquals(53.0, main_RS232_RS422.dashboard_double_last_update_record_humidity, 0.001);
     assertEquals(350, main_RS232_RS422.dashboard_int_last_update_record_true_wind_dir);
@@ -111,11 +112,14 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     double trueWindAt10m = owner.RS422_convert_wind_speed_to_10m(4.2);
     double relativeWindAt10m = owner.RS422_convert_wind_speed_to_10m(4.6);
     double gustAt10m = owner.RS422_convert_wind_speed_to_10m(7.8);
-    assertEquals((int) Math.round(trueWindAt10m * main.M_S_KNOT_CONVERSION),
+    assertEquals(
+        (int) Math.round(trueWindAt10m * main.M_S_KNOT_CONVERSION),
         main_RS232_RS422.dashboard_int_last_update_record_true_wind_speed_10m);
-    assertEquals((int) Math.round(relativeWindAt10m * main.M_S_KNOT_CONVERSION),
+    assertEquals(
+        (int) Math.round(relativeWindAt10m * main.M_S_KNOT_CONVERSION),
         main_RS232_RS422.dashboard_int_last_update_record_relative_wind_speed_10m);
-    assertEquals((int) Math.round(gustAt10m * main.M_S_KNOT_CONVERSION),
+    assertEquals(
+        (int) Math.round(gustAt10m * main.M_S_KNOT_CONVERSION),
         main_RS232_RS422.dashboard_int_last_update_record_true_wind_gust_10m);
   }
 
@@ -132,17 +136,34 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     assertEquals("", main_RS232_RS422.dashboard_string_last_update_record_SOG);
     assertEquals("", main_RS232_RS422.dashboard_string_last_update_record_COG);
     assertEquals("", main_RS232_RS422.dashboard_string_last_update_record_heading);
-    assertEquals(Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_sensor_level_pressure_ic, 0.0);
-    assertEquals(Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic, 0.0);
-    assertEquals(Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency, 0.0);
-    assertEquals(Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_air_temp, 0.0);
-    assertEquals(Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_humidity, 0.0);
-    assertEquals(Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_dir);
-    assertEquals(Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_relative_wind_dir);
-    assertEquals(Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_gust_dir);
-    assertEquals(Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_speed);
-    assertEquals(Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_relative_wind_speed);
-    assertEquals(Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_gust);
+    assertEquals(
+        Double.MAX_VALUE,
+        main_RS232_RS422.dashboard_double_last_update_record_sensor_level_pressure_ic,
+        0.0);
+    assertEquals(
+        Double.MAX_VALUE,
+        main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic,
+        0.0);
+    assertEquals(
+        Double.MAX_VALUE,
+        main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency,
+        0.0);
+    assertEquals(
+        Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_air_temp, 0.0);
+    assertEquals(
+        Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_humidity, 0.0);
+    assertEquals(
+        Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_dir);
+    assertEquals(
+        Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_relative_wind_dir);
+    assertEquals(
+        Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_gust_dir);
+    assertEquals(
+        Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_speed);
+    assertEquals(
+        Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_relative_wind_speed);
+    assertEquals(
+        Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_true_wind_gust);
     assertEquals(Double.MAX_VALUE, main_RS232_RS422.dashboard_double_last_update_record_sst, 0.0);
     assertEquals(Integer.MAX_VALUE, main_RS232_RS422.dashboard_int_last_update_record_VOT);
   }
@@ -154,7 +175,8 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic = 1012.3;
     startUpdate();
     flushEdt();
-    assertEquals(1012.3, main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic, 0.001);
+    assertEquals(
+        1012.3, main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic, 0.001);
 
     resetDashboardValues();
     main.pressure_MSL_from_AWS_present = true;
@@ -164,7 +186,8 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency = 2.4;
     startUpdate();
     waitFor(() -> main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic == 1000.5);
-    assertEquals(2.4, main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency, 0.001);
+    assertEquals(
+        2.4, main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency, 0.001);
   }
 
   @Test
@@ -267,7 +290,8 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     main_RS232_RS422.dashboard_string_last_update_record_SOG = "";
     main_RS232_RS422.dashboard_string_last_update_record_COG = "";
     main_RS232_RS422.dashboard_string_last_update_record_heading = "";
-    main_RS232_RS422.dashboard_double_last_update_record_sensor_level_pressure_ic = Double.MAX_VALUE;
+    main_RS232_RS422.dashboard_double_last_update_record_sensor_level_pressure_ic =
+        Double.MAX_VALUE;
     main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic = Double.MAX_VALUE;
     main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency = Double.MAX_VALUE;
     main_RS232_RS422.dashboard_double_last_update_record_air_temp = Double.MAX_VALUE;

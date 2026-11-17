@@ -23,8 +23,7 @@ public class AwsGraphRecordParserTest {
 
   @Test
   public void acceptsRecordWithOnlySecondaryGraphValue() {
-    AwsGraphRecord parsed =
-        AwsGraphRecordParser.parse(RECORD.replace(",5,", ",,"), HOUR, 5, 7);
+    AwsGraphRecord parsed = AwsGraphRecordParser.parse(RECORD.replace(",5,", ",,"), HOUR, 5, 7);
 
     assertEquals(HOUR + "05", parsed.timestamp);
     assertEquals(5, parsed.minute);

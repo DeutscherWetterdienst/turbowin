@@ -22,7 +22,8 @@ public class MintakaHistoricalRecordReaderTest {
     File file = Files.createTempFile("turbowin-mintaka-history-reader", ".txt").toFile();
     try {
       Files.write(
-          file.toPath(), List.of("wrong", VALID_RECORD, VALID_RECORD.replace(TIMESTAMP, "201703152007")));
+          file.toPath(),
+          List.of("wrong", VALID_RECORD, VALID_RECORD.replace(TIMESTAMP, "201703152007")));
 
       assertEquals(
           VALID_RECORD,
@@ -137,11 +138,13 @@ public class MintakaHistoricalRecordReaderTest {
                 + "*"
                 + main_RS232_RS422.Mintaka_Star_Checksum(wrongCommaPayload + "*")
                 + TIMESTAMP;
-        for (String invalid : List.of("x" + TIMESTAMP, payload + "*ZZ" + TIMESTAMP, wrongCommaCount)) {
+        for (String invalid :
+            List.of("x" + TIMESTAMP, payload + "*ZZ" + TIMESTAMP, wrongCommaCount)) {
           Files.write(file.toPath(), List.of(invalid));
           assertNull(MintakaHistoricalRecordReader.readLatestValidRecord(file, TIMESTAMP, starX));
           assertNull(MintakaHistoricalGpsReader.read(file, TIMESTAMP, starX));
-          assertNull(MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, starX));
+          assertNull(
+              MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, starX));
           assertNull(MintakaHistoricalGpsReader.readLatestMatching(file, TIMESTAMP, starX));
           assertEquals("", output.toString());
 
@@ -149,7 +152,8 @@ public class MintakaHistoricalRecordReaderTest {
           // The latest-valid utility retains its policy; workflows use the file-order policy.
           assertEquals(
               valid, MintakaHistoricalRecordReader.readLatestValidRecord(file, TIMESTAMP, starX));
-          assertNull(MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, starX));
+          assertNull(
+              MintakaHistoricalRecordReader.readLatestMatchingRecord(file, TIMESTAMP, starX));
           assertEquals("", output.toString());
         }
       }

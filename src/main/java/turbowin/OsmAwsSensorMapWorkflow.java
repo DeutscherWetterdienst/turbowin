@@ -27,9 +27,7 @@ final class OsmAwsSensorMapWorkflow {
       } // protected Void doInBackground() throws Exception
 
       @Override
-      protected void done() {
-        ;
-      }
+      protected void done() {}
     }.execute(); // new SwingWorker<Void, Void>()
   }
 }

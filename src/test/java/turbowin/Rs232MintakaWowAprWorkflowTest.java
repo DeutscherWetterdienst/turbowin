@@ -225,10 +225,7 @@ public class Rs232MintakaWowAprWorkflowTest {
   @Test
   public void aprFallsBackToTheMostRecentRecordWithGps() throws Exception {
     Date current = new Date();
-    appendCurrentRecord(
-        starRecord(
-            starPayload("1000.0", "1.0", "2", "", ""),
-            current));
+    appendCurrentRecord(starRecord(starPayload("1000.0", "1.0", "2", "", ""), current));
     appendCurrentRecord(
         starRecord(
             starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"),
@@ -255,16 +252,14 @@ public class Rs232MintakaWowAprWorkflowTest {
 
     runWorkflowWithRecord(
         starRecord(
-                starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E") + ",extra",
-                current),
+            starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E") + ",extra", current),
         "MAIN_SCREEN",
         false);
     assertRejectedMainScreenState();
 
     Date stale = new Date(System.currentTimeMillis() - 20 * 60 * 1000L);
     runWorkflowWithRecord(
-        starRecord(
-            starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), stale),
+        starRecord(starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), stale),
         "MAIN_SCREEN",
         false);
     assertRejectedMainScreenState();
@@ -277,12 +272,10 @@ public class Rs232MintakaWowAprWorkflowTest {
     Date current = twoMinutesAgo();
     Date earlier = new Date(current.getTime() - 10 * 60 * 1000L);
     writeRecordInHour(
-        starRecord(
-            starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), earlier),
+        starRecord(starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), earlier),
         earlier);
     writeRecordInHour(
-        starRecord(
-            starPayload("1000.0", "1.0", "2", "52 01.0000N", "004 00.0000E"), current),
+        starRecord(starPayload("1000.0", "1.0", "2", "52 01.0000N", "004 00.0000E"), current),
         current);
 
     startWorkflow("MAIN_SCREEN", false, false);
@@ -303,16 +296,13 @@ public class Rs232MintakaWowAprWorkflowTest {
     Date newer = new Date(earlier.getTime() + 60 * 1000L);
 
     writeRecordInHour(
-        starRecord(
-            starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), earlier),
+        starRecord(starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), earlier),
         earlier);
     writeRecordInHour(
-        starRecord(
-            starPayload("1000.0", "1.0", "2", "53 00.0000N", "005 00.0000E"), newer),
+        starRecord(starPayload("1000.0", "1.0", "2", "53 00.0000N", "005 00.0000E"), newer),
         earlier);
     writeRecordInHour(
-        starRecord(
-            starPayload("1000.0", "1.0", "2", "52 01.0000N", "004 01.0000E"), current),
+        starRecord(starPayload("1000.0", "1.0", "2", "52 01.0000N", "004 01.0000E"), current),
         current);
 
     startWorkflow("MAIN_SCREEN", false, false);
@@ -337,8 +327,7 @@ public class Rs232MintakaWowAprWorkflowTest {
       Date current = twoMinutesAgo();
       Date earlier = new Date(current.getTime() - 10 * 60 * 1000L);
       String extension = starX ? ",20.0,50,19.0,10.0,0" : "";
-      String payload =
-          starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E") + extension;
+      String payload = starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E") + extension;
       writeRecordInHour(starRecord(payload, earlier), earlier);
       String invalid =
           wrongCommaCount
@@ -400,8 +389,7 @@ public class Rs232MintakaWowAprWorkflowTest {
   public void starXSensorBoundariesAreApplied() throws Exception {
     runWorkflowWithRecord(
         starRecord(
-            starXPayload("1000.0", "1.0", "2", "-69.9", "100", "-69.9", "12.3", "0"),
-            new Date()),
+            starXPayload("1000.0", "1.0", "2", "-69.9", "100", "-69.9", "12.3", "0"), new Date()),
         "MAIN_SCREEN",
         true);
 
@@ -413,8 +401,7 @@ public class Rs232MintakaWowAprWorkflowTest {
 
     runWorkflowWithRecord(
         starRecord(
-            starXPayload("900.0", "1.0", "2", "70.0", "101", "70.0", "70.0", "0"),
-            new Date()),
+            starXPayload("900.0", "1.0", "2", "70.0", "101", "70.0", "70.0", "0"), new Date()),
         "MAIN_SCREEN",
         true);
 
@@ -428,9 +415,7 @@ public class Rs232MintakaWowAprWorkflowTest {
   @Test
   public void wowAprAndMainScreenUseDifferentDestinationsForTheSameRecord() throws Exception {
     runWorkflowWithRecord(
-        starRecord(
-            starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"),
-            new Date()),
+        starRecord(starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"), new Date()),
         "APR",
         false);
     assertTrue(mybarometer.pressure_reading_corrected.length() > 0);
@@ -439,9 +424,7 @@ public class Rs232MintakaWowAprWorkflowTest {
     assertEquals("", main.jTextField9.getText());
 
     runWorkflowWithRecord(
-        starRecord(
-            starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"),
-            new Date()),
+        starRecord(starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"), new Date()),
         "MAIN_SCREEN",
         false);
     assertTrue(main.jTextField9.getText().contains("hPa"));
@@ -449,9 +432,7 @@ public class Rs232MintakaWowAprWorkflowTest {
     assertEquals("2 (code)", main.jTextField12.getText());
 
     runWorkflowWithRecord(
-        starRecord(
-            starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"),
-            new Date()),
+        starRecord(starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"), new Date()),
         "WOW",
         false);
     assertEquals("", mybarometer.pressure_reading_corrected);
@@ -478,15 +459,13 @@ public class Rs232MintakaWowAprWorkflowTest {
   private void startWorkflow(String destination, boolean retry, boolean starX) throws Exception {
     DialogCloser dialogCloser = new DialogCloser();
     dialogCloser.start();
-    Thread.UncaughtExceptionHandler originalHandler =
-        Thread.getDefaultUncaughtExceptionHandler();
+    Thread.UncaughtExceptionHandler originalHandler = Thread.getDefaultUncaughtExceptionHandler();
     if (GraphicsEnvironment.isHeadless()) {
-      Thread.setDefaultUncaughtExceptionHandler(
-          (thread, error) -> {
-            if (!(error instanceof HeadlessException) && originalHandler != null) {
-              originalHandler.uncaughtException(thread, error);
-            }
-          });
+      Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+        if (!(error instanceof HeadlessException) && originalHandler != null) {
+          originalHandler.uncaughtException(thread, error);
+        }
+      });
     }
     try {
       main.obs_file_datum_tijd = new GregorianCalendar();
@@ -514,8 +493,7 @@ public class Rs232MintakaWowAprWorkflowTest {
   }
 
   private void writeRecordInHour(String record, Date fileDate) throws Exception {
-    File file =
-        new File(main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate) + ".txt");
+    File file = new File(main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate) + ".txt");
     Files.writeString(
         file.toPath(),
         record + System.lineSeparator(),
@@ -523,17 +501,9 @@ public class Rs232MintakaWowAprWorkflowTest {
         StandardOpenOption.APPEND);
   }
 
-  private String starPayload(String pressure, String ppp, String a, String latitude, String longitude) {
-    return pressure
-        + ",1000.0,"
-        + ppp
-        + ","
-        + a
-        + ","
-        + latitude
-        + ","
-        + longitude
-        + ",0,0,0";
+  private String starPayload(
+      String pressure, String ppp, String a, String latitude, String longitude) {
+    return pressure + ",1000.0," + ppp + "," + a + "," + latitude + "," + longitude + ",0,0,0";
   }
 
   private String starXPayload(
@@ -627,24 +597,23 @@ public class Rs232MintakaWowAprWorkflowTest {
         return;
       }
       thread =
-          new Thread(
-              () -> {
-                long deadline = System.nanoTime() + 5_000_000_000L;
-                while (System.nanoTime() < deadline) {
-                  for (Window window : Window.getWindows()) {
-                    if (window instanceof JDialog && window.isVisible()) {
-                      SwingUtilities.invokeLater(window::dispose);
-                      return;
-                    }
-                  }
-                  try {
-                    Thread.sleep(10);
-                  } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                  }
+          new Thread(() -> {
+            long deadline = System.nanoTime() + 5_000_000_000L;
+            while (System.nanoTime() < deadline) {
+              for (Window window : Window.getWindows()) {
+                if (window instanceof JDialog && window.isVisible()) {
+                  SwingUtilities.invokeLater(window::dispose);
+                  return;
                 }
-              });
+              }
+              try {
+                Thread.sleep(10);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+              }
+            }
+          });
       thread.setDaemon(true);
       thread.start();
     }

@@ -21,12 +21,11 @@ final class ConfigurationWriteWorkflow {
   private static volatile long exitGeneration;
 
   private static final ExecutorService SAVE_QUEUE =
-      Executors.newSingleThreadExecutor(
-          task -> {
-            Thread thread = new Thread(task, "configuration-save");
-            thread.setDaemon(true);
-            return thread;
-          });
+      Executors.newSingleThreadExecutor(task -> {
+        Thread thread = new Thread(task, "configuration-save");
+        thread.setDaemon(true);
+        return thread;
+      });
 
   private ConfigurationWriteWorkflow() {}
 

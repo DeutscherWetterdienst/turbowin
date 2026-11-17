@@ -122,8 +122,7 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
     assertEquals("", myposition.latitude_degrees);
 
     writeSensorFile(
-        awsRecord(recordTime(), "12.345", "123.456", "90.0", "2.83")
-            .replaceFirst(",", ""));
+        awsRecord(recordTime(), "12.345", "123.456", "90.0", "2.83").replaceFirst(",", ""));
     myposition.latitude_degrees = "stale";
     startWorkflow();
     settleWorkflow();
@@ -147,7 +146,8 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
     assertEquals(recordTime.expectedHour, mydatetime.GG_code);
     assertFalse(owner.RS422_Set_Date_Time_Obs_And_IMMT_For_AWSR("2026", "000000"));
     assertFalse(owner.RS422_Check_Date_Time_Last_Saved_Record_For_AWSR("2026", "000000"));
-    assertTrue(owner.RS422_Check_Date_Time_Last_Saved_Record_For_AWSR(recordTime.date, recordTime.time));
+    assertTrue(
+        owner.RS422_Check_Date_Time_Last_Saved_Record_For_AWSR(recordTime.date, recordTime.time));
 
     RecordTime stale = recordTime(20);
     assertFalse(owner.RS422_Check_Date_Time_Last_Saved_Record_For_AWSR(stale.date, stale.time));
@@ -162,7 +162,9 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
 
     assertEquals("", mydatetime.year);
     assertEquals("", myposition.latitude_degrees);
-    assertFalse(Files.exists(systemLogFile()) && Files.readString(systemLogFile()).contains("send method unknown"));
+    assertFalse(
+        Files.exists(systemLogFile())
+            && Files.readString(systemLogFile()).contains("send method unknown"));
   }
 
   private void startWorkflow() {
@@ -240,7 +242,8 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
     if (rounded.get(Calendar.MINUTE) > 30) {
       rounded.add(Calendar.HOUR_OF_DAY, 1);
     }
-    return new RecordTime(date, time, fileKey, String.format("%02d", rounded.get(Calendar.HOUR_OF_DAY)));
+    return new RecordTime(
+        date, time, fileKey, String.format("%02d", rounded.get(Calendar.HOUR_OF_DAY)));
   }
 
   private void captureStaticState(Class<?>... types) throws Exception {

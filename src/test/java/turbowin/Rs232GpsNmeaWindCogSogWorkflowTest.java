@@ -57,8 +57,7 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
   public void missingPositionResetsWindStateAndLogsAprError() throws Exception {
     setStaleWindState();
 
-    Rs232GpsNmeaWindCogSogWorkflow.start(
-        "APR", new double[] {Double.MAX_VALUE, 0.0, 0.0, 0.0});
+    Rs232GpsNmeaWindCogSogWorkflow.start("APR", new double[] {Double.MAX_VALUE, 0.0, 0.0, 0.0});
 
     waitFor(this::windStateIsReset);
     assertEquals(Double.MAX_VALUE, myposition.COG_APR_wind, 0.0);
@@ -120,8 +119,7 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
     waitFor(() -> myposition.SOG_APR_wind == 6.0);
     Thread.sleep(100);
-    assertEquals(
-        logBeforeMinuteUpdate, Files.readString(currentLogFile(), StandardCharsets.UTF_8));
+    assertEquals(logBeforeMinuteUpdate, Files.readString(currentLogFile(), StandardCharsets.UTF_8));
   }
 
   private void resetWindState() {
@@ -140,15 +138,14 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
   }
 
   private void assertLogContains(String expected) throws Exception {
-    waitFor(
-        () -> {
-          try {
-            return Files.exists(currentLogFile())
-                && Files.readString(currentLogFile(), StandardCharsets.UTF_8).contains(expected);
-          } catch (Exception ex) {
-            return false;
-          }
-        });
+    waitFor(() -> {
+      try {
+        return Files.exists(currentLogFile())
+            && Files.readString(currentLogFile(), StandardCharsets.UTF_8).contains(expected);
+      } catch (Exception ex) {
+        return false;
+      }
+    });
   }
 
   private boolean logContainsOccurrences(String expected, int minimumOccurrences) {

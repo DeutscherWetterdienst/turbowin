@@ -161,11 +161,7 @@ public class Rs232VaisalaHmp155AprWorkflowTest {
     resetModel();
     mytemp.air_temp = "old";
     writeRecord(
-        "20.0",
-        "0.0",
-        "10.0",
-        "50.0",
-        new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
+        "20.0", "0.0", "10.0", "50.0", new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
     runWorkflow("APR");
     assertCleared();
   }
@@ -265,9 +261,7 @@ public class Rs232VaisalaHmp155AprWorkflowTest {
     Calendar fileDate = new GregorianCalendar();
     fileDate.add(Calendar.MINUTE, -2);
     File file =
-        new File(
-            main.logs_dir,
-            "sensor_data_II_" + main.sdf3.format(fileDate.getTime()) + ".txt");
+        new File(main.logs_dir, "sensor_data_II_" + main.sdf3.format(fileDate.getTime()) + ".txt");
     Files.writeString(file.toPath(), record + System.lineSeparator());
   }
 

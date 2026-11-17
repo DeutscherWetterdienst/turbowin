@@ -298,7 +298,7 @@ final class Rs232MintakaGpsWorkflow {
                         + ")");
                 System.out.println(
                     "--- sensor data record, GPS longitude earlier: "
-                    + GPS_longitude_earlier
+                        + GPS_longitude_earlier
                         + "("
                         + date_time_SOG_COG_start
                         + ")");

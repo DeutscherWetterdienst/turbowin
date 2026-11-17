@@ -160,17 +160,16 @@ public class ConfigurationWriteWorkflowTest {
       main.ship_name = "Ship at save time";
       Arrays.fill(main.configuratie_regels, "");
 
-      ConfigurationWriteWorkflow.write(
-          worker -> {
-            pendingWrites.add(worker);
-            if (pendingWrites.size() == 1) {
-              // A queued worker must retain its snapshot when globals change.
-              main.data_dir = laterData.toString();
-              main.logs_dir = laterLogs.toString();
-              main.ship_name = "Later ship";
-              main.fill_configuratie_array();
-            }
-          });
+      ConfigurationWriteWorkflow.write(worker -> {
+        pendingWrites.add(worker);
+        if (pendingWrites.size() == 1) {
+          // A queued worker must retain its snapshot when globals change.
+          main.data_dir = laterData.toString();
+          main.logs_dir = laterLogs.toString();
+          main.ship_name = "Later ship";
+          main.fill_configuratie_array();
+        }
+      });
 
       assertEquals(1, pendingWrites.size());
       for (SwingWorker<Void, Void> worker : pendingWrites) {

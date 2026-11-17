@@ -49,7 +49,8 @@ public class Rs232GpsNmeaDatePositionParsingCharacterizationTest {
     main.obs_format = originalObservationFormat;
     double[][] gpsPositions = gpsArrayPositions();
     for (int i = 0; i < gpsPositions.length; i++) {
-      gpsPositions[i] = Arrays.copyOf(originalGpsArrayPositions[i], originalGpsArrayPositions[i].length);
+      gpsPositions[i] =
+          Arrays.copyOf(originalGpsArrayPositions[i], originalGpsArrayPositions[i].length);
     }
     System.arraycopy(originalGpsArrayTimes, 0, gpsArrayTimes(), 0, originalGpsArrayTimes.length);
   }

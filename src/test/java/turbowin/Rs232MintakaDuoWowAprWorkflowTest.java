@@ -153,8 +153,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     assertCleared();
 
     resetModel();
-    runPressureRecord(
-        "1000.0", "APR", new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
+    runPressureRecord("1000.0", "APR", new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
     assertCleared();
 
     resetModel();
@@ -247,23 +246,20 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
   private String runWorkflow(String destination) throws Exception {
     DialogCloser dialogCloser = new DialogCloser();
     dialogCloser.start();
-    Thread.UncaughtExceptionHandler originalHandler =
-        Thread.getDefaultUncaughtExceptionHandler();
+    Thread.UncaughtExceptionHandler originalHandler = Thread.getDefaultUncaughtExceptionHandler();
     if (GraphicsEnvironment.isHeadless()) {
-      Thread.setDefaultUncaughtExceptionHandler(
-          (thread, error) -> {
-            if (!(error instanceof HeadlessException) && originalHandler != null) {
-              originalHandler.uncaughtException(thread, error);
-            }
-          });
+      Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+        if (!(error instanceof HeadlessException) && originalHandler != null) {
+          originalHandler.uncaughtException(thread, error);
+        }
+      });
     }
     try {
       main.obs_file_datum_tijd = new GregorianCalendar();
       Rs232MintakaDuoWowAprWorkflow.start(destination, false);
-      waitFor(
-          () ->
-              main.obs_file_datum_tijd == null
-                  && (main.RS232_connection_mode_II == 0 || mytemp.air_temp.length() > 0));
+      waitFor(() ->
+          main.obs_file_datum_tijd == null
+              && (main.RS232_connection_mode_II == 0 || mytemp.air_temp.length() > 0));
       dialogCloser.await();
       flushEdt();
       return dialogCloser.message();
@@ -278,8 +274,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
 
   private void writeRawRecord(String record) throws Exception {
     Date fileDate = new Date(System.currentTimeMillis() - 2 * 60 * 1000L);
-    File file =
-        new File(main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate) + ".txt");
+    File file = new File(main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate) + ".txt");
     Files.writeString(file.toPath(), record + System.lineSeparator());
   }
 
@@ -299,8 +294,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     assertEquals(main.RECORD_LENGTE_HMP155, record.length());
 
     Date fileDate = new Date(System.currentTimeMillis() - 2 * 60 * 1000L);
-    File file =
-        new File(main.logs_dir, "sensor_data_II_" + main.sdf3.format(fileDate) + ".txt");
+    File file = new File(main.logs_dir, "sensor_data_II_" + main.sdf3.format(fileDate) + ".txt");
     Files.writeString(file.toPath(), record + System.lineSeparator());
   }
 
@@ -377,26 +371,25 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
         return;
       }
       thread =
-          new Thread(
-              () -> {
-                long deadline = System.nanoTime() + 5_000_000_000L;
-                while (System.nanoTime() < deadline) {
-                  for (Window window : Window.getWindows()) {
-                    if (window instanceof JDialog && window.isVisible()) {
-                      String dialogMessage = dialogMessage(window);
-                      message = dialogMessage == null ? "dialog" : dialogMessage;
-                      SwingUtilities.invokeLater(window::dispose);
-                      return;
-                    }
-                  }
-                  try {
-                    Thread.sleep(10);
-                  } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                  }
+          new Thread(() -> {
+            long deadline = System.nanoTime() + 5_000_000_000L;
+            while (System.nanoTime() < deadline) {
+              for (Window window : Window.getWindows()) {
+                if (window instanceof JDialog && window.isVisible()) {
+                  String dialogMessage = dialogMessage(window);
+                  message = dialogMessage == null ? "dialog" : dialogMessage;
+                  SwingUtilities.invokeLater(window::dispose);
+                  return;
                 }
-              });
+              }
+              try {
+                Thread.sleep(10);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+              }
+            }
+          });
       thread.setDaemon(true);
       thread.start();
     }

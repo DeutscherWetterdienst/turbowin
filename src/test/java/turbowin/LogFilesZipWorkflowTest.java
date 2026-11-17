@@ -31,16 +31,15 @@ public class LogFilesZipWorkflowTest {
     Map<String, String> entries = new HashMap<>();
     try (ZipFile zip = new ZipFile(archive)) {
       zip.stream()
-          .forEach(
-              entry -> {
-                try {
-                  entries.put(
-                      entry.getName(),
-                      new String(zip.getInputStream(entry).readAllBytes(), StandardCharsets.UTF_8));
-                } catch (IOException ex) {
-                  throw new RuntimeException(ex);
-                }
-              });
+          .forEach(entry -> {
+            try {
+              entries.put(
+                  entry.getName(),
+                  new String(zip.getInputStream(entry).readAllBytes(), StandardCharsets.UTF_8));
+            } catch (IOException ex) {
+              throw new RuntimeException(ex);
+            }
+          });
     }
 
     assertTrue(archive.isFile());

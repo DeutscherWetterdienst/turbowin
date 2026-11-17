@@ -126,8 +126,7 @@ public class Rs422ReadAwsSensorDataForDisplayWorkflowTest {
   @Test
   public void convertsRelativeWindUsingConfiguredUnitsAndRoundingBoundaries() throws Exception {
     writeSensorFile(
-        awsRecord(
-            sensorFileKey() + "15", "20260409", "071530", "12.345", "123.456", "90.0"));
+        awsRecord(sensorFileKey() + "15", "20260409", "071530", "12.345", "123.456", "90.0"));
 
     main.wind_units = main.M_S;
     runUntilParsed();
@@ -158,7 +157,13 @@ public class Rs422ReadAwsSensorDataForDisplayWorkflowTest {
     for (int i = 0; i < votValues.length; i++) {
       writeSensorFile(
           awsRecord(
-              sensorFileKey() + "15", "20260409", "071530", "12.345", "123.456", "90.0", votValues[i]));
+              sensorFileKey() + "15",
+              "20260409",
+              "071530",
+              "12.345",
+              "123.456",
+              "90.0",
+              votValues[i]));
       main.jMenuItem46.setEnabled(true);
 
       runUntilVotParsed();

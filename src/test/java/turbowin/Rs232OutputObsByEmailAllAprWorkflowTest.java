@@ -249,15 +249,14 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
   }
 
   private void awaitLogContains(String expected) throws Exception {
-    waitFor(
-        () -> {
-          try {
-            return Files.exists(systemLogFile())
-                && Files.readString(systemLogFile(), StandardCharsets.UTF_8).contains(expected);
-          } catch (Exception ex) {
-            return false;
-          }
-        });
+    waitFor(() -> {
+      try {
+        return Files.exists(systemLogFile())
+            && Files.readString(systemLogFile(), StandardCharsets.UTF_8).contains(expected);
+      } catch (Exception ex) {
+        return false;
+      }
+    });
   }
 
   private Path systemLogFile() {

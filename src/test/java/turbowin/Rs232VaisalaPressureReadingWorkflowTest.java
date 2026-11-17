@@ -176,10 +176,9 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     main.obs_file_datum_tijd = new GregorianCalendar();
     main.tray_icon_clicked = false;
     Rs232VaisalaPressureReadingWorkflow.start(false);
-    waitFor(
-        () ->
-            main.sensor_data_record_obs_pressure.equals(padded(pressure, 7))
-                && main.obs_file_datum_tijd == null);
+    waitFor(() ->
+        main.sensor_data_record_obs_pressure.equals(padded(pressure, 7))
+            && main.obs_file_datum_tijd == null);
     flushEdt();
   }
 
@@ -198,21 +197,19 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     dialogCloser.start();
     Thread.UncaughtExceptionHandler originalHandler = Thread.getDefaultUncaughtExceptionHandler();
     if (GraphicsEnvironment.isHeadless()) {
-      Thread.setDefaultUncaughtExceptionHandler(
-          (thread, error) -> {
-            if (!(error instanceof HeadlessException) && originalHandler != null) {
-              originalHandler.uncaughtException(thread, error);
-            }
-          });
+      Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+        if (!(error instanceof HeadlessException) && originalHandler != null) {
+          originalHandler.uncaughtException(thread, error);
+        }
+      });
     }
     try {
       main.obs_file_datum_tijd = new GregorianCalendar();
       main.tray_icon_clicked = true;
       Rs232VaisalaPressureReadingWorkflow.start(true);
-      waitFor(
-          () ->
-              main.sensor_data_record_obs_pressure.equals(expectedRecord)
-                  && main.obs_file_datum_tijd == null);
+      waitFor(() ->
+          main.sensor_data_record_obs_pressure.equals(expectedRecord)
+              && main.obs_file_datum_tijd == null);
       dialogCloser.await();
       flushEdt();
       return dialogCloser.message();
@@ -235,8 +232,7 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     Calendar fileDate = new GregorianCalendar();
     fileDate.add(Calendar.MINUTE, -2);
     File file =
-        new File(
-            main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate.getTime()) + ".txt");
+        new File(main.logs_dir, "sensor_data_" + main.sdf3.format(fileDate.getTime()) + ".txt");
     Files.writeString(file.toPath(), new String(record) + System.lineSeparator());
   }
 
@@ -272,25 +268,24 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
         return;
       }
       thread =
-          new Thread(
-              () -> {
-                long deadline = System.nanoTime() + 5_000_000_000L;
-                while (System.nanoTime() < deadline) {
-                  for (Window window : Window.getWindows()) {
-                    if (window instanceof JDialog && window.isVisible()) {
-                      message.set(findMessage(window));
-                      SwingUtilities.invokeLater(window::dispose);
-                      return;
-                    }
-                  }
-                  try {
-                    Thread.sleep(10);
-                  } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                  }
+          new Thread(() -> {
+            long deadline = System.nanoTime() + 5_000_000_000L;
+            while (System.nanoTime() < deadline) {
+              for (Window window : Window.getWindows()) {
+                if (window instanceof JDialog && window.isVisible()) {
+                  message.set(findMessage(window));
+                  SwingUtilities.invokeLater(window::dispose);
+                  return;
                 }
-              });
+              }
+              try {
+                Thread.sleep(10);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+              }
+            }
+          });
       thread.setDaemon(true);
       thread.start();
     }

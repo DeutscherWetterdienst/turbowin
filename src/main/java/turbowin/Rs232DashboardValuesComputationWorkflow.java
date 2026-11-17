@@ -97,8 +97,7 @@ final class Rs232DashboardValuesComputationWorkflow {
                   dashboard_string_last_update_record_ppp = parsedRecord.pressureChange;
                   main.sensor_data_record_obs_pressure = parsedRecord.observationPressure;
                 } else {
-                  System.out.println(
-                      "--- RS232_compute_dasboard_values() malformed StarX record");
+                  System.out.println("--- RS232_compute_dasboard_values() malformed StarX record");
                 }
               } else if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330

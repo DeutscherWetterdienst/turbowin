@@ -108,7 +108,8 @@ public final class about extends javax.swing.JFrame {
         new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
     jPanel3.setPreferredSize(new java.awt.Dimension(572, 194));
 
-    jLabel4.setFont(SwingUiUtils.uiFont(java.awt.Font.BOLD, SwingUiUtils.UI_FONT_STANDARD)); // NOI18N
+    jLabel4.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.BOLD, SwingUiUtils.UI_FONT_STANDARD)); // NOI18N
     jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel4.setText("jLabel4");
 
@@ -116,16 +117,19 @@ public final class about extends javax.swing.JFrame {
     jLabel6.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel6.setText("jLabel6");
 
-    jLabel11.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel11.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel11.setText("jLabel11");
 
-    jLabel12.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel12.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel12.setText("jLabel12");
 
     jLabel1.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel1.setText("jLabel1");
 
-    jLabel13.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel13.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel13.setText("jLabel13");
 
     jLabel3.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
@@ -134,17 +138,21 @@ public final class about extends javax.swing.JFrame {
     jLabel5.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel5.setText("jLabel5");
 
-    jLabel14.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel14.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel14.setText("jLabel14");
 
-    jLabel16.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel16.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel16.setText("jLabel16");
 
-    jLabel15.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel15.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel15.setText("jLabel15");
 
-    jLabel17.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel17.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel17.setText("jLabel17");
 
     javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -443,9 +451,7 @@ public final class about extends javax.swing.JFrame {
     jLabel6.setText("operating system: " + SystemInfo.operatingSystem());
     jLabel11.setText("app dir: " + System.getProperty("app.dir"));
     jLabel12.setText("logs dir: " + main.logs_dir);
-    jLabel1.setText(
-        "java: "
-            + SystemInfo.javaRuntime());
+    jLabel1.setText("java: " + SystemInfo.javaRuntime());
 
     // NB See also Function log_memory_statistics() [main_support.java]
     //

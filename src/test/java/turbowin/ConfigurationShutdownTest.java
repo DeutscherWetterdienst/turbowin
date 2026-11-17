@@ -125,15 +125,14 @@ public class ConfigurationShutdownTest {
               throw new AssertionError("Unexpected save failure: " + saved.failures());
             });
     AtomicBoolean uiResponsive = new AtomicBoolean();
-    SwingUtilities.invokeAndWait(
-        () -> {
-          uiResponsive.set(true);
-          request.start(); // A repeated close request must not queue another final save.
-          if (saveDuringWait) {
-            main.ship_name = "Later imported ship";
-            ConfigurationWriteWorkflow.write(writer);
-          }
-        });
+    SwingUtilities.invokeAndWait(() -> {
+      uiResponsive.set(true);
+      request.start(); // A repeated close request must not queue another final save.
+      if (saveDuringWait) {
+        main.ship_name = "Later imported ship";
+        ConfigurationWriteWorkflow.write(writer);
+      }
+    });
     assertTrue(uiResponsive.get());
     assertEquals("Exit ran while a write was blocked", 0, exits.get());
     assertEquals(1, attempts.get());

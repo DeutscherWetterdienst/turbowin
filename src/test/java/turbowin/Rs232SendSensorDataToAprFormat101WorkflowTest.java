@@ -82,8 +82,8 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     originalResponseCode = main_RS232_RS422.APR_server_response_code;
     originalFormat101Observation = main_RS232_RS422.format_101_obs;
 
-    replaceStaticTextFields(main.class, myposition.class, mybarometer.class, mybarograph.class,
-        mytemp.class);
+    replaceStaticTextFields(
+        main.class, myposition.class, mybarometer.class, mybarograph.class, mytemp.class);
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -133,12 +133,11 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
   @Test
   public void javaEncoderProducesCompressedObservation() throws Exception {
     String[] rawQuery = new String[1];
-    startServer(
-        exchange -> {
-          rawQuery[0] = exchange.getRequestURI().getRawQuery();
-          exchange.sendResponseHeaders(200, -1);
-          exchange.close();
-        });
+    startServer(exchange -> {
+      rawQuery[0] = exchange.getRequestURI().getRawQuery();
+      exchange.sendResponseHeaders(200, -1);
+      exchange.close();
+    });
 
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
     awaitResponse(200);
@@ -150,7 +149,8 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
         main_RS232_RS422.format_101_obs + System.lineSeparator(),
         Files.readString(compressedFile, StandardCharsets.ISO_8859_1));
     assertEquals(
-        ServerObservationRequestBuilder.format101Url(main.upload_URL, main_RS232_RS422.format_101_obs)
+        ServerObservationRequestBuilder.format101Url(
+                main.upload_URL, main_RS232_RS422.format_101_obs)
             .substring(main.upload_URL.length()),
         rawQuery[0]);
     assertEquals(
@@ -170,20 +170,15 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
   @Test
   public void failedJavaEncodingCannotReuseEarlierCompressedObservation() throws Exception {
     AtomicInteger requests = new AtomicInteger();
-    startServer(
-        exchange -> {
-          requests.incrementAndGet();
-          exchange.sendResponseHeaders(200, -1);
-          exchange.close();
-        });
+    startServer(exchange -> {
+      requests.incrementAndGet();
+      exchange.sendResponseHeaders(200, -1);
+      exchange.close();
+    });
     Path compressedFile = compressedFile();
     Files.writeString(compressedFile, "STALE_OBSERVATION\n", StandardCharsets.ISO_8859_1);
     Files.writeString(
-        Path.of(
-            main.logs_dir,
-            main.FORMAT_101_ROOT_DIR,
-            "config",
-            "S-AWS-101_modl_pilote.csv"),
+        Path.of(main.logs_dir, main.FORMAT_101_ROOT_DIR, "config", "S-AWS-101_modl_pilote.csv"),
         "malformed pilot table\n");
 
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
@@ -198,13 +193,12 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
   public void urlEncodesPayloadAndUsesConfiguredHttpProtocol() throws Exception {
     AtomicInteger requests = new AtomicInteger();
     String[] rawQuery = new String[1];
-    startServer(
-        exchange -> {
-          requests.incrementAndGet();
-          rawQuery[0] = exchange.getRequestURI().getRawQuery();
-          exchange.sendResponseHeaders(200, -1);
-          exchange.close();
-        });
+    startServer(exchange -> {
+      requests.incrementAndGet();
+      rawQuery[0] = exchange.getRequestURI().getRawQuery();
+      exchange.sendResponseHeaders(200, -1);
+      exchange.close();
+    });
     installFormat101Module("BBXX TEST+é");
 
     main.server_com_protocol = main.HTTP_PROTOCOL;
@@ -229,11 +223,10 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
 
   @Test
   public void returnsDeterministicHttpErrorAndNoInternetCodes() throws Exception {
-    startServer(
-        exchange -> {
-          exchange.sendResponseHeaders(503, -1);
-          exchange.close();
-        });
+    startServer(exchange -> {
+      exchange.sendResponseHeaders(503, -1);
+      exchange.close();
+    });
     installFormat101Module("BBXX TEST");
 
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
@@ -248,15 +241,14 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
   @Test
   public void retriesTransientTransportFailureBeforeReportingSuccess() throws Exception {
     AtomicInteger requests = new AtomicInteger();
-    startServer(
-        exchange -> {
-          if (requests.incrementAndGet() == 1) {
-            exchange.close();
-          } else {
-            exchange.sendResponseHeaders(200, -1);
-            exchange.close();
-          }
-        });
+    startServer(exchange -> {
+      if (requests.incrementAndGet() == 1) {
+        exchange.close();
+      } else {
+        exchange.sendResponseHeaders(200, -1);
+        exchange.close();
+      }
+    });
     installFormat101Module("BBXX TEST");
 
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
@@ -267,11 +259,10 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
 
   @Test
   public void retryControlsImmtSaveAndObservationResetAfterFailure() throws Exception {
-    startServer(
-        exchange -> {
-          exchange.sendResponseHeaders(500, -1);
-          exchange.close();
-        });
+    startServer(exchange -> {
+      exchange.sendResponseHeaders(500, -1);
+      exchange.close();
+    });
     installFormat101Module("BBXX TEST");
 
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
@@ -326,8 +317,7 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     } else if (output.isEmpty()) {
       compressorScript = "#!/bin/sh\nexit 0\n";
     } else {
-      compressorScript =
-          "#!/bin/sh\nprintf '%s\\n' '" + output + "' > temp/HPK_format_101.txt\n";
+      compressorScript = "#!/bin/sh\nprintf '%s\\n' '" + output + "' > temp/HPK_format_101.txt\n";
     }
     writeExecutable(compressor, compressorScript);
   }
@@ -350,14 +340,13 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
 
   private void awaitImmtFile() throws Exception {
     waitFor(() -> Files.exists(immtFile()));
-    waitFor(
-        () -> {
-          try {
-            return Files.size(immtFile()) > 0;
-          } catch (Exception ex) {
-            return false;
-          }
-        });
+    waitFor(() -> {
+      try {
+        return Files.size(immtFile()) > 0;
+      } catch (Exception ex) {
+        return false;
+      }
+    });
     assertTrue(Files.readString(immtFile(), StandardCharsets.UTF_8).length() > 0);
   }
 

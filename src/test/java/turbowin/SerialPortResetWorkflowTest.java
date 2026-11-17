@@ -6,7 +6,6 @@ import static org.junit.Assert.assertFalse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.Test;
 
 public class SerialPortResetWorkflowTest {
@@ -24,7 +23,10 @@ public class SerialPortResetWorkflowTest {
     FakePort port = new FakePort(true, events);
 
     SerialPortResetWorkflow.reset(
-        port, "GPS", () -> events.add("clear default port"), message -> events.add("log: " + message));
+        port,
+        "GPS",
+        () -> events.add("clear default port"),
+        message -> events.add("log: " + message));
 
     assertFalse(port.isOpen());
     assertEquals(
@@ -42,12 +44,14 @@ public class SerialPortResetWorkflowTest {
     FakePort port = new FakePort(false, events);
 
     SerialPortResetWorkflow.reset(
-        port, "GPS", () -> events.add("clear default port"), message -> events.add("log: " + message));
+        port,
+        "GPS",
+        () -> events.add("clear default port"),
+        message -> events.add("log: " + message));
 
     assertFalse(port.isOpen());
     assertEquals(
-        Arrays.asList(
-            "log: [GPS] starting-com-port closed (COM-test)", "clear default port"),
+        Arrays.asList("log: [GPS] starting-com-port closed (COM-test)", "clear default port"),
         events);
   }
 

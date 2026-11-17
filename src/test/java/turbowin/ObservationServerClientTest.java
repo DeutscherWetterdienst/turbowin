@@ -5,9 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.net.URL;
-import java.net.URLConnection;
 import java.security.Principal;
 import java.security.cert.Certificate;
 import javax.net.ssl.HttpsURLConnection;
@@ -57,8 +55,7 @@ public class ObservationServerClientTest {
     assertEquals(
         204,
         ObservationServerClient.getResponseCode(
-            "https://example.test/ok",
-            uri -> new TestHttpsURLConnection(uri.toURL())));
+            "https://example.test/ok", uri -> new TestHttpsURLConnection(uri.toURL())));
     assertEquals("GET", lastHttpsRequestMethod);
   }
 

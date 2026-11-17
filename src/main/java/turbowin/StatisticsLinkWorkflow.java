@@ -16,7 +16,8 @@ final class StatisticsLinkWorkflow {
       @Override
       protected Integer doInBackground() throws Exception {
         String os = OSDetector.getOSString();
-        // NB deprecated from October 2024: http://esurfmar.meteo.fr/cgi-bin/meteo/display_vos_ext.cgi?callchx=
+        // NB deprecated from October 2024:
+        // http://esurfmar.meteo.fr/cgi-bin/meteo/display_vos_ext.cgi?callchx=
         String link_url = "https://esurfmar.meteo.fr/cgi-bin/display_vos_ext.cgi?callchx=";
         link_url += station_ID;
         return DesktopUtils.openLink(link_url, os);

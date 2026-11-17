@@ -8,8 +8,7 @@ import java.io.IOException;
 /**
  * Reads the last record from the IMMT log.
  *
- * <p>This read is synchronous; callers must invoke it from a SwingWorker rather than the UI
- * thread.
+ * <p>This read is synchronous; callers must invoke it from a SwingWorker rather than the UI thread.
  */
 final class ImmtLogReaderWorkflow {
 

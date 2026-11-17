@@ -31,9 +31,7 @@ public class Format101CharacterizationTest {
               "format101Path",
               new Class<?>[] {String[].class},
               (Object)
-                  new String[] {
-                    main.FORMAT_101_ROOT_DIR, "config", "S-AWS-101_modl_pilote.csv"
-                  }));
+                  new String[] {main.FORMAT_101_ROOT_DIR, "config", "S-AWS-101_modl_pilote.csv"}));
     } finally {
       main.logs_dir = originalLogsDirectory;
     }
@@ -596,7 +594,8 @@ public class Format101CharacterizationTest {
       for (String middleCloudType : new String[] {"7b", "7c"}) {
         mycm.cm_code = middleCloudType;
         invokePrivate("write_input_for_101_compression");
-        lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
+        lines =
+            Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
         assertEquals("1 27.0            cloud type middle (Cm) [code]", lines.get(37));
       }
 

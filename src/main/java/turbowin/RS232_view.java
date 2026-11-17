@@ -831,8 +831,8 @@ public class RS232_view extends javax.swing.JFrame {
   /**
    * Reads AWS {@code $PEUMB} graph records. Records contain 27 commas and graph samples are stored
    * every five minutes, giving 12 points per hour. The one-based comma mapping is MSL pressure 9,
-   * air temperature 12, sea-surface temperature 14, true-wind speed 17, true-wind direction 18,
-   * and true-wind gust 19.
+   * air temperature 12, sea-surface temperature 14, true-wind speed 17, true-wind direction 18, and
+   * true-wind gust 19.
    */
   private void Read_Sensor_Data_Files_For_Graphs() {
     int primaryComma;

@@ -18,10 +18,7 @@ final class GpsDateTimeValidator {
   private GpsDateTimeValidator() {}
 
   static Result validate(
-      String gpsDate,
-      String gpsTime,
-      LongSupplier currentTimeMillis,
-      long maximumAgeMinutes) {
+      String gpsDate, String gpsTime, LongSupplier currentTimeMillis, long maximumAgeMinutes) {
     if ((gpsDate.length() != 6) || (gpsTime.length() < 6)) {
       return new Result(
           false,

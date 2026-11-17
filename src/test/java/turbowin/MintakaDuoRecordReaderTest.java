@@ -19,45 +19,43 @@ public class MintakaDuoRecordReaderTest {
 
   @Test
   public void returnsLatestValidRecordWithinConfiguredAge() throws Exception {
-    withUtcDateFormat(
-        () -> {
-          File file = Files.createTempFile("turbowin-mintaka-duo", ".txt").toFile();
-          try {
-            Files.writeString(file.toPath(), RECORD);
+    withUtcDateFormat(() -> {
+      File file = Files.createTempFile("turbowin-mintaka-duo", ".txt").toFile();
+      try {
+        Files.writeString(file.toPath(), RECORD);
 
-            MintakaDuoRecordReading result =
-                MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS + 3 * 60 * 1000);
+        MintakaDuoRecordReading result =
+            MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS + 3 * 60 * 1000);
 
-            assertEquals("1.70", result.record.pressureTendency);
-            assertEquals(3, result.ageMinutes);
-          } finally {
-            file.delete();
-          }
-        });
+        assertEquals("1.70", result.record.pressureTendency);
+        assertEquals(3, result.ageMinutes);
+      } finally {
+        file.delete();
+      }
+    });
   }
 
   @Test
   public void rejectsStaleMalformedMissingAndEmptyRecords() throws Exception {
-    withUtcDateFormat(
-        () -> {
-          File file = Files.createTempFile("turbowin-mintaka-duo", ".txt").toFile();
-          File missing = new File(file.getParent(), "missing-mintaka-duo.txt");
-          try {
-            Files.writeString(file.toPath(), RECORD);
-            MintakaDuoRecordReading stale =
-                MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS + 4 * 60 * 1000);
-            assertEquals(false, stale.isWithin(3));
+    withUtcDateFormat(() -> {
+      File file = Files.createTempFile("turbowin-mintaka-duo", ".txt").toFile();
+      File missing = new File(file.getParent(), "missing-mintaka-duo.txt");
+      try {
+        Files.writeString(file.toPath(), RECORD);
+        MintakaDuoRecordReading stale =
+            MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS + 4 * 60 * 1000);
+        assertEquals(false, stale.isWithin(3));
 
-            Files.writeString(file.toPath(), "malformed");
-            assertNull(MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS));
+        Files.writeString(file.toPath(), "malformed");
+        assertNull(MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS));
 
-            Files.writeString(file.toPath(), "");
-            assertNull(MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS));
-            assertNull(MintakaDuoRecordReader.readLatest(missing, RECORD_TIME_MILLIS));
-          } finally {
-            file.delete();
-          }
-        });
+        Files.writeString(file.toPath(), "");
+        assertNull(MintakaDuoRecordReader.readLatest(file, RECORD_TIME_MILLIS));
+        assertNull(MintakaDuoRecordReader.readLatest(missing, RECORD_TIME_MILLIS));
+      } finally {
+        file.delete();
+      }
+    });
   }
 
   @Test
@@ -117,31 +115,30 @@ public class MintakaDuoRecordReaderTest {
 
   @Test
   public void samplesClockAfterReadingThreeMinuteBoundaryRecord() throws Exception {
-    withUtcDateFormat(
-        () -> {
-          File file = Files.createTempFile("turbowin-mintaka-duo", ".txt").toFile();
-          try {
-            Files.writeString(file.toPath(), RECORD);
+    withUtcDateFormat(() -> {
+      File file = Files.createTempFile("turbowin-mintaka-duo", ".txt").toFile();
+      try {
+        Files.writeString(file.toPath(), RECORD);
 
-            MintakaDuoRecordReading result =
-                MintakaDuoRecordReader.readLatest(
-                    file,
-                    () -> {
-                      try {
-                        Files.writeString(file.toPath(), "malformed");
-                      } catch (Exception exception) {
-                        throw new AssertionError(exception);
-                      }
-                      return RECORD_TIME_MILLIS + 3 * 60 * 1000;
-                    },
-                    "Mintaka Duo");
+        MintakaDuoRecordReading result =
+            MintakaDuoRecordReader.readLatest(
+                file,
+                () -> {
+                  try {
+                    Files.writeString(file.toPath(), "malformed");
+                  } catch (Exception exception) {
+                    throw new AssertionError(exception);
+                  }
+                  return RECORD_TIME_MILLIS + 3 * 60 * 1000;
+                },
+                "Mintaka Duo");
 
-            assertEquals(3, result.ageMinutes);
-            assertTrue(result.isWithin(3));
-          } finally {
-            file.delete();
-          }
-        });
+        assertEquals(3, result.ageMinutes);
+        assertTrue(result.isWithin(3));
+      } finally {
+        file.delete();
+      }
+    });
   }
 
   private static void withUtcDateFormat(ThrowingRunnable runnable) throws Exception {

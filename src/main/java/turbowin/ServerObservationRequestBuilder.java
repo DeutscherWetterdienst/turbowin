@@ -6,9 +6,9 @@ import java.nio.charset.StandardCharsets;
 /**
  * Builds upload URLs without opening a network connection.
  *
- * <p>FM13 payloads intentionally remain unencoded. Format 101 encodes only the observation value
- * as application/x-www-form-urlencoded data; UTF-8 is required for compatibility. The URL and
- * its query separators are not encoded.
+ * <p>FM13 payloads intentionally remain unencoded. Format 101 encodes only the observation value as
+ * application/x-www-form-urlencoded data; UTF-8 is required for compatibility. The URL and its
+ * query separators are not encoded.
  */
 final class ServerObservationRequestBuilder {
 

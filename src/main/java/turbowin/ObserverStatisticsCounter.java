@@ -31,7 +31,8 @@ final class ObserverStatisticsCounter {
         }
 
         if (record.length() > observerPosition - 1) {
-          // Observer fields are surname;initials;rank;discharge-book number, matching observerNames.
+          // Observer fields are surname;initials;rank;discharge-book number, matching
+          // observerNames.
           String observerName = record.substring(observerPosition);
           String year = record.substring(1, 5);
 

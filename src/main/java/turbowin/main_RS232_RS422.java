@@ -182,8 +182,7 @@ public class main_RS232_RS422 {
                       + "\" to "
                       + serial_ports_portid_array[i].getDescriptivePortName());
               String messageString_info = "?\r\n"; // or "?\r"
-              byte[] bytes_message =
-                  messageString_info.getBytes(StandardCharsets.UTF_8);
+              byte[] bytes_message = messageString_info.getBytes(StandardCharsets.UTF_8);
               serialPort_test.writeBytes(bytes_message, bytes_message.length); // Write data to port
               written_bytes =
                   serialPort_test.writeBytes(
@@ -320,8 +319,7 @@ public class main_RS232_RS422 {
                       + "\" to "
                       + serial_ports_portid_array[i].getDescriptivePortName());
               String messageString_info = "?\r\n"; // or "?\r"
-              byte[] bytes_message =
-                  messageString_info.getBytes(StandardCharsets.UTF_8);
+              byte[] bytes_message = messageString_info.getBytes(StandardCharsets.UTF_8);
               serialPort_test.writeBytes(bytes_message, bytes_message.length); // Write data to port
               written_bytes =
                   serialPort_test.writeBytes(
@@ -704,8 +702,7 @@ public class main_RS232_RS422 {
                         + "\" to "
                         + serial_ports_portid_array[i].getDescriptivePortName());
                 String messageString_stop = "s\r";
-                byte[] bytes_message_stop =
-                    messageString_stop.getBytes(StandardCharsets.UTF_8);
+                byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8);
                 serialPort_test.writeBytes(
                     bytes_message_stop, bytes_message_stop.length); // Write data to port
                 written_bytes =
@@ -744,8 +741,7 @@ public class main_RS232_RS422 {
                 String messageString_info = "VERS\r";
                 // serialPort_test.writeBytes(messageString_info.getBytes());                     //
                 // Write data to port
-                byte[] bytes_message_info =
-                    messageString_info.getBytes(StandardCharsets.UTF_8);
+                byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8);
                 serialPort_test.writeBytes(
                     bytes_message_info, bytes_message_info.length); // Write data to port
 
@@ -833,8 +829,7 @@ public class main_RS232_RS422 {
               // String messageString_stop = "asq\r\n";
               // serialPort_test.writeBytes(messageString_stop.getBytes());                     //
               // Write data to port
-              byte[] bytes_message_stop =
-                  messageString_stop.getBytes(StandardCharsets.UTF_8);
+              byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8);
               serialPort_test.writeBytes(
                   bytes_message_stop, bytes_message_stop.length); // Write data to port
               written_bytes =
@@ -868,8 +863,7 @@ public class main_RS232_RS422 {
                 String messageString_info = "dm ma\r";
                 // serialPort_test.writeBytes(messageString_info.getBytes());                     //
                 // Write data to port
-                byte[] bytes_message_info =
-                    messageString_info.getBytes(StandardCharsets.UTF_8);
+                byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8);
                 serialPort_test.writeBytes(
                     bytes_message_info, bytes_message_info.length); // Write data to port
 
@@ -1274,8 +1268,7 @@ public class main_RS232_RS422 {
                           + "\" to "
                           + serial_ports_portid_array[i].getDescriptivePortName());
                   String messageString_stop = "s\r";
-                  byte[] bytes_message_stop =
-                      messageString_stop.getBytes(StandardCharsets.UTF_8);
+                  byte[] bytes_message_stop = messageString_stop.getBytes(StandardCharsets.UTF_8);
                   serialPort_test.writeBytes(
                       bytes_message_stop, bytes_message_stop.length); // Write data to port
                   written_bytes =
@@ -1314,8 +1307,7 @@ public class main_RS232_RS422 {
                   String messageString_info = "vers\r";
                   // serialPort_test.writeBytes(messageString_info.getBytes());
                   // // Write data to port
-                  byte[] bytes_message_info =
-                      messageString_info.getBytes(StandardCharsets.UTF_8);
+                  byte[] bytes_message_info = messageString_info.getBytes(StandardCharsets.UTF_8);
                   serialPort_test.writeBytes(
                       bytes_message_info, bytes_message_info.length); // Write data to port
 

@@ -5,8 +5,8 @@ package turbowin;
  *
  * <p>In the common Star and StarX layout, zero-based fields 0 through 3 are station pressure,
  * sea-level pressure, three-hour pressure tendency, and the WMO tendency characteristic code;
- * fields 4 and 5 are latitude and longitude. Coordinates use {@code ddd mm.mmmm[N|S]} and
- * {@code ddd mm.mmmm[E|W]} respectively.
+ * fields 4 and 5 are latitude and longitude. Coordinates use {@code ddd mm.mmmm[N|S]} and {@code
+ * ddd mm.mmmm[E|W]} respectively.
  */
 final class MintakaGpsFieldsParser {
 

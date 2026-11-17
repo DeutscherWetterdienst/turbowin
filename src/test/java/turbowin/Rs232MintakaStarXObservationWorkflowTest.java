@@ -143,7 +143,12 @@ public class Rs232MintakaStarXObservationWorkflowTest {
 
     resetModel();
     seedExistingValues();
-    runRecord("20.0", "75.0", "0.4", "12.3", Integer.toString(main_RS232_RS422.MAX_AGE_STARX_OBS_DATA + 1));
+    runRecord(
+        "20.0",
+        "75.0",
+        "0.4",
+        "12.3",
+        Integer.toString(main_RS232_RS422.MAX_AGE_STARX_OBS_DATA + 1));
     assertCleared();
 
     resetModel();
@@ -172,8 +177,8 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     assertCleared();
   }
 
-  private void runRecord(
-      String airTemp, String rh, String wetBulbTemp, String dewPoint, String age) throws Exception {
+  private void runRecord(String airTemp, String rh, String wetBulbTemp, String dewPoint, String age)
+      throws Exception {
     writeRawRecord(starRecord(starXPayload(airTemp, rh, wetBulbTemp, dewPoint, age), recentDate()));
     runWorkflow();
   }
@@ -185,15 +190,13 @@ public class Rs232MintakaStarXObservationWorkflowTest {
   private void runWorkflow() throws Exception {
     DialogCloser dialogCloser = new DialogCloser();
     dialogCloser.start();
-    Thread.UncaughtExceptionHandler originalHandler =
-        Thread.getDefaultUncaughtExceptionHandler();
+    Thread.UncaughtExceptionHandler originalHandler = Thread.getDefaultUncaughtExceptionHandler();
     if (GraphicsEnvironment.isHeadless()) {
-      Thread.setDefaultUncaughtExceptionHandler(
-          (thread, error) -> {
-            if (!(error instanceof HeadlessException) && originalHandler != null) {
-              originalHandler.uncaughtException(thread, error);
-            }
-          });
+      Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+        if (!(error instanceof HeadlessException) && originalHandler != null) {
+          originalHandler.uncaughtException(thread, error);
+        }
+      });
     }
     try {
       main.obs_file_datum_tijd = new GregorianCalendar();
@@ -274,7 +277,8 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     while (!condition.getAsBoolean() && System.nanoTime() < deadline) {
       Thread.sleep(10);
     }
-    assertTrue("Timed out waiting for Mintaka StarX observation workflow", condition.getAsBoolean());
+    assertTrue(
+        "Timed out waiting for Mintaka StarX observation workflow", condition.getAsBoolean());
   }
 
   private static void flushEdt() throws Exception {
@@ -292,24 +296,23 @@ public class Rs232MintakaStarXObservationWorkflowTest {
         return;
       }
       thread =
-          new Thread(
-              () -> {
-                long deadline = System.nanoTime() + 5_000_000_000L;
-                while (System.nanoTime() < deadline) {
-                  for (Window window : Window.getWindows()) {
-                    if (window instanceof JDialog && window.isVisible()) {
-                      SwingUtilities.invokeLater(window::dispose);
-                      return;
-                    }
-                  }
-                  try {
-                    Thread.sleep(10);
-                  } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                  }
+          new Thread(() -> {
+            long deadline = System.nanoTime() + 5_000_000_000L;
+            while (System.nanoTime() < deadline) {
+              for (Window window : Window.getWindows()) {
+                if (window instanceof JDialog && window.isVisible()) {
+                  SwingUtilities.invokeLater(window::dispose);
+                  return;
                 }
-              });
+              }
+              try {
+                Thread.sleep(10);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+              }
+            }
+          });
       thread.setDaemon(true);
       thread.start();
     }

@@ -53,13 +53,11 @@ public class ObservationEmailParametersTest {
   public void preservesTheLegacyCcLengthCutoff() {
     assertEquals(
         "null",
-        ObservationEmailParameters.forCustomSettings(
-                "", "", "", "", "", "", "123", "", false)
+        ObservationEmailParameters.forCustomSettings("", "", "", "", "", "", "123", "", false)
             .cc());
     assertEquals(
         "1234",
-        ObservationEmailParameters.forCustomSettings(
-                "", "", "", "", "", "", "1234", "", false)
+        ObservationEmailParameters.forCustomSettings("", "", "", "", "", "", "1234", "", false)
             .cc());
   }
 }

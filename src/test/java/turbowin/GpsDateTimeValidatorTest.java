@@ -12,8 +12,7 @@ public class GpsDateTimeValidatorTest {
 
   @Test
   public void rejectsMissingDateOrTime() {
-    GpsDateTimeValidator.Result result =
-        GpsDateTimeValidator.validate("", "", () -> 0, 10);
+    GpsDateTimeValidator.Result result = GpsDateTimeValidator.validate("", "", () -> 0, 10);
 
     assertFalse(result.valid());
     assertEquals(Long.MAX_VALUE, result.minuteTimestamp());
@@ -49,8 +48,7 @@ public class GpsDateTimeValidatorTest {
         GpsDateTimeValidator.validate(
             "010124", "000000", () -> gpsTimeMillis + 10 * 60 * 1000 + 59_999, 10);
     GpsDateTimeValidator.Result beyondLimit =
-        GpsDateTimeValidator.validate(
-            "010124", "000000", () -> gpsTimeMillis + 11 * 60 * 1000, 10);
+        GpsDateTimeValidator.validate("010124", "000000", () -> gpsTimeMillis + 11 * 60 * 1000, 10);
 
     assertTrue(withinLimit.valid());
     assertFalse(beyondLimit.valid());

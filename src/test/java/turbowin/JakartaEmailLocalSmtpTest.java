@@ -53,7 +53,8 @@ public class JakartaEmailLocalSmtpTest {
     String originalLogsDirectory = main.logs_dir;
     File logsDirectory = temporaryFolder.newFolder("logs");
     File tempDirectory =
-        new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + main.FORMAT_101_TEMP_DIR);
+        new File(
+            logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + main.FORMAT_101_TEMP_DIR);
     assertTrue(tempDirectory.mkdirs());
     File hpkFile = new File(tempDirectory, "HPK_" + main.FORMAT_101_INPUT_FILE);
     Files.writeString(hpkFile.toPath(), "HPK payload\n", StandardCharsets.ISO_8859_1);
@@ -223,9 +224,11 @@ public class JakartaEmailLocalSmtpTest {
     private void serve() {
       try (Socket socket = serverSocket.accept();
           BufferedReader reader =
-              new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
+              new BufferedReader(
+                  new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
           BufferedWriter writer =
-              new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.US_ASCII))) {
+              new BufferedWriter(
+                  new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.US_ASCII))) {
         respond(writer, "220 localhost");
         String line;
         while ((line = reader.readLine()) != null) {

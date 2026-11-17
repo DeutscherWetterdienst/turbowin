@@ -117,15 +117,14 @@ public class StationDataImportWorkflowTest {
     AtomicBoolean refreshedOnEdt = new AtomicBoolean();
     AtomicReference<String> displayedShipName = new AtomicReference<>();
 
-    SwingUtilities.invokeAndWait(
-        () ->
-            StationDataImportWorkflow.start(
-                source.toString(),
-                () -> {
-                  refreshedOnEdt.set(SwingUtilities.isEventDispatchThread());
-                  displayedShipName.set(main.ship_name);
-                  refreshed.countDown();
-                }));
+    SwingUtilities.invokeAndWait(() ->
+        StationDataImportWorkflow.start(
+            source.toString(),
+            () -> {
+              refreshedOnEdt.set(SwingUtilities.isEventDispatchThread());
+              displayedShipName.set(main.ship_name);
+              refreshed.countDown();
+            }));
 
     assertTrue("Import did not refresh the station form", refreshed.await(5, TimeUnit.SECONDS));
     awaitSavedSettings(dataConfiguration, expectedLastLine);

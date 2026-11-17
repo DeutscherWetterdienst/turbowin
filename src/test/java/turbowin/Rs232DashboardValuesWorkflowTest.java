@@ -96,15 +96,13 @@ public class Rs232DashboardValuesWorkflowTest {
 
     resetDashboardState();
     writeRawRecord(
-        duoRecord(
-            "1001.2", "2.34", new Date(System.currentTimeMillis() - 10 * 60 * 1000L)));
+        duoRecord("1001.2", "2.34", new Date(System.currentTimeMillis() - 10 * 60 * 1000L)));
     runWorkflow();
     waitForDashboardPressure(1001.2);
 
     resetDashboardState();
     writeRawRecord(
-        duoRecord(
-            "1001.2", "2.34", new Date(System.currentTimeMillis() - 11 * 60 * 1000L)));
+        duoRecord("1001.2", "2.34", new Date(System.currentTimeMillis() - 11 * 60 * 1000L)));
     runWorkflow();
     assertDashboardState(Double.MAX_VALUE, Double.MAX_VALUE, "");
   }
@@ -185,12 +183,10 @@ public class Rs232DashboardValuesWorkflowTest {
   }
 
   private static void waitForDashboardPressure(double expectedPressure) throws Exception {
-    waitFor(
-        () ->
-            Math.abs(
-                    main_RS232_RS422.dashboard_double_last_update_record_pressure_ic
-                        - expectedPressure)
-                < 0.001);
+    waitFor(() ->
+        Math.abs(
+                main_RS232_RS422.dashboard_double_last_update_record_pressure_ic - expectedPressure)
+            < 0.001);
   }
 
   private static void flushEdt() throws Exception {

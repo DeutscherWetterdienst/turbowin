@@ -52,13 +52,12 @@ public class Rs232DeleteSensorDataFilesWorkflowTest {
 
     new Rs232DeleteSensorDataFilesWorkflow().start();
 
-    waitFor(
-        () ->
-            !firstDeletedFile.exists()
-                && !lastDeletedFile.exists()
-                && newerFile.exists()
-                && olderFile.exists()
-                && secondSensorFile.exists());
+    waitFor(() ->
+        !firstDeletedFile.exists()
+            && !lastDeletedFile.exists()
+            && newerFile.exists()
+            && olderFile.exists()
+            && secondSensorFile.exists());
 
     assertTrue(newerFile.exists());
     assertFalse(firstDeletedFile.exists());
@@ -79,13 +78,12 @@ public class Rs232DeleteSensorDataFilesWorkflowTest {
 
     new Rs232DeleteSensorDataFilesWorkflow().start();
 
-    waitFor(
-        () ->
-            !firstDeletedFile.exists()
-                && !lastDeletedFile.exists()
-                && newerFile.exists()
-                && olderFile.exists()
-                && secondSensorFile.exists());
+    waitFor(() ->
+        !firstDeletedFile.exists()
+            && !lastDeletedFile.exists()
+            && newerFile.exists()
+            && olderFile.exists()
+            && secondSensorFile.exists());
 
     assertTrue(newerFile.exists());
     assertFalse(firstDeletedFile.exists());
@@ -113,8 +111,7 @@ public class Rs232DeleteSensorDataFilesWorkflowTest {
 
   private File secondSensorFile(int hoursAgo) {
     Calendar date = hoursAgoFromNow(hoursAgo);
-    return new File(
-        main.logs_dir, "sensor_data_II_" + main.sdf3.format(date.getTime()) + ".txt");
+    return new File(main.logs_dir, "sensor_data_II_" + main.sdf3.format(date.getTime()) + ".txt");
   }
 
   private Calendar hoursAgoFromNow(int hoursAgo) {

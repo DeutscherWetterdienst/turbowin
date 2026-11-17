@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 /**
  * Appends a sensor record while preserving the application's record-boundary conventions.
  *
- * <p>A complete record invokes {@code onCompleteRecord} for the main-screen last-update display
- * and appends the supplied UTC minute timestamp. A serial fragment is written without a timestamp
- * until the complete record arrives.
+ * <p>A complete record invokes {@code onCompleteRecord} for the main-screen last-update display and
+ * appends the supplied UTC minute timestamp. A serial fragment is written without a timestamp until
+ * the complete record arrives.
  */
 final class SensorDataFileWriter {
 

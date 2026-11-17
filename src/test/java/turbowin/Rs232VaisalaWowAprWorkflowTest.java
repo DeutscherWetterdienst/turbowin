@@ -264,14 +264,15 @@ public class Rs232VaisalaWowAprWorkflowTest {
     main.barometer_above_sll = "20";
     main.barometer_instrument_correction = "0";
     mytemp.air_temp = "-20.0";
-    writeHmpRecord("30.0", "20.0", "10.0", "50.0",
-        new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
+    writeHmpRecord(
+        "30.0", "20.0", "10.0", "50.0", new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
     runPressureRecord("1000.0", "1.0", "3", "APR", new Date());
     assertEquals("1002.37", mybarometer.pressure_msl_corrected);
   }
 
   @Test
-  public void mainScreenUpdatesPressureAndTendencyFieldsAndReadsSecondInstrument() throws Exception {
+  public void mainScreenUpdatesPressureAndTendencyFieldsAndReadsSecondInstrument()
+      throws Exception {
     main.RS232_connection_mode_II = 1;
     main.jTextField9 = new JTextField();
     main.jTextField10 = new JTextField();
@@ -322,7 +323,8 @@ public class Rs232VaisalaWowAprWorkflowTest {
   }
 
   private void writeHmpRecord(
-      String airTemp, String wetBulb, String dewPoint, String rh, Date recordDate) throws Exception {
+      String airTemp, String wetBulb, String dewPoint, String rh, Date recordDate)
+      throws Exception {
     String record =
         padded(airTemp, 8)
             + " "
@@ -338,9 +340,7 @@ public class Rs232VaisalaWowAprWorkflowTest {
     Calendar fileDate = utcCalendar();
     fileDate.add(Calendar.MINUTE, -2);
     File file =
-        new File(
-            main.logs_dir,
-            "sensor_data_II_" + main.sdf3.format(fileDate.getTime()) + ".txt");
+        new File(main.logs_dir, "sensor_data_II_" + main.sdf3.format(fileDate.getTime()) + ".txt");
     Files.writeString(file.toPath(), record + System.lineSeparator());
   }
 

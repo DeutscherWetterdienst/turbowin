@@ -54,9 +54,7 @@ final class NumericInputWorkflow {
       String current = bypass.getDocument().getText(0, bypass.getDocument().getLength());
       String replacement = text == null ? "" : text.replace(',', '.');
       String candidate =
-          current.substring(0, offset)
-              + replacement
-              + current.substring(offset + length);
+          current.substring(0, offset) + replacement + current.substring(offset + length);
       if (valid(candidate)) {
         bypass.replace(offset, length, replacement, attrs);
       }

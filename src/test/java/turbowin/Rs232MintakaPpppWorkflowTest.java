@@ -133,7 +133,8 @@ public class Rs232MintakaPpppWorkflowTest {
   }
 
   private void runFormRecord(String pressure, boolean starX, String expected) throws Exception {
-    writeCurrentRecord(starRecord(starX ? starXPayload(pressure, 0) : starPayload(pressure), new Date()));
+    writeCurrentRecord(
+        starRecord(starX ? starXPayload(pressure, 0) : starPayload(pressure), new Date()));
     if (expected.isEmpty()) {
       runWorkflowWithDialog(false, starX);
     } else {
@@ -171,15 +172,13 @@ public class Rs232MintakaPpppWorkflowTest {
   private String runWorkflowWithDialog(boolean tray, boolean starX) throws Exception {
     DialogCloser dialogCloser = new DialogCloser();
     dialogCloser.start();
-    Thread.UncaughtExceptionHandler originalHandler =
-        Thread.getDefaultUncaughtExceptionHandler();
+    Thread.UncaughtExceptionHandler originalHandler = Thread.getDefaultUncaughtExceptionHandler();
     if (GraphicsEnvironment.isHeadless()) {
-      Thread.setDefaultUncaughtExceptionHandler(
-          (thread, error) -> {
-            if (!(error instanceof HeadlessException) && originalHandler != null) {
-              originalHandler.uncaughtException(thread, error);
-            }
-          });
+      Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+        if (!(error instanceof HeadlessException) && originalHandler != null) {
+          originalHandler.uncaughtException(thread, error);
+        }
+      });
     }
     try {
       Rs232MintakaPpppWorkflow.start(tray, starX);
@@ -213,9 +212,7 @@ public class Rs232MintakaPpppWorkflowTest {
   }
 
   private String starXPayload(String pressure, int age) {
-    return pressure
-        + ",1000.0,1.0,2, 52 00.0000N, 004 00.0000E,0,0,0,20.0,50,19.0,10.0,"
-        + age;
+    return pressure + ",1000.0,1.0,2, 52 00.0000N, 004 00.0000E,0,0,0,20.0,50,19.0,10.0," + age;
   }
 
   private String starRecord(String payload, Date recordDate) {
@@ -261,28 +258,27 @@ public class Rs232MintakaPpppWorkflowTest {
         return;
       }
       thread =
-          new Thread(
-              () -> {
-                long deadline = System.nanoTime() + 5_000_000_000L;
-                while (System.nanoTime() < deadline) {
-                  for (Window window : Window.getWindows()) {
-                    if (window instanceof JDialog && window.isVisible()) {
-                      if (((JDialog) window).getContentPane().getComponentCount() > 0) {
-                        String dialogMessage = dialogMessage(window);
-                        message = dialogMessage == null ? "dialog" : dialogMessage;
-                      }
-                      SwingUtilities.invokeLater(window::dispose);
-                      return;
-                    }
+          new Thread(() -> {
+            long deadline = System.nanoTime() + 5_000_000_000L;
+            while (System.nanoTime() < deadline) {
+              for (Window window : Window.getWindows()) {
+                if (window instanceof JDialog && window.isVisible()) {
+                  if (((JDialog) window).getContentPane().getComponentCount() > 0) {
+                    String dialogMessage = dialogMessage(window);
+                    message = dialogMessage == null ? "dialog" : dialogMessage;
                   }
-                  try {
-                    Thread.sleep(10);
-                  } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                  }
+                  SwingUtilities.invokeLater(window::dispose);
+                  return;
                 }
-              });
+              }
+              try {
+                Thread.sleep(10);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+              }
+            }
+          });
       thread.setDaemon(true);
       thread.start();
     }

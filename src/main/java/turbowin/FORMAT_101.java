@@ -123,9 +123,11 @@ public class FORMAT_101 {
     }
 
     try {
-      Files.createDirectories(Path.of(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR)));
+      Files.createDirectories(
+          Path.of(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR)));
       Files.createDirectories(Path.of(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_LOG_DIR)));
-      Files.createDirectories(Path.of(format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR)));
+      Files.createDirectories(
+          Path.of(format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR)));
       copyResourceToFile(
           main.FORMAT_101_ROOT_DIR + "/" + FORMAT_101_CONFIG_DIR + "/" + BUFR_TABLE,
           new File(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE)));
@@ -137,7 +139,6 @@ public class FORMAT_101 {
       return 1;
     }
   }
-
 
   private void copyResourceToFile(String resourcePath, File destination) throws IOException {
     // JAR resource paths must use "/"; File.separator does not work for resources on Windows.
@@ -240,8 +241,7 @@ public class FORMAT_101 {
   public void compress_101(String identifier) {
     Path pilotFile =
         Path.of(format101Path(main.FORMAT_101_ROOT_DIR, FORMAT_101_CONFIG_DIR, BUFR_TABLE));
-    Path tempDirectory =
-        Path.of(format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR));
+    Path tempDirectory = Path.of(format101Path(main.FORMAT_101_ROOT_DIR, main.FORMAT_101_TEMP_DIR));
     Path inputFile = tempDirectory.resolve(main.FORMAT_101_INPUT_FILE);
     Path outputFile = tempDirectory.resolve("HPK_" + main.FORMAT_101_INPUT_FILE);
 
@@ -251,8 +251,7 @@ public class FORMAT_101 {
           identifier.length() > 7 ? identifier.substring(0, 7) : identifier;
       String hpkLine =
           Encoder.encodeFromFormat101Txt(pilotFile, inputFile, effectiveIdentifier).toHpkLine();
-      Files.writeString(
-          outputFile, hpkLine + System.lineSeparator(), StandardCharsets.ISO_8859_1);
+      Files.writeString(outputFile, hpkLine + System.lineSeparator(), StandardCharsets.ISO_8859_1);
       System.out.println("Compression process finished with status: 0");
     } catch (IOException | RuntimeException ex) {
       System.out.println("format 101 Java compression error: " + ex);

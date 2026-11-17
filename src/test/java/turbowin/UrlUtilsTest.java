@@ -14,7 +14,8 @@ public class UrlUtilsTest {
   @Test
   public void encodesMailtoLineBreaksAndSpaces() {
     assertEquals(
-        "Observation%3A%2012%B0C%20clear%0ANext", UrlUtils.urlEncode("Observation: 12°C clear\nNext"));
+        "Observation%3A%2012%B0C%20clear%0ANext",
+        UrlUtils.urlEncode("Observation: 12°C clear\nNext"));
   }
 
   @Test

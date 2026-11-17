@@ -16,8 +16,8 @@ package turbowin;
  * characteristic code, field 4 is latitude, field 5 is longitude, field 6 is true course, field 7
  * is speed in knots, and field 8 is elevation in meters. StarX fields 9 through 12 are air
  * temperature, relative humidity (0–100), wet-bulb temperature, and dew point; field 13 is
- * observation age in seconds. Latitude and longitude use {@code ddd mm.mmmm[N|S]} and
- * {@code ddd mm.mmmm[E|W]} respectively. Non-StarX records use observation age {@code 0}.
+ * observation age in seconds. Latitude and longitude use {@code ddd mm.mmmm[N|S]} and {@code ddd
+ * mm.mmmm[E|W]} respectively. Non-StarX records use observation age {@code 0}.
  */
 final class MintakaStarRecordFieldsParser {
 

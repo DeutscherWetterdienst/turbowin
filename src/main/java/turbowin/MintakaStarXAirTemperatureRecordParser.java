@@ -9,9 +9,9 @@ import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
  * pressure tendency, WMO tendency characteristic code, latitude, longitude, true course, speed
  * (knots), elevation (meters), temperature (degrees Celsius), relative humidity (0–100), wet-bulb
  * temperature (degrees Celsius), dew point (degrees Celsius), and observation age (seconds),
- * followed by {@code *checksum}. Latitude and longitude use {@code ddd mm.mmmm[N|S]} and
- * {@code ddd mm.mmmm[E|W]} respectively. The parser extracts the temperature field and accepts
- * observation ages from 0 through {@link main_RS232_RS422#MAX_AGE_STARX_OBS_DATA} seconds.
+ * followed by {@code *checksum}. Latitude and longitude use {@code ddd mm.mmmm[N|S]} and {@code ddd
+ * mm.mmmm[E|W]} respectively. The parser extracts the temperature field and accepts observation
+ * ages from 0 through {@link main_RS232_RS422#MAX_AGE_STARX_OBS_DATA} seconds.
  */
 final class MintakaStarXAirTemperatureRecordParser {
 
@@ -89,8 +89,7 @@ final class MintakaStarXAirTemperatureRecordParser {
       return Integer.parseInt(observationAge.trim());
     } catch (NumberFormatException exception) {
       // Preserve the diagnostic emitted by the original StarX workflow for malformed ages.
-      System.out.println(
-          "--- Read_Sensor_Data_Files_For_Air_Temp_Mintaka_StarX() " + exception);
+      System.out.println("--- Read_Sensor_Data_Files_For_Air_Temp_Mintaka_StarX() " + exception);
       return AGE_NOT_OK;
     }
   }

@@ -101,8 +101,7 @@ public class Rs232GpsNmeaCogSogWorkflowTest {
 
   @Test
   public void format101AndFm13UseTheirConfiguredSpeedIntervals() throws Exception {
-    double[] oneNauticalMileEast =
-        new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)};
+    double[] oneNauticalMileEast = new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)};
 
     Rs232GpsNmeaCogSogWorkflow.start("UPDATE_MINUTE", oneNauticalMileEast);
     waitFor(() -> "6.0".equals(myposition.speed));
@@ -196,15 +195,14 @@ public class Rs232GpsNmeaCogSogWorkflowTest {
                     + File.separator
                     + SystemLogWriterWorkflow.logFileName(main.sdf_tsl_1.format(new Date())))
             .toPath();
-    waitFor(
-        () -> {
-          try {
-            return Files.exists(logFile)
-                && Files.readString(logFile, StandardCharsets.UTF_8).contains(expected);
-          } catch (Exception ex) {
-            return false;
-          }
-        });
+    waitFor(() -> {
+      try {
+        return Files.exists(logFile)
+            && Files.readString(logFile, StandardCharsets.UTF_8).contains(expected);
+      } catch (Exception ex) {
+        return false;
+      }
+    });
   }
 
   private static double longitudeForTenMinuteKnots(double knots) {

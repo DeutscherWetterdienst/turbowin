@@ -3,9 +3,8 @@ package turbowin;
 import java.util.function.Consumer;
 
 /**
- * Handles the shared completion path for an observation with no data.
- * Empty observations are reset and reported to the system log, but intentionally not written to
- * the IMMT observation log.
+ * Handles the shared completion path for an observation with no data. Empty observations are reset
+ * and reported to the system log, but intentionally not written to the IMMT observation log.
  */
 final class ObservationEmailEmptyObservationHandler {
 

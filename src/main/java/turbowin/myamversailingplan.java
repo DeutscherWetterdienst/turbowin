@@ -1254,7 +1254,8 @@ public final class myamversailingplan extends javax.swing.JFrame {
 
     jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-    jLabel41.setFont(SwingUiUtils.uiFont(java.awt.Font.BOLD, SwingUiUtils.UI_FONT_MEDIUM)); // NOI18N
+    jLabel41.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.BOLD, SwingUiUtils.UI_FONT_MEDIUM)); // NOI18N
     jLabel41.setText("Remarks*");
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);

@@ -180,15 +180,14 @@ public class ConfigurationReadWorkflowTest {
     CountDownLatch completed = new CountDownLatch(1);
     List<String> notices = new ArrayList<>();
     AtomicBoolean notifiedOnEdt = new AtomicBoolean();
-    SwingUtilities.invokeAndWait(
-        () ->
-            ConfigurationReadWorkflow.read(
-                completed::countDown,
-                message -> {},
-                message -> {
-                  notifiedOnEdt.set(SwingUtilities.isEventDispatchThread());
-                  notices.add(message);
-                }));
+    SwingUtilities.invokeAndWait(() ->
+        ConfigurationReadWorkflow.read(
+            completed::countDown,
+            message -> {},
+            message -> {
+              notifiedOnEdt.set(SwingUtilities.isEventDispatchThread());
+              notices.add(message);
+            }));
     assertTrue(completed.await(5, TimeUnit.SECONDS));
     assertEquals("Recovered ship", main.ship_name);
     assertEquals(1, notices.size());
@@ -201,14 +200,13 @@ public class ConfigurationReadWorkflowTest {
     List<String> messages = new ArrayList<>();
     CountDownLatch completed = new CountDownLatch(1);
     AtomicBoolean completedOnEdt = new AtomicBoolean();
-    SwingUtilities.invokeAndWait(
-        () ->
-            ConfigurationReadWorkflow.read(
-                () -> {
-                  completedOnEdt.set(SwingUtilities.isEventDispatchThread());
-                  completed.countDown();
-                },
-                messages::add));
+    SwingUtilities.invokeAndWait(() ->
+        ConfigurationReadWorkflow.read(
+            () -> {
+              completedOnEdt.set(SwingUtilities.isEventDispatchThread());
+              completed.countDown();
+            },
+            messages::add));
     assertTrue("Startup completion timed out", completed.await(5, TimeUnit.SECONDS));
     SwingUtilities.invokeAndWait(() -> {});
     assertTrue("Startup must complete on the EDT", completedOnEdt.get());

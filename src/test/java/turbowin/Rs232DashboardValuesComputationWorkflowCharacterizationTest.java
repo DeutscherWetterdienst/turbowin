@@ -185,7 +185,8 @@ public class Rs232DashboardValuesComputationWorkflowCharacterizationTest {
 
     assertEquals(1005.5, main_RS232_RS422.dashboard_double_last_update_record_pressure_ic, 0.0);
     assertEquals(7.7, main_RS232_RS422.dashboard_double_last_update_record_ppp, 0.0);
-    assertEquals("before-empty-age", main_RS232_RS422.dashboard_string_last_update_record_date_time);
+    assertEquals(
+        "before-empty-age", main_RS232_RS422.dashboard_string_last_update_record_date_time);
     assertEquals("1004.00", main.sensor_data_record_obs_pressure);
     assertFalse(output.toString().contains("NumberFormatException"));
   }

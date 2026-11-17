@@ -393,100 +393,100 @@ final class Rs232MintakaWowAprWorkflow {
                     error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
                     laatste_record = null;
                   } else {
-                  // pressure (uncorrected at sensor height)
-                  //
+                    // pressure (uncorrected at sensor height)
+                    //
                     local_sensor_data_record_obs_pressure = commonFields.pressure;
 
                     if (destination.equals("MAIN_SCREEN") == false) {
-                    System.out.println(
-                        "--- sensor data record, raw uncorrected pressure: "
-                            + local_sensor_data_record_obs_pressure);
+                      System.out.println(
+                          "--- sensor data record, raw uncorrected pressure: "
+                              + local_sensor_data_record_obs_pressure);
                     }
 
-                  // ppp (3hr pressure tendency)
-                  //
+                    // ppp (3hr pressure tendency)
+                    //
                     local_sensor_data_record_obs_ppp = commonFields.pressureTendency;
                     if (destination.equals("MAIN_SCREEN") == false) {
-                    System.out.println(
-                        "--- sensor data record, 3hr pressure tendency (ppp): "
-                            + local_sensor_data_record_obs_ppp);
+                      System.out.println(
+                          "--- sensor data record, 3hr pressure tendency (ppp): "
+                              + local_sensor_data_record_obs_ppp);
                     }
 
-                  // a (3hr pressure tendency characteristic; WMO code)
-                  //
+                    // a (3hr pressure tendency characteristic; WMO code)
+                    //
                     local_sensor_data_record_obs_a = commonFields.tendencyCharacteristic;
                     if (destination.equals("MAIN_SCREEN") == false) {
-                    System.out.println(
-                        "--- sensor data record, 3hr pressure characteristic (a): "
-                            + local_sensor_data_record_obs_a);
+                      System.out.println(
+                          "--- sensor data record, 3hr pressure characteristic (a): "
+                              + local_sensor_data_record_obs_a);
                     }
 
-                  // rounding eg: 998.19 -> 998.2
-                  //        double digitale_sensor_waarde =
-                  // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) +
-                  // HOOGTE_CORRECTIE;
-                  //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) /
-                  // 10.0d;  // bv 998.19 -> 998.2
+                    // rounding eg: 998.19 -> 998.2
+                    //        double digitale_sensor_waarde =
+                    // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) +
+                    // HOOGTE_CORRECTIE;
+                    //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) /
+                    // 10.0d;  // bv 998.19 -> 998.2
 
-                  // GPS
-                  //
+                    // GPS
+                    //
                     GPS_latitude = commonFields.latitude;
                     GPS_longitude = commonFields.longitude;
                     local_obs_age = commonFields.observationAge;
 
                     if (destination.equals("MAIN_SCREEN") == false) {
-                    System.out.println("--- sensor data record, GPS latitude: " + GPS_latitude);
-                    System.out.println("--- sensor data record, GPS longitude: " + GPS_longitude);
+                      System.out.println("--- sensor data record, GPS latitude: " + GPS_latitude);
+                      System.out.println("--- sensor data record, GPS longitude: " + GPS_longitude);
                     }
 
                     if (StarX == true) {
-                    MintakaStarXObservationFields fields =
-                        MintakaStarXObservationFieldsParser.parse(laatste_record);
-                    if (fields != null) {
-                      GPS_latitude = fields.latitude;
-                      GPS_longitude = fields.longitude;
-                      local_sensor_data_record_obs_temp = fields.airTemperature;
-                      local_sensor_data_record_obs_RH = fields.relativeHumidity;
-                      local_sensor_data_record_obs_wet_bulb = fields.wetBulbTemperature;
-                      local_sensor_data_record_obs_dew_point = fields.dewPoint;
-                      local_obs_age = fields.observationAge;
+                      MintakaStarXObservationFields fields =
+                          MintakaStarXObservationFieldsParser.parse(laatste_record);
+                      if (fields != null) {
+                        GPS_latitude = fields.latitude;
+                        GPS_longitude = fields.longitude;
+                        local_sensor_data_record_obs_temp = fields.airTemperature;
+                        local_sensor_data_record_obs_RH = fields.relativeHumidity;
+                        local_sensor_data_record_obs_wet_bulb = fields.wetBulbTemperature;
+                        local_sensor_data_record_obs_dew_point = fields.dewPoint;
+                        local_obs_age = fields.observationAge;
 
-                      if (!destination.equals("MAIN_SCREEN")) {
-                        System.out.println(
-                            "--- sensor data record, air temperature: "
-                                + local_sensor_data_record_obs_temp);
-                        System.out.println(
-                            "--- sensor data record, RH: " + local_sensor_data_record_obs_RH);
-                        System.out.println(
-                            "--- sensor data record, wet bulb: "
-                                + local_sensor_data_record_obs_wet_bulb);
-                        System.out.println(
-                            "--- sensor data record, dew point: "
-                                + local_sensor_data_record_obs_dew_point);
-                        System.out.println("--- sensor data record, obs age: " + local_obs_age);
-                      }
-
-                      int int_local_obs_age = AGE_NOT_OK;
-                      if (!local_obs_age.isEmpty() && local_obs_age.indexOf("*") == -1) {
-                        try {
-                          int_local_obs_age = Integer.parseInt(local_obs_age.trim());
-                        } catch (NumberFormatException e) {
-                          int_local_obs_age = AGE_NOT_OK;
+                        if (!destination.equals("MAIN_SCREEN")) {
                           System.out.println(
-                              "--- RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR() "
-                                  + e);
+                              "--- sensor data record, air temperature: "
+                                  + local_sensor_data_record_obs_temp);
+                          System.out.println(
+                              "--- sensor data record, RH: " + local_sensor_data_record_obs_RH);
+                          System.out.println(
+                              "--- sensor data record, wet bulb: "
+                                  + local_sensor_data_record_obs_wet_bulb);
+                          System.out.println(
+                              "--- sensor data record, dew point: "
+                                  + local_sensor_data_record_obs_dew_point);
+                          System.out.println("--- sensor data record, obs age: " + local_obs_age);
                         }
-                      }
 
-                      if (int_local_obs_age < 0
-                          || int_local_obs_age > main_RS232_RS422.MAX_AGE_STARX_OBS_DATA) {
-                        error_info = STRING_STARX_PART_OBSOLETE_ERROR;
+                        int int_local_obs_age = AGE_NOT_OK;
+                        if (!local_obs_age.isEmpty() && local_obs_age.indexOf("*") == -1) {
+                          try {
+                            int_local_obs_age = Integer.parseInt(local_obs_age.trim());
+                          } catch (NumberFormatException e) {
+                            int_local_obs_age = AGE_NOT_OK;
+                            System.out.println(
+                                "--- RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR() "
+                                    + e);
+                          }
+                        }
+
+                        if (int_local_obs_age < 0
+                            || int_local_obs_age > main_RS232_RS422.MAX_AGE_STARX_OBS_DATA) {
+                          error_info = STRING_STARX_PART_OBSOLETE_ERROR;
+                          laatste_record = null;
+                        }
+                      } else {
+                        error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
                         laatste_record = null;
                       }
-                    } else {
-                      error_info = STRING_PRESSURE_RECORD_FORMAT_ERROR;
-                      laatste_record = null;
-                    }
                     }
                   }
                 } // if (computed_checksum.equals(record_checksum))

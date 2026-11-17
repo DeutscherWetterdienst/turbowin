@@ -96,20 +96,18 @@ final class ApplicationShutdownWorkflow {
     indicator.setIndeterminate(true);
     content.add(indicator, BorderLayout.CENTER);
     JButton cancelExit = new JButton("Cancel exit");
-    cancelExit.addActionListener(
-        event -> {
-          progress.dispose();
-          cancel.run();
-        });
+    cancelExit.addActionListener(event -> {
+      progress.dispose();
+      cancel.run();
+    });
     content.add(cancelExit, BorderLayout.SOUTH);
     progress.setContentPane(content);
     progress.pack();
     progress.setLocationRelativeTo(owner);
-    ConfigurationWriteWorkflow.saveBeforeExit(
-        saved -> {
-          progress.dispose();
-          completed.accept(saved);
-        });
+    ConfigurationWriteWorkflow.saveBeforeExit(saved -> {
+      progress.dispose();
+      completed.accept(saved);
+    });
     // A modal Swing dialog keeps dispatching EDT events while preventing further UI edits.
     progress.setVisible(true);
   }

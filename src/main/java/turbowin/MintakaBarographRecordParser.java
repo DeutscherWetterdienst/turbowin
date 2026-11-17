@@ -6,8 +6,8 @@ import static turbowin.main_RS232_RS422.Mintaka_Star_Checksum;
  * Validates and extracts pressure values from historical Mintaka graph records.
  *
  * <p>The connection modes identify the record formats: 4 is Mintaka Duo, 5 is Mintaka Star over
- * USB/serial, 6 is Mintaka Star over WiFi/LAN, 7 is Mintaka StarX over USB/serial, and 8 is
- * Mintaka StarX over WiFi/LAN. The corresponding records contain 3, 8, and 13 commas.
+ * USB/serial, 6 is Mintaka Star over WiFi/LAN, 7 is Mintaka StarX over USB/serial, and 8 is Mintaka
+ * StarX over WiFi/LAN. The corresponding records contain 3, 8, and 13 commas.
  *
  * <p>StarX records are laid out as MSL pressure, local pressure, acceleration, latitude, longitude,
  * course, speed, elevation, air temperature, relative humidity, wet-bulb temperature, dew-point

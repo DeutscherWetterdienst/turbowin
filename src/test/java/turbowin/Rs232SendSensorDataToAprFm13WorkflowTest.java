@@ -68,8 +68,8 @@ public class Rs232SendSensorDataToAprFm13WorkflowTest {
     originalApr = main.APR;
     originalConnectionMode = main.RS232_connection_mode;
     originalResponseCode = main_RS232_RS422.APR_server_response_code;
-    replaceStaticTextFields(main.class, myposition.class, mybarometer.class, mybarograph.class,
-        mytemp.class);
+    replaceStaticTextFields(
+        main.class, myposition.class, mybarometer.class, mybarograph.class, mytemp.class);
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -201,14 +201,13 @@ public class Rs232SendSensorDataToAprFm13WorkflowTest {
 
   private void awaitImmtFile() throws Exception {
     waitFor(() -> Files.exists(immtFile()));
-    waitFor(
-        () -> {
-          try {
-            return Files.size(immtFile()) > 0;
-          } catch (Exception ex) {
-            return false;
-          }
-        });
+    waitFor(() -> {
+      try {
+        return Files.size(immtFile()) > 0;
+      } catch (Exception ex) {
+        return false;
+      }
+    });
     assertTrue(Files.readString(immtFile(), StandardCharsets.UTF_8).length() > 0);
   }
 

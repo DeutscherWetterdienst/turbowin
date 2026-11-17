@@ -79,22 +79,22 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     try {
       CaptainLogReadWorkflow.start(owner);
 
-      awaitCondition(
-          () ->
-              "Ada".equals(mycaptain.captain_data[0][0])
-                  && "".equals(mycaptain.captain_data[0][1])
-                  && "12".equals(mycaptain.captain_data[0][2])
-                  && "-".equals(mycaptain.captain_data[0][3])
-                  && " ".equals(mycaptain.captain_data[0][4])
-                  && "Incomplete".equals(mycaptain.captain_data[1][0])
-                  && "".equals(mycaptain.captain_data[1][1]));
+      awaitCondition(() ->
+          "Ada".equals(mycaptain.captain_data[0][0])
+              && "".equals(mycaptain.captain_data[0][1])
+              && "12".equals(mycaptain.captain_data[0][2])
+              && "-".equals(mycaptain.captain_data[0][3])
+              && " ".equals(mycaptain.captain_data[0][4])
+              && "Incomplete".equals(mycaptain.captain_data[1][0])
+              && "".equals(mycaptain.captain_data[1][1]));
     } finally {
       owner.dispose();
     }
   }
 
   @Test
-  public void observerReaderParsesFieldsIncludingEmptyFieldsAndMissingSeparators() throws Exception {
+  public void observerReaderParsesFieldsIncludingEmptyFieldsAndMissingSeparators()
+      throws Exception {
     Path logsDirectory = temporaryFolder.newFolder("observer-reader-logs").toPath();
     main.logs_dir = logsDirectory.toString();
     Path logFile = logsDirectory.resolve(main.OBSERVER_LOG);
@@ -107,14 +107,13 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     try {
       ObserverLogReadWorkflow.start(owner);
 
-      awaitCondition(
-          () ->
-              "Bob".equals(myobserver.observer_data[0][0])
-                  && "".equals(myobserver.observer_data[0][1])
-                  && "7".equals(myobserver.observer_data[0][2])
-                  && "book".equals(myobserver.observer_data[0][3])
-                  && "Incomplete".equals(myobserver.observer_data[1][0])
-                  && "".equals(myobserver.observer_data[1][1]));
+      awaitCondition(() ->
+          "Bob".equals(myobserver.observer_data[0][0])
+              && "".equals(myobserver.observer_data[0][1])
+              && "7".equals(myobserver.observer_data[0][2])
+              && "book".equals(myobserver.observer_data[0][3])
+              && "Incomplete".equals(myobserver.observer_data[1][0])
+              && "".equals(myobserver.observer_data[1][1]));
     } finally {
       owner.dispose();
     }
@@ -135,11 +134,10 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     try {
       CaptainLogReadWorkflow.start(owner);
 
-      awaitCondition(
-          () ->
-              "Captain0".equals(mycaptain.captain_data[0][0])
-                  && ("Captain" + (mycaptain.CAPTAIN_ROWS - 1))
-                      .equals(mycaptain.captain_data[mycaptain.CAPTAIN_ROWS - 1][0]));
+      awaitCondition(() ->
+          "Captain0".equals(mycaptain.captain_data[0][0])
+              && ("Captain" + (mycaptain.CAPTAIN_ROWS - 1))
+                  .equals(mycaptain.captain_data[mycaptain.CAPTAIN_ROWS - 1][0]));
     } finally {
       owner.dispose();
     }
@@ -160,11 +158,10 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     try {
       ObserverLogReadWorkflow.start(owner);
 
-      awaitCondition(
-          () ->
-              "Observer0".equals(myobserver.observer_data[0][0])
-                  && ("Observer" + (myobserver.OBSERVER_ROWS - 1))
-                      .equals(myobserver.observer_data[myobserver.OBSERVER_ROWS - 1][0]));
+      awaitCondition(() ->
+          "Observer0".equals(myobserver.observer_data[0][0])
+              && ("Observer" + (myobserver.OBSERVER_ROWS - 1))
+                  .equals(myobserver.observer_data[myobserver.OBSERVER_ROWS - 1][0]));
     } finally {
       owner.dispose();
     }

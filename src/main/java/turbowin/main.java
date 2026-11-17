@@ -2238,7 +2238,8 @@ public class main extends javax.swing.JFrame {
     jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel4.setText("Turbo+");
 
-    jLabel39.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_STANDARD)); // NOI18N
+    jLabel39.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_STANDARD)); // NOI18N
     jLabel39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel39.setText(
         "--- adding data: input menu, popup menu, toolbar icons or click on the text labels or fields ---");
@@ -2247,7 +2248,8 @@ public class main extends javax.swing.JFrame {
     jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel6.setText("-");
 
-    jLabel41.setFont(SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
+    jLabel41.setFont(
+        SwingUiUtils.uiFont(java.awt.Font.PLAIN, SwingUiUtils.UI_FONT_SMALL)); // NOI18N
     jLabel41.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jLabel41.setText("-");
 
@@ -4603,7 +4605,8 @@ public class main extends javax.swing.JFrame {
 
   void Themes_1_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_1_actionPerformed
-    // Nimbus default color values: https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html
+    // Nimbus default color values:
+    // https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/_nimbusDefaults.html
     ThemeWorkflow.apply(
         this,
         THEME_NIMBUS_DAY,

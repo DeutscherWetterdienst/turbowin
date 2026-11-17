@@ -3,9 +3,9 @@ package turbowin;
 /**
  * Formats corrected pressure values as the four-character IMMT PPPP code.
  *
- * <p>The corrected pressure is in hPa, and PPPP encodes it in tenths of hPa without the
- * thousands digit. Therefore, rounded values at or above 10000 have 10000 removed before the
- * result is padded with leading zeroes to exactly four characters.
+ * <p>The corrected pressure is in hPa, and PPPP encodes it in tenths of hPa without the thousands
+ * digit. Therefore, rounded values at or above 10000 have 10000 removed before the result is padded
+ * with leading zeroes to exactly four characters.
  */
 final class PressureCodeFormatter {
 

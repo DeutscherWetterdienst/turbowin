@@ -172,26 +172,23 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
             starX ? starXPayload("1000.0", ppp, a, "0") : starPayload("1000.0", ppp, a),
             new Date()));
     Rs232MintakaApppDataFilesWorkflow.start(starX);
-    waitFor(
-        () ->
-            main.obs_file_datum_tijd == null
-                && main.sensor_data_record_obs_ppp.equals(ppp)
-                && main.sensor_data_record_obs_a.equals(a));
+    waitFor(() ->
+        main.obs_file_datum_tijd == null
+            && main.sensor_data_record_obs_ppp.equals(ppp)
+            && main.sensor_data_record_obs_a.equals(a));
     flushEdt();
   }
 
   private void runRejectedRecord(String record, boolean starX) throws Exception {
     DialogCloser dialogCloser = new DialogCloser();
     dialogCloser.start();
-    Thread.UncaughtExceptionHandler originalHandler =
-        Thread.getDefaultUncaughtExceptionHandler();
+    Thread.UncaughtExceptionHandler originalHandler = Thread.getDefaultUncaughtExceptionHandler();
     if (GraphicsEnvironment.isHeadless()) {
-      Thread.setDefaultUncaughtExceptionHandler(
-          (thread, error) -> {
-            if (!(error instanceof HeadlessException) && originalHandler != null) {
-              originalHandler.uncaughtException(thread, error);
-            }
-          });
+      Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+        if (!(error instanceof HeadlessException) && originalHandler != null) {
+          originalHandler.uncaughtException(thread, error);
+        }
+      });
     }
     try {
       main.obs_file_datum_tijd = new GregorianCalendar();
@@ -326,24 +323,23 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
         return;
       }
       thread =
-          new Thread(
-              () -> {
-                long deadline = System.nanoTime() + 5_000_000_000L;
-                while (System.nanoTime() < deadline) {
-                  for (Window window : Window.getWindows()) {
-                    if (window instanceof JDialog && window.isVisible()) {
-                      SwingUtilities.invokeLater(window::dispose);
-                      return;
-                    }
-                  }
-                  try {
-                    Thread.sleep(10);
-                  } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                  }
+          new Thread(() -> {
+            long deadline = System.nanoTime() + 5_000_000_000L;
+            while (System.nanoTime() < deadline) {
+              for (Window window : Window.getWindows()) {
+                if (window instanceof JDialog && window.isVisible()) {
+                  SwingUtilities.invokeLater(window::dispose);
+                  return;
                 }
-              });
+              }
+              try {
+                Thread.sleep(10);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+              }
+            }
+          });
       thread.setDaemon(true);
       thread.start();
     }

@@ -167,8 +167,9 @@ public class RS232_vaisala {
     Rs232VaisalaHmp155AprWorkflow.start(destination, retry);
   }
 
-  public static String RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument(
-      final String destination) {
+  public static String
+      RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument(
+          final String destination) {
     // called from: - RS232_Vaisala_Read_And_Send_Sensor_Data_For_WOW_APR()
     //              - RS232_Mintaka_Duo_Read_And_Send_Sensor_Data_For_WOW_APR()
 

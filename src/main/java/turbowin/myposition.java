@@ -1389,10 +1389,9 @@ public final class myposition extends javax.swing.JFrame {
 
       /* put ship position on a leaflet map (but only if an internet connection is available (and appropriate checkbox ticked and a logs_dir is available */
       if ((checks_ok == true) && (jCheckBox1.isSelected() == true)) {
-        PositionLeafletMapWorkflow.start(
-            () ->
-                Position_In_leaflet_Maps(
-                    main.logs_dir + java.io.File.separator + main.LEAFLET_MAPS_HTML_FILE));
+        PositionLeafletMapWorkflow.start(() ->
+            Position_In_leaflet_Maps(
+                main.logs_dir + java.io.File.separator + main.LEAFLET_MAPS_HTML_FILE));
       } // if ( (checks_ok == true) && (jCheckBox1.isSelected() == true) )
 
     } // if (main.RS232_connection_mode != 3) etc.

@@ -151,12 +151,12 @@ final class Rs232MintakaStarXObservationWorkflow {
                     local_dew_point = fields.dewPoint;
                     local_obs_age = fields.observationAge;
 
-                  // rounding eg: 998.19 -> 998.2
-                  //        double digitale_sensor_waarde =
-                  // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) +
-                  // HOOGTE_CORRECTIE;
-                  //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) /
-                  // 10.0d;  // bv 998.19 -> 998.2
+                    // rounding eg: 998.19 -> 998.2
+                    //        double digitale_sensor_waarde =
+                    // Double.parseDouble(RS232_view.sensor_waarde_array[i].trim()) +
+                    // HOOGTE_CORRECTIE;
+                    //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) /
+                    // 10.0d;  // bv 998.19 -> 998.2
 
                     System.out.println(
                         "--- sensor data record, air temp for obs: " + mytemp.air_temp);

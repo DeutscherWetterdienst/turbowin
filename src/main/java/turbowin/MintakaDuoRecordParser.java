@@ -3,11 +3,11 @@ package turbowin;
 /**
  * Validates and extracts fields from Mintaka Duo records.
  *
- * <p>The saved layout is {@code pressure,pressure,pressureTendency,characteristic*checksum} followed
- * by a 12-character {@code YYYYMMDDHHmm} timestamp. The legacy minimum-length guard is a
+ * <p>The saved layout is {@code pressure,pressure,pressureTendency,characteristic*checksum}
+ * followed by a 12-character {@code YYYYMMDDHHmm} timestamp. The legacy minimum-length guard is a
  * conservative check for that timestamp, the three required commas, and a minimum pressure
- * fragment. The characteristic immediately after the third comma is one character; it can be
- * {@code *} when no characteristic is present and the caller handles that case.
+ * fragment. The characteristic immediately after the third comma is one character; it can be {@code
+ * *} when no characteristic is present and the caller handles that case.
  *
  * <p>This shared parser returns {@code null} for malformed records. {@link #failureReason(String)}
  * preserves the legacy minimum-length and comma-count distinctions for the shared reader's

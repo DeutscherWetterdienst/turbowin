@@ -150,12 +150,10 @@ public class Rs232DashboardValuesComputationWorkflowTest {
 
   private void startAndWaitForPressure(double expectedPressure, String record) throws Exception {
     startComputation(record);
-    waitFor(
-        () ->
-            Math.abs(
-                    main_RS232_RS422.dashboard_double_last_update_record_pressure_ic
-                        - expectedPressure)
-                < 0.001);
+    waitFor(() ->
+        Math.abs(
+                main_RS232_RS422.dashboard_double_last_update_record_pressure_ic - expectedPressure)
+            < 0.001);
     flushEdt();
   }
 
@@ -204,8 +202,7 @@ public class Rs232DashboardValuesComputationWorkflowTest {
   private void assertExistingValues() {
     assertEquals(1012.3, main_RS232_RS422.dashboard_double_last_update_record_pressure_ic, 0.001);
     assertEquals(2.4, main_RS232_RS422.dashboard_double_last_update_record_ppp, 0.001);
-    assertEquals(
-        "previous", main_RS232_RS422.dashboard_string_last_update_record_date_time);
+    assertEquals("previous", main_RS232_RS422.dashboard_string_last_update_record_date_time);
   }
 
   private void assertExistingValuesAsEmpty() {

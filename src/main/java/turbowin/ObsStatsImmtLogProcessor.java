@@ -70,7 +70,8 @@ final class ObsStatsImmtLogProcessor {
         boolean observerNameFound = false;
 
         if (obs.length() > main.IMMT_5_POSITION_OBSERVER - 1) {
-          // IMMT-5 observer data starts at fixed position 173: surname;initials;rank;discharge-book number.
+          // IMMT-5 observer data starts at fixed position 173: surname;initials;rank;discharge-book
+          // number.
           observerName = obs.substring(main.IMMT_5_POSITION_OBSERVER);
 
           for (int i = 0; i < Obs_Stats_view.MAX_NUMBER_OBSERVERS_TEST; i++) {
