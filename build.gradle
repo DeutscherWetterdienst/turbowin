@@ -45,6 +45,8 @@ tasks.named('processResources') {
 }
 
 jar {
+    // Offline map resources are installed as files in the runtime image.
+    exclude 'turbowin/OSM/**'
     manifest {
         attributes(
             'Main-Class': 'turbowin.main'
@@ -152,6 +154,10 @@ tasks.jlink.doLast {
     copy {
         from('src/main/resources/turbowin/help_files')
         into file("$buildDir/image/help")
+    }
+    copy {
+        from('src/main/resources/turbowin/OSM')
+        into file("$buildDir/image/OSM")
     }
 }
 

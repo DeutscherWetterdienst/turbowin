@@ -3,15 +3,50 @@ package turbowin;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class OsmMapHtmlCharacterizationTest {
+
+  @Rule public TemporaryFolder temporary = new TemporaryFolder();
+
+  @Test
+  public void installedOfflineAssetsAreReferencedWithoutCopying() throws Exception {
+    Path runtime = temporary.newFolder("runtime & space").toPath();
+    Path assets = Files.createDirectory(runtime.resolve("OSM"));
+    Files.createFile(assets.resolve("leaflet.js"));
+    Files.createFile(assets.resolve("leaflet.css"));
+    Files.createFile(assets.resolve("marker_red_meet.png"));
+    Files.createDirectory(assets.resolve("OSMPublicTransport"));
+    Path logs = temporary.newFolder("logs").toPath();
+    String previousHome = System.getProperty("java.home");
+    String previousLogs = main.logs_dir;
+    try {
+      System.setProperty("java.home", runtime.toString());
+      main.logs_dir = logs.toString();
+      assertTrue(new OSM().OSM_control_center());
+      assertTrue(Files.isDirectory(logs.resolve("OSM")));
+      assertFalse(Files.exists(logs.resolve("OSM/leaflet.js")));
+      StringWriter result = new StringWriter();
+      try (BufferedWriter writer = new BufferedWriter(result)) {
+        OsmMapHtmlWriter.writeOfflineShell(writer, "map", "var iconOptions = {};");
+      }
+      assertTrue(result.toString().contains(assets.toUri().toASCIIString().replace("&", "&amp;")));
+    } finally {
+      System.setProperty("java.home", previousHome);
+      main.logs_dir = previousLogs;
+    }
+  }
 
   @Test
   public void writesOnlineObservationMapShell() throws Exception {

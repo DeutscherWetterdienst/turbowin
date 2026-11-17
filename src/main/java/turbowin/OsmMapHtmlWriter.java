@@ -2,6 +2,7 @@ package turbowin;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 
 /** Writes the shared Leaflet shell used by the OSM map pages. */
 final class OsmMapHtmlWriter {
@@ -80,6 +81,13 @@ final class OsmMapHtmlWriter {
     out.write("<html>");
     out.newLine();
     out.write("<head>");
+    out.newLine();
+    Path assets = OsmMapPath.assets();
+    if (assets == null) {
+      throw new IOException("Offline map resources are missing");
+    }
+    String uri = assets.toUri().toASCIIString().replace("&", "&amp;");
+    out.write("  <base href=\"" + uri + "\" />");
     out.newLine();
     out.newLine();
     out.write("  <title>" + title + "</title>");

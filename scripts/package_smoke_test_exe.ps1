@@ -30,6 +30,9 @@ function Assert-Installed {
     foreach ($path in @("app", "runtime")) {
         if (-not (Test-Path (Join-Path $installDirectory $path))) { throw "Installed support directory is missing: $path" }
     }
+    foreach ($path in @("runtime\OSM\leaflet.js", "runtime\OSM\OSMPublicTransport\2\0\0.png")) {
+        if (-not (Test-Path (Join-Path $installDirectory $path) -PathType Leaf)) { throw "Installed map resource is missing: $path" }
+    }
     $entry = Get-TurboWinUninstallEntry
     if (-not $entry) { throw "TurboWin is missing from the Windows uninstall registry" }
     if ($entry.InstallLocation.TrimEnd('\') -ne $installDirectory.TrimEnd('\')) {

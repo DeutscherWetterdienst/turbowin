@@ -22,7 +22,7 @@ final class OsmMapWorkflow {
       new SwingWorker<Boolean, Void>() {
         @Override
         protected Boolean doInBackground() throws Exception {
-          // Check for OSM files and copy missing resources from the application JAR before display.
+          // Prepare the output directory and verify that offline map resources are available.
           return osm_class.OSM_control_center();
         }
 

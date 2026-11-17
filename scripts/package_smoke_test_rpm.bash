@@ -57,6 +57,8 @@ assert_installed() {
   test -x "$app_dir/bin/TurboWin"
   test -x "$app_dir/bin/TurboWin.run"
   test -f "$app_dir/lib/app/TurboWin.run.cfg"
+  test -f "$app_dir/lib/runtime/OSM/leaflet.js"
+  test -f "$app_dir/lib/runtime/OSM/OSMPublicTransport/2/0/0.png"
   rpm -ql "$package_name" >"$diag_dir/installed-files.log"
 }
 
