@@ -1773,7 +1773,7 @@ public final class mystationdata extends javax.swing.JFrame {
 
       /* message */
       // info = "Changes will take effect inmediatelly. Not necessary to restart";
-      info = "Changes will take full effect after a TurboWin restart";
+      info = "Changes have been saved and are active immediately";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
 

@@ -1022,7 +1022,7 @@ public final class myemailsettings extends javax.swing.JFrame {
     // pop-up info message
     //
     // String info = "Changes will take effect inmediatelly. Not necessary to restart";
-    String info = "Changes will take full effect after a " + main.APPLICATION_NAME + " restart";
+    String info = "Changes have been saved and are active immediately";
     JOptionPane.showMessageDialog(
         null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
 

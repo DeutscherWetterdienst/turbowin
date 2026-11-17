@@ -422,7 +422,7 @@ public final class myobsformat extends javax.swing.JFrame {
       main.schrijf_configuratie_regels();
 
       /* message */
-      String info = "Changes will take full effect after a TurboWin restart";
+      String info = "Changes have been saved and are active immediately";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
 

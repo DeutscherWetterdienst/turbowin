@@ -310,7 +310,7 @@ public final class myserversettings extends javax.swing.JFrame {
     // String info = "Changes will take effect inmediatelly. Not necessary to restart";
     // JOptionPane.showMessageDialog(null, info, main.APPLICATION_NAME + " info",
     // JOptionPane.INFORMATION_MESSAGE);
-    String info = "Changes will take full effect after a " + main.APPLICATION_NAME + " restart";
+    String info = "Changes have been saved and are active immediately";
     JOptionPane.showMessageDialog(
         null, info, main.APPLICATION_NAME + " info", JOptionPane.INFORMATION_MESSAGE);
 
