@@ -145,6 +145,7 @@ public class Jakarta_Email {
     props.clear();
     props.put("mail.smtp.timeout", "60000"); // 1000 = 1 sec; 60000 = 1 min
     props.put("mail.smtp.connectiontimeout", "60000");
+    props.put("mail.smtp.writetimeout", "60000");
     props.put("mail.smtp.charset", "UTF-8");
     props.put(
         "mail.from",
