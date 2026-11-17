@@ -33,16 +33,17 @@ public class JakartaEmailLocalSmtpTest {
                   "",
                   "recipient@example.org",
                   "sender@example.org",
-                  "FM13 subject",
-                  "FM13 body",
+                  "FM13 subject äöü",
+                  "FM13 body – Prüfung",
                   "null",
                   Integer.toString(server.port()),
                   "null");
 
       assertEquals(0, status);
       server.awaitMessage();
-      assertTrue(server.message().contains("Subject: FM13 subject"));
+      assertTrue(server.message().contains("Subject: =?UTF-8?"));
       assertTrue(server.message().contains("FM13 body"));
+      assertTrue(server.message().contains("charset=UTF-8"));
       assertTrue(server.message().contains("From: sender@example.org"));
       assertTrue(server.message().contains("To: recipient@example.org"));
     }

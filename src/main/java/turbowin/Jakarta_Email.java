@@ -98,6 +98,7 @@ public class Jakarta_Email {
     props.clear();
     props.put("mail.smtp.timeout", "60000"); // 1000 = 1 sec; 60000 = 1 min
     props.put("mail.smtp.connectiontimeout", "60000");
+    props.put("mail.smtp.charset", "UTF-8");
     props.put(
         "mail.from",
         send_from); // The return email address of the current user, used by the InternetAddress
@@ -296,7 +297,7 @@ public class Jakarta_Email {
               Message.RecipientType.CC,
               InternetAddress.parse(send_cc, false)); // set cc email field
         }
-        msg.setSubject(subject); // set email subject field
+        msg.setSubject(subject, "UTF-8"); // set email subject field
         msg.setSentDate(new Date());
         // If the desired charset is known, you can use
         // setText(text, charset)
@@ -321,7 +322,7 @@ public class Jakarta_Email {
             // Attach the specified file.
             // We need a multipart message to hold the attachment.
             MimeBodyPart mbp1 = new MimeBodyPart();
-            mbp1.setText(body);
+            mbp1.setText(body, "UTF-8");
 
             MimeBodyPart mbp2 = new MimeBodyPart();
             try {
@@ -343,7 +344,7 @@ public class Jakarta_Email {
           }
         } // if (attachment.equals("yes"))
         else {
-          msg.setText(body);
+          msg.setText(body, "UTF-8");
         }
 
         // send
@@ -527,7 +528,7 @@ public class Jakarta_Email {
         msg.setFrom(new InternetAddress(send_from)); // set From email field
         msg.setRecipients(
             Message.RecipientType.TO, InternetAddress.parse(send_to)); // set To email field
-        msg.setSubject(subject); // set email subject field
+        msg.setSubject(subject, "UTF-8"); // set email subject field
         msg.setSentDate(new Date());
 
         if (attachment.equals("yes")) {
@@ -546,7 +547,7 @@ public class Jakarta_Email {
             // Attach the specified file.
             // We need a multipart message to hold the attachment.
             MimeBodyPart mbp1 = new MimeBodyPart();
-            mbp1.setText(body);
+            mbp1.setText(body, "UTF-8");
 
             MimeBodyPart mbp2 = new MimeBodyPart();
             try {
@@ -569,7 +570,7 @@ public class Jakarta_Email {
           }
         } // if (attachment.equals("yes"))
         else {
-          msg.setText(body);
+          msg.setText(body, "UTF-8");
         }
 
         // send
