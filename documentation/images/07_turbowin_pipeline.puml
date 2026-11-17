@@ -1,11 +1,6 @@
 @startuml
 title TurboWin CI tasks (GitHub Actions and GitLab)
 start
-if (Manual JAR request?) then (yes)
-  :Linux amd64 / Java 25;
-  :task_linux.bash jar;
-  :Upload build/libs/;
-else (push / pull request)
   fork
     :Linux amd64 test job;
     :Install X11 / Openbox / ffmpeg;
@@ -37,10 +32,9 @@ else (push / pull request)
     :task_windows.ps1\nDownload JDK / WiX\njlink + jpackage;
     :Upload build/jpackage/;
   end fork
-endif
 note right
-  GitHub: separate workflows; JAR uses workflow_dispatch.
-  GitLab: one build stage; JAR is manual.
+  GitHub: separate workflows.
+  GitLab: one build stage.
   Email build settings required; dummy fallbacks only in GitHub test.
   No signing or release-publication stage is implemented.
 end note

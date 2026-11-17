@@ -8,8 +8,10 @@ is implemented in Java and no native Format 101 helper is packaged with the appl
 ## Runtime and writable data
 
 The build requires a Java 25 JDK. `jlink` creates the runtime image used by `jpackage` installers,
-so those installations do not require a separately installed Java runtime. A standalone JAR is
-not the same deployment: it does not bundle a runtime or all dependency JARs.
+so those installations do not require a separately installed Java runtime. The intermediate JAR
+does not bundle the runtime, all dependencies, or the offline map files and is not a deployment.
+The runtime image contains the offline map files alongside the help files; generated map pages are
+written to the configured logs directory and reference those installed files.
 
 Current default writable roots from
 [StartupEnvironment](../src/main/java/turbowin/StartupEnvironment.java) are:
@@ -86,7 +88,7 @@ The platform scripts share [variables.json](../scripts/variables.json):
 
 | Task | Entry point | Output |
 | --- | --- | --- |
-| JAR | `./scripts/task_linux.bash jar` | `build/libs/` |
+| Intermediate JAR build | `./scripts/task_linux.bash jar` | `build/libs/` |
 | Full Linux tests and recording | `./scripts/task_linux.bash test` | Video/log plus Gradle HTML/XML reports |
 | DEB on the runner's architecture | `./scripts/task_linux.bash deb` | `build/jpackage/` |
 | RPM | `./scripts/task_linux.bash rpm` | `build/jpackage/` |
@@ -103,8 +105,8 @@ assets.
 ![Current build and test jobs](images/07_turbowin_pipeline.svg)
 
 [GitHub Actions](../.github/workflows/) defines separate test and platform packaging workflows
-on pushes/pull requests; the JAR workflow is manually dispatched. [.gitlab-ci.yml](../.gitlab-ci.yml)
-defines equivalent task entry points in one `build` stage, with a manual JAR job. There is no
+on pushes/pull requests. [.gitlab-ci.yml](../.gitlab-ci.yml)
+defines equivalent task entry points in one `build` stage. There is no
 implemented signing or automatic release-publication stage in these definitions.
 
 The shared Linux test task waits for Xvfb readiness, starts Openbox and screen recording, then runs
