@@ -112,12 +112,6 @@ public class Jakarta_Email {
         // 26-aug-2022: via gmail: TLsv1.3:
         // handshake_failure)
       }
-      props.put(
-          "mail.smtp.ssl.trust",
-          smtp_host_local); // If set, and a socket factory hasn't been specified, enables use of a
-      // MailSSLSocketFactory. If set to "*", all hosts are trusted. If set to
-      // a whitespace separated list of hosts, those hosts are trusted.
-      // Otherwise, trust depends on the certificate the server presents.
     } else if (smtp_mode.equals(main.CUSTOM_SSL_STARTTLS)) {
       props.put(
           "mail.smtp.ssl.enable",
@@ -134,12 +128,6 @@ public class Jakarta_Email {
             "mail.smtp.ssl.protocols",
             "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1 SSLv3 SSLv2Hello"); // sequence is important!
       }
-      props.put(
-          "mail.smtp.ssl.trust",
-          smtp_host_local); // If set, and a socket factory hasn't been specified, enables use of a
-      // MailSSLSocketFactory. If set to "*", all hosts are trusted. If set to
-      // a whitespace separated list of hosts, those hosts are trusted.
-      // Otherwise, trust depends on the certificate the server presents.
       props.put("mail.smtp.starttls.enable", "true");
       props.put("mail.smtp.starttls.required", "true");
     } else if (smtp_mode.equals(main.CUSTOM_TLS)) {
@@ -153,13 +141,6 @@ public class Jakarta_Email {
       } else {
         props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1");
       }
-      props.put(
-          "mail.smtp.ssl.trust",
-          smtp_host_local); // to avoid exception: "Could not convert socket to TLS" // If set, and
-      // a socket factory hasn't been specified, enables use of a
-      // MailSSLSocketFactory. If set to "*", all hosts are trusted. If set to
-      // a whitespace separated list of hosts, those hosts are trusted.
-      // Otherwise, trust depends on the certificate the server presents.
     } else if (smtp_mode.equals(main.CUSTOM_TLS_STARTTLS)) {
       if ((smtp_host_local != null)
           && (smtp_host_local.toLowerCase().contains("gmail")
@@ -175,13 +156,6 @@ public class Jakarta_Email {
       } else {
         props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1");
       }
-      props.put(
-          "mail.smtp.ssl.trust",
-          smtp_host_local); // to avoid exception: "Could not convert socket to TLS" // If set, and
-      // a socket factory hasn't been specified, enables use of a
-      // MailSSLSocketFactory. If set to "*", all hosts are trusted. If set to
-      // a whitespace separated list of hosts, those hosts are trusted.
-      // Otherwise, trust depends on the certificate the server presents.
       props.put("mail.smtp.starttls.enable", "true");
       props.put("mail.smtp.starttls.required", "true");
     }
