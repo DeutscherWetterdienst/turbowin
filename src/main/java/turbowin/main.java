@@ -2532,7 +2532,7 @@ public class main extends javax.swing.JFrame {
         });
     jMenu3.add(jMenuItem23);
 
-    jMenuItem80.setText("Obs by Email (Custom)");
+    jMenuItem80.setText("Obs by Email (SMTP)");
     jMenuItem80.addActionListener(
         new java.awt.event.ActionListener() {
           public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -413,7 +413,7 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-    jLabel19.setText("[CUSTOM] your email address");
+    jLabel19.setText("[SMTP] your email address");
 
     jLabel20.setText("server");
 
@@ -674,7 +674,7 @@ public final class myemailsettings extends javax.swing.JFrame {
     jRadioButton3.setText("via default email client on this pc");
 
     buttonGroup6.add(jRadioButton4);
-    jRadioButton4.setText("via CUSTOM email client (see above)");
+    jRadioButton4.setText("via SMTP (see above)");
 
     jLabel10.setText("logs subject");
 
@@ -944,7 +944,7 @@ public final class myemailsettings extends javax.swing.JFrame {
     jLabel3
         .getAccessibleContext()
         .setAccessibleName(
-            "required for: Output > Obs by Email (default / SMTP host / Gmail / Yahoo/ Customl' and optional for AP[&T]R and AWSR");
+            "required for: Output > Obs by Email (default / SMTP) and optional for AP[&T]R and AWSR");
 
     pack();
   } // </editor-fold>//GEN-END:initComponents
@@ -1169,9 +1169,6 @@ public final class myemailsettings extends javax.swing.JFrame {
   private static final String aesEncryptionAlgorithm =
       EmailSettingsConstants.aesEncryptionAlgorithm;
 
-  // private String gmail_app_password_plain                   = "";
-  // private String yahoo_app_password_plain                   = "";
-  // private String smtp_host_password_plain                   = "";
   private String custom_password_plain = "";
   private final String password_stars = "******";
   private Boolean STARTTLS_local = false;

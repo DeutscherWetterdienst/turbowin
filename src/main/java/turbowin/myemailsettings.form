@@ -102,7 +102,7 @@
         <Property name="text" type="java.lang.String" value="for &apos;Output -&gt; Obs by Email&apos; and AP[&amp;T]R / AWSR"/>
       </Properties>
       <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="required for: Output &gt; Obs by Email (default / SMTP host / Gmail / Yahoo/ Customl&apos; and optional for AP[&amp;T]R and AWSR"/>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="required for: Output &gt; Obs by Email (default / SMTP) and optional for AP[&amp;T]R and AWSR"/>
       </AccessibilityProperties>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
@@ -374,7 +374,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel19">
               <Properties>
-                <Property name="text" type="java.lang.String" value="[CUSTOM] your email address"/>
+                <Property name="text" type="java.lang.String" value="[SMTP] your email address"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField13">
@@ -567,7 +567,7 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="buttonGroup6"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="via CUSTOM email client (see above)"/>
+            <Property name="text" type="java.lang.String" value="via SMTP (see above)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
