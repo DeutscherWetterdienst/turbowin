@@ -166,6 +166,7 @@ public final class myemailsettings extends javax.swing.JFrame {
     }
 
     jTextField16.setText(main.custom_port);
+    jComboBox1.setSelectedItem(SmtpProviderProfile.MANUAL);
 
     // Legacy python_email values are normalized during configuration loading.
     // Always display Jakarta Mail as the only supported custom module.
@@ -240,6 +241,8 @@ public final class myemailsettings extends javax.swing.JFrame {
     jPanel8 = new javax.swing.JPanel();
     jLabel19 = new javax.swing.JLabel();
     jTextField13 = new javax.swing.JTextField();
+    jLabel24 = new javax.swing.JLabel();
+    jComboBox1 = new javax.swing.JComboBox<>();
     jLabel23 = new javax.swing.JLabel();
     jTextField17 = new javax.swing.JTextField();
     jLabel20 = new javax.swing.JLabel();
@@ -419,6 +422,10 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     jLabel19.setText("[SMTP] your email address");
 
+    jLabel24.setText("SMTP profile");
+    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(SmtpProviderProfile.values()));
+    jComboBox1.addActionListener(evt -> applySelectedSmtpProfile());
+
     jLabel23.setText("SMTP username");
 
     jLabel20.setText("server");
@@ -455,7 +462,28 @@ public final class myemailsettings extends javax.swing.JFrame {
                     .addContainerGap()
                     .addGroup(
                         jPanel8Layout
+                            .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel24)
+                            .addComponent(jComboBox1))
+                    .addGap(18, 18, 18)
+                    .addGroup(
+                        jPanel8Layout
                             .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(
+                                jPanel8Layout
+                                    .createSequentialGroup()
+                                    .addComponent(
+                                        jLabel24,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        175,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(
+                                        jComboBox1,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        200,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(
                                 jPanel8Layout
                                     .createSequentialGroup()
@@ -1194,6 +1222,21 @@ public final class myemailsettings extends javax.swing.JFrame {
     return "";
   }
 
+  private void applySelectedSmtpProfile() {
+    if (jComboBox1 == null || jComboBox1.getSelectedItem() == null) {
+      return;
+    }
+    SmtpProviderProfile profile = (SmtpProviderProfile) jComboBox1.getSelectedItem();
+    profile.apply(
+        jTextField14,
+        jTextField16,
+        security -> {
+          jRadioButton7.setSelected(SmtpSecurityMode.PLAIN.equals(security));
+          jRadioButton8.setSelected(SmtpSecurityMode.IMPLICIT_TLS.equals(security));
+          jCheckBox1.setSelected(SmtpSecurityMode.STARTTLS.equals(security));
+        });
+  }
+
   private void Cancel_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Cancel_button_actionPerformed
     // TODO add your handling code here:
@@ -1286,6 +1329,7 @@ public final class myemailsettings extends javax.swing.JFrame {
   private javax.swing.JButton jButton2;
   private javax.swing.JButton jButton3;
   private javax.swing.JButton jButton4;
+  private javax.swing.JComboBox<SmtpProviderProfile> jComboBox1;
   private javax.swing.JCheckBox jCheckBox1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel10;
@@ -1324,6 +1368,7 @@ public final class myemailsettings extends javax.swing.JFrame {
   private javax.swing.JTextField jTextField16;
   private javax.swing.JTextField jTextField17;
   private javax.swing.JLabel jLabel23;
+  private javax.swing.JLabel jLabel24;
   private javax.swing.JTextField jTextField2;
   private javax.swing.JTextField jTextField3;
   private javax.swing.JTextField jTextField4;
