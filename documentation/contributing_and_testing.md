@@ -140,8 +140,9 @@ available through Git.
 ## Formatting and documentation
 
 Java formatting is configured with Spotless/google-java-format. `./gradlew spotlessCheck` checks
-formatting; `./gradlew spotlessApply` rewrites configured Java files, so inspect its scope and do
-not include unrelated formatting in a focused change.
+formatting, and Gradle's `check` task depends on that check. CI runs the formatting check in its
+own lint job. `./gradlew spotlessApply` rewrites configured Java files, so inspect its scope and
+keep the resulting formatting changes separate from functional changes.
 
 Keep architecture text organized around responsibilities and contracts, not a class catalogue
 or commit count. Check relative links and update both PlantUML sources and generated SVGs when

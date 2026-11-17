@@ -10,6 +10,12 @@ ci-config-lint:
     - curl --fail-with-body --request POST --header "JOB-TOKEN: $CI_JOB_TOKEN" --form "content=<.gitlab-ci.yml" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/ci/lint" | tee ci-lint-result.json
     - jq -e '.valid == true' ci-lint-result.json
 
+format:
+  stage: lint
+  image: eclipse-temurin:25-jdk-noble
+  script:
+    - ./gradlew spotlessCheck --no-daemon --console=plain
+
 test:
   stage: build
   image: eclipse-temurin:25-jdk-noble

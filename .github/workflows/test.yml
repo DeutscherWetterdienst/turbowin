@@ -5,6 +5,15 @@ on:
   pull_request:
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:25-jdk-noble
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check Java formatting
+        run: ./gradlew spotlessCheck --no-daemon --console=plain
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
