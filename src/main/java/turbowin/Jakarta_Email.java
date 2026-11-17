@@ -57,12 +57,7 @@ public class Jakarta_Email {
     // auth);) ->  YAHOO not ok and Gmail not ok
     // TLSv1.3: if  AUTH=off -> YAHOO ok but Gmail not ok
     //
-    // TLS + STARTTLS: props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2 TLSv1.2 TLSv1.1
-    // TLSv1"); ok for Yahoo end Ziggo but not for GMail
-    // SSL           : props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1 SSLv3
-    // SSLv2Hello"); ok for Yahoo end Ziggo but not for GMail
-    // SSL + STARTTLS: props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1 SSLv3
-    // SSLv2Hello"); ok for Yahoo end Ziggo but not for GMail
+    // TLS, STARTTLS and SSL use TLSv1.3 and TLSv1.2 only.
     //
     //
 
@@ -101,16 +96,9 @@ public class Jakarta_Email {
       if ((smtp_host_local != null)
           && (smtp_host_local.toLowerCase().contains("gmail")
               || smtp_host_local.toLowerCase().contains("outlook"))) {
-        props.put(
-            "mail.smtp.ssl.protocols",
-            "TLSv1.2 TLSv1.1 TLSv1 SSLv3 SSLv2Hello"); // (test 26-aug-2022: via gmail: TLsv1.3:
-        // handshake_failure)
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       } else {
-        props.put(
-            "mail.smtp.ssl.protocols",
-            "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1 SSLv3 SSLv2Hello"); // sequence is important! // (test
-        // 26-aug-2022: via gmail: TLsv1.3:
-        // handshake_failure)
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       }
     } else if (smtp_mode.equals(main.CUSTOM_SSL_STARTTLS)) {
       props.put(
@@ -119,14 +107,9 @@ public class Jakarta_Email {
       if ((smtp_host_local != null)
           && (smtp_host_local.toLowerCase().contains("gmail")
               || smtp_host_local.toLowerCase().contains("outlook"))) {
-        props.put(
-            "mail.smtp.ssl.protocols",
-            "TLSv1.2 TLSv1.1 TLSv1 SSLv3 SSLv2Hello"); // (test 26-aug-2022: via gmail: TLsv1.3:
-        // handshake_failure)
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       } else {
-        props.put(
-            "mail.smtp.ssl.protocols",
-            "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1 SSLv3 SSLv2Hello"); // sequence is important!
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       }
       props.put("mail.smtp.starttls.enable", "true");
       props.put("mail.smtp.starttls.required", "true");
@@ -134,12 +117,9 @@ public class Jakarta_Email {
       if ((smtp_host_local != null)
           && (smtp_host_local.toLowerCase().contains("gmail")
               || smtp_host_local.toLowerCase().contains("outlook"))) {
-        props.put(
-            "mail.smtp.ssl.protocols",
-            "TLSv1.2 TLSv1.1 TLSv1"); // to avoid exception: "Could not convert socket to TLS" //
-        // (test 26-aug-2022: via gmail: TLsv1.3: handshake_failure)
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       } else {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       }
     } else if (smtp_mode.equals(main.CUSTOM_TLS_STARTTLS)) {
       if ((smtp_host_local != null)
@@ -149,12 +129,9 @@ public class Jakarta_Email {
                   .contains(
                       "outlook"))) // (test 26-aug-2022: via gmail: TLsv1.3: handshake_failure)
       {
-        props.put(
-            "mail.smtp.ssl.protocols",
-            "TLSv1.2 TLSv1.1 TLSv1"); // to avoid exception: "Could not convert socket to TLS" //
-        // (test 26-aug-2022: via gmail: TLsv1.3: handshake_failure)
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       } else {
-        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2 TLSv1.1 TLSv1");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.3 TLSv1.2");
       }
       props.put("mail.smtp.starttls.enable", "true");
       props.put("mail.smtp.starttls.required", "true");
