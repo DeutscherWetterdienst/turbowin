@@ -1,6 +1,8 @@
 package turbowin;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 final class LatestObservationFormatter {
 
@@ -32,7 +34,7 @@ final class LatestObservationFormatter {
   static String waveHeight(String height) {
     // IMMT wave and swell heights are encoded in half-meter units.
     try {
-      return String.format("%.1f", Double.parseDouble(height) / 2.0);
+      return String.format(Locale.ROOT, "%.1f", Double.parseDouble(height) / 2.0);
     } catch (NumberFormatException ex) {
       return "-";
     }
@@ -52,7 +54,7 @@ final class LatestObservationFormatter {
   }
 
   private static String withFahrenheit(String celsius) {
-    DecimalFormat format = new DecimalFormat("0.0");
+    DecimalFormat format = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
     String fahrenheit = format.format((Double.parseDouble(celsius) * 1.8) + 32.0);
     // Locale may produce a comma (e.g. Netherlands); use a dot for dashboard compatibility.
     fahrenheit = fahrenheit.replace(",", ".");

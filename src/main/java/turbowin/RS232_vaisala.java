@@ -8,11 +8,13 @@ import static turbowin.main_RS232_RS422.RS232_make_wet_bulb_temp_APR_FM13_IMMT_r
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 // import static turbowin.main_RS232_RS422.TIMEDIFF_SENSOR_DATA;
 
@@ -424,7 +426,8 @@ public class RS232_vaisala {
           if ((hulp_double_air_temp > -99.9) && (hulp_double_air_temp < 99.9)) {
             // Return the current measurement without locale-dependent display formatting.
             airTemperature = Double.toString(hulp_double_air_temp);
-            DecimalFormat df = new DecimalFormat("0.0"); // rounding 1 decimal
+            DecimalFormat df =
+                new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
             mytemp.air_temp = df.format(hulp_double_air_temp);
 
             if (destination.equals("MAIN_SCREEN") == false) {
@@ -463,7 +466,8 @@ public class RS232_vaisala {
           hulp_double_wet_bulb_temp = Double.parseDouble(mytemp.wet_bulb_temp.trim());
 
           if ((hulp_double_wet_bulb_temp > -99.9) && (hulp_double_wet_bulb_temp < 99.9)) {
-            DecimalFormat df = new DecimalFormat("0.0"); // rounding 1 decimal
+            DecimalFormat df =
+                new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
             mytemp.wet_bulb_temp = df.format(hulp_double_wet_bulb_temp);
 
             if (destination.equals("MAIN_SCREEN") == false) {
@@ -504,7 +508,8 @@ public class RS232_vaisala {
 
           if ((mytemp.double_dew_point > -70.0) && (mytemp.double_dew_point < 70.0)) {
             if (destination.equals("MAIN_SCREEN") == false) {
-              DecimalFormat df = new DecimalFormat("0.0"); // rounding 1 decimal
+              DecimalFormat df =
+                  new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
               String message_dew_point =
                   "[APR] dew-point at sensor height = "
                       + df.format(mytemp.double_dew_point)

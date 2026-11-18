@@ -1,5 +1,7 @@
 package turbowin;
 
+import java.util.Locale;
+
 /** Builds the satellite image URLs used by the SSEC and NOAA integrations. */
 final class SatelliteImageUrlBuilder {
 
@@ -21,8 +23,12 @@ final class SatelliteImageUrlBuilder {
 
     // Keep zoom <= 4 to reduce the chance of a watermark.
     return String.format(
+        Locale.ROOT,
         "https://realearth.ssec.wisc.edu/?products=%s&time=latest&center=%.6f,%.6f&zoom=%d",
-        products, centerLat, centerLon, 2);
+        products,
+        centerLat,
+        centerLon,
+        2);
   }
 
   static String buildNoaa(String satelliteImageMode, int latitude, int longitude) {
@@ -45,7 +51,8 @@ final class SatelliteImageUrlBuilder {
     double maxLon = Math.min(180.0, centerLon + halfWidth);
     double minLat = Math.max(-90.0, centerLat - halfHeight);
     double maxLat = Math.min(90.0, centerLat + halfHeight);
-    String viewport = String.format("%.6f,%.6f,%.6f,%.6f", minLon, minLat, maxLon, maxLat);
+    String viewport =
+        String.format(Locale.ROOT, "%.6f,%.6f,%.6f,%.6f", minLon, minLat, maxLon, maxLat);
 
     StringBuilder url = new StringBuilder("https://worldview.earthdata.nasa.gov/?");
     url.append("v=").append(viewport);

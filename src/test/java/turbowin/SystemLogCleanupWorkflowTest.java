@@ -7,6 +7,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class SystemLogCleanupWorkflowTest {
     File logsDirectory = Files.createTempDirectory("turbowin-system-logs").toFile();
     File systemLogsDirectory = new File(logsDirectory, "system");
     assertTrue(systemLogsDirectory.mkdir());
-    SimpleDateFormat monthlyFormat = new SimpleDateFormat("MMM_yyyy");
+    SimpleDateFormat monthlyFormat = new SimpleDateFormat("MMM_yyyy", Locale.ENGLISH);
     monthlyFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Date date = monthlyFormat.parse("JAN_2026");
     File logFile =

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ public class SystemLogEmailWorkflowTest {
 
   @Test
   public void selectsCurrentAndPreviousMonthlyLogs() {
-    SimpleDateFormat monthlyFormat = new SimpleDateFormat("MMM_yyyy");
+    SimpleDateFormat monthlyFormat = new SimpleDateFormat("MMM_yyyy", Locale.ENGLISH);
     monthlyFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
     calendar.set(2026, Calendar.JANUARY, 15, 12, 0, 0);

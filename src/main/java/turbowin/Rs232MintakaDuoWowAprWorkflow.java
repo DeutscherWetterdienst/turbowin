@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -144,7 +146,8 @@ final class Rs232MintakaDuoWowAprWorkflow {
 
             if ((hulp_double_APR_pressure_reading > 900.0)
                 && (hulp_double_APR_pressure_reading < 1100.0)) {
-              DecimalFormat df = new DecimalFormat("0.0"); // rounding only 1 decimal
+              DecimalFormat df =
+                  new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
 
               // CONVERT TO MSL (+ apply barometer instrument correction)
               double APR_height_correction_pressure =

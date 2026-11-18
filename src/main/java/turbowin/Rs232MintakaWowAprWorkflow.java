@@ -25,9 +25,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JOptionPane;
@@ -1024,7 +1026,8 @@ final class Rs232MintakaWowAprWorkflow {
                   }
                 }
 
-                DecimalFormat df = new DecimalFormat("0.0"); // rounding only 1 decimal
+                DecimalFormat df =
+                    new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
 
                 ////////////////// barometer reading (pressure at sensor height + ic)
                 // ////////////////
@@ -1114,7 +1117,8 @@ final class Rs232MintakaWowAprWorkflow {
             }
 
             if ((hulp_double_APR_pressure_ppp > -99.9) && (hulp_double_APR_pressure_ppp < 99.9)) {
-              DecimalFormat df = new DecimalFormat("0.0"); // rounding 1 decimal
+              DecimalFormat df =
+                  new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
               mybarograph.pressure_amount_tendency =
                   df.format(Math.abs(hulp_double_APR_pressure_ppp)); // only positve values !!
               ppp_ok = true;
@@ -1196,7 +1200,8 @@ final class Rs232MintakaWowAprWorkflow {
               }
 
               if ((hulp_double_APR_air_temp > -70.0) && (hulp_double_APR_air_temp < 70.0)) {
-                DecimalFormat df = new DecimalFormat("0.0"); // rounding 1 decimal
+                DecimalFormat df =
+                    new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
                 mytemp.air_temp = df.format(hulp_double_APR_air_temp);
                 air_temp_ok = true;
 
@@ -1234,7 +1239,8 @@ final class Rs232MintakaWowAprWorkflow {
               }
 
               if ((hulp_double_APR_wet_bulb > -70.0) && (hulp_double_APR_wet_bulb < 70.0)) {
-                DecimalFormat df = new DecimalFormat("0.0"); // rounding 1 decimal
+                DecimalFormat df =
+                    new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
                 mytemp.wet_bulb_temp = df.format(hulp_double_APR_wet_bulb);
                 wet_bulb_ok = true;
 

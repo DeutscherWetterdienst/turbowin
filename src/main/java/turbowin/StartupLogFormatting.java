@@ -1,6 +1,7 @@
 package turbowin;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /** Creates the UTC date formats used by TurboWin system logs. */
@@ -19,7 +20,7 @@ final class StartupLogFormatting {
   }
 
   private static SimpleDateFormat format(String pattern) {
-    SimpleDateFormat format = new SimpleDateFormat(pattern);
+    SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.ENGLISH);
     format.setTimeZone(UTC);
     return format;
   }
