@@ -28,6 +28,7 @@ public class Jakarta_Email {
 
   private static final int MAX_SMTP_ATTEMPTS = 3;
   private static final long SMTP_RETRY_DELAY_MILLIS = 250L;
+  private volatile SmtpDiagnostic.Category lastDiagnostic = SmtpDiagnostic.Category.UNKNOWN;
 
   public Jakarta_Email() {
     props = new Properties();
@@ -57,6 +58,7 @@ public class Jakarta_Email {
         }
         return;
       } catch (MessagingException exception) {
+        lastDiagnostic = SmtpDiagnostic.classify(exception);
         logSmtpException(operation + " attempt=" + attempt, exception);
         if (!isTemporarySmtpFailure(exception) || attempt == MAX_SMTP_ATTEMPTS) {
           throw exception;
@@ -107,6 +109,7 @@ public class Jakarta_Email {
       }
       return 0;
     } catch (Exception ex) {
+      lastDiagnostic = SmtpDiagnostic.classify(ex);
       logSmtpException("connection test", ex);
       System.out.println("[EMAIL] SMTP connection test failed: " + ex.getMessage());
       return 1;
@@ -127,17 +130,24 @@ public class Jakarta_Email {
   }
 
   private static void logSmtpException(String operation, Exception exception) {
+    SmtpDiagnostic.Category category = SmtpDiagnostic.classify(exception);
     String message = exception.getMessage();
     String status = extractSmtpStatus(message);
     main.log_turbowin_system_message(
         "[EMAIL][SMTP] operation="
             + operation
+            + " category="
+            + SmtpDiagnostic.label(category)
             + " status="
             + status
             + " exception="
             + (message == null
                 ? exception.getClass().getSimpleName()
                 : message.replace('\n', ' ')));
+  }
+
+  String lastDiagnosticLabel() {
+    return SmtpDiagnostic.label(lastDiagnostic);
   }
 
   private static String extractSmtpStatus(String text) {
@@ -459,6 +469,7 @@ public class Jakarta_Email {
         main.log_turbowin_system_message("[EMAIL] obs email sent successfully");
 
       } catch (MessagingException e) {
+        lastDiagnostic = SmtpDiagnostic.classify(e);
         logSmtpException("observation send", e);
         // System.out.println("\n--Exception handling in send_jakarta_email.java: " + e);
 
@@ -672,6 +683,7 @@ public class Jakarta_Email {
             "[EMAIL] meteo logs successfully sent from " + send_from + " to " + send_to);
         exitStatus = 200; // success
       } catch (MessagingException e) {
+        lastDiagnostic = SmtpDiagnostic.classify(e);
         logSmtpException("log send", e);
         // System.out.println("\n--Exception handling in send_jakarta_email.java: " + e);
 

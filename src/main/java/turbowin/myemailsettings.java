@@ -1163,10 +1163,10 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     jButton3.setEnabled(false);
     jButton4.setEnabled(false);
+    final Jakarta_Email email = new Jakarta_Email();
     new javax.swing.SwingWorker<Integer, Void>() {
       @Override
       protected Integer doInBackground() {
-        Jakarta_Email email = new Jakarta_Email();
         if (!sendTestEmail) {
           return email.testConnection(mode, host, password, username, port);
         }
@@ -1196,7 +1196,9 @@ public final class myemailsettings extends javax.swing.JFrame {
                   ? (sendTestEmail
                       ? "Test e-mail sent successfully."
                       : "SMTP connection succeeded.")
-                  : (sendTestEmail ? "Test e-mail could not be sent." : "SMTP connection failed."),
+                  : (sendTestEmail
+                      ? "Test e-mail could not be sent (" + email.lastDiagnosticLabel() + ")."
+                      : "SMTP connection failed (" + email.lastDiagnosticLabel() + ")."),
               main.APPLICATION_NAME + (status == 0 ? " info" : " error"),
               status == 0 ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
