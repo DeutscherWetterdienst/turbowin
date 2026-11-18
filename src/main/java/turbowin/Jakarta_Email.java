@@ -238,7 +238,12 @@ public class Jakarta_Email {
     // specified
     // protocol. Overrides the mail.user property.
     props.put("mail.smtp.password", smtp_password_local);
-    // props.put("mail.smtp.auth", "true");
+    boolean credentialsConfigured =
+        smtp_username_local != null
+            && !smtp_username_local.isEmpty()
+            && smtp_password_local != null
+            && !smtp_password_local.isEmpty();
+    props.put("mail.smtp.auth", Boolean.toString(credentialsConfigured));
     if (debug) {
       props.put("mail.debug", "true");
     }

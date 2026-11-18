@@ -19,6 +19,7 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.TrustManagerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,9 +32,11 @@ public class JakartaEmailTlsSmtpTest {
   private static String originalTrustStore;
   private static String originalKeyStorePassword;
   private static String originalTrustStorePassword;
+  private static SSLContext originalDefaultContext;
 
   @BeforeClass
   public static void configureTestCertificate() throws Exception {
+    originalDefaultContext = SSLContext.getDefault();
     keyStore = Files.createTempFile("turbowin-smtp-test-", ".p12");
     Files.deleteIfExists(keyStore);
     String keytool = Path.of(System.getProperty("java.home"), "bin", "keytool").toString();
@@ -77,6 +80,16 @@ public class JakartaEmailTlsSmtpTest {
     System.setProperty("javax.net.ssl.trustStore", keyStore.toString());
     System.setProperty("javax.net.ssl.keyStorePassword", STORE_PASSWORD);
     System.setProperty("javax.net.ssl.trustStorePassword", STORE_PASSWORD);
+    KeyStore trustStore = KeyStore.getInstance("PKCS12");
+    try (java.io.InputStream input = Files.newInputStream(keyStore)) {
+      trustStore.load(input, STORE_PASSWORD.toCharArray());
+    }
+    TrustManagerFactory trustManagers =
+        TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+    trustManagers.init(trustStore);
+    SSLContext clientContext = SSLContext.getInstance("TLS");
+    clientContext.init(null, trustManagers.getTrustManagers(), null);
+    SSLContext.setDefault(clientContext);
   }
 
   @AfterClass
@@ -85,6 +98,7 @@ public class JakartaEmailTlsSmtpTest {
     restore("javax.net.ssl.trustStore", originalTrustStore);
     restore("javax.net.ssl.keyStorePassword", originalKeyStorePassword);
     restore("javax.net.ssl.trustStorePassword", originalTrustStorePassword);
+    SSLContext.setDefault(originalDefaultContext);
     Files.deleteIfExists(keyStore);
   }
 
