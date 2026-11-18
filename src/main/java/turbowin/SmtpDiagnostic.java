@@ -24,6 +24,7 @@ final class SmtpDiagnostic {
 
   static Category classify(Throwable failure) {
     for (Throwable current = failure; current != null; current = current.getCause()) {
+      String status = extractStatus(current.getMessage());
       if (current instanceof UnknownHostException) {
         return Category.DNS;
       }
@@ -32,10 +33,12 @@ final class SmtpDiagnostic {
           || contains(current, "certificate", "PKIX", "handshake", "trust anchor")) {
         return Category.TLS_CERTIFICATE;
       }
-      if (contains(current, "535", "authentication", "auth failed", "invalid credentials")) {
+      if ("535".equals(status)
+          || contains(current, "authentication", "auth failed", "invalid credentials")) {
         return Category.AUTHENTICATION;
       }
-      if (contains(current, "550", "551", "553", "recipient", "address rejected")) {
+      if (("550".equals(status) || "551".equals(status) || "553".equals(status))
+          || contains(current, "recipient", "address rejected")) {
         return Category.RECIPIENT_REJECTED;
       }
       if (current instanceof ConnectException
@@ -45,6 +48,33 @@ final class SmtpDiagnostic {
       }
     }
     return failure instanceof jakarta.mail.MessagingException ? Category.SMTP : Category.UNKNOWN;
+  }
+
+  static String extractStatus(String text) {
+    if (text != null) {
+      for (int index = 0; index <= text.length() - 3; index++) {
+        char first = text.charAt(index);
+        char second = text.charAt(index + 1);
+        char third = text.charAt(index + 2);
+        boolean validCode =
+            first >= '2'
+                && first <= '5'
+                && second >= '0'
+                && second <= '9'
+                && third >= '0'
+                && third <= '9';
+        boolean separated =
+            (index == 0 || !Character.isDigit(text.charAt(index - 1)))
+                && (index + 3 == text.length() || !Character.isDigit(text.charAt(index + 3)))
+                && (index + 3 == text.length()
+                    || text.charAt(index + 3) == ' '
+                    || text.charAt(index + 3) == '-');
+        if (validCode && separated) {
+          return text.substring(index, index + 3);
+        }
+      }
+    }
+    return "unknown";
   }
 
   static String label(Category category) {

@@ -162,22 +162,7 @@ public class Jakarta_Email {
   }
 
   private static String extractSmtpStatus(String text) {
-    if (text != null) {
-      for (int index = 0; index <= text.length() - 3; index++) {
-        char first = text.charAt(index);
-        char second = text.charAt(index + 1);
-        char third = text.charAt(index + 2);
-        if (first >= '2'
-            && first <= '5'
-            && second >= '0'
-            && second <= '9'
-            && third >= '0'
-            && third <= '9') {
-          return text.substring(index, index + 3);
-        }
-      }
-    }
-    return "unknown";
+    return SmtpDiagnostic.extractStatus(text);
   }
 
   private void set_jakarta_email_props(

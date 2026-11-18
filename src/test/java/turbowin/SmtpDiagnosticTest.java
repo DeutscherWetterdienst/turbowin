@@ -32,4 +32,13 @@ public class SmtpDiagnosticTest {
         SmtpDiagnostic.Category.RECIPIENT_REJECTED,
         SmtpDiagnostic.classify(new MessagingException("550 No such recipient")));
   }
+
+  @Test
+  public void doesNotTreatPortNumbersAsSmtpStatusCodes() {
+    assertEquals(
+        "unknown", SmtpDiagnostic.extractStatus("Could not connect to SMTP host, port: 33811"));
+    assertEquals("550", SmtpDiagnostic.extractStatus("550 No such recipient"));
+    assertEquals("535", SmtpDiagnostic.extractStatus("SMTP error (535 Authentication failed)"));
+    assertEquals("250", SmtpDiagnostic.extractStatus("250-PIPELINING"));
+  }
 }
