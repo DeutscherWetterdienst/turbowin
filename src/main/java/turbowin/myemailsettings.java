@@ -435,7 +435,7 @@ public final class myemailsettings extends javax.swing.JFrame {
     jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(SmtpProviderProfile.values()));
     jComboBox1.addActionListener(evt -> applySelectedSmtpProfile());
 
-    jLabel23.setText("SMTP username");
+    jLabel23.setText("SMTP username*");
 
     jLabel20.setText("server");
 
@@ -912,7 +912,7 @@ public final class myemailsettings extends javax.swing.JFrame {
         });
 
     jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    jLabel11.setText("* optional");
+    jLabel11.setText("* optional (SMTP username defaults to your e-mail address)");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -949,7 +949,7 @@ public final class myemailsettings extends javax.swing.JFrame {
                                             .addComponent(
                                                 jLabel11,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                203,
+                                                350,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(
                                                 jLabel4,
