@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Rule;
 import org.junit.Test;
@@ -181,12 +182,37 @@ public class JakartaEmailLocalSmtpTest {
     }
   }
 
+  @Test
+  public void authenticatesWithSeparateSmtpUsername() throws Exception {
+    try (FakeSmtpServer server = new FakeSmtpServer("smtp-user", "smtp-pass")) {
+      int status =
+          new Jakarta_Email()
+              .send_jakarta_email_obs_with_username(
+                  main.CUSTOM_TLS,
+                  "127.0.0.1",
+                  "smtp-pass",
+                  "recipient@example.org",
+                  "sender@example.org",
+                  "Subject",
+                  "Body",
+                  "null",
+                  Integer.toString(server.port()),
+                  "null",
+                  "smtp-user");
+
+      assertEquals(0, status);
+      server.awaitMessage();
+    }
+  }
+
   private static final class FakeSmtpServer implements AutoCloseable {
     private final ServerSocket serverSocket;
     private final AtomicReference<String> receivedMessage = new AtomicReference<>();
     private final Thread serverThread;
     private final boolean rejectRecipients;
     private final boolean rejectAuthentication;
+    private final String expectedUsername;
+    private final String expectedPassword;
 
     FakeSmtpServer() throws IOException {
       this(false, false);
@@ -197,9 +223,24 @@ public class JakartaEmailLocalSmtpTest {
     }
 
     FakeSmtpServer(boolean rejectRecipients, boolean rejectAuthentication) throws IOException {
+      this(rejectRecipients, rejectAuthentication, null, null);
+    }
+
+    FakeSmtpServer(String expectedUsername, String expectedPassword) throws IOException {
+      this(false, false, expectedUsername, expectedPassword);
+    }
+
+    private FakeSmtpServer(
+        boolean rejectRecipients,
+        boolean rejectAuthentication,
+        String expectedUsername,
+        String expectedPassword)
+        throws IOException {
       serverSocket = new ServerSocket(0);
       this.rejectRecipients = rejectRecipients;
       this.rejectAuthentication = rejectAuthentication;
+      this.expectedUsername = expectedUsername;
+      this.expectedPassword = expectedPassword;
       serverThread = new Thread(this::serve, "fake-smtp-server");
       serverThread.start();
     }
@@ -232,18 +273,33 @@ public class JakartaEmailLocalSmtpTest {
                   new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.US_ASCII))) {
         respond(writer, "220 localhost");
         String line;
+        boolean authenticated = expectedUsername == null;
         while ((line = reader.readLine()) != null) {
           String command = line.toUpperCase();
           if (command.startsWith("EHLO") || command.startsWith("HELO")) {
             respond(writer, "250-localhost");
-            if (rejectAuthentication) {
+            if (rejectAuthentication || expectedUsername != null) {
               respond(writer, "250-AUTH LOGIN PLAIN");
             }
             respond(writer, "250 OK");
           } else if (command.startsWith("AUTH")) {
-            respond(writer, "535 Authentication failed");
+            if (expectedUsername == null) {
+              respond(writer, "535 Authentication failed");
+            } else {
+              respond(writer, "334 VXNlcm5hbWU6");
+              String username =
+                  new String(Base64.getDecoder().decode(reader.readLine()), StandardCharsets.UTF_8);
+              respond(writer, "334 UGFzc3dvcmQ6");
+              String password =
+                  new String(Base64.getDecoder().decode(reader.readLine()), StandardCharsets.UTF_8);
+              authenticated =
+                  expectedUsername.equals(username) && expectedPassword.equals(password);
+              respond(
+                  writer,
+                  authenticated ? "235 Authentication successful" : "535 Authentication failed");
+            }
           } else if (command.startsWith("MAIL FROM")) {
-            respond(writer, "250 OK");
+            respond(writer, authenticated ? "250 OK" : "530 Authentication required");
           } else if (command.startsWith("RCPT TO")) {
             respond(writer, rejectRecipients ? "550 No such recipient" : "250 OK");
           } else if (command.equals("DATA")) {
