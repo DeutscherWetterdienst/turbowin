@@ -7,12 +7,17 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.KeyStore;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSocket;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -125,6 +130,35 @@ public class JakartaEmailTlsSmtpTest {
     }
   }
 
+  @Test
+  public void rejectsServerWithUntrustedCertificate() throws Exception {
+    Path untrustedKeyStore = createTestCertificate();
+    try (TlsSmtpServer server = new TlsSmtpServer(false, untrustedKeyStore)) {
+      try (SSLSocket socket =
+          (SSLSocket)
+              SSLContext.getDefault().getSocketFactory().createSocket("127.0.0.1", server.port())) {
+        try {
+          socket.startHandshake();
+          throw new AssertionError("Untrusted certificate was accepted");
+        } catch (SSLHandshakeException exception) {
+          assertEquals(SmtpDiagnostic.Category.TLS_CERTIFICATE, SmtpDiagnostic.classify(exception));
+        }
+      }
+    } finally {
+      Files.deleteIfExists(untrustedKeyStore);
+    }
+  }
+
+  @Test
+  public void reportsActualDnsFailure() {
+    try {
+      InetAddress.getAllByName("smtp-turbowin-test.invalid");
+      throw new AssertionError("Reserved invalid domain unexpectedly resolved");
+    } catch (UnknownHostException exception) {
+      assertEquals(SmtpDiagnostic.Category.DNS, SmtpDiagnostic.classify(exception));
+    }
+  }
+
   private static void restore(String name, String value) {
     if (value == null) {
       System.clearProperty(name);
@@ -133,19 +167,60 @@ public class JakartaEmailTlsSmtpTest {
     }
   }
 
+  private static Path createTestCertificate() throws Exception {
+    Path certificate = Files.createTempFile("turbowin-smtp-test-", ".p12");
+    Files.deleteIfExists(certificate);
+    String keytool = Path.of(System.getProperty("java.home"), "bin", "keytool").toString();
+    Process process =
+        new ProcessBuilder(
+                keytool,
+                "-genkeypair",
+                "-alias",
+                "smtp-test",
+                "-keyalg",
+                "RSA",
+                "-keysize",
+                "2048",
+                "-validity",
+                "1",
+                "-storetype",
+                "PKCS12",
+                "-keystore",
+                certificate.toString(),
+                "-storepass",
+                STORE_PASSWORD,
+                "-keypass",
+                STORE_PASSWORD,
+                "-dname",
+                "CN=127.0.0.1",
+                "-ext",
+                "SAN=IP:127.0.0.1")
+            .redirectErrorStream(true)
+            .start();
+    if (process.waitFor() != 0) {
+      throw new IOException("Could not create TLS test certificate");
+    }
+    return certificate;
+  }
+
   private static final class TlsSmtpServer implements AutoCloseable {
     private final boolean startTls;
     private final ServerSocket serverSocket;
     private final Thread thread;
+    private final SSLContext serverContext;
     private volatile Throwable failure;
 
     TlsSmtpServer(boolean startTls) throws Exception {
+      this(startTls, keyStore);
+    }
+
+    TlsSmtpServer(boolean startTls, Path serverKeyStore) throws Exception {
       this.startTls = startTls;
-      SSLContext context = SSLContext.getDefault();
+      this.serverContext = serverContext(serverKeyStore);
       if (startTls) {
         serverSocket = new ServerSocket(0);
       } else {
-        serverSocket = context.getServerSocketFactory().createServerSocket(0);
+        serverSocket = serverContext.getServerSocketFactory().createServerSocket(0);
       }
       thread = new Thread(this::serve, "turbowin-test-smtp");
       thread.start();
@@ -189,7 +264,7 @@ public class JakartaEmailTlsSmtpTest {
             reply(writer, "220 Ready to start TLS");
             SSLSocket secure =
                 (SSLSocket)
-                    SSLContext.getDefault()
+                    serverContext
                         .getSocketFactory()
                         .createSocket(socket, "127.0.0.1", socket.getPort(), false);
             secure.setUseClientMode(false);
@@ -219,6 +294,19 @@ public class JakartaEmailTlsSmtpTest {
     private static BufferedReader reader(Socket socket) throws IOException {
       return new BufferedReader(
           new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
+    }
+
+    private static SSLContext serverContext(Path serverKeyStore) throws Exception {
+      KeyStore keyStore = KeyStore.getInstance("PKCS12");
+      try (java.io.InputStream input = Files.newInputStream(serverKeyStore)) {
+        keyStore.load(input, STORE_PASSWORD.toCharArray());
+      }
+      KeyManagerFactory keyManagers =
+          KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+      keyManagers.init(keyStore, STORE_PASSWORD.toCharArray());
+      SSLContext context = SSLContext.getInstance("TLS");
+      context.init(keyManagers.getKeyManagers(), null, null);
+      return context;
     }
 
     private static BufferedWriter writer(Socket socket) throws IOException {
