@@ -15,6 +15,7 @@ final class SmtpDiagnostic {
     TLS_CERTIFICATE,
     AUTHENTICATION,
     RECIPIENT_REJECTED,
+    LOCAL_RELAY_POLICY,
     SMTP,
     UNKNOWN
   }
@@ -53,6 +54,7 @@ final class SmtpDiagnostic {
       case TLS_CERTIFICATE -> "TLS certificate or handshake";
       case AUTHENTICATION -> "authentication";
       case RECIPIENT_REJECTED -> "recipient rejected";
+      case LOCAL_RELAY_POLICY -> "unencrypted remote relay blocked";
       case SMTP -> "SMTP protocol";
       case UNKNOWN -> "unknown";
     };

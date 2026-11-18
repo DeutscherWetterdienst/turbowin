@@ -91,6 +91,12 @@ public class Jakarta_Email {
       final String smtp_username_local,
       final String smtp_port_local) {
     try {
+      if (SmtpSecurityMode.PLAIN.equals(SmtpSecurityMode.normalize(smtp_mode, smtp_port_local))
+          && !SmtpHostPolicy.isLocalRelayHost(smtp_host_local)) {
+        lastDiagnostic = SmtpDiagnostic.Category.LOCAL_RELAY_POLICY;
+        logLocalRelayPolicyFailure(smtp_host_local);
+        return 1;
+      }
       set_jakarta_email_props(
           smtp_mode,
           smtp_host_local,
@@ -127,6 +133,11 @@ public class Jakarta_Email {
             + status
             + " response="
             + (safeResponse.isEmpty() ? "none" : safeResponse));
+  }
+
+  private static void logLocalRelayPolicyFailure(String host) {
+    main.log_turbowin_system_message(
+        "[EMAIL][SMTP] category=local relay policy status=blocked host=" + host);
   }
 
   private static void logSmtpException(String operation, Exception exception) {
@@ -365,6 +376,12 @@ public class Jakarta_Email {
             smtp_host_local, send_to, send_from, subject, body, smtp_port_local);
 
     if (exitStatus == 0) {
+      if (SmtpSecurityMode.PLAIN.equals(SmtpSecurityMode.normalize(smtp_mode, smtp_port_local))
+          && !SmtpHostPolicy.isLocalRelayHost(smtp_host_local)) {
+        lastDiagnostic = SmtpDiagnostic.Category.LOCAL_RELAY_POLICY;
+        logLocalRelayPolicyFailure(smtp_host_local);
+        return 1;
+      }
       // NB
       // https://eclipse-ee4j.github.io/mail/docs/api/jakarta.mail/jakarta/mail/package-summary.html
       //
@@ -608,6 +625,12 @@ public class Jakarta_Email {
             smtp_host_local, send_to, send_from, subject, body, smtp_port_local);
 
     if (exitStatus == 0) {
+      if (SmtpSecurityMode.PLAIN.equals(SmtpSecurityMode.normalize(smtp_mode, smtp_port_local))
+          && !SmtpHostPolicy.isLocalRelayHost(smtp_host_local)) {
+        lastDiagnostic = SmtpDiagnostic.Category.LOCAL_RELAY_POLICY;
+        logLocalRelayPolicyFailure(smtp_host_local);
+        return 101;
+      }
       // NB
       // https://eclipse-ee4j.github.io/mail/docs/api/jakarta.mail/jakarta/mail/package-summary.html
 
