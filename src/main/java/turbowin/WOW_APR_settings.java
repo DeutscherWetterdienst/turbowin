@@ -391,7 +391,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
     jRadioButton12.setText("Server Met Center*");
 
     buttonGroup4.add(jRadioButton1);
-    jRadioButton1.setText("Custom email**");
+    jRadioButton1.setText("Email (SMTP)**");
 
     javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
     jPanel9.setLayout(jPanel9Layout);
