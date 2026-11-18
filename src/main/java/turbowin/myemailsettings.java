@@ -285,8 +285,8 @@ public final class myemailsettings extends javax.swing.JFrame {
 
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     setTitle("E-mail settings");
-    setMaximumSize(new java.awt.Dimension(1000, 700));
-    setMinimumSize(new java.awt.Dimension(1000, 700));
+    setMaximumSize(new java.awt.Dimension(1000, 800));
+    setMinimumSize(new java.awt.Dimension(1000, 800));
     setResizable(false);
 
     jLabel3.setText("for 'Output -> Obs by Email' and AP[&T]R / AWSR");
