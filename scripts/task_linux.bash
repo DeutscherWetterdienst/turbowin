@@ -81,7 +81,13 @@ case "$TASK" in
     echo "Running test task..."
     echo "JAVA_HOME: ${JAVA_HOME}"
     ls -lh "${JAVA_HOME}"
-    apt-get install --quiet=2 --yes xvfb libxtst6 libxi6 openbox ffmpeg x11-utils
+    # JavaFX's GTK backend is loaded dynamically and must be present for the GUI tests.
+    if apt-cache show libgtk-3-0t64 >/dev/null 2>&1; then
+      gtk_package=libgtk-3-0t64
+    else
+      gtk_package=libgtk-3-0
+    fi
+    apt-get install --quiet=2 --yes xvfb libxtst6 libxi6 openbox ffmpeg x11-utils "$gtk_package"
 
     # Preserve the test exit status and finalize the recording even when Gradle fails.
     xvfb_pid=""
@@ -165,6 +171,7 @@ case "$TASK" in
       --license-file "$LICENSE_FILE" \
       --vendor "$VENDOR" \
       --linux-deb-maintainer "$DEB_MAINTAINER_EMAIL" \
+      --linux-package-deps 'libgtk-3-0 | libgtk-3-0t64' \
       --icon "$ICON_PATH_LINUX"
     label_installer deb "$BUILD_SUFFIX"
     ;;
@@ -172,7 +179,7 @@ case "$TASK" in
     echo "Running rpm packaging task..."
     echo "JAVA_HOME: ${JAVA_HOME}"
     ls -lh "${JAVA_HOME}"
-    microdnf install -y rpm-build
+    microdnf install -y rpm-build binutils
     export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
     BUILD_SUFFIX=$(./gradlew printBuildArtifactSuffix -q | tail -n 1)
     echo "App version is $APP_VERSION"
@@ -191,6 +198,7 @@ case "$TASK" in
       --app-version "$APP_VERSION" \
       --license-file "$LICENSE_FILE" \
       --vendor "$VENDOR" \
+      --linux-package-deps gtk3 \
       --icon "$ICON_PATH_LINUX"
     label_installer rpm "$BUILD_SUFFIX"
     ;;

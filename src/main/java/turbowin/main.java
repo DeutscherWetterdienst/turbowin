@@ -4164,9 +4164,7 @@ public class main extends javax.swing.JFrame {
 
   private void Info_About_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_About_menu_actionPerformed
-    about form = new about();
-    form.setSize(600, 700);
-    form.setVisible(true);
+    AboutDialog.show(this);
   } // GEN-LAST:event_Info_About_menu_actionPerformed
 
   private void Output_obs_by_email_all_manual() {

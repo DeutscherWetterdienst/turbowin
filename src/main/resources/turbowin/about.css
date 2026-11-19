@@ -1,0 +1,53 @@
+.root {
+    -fx-font-family: "System";
+    -fx-font-size: 13px;
+    -fx-background-color: #f4f7fa;
+}
+.about-scroll, .about-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.content {
+    -fx-padding: 26 30 20 30;
+}
+.title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #19374e;
+}
+.subtitle {
+    -fx-text-fill: #4d6575;
+}
+.details {
+    -fx-padding: 15;
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-color: #d8e1e8;
+    -fx-border-radius: 6;
+}
+.details .label {
+    -fx-text-fill: #263d4b;
+}
+.details.night {
+    -fx-background-color: #d9e1e6;
+}
+.details.sunrise {
+    -fx-background-color: #fff0df;
+}
+.details.sunset {
+    -fx-background-color: #ffeded;
+}
+.hyperlink {
+    -fx-text-fill: #1c6287;
+    -fx-padding: 0;
+}
+.history {
+    -fx-text-fill: #526a79;
+    -fx-font-weight: bold;
+}
+.footer {
+    -fx-padding: 12 30 16 30;
+    -fx-border-color: #d8e1e8 transparent transparent transparent;
+}
+.button {
+    -fx-min-width: 90;
+}
