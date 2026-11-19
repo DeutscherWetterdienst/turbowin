@@ -1,13 +1,16 @@
 # Architecture Decisions
 
-These describe choices visible in the current implementation and their tradeoffs. They are not a
-record of previously undocumented historical motives or commitments to future redesigns.
+These describe architectural choices and their tradeoffs, without attributing undocumented
+historical motives to the implementation.
 
-## Java 25, Swing, and packaged runtimes
+## Java 25, incremental JavaFX migration, and packaged runtimes
 
-The application uses Java 25 and Swing. Java provides a shared implementation across deployment
-platforms, while `jlink`/`jpackage` supply an application runtime in the installers. Serial hardware
-and desktop APIs still impose platform-specific constraints.
+The application uses Java 25 and retains its Swing interface while migrating individual views to
+JavaFX. The About dialog is the first JavaFX view embedded in Swing. This incremental approach and
+the continued coexistence of both toolkits are recorded in
+[ADR-0010](adr/0010-incremental-javafx-migration.md). `jlink`/`jpackage` supply an application
+runtime in the installers; native UI dependencies, serial hardware, and desktop APIs still impose
+platform-specific constraints.
 
 ## Preserve behavior while extracting responsibilities
 

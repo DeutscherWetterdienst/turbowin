@@ -30,6 +30,7 @@ shares mutable state across Swing forms and legacy coordinator classes.
 ## Working on the repository
 
 - [Contributor and testing guide](contributing_and_testing.md)
+- [JavaFX migration and Swing integration](javafx-migration.md)
 - [Repository cleanup and artifact policy](repository_cleanup.md)
 - [Format 101 compatibility tooling](../contrib/format101/README.md)
 
