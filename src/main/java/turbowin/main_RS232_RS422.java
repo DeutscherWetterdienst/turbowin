@@ -4383,8 +4383,8 @@ public class main_RS232_RS422 {
             }
 
             if (APR_settings_ok
-                && GPS_date_time_ok) // GPS date-time was compared with system date-time
-            {
+                && GPS_date_time_ok
+                && aprUploadGate.claim(cal_APR_system_date_time.toInstant(), retry)) {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
@@ -4449,8 +4449,8 @@ public class main_RS232_RS422 {
             }
 
             if (APR_settings_ok
-                && GPS_date_time_ok) // GPS date-time was compared with system date-time
-            {
+                && GPS_date_time_ok
+                && aprUploadGate.claim(cal_APR_system_date_time.toInstant(), retry)) {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
@@ -4514,8 +4514,8 @@ public class main_RS232_RS422 {
             }
 
             if (APR_settings_ok
-                && GPS_date_time_ok) // GPS date-time was compared with system date-time
-            {
+                && GPS_date_time_ok
+                && aprUploadGate.claim(cal_APR_system_date_time.toInstant(), retry)) {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
@@ -5854,8 +5854,8 @@ public class main_RS232_RS422 {
               }
 
               if (APR_settings_ok
-                  && GPS_date_time_ok) // GPS date-time was compared with system date-time
-              {
+                  && GPS_date_time_ok
+                  && aprUploadGate.claim(cal_APR_system_date_time.toInstant(), retry)) {
                 // NB in this stage we are sure the date-time is correct! + we are sure position is
                 // available!
 
@@ -5890,8 +5890,8 @@ public class main_RS232_RS422 {
               GPS_date_time_ok = main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("APR");
 
               if (APR_settings_ok
-                  && GPS_date_time_ok) // GPS date-time was compared with system date-time
-              {
+                  && GPS_date_time_ok
+                  && aprUploadGate.claim(cal_APR_system_date_time.toInstant(), retry)) {
                 // NB in this stage we are sure the date-time is correct! + we are sure position is
                 // available!
 
@@ -6220,8 +6220,8 @@ public class main_RS232_RS422 {
             }
 
             if (APR_settings_ok
-                && GPS_date_time_ok) // GPS date-time was compared with system date-time
-            {
+                && GPS_date_time_ok
+                && aprUploadGate.claim(cal_APR_system_date_time.toInstant(), retry)) {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
@@ -6280,8 +6280,8 @@ public class main_RS232_RS422 {
             }
 
             if (APR_settings_ok
-                && GPS_date_time_ok) // GPS date-time was compared with system date-time
-            {
+                && GPS_date_time_ok
+                && aprUploadGate.claim(cal_APR_system_date_time.toInstant(), retry)) {
               // NB in this stage we are sure the date-time is correct! + we are sure position is
               // available!
 
@@ -8132,6 +8132,7 @@ public class main_RS232_RS422 {
   private GregorianCalendar cal_APR_system_dt;
   private GregorianCalendar cal_AWSR_system_date_time;
   private final AwsrUploadGate awsrUploadGate = new AwsrUploadGate();
+  private final AwsrUploadGate aprUploadGate = new AwsrUploadGate();
   private GregorianCalendar cal_AWSR_system_dt;
   private GregorianCalendar cal_AWS_system_dt;
   private GregorianCalendar cal_APR_AWS_system_dt; // pop-up dashboard
