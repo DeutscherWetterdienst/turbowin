@@ -205,6 +205,52 @@ public class JakartaEmailLocalSmtpTest {
     }
   }
 
+  @Test
+  public void connectionTestAuthenticatesWithConfiguredCredentials() throws Exception {
+    try (FakeSmtpServer server = new FakeSmtpServer("smtp-user", "smtp-pass")) {
+      int status =
+          new Jakarta_Email()
+              .testConnection(
+                  main.CUSTOM_TLS,
+                  "127.0.0.1",
+                  "smtp-pass",
+                  "smtp-user",
+                  Integer.toString(server.port()));
+      assertEquals(0, status);
+      server.awaitCompletion();
+      assertTrue(server.message() == null);
+    }
+  }
+
+  @Test
+  public void connectionTestReportsRejectedCredentials() throws Exception {
+    try (FakeSmtpServer server = new FakeSmtpServer("smtp-user", "smtp-pass")) {
+      Jakarta_Email email = new Jakarta_Email();
+      int status =
+          email.testConnection(
+              main.CUSTOM_TLS,
+              "127.0.0.1",
+              "wrong-pass",
+              "smtp-user",
+              Integer.toString(server.port()));
+      assertEquals(1, status);
+      assertEquals("authentication", email.lastDiagnosticLabel());
+      server.awaitCompletion();
+    }
+  }
+
+  @Test
+  public void connectionTestSupportsUnauthenticatedLocalRelay() throws Exception {
+    try (FakeSmtpServer server = new FakeSmtpServer()) {
+      assertEquals(
+          0,
+          new Jakarta_Email()
+              .testConnection(
+                  main.CUSTOM_TLS, "127.0.0.1", "", "", Integer.toString(server.port())));
+      server.awaitCompletion();
+    }
+  }
+
   private static final class FakeSmtpServer implements AutoCloseable {
     private final ServerSocket serverSocket;
     private final AtomicReference<String> receivedMessage = new AtomicReference<>();

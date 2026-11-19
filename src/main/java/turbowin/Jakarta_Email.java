@@ -107,7 +107,7 @@ public class Jakarta_Email {
       Session session = Session.getInstance(props, null);
       SMTPTransport transport = (SMTPTransport) session.getTransport("smtp");
       try {
-        transport.connect();
+        transport.connect(smtp_host_local, smtp_username_local, smtp_password_local);
       } finally {
         if (transport.isConnected()) {
           transport.close();
