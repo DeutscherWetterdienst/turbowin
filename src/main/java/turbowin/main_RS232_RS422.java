@@ -4289,6 +4289,7 @@ public class main_RS232_RS422 {
                   new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
           cal_WOW_systeem_datum_tijd.getTime(); // now effective
           int WOW_system_minute_local = cal_WOW_systeem_datum_tijd.get(Calendar.MINUTE);
+          var wowScheduleTime = cal_WOW_systeem_datum_tijd.toInstant();
           cal_WOW_systeem_datum_tijd = null;
 
           // if (WOW_system_minute_local % Integer.valueOf(main.WOW_reporting_interval) == 0)
@@ -4299,14 +4300,11 @@ public class main_RS232_RS422 {
               == 0) // e.g. every 10 minutes (WOW_reporting_interval);  e.g: 1, 11, 21, 31 etc min
           // past every hour
           {
-            // logging
-            String message = "[WOW] scheduled upload";
-            main.log_turbowin_system_message(message);
-
             // checking
             boolean WOW_settings_ok = RS232_check_WOW_settings();
 
-            if (WOW_settings_ok) {
+            if (WOW_settings_ok && wowUploadGate.claim(wowScheduleTime)) {
+              main.log_turbowin_system_message("[WOW] scheduled upload");
               // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
@@ -6124,20 +6122,18 @@ public class main_RS232_RS422 {
                   new SimpleTimeZone(0, "UTC")); // system date time in UTC of this moment
           cal_WOW_systeem_datum_tijd.getTime(); // now effective
           int WOW_system_minute_local = cal_WOW_systeem_datum_tijd.get(Calendar.MINUTE);
+          var wowScheduleTime = cal_WOW_systeem_datum_tijd.toInstant();
           cal_WOW_systeem_datum_tijd = null;
 
           if ((WOW_system_minute_local - 1) % Integer.valueOf(main.WOW_reporting_interval)
               == 0) // e.g. every 10 minutes (WOW_reporting_interval);   but no interference with
           // APR!
           {
-            // logging
-            String message = "[WOW] scheduled upload";
-            main.log_turbowin_system_message(message);
-
             // checking
             boolean WOW_settings_ok = RS232_check_WOW_settings();
 
-            if (WOW_settings_ok) {
+            if (WOW_settings_ok && wowUploadGate.claim(wowScheduleTime)) {
+              main.log_turbowin_system_message("[WOW] scheduled upload");
               // read the barometer data which was saved before by TurboWin from a sensor data file
               if (main.RS232_connection_mode == 1
                   || main.RS232_connection_mode == 2) // PTB220 or PTB330
@@ -8133,6 +8129,7 @@ public class main_RS232_RS422 {
   private GregorianCalendar cal_AWSR_system_date_time;
   private final AwsrUploadGate awsrUploadGate = new AwsrUploadGate();
   private final AwsrUploadGate aprUploadGate = new AwsrUploadGate();
+  private final WowUploadGate wowUploadGate = new WowUploadGate();
   private GregorianCalendar cal_AWSR_system_dt;
   private GregorianCalendar cal_AWS_system_dt;
   private GregorianCalendar cal_APR_AWS_system_dt; // pop-up dashboard
