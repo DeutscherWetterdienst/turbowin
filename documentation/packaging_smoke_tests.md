@@ -18,8 +18,8 @@ written below `build/package-smoke/` and uploaded by CI even when the test fails
 Run a test locally after building its installer (as root or in a disposable VM/container):
 
 ```bash
-./scripts/package_smoke_test_deb.bash build/jpackage/TurboWin-6.0.0.deb
-./scripts/package_smoke_test_rpm.bash build/jpackage/TurboWin-6.0.0.rpm
+./scripts/package_smoke_test_deb.bash path/to/installer.deb
+./scripts/package_smoke_test_rpm.bash path/to/installer.rpm
 ```
 
 To set the Debian package maintainer email without storing it in Git, export
@@ -30,7 +30,7 @@ the same name. The DEB packaging task fails fast if it is unset or empty.
 On Windows PowerShell, run the EXE test in an elevated disposable runner:
 
 ```powershell
-.\scripts\package_smoke_test_exe.ps1 build\jpackage\TurboWin-6.0.0_64-bit.exe
+.\scripts\package_smoke_test_exe.ps1 path\to\installer.exe
 ```
 
 The application has no dedicated headless mode. Linux launch checks use `xvfb-run`; Windows starts

@@ -4,13 +4,13 @@ set -euo pipefail
 # Determine the directory of this script.
 SCRIPT_DIR="$(dirname "$0")"
 
-# Install jq depending on the package manager available
+# Install the tools used for packaging and build identity detection.
 if command -v apt-get &>/dev/null; then
-  echo "Using apt-get to install jq..."
-  apt-get update --quiet=2 && apt-get install --quiet=2 --yes jq
+  echo "Using apt-get to install jq and git..."
+  apt-get update --quiet=2 && apt-get install --quiet=2 --yes jq git
 elif command -v microdnf &>/dev/null; then
-  echo "Using microdnf to install jq..."
-  microdnf update -y && microdnf install -y jq
+  echo "Using microdnf to install jq and git..."
+  microdnf update -y && microdnf install -y jq git
 else
   echo "Error: Neither apt-get nor microdnf found. Cannot install jq."
   exit 1
@@ -32,6 +32,35 @@ fi
 # Valid tasks: jar, test, deb, rpm
 
 TASK="$1"
+
+# Rename only the installer created in this packaging run. The package's internal version remains
+# numeric; the filename identifies the source build without changing upgrade semantics.
+assert_installer_output_clear() {
+  local extension="$1"
+  if [ -d build/jpackage ] && find build/jpackage -maxdepth 1 -type f -name "*.$extension" -print -quit | grep -q .; then
+    echo "Error: move existing .$extension installers out of build/jpackage before packaging." >&2
+    exit 1
+  fi
+}
+
+label_installer() {
+  local extension="$1" suffix="$2" package target
+  if [ "$suffix" = release ]; then
+    return
+  fi
+  mapfile -t packages < <(find build/jpackage -maxdepth 1 -type f -name "*.$extension" -print)
+  if [ "${#packages[@]}" -ne 1 ]; then
+    echo "Error: expected exactly one .$extension installer in build/jpackage, found ${#packages[@]}." >&2
+    exit 1
+  fi
+  package="${packages[0]}"
+  target="${package%.*}-${suffix}.${extension}"
+  if [ -e "$target" ]; then
+    echo "Error: refusing to overwrite installer $target" >&2
+    exit 1
+  fi
+  mv -- "$package" "$target"
+}
 
 if [ -z "$TASK" ]; then
   echo "Usage: $0 <task>"
@@ -118,9 +147,11 @@ case "$TASK" in
     ls -lh "${JAVA_HOME}"
     apt-get install --quiet=2 --yes fakeroot binutils
     export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
+    BUILD_SUFFIX=$(./gradlew printBuildArtifactSuffix -q | tail -n 1)
     echo "App version is $APP_VERSION"
     ./gradlew jlink --stacktrace --info
     ./gradlew --stop
+    assert_installer_output_clear deb
     jpackage \
       --verbose \
       --type deb \
@@ -135,6 +166,7 @@ case "$TASK" in
       --vendor "$VENDOR" \
       --linux-deb-maintainer "$DEB_MAINTAINER_EMAIL" \
       --icon "$ICON_PATH_LINUX"
+    label_installer deb "$BUILD_SUFFIX"
     ;;
   rpm)
     echo "Running rpm packaging task..."
@@ -142,9 +174,11 @@ case "$TASK" in
     ls -lh "${JAVA_HOME}"
     microdnf install -y rpm-build
     export APP_VERSION=$(./gradlew printVersion -q | tail -n 1)
+    BUILD_SUFFIX=$(./gradlew printBuildArtifactSuffix -q | tail -n 1)
     echo "App version is $APP_VERSION"
     ./gradlew jlink --stacktrace --info
     ./gradlew --stop
+    assert_installer_output_clear rpm
     jpackage \
       --verbose \
       --type rpm \
@@ -158,6 +192,7 @@ case "$TASK" in
       --license-file "$LICENSE_FILE" \
       --vendor "$VENDOR" \
       --icon "$ICON_PATH_LINUX"
+    label_installer rpm "$BUILD_SUFFIX"
     ;;
   *)
     echo "Unknown task: $TASK"

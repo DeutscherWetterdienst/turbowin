@@ -94,6 +94,19 @@ The platform scripts share [variables.json](../scripts/variables.json):
 | RPM | `./scripts/task_linux.bash rpm` | `build/jpackage/` |
 | Windows EXE | `powershell -File scripts/task_windows.ps1` | `build/jpackage/` |
 
+A clean checkout tagged `v6.0.0` (or `6.0.0`, matching the Gradle version) is identified as a
+release. Other builds display a label such as `6.0.0-dev+f9cbf95` in About and the system log; the
+installer filename includes `dev-f9cbf95`. Uncommitted local changes add `dirty`. If the commit
+cannot be determined, the label uses `unknown`. GitHub and GitLab CI use their checkout or commit
+environment variables; a source archive without Git is treated as a development build.
+When CI provides a source archive without Git metadata, a matching CI release tag and commit
+identify the release; a standalone archive without those CI variables is a development build.
+
+The installer filename is only an identifier: the package's internal version remains `6.0.0`,
+so these labels do not make development builds ordered upgrades. The full commit hash is retained
+in the generated application metadata. Before building another installer of the same format in
+the same output directory, move the previous installer elsewhere.
+
 The Linux script installs operating-system packages and expects an appropriate privileged
 APT/microdnf environment and `JAVA_HOME`; it is intended for the CI containers, not an ordinary
 unprivileged workstation command. The Windows script downloads the configured Liberica JDK and
