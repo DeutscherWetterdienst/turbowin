@@ -1893,10 +1893,6 @@ public class main_RS232_RS422 {
             AWSR_system_hour_local, AWSR_system_minute_local, AWSR_reporting_interval)) {
           retry = false;
 
-          // logging
-          String message = "[AWSR] scheduled upload";
-          main.log_turbowin_system_message(message);
-
           // checking
           boolean AWSR_settings_ok = RS422_check_AWSR_settings();
           boolean GPS_date_time_ok = true;
@@ -1906,8 +1902,9 @@ public class main_RS232_RS422 {
           // saved record will be checked, see below
 
           if (AWSR_settings_ok
-              && GPS_date_time_ok) // GPS date-time was compared with system date-time
-          {
+              && GPS_date_time_ok
+              && awsrUploadGate.claim(cal_AWSR_system_date_time.toInstant(), false)) {
+            main.log_turbowin_system_message("[AWSR] scheduled upload");
             // NB in this stage we are sure the date-time is correct! + we are sure position is
             // available!
 
@@ -1926,10 +1923,6 @@ public class main_RS232_RS422 {
             AWSR_RETRY_MINUTES)) {
           retry = true;
 
-          // logging
-          String message = "[AWSR] retry scheduled upload";
-          main.log_turbowin_system_message(message);
-
           // checking
           boolean AWSR_settings_ok = RS422_check_AWSR_settings();
           boolean GPS_date_time_ok = true;
@@ -1940,8 +1933,9 @@ public class main_RS232_RS422 {
           GPS_date_time_ok = true;
 
           if (AWSR_settings_ok
-              && GPS_date_time_ok) // GPS date-time was compared with system date-time
-          {
+              && GPS_date_time_ok
+              && awsrUploadGate.claim(cal_AWSR_system_date_time.toInstant(), true)) {
+            main.log_turbowin_system_message("[AWSR] retry scheduled upload");
             // NB in this stage we are sure the date-time is correct! + we are sure position is
             // available!
             RS422_Read_And_Send_Sensor_Data_For_AWSR(retry);
@@ -8133,6 +8127,7 @@ public class main_RS232_RS422 {
   private GregorianCalendar cal_APR_system_date_time;
   private GregorianCalendar cal_APR_system_dt;
   private GregorianCalendar cal_AWSR_system_date_time;
+  private final AwsrUploadGate awsrUploadGate = new AwsrUploadGate();
   private GregorianCalendar cal_AWSR_system_dt;
   private GregorianCalendar cal_AWS_system_dt;
   private GregorianCalendar cal_APR_AWS_system_dt; // pop-up dashboard
