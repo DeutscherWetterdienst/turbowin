@@ -18,9 +18,9 @@ final class CloudCoverJavaFxWindow {
     }
     CloudCoverView.State state =
         new CloudCoverView.State(
-            mycloudcover.N,
-            mycloudcover.N.isEmpty() ? "" : mycloudcover.Nh,
-            advisedHeight(mycloudcover.computeHeightAdvice()),
+            CloudCoverState.N,
+            CloudCoverState.N.isEmpty() ? "" : CloudCoverState.Nh,
+            advisedHeight(CloudHeightAdvice.compute()),
             main.in_next_sequence,
             main.offline_mode);
     return FxSwingDialog.show(
@@ -41,18 +41,18 @@ final class CloudCoverJavaFxWindow {
 
   static String advisedHeight(int advice) {
     return switch (advice) {
-      case -9 -> mycloudcover.H_CLOUDLESS;
-      case 0 -> mycloudcover.H_0_50;
-      case 1 -> mycloudcover.H_50_100;
-      case 2 -> mycloudcover.H_100_200;
-      case 3 -> mycloudcover.H_200_300;
-      case 4 -> mycloudcover.H_300_600;
-      case 5 -> mycloudcover.H_600_1000;
-      case 6 -> mycloudcover.H_1000_1500;
-      case 7 -> mycloudcover.H_1500_2000;
-      case 8 -> mycloudcover.H_2000_2500;
-      case 9 -> mycloudcover.H_GROTER_2500;
-      default -> mycloudcover.H_NOT_DETERMINED;
+      case -9 -> CloudCoverState.H_CLOUDLESS;
+      case 0 -> CloudCoverState.H_0_50;
+      case 1 -> CloudCoverState.H_50_100;
+      case 2 -> CloudCoverState.H_100_200;
+      case 3 -> CloudCoverState.H_200_300;
+      case 4 -> CloudCoverState.H_300_600;
+      case 5 -> CloudCoverState.H_600_1000;
+      case 6 -> CloudCoverState.H_1000_1500;
+      case 7 -> CloudCoverState.H_1500_2000;
+      case 8 -> CloudCoverState.H_2000_2500;
+      case 9 -> CloudCoverState.H_GROTER_2500;
+      default -> CloudCoverState.H_NOT_DETERMINED;
     };
   }
 
@@ -66,12 +66,12 @@ final class CloudCoverJavaFxWindow {
       clearObservation();
       return;
     }
-    mycloudcover.N = result.n;
-    mycloudcover.Nh = result.nh;
-    mycloudcover.h = result.h;
-    mycloudcover.N_code = result.nCode;
-    mycloudcover.Nh_code = result.nhCode;
-    mycloudcover.h_code = result.hCode;
+    CloudCoverState.N = result.n;
+    CloudCoverState.Nh = result.nh;
+    CloudCoverState.h = result.h;
+    CloudCoverState.N_code = result.nCode;
+    CloudCoverState.Nh_code = result.nhCode;
+    CloudCoverState.h_code = result.hCode;
     main.cloud_cover_fields_update();
     close.run();
     if (main.in_next_sequence) {
@@ -80,12 +80,12 @@ final class CloudCoverJavaFxWindow {
   }
 
   private static void clearObservation() {
-    mycloudcover.N = "";
-    mycloudcover.Nh = "";
-    mycloudcover.h = "";
-    mycloudcover.N_code = "";
-    mycloudcover.Nh_code = "";
-    mycloudcover.h_code = "";
+    CloudCoverState.N = "";
+    CloudCoverState.Nh = "";
+    CloudCoverState.h = "";
+    CloudCoverState.N_code = "";
+    CloudCoverState.Nh_code = "";
+    CloudCoverState.h_code = "";
     main.cloud_cover_fields_update();
   }
 

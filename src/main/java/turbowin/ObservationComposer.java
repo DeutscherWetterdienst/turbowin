@@ -90,15 +90,15 @@ final class ObservationComposer {
 
     // total cloud cover (N)
     //
-    coded_obs_N = ObservationCodeFormatter.direct(mycloudcover.N_code, "/");
+    coded_obs_N = ObservationCodeFormatter.direct(CloudCoverState.N_code, "/");
 
     // cover Cl/Cm (Nh)
     //
-    coded_obs_Nh = ObservationCodeFormatter.direct(mycloudcover.Nh_code, "/");
+    coded_obs_Nh = ObservationCodeFormatter.direct(CloudCoverState.Nh_code, "/");
 
     // height lowest cloud in the sky (h)
     //
-    coded_obs_h = ObservationCodeFormatter.direct(mycloudcover.h_code, "/");
+    coded_obs_h = ObservationCodeFormatter.direct(CloudCoverState.h_code, "/");
 
     // visibility (VV)
     //

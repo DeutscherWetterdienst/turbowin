@@ -76,9 +76,9 @@ final class ImmtLogWorkflow {
     immt_rec += "0"; // char number 20
 
     try {
-      int num_h = Integer.valueOf(mycloudcover.h_code);
+      int num_h = Integer.valueOf(CloudCoverState.h_code);
       if (num_h >= 0 && num_h <= 9) {
-        immt_rec += mycloudcover.h_code; // char number 21
+        immt_rec += CloudCoverState.h_code; // char number 21
         Qc_1 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 21
@@ -102,9 +102,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_N = Integer.valueOf(mycloudcover.N_code);
+      int num_N = Integer.valueOf(CloudCoverState.N_code);
       if (num_N >= 0 && num_N <= 9) {
-        immt_rec += mycloudcover.N_code; // char number 24
+        immt_rec += CloudCoverState.N_code; // char number 24
         Qc_3 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 24
@@ -284,9 +284,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_Nh = Integer.valueOf(mycloudcover.Nh_code);
+      int num_Nh = Integer.valueOf(CloudCoverState.Nh_code);
       if (num_Nh >= 0 && num_Nh <= 9) {
-        immt_rec += mycloudcover.Nh_code; // char number 46
+        immt_rec += CloudCoverState.Nh_code; // char number 46
         Qc_3 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 46

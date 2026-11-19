@@ -294,9 +294,9 @@ public class ObservationFillingTest extends AbstractUiTest {
     Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) lowCloudsFrame.target());
     CloudCoverFxTestSupport.onFx(() -> {
       scene.getRoot().applyCss();
-      CloudCoverFxTestSupport.choose(scene, "total", mycloudcover.N_4_8);
-      CloudCoverFxTestSupport.choose(scene, "cl", mycloudcover.NH_3_8);
-      CloudCoverFxTestSupport.choose(scene, "low", mycloudcover.H_300_600);
+      CloudCoverFxTestSupport.choose(scene, "total", CloudCoverState.N_4_8);
+      CloudCoverFxTestSupport.choose(scene, "cl", CloudCoverState.NH_3_8);
+      CloudCoverFxTestSupport.choose(scene, "low", CloudCoverState.H_300_600);
       CloudCoverFxTestSupport.click(scene, "OK");
       return null;
     });

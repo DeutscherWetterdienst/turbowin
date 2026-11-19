@@ -53,12 +53,12 @@ final class ObservationStateResetter {
     mych.ch_code = "";
 
     // cloud cover and height
-    mycloudcover.N = "";
-    mycloudcover.Nh = "";
-    mycloudcover.h = "";
-    mycloudcover.N_code = "";
-    mycloudcover.Nh_code = "";
-    mycloudcover.h_code = "";
+    CloudCoverState.N = "";
+    CloudCoverState.Nh = "";
+    CloudCoverState.h = "";
+    CloudCoverState.N_code = "";
+    CloudCoverState.Nh_code = "";
+    CloudCoverState.h_code = "";
 
     // Temperatures
     mytemp.air_temp = "";

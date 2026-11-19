@@ -33,16 +33,16 @@ final class CloudFieldsUpdater {
   }
 
   static void updateCover() {
-    if ((mycloudcover.N.compareTo("") != 0) && (mycloudcover.N != null))
-      jTextField30.setText(mycloudcover.N);
+    if ((CloudCoverState.N.compareTo("") != 0) && (CloudCoverState.N != null))
+      jTextField30.setText(CloudCoverState.N);
     else jTextField30.setText("");
 
-    if ((mycloudcover.Nh.compareTo("") != 0) && (mycloudcover.Nh != null))
-      jTextField31.setText(mycloudcover.Nh);
+    if ((CloudCoverState.Nh.compareTo("") != 0) && (CloudCoverState.Nh != null))
+      jTextField31.setText(CloudCoverState.Nh);
     else jTextField31.setText("");
 
-    if ((mycloudcover.h.compareTo("") != 0) && (mycloudcover.h != null))
-      jTextField32.setText(mycloudcover.h);
+    if ((CloudCoverState.h.compareTo("") != 0) && (CloudCoverState.h != null))
+      jTextField32.setText(CloudCoverState.h);
     else jTextField32.setText("");
 
     coded_obs_update();

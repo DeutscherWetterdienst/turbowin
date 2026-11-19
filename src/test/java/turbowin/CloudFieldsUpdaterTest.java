@@ -25,9 +25,9 @@ public class CloudFieldsUpdaterTest {
     originalCloudValues[0] = mycl.cl_code;
     originalCloudValues[1] = mycm.cm_code;
     originalCloudValues[2] = mych.ch_code;
-    originalCloudValues[3] = mycloudcover.N;
-    originalCloudValues[4] = mycloudcover.Nh;
-    originalCloudValues[5] = mycloudcover.h;
+    originalCloudValues[3] = CloudCoverState.N;
+    originalCloudValues[4] = CloudCoverState.Nh;
+    originalCloudValues[5] = CloudCoverState.h;
     originalConnectionMode = main.RS232_connection_mode;
   }
 
@@ -43,9 +43,9 @@ public class CloudFieldsUpdaterTest {
     mycl.cl_code = originalCloudValues[0];
     mycm.cm_code = originalCloudValues[1];
     mych.ch_code = originalCloudValues[2];
-    mycloudcover.N = originalCloudValues[3];
-    mycloudcover.Nh = originalCloudValues[4];
-    mycloudcover.h = originalCloudValues[5];
+    CloudCoverState.N = originalCloudValues[3];
+    CloudCoverState.Nh = originalCloudValues[4];
+    CloudCoverState.h = originalCloudValues[5];
     main.RS232_connection_mode = originalConnectionMode;
   }
 
@@ -55,9 +55,9 @@ public class CloudFieldsUpdaterTest {
     mycl.cl_code = "5";
     mycm.cm_code = "7a";
     mych.ch_code = "3";
-    mycloudcover.N = "6";
-    mycloudcover.Nh = "2";
-    mycloudcover.h = "4";
+    CloudCoverState.N = "6";
+    CloudCoverState.Nh = "2";
+    CloudCoverState.h = "4";
 
     CloudFieldsUpdater.updateLow();
     CloudFieldsUpdater.updateMiddle();
@@ -78,9 +78,9 @@ public class CloudFieldsUpdaterTest {
     mycl.cl_code = "";
     mycm.cm_code = "";
     mych.ch_code = "";
-    mycloudcover.N = "";
-    mycloudcover.Nh = "";
-    mycloudcover.h = "";
+    CloudCoverState.N = "";
+    CloudCoverState.Nh = "";
+    CloudCoverState.h = "";
 
     CloudFieldsUpdater.updateLow();
     CloudFieldsUpdater.updateMiddle();

@@ -973,7 +973,12 @@ public class FORMAT_101 {
 
     compressed_cloud_cover =
         parseOptionalNumericField(
-            mycloudcover.N_code, 1, present, 33, "total cloud cover (N)", COMPRESSED_UNDEF_VALUE);
+            CloudCoverState.N_code,
+            1,
+            present,
+            33,
+            "total cloud cover (N)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [34]
     //////////////////////////////////////////// 0 20 011 (cloud amount low; Nh) ////////////////////////////////////////
@@ -981,7 +986,12 @@ public class FORMAT_101 {
     /* unit  = code (bufr table 020011) */
     compressed_cloud_amount_low_medium =
         parseOptionalNumericField(
-            mycloudcover.Nh_code, 1, present, 34, "cloud amount low (Nh)", COMPRESSED_UNDEF_VALUE);
+            CloudCoverState.Nh_code,
+            1,
+            present,
+            34,
+            "cloud amount low (Nh)",
+            COMPRESSED_UNDEF_VALUE);
 
     /* [35]
     //////////////////////////////////////////// 0 20 012 (cloud type low; Cl) ////////////////////////////////////////
@@ -1024,7 +1034,7 @@ public class FORMAT_101 {
 
     compressed_cloud_base =
         parseOptionalNumericField(
-            mycloudcover.h_code,
+            CloudCoverState.h_code,
             1,
             present,
             38,

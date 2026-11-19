@@ -69,9 +69,9 @@ public class AwsObservationComposerTest {
     originalWwCode = mypresentweather.ww_code;
     originalW1Code = mypastweather.W1_code;
     originalW2Code = mypastweather.W2_code;
-    originalNCode = mycloudcover.N_code;
-    originalNhCode = mycloudcover.Nh_code;
-    originalHCode = mycloudcover.h_code;
+    originalNCode = CloudCoverState.N_code;
+    originalNhCode = CloudCoverState.Nh_code;
+    originalHCode = CloudCoverState.h_code;
     originalClCode = mycl.cl_code;
     originalCmCode = mycm.cm_code;
     originalChCode = mych.ch_code;
@@ -111,9 +111,9 @@ public class AwsObservationComposerTest {
     mypresentweather.ww_code = "//";
     mypastweather.W1_code = "/";
     mypastweather.W2_code = "/";
-    mycloudcover.N_code = "/";
-    mycloudcover.Nh_code = "/";
-    mycloudcover.h_code = "/";
+    CloudCoverState.N_code = "/";
+    CloudCoverState.Nh_code = "/";
+    CloudCoverState.h_code = "/";
     mycl.cl_code = "/";
     mycm.cm_code = "/";
     mych.ch_code = "/";
@@ -155,9 +155,9 @@ public class AwsObservationComposerTest {
     mypresentweather.ww_code = originalWwCode;
     mypastweather.W1_code = originalW1Code;
     mypastweather.W2_code = originalW2Code;
-    mycloudcover.N_code = originalNCode;
-    mycloudcover.Nh_code = originalNhCode;
-    mycloudcover.h_code = originalHCode;
+    CloudCoverState.N_code = originalNCode;
+    CloudCoverState.Nh_code = originalNhCode;
+    CloudCoverState.h_code = originalHCode;
     mycl.cl_code = originalClCode;
     mycm.cm_code = originalCmCode;
     mych.ch_code = originalChCode;
@@ -524,17 +524,17 @@ public class AwsObservationComposerTest {
     String originalPresentWeather = mypresentweather.ww_code;
     String originalPastWeatherOne = mypastweather.W1_code;
     String originalPastWeatherTwo = mypastweather.W2_code;
-    String originalCloudCover = mycloudcover.N_code;
-    String originalCloudAmount = mycloudcover.Nh_code;
-    String originalCloudHeight = mycloudcover.h_code;
+    String originalCloudCover = CloudCoverState.N_code;
+    String originalCloudAmount = CloudCoverState.Nh_code;
+    String originalCloudHeight = CloudCoverState.h_code;
     try {
       myvisibility.VV_code = "10";
       mypresentweather.ww_code = "45";
       mypastweather.W1_code = "2";
       mypastweather.W2_code = "3";
-      mycloudcover.N_code = "7";
-      mycloudcover.Nh_code = "5";
-      mycloudcover.h_code = "4";
+      CloudCoverState.N_code = "7";
+      CloudCoverState.Nh_code = "5";
+      CloudCoverState.h_code = "4";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -550,9 +550,9 @@ public class AwsObservationComposerTest {
       mypresentweather.ww_code = originalPresentWeather;
       mypastweather.W1_code = originalPastWeatherOne;
       mypastweather.W2_code = originalPastWeatherTwo;
-      mycloudcover.N_code = originalCloudCover;
-      mycloudcover.Nh_code = originalCloudAmount;
-      mycloudcover.h_code = originalCloudHeight;
+      CloudCoverState.N_code = originalCloudCover;
+      CloudCoverState.Nh_code = originalCloudAmount;
+      CloudCoverState.h_code = originalCloudHeight;
     }
   }
 
@@ -562,17 +562,17 @@ public class AwsObservationComposerTest {
     String originalPresentWeather = mypresentweather.ww_code;
     String originalPastWeatherOne = mypastweather.W1_code;
     String originalPastWeatherTwo = mypastweather.W2_code;
-    String originalCloudCover = mycloudcover.N_code;
-    String originalCloudAmount = mycloudcover.Nh_code;
-    String originalCloudHeight = mycloudcover.h_code;
+    String originalCloudCover = CloudCoverState.N_code;
+    String originalCloudAmount = CloudCoverState.Nh_code;
+    String originalCloudHeight = CloudCoverState.h_code;
     try {
       myvisibility.VV_code = "//";
       mypresentweather.ww_code = "//";
       mypastweather.W1_code = "/";
       mypastweather.W2_code = "/";
-      mycloudcover.N_code = "/";
-      mycloudcover.Nh_code = "/";
-      mycloudcover.h_code = "/";
+      CloudCoverState.N_code = "/";
+      CloudCoverState.Nh_code = "/";
+      CloudCoverState.h_code = "/";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -588,9 +588,9 @@ public class AwsObservationComposerTest {
       mypresentweather.ww_code = originalPresentWeather;
       mypastweather.W1_code = originalPastWeatherOne;
       mypastweather.W2_code = originalPastWeatherTwo;
-      mycloudcover.N_code = originalCloudCover;
-      mycloudcover.Nh_code = originalCloudAmount;
-      mycloudcover.h_code = originalCloudHeight;
+      CloudCoverState.N_code = originalCloudCover;
+      CloudCoverState.Nh_code = originalCloudAmount;
+      CloudCoverState.h_code = originalCloudHeight;
     }
   }
 

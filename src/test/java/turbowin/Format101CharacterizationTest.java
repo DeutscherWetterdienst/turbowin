@@ -514,9 +514,9 @@ public class Format101CharacterizationTest {
     String originalMonth = mydatetime.MM_code;
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
-    String originalCloudCover = mycloudcover.N_code;
-    String originalLowCloudAmount = mycloudcover.Nh_code;
-    String originalCloudBase = mycloudcover.h_code;
+    String originalCloudCover = CloudCoverState.N_code;
+    String originalLowCloudAmount = CloudCoverState.Nh_code;
+    String originalCloudBase = CloudCoverState.h_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -528,9 +528,9 @@ public class Format101CharacterizationTest {
       mydatetime.MM_code = "10";
       mydatetime.day = "04";
       mydatetime.hour = "12";
-      mycloudcover.N_code = "5";
-      mycloudcover.Nh_code = "3";
-      mycloudcover.h_code = "600";
+      CloudCoverState.N_code = "5";
+      CloudCoverState.Nh_code = "3";
+      CloudCoverState.h_code = "600";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -539,9 +539,9 @@ public class Format101CharacterizationTest {
       assertEquals("1 3.0             cloud amount (low) [code]", lines.get(35));
       assertEquals("1 600.0           height of base of lowest clouds [code]", lines.get(39));
 
-      mycloudcover.N_code = "/";
-      mycloudcover.Nh_code = "/";
-      mycloudcover.h_code = "/";
+      CloudCoverState.N_code = "/";
+      CloudCoverState.Nh_code = "/";
+      CloudCoverState.h_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 total cloud cover [code]", lines.get(34));
@@ -553,9 +553,9 @@ public class Format101CharacterizationTest {
       mydatetime.MM_code = originalMonth;
       mydatetime.day = originalDay;
       mydatetime.hour = originalHour;
-      mycloudcover.N_code = originalCloudCover;
-      mycloudcover.Nh_code = originalLowCloudAmount;
-      mycloudcover.h_code = originalCloudBase;
+      CloudCoverState.N_code = originalCloudCover;
+      CloudCoverState.Nh_code = originalLowCloudAmount;
+      CloudCoverState.h_code = originalCloudBase;
     }
   }
 

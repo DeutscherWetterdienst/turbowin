@@ -25,9 +25,9 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
   public void acceptsObservationAndReopensAfterAbout() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       AboutDialog.show(frame.target());
-      mycloudcover.N = mycloudcover.N_4_8;
-      mycloudcover.Nh = mycloudcover.NH_3_8;
-      mycloudcover.h = mycloudcover.H_300_600;
+      CloudCoverState.N = CloudCoverState.N_4_8;
+      CloudCoverState.Nh = CloudCoverState.NH_3_8;
+      CloudCoverState.h = CloudCoverState.H_300_600;
       main.in_next_sequence = false;
     });
     JDialog dialog = GuiActionRunner.execute(() -> CloudCoverJavaFxWindow.open());
@@ -40,7 +40,7 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
               .filter(RadioButton.class::isInstance)
               .map(RadioButton.class::cast)
               .anyMatch(button ->
-                  mycloudcover.N_4_8.equals(button.getUserData()) && button.isSelected()));
+                  CloudCoverState.N_4_8.equals(button.getUserData()) && button.isSelected()));
       Button back =
           scene.getRoot().lookupAll(".button").stream()
               .filter(Button.class::isInstance)
@@ -49,24 +49,24 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
               .findFirst()
               .orElseThrow();
       assertTrue(back.isDisabled());
-      CloudCoverFxTestSupport.choose(scene, "total", mycloudcover.N_4_8);
-      CloudCoverFxTestSupport.choose(scene, "cl", mycloudcover.NH_3_8);
-      CloudCoverFxTestSupport.choose(scene, "low", mycloudcover.H_300_600);
+      CloudCoverFxTestSupport.choose(scene, "total", CloudCoverState.N_4_8);
+      CloudCoverFxTestSupport.choose(scene, "cl", CloudCoverState.NH_3_8);
+      CloudCoverFxTestSupport.choose(scene, "low", CloudCoverState.H_300_600);
       CloudCoverFxTestSupport.click(scene, "OK");
       return null;
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("4", mycloudcover.N_code);
-      assertEquals("3", mycloudcover.Nh_code);
-      assertEquals("4", mycloudcover.h_code);
-      assertEquals(mycloudcover.H_300_600, main.jTextField32.getText());
+      assertEquals("4", CloudCoverState.N_code);
+      assertEquals("3", CloudCoverState.Nh_code);
+      assertEquals("4", CloudCoverState.h_code);
+      assertEquals(CloudCoverState.H_300_600, main.jTextField32.getText());
     });
     JDialog reopened = GuiActionRunner.execute(() -> CloudCoverJavaFxWindow.open());
     Scene reopenedScene = CloudCoverFxTestSupport.awaitScene(reopened);
     String expectedAdvice =
         GuiActionRunner.execute(
-            () -> CloudCoverJavaFxWindow.advisedHeight(mycloudcover.computeHeightAdvice()));
+            () -> CloudCoverJavaFxWindow.advisedHeight(CloudHeightAdvice.compute()));
     CloudCoverFxTestSupport.onFx(() -> {
       reopenedScene.getRoot().applyCss();
       VBox heights = (VBox) reopenedScene.getRoot().lookup("#low");
@@ -86,7 +86,7 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
   public void stopLeavesSequenceModeAndDoesNotOverwriteObservation() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = true;
-      mycloudcover.N = mycloudcover.N_2_8;
+      CloudCoverState.N = CloudCoverState.N_2_8;
     });
     JDialog dialog = GuiActionRunner.execute(() -> CloudCoverJavaFxWindow.open());
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -98,7 +98,7 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
       assertFalse(main.in_next_sequence);
-      assertEquals(mycloudcover.N_2_8, mycloudcover.N);
+      assertEquals(CloudCoverState.N_2_8, CloudCoverState.N);
     });
   }
 
@@ -106,20 +106,20 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
   public void invalidSelectionClearsObservationAndKeepsDialogOpen() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
-      mycloudcover.N = mycloudcover.N_4_8;
-      mycloudcover.Nh = mycloudcover.NH_3_8;
-      mycloudcover.h = mycloudcover.H_300_600;
-      mycloudcover.N_code = "4";
-      mycloudcover.Nh_code = "3";
-      mycloudcover.h_code = "4";
+      CloudCoverState.N = CloudCoverState.N_4_8;
+      CloudCoverState.Nh = CloudCoverState.NH_3_8;
+      CloudCoverState.h = CloudCoverState.H_300_600;
+      CloudCoverState.N_code = "4";
+      CloudCoverState.Nh_code = "3";
+      CloudCoverState.h_code = "4";
     });
     JDialog dialog = GuiActionRunner.execute(() -> CloudCoverJavaFxWindow.open());
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
     CloudCoverFxTestSupport.onFx(() -> {
       scene.getRoot().applyCss();
-      CloudCoverFxTestSupport.choose(scene, "total", mycloudcover.N_CLOUDLESS);
-      CloudCoverFxTestSupport.choose(scene, "cl", mycloudcover.NH_1_8);
-      CloudCoverFxTestSupport.choose(scene, "low", mycloudcover.H_CLOUDLESS);
+      CloudCoverFxTestSupport.choose(scene, "total", CloudCoverState.N_CLOUDLESS);
+      CloudCoverFxTestSupport.choose(scene, "cl", CloudCoverState.NH_1_8);
+      CloudCoverFxTestSupport.choose(scene, "low", CloudCoverState.H_CLOUDLESS);
       CloudCoverFxTestSupport.click(scene, "OK");
       return null;
     });
@@ -129,8 +129,8 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
     warning.button(JButtonMatcher.withText("OK")).click();
     SwingUtilities.invokeAndWait(() -> {
       assertTrue(dialog.isDisplayable());
-      assertEquals("", mycloudcover.N);
-      assertEquals("", mycloudcover.Nh_code);
+      assertEquals("", CloudCoverState.N);
+      assertEquals("", CloudCoverState.Nh_code);
       assertEquals("", main.jTextField32.getText());
     });
     CloudCoverFxTestSupport.onFx(() -> {

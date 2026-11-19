@@ -26,44 +26,44 @@ final class CloudCoverView {
 
   private static final List<String> TOTAL_COVER =
       List.of(
-          mycloudcover.N_CLOUDLESS,
-          mycloudcover.N_1_8,
-          mycloudcover.N_2_8,
-          mycloudcover.N_3_8,
-          mycloudcover.N_4_8,
-          mycloudcover.N_5_8,
-          mycloudcover.N_6_8,
-          mycloudcover.N_7_8,
-          mycloudcover.N_COMPLETELY_OVERCAST,
-          mycloudcover.N_OBSCURED,
-          mycloudcover.N_NOT_DETERMINED);
+          CloudCoverState.N_CLOUDLESS,
+          CloudCoverState.N_1_8,
+          CloudCoverState.N_2_8,
+          CloudCoverState.N_3_8,
+          CloudCoverState.N_4_8,
+          CloudCoverState.N_5_8,
+          CloudCoverState.N_6_8,
+          CloudCoverState.N_7_8,
+          CloudCoverState.N_COMPLETELY_OVERCAST,
+          CloudCoverState.N_OBSCURED,
+          CloudCoverState.N_NOT_DETERMINED);
   private static final List<String> CLOUD_AMOUNT =
       List.of(
-          mycloudcover.NH_0_8,
-          mycloudcover.NH_1_8,
-          mycloudcover.NH_2_8,
-          mycloudcover.NH_3_8,
-          mycloudcover.NH_4_8,
-          mycloudcover.NH_5_8,
-          mycloudcover.NH_6_8,
-          mycloudcover.NH_7_8,
-          mycloudcover.NH_8_8,
-          mycloudcover.NH_OBSCURED,
-          mycloudcover.NH_NOT_DETERMINED);
+          CloudCoverState.NH_0_8,
+          CloudCoverState.NH_1_8,
+          CloudCoverState.NH_2_8,
+          CloudCoverState.NH_3_8,
+          CloudCoverState.NH_4_8,
+          CloudCoverState.NH_5_8,
+          CloudCoverState.NH_6_8,
+          CloudCoverState.NH_7_8,
+          CloudCoverState.NH_8_8,
+          CloudCoverState.NH_OBSCURED,
+          CloudCoverState.NH_NOT_DETERMINED);
   private static final List<String> CLOUD_HEIGHT =
       List.of(
-          mycloudcover.H_CLOUDLESS,
-          mycloudcover.H_0_50,
-          mycloudcover.H_50_100,
-          mycloudcover.H_100_200,
-          mycloudcover.H_200_300,
-          mycloudcover.H_300_600,
-          mycloudcover.H_600_1000,
-          mycloudcover.H_1000_1500,
-          mycloudcover.H_1500_2000,
-          mycloudcover.H_2000_2500,
-          mycloudcover.H_GROTER_2500,
-          mycloudcover.H_NOT_DETERMINED);
+          CloudCoverState.H_CLOUDLESS,
+          CloudCoverState.H_0_50,
+          CloudCoverState.H_50_100,
+          CloudCoverState.H_100_200,
+          CloudCoverState.H_200_300,
+          CloudCoverState.H_300_600,
+          CloudCoverState.H_600_1000,
+          CloudCoverState.H_1000_1500,
+          CloudCoverState.H_1500_2000,
+          CloudCoverState.H_2000_2500,
+          CloudCoverState.H_GROTER_2500,
+          CloudCoverState.H_NOT_DETERMINED);
 
   private CloudCoverView() {}
 
@@ -87,21 +87,21 @@ final class CloudCoverView {
                 TOTAL_COVER,
                 totalCover,
                 state.n(),
-                mycloudcover.N_NOT_DETERMINED),
+                CloudCoverState.N_NOT_DETERMINED),
             group(
                 "cl",
                 "Amount of Cl (or Cm if Cl not present)",
                 CLOUD_AMOUNT,
                 cloudAmount,
                 state.nh(),
-                mycloudcover.NH_NOT_DETERMINED),
+                CloudCoverState.NH_NOT_DETERMINED),
             group(
                 "low",
                 "Lowest cloud-base height (h)",
                 CLOUD_HEIGHT,
                 cloudHeight,
                 state.heightAdvice(),
-                mycloudcover.H_NOT_DETERMINED));
+                CloudCoverState.H_NOT_DETERMINED));
     Label hint =
         new Label(
             "This program computes a 'height of base of lowest cloud' advice if cloud classification, latitude, air temp, wet bulb temp and present weather are available. This advice can always be overruled by checking another button.");

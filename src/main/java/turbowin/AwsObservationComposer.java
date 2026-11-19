@@ -164,11 +164,11 @@ final class AwsObservationComposer {
 
     // total cloud cover (N)
     //
-    AWS_N = AwsObservationCodeFormatter.direct(mycloudcover.N_code, "/");
+    AWS_N = AwsObservationCodeFormatter.direct(CloudCoverState.N_code, "/");
 
     // Cloud amount Cl/Cm (Nh) [bufr table 020011]
     //
-    AWS_Nh = AwsObservationCodeFormatter.direct(mycloudcover.Nh_code, "/");
+    AWS_Nh = AwsObservationCodeFormatter.direct(CloudCoverState.Nh_code, "/");
 
     // clouds low (Cl) [bufr table 020012]
     //
@@ -184,7 +184,7 @@ final class AwsObservationComposer {
 
     // height of base of lowest clouds (h)
     //
-    AWS_h = AwsObservationCodeFormatter.direct(mycloudcover.h_code, "/");
+    AWS_h = AwsObservationCodeFormatter.direct(CloudCoverState.h_code, "/");
 
     // Pw (period wind waves)
     //

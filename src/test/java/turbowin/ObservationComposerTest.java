@@ -145,7 +145,7 @@ public class ObservationComposerTest {
     String originalWindSource = mywind.iw_code;
     String originalWindDirection = mywind.dd_code;
     String originalWindSpeed = mywind.ff_code;
-    String originalCloudCover = mycloudcover.N_code;
+    String originalCloudCover = CloudCoverState.N_code;
     String originalTemperatureSign = mytemp.sn_TTT_code;
     String originalTemperature = mytemp.TTT_code;
     try {
@@ -158,7 +158,7 @@ public class ObservationComposerTest {
       mywind.iw_code = "1";
       mywind.dd_code = "18";
       mywind.ff_code = "05";
-      mycloudcover.N_code = "5";
+      CloudCoverState.N_code = "5";
       mytemp.sn_TTT_code = "0";
       mytemp.TTT_code = "123";
 
@@ -172,7 +172,7 @@ public class ObservationComposerTest {
       mywind.iw_code = originalWindSource;
       mywind.dd_code = originalWindDirection;
       mywind.ff_code = originalWindSpeed;
-      mycloudcover.N_code = originalCloudCover;
+      CloudCoverState.N_code = originalCloudCover;
       mytemp.sn_TTT_code = originalTemperatureSign;
       mytemp.TTT_code = originalTemperature;
     }
@@ -393,7 +393,7 @@ public class ObservationComposerTest {
   @Test
   public void extractsTheFirstCharacterOfMiddleCloudCode() {
     String originalMiddleCloud = mycm.cm_code;
-    String originalCloudAmount = mycloudcover.Nh_code;
+    String originalCloudAmount = CloudCoverState.Nh_code;
     String originalLowCloud = mycl.cl_code;
     String originalHighCloud = mych.ch_code;
     try {
@@ -404,7 +404,7 @@ public class ObservationComposerTest {
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
       mycm.cm_code = "7a";
-      mycloudcover.Nh_code = "";
+      CloudCoverState.Nh_code = "";
       mycl.cl_code = "";
       mych.ch_code = "";
 
@@ -413,7 +413,7 @@ public class ObservationComposerTest {
       assertTrue(observation.contains(" 8//7/ "));
     } finally {
       mycm.cm_code = originalMiddleCloud;
-      mycloudcover.Nh_code = originalCloudAmount;
+      CloudCoverState.Nh_code = originalCloudAmount;
       mycl.cl_code = originalLowCloud;
       mych.ch_code = originalHighCloud;
     }
@@ -422,7 +422,7 @@ public class ObservationComposerTest {
   @Test
   public void usesPlaceholderForMissingMiddleCloudCode() {
     String originalMiddleCloud = mycm.cm_code;
-    String originalCloudAmount = mycloudcover.Nh_code;
+    String originalCloudAmount = CloudCoverState.Nh_code;
     String originalLowCloud = mycl.cl_code;
     String originalHighCloud = mych.ch_code;
     try {
@@ -433,7 +433,7 @@ public class ObservationComposerTest {
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
       mycm.cm_code = "";
-      mycloudcover.Nh_code = "";
+      CloudCoverState.Nh_code = "";
       mycl.cl_code = "";
       mych.ch_code = "";
 
@@ -442,7 +442,7 @@ public class ObservationComposerTest {
       assertTrue(observation.contains(" 8//// "));
     } finally {
       mycm.cm_code = originalMiddleCloud;
-      mycloudcover.Nh_code = originalCloudAmount;
+      CloudCoverState.Nh_code = originalCloudAmount;
       mycl.cl_code = originalLowCloud;
       mych.ch_code = originalHighCloud;
     }
@@ -450,7 +450,7 @@ public class ObservationComposerTest {
 
   @Test
   public void composesWindSpeedWithOptionalHighSpeedExtension() {
-    String originalCloudCover = mycloudcover.N_code;
+    String originalCloudCover = CloudCoverState.N_code;
     String originalWindDirection = mywind.dd_code;
     String originalWindSpeed = mywind.ff_code;
     String originalHighWindSpeed = mywind.fff00_code;
@@ -461,7 +461,7 @@ public class ObservationComposerTest {
       myposition.Qc_code = "1";
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
-      mycloudcover.N_code = "5";
+      CloudCoverState.N_code = "5";
       mywind.dd_code = "18";
       mywind.ff_code = "05";
       mywind.fff00_code = "12";
@@ -470,7 +470,7 @@ public class ObservationComposerTest {
 
       assertTrue(observation.contains(" 51805 0012 "));
     } finally {
-      mycloudcover.N_code = originalCloudCover;
+      CloudCoverState.N_code = originalCloudCover;
       mywind.dd_code = originalWindDirection;
       mywind.ff_code = originalWindSpeed;
       mywind.fff00_code = originalHighWindSpeed;
@@ -479,7 +479,7 @@ public class ObservationComposerTest {
 
   @Test
   public void usesWindSpeedPlaceholderWhenMissing() {
-    String originalCloudCover = mycloudcover.N_code;
+    String originalCloudCover = CloudCoverState.N_code;
     String originalWindDirection = mywind.dd_code;
     String originalWindSpeed = mywind.ff_code;
     String originalHighWindSpeed = mywind.fff00_code;
@@ -490,7 +490,7 @@ public class ObservationComposerTest {
       myposition.Qc_code = "1";
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
-      mycloudcover.N_code = "5";
+      CloudCoverState.N_code = "5";
       mywind.dd_code = "18";
       mywind.ff_code = "";
       mywind.fff00_code = "12";
@@ -499,7 +499,7 @@ public class ObservationComposerTest {
 
       assertTrue(observation.contains(" 518// "));
     } finally {
-      mycloudcover.N_code = originalCloudCover;
+      CloudCoverState.N_code = originalCloudCover;
       mywind.dd_code = originalWindDirection;
       mywind.ff_code = originalWindSpeed;
       mywind.fff00_code = originalHighWindSpeed;
