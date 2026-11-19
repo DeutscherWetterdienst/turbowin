@@ -36,6 +36,18 @@ public class AwsrUploadGateTest {
   }
 
   @Test
+  public void invalidDataReleasesReservationWithoutReleasingAnOlderHour() {
+    AwsrUploadGate gate = new AwsrUploadGate();
+    Instant hour = Instant.parse("2026-11-18T18:00:00Z");
+    assertTrue(gate.claim(hour, false));
+    Instant next = hour.plusSeconds(3600);
+    assertTrue(gate.claim(next, false));
+    gate.release(next, false);
+    assertFalse(gate.claim(hour, false));
+    assertTrue(gate.claim(next, false));
+  }
+
+  @Test
   public void concurrentRecordsOnlyClaimOneDispatch() throws Exception {
     AwsrUploadGate gate = new AwsrUploadGate();
     Instant hour = Instant.parse("2026-11-18T18:00:00Z");

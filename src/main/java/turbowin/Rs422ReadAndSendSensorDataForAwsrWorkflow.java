@@ -16,6 +16,10 @@ final class Rs422ReadAndSendSensorDataForAwsrWorkflow {
   }
 
   void start(final boolean retry) {
+    start(retry, () -> {});
+  }
+
+  void start(final boolean retry, final Runnable invalidData) {
     // check the presence of the various meteo parameters in the data received from an AWS (data
     // stored by TurboWin in sensor data files)
 
@@ -1123,6 +1127,7 @@ final class Rs422ReadAndSendSensorDataForAwsrWorkflow {
         if (check_date_time_record_ok && set_date_time_record_ok) {
           main_RS232_RS422.RS232_APR_AWSR_send(retry); // so also applicable for RS422 of OMC-140
         } else {
+          invalidData.run();
           main.Reset_all_meteo_parameters(); // to be sure all the (possible) manual inserted data
           // will be cleared
         }

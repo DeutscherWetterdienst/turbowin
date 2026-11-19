@@ -7,6 +7,8 @@ import java.time.temporal.ChronoUnit;
 final class AwsrUploadGate {
   private Instant lastScheduledHour;
   private Instant lastRetryHour;
+  private Instant previousScheduledHour;
+  private Instant previousRetryHour;
 
   synchronized boolean claim(Instant time, boolean retry) {
     Instant hour = time.truncatedTo(ChronoUnit.HOURS);
@@ -15,10 +17,21 @@ final class AwsrUploadGate {
       return false;
     }
     if (retry) {
+      previousRetryHour = lastRetryHour;
       lastRetryHour = hour;
     } else {
+      previousScheduledHour = lastScheduledHour;
       lastScheduledHour = hour;
     }
     return true;
+  }
+
+  synchronized void release(Instant time, boolean retry) {
+    Instant hour = time.truncatedTo(ChronoUnit.HOURS);
+    if (retry && hour.equals(lastRetryHour)) {
+      lastRetryHour = previousRetryHour;
+    } else if (!retry && hour.equals(lastScheduledHour)) {
+      lastScheduledHour = previousScheduledHour;
+    }
   }
 }

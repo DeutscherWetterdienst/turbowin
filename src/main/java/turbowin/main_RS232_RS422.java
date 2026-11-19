@@ -1905,12 +1905,14 @@ public class main_RS232_RS422 {
               && GPS_date_time_ok
               && awsrUploadGate.claim(cal_AWSR_system_date_time.toInstant(), false)) {
             main.log_turbowin_system_message("[AWSR] scheduled upload");
+            final var scheduledTime = cal_AWSR_system_date_time.toInstant();
             // NB in this stage we are sure the date-time is correct! + we are sure position is
             // available!
 
             // read the AWS data which was saved before by TurboWin from a sensor data file
-            RS422_Read_And_Send_Sensor_Data_For_AWSR(
-                retry); // nB in this function also the date-time of the last saved record will be
+            new Rs422ReadAndSendSensorDataForAwsrWorkflow(this)
+                .start(false, () -> awsrUploadGate.release(scheduledTime, false));
+            // In this function also the date-time of the last saved record will be
             // checked
           } // if (AWSR_settings_ok && GPS_date_time_ok)
         } // if ((AWSR_system_minute_local == 0) etc.
@@ -1938,7 +1940,9 @@ public class main_RS232_RS422 {
             main.log_turbowin_system_message("[AWSR] retry scheduled upload");
             // NB in this stage we are sure the date-time is correct! + we are sure position is
             // available!
-            RS422_Read_And_Send_Sensor_Data_For_AWSR(retry);
+            final var scheduledTime = cal_AWSR_system_date_time.toInstant();
+            new Rs422ReadAndSendSensorDataForAwsrWorkflow(this)
+                .start(true, () -> awsrUploadGate.release(scheduledTime, true));
           } // if (APR_settings_ok && GPS_date_time_ok)
 
           // reset (to be sure)
