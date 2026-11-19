@@ -406,6 +406,7 @@ public class Jakarta_Email {
       try {
         // create a message
         MimeMessage msg = new MimeMessage(session);
+        msg.setHeader("X-Mailer", main.APPLICATION_NAME + " " + TurboWinAppInfo.RELEASE_VERSION);
         msg.setFrom(new InternetAddress(send_from)); // set From email field
         msg.setRecipients(
             Message.RecipientType.TO, InternetAddress.parse(send_to, false)); // set To email field
@@ -641,6 +642,7 @@ public class Jakarta_Email {
       try {
         // create a message
         MimeMessage msg = new MimeMessage(session);
+        msg.setHeader("X-Mailer", main.APPLICATION_NAME + " " + TurboWinAppInfo.RELEASE_VERSION);
         msg.setFrom(new InternetAddress(send_from)); // set From email field
         msg.setRecipients(
             Message.RecipientType.TO, InternetAddress.parse(send_to)); // set To email field

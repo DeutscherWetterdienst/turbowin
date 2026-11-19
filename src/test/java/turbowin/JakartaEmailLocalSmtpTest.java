@@ -47,6 +47,30 @@ public class JakartaEmailLocalSmtpTest {
       assertTrue(server.message().contains("charset=UTF-8"));
       assertTrue(server.message().contains("From: sender@example.org"));
       assertTrue(server.message().contains("To: recipient@example.org"));
+      assertTrue(
+          server.message().contains("X-Mailer: TurboWin " + TurboWinAppInfo.RELEASE_VERSION));
+    }
+  }
+
+  @Test
+  public void includesVersionInLogEmailHeader() throws Exception {
+    try (FakeSmtpServer server = new FakeSmtpServer()) {
+      int status =
+          new Jakarta_Email()
+              .send_jakarta_email_logs(
+                  main.CUSTOM_TLS,
+                  "127.0.0.1",
+                  "",
+                  "recipient@example.org",
+                  "sender@example.org",
+                  "Logs",
+                  "Body",
+                  Integer.toString(server.port()),
+                  "null");
+      assertEquals(200, status);
+      server.awaitMessage();
+      assertTrue(
+          server.message().contains("X-Mailer: TurboWin " + TurboWinAppInfo.RELEASE_VERSION));
     }
   }
 
