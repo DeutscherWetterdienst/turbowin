@@ -72,9 +72,9 @@ final class CloudCoverView {
     ToggleGroup totalCover = new ToggleGroup();
     ToggleGroup cloudAmount = new ToggleGroup();
     ToggleGroup cloudHeight = new ToggleGroup();
-    VBox root = new VBox(18);
-    root.setPadding(new Insets(24));
-    root.getStyleClass().add("cloud-cover-root");
+    VBox content = new VBox(18);
+    content.setPadding(new Insets(24));
+    content.getStyleClass().add("cloud-cover-content");
     Label heading = new Label("Cloud observation");
     heading.getStyleClass().add("heading");
     HBox groups = new HBox(16);
@@ -108,7 +108,8 @@ final class CloudCoverView {
     hint.setWrapText(true);
     hint.getStyleClass().add("hint");
     HBox buttons = new HBox(10);
-    buttons.setAlignment(Pos.CENTER_RIGHT);
+    buttons.setAlignment(Pos.CENTER);
+    buttons.getStyleClass().add("cloud-cover-actions");
     Button helpButton = new Button(state.offline() ? "Help" : "Internet");
     Button backButton = new Button("Back");
     Button stopButton = new Button("Stop");
@@ -123,11 +124,16 @@ final class CloudCoverView {
     ok.setDefaultButton(true);
     ok.setOnAction(
         event -> accept.accept(selected(totalCover), selected(cloudAmount), selected(cloudHeight)));
-    buttons.getChildren().addAll(helpButton, backButton, stopButton, cancelButton, ok);
-    root.getChildren().addAll(heading, groups, hint, buttons);
-    ScrollPane scroll = new ScrollPane(root);
+    buttons.getChildren().addAll(backButton, ok, cancelButton, helpButton, stopButton);
+    content.getChildren().addAll(heading, groups, hint);
+    ScrollPane scroll = new ScrollPane(content);
     scroll.setFitToWidth(true);
-    Scene scene = new Scene(scroll);
+    scroll.setFitToHeight(true);
+    scroll.getStyleClass().add("cloud-cover-scroll");
+    VBox.setVgrow(scroll, Priority.ALWAYS);
+    VBox root = new VBox(scroll, buttons);
+    root.getStyleClass().add("cloud-cover-root");
+    Scene scene = new Scene(root);
     scene
         .getStylesheets()
         .add(

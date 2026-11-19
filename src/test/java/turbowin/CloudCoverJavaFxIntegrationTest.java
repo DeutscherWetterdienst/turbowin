@@ -4,9 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -34,6 +38,15 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
     CloudCoverFxTestSupport.onFx(() -> {
       scene.getRoot().applyCss();
+      VBox root = (VBox) scene.getRoot();
+      assertTrue(root.getChildren().get(0) instanceof ScrollPane);
+      HBox actions = (HBox) root.getChildren().get(1);
+      assertEquals(Pos.CENTER, actions.getAlignment());
+      String helpText = ((Button) actions.getChildren().get(3)).getText();
+      assertTrue(List.of("Help", "Internet").contains(helpText));
+      assertEquals(
+          List.of("Back", "OK", "Cancel", helpText, "Stop"),
+          actions.getChildren().stream().map(Button.class::cast).map(Button::getText).toList());
       VBox total = (VBox) scene.getRoot().lookup("#total");
       assertTrue(
           total.getChildren().stream()

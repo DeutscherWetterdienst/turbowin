@@ -14,9 +14,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import org.junit.Test;
@@ -61,6 +64,14 @@ public class AboutDialogFxTest {
           assertFalse(view.getStylesheets().isEmpty());
           view.getRoot().applyCss();
           assertTrue(view.getRoot().lookupAll(".image-view").size() >= 2);
+          ImageView vosLogo =
+              view.getRoot().lookupAll(".image-view").stream()
+                  .map(ImageView.class::cast)
+                  .filter(item -> item.getImage().getUrl().contains("logo-sot.png"))
+                  .findFirst()
+                  .orElseThrow();
+          assertEquals(260.0, vosLogo.getFitWidth(), 0.0);
+          assertEquals(Pos.CENTER, ((HBox) view.getRoot().lookup(".footer")).getAlignment());
           Hyperlink vos =
               view.getRoot().lookupAll(".hyperlink").stream()
                   .map(Hyperlink.class::cast)

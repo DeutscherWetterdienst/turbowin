@@ -52,10 +52,14 @@ final class AboutView {
         .addAll(
             linkSection(
                 "icons/logo-sot.png",
+                260,
+                105,
                 "TurboWin supports the Voluntary Observing Ship Scheme",
                 () -> openLink.accept(AboutDialog.sotLink())),
             linkSection(
                 "icons/gplv3-with-text-136x68.png",
+                136,
+                68,
                 "TurboWin is free software and open-source software (GPLv3)",
                 () -> openLink.accept(AboutDialog.sourceLink())));
     Label history = new Label("Turbo/TurboWin/TurboWin+ since 1990");
@@ -71,7 +75,7 @@ final class AboutView {
     ok.setCancelButton(true);
     ok.setOnAction(event -> close.run());
     HBox footer = new HBox(ok);
-    footer.setAlignment(Pos.CENTER_RIGHT);
+    footer.setAlignment(Pos.CENTER);
     footer.getStyleClass().add("footer");
     VBox root = new VBox(scroll, footer);
     Scene scene = new Scene(root);
@@ -79,11 +83,12 @@ final class AboutView {
     return scene;
   }
 
-  private static VBox linkSection(String imagePath, String text, Runnable action) {
+  private static VBox linkSection(
+      String imagePath, double maxWidth, double maxHeight, String text, Runnable action) {
     ImageView image = new ImageView(new Image(resource(imagePath).toExternalForm()));
     image.setPreserveRatio(true);
-    image.setFitWidth(136);
-    image.setFitHeight(68);
+    image.setFitWidth(maxWidth);
+    image.setFitHeight(maxHeight);
     Hyperlink link = new Hyperlink(text);
     link.setWrapText(true);
     link.setOnAction(event -> action.run());

@@ -3,6 +3,17 @@
     -fx-font-family: "System";
 }
 
+.cloud-cover-scroll, .cloud-cover-scroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.cloud-cover-actions {
+    -fx-padding: 12 24 16 24;
+    -fx-border-color: #c8d6e5 transparent transparent transparent;
+}
+
 .heading {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
