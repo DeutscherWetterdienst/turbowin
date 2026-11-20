@@ -752,9 +752,7 @@ public final class myconfusedswell extends javax.swing.JFrame {
   }
 
   private void next_screen() {
-    myvisibility form = new myvisibility();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    VisibilityDialog.open();
   }
 
   private void previous_screen() {

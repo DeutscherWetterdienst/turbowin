@@ -919,7 +919,13 @@ public class FORMAT_101 {
 
     compressed_visibility =
         parseOptionalNumericField(
-            myvisibility.VV_code, 1, present, 29, "visibility (VV)", COMPRESSED_UNDEF_VALUE, "//");
+            VisibilityState.VV_code,
+            1,
+            present,
+            29,
+            "visibility (VV)",
+            COMPRESSED_UNDEF_VALUE,
+            "//");
 
     /* [30]
     /////////////////////////////////////////// 0 20 003 (present weather)  ///////////////////////////////////////

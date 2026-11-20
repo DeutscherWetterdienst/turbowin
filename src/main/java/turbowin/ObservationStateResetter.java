@@ -25,8 +25,8 @@ final class ObservationStateResetter {
     mypresentweather.present_weather = "";
 
     // visibility
-    myvisibility.VV = "";
-    myvisibility.VV_code = "";
+    VisibilityState.VV = "";
+    VisibilityState.VV_code = "";
 
     // barograph
     mybarograph.a_code = "";

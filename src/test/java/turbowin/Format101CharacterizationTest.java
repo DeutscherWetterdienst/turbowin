@@ -899,7 +899,7 @@ public class Format101CharacterizationTest {
     String originalMonth = mydatetime.MM_code;
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
-    String originalVisibility = myvisibility.VV_code;
+    String originalVisibility = VisibilityState.VV_code;
     String originalPresentWeather = mypresentweather.ww_code;
     String originalPastWeather1 = mypastweather.W1_code;
     String originalPastWeather2 = mypastweather.W2_code;
@@ -914,7 +914,7 @@ public class Format101CharacterizationTest {
       mydatetime.MM_code = "10";
       mydatetime.day = "04";
       mydatetime.hour = "12";
-      myvisibility.VV_code = "5";
+      VisibilityState.VV_code = "5";
       mypresentweather.ww_code = "20";
       mypastweather.W1_code = "3";
       mypastweather.W2_code = "4";
@@ -927,7 +927,7 @@ public class Format101CharacterizationTest {
       assertEquals("1 3.0             past weather 1 (W1) [code]", lines.get(32));
       assertEquals("1 4.0             past weather 2 (W2) [code]", lines.get(33));
 
-      myvisibility.VV_code = "//";
+      VisibilityState.VV_code = "//";
       mypresentweather.ww_code = "//";
       mypastweather.W1_code = "/";
       mypastweather.W2_code = "/";
@@ -943,7 +943,7 @@ public class Format101CharacterizationTest {
       mydatetime.MM_code = originalMonth;
       mydatetime.day = originalDay;
       mydatetime.hour = originalHour;
-      myvisibility.VV_code = originalVisibility;
+      VisibilityState.VV_code = originalVisibility;
       mypresentweather.ww_code = originalPresentWeather;
       mypastweather.W1_code = originalPastWeather1;
       mypastweather.W2_code = originalPastWeather2;

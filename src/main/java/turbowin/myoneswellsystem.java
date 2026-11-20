@@ -820,9 +820,7 @@ public final class myoneswellsystem extends javax.swing.JFrame {
   } // GEN-LAST:event_Back_button_actionPerformed
 
   private void next_screen() {
-    myvisibility form = new myvisibility();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    VisibilityDialog.open();
   }
 
   private void previous_screen() {

@@ -148,7 +148,7 @@ final class AwsObservationComposer {
 
     // visibility [format VV; range 0..99; resolution -; units: code]
     //
-    AWS_VV = AwsObservationCodeFormatter.direct(myvisibility.VV_code, "//");
+    AWS_VV = AwsObservationCodeFormatter.direct(VisibilityState.VV_code, "//");
 
     // Present Weather [format WW; range 0..99; resolution -; units: bufr code table 020003]
     //

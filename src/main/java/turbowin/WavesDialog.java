@@ -55,7 +55,7 @@ final class WavesDialog {
   }
 
   private static void next() {
-    show(new myvisibility());
+    VisibilityDialog.open();
   }
 
   private static void show(JFrame form) {

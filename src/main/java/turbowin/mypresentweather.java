@@ -906,9 +906,7 @@ public final class mypresentweather extends javax.swing.JFrame {
   } // GEN-LAST:event_Stop_button_actionPerformed
 
   private void previous_screen() {
-    myvisibility form = new myvisibility();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    VisibilityDialog.open();
   }
 
   private void next_screen() {

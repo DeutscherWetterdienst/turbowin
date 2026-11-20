@@ -223,17 +223,26 @@ public class ObservationFillingTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {});
   }
 
-  private void fillVisibilityInformation() throws InterruptedException {
+  private void fillVisibilityInformation() throws Exception {
     this.frame
         .label(JLabelMatcher.withText("Visibility"))
         .requireVisible()
         .requireEnabled()
         .click();
-    FrameFixture visibilityFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Visibility")).using(this.robot());
-    visibilityFrame.radioButton(new RadioButtonMatcher("0.5 - 1.1 nm")).click();
-
-    clickOkButtonInFrame(visibilityFrame);
+    DialogFixture visibility =
+        WindowFinder.findDialog(new DialogTitleMatcher("Visibility")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) visibility.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      scene.getRoot().lookupAll(".radio-button").stream()
+          .map(javafx.scene.control.RadioButton.class::cast)
+          .filter(item -> item.getText().equals("0.5 - 1.1 nm"))
+          .findFirst()
+          .orElseThrow()
+          .fire();
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillPresentWeatherInformation() throws InterruptedException {

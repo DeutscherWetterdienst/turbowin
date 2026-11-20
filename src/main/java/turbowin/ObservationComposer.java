@@ -102,7 +102,7 @@ final class ObservationComposer {
 
     // visibility (VV)
     //
-    coded_obs_VV = ObservationCodeFormatter.direct(myvisibility.VV_code, "//");
+    coded_obs_VV = ObservationCodeFormatter.direct(VisibilityState.VV_code, "//");
 
     // winds source
     coded_obs_iw = ObservationCodeFormatter.direct(mywind.iw_code, "/");

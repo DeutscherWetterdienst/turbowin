@@ -10,7 +10,7 @@ public class VisibilityFieldsUpdaterTest {
   @Test
   public void displaysVisibilityValue() {
     prepareFields();
-    myvisibility.VV = "9999";
+    VisibilityState.VV = "9999";
 
     VisibilityFieldsUpdater.update();
 
@@ -20,7 +20,7 @@ public class VisibilityFieldsUpdaterTest {
   @Test
   public void clearsEmptyVisibilityValue() {
     prepareFields();
-    myvisibility.VV = "";
+    VisibilityState.VV = "";
 
     VisibilityFieldsUpdater.update();
 

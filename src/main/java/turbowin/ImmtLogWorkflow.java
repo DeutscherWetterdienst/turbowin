@@ -89,9 +89,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_VV = Integer.valueOf(myvisibility.VV_code);
+      int num_VV = Integer.valueOf(VisibilityState.VV_code);
       if (num_VV >= 90 && num_VV <= 99) {
-        immt_rec += myvisibility.VV_code; // char number 22-23
+        immt_rec += VisibilityState.VV_code; // char number 22-23
         Qc_2 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 22-23

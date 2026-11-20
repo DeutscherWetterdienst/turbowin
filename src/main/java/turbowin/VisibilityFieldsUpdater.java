@@ -8,8 +8,8 @@ final class VisibilityFieldsUpdater {
   private VisibilityFieldsUpdater() {}
 
   static void update() {
-    if ((myvisibility.VV.compareTo("") != 0) && (myvisibility.VV != null))
-      jTextField18.setText(myvisibility.VV);
+    if ((VisibilityState.VV.compareTo("") != 0) && (VisibilityState.VV != null))
+      jTextField18.setText(VisibilityState.VV);
     else jTextField18.setText("");
 
     coded_obs_update();

@@ -4091,9 +4091,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Visibility_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Visibility_menu_actionPerformed
-    myvisibility form = new myvisibility();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    VisibilityDialog.open();
   } // GEN-LAST:event_Input_Visibility_menu_actionPerformed
 
   private void File_Exit_menu_actionPerformd(

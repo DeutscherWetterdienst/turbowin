@@ -65,7 +65,7 @@ public class AwsObservationComposerTest {
     originalAirTemp = mytemp.air_temp;
     originalDoubleRv = mytemp.double_rv;
     originalSeaWaterTemp = mytemp.sea_water_temp;
-    originalVvCode = myvisibility.VV_code;
+    originalVvCode = VisibilityState.VV_code;
     originalWwCode = mypresentweather.ww_code;
     originalW1Code = mypastweather.W1_code;
     originalW2Code = mypastweather.W2_code;
@@ -107,7 +107,7 @@ public class AwsObservationComposerTest {
     mytemp.air_temp = "";
     mytemp.double_rv = main.INVALID;
     mytemp.sea_water_temp = "";
-    myvisibility.VV_code = "//";
+    VisibilityState.VV_code = "//";
     mypresentweather.ww_code = "//";
     mypastweather.W1_code = "/";
     mypastweather.W2_code = "/";
@@ -151,7 +151,7 @@ public class AwsObservationComposerTest {
     mytemp.air_temp = originalAirTemp;
     mytemp.double_rv = originalDoubleRv;
     mytemp.sea_water_temp = originalSeaWaterTemp;
-    myvisibility.VV_code = originalVvCode;
+    VisibilityState.VV_code = originalVvCode;
     mypresentweather.ww_code = originalWwCode;
     mypastweather.W1_code = originalW1Code;
     mypastweather.W2_code = originalW2Code;
@@ -520,7 +520,7 @@ public class AwsObservationComposerTest {
 
   @Test
   public void preservesDirectAwsObservationCodes() {
-    String originalVisibility = myvisibility.VV_code;
+    String originalVisibility = VisibilityState.VV_code;
     String originalPresentWeather = mypresentweather.ww_code;
     String originalPastWeatherOne = mypastweather.W1_code;
     String originalPastWeatherTwo = mypastweather.W2_code;
@@ -528,7 +528,7 @@ public class AwsObservationComposerTest {
     String originalCloudAmount = CloudCoverState.Nh_code;
     String originalCloudHeight = CloudCoverState.h_code;
     try {
-      myvisibility.VV_code = "10";
+      VisibilityState.VV_code = "10";
       mypresentweather.ww_code = "45";
       mypastweather.W1_code = "2";
       mypastweather.W2_code = "3";
@@ -546,7 +546,7 @@ public class AwsObservationComposerTest {
       assertEquals("5", fields[12]);
       assertEquals("4", fields[16]);
     } finally {
-      myvisibility.VV_code = originalVisibility;
+      VisibilityState.VV_code = originalVisibility;
       mypresentweather.ww_code = originalPresentWeather;
       mypastweather.W1_code = originalPastWeatherOne;
       mypastweather.W2_code = originalPastWeatherTwo;
@@ -558,7 +558,7 @@ public class AwsObservationComposerTest {
 
   @Test
   public void omitsDirectAwsObservationSentinelCodes() {
-    String originalVisibility = myvisibility.VV_code;
+    String originalVisibility = VisibilityState.VV_code;
     String originalPresentWeather = mypresentweather.ww_code;
     String originalPastWeatherOne = mypastweather.W1_code;
     String originalPastWeatherTwo = mypastweather.W2_code;
@@ -566,7 +566,7 @@ public class AwsObservationComposerTest {
     String originalCloudAmount = CloudCoverState.Nh_code;
     String originalCloudHeight = CloudCoverState.h_code;
     try {
-      myvisibility.VV_code = "//";
+      VisibilityState.VV_code = "//";
       mypresentweather.ww_code = "//";
       mypastweather.W1_code = "/";
       mypastweather.W2_code = "/";
@@ -584,7 +584,7 @@ public class AwsObservationComposerTest {
       assertEquals("", fields[12]);
       assertEquals("", fields[16]);
     } finally {
-      myvisibility.VV_code = originalVisibility;
+      VisibilityState.VV_code = originalVisibility;
       mypresentweather.ww_code = originalPresentWeather;
       mypastweather.W1_code = originalPastWeatherOne;
       mypastweather.W2_code = originalPastWeatherTwo;

@@ -187,8 +187,8 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(cancelScene, "Cancel");
         return null;
       });
-      FrameFixture visibility =
-          WindowFinder.findFrame(new FrameTitleMatcher("Visibility")).using(robot());
+      DialogFixture visibility =
+          WindowFinder.findDialog(new DialogTitleMatcher("Visibility")).using(robot());
       SwingUtilities.invokeAndWait(visibility.target()::dispose);
       JDialog accept = GuiActionRunner.execute(WavesDialog::open);
       Scene acceptScene = CloudCoverFxTestSupport.awaitScene(accept);
@@ -197,8 +197,8 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(acceptScene, "OK");
         return null;
       });
-      FrameFixture acceptedVisibility =
-          WindowFinder.findFrame(new FrameTitleMatcher("Visibility")).using(robot());
+      DialogFixture acceptedVisibility =
+          WindowFinder.findDialog(new DialogTitleMatcher("Visibility")).using(robot());
       SwingUtilities.invokeAndWait(() -> {
         assertEquals("no swell", mywaves.swell_1_dir);
         acceptedVisibility.target().dispose();

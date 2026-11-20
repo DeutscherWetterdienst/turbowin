@@ -101,7 +101,7 @@ final class LevelTwoValidationWorkflow {
     // string VV code conversion to int
     Integer parsedVisibility =
         support.parseValidationInt(
-            myvisibility.VV_code, "[GENERAL] VV conversion error; Function: checking_level_2()");
+            VisibilityState.VV_code, "[GENERAL] VV conversion error; Function: checking_level_2()");
     if (parsedVisibility != null) {
       int_VV_code = parsedVisibility;
       VV_code_conversion_ok = true;
