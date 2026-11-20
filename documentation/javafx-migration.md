@@ -1,6 +1,7 @@
 # JavaFX in the Swing application
 
-The About and cloud-cover windows are embedded JavaFX views. The rest of TurboWin continues to use Swing.
+The About, high-cloud, and cloud-cover windows are embedded JavaFX views. The rest of TurboWin
+continues to use Swing.
 The OpenJFX Gradle plugin supplies JavaFX 25.0.2 controls and Swing integration for the build
 machine's operating system and architecture. Build each distribution on its target platform, as
 the existing `jlink` and `jpackage` scripts already do. Linux deployments also need the native
@@ -24,6 +25,7 @@ thread. Keep its CSS and images in application resources.
 The cloud-cover view snapshots its initial values and height advice on the Swing event thread.
 Its selection actions return to that thread for validation, observation updates, and navigation;
 the JavaFX view does not directly update Swing components or shared observation state.
+The high-cloud view uses the same boundary for Ch selections, thumbnail help, and navigation.
 
 `AboutDialogFxTest` requires a graphical display and skips itself in a headless environment. On
 Linux it can be run with `xvfb-run -a ./gradlew test --tests turbowin.AboutDialogFxTest`; the

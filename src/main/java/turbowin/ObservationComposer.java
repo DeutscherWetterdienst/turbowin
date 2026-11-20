@@ -159,7 +159,7 @@ final class ObservationComposer {
 
     // clouds high (Ch)
     //
-    coded_obs_Ch = ObservationCodeFormatter.direct(mych.ch_code, "/");
+    coded_obs_Ch = ObservationCodeFormatter.direct(HighCloudState.ch_code, "/");
 
     // Tsea
     //

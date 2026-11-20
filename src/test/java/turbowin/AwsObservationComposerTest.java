@@ -74,7 +74,7 @@ public class AwsObservationComposerTest {
     originalHCode = CloudCoverState.h_code;
     originalClCode = mycl.cl_code;
     originalCmCode = mycm.cm_code;
-    originalChCode = mych.ch_code;
+    originalChCode = HighCloudState.ch_code;
     originalPwCode = mywaves.Pw_code;
     originalHwCode = mywaves.Hw_code;
     originalDw1Code = mywaves.Dw1_code;
@@ -116,7 +116,7 @@ public class AwsObservationComposerTest {
     CloudCoverState.h_code = "/";
     mycl.cl_code = "/";
     mycm.cm_code = "/";
-    mych.ch_code = "/";
+    HighCloudState.ch_code = "/";
     mywaves.Pw_code = "//";
     mywaves.Hw_code = "//";
     mywaves.Dw1_code = "//";
@@ -160,7 +160,7 @@ public class AwsObservationComposerTest {
     CloudCoverState.h_code = originalHCode;
     mycl.cl_code = originalClCode;
     mycm.cm_code = originalCmCode;
-    mych.ch_code = originalChCode;
+    HighCloudState.ch_code = originalChCode;
     mywaves.Pw_code = originalPwCode;
     mywaves.Hw_code = originalHwCode;
     mywaves.Dw1_code = originalDw1Code;
@@ -217,7 +217,7 @@ public class AwsObservationComposerTest {
   @Test
   public void preservesBufrMappingsAndOptionalObserverId() {
     mycm.cm_code = "7a";
-    mych.ch_code = "3";
+    HighCloudState.ch_code = "3";
     myicing.Is_code = "1";
     myice1.ci_code = "u";
     myice1.Di_code = "2";
@@ -362,11 +362,11 @@ public class AwsObservationComposerTest {
   public void convertsCloudTypesToAwsCodes() {
     String originalLowCloud = mycl.cl_code;
     String originalMiddleCloud = mycm.cm_code;
-    String originalHighCloud = mych.ch_code;
+    String originalHighCloud = HighCloudState.ch_code;
     try {
       mycl.cl_code = "1";
       mycm.cm_code = "7a";
-      mych.ch_code = "3";
+      HighCloudState.ch_code = "3";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -376,7 +376,7 @@ public class AwsObservationComposerTest {
     } finally {
       mycl.cl_code = originalLowCloud;
       mycm.cm_code = originalMiddleCloud;
-      mych.ch_code = originalHighCloud;
+      HighCloudState.ch_code = originalHighCloud;
     }
   }
 
@@ -384,11 +384,11 @@ public class AwsObservationComposerTest {
   public void omitsUnavailableAndMalformedCloudTypes() {
     String originalLowCloud = mycl.cl_code;
     String originalMiddleCloud = mycm.cm_code;
-    String originalHighCloud = mych.ch_code;
+    String originalHighCloud = HighCloudState.ch_code;
     try {
       mycl.cl_code = "/";
       mycm.cm_code = "x";
-      mych.ch_code = "";
+      HighCloudState.ch_code = "";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -398,7 +398,7 @@ public class AwsObservationComposerTest {
     } finally {
       mycl.cl_code = originalLowCloud;
       mycm.cm_code = originalMiddleCloud;
-      mych.ch_code = originalHighCloud;
+      HighCloudState.ch_code = originalHighCloud;
     }
   }
 

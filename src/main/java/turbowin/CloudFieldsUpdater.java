@@ -25,8 +25,8 @@ final class CloudFieldsUpdater {
   }
 
   static void updateHigh() {
-    if ((mych.ch_code.compareTo("") != 0) && (mych.ch_code != null))
-      jTextField35.setText(mych.ch_code + " (code)");
+    if ((HighCloudState.ch_code.compareTo("") != 0) && (HighCloudState.ch_code != null))
+      jTextField35.setText(HighCloudState.ch_code + " (code)");
     else jTextField35.setText("");
 
     coded_obs_update();

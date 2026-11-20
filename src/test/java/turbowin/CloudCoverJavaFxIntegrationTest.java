@@ -175,8 +175,8 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(backScene, "Back");
         return null;
       });
-      FrameFixture highClouds =
-          WindowFinder.findFrame(new FrameTitleMatcher("Clouds high")).using(robot());
+      DialogFixture highClouds =
+          WindowFinder.findDialog(new DialogTitleMatcher("Clouds high")).using(robot());
       SwingUtilities.invokeAndWait(highClouds.target()::dispose);
     } finally {
       SwingUtilities.invokeAndWait(() -> main.in_next_sequence = false);

@@ -4032,9 +4032,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudshigh_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudshigh_menu_actionPerformed
-    mych form = new mych();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    HighCloudDialog.open();
   } // GEN-LAST:event_Input_Cloudshigh_menu_actionPerformed
 
   void Input_Position_menu_actionPerformed(

@@ -98,9 +98,7 @@ final class CloudCoverJavaFxWindow {
 
   private static void back(Runnable close) {
     close.run();
-    mych form = new mych();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    HighCloudDialog.open();
   }
 
   private static void stop(Runnable close) {

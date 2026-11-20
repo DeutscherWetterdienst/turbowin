@@ -935,9 +935,7 @@ public final class mycm extends javax.swing.JFrame {
   }
 
   private void next_screen() {
-    mych form = new mych();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    HighCloudDialog.open();
   }
 
   /**
@@ -1013,4 +1011,4 @@ public final class mycm extends javax.swing.JFrame {
   private final String CM7_HELP_DIR = "cm_7.pdf";
   private final String CM8_HELP_DIR = "cm_8.pdf";
   private final String CM9_HELP_DIR = "cm_9.pdf";
-} // public class mych extends javax.swing.JFrame
+} // public class mycm extends javax.swing.JFrame

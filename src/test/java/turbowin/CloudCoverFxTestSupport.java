@@ -54,4 +54,14 @@ final class CloudCoverFxTestSupport {
         .orElseThrow()
         .fire();
   }
+
+  static void selectRadio(Scene scene, String code) {
+    scene.getRoot().lookupAll(".radio-button").stream()
+        .filter(RadioButton.class::isInstance)
+        .map(RadioButton.class::cast)
+        .filter(button -> code.equals(button.getUserData()))
+        .findFirst()
+        .orElseThrow()
+        .fire();
+  }
 }

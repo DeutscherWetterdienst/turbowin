@@ -25,13 +25,14 @@ final class LevelTwoCloudValidation {
       return warning("if total cloud cover is 'cloudless', Cm must be 'no clouds Cm'");
     }
 
-    if (CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS) && !mych.ch_code.equals("0")) {
+    if (CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS)
+        && !HighCloudState.ch_code.equals("0")) {
       return warning("if total cloud cover is 'cloudless', Ch must be 'no clouds Ch'");
     }
 
     if (mycl.cl_code.equals("0")
         && mycm.cm_code.equals("0")
-        && mych.ch_code.equals("0")
+        && HighCloudState.ch_code.equals("0")
         && !CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS)) {
       return warning("if Cl and Cm and Ch is 'no clouds', total cloud cover must be 'cloudless'");
     }
@@ -106,7 +107,7 @@ final class LevelTwoCloudValidation {
 
     if (weatherCodeValid
         && Arrays.asList(skyNotDiscernible).contains(weatherCode)
-        && !mych.ch_code.equals("")) {
+        && !HighCloudState.ch_code.equals("")) {
       return warning(
           "if 'present weather' is 'fog with sky not discernable', Ch must be 'not determined'");
     }

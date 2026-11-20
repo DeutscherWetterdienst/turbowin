@@ -83,7 +83,7 @@ final class LevelTwoValidationWorkflow {
     // string Ch code conversion to int
     Integer parsedHighCloudType =
         support.parseValidationInt(
-            mych.ch_code, "[GENERAL] Ch conversion error; Function: checking_level_2()");
+            HighCloudState.ch_code, "[GENERAL] Ch conversion error; Function: checking_level_2()");
     if (parsedHighCloudType != null) {
       int_ch_code = parsedHighCloudType;
       ch_code_conversion_ok = true;

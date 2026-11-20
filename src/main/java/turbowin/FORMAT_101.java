@@ -1025,7 +1025,13 @@ public class FORMAT_101 {
 
     compressed_Ch =
         parseCloudTypeField(
-            mych.ch_code, 10.0, present, 37, "cloud type high (Ch)", false, COMPRESSED_UNDEF_VALUE);
+            HighCloudState.ch_code,
+            10.0,
+            present,
+            37,
+            "cloud type high (Ch)",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [38]
     //////////////////////////////////////////////// 0 20 013 (height of base of cloud; h)///////////////////////

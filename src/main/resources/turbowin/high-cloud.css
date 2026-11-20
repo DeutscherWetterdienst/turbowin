@@ -1,0 +1,8 @@
+.cloud-photo {
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.cloud-photo:focused {
+    -fx-border-color: #236da3;
+}

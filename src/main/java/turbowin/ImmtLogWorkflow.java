@@ -334,9 +334,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_ch = Integer.valueOf(mych.ch_code);
+      int num_ch = Integer.valueOf(HighCloudState.ch_code);
       if (num_ch >= 0 && num_ch <= 9) {
-        immt_rec += mych.ch_code; // char number 49
+        immt_rec += HighCloudState.ch_code; // char number 49
         Qc_3 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 49

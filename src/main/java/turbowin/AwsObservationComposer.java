@@ -180,7 +180,7 @@ final class AwsObservationComposer {
 
     // clouds high (Ch) [bufr table 020012]
     //
-    AWS_Ch = AwsCloudCodeFormatter.convert(mych.ch_code, 10, "high (Ch)");
+    AWS_Ch = AwsCloudCodeFormatter.convert(HighCloudState.ch_code, 10, "high (Ch)");
 
     // height of base of lowest clouds (h)
     //

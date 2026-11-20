@@ -24,7 +24,7 @@ public class CloudFieldsUpdaterTest {
     originalFields[6] = main.jTextField4;
     originalCloudValues[0] = mycl.cl_code;
     originalCloudValues[1] = mycm.cm_code;
-    originalCloudValues[2] = mych.ch_code;
+    originalCloudValues[2] = HighCloudState.ch_code;
     originalCloudValues[3] = CloudCoverState.N;
     originalCloudValues[4] = CloudCoverState.Nh;
     originalCloudValues[5] = CloudCoverState.h;
@@ -42,7 +42,7 @@ public class CloudFieldsUpdaterTest {
     main.jTextField4 = originalFields[6];
     mycl.cl_code = originalCloudValues[0];
     mycm.cm_code = originalCloudValues[1];
-    mych.ch_code = originalCloudValues[2];
+    HighCloudState.ch_code = originalCloudValues[2];
     CloudCoverState.N = originalCloudValues[3];
     CloudCoverState.Nh = originalCloudValues[4];
     CloudCoverState.h = originalCloudValues[5];
@@ -54,7 +54,7 @@ public class CloudFieldsUpdaterTest {
     prepareFields();
     mycl.cl_code = "5";
     mycm.cm_code = "7a";
-    mych.ch_code = "3";
+    HighCloudState.ch_code = "3";
     CloudCoverState.N = "6";
     CloudCoverState.Nh = "2";
     CloudCoverState.h = "4";
@@ -77,7 +77,7 @@ public class CloudFieldsUpdaterTest {
     prepareFields();
     mycl.cl_code = "";
     mycm.cm_code = "";
-    mych.ch_code = "";
+    HighCloudState.ch_code = "";
     CloudCoverState.N = "";
     CloudCoverState.Nh = "";
     CloudCoverState.h = "";

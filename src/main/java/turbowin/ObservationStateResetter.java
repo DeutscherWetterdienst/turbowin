@@ -50,7 +50,7 @@ final class ObservationStateResetter {
     mycm.cm_code = "";
 
     // Ch
-    mych.ch_code = "";
+    HighCloudState.ch_code = "";
 
     // cloud cover and height
     CloudCoverState.N = "";

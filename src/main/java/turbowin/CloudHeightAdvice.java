@@ -40,11 +40,11 @@ final class CloudHeightAdvice {
 
     // Ch_code to int (code)
     //
-    if (mych.ch_code.trim().length() == 0) {
+    if (HighCloudState.ch_code.trim().length() == 0) {
       local_int_Ch = main.INVALID;
     } else {
       try {
-        local_int_Ch = Integer.parseInt(mych.ch_code.trim());
+        local_int_Ch = Integer.parseInt(HighCloudState.ch_code.trim());
       } catch (NumberFormatException e) {
         local_int_Ch = main.INVALID;
       }

@@ -568,7 +568,7 @@ public class Format101CharacterizationTest {
     String originalHour = mydatetime.hour;
     String originalLowCloudType = mycl.cl_code;
     String originalMiddleCloudType = mycm.cm_code;
-    String originalHighCloudType = mych.ch_code;
+    String originalHighCloudType = HighCloudState.ch_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -582,7 +582,7 @@ public class Format101CharacterizationTest {
       mydatetime.hour = "12";
       mycl.cl_code = "2";
       mycm.cm_code = "7a";
-      mych.ch_code = "4";
+      HighCloudState.ch_code = "4";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -601,7 +601,7 @@ public class Format101CharacterizationTest {
 
       mycl.cl_code = "/";
       mycm.cm_code = "/";
-      mych.ch_code = "/";
+      HighCloudState.ch_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 cloud type low (Cl) [code]", lines.get(36));
@@ -610,7 +610,7 @@ public class Format101CharacterizationTest {
 
       mycl.cl_code = "2a";
       mycm.cm_code = "";
-      mych.ch_code = "4b";
+      HighCloudState.ch_code = "4b";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 cloud type low (Cl) [code]", lines.get(36));
@@ -623,7 +623,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = originalDay;
       mycl.cl_code = originalLowCloudType;
       mycm.cm_code = originalMiddleCloudType;
-      mych.ch_code = originalHighCloudType;
+      HighCloudState.ch_code = originalHighCloudType;
     }
   }
 
