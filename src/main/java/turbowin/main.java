@@ -4124,9 +4124,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Temperatures_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Temperatures_menu_actionPerformed
-    mytemp form = new mytemp();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    TemperatureDialog.open();
   } // GEN-LAST:event_Input_Temperatures_menu_actionPerformed
 
   private void Maintenance_Stationdata_actionPerformed(

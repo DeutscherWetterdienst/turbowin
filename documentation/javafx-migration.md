@@ -1,6 +1,6 @@
 # JavaFX in the Swing application
 
-The About, low-cloud, middle-cloud, high-cloud, and cloud-cover windows are embedded JavaFX views.
+The About, temperature, low-cloud, middle-cloud, high-cloud, and cloud-cover windows are embedded JavaFX views.
 The rest of TurboWin continues to use Swing.
 The OpenJFX Gradle plugin supplies JavaFX 25.0.2 controls and Swing integration for the build
 machine's operating system and architecture. Build each distribution on its target platform, as
@@ -27,6 +27,9 @@ Its selection actions return to that thread for validation, observation updates,
 the JavaFX view does not directly update Swing components or shared observation state.
 The low-, middle-, and high-cloud views use the same boundary for cloud selections, thumbnail help, and
 navigation. Cm7's three distinct codes remain available to existing observation workflows.
+The temperature view snapshots its input and station settings on the Swing thread. Validation,
+meteorological calculations, and sequence navigation remain on that thread. Asynchronous sensor
+readings are copied back to the JavaFX controls on the JavaFX thread.
 
 `AboutDialogFxTest` requires a graphical display and skips itself in a headless environment. On
 Linux it can be run with `xvfb-run -a ./gradlew test --tests turbowin.AboutDialogFxTest`; the

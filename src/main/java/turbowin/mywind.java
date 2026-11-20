@@ -1789,9 +1789,7 @@ public final class mywind extends javax.swing.JFrame {
   }
 
   private void previous_screen() {
-    mytemp form = new mytemp();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    TemperatureDialog.open();
   }
 
   public ImageIcon createImageIcon(String path_and_file) {

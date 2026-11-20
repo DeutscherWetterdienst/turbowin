@@ -169,16 +169,20 @@ public class ObservationFillingTest extends AbstractUiTest {
     clickOkButtonInFrame(pressureTendencyFrame);
   }
 
-  private void fillAirTemperatureInformation() throws InterruptedException {
+  private void fillAirTemperatureInformation() throws Exception {
     this.frame.label(JLabelMatcher.withText("Air temp")).requireVisible().requireEnabled().click();
-    FrameFixture temperaturesFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Temperatures")).using(this.robot());
-    temperaturesFrame.textBox("sea_water_temp").setText("5");
-    temperaturesFrame.textBox("air_temp").setText("5");
-    temperaturesFrame.textBox("wet_bulb_temp").setText("5");
-    temperaturesFrame.textBox("rel_humidity").setText("5");
-
-    clickOkButtonInFrame(temperaturesFrame);
+    DialogFixture temperatures =
+        WindowFinder.findDialog(new DialogTitleMatcher("Temperatures")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) temperatures.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      ((javafx.scene.control.TextField) scene.lookup("#sea_water_temp")).setText("5");
+      ((javafx.scene.control.TextField) scene.lookup("#air_temp")).setText("5");
+      ((javafx.scene.control.TextField) scene.lookup("#wet_bulb_temp")).setText("5");
+      ((javafx.scene.control.TextField) scene.lookup("#rel_humidity")).setText("5");
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillTrueWindInformation() throws InterruptedException {

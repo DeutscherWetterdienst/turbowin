@@ -285,6 +285,7 @@ final class Rs232VaisalaHmp155ObservationWorkflow {
           }
 
           mytemp.jTextField4.setText(mytemp.RH); // RH
+          TemperatureDialog.sensorUpdated();
         } // else
       }
     }.execute(); // new SwingWorker <Void, Void>()

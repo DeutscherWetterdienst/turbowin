@@ -384,6 +384,7 @@ final class Rs232MintakaStarXObservationWorkflow {
           }
 
           mytemp.jTextField4.setText(mytemp.RH); // RH
+          TemperatureDialog.sensorUpdated();
         } // else
       } // protected void done()
     }.execute(); // new SwingWorker <Void, Void>()

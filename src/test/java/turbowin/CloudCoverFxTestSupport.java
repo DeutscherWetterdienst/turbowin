@@ -17,10 +17,17 @@ final class CloudCoverFxTestSupport {
 
   static Scene awaitScene(JDialog dialog) throws Exception {
     JFXPanel[] panel = new JFXPanel[1];
-    SwingUtilities.invokeAndWait(
-        () -> panel[0] = (JFXPanel) dialog.getContentPane().getComponent(0));
     long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(15);
     while (System.nanoTime() < deadline) {
+      SwingUtilities.invokeAndWait(() -> {
+        if (dialog.getContentPane().getComponentCount() > 0) {
+          panel[0] = (JFXPanel) dialog.getContentPane().getComponent(0);
+        }
+      });
+      if (panel[0] == null) {
+        Thread.sleep(25);
+        continue;
+      }
       Scene scene = onFx(panel[0]::getScene);
       if (scene != null) return scene;
       Thread.sleep(25);

@@ -1304,9 +1304,7 @@ public final class mybarograph extends javax.swing.JFrame {
   }
 
   private void next_screen() {
-    mytemp form = new mytemp();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    TemperatureDialog.open();
   }
 
   /**

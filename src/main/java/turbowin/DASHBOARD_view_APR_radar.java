@@ -4959,9 +4959,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     // cannot be opened this way
     // System.out.println("--- APR Dashboard (re)set to 'NOT Always On Top'");
 
-    mytemp form = new mytemp();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    TemperatureDialog.open();
   } // GEN-LAST:event_DASHBOARD_input_temperatures_actionPerformed
 
   private void write_Bf_description(int beaufort_class)
