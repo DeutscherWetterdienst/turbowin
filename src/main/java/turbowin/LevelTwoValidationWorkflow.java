@@ -72,7 +72,8 @@ final class LevelTwoValidationWorkflow {
     // string Cm code conversion to int
     Integer parsedMiddleCloudType =
         support.parseValidationFirstDigitInt(
-            mycm.cm_code, "[GENERAL] Cm conversion error; Function: checking_level_2()");
+            MiddleCloudState.cm_code,
+            "[GENERAL] Cm conversion error; Function: checking_level_2()");
     if (parsedMiddleCloudType != null) {
       int_cm_code = parsedMiddleCloudType;
       cm_code_conversion_ok = true;

@@ -16,9 +16,9 @@ final class CloudFieldsUpdater {
   }
 
   static void updateMiddle() {
-    if ((mycm.cm_code.compareTo("") != 0) && (mycm.cm_code != null)) {
+    if ((MiddleCloudState.cm_code.compareTo("") != 0) && (MiddleCloudState.cm_code != null)) {
       // Middle-cloud codes 7a, 7b, and 7c are displayed as the first digit, 7.
-      jTextField34.setText(mycm.cm_code.substring(0, 1) + " (code)");
+      jTextField34.setText(MiddleCloudState.cm_code.substring(0, 1) + " (code)");
     } else jTextField34.setText("");
 
     coded_obs_update();

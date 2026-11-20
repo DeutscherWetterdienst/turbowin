@@ -21,7 +21,8 @@ final class LevelTwoCloudValidation {
       return warning("if total cloud cover is 'cloudless', Cl must be 'no clouds Cl'");
     }
 
-    if (CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS) && !mycm.cm_code.equals("0")) {
+    if (CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS)
+        && !MiddleCloudState.cm_code.equals("0")) {
       return warning("if total cloud cover is 'cloudless', Cm must be 'no clouds Cm'");
     }
 
@@ -31,7 +32,7 @@ final class LevelTwoCloudValidation {
     }
 
     if (mycl.cl_code.equals("0")
-        && mycm.cm_code.equals("0")
+        && MiddleCloudState.cm_code.equals("0")
         && HighCloudState.ch_code.equals("0")
         && !CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS)) {
       return warning("if Cl and Cm and Ch is 'no clouds', total cloud cover must be 'cloudless'");
@@ -44,13 +45,13 @@ final class LevelTwoCloudValidation {
 
     if (CloudCoverState.Nh.equals(CloudCoverState.NH_0_8)
         && mycl.cl_code.equals("0")
-        && !mycm.cm_code.equals("0")) {
+        && !MiddleCloudState.cm_code.equals("0")) {
       return warning(
           "if 'amount of Cl (or Cm if Cl not present)' is '0/8' and Cl is 'no clouds Cl', Cm must be 'no clouds Cm'");
     }
 
     if (mycl.cl_code.equals("0")
-        && mycm.cm_code.equals("0")
+        && MiddleCloudState.cm_code.equals("0")
         && !CloudCoverState.Nh.equals(CloudCoverState.NH_0_8)) {
       return warning(
           "if Cl and Cm is 'no clouds', amount of Cl (or Cm if Cl not present)' must be '0/8'  ");
@@ -100,7 +101,7 @@ final class LevelTwoCloudValidation {
 
     if (weatherCodeValid
         && Arrays.asList(skyNotDiscernible).contains(weatherCode)
-        && !mycm.cm_code.equals("")) {
+        && !MiddleCloudState.cm_code.equals("")) {
       return warning(
           "if 'present weather' is 'fog with sky not discernable', Cm must be 'not determined'");
     }
@@ -134,7 +135,7 @@ final class LevelTwoCloudValidation {
 
     if (highCloudValid
         && mycl.cl_code.equals("0")
-        && mycm.cm_code.equals("0")
+        && MiddleCloudState.cm_code.equals("0")
         && Arrays.asList(DETERMINED_CLOUD_TYPES).contains(highCloud)
         && (CloudCoverState.h.equals(CloudCoverState.H_0_50)
             || CloudCoverState.h.equals(CloudCoverState.H_50_100)

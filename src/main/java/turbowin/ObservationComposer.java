@@ -155,7 +155,7 @@ final class ObservationComposer {
 
     // clouds middle (Cm)
     //
-    coded_obs_Cm = ObservationCodeFormatter.firstCharacter(mycm.cm_code, "/");
+    coded_obs_Cm = ObservationCodeFormatter.firstCharacter(MiddleCloudState.cm_code, "/");
 
     // clouds high (Ch)
     //

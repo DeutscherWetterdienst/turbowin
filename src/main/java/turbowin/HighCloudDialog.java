@@ -46,9 +46,7 @@ final class HighCloudDialog {
 
   private static void back(Runnable close) {
     close.run();
-    mycm form = new mycm();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    MiddleCloudDialog.open();
   }
 
   private static void stop(Runnable close) {

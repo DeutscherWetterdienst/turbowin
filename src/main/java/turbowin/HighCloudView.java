@@ -105,7 +105,7 @@ final class HighCloudView {
     root.getStyleClass().add("cloud-cover-root");
     Scene scene = new Scene(root);
     scene.getStylesheets().add(resource("cloud-cover.css").toExternalForm());
-    scene.getStylesheets().add(resource("high-cloud.css").toExternalForm());
+    scene.getStylesheets().add(resource("cloud-photos.css").toExternalForm());
     return scene;
   }
 

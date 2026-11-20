@@ -262,13 +262,18 @@ public class ObservationFillingTest extends AbstractUiTest {
     clickOkButtonInFrame(lowCloudsFrame);
   }
 
-  private void fillMiddleCloudInformation() throws InterruptedException {
+  private void fillMiddleCloudInformation() throws Exception {
     this.frame.label(JLabelMatcher.withText("Cm")).requireVisible().requireEnabled().click();
-    FrameFixture lowCloudsFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Clouds middle")).using(this.robot());
-    lowCloudsFrame.radioButton(new RadioButtonMatcher("Cm4")).click();
-
-    clickOkButtonInFrame(lowCloudsFrame);
+    DialogFixture middleClouds =
+        WindowFinder.findDialog(new DialogTitleMatcher("Clouds middle")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) middleClouds.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      scene.getRoot().applyCss();
+      CloudCoverFxTestSupport.selectRadio(scene, "4");
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillHighCloudInformation() throws Exception {

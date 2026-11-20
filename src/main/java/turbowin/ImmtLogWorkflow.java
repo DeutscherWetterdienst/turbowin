@@ -312,13 +312,13 @@ final class ImmtLogWorkflow {
     try {
       String hulp_cm_code = "";
 
-      if (mycm.cm_code.length() > 1) {
+      if (MiddleCloudState.cm_code.length() > 1) {
         hulp_cm_code =
-            mycm.cm_code.substring(
+            MiddleCloudState.cm_code.substring(
                 0, 1); // NB .substring(0, 1) --> because Cm_code in case of Cm7 an a, b, c could be
         // sticked to the 7 (7a, 7b, 7c)
       } else {
-        hulp_cm_code = mycm.cm_code;
+        hulp_cm_code = MiddleCloudState.cm_code;
       }
 
       int num_cm = Integer.valueOf(hulp_cm_code);

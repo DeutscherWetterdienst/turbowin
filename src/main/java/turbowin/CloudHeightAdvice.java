@@ -28,11 +28,11 @@ final class CloudHeightAdvice {
 
     // Cm_code to int (code)
     //
-    if (mycm.cm_code.trim().length() == 0) {
+    if (MiddleCloudState.cm_code.trim().length() == 0) {
       local_int_Cm = main.INVALID;
     } else {
       try {
-        local_int_Cm = Integer.parseInt(mycm.cm_code.trim());
+        local_int_Cm = Integer.parseInt(MiddleCloudState.cm_code.trim());
       } catch (NumberFormatException e) {
         local_int_Cm = main.INVALID;
       }

@@ -39,7 +39,7 @@ public class ObservationComposerTest {
     originalLongitudeCode = myposition.lolololo_code;
     originalWindSpeedCode = mywind.ff_code;
     originalExtendedWindSpeedCode = mywind.fff00_code;
-    originalMiddleCloudCode = mycm.cm_code;
+    originalMiddleCloudCode = MiddleCloudState.cm_code;
     originalLowCloudCode = mycl.cl_code;
     originalHighCloudCode = HighCloudState.ch_code;
     originalSwellDirectionCode = mywaves.Dw1_code;
@@ -62,7 +62,7 @@ public class ObservationComposerTest {
     myposition.lolololo_code = originalLongitudeCode;
     mywind.ff_code = originalWindSpeedCode;
     mywind.fff00_code = originalExtendedWindSpeedCode;
-    mycm.cm_code = originalMiddleCloudCode;
+    MiddleCloudState.cm_code = originalMiddleCloudCode;
     mycl.cl_code = originalLowCloudCode;
     HighCloudState.ch_code = originalHighCloudCode;
     mywaves.Dw1_code = originalSwellDirectionCode;
@@ -112,7 +112,7 @@ public class ObservationComposerTest {
     setRequiredObservationData();
     mywind.ff_code = "12";
     mywind.fff00_code = "345";
-    mycm.cm_code = "7b";
+    MiddleCloudState.cm_code = "7b";
     mycl.cl_code = "";
     HighCloudState.ch_code = "";
     mywaves.Dw1_code = "99";
@@ -392,7 +392,7 @@ public class ObservationComposerTest {
 
   @Test
   public void extractsTheFirstCharacterOfMiddleCloudCode() {
-    String originalMiddleCloud = mycm.cm_code;
+    String originalMiddleCloud = MiddleCloudState.cm_code;
     String originalCloudAmount = CloudCoverState.Nh_code;
     String originalLowCloud = mycl.cl_code;
     String originalHighCloud = HighCloudState.ch_code;
@@ -403,7 +403,7 @@ public class ObservationComposerTest {
       myposition.Qc_code = "1";
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
-      mycm.cm_code = "7a";
+      MiddleCloudState.cm_code = "7a";
       CloudCoverState.Nh_code = "";
       mycl.cl_code = "";
       HighCloudState.ch_code = "";
@@ -412,7 +412,7 @@ public class ObservationComposerTest {
 
       assertTrue(observation.contains(" 8//7/ "));
     } finally {
-      mycm.cm_code = originalMiddleCloud;
+      MiddleCloudState.cm_code = originalMiddleCloud;
       CloudCoverState.Nh_code = originalCloudAmount;
       mycl.cl_code = originalLowCloud;
       HighCloudState.ch_code = originalHighCloud;
@@ -421,7 +421,7 @@ public class ObservationComposerTest {
 
   @Test
   public void usesPlaceholderForMissingMiddleCloudCode() {
-    String originalMiddleCloud = mycm.cm_code;
+    String originalMiddleCloud = MiddleCloudState.cm_code;
     String originalCloudAmount = CloudCoverState.Nh_code;
     String originalLowCloud = mycl.cl_code;
     String originalHighCloud = HighCloudState.ch_code;
@@ -432,7 +432,7 @@ public class ObservationComposerTest {
       myposition.Qc_code = "1";
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
-      mycm.cm_code = "";
+      MiddleCloudState.cm_code = "";
       CloudCoverState.Nh_code = "";
       mycl.cl_code = "";
       HighCloudState.ch_code = "";
@@ -441,7 +441,7 @@ public class ObservationComposerTest {
 
       assertTrue(observation.contains(" 8//// "));
     } finally {
-      mycm.cm_code = originalMiddleCloud;
+      MiddleCloudState.cm_code = originalMiddleCloud;
       CloudCoverState.Nh_code = originalCloudAmount;
       mycl.cl_code = originalLowCloud;
       HighCloudState.ch_code = originalHighCloud;

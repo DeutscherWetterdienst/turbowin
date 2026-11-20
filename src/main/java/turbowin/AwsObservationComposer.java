@@ -176,7 +176,7 @@ final class AwsObservationComposer {
 
     // clouds middle (Cm) [bufr table 020012]
     //
-    AWS_Cm = AwsCloudCodeFormatter.convertFirstDigit(mycm.cm_code, 20, "middle (Cm)");
+    AWS_Cm = AwsCloudCodeFormatter.convertFirstDigit(MiddleCloudState.cm_code, 20, "middle (Cm)");
 
     // clouds high (Ch) [bufr table 020012]
     //

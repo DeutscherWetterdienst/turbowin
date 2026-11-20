@@ -47,7 +47,7 @@ final class ObservationStateResetter {
     mycl.cl_code = "";
 
     // Cm
-    mycm.cm_code = "";
+    MiddleCloudState.cm_code = "";
 
     // Ch
     HighCloudState.ch_code = "";

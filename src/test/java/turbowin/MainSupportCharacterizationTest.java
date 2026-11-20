@@ -296,22 +296,22 @@ public class MainSupportCharacterizationTest {
 
   @Test
   public void preservesMiddleCloudSuffixConversionAtLevelTwo() {
-    String originalMiddleCloudType = mycm.cm_code;
+    String originalMiddleCloudType = MiddleCloudState.cm_code;
 
     try {
-      mycm.cm_code = "7";
+      MiddleCloudState.cm_code = "7";
       assertTrue(new main_support().checking_level_2());
 
-      mycm.cm_code = "7a";
+      MiddleCloudState.cm_code = "7a";
       assertTrue(new main_support().checking_level_2());
 
-      mycm.cm_code = "";
+      MiddleCloudState.cm_code = "";
       assertTrue(new main_support().checking_level_2());
 
-      mycm.cm_code = "invalid";
+      MiddleCloudState.cm_code = "invalid";
       assertTrue(new main_support().checking_level_2());
     } finally {
-      mycm.cm_code = originalMiddleCloudType;
+      MiddleCloudState.cm_code = originalMiddleCloudType;
     }
   }
 

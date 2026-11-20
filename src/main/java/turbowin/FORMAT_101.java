@@ -1010,7 +1010,7 @@ public class FORMAT_101 {
     // FORMAT 101 represents Cm7 as 7a, 7b, or 7c; only the first character is parsed.
     compressed_Cm =
         parseCloudTypeField(
-            mycm.cm_code,
+            MiddleCloudState.cm_code,
             20.0,
             present,
             36,

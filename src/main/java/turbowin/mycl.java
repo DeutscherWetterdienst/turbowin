@@ -838,9 +838,7 @@ public final class mycl extends javax.swing.JFrame {
   }
 
   private void next_screen() {
-    mycm form = new mycm();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    MiddleCloudDialog.open();
   }
 
   /**

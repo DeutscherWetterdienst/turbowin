@@ -4121,9 +4121,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudsmiddle_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudsmiddle_menu_actionPerformed
-    mycm form = new mycm();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    MiddleCloudDialog.open();
   } // GEN-LAST:event_Input_Cloudsmiddle_menu_actionPerformed
 
   void Input_Temperatures_menu_actionPerformed(

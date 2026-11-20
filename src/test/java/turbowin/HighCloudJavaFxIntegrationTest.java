@@ -21,10 +21,8 @@ import javax.swing.SwingUtilities;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 /** Verifies the embedded high-cloud view and its Swing observation workflow. */
 public class HighCloudJavaFxIntegrationTest extends AbstractUiTest {
@@ -169,8 +167,8 @@ public class HighCloudJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(backScene, "Back");
         return null;
       });
-      FrameFixture middle =
-          WindowFinder.findFrame(new FrameTitleMatcher("Clouds middle")).using(robot());
+      DialogFixture middle =
+          WindowFinder.findDialog(new DialogTitleMatcher("Clouds middle")).using(robot());
       SwingUtilities.invokeAndWait(middle.target()::dispose);
 
       JDialog stopDialog = GuiActionRunner.execute(() -> HighCloudDialog.open());

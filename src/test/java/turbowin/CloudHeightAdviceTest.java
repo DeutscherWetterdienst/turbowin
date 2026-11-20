@@ -18,14 +18,14 @@ public class CloudHeightAdviceTest {
   @Before
   public void saveAndInitializeObservation() {
     cl = mycl.cl_code;
-    cm = mycm.cm_code;
+    cm = MiddleCloudState.cm_code;
     ch = HighCloudState.ch_code;
     temperature = mytemp.air_temp;
     dewPoint = mytemp.double_dew_point;
     weather = mypresentweather.ww_code;
     latitude = myposition.int_latitude_degrees;
     mycl.cl_code = "";
-    mycm.cm_code = "";
+    MiddleCloudState.cm_code = "";
     HighCloudState.ch_code = "";
     mytemp.air_temp = "";
     mytemp.double_dew_point = main.INVALID;
@@ -36,7 +36,7 @@ public class CloudHeightAdviceTest {
   @After
   public void restoreObservation() {
     mycl.cl_code = cl;
-    mycm.cm_code = cm;
+    MiddleCloudState.cm_code = cm;
     HighCloudState.ch_code = ch;
     mytemp.air_temp = temperature;
     mytemp.double_dew_point = dewPoint;
@@ -57,7 +57,7 @@ public class CloudHeightAdviceTest {
   @Test
   public void noLowOrMiddleCloudDistinguishesCloudlessAndHighCloud() {
     mycl.cl_code = "0";
-    mycm.cm_code = "0";
+    MiddleCloudState.cm_code = "0";
     HighCloudState.ch_code = "0";
     assertEquals(-9, CloudHeightAdvice.compute());
     HighCloudState.ch_code = "1";
@@ -67,7 +67,7 @@ public class CloudHeightAdviceTest {
   @Test
   public void middleCloudAdviceDependsOnPresentWeather() {
     mycl.cl_code = "0";
-    mycm.cm_code = "2";
+    MiddleCloudState.cm_code = "2";
     mypresentweather.ww_code = "61";
     assertEquals(3, CloudHeightAdvice.compute());
     mypresentweather.ww_code = "0";
