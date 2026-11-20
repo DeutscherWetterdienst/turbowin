@@ -2,7 +2,7 @@
 
 The About, temperature, wind, waves, visibility, present-weather, past-weather, icing, ice, low-cloud, middle-cloud, high-cloud, and cloud-cover windows are embedded JavaFX views.
 The rest of TurboWin continues to use Swing.
-The OpenJFX Gradle plugin supplies JavaFX 25.0.2 controls and Swing integration for the build
+The OpenJFX Gradle plugin supplies JavaFX 25.0.5.1 controls and Swing integration for the build
 machine's operating system and architecture. Build each distribution on its target platform, as
 the existing `jlink` and `jpackage` scripts already do. Linux deployments also need the native
 desktop libraries required by JavaFX, including GTK. The Linux package scripts declare the GTK 3
