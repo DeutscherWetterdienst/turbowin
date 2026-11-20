@@ -3951,9 +3951,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_waves_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_waves_menu_actionPerformed
-    mywaves form = new mywaves();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    WavesDialog.open();
   } // GEN-LAST:event_Input_waves_menu_actionPerformed
 
   public static void observer_field_update() {

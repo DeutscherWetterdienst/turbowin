@@ -54,8 +54,6 @@ final class WindDialog {
   }
 
   private static void next() {
-    mywaves form = new mywaves();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    WavesDialog.open();
   }
 }

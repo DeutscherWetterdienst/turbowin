@@ -826,9 +826,7 @@ public final class myoneswellsystem extends javax.swing.JFrame {
   }
 
   private void previous_screen() {
-    mywaves form = new mywaves();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    WavesDialog.open();
   }
 
   private void initSynopparameters() {

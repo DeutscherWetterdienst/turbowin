@@ -205,18 +205,22 @@ public class ObservationFillingTest extends AbstractUiTest {
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
   }
 
-  private void fillWaveInformation() throws InterruptedException {
+  private void fillWaveInformation() throws Exception {
     this.frame
         .label(JLabelMatcher.withText("(Wind) wave per"))
         .requireVisible()
         .requireEnabled()
         .click();
-    FrameFixture wavesFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Waves")).using(this.robot());
-    wavesFrame.textBox("wave_1").setText("5");
-    wavesFrame.textBox("wave_2").setText("5");
-
-    clickOkButtonInFrame(wavesFrame);
+    DialogFixture waves =
+        WindowFinder.findDialog(new DialogTitleMatcher("Waves")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) waves.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      ((javafx.scene.control.TextField) scene.lookup("#wave_1")).setText("5");
+      ((javafx.scene.control.TextField) scene.lookup("#wave_2")).setText("5");
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillVisibilityInformation() throws InterruptedException {

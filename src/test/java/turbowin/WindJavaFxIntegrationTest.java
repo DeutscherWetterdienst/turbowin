@@ -15,10 +15,8 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 public class WindJavaFxIntegrationTest extends AbstractUiTest {
   @Test
@@ -176,7 +174,7 @@ public class WindJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(forwardScene, "Cancel");
         return null;
       });
-      FrameFixture waves = WindowFinder.findFrame(new FrameTitleMatcher("Waves")).using(robot());
+      DialogFixture waves = WindowFinder.findDialog(new DialogTitleMatcher("Waves")).using(robot());
       SwingUtilities.invokeAndWait(waves.target()::dispose);
       JDialog stop = GuiActionRunner.execute(WindDialog::open);
       Scene stopScene = CloudCoverFxTestSupport.awaitScene(stop);

@@ -472,9 +472,7 @@ public final class myvisibility extends javax.swing.JFrame {
   } // GEN-LAST:event_Stop_button_actionPerformed
 
   private void previous_screen() {
-    mywaves form = new mywaves();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    WavesDialog.open();
   }
 
   private void next_screen() {

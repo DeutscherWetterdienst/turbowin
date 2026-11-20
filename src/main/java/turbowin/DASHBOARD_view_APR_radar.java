@@ -4944,9 +4944,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     // cannot be opened this way
     // System.out.println("--- APR Dashboard (re)set to 'NOT Always On Top'");
 
-    mywaves form = new mywaves();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    WavesDialog.open();
   } // GEN-LAST:event_DASHBOARD_input_waves_actionPerformed
 
   private void DASHBOARD_input_temperatures_actionPerformed(
