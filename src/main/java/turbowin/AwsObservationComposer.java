@@ -232,23 +232,23 @@ final class AwsObservationComposer {
 
     // sea ice concentration (ci) [bufr table 020034]
     //
-    AWS_ci = AwsIceCodeFormatter.unknownValue(myice1.ci_code, "14");
+    AWS_ci = AwsIceCodeFormatter.unknownValue(IceState.ci_code, "14");
 
     // amount and type of ice (bi) [bufr table 020035]
     //
-    AWS_bi = AwsIceCodeFormatter.unknownValue(myice1.bi_code, "14");
+    AWS_bi = AwsIceCodeFormatter.unknownValue(IceState.bi_code, "14");
 
     // ice situation (zi) [bufr table 020036]
     //
-    AWS_zi = AwsIceCodeFormatter.unknownValue(myice1.zi_code, "30");
+    AWS_zi = AwsIceCodeFormatter.unknownValue(IceState.zi_code, "30");
 
     // ice development (Si) [bufr table 020037]
     //
-    AWS_Si = AwsIceCodeFormatter.unknownValue(myice1.Si_code, "30");
+    AWS_Si = AwsIceCodeFormatter.unknownValue(IceState.Si_code, "30");
 
     // bearing of ice edge (Di) [bufr id 020038 NO TABLE]
     //
-    AWS_Di = AwsIceCodeFormatter.iceBearing(myice1.Di_code);
+    AWS_Di = AwsIceCodeFormatter.iceBearing(IceState.Di_code);
 
     // OBS_ID (but only if requested and set in the maintenance section
     //

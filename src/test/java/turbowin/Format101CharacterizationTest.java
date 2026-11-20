@@ -719,11 +719,11 @@ public class Format101CharacterizationTest {
     String originalThickness = IcingState.EsEs_code;
     String originalRate = IcingState.Rs_code;
     String originalCause = IcingState.Is_code;
-    String originalConcentration = myice1.ci_code;
-    String originalType = myice1.bi_code;
-    String originalSituation = myice1.zi_code;
-    String originalDevelopment = myice1.Si_code;
-    String originalBearing = myice1.Di_code;
+    String originalConcentration = IceState.ci_code;
+    String originalType = IceState.bi_code;
+    String originalSituation = IceState.zi_code;
+    String originalDevelopment = IceState.Si_code;
+    String originalBearing = IceState.Di_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -738,11 +738,11 @@ public class Format101CharacterizationTest {
       IcingState.EsEs_code = "100";
       IcingState.Rs_code = "2";
       IcingState.Is_code = "";
-      myice1.ci_code = "";
-      myice1.bi_code = "";
-      myice1.zi_code = "";
-      myice1.Si_code = "";
-      myice1.Di_code = "";
+      IceState.ci_code = "";
+      IceState.bi_code = "";
+      IceState.zi_code = "";
+      IceState.Si_code = "";
+      IceState.Di_code = "";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -774,11 +774,11 @@ public class Format101CharacterizationTest {
       IcingState.EsEs_code = originalThickness;
       IcingState.Rs_code = originalRate;
       IcingState.Is_code = originalCause;
-      myice1.ci_code = originalConcentration;
-      myice1.bi_code = originalType;
-      myice1.zi_code = originalSituation;
-      myice1.Si_code = originalDevelopment;
-      myice1.Di_code = originalBearing;
+      IceState.ci_code = originalConcentration;
+      IceState.bi_code = originalType;
+      IceState.zi_code = originalSituation;
+      IceState.Si_code = originalDevelopment;
+      IceState.Di_code = originalBearing;
     }
   }
 
@@ -790,7 +790,7 @@ public class Format101CharacterizationTest {
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
     String originalCause = IcingState.Is_code;
-    String originalBearing = myice1.Di_code;
+    String originalBearing = IceState.Di_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -803,7 +803,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = "04";
       mydatetime.hour = "12";
       IcingState.Is_code = "1";
-      myice1.Di_code = "0";
+      IceState.Di_code = "0";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -812,14 +812,14 @@ public class Format101CharacterizationTest {
       assertEquals("0                 bearing of ice edge (Di) [degrees]", lines.get(57));
 
       IcingState.Is_code = "14";
-      myice1.Di_code = "6";
+      IceState.Di_code = "6";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 14.0            cause of ice accretion (Is) [code]", lines.get(52));
       assertEquals("1 270.0           bearing of ice edge (Di) [degrees]", lines.get(57));
 
       IcingState.Is_code = "9";
-      myice1.Di_code = "/";
+      IceState.Di_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 cause of ice accretion (Is) [code]", lines.get(52));
@@ -831,7 +831,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = originalDay;
       mydatetime.hour = originalHour;
       IcingState.Is_code = originalCause;
-      myice1.Di_code = originalBearing;
+      IceState.Di_code = originalBearing;
     }
   }
 
@@ -842,10 +842,10 @@ public class Format101CharacterizationTest {
     String originalMonth = mydatetime.MM_code;
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
-    String originalConcentration = myice1.ci_code;
-    String originalType = myice1.bi_code;
-    String originalSituation = myice1.zi_code;
-    String originalDevelopment = myice1.Si_code;
+    String originalConcentration = IceState.ci_code;
+    String originalType = IceState.bi_code;
+    String originalSituation = IceState.zi_code;
+    String originalDevelopment = IceState.Si_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -857,10 +857,10 @@ public class Format101CharacterizationTest {
       mydatetime.MM_code = "10";
       mydatetime.day = "04";
       mydatetime.hour = "12";
-      myice1.ci_code = "3";
-      myice1.bi_code = "4";
-      myice1.zi_code = "5";
-      myice1.Si_code = "6";
+      IceState.ci_code = "3";
+      IceState.bi_code = "4";
+      IceState.zi_code = "5";
+      IceState.Si_code = "6";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -870,10 +870,10 @@ public class Format101CharacterizationTest {
       assertEquals("1 5.0             ice situation (zi) [code]", lines.get(55));
       assertEquals("1 6.0             ice development (Si) code]", lines.get(56));
 
-      myice1.ci_code = "/";
-      myice1.bi_code = "/";
-      myice1.zi_code = "/";
-      myice1.Si_code = "/";
+      IceState.ci_code = "/";
+      IceState.bi_code = "/";
+      IceState.zi_code = "/";
+      IceState.Si_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 sea ice concentration (ci) [code]", lines.get(53));
@@ -885,10 +885,10 @@ public class Format101CharacterizationTest {
       mydatetime.year = originalYear;
       mydatetime.MM_code = originalMonth;
       mydatetime.day = originalDay;
-      myice1.ci_code = originalConcentration;
-      myice1.bi_code = originalType;
-      myice1.zi_code = originalSituation;
-      myice1.Si_code = originalDevelopment;
+      IceState.ci_code = originalConcentration;
+      IceState.bi_code = originalType;
+      IceState.zi_code = originalSituation;
+      IceState.Si_code = originalDevelopment;
     }
   }
 
@@ -958,7 +958,7 @@ public class Format101CharacterizationTest {
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
     String originalCourseCode = myposition.Ds_code;
-    String originalIceBearingCode = myice1.Di_code;
+    String originalIceBearingCode = IceState.Di_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -971,7 +971,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = "04";
       mydatetime.hour = "12";
       myposition.Ds_code = "3";
-      myice1.Di_code = "6";
+      IceState.Di_code = "6";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -980,7 +980,7 @@ public class Format101CharacterizationTest {
       assertEquals("1 270.0           bearing of ice edge (Di) [degrees]", lines.get(57));
 
       myposition.Ds_code = "9";
-      myice1.Di_code = "/";
+      IceState.Di_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 COG past 10 minutes [degrees]", lines.get(3));
@@ -991,7 +991,7 @@ public class Format101CharacterizationTest {
       mydatetime.MM_code = originalMonth;
       mydatetime.day = originalDay;
       myposition.Ds_code = originalCourseCode;
-      myice1.Di_code = originalIceBearingCode;
+      IceState.Di_code = originalIceBearingCode;
     }
   }
 

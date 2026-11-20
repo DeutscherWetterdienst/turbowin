@@ -149,11 +149,11 @@ final class ObservationStateResetter {
     IcingState.Rs_code = "";
 
     // Ice
-    myice1.ci_code = "";
-    myice1.Si_code = "";
-    myice1.bi_code = "";
-    myice1.Di_code = "";
-    myice1.zi_code = "";
+    IceState.ci_code = "";
+    IceState.Si_code = "";
+    IceState.bi_code = "";
+    IceState.Di_code = "";
+    IceState.zi_code = "";
 
     // position
     myposition.latitude_degrees = "";

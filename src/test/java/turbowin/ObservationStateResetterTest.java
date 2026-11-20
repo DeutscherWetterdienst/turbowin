@@ -83,7 +83,7 @@ public class ObservationStateResetterTest {
     CloudCoverState.N = "8";
     mywaves.swell_1_height = "3";
     IcingState.Is_code = "I";
-    myice1.ci_code = "C";
+    IceState.ci_code = "C";
     myposition.longitude_degrees = "4";
     myposition.SOG_APR = 12;
     mydatetime.GG_code = "10";
@@ -93,7 +93,7 @@ public class ObservationStateResetterTest {
     assertEquals("", CloudCoverState.N);
     assertEquals("", mywaves.swell_1_height);
     assertEquals("", IcingState.Is_code);
-    assertEquals("", myice1.ci_code);
+    assertEquals("", IceState.ci_code);
     assertEquals("", myposition.longitude_degrees);
     assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
     assertEquals("", mydatetime.GG_code);

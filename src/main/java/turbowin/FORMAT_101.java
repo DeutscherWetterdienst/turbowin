@@ -1202,11 +1202,11 @@ public class FORMAT_101 {
     if (IcingState.EsEs_code.equals("")
         && IcingState.Rs_code.equals("")
         && IcingState.Is_code.equals("")
-        && myice1.ci_code.equals("")
-        && myice1.bi_code.equals("")
-        && myice1.zi_code.equals("")
-        && myice1.Si_code.equals("")
-        && myice1.Di_code.equals("")) {
+        && IceState.ci_code.equals("")
+        && IceState.bi_code.equals("")
+        && IceState.zi_code.equals("")
+        && IceState.Si_code.equals("")
+        && IceState.Di_code.equals("")) {
       compressed_ice_obs_presence_indicator = 0; // observation do not contain ice groups
       present[48] = 1;
     } else {
@@ -1282,7 +1282,7 @@ public class FORMAT_101 {
 
     compressed_sea_ice_concentration =
         parseOptionalNumericField(
-            myice1.ci_code,
+            IceState.ci_code,
             schalings_factor,
             present,
             52,
@@ -1297,7 +1297,7 @@ public class FORMAT_101 {
 
     compressed_amount_type_ice =
         parseOptionalNumericField(
-            myice1.bi_code,
+            IceState.bi_code,
             schalings_factor,
             present,
             53,
@@ -1312,7 +1312,7 @@ public class FORMAT_101 {
 
     compressed_ice_situation =
         parseOptionalNumericField(
-            myice1.zi_code,
+            IceState.zi_code,
             schalings_factor,
             present,
             54,
@@ -1327,7 +1327,7 @@ public class FORMAT_101 {
 
     compressed_ice_development =
         parseOptionalNumericField(
-            myice1.Si_code,
+            IceState.Si_code,
             schalings_factor,
             present,
             55,
@@ -1340,7 +1340,7 @@ public class FORMAT_101 {
     /* unit  = degrees (no bufr table) */
     schalings_factor = 1;
 
-    if (myice1.Di_code.equals("0")
+    if (IceState.Di_code.equals("0")
         == true) // ship in shore or flaw lead; not possible to translate this into a direction (as
     // required in bufr) !!
     {
@@ -1349,7 +1349,7 @@ public class FORMAT_101 {
       // codes", Pierre Blouch, 21 August 2013 draft V2
       present[56] = 0;
     } else {
-      Integer direction = directionCodeToDegrees(myice1.Di_code);
+      Integer direction = directionCodeToDegrees(IceState.Di_code);
       if (direction != null) {
         compressed_ice_edge_bearing = direction * schalings_factor;
         present[56] = 1;

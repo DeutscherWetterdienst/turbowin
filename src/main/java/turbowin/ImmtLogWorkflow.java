@@ -692,9 +692,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_ci = Integer.valueOf(myice1.ci_code);
+      int num_ci = Integer.valueOf(IceState.ci_code);
       if (num_ci >= 0 && num_ci <= 9) {
-        immt_rec += myice1.ci_code; // char number 105
+        immt_rec += IceState.ci_code; // char number 105
       } else {
         immt_rec += SPATIE_1; // char number 105
       }
@@ -703,9 +703,9 @@ final class ImmtLogWorkflow {
     }
 
     try {
-      int num_Si = Integer.valueOf(myice1.Si_code);
+      int num_Si = Integer.valueOf(IceState.Si_code);
       if (num_Si >= 0 && num_Si <= 9) {
-        immt_rec += myice1.Si_code; // char number 106
+        immt_rec += IceState.Si_code; // char number 106
       } else {
         immt_rec += SPATIE_1; // char number 106
       }
@@ -714,9 +714,9 @@ final class ImmtLogWorkflow {
     }
 
     try {
-      int num_bi = Integer.valueOf(myice1.bi_code);
+      int num_bi = Integer.valueOf(IceState.bi_code);
       if (num_bi >= 0 && num_bi <= 9) {
-        immt_rec += myice1.bi_code; // char number 107
+        immt_rec += IceState.bi_code; // char number 107
       } else {
         immt_rec += SPATIE_1; // char number 107
       }
@@ -725,9 +725,9 @@ final class ImmtLogWorkflow {
     }
 
     try {
-      int num_Di = Integer.valueOf(myice1.Di_code);
+      int num_Di = Integer.valueOf(IceState.Di_code);
       if (num_Di >= 0 && num_Di <= 9) {
-        immt_rec += myice1.Di_code; // char number 108
+        immt_rec += IceState.Di_code; // char number 108
       } else {
         immt_rec += SPATIE_1; // char number 108
       }
@@ -736,9 +736,9 @@ final class ImmtLogWorkflow {
     }
 
     try {
-      int num_zi = Integer.valueOf(myice1.zi_code);
+      int num_zi = Integer.valueOf(IceState.zi_code);
       if (num_zi >= 0 && num_zi <= 9) {
-        immt_rec += myice1.zi_code; // char number 109
+        immt_rec += IceState.zi_code; // char number 109
       } else {
         immt_rec += SPATIE_1; // char number 109
       }

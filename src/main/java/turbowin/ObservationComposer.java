@@ -220,23 +220,23 @@ final class ObservationComposer {
 
     // concentration or arrangement of sea ice (ci)
     //
-    coded_obs_ci = ObservationCodeFormatter.iceValue(myice1.ci_code);
+    coded_obs_ci = ObservationCodeFormatter.iceValue(IceState.ci_code);
 
     // stage of development Si)
     //
-    coded_obs_Si = ObservationCodeFormatter.iceValue(myice1.Si_code);
+    coded_obs_Si = ObservationCodeFormatter.iceValue(IceState.Si_code);
 
     // Ice of land origin (bi)
     //
-    coded_obs_bi = ObservationCodeFormatter.iceValue(myice1.bi_code);
+    coded_obs_bi = ObservationCodeFormatter.iceValue(IceState.bi_code);
 
     // Bearing of principal ice edge (Di)
     //
-    coded_obs_Di = ObservationCodeFormatter.iceValue(myice1.Di_code);
+    coded_obs_Di = ObservationCodeFormatter.iceValue(IceState.Di_code);
 
     // Ice situation and trend over preceding three hours (zi)
     //
-    coded_obs_zi = ObservationCodeFormatter.iceValue(myice1.zi_code);
+    coded_obs_zi = ObservationCodeFormatter.iceValue(IceState.zi_code);
 
     if ((coded_obs_call_sign.compareTo("unknown") != 0)
         && (coded_obs_YY.compareTo("//") != 0)

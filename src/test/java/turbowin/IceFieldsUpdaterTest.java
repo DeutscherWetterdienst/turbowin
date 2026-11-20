@@ -10,11 +10,11 @@ public class IceFieldsUpdaterTest {
   @Test
   public void showsPresentForMeaningfulIceCode() {
     prepareFields();
-    myice1.ci_code = "1";
-    myice1.Si_code = "";
-    myice1.bi_code = "";
-    myice1.Di_code = "";
-    myice1.zi_code = "";
+    IceState.ci_code = "1";
+    IceState.Si_code = "";
+    IceState.bi_code = "";
+    IceState.Di_code = "";
+    IceState.zi_code = "";
 
     IceFieldsUpdater.update();
 
@@ -24,11 +24,11 @@ public class IceFieldsUpdaterTest {
   @Test
   public void suppressesPresentForAllUnableToReportCodes() {
     prepareFields();
-    myice1.ci_code = "u";
-    myice1.Si_code = "u";
-    myice1.bi_code = "u";
-    myice1.Di_code = "u";
-    myice1.zi_code = "u";
+    IceState.ci_code = "u";
+    IceState.Si_code = "u";
+    IceState.bi_code = "u";
+    IceState.Di_code = "u";
+    IceState.zi_code = "u";
 
     IceFieldsUpdater.update();
 

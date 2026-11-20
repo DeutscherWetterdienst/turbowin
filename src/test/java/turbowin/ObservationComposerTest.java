@@ -48,8 +48,8 @@ public class ObservationComposerTest {
     originalIcingCauseCode = IcingState.Is_code;
     originalIcingThicknessCode = IcingState.EsEs_code;
     originalIcingRateCode = IcingState.Rs_code;
-    originalIceConcentrationCode = myice1.ci_code;
-    originalIceDevelopmentCode = myice1.Si_code;
+    originalIceConcentrationCode = IceState.ci_code;
+    originalIceDevelopmentCode = IceState.Si_code;
   }
 
   @After
@@ -71,8 +71,8 @@ public class ObservationComposerTest {
     IcingState.Is_code = originalIcingCauseCode;
     IcingState.EsEs_code = originalIcingThicknessCode;
     IcingState.Rs_code = originalIcingRateCode;
-    myice1.ci_code = originalIceConcentrationCode;
-    myice1.Si_code = originalIceDevelopmentCode;
+    IceState.ci_code = originalIceConcentrationCode;
+    IceState.Si_code = originalIceDevelopmentCode;
   }
 
   @Test
@@ -119,8 +119,8 @@ public class ObservationComposerTest {
     IcingState.Is_code = "1";
     IcingState.EsEs_code = "02";
     IcingState.Rs_code = "3";
-    myice1.ci_code = "u";
-    myice1.Si_code = "1";
+    IceState.ci_code = "u";
+    IceState.Si_code = "1";
 
     String observation = main.compose_coded_obs(" ");
 
@@ -328,11 +328,11 @@ public class ObservationComposerTest {
 
   @Test
   public void includesLegacyIceValuesWhenReportable() {
-    String originalConcentration = myice1.ci_code;
-    String originalDevelopment = myice1.Si_code;
-    String originalAmountAndType = myice1.bi_code;
-    String originalBearing = myice1.Di_code;
-    String originalSituation = myice1.zi_code;
+    String originalConcentration = IceState.ci_code;
+    String originalDevelopment = IceState.Si_code;
+    String originalAmountAndType = IceState.bi_code;
+    String originalBearing = IceState.Di_code;
+    String originalSituation = IceState.zi_code;
     try {
       main.station_ID = "TEST";
       mydatetime.YY_code = "01";
@@ -340,31 +340,31 @@ public class ObservationComposerTest {
       myposition.Qc_code = "1";
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
-      myice1.ci_code = "1";
-      myice1.Si_code = "2";
-      myice1.bi_code = "3";
-      myice1.Di_code = "4";
-      myice1.zi_code = "5";
+      IceState.ci_code = "1";
+      IceState.Si_code = "2";
+      IceState.bi_code = "3";
+      IceState.Di_code = "4";
+      IceState.zi_code = "5";
 
       String observation = ObservationComposer.compose(" ");
 
       assertTrue(observation.contains(" ICE 12345"));
     } finally {
-      myice1.ci_code = originalConcentration;
-      myice1.Si_code = originalDevelopment;
-      myice1.bi_code = originalAmountAndType;
-      myice1.Di_code = originalBearing;
-      myice1.zi_code = originalSituation;
+      IceState.ci_code = originalConcentration;
+      IceState.Si_code = originalDevelopment;
+      IceState.bi_code = originalAmountAndType;
+      IceState.Di_code = originalBearing;
+      IceState.zi_code = originalSituation;
     }
   }
 
   @Test
   public void omitsLegacyIceValuesThatAreUnavailable() {
-    String originalConcentration = myice1.ci_code;
-    String originalDevelopment = myice1.Si_code;
-    String originalAmountAndType = myice1.bi_code;
-    String originalBearing = myice1.Di_code;
-    String originalSituation = myice1.zi_code;
+    String originalConcentration = IceState.ci_code;
+    String originalDevelopment = IceState.Si_code;
+    String originalAmountAndType = IceState.bi_code;
+    String originalBearing = IceState.Di_code;
+    String originalSituation = IceState.zi_code;
     try {
       main.station_ID = "TEST";
       mydatetime.YY_code = "01";
@@ -372,21 +372,21 @@ public class ObservationComposerTest {
       myposition.Qc_code = "1";
       myposition.lalala_code = "234";
       myposition.lolololo_code = "5678";
-      myice1.ci_code = "u";
-      myice1.Si_code = "u";
-      myice1.bi_code = "u";
-      myice1.Di_code = "u";
-      myice1.zi_code = "u";
+      IceState.ci_code = "u";
+      IceState.Si_code = "u";
+      IceState.bi_code = "u";
+      IceState.Di_code = "u";
+      IceState.zi_code = "u";
 
       String observation = ObservationComposer.compose(" ");
 
       assertTrue(!observation.contains(" ICE "));
     } finally {
-      myice1.ci_code = originalConcentration;
-      myice1.Si_code = originalDevelopment;
-      myice1.bi_code = originalAmountAndType;
-      myice1.Di_code = originalBearing;
-      myice1.zi_code = originalSituation;
+      IceState.ci_code = originalConcentration;
+      IceState.Si_code = originalDevelopment;
+      IceState.bi_code = originalAmountAndType;
+      IceState.Di_code = originalBearing;
+      IceState.zi_code = originalSituation;
     }
   }
 

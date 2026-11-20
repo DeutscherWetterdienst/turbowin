@@ -86,11 +86,11 @@ public class AwsObservationComposerTest {
     originalEsEsCode = IcingState.EsEs_code;
     originalRsCode = IcingState.Rs_code;
     originalIsCode = IcingState.Is_code;
-    originalCiCode = myice1.ci_code;
-    originalBiCode = myice1.bi_code;
-    originalZiCode = myice1.zi_code;
-    originalSiCode = myice1.Si_code;
-    originalDiCode = myice1.Di_code;
+    originalCiCode = IceState.ci_code;
+    originalBiCode = IceState.bi_code;
+    originalZiCode = IceState.zi_code;
+    originalSiCode = IceState.Si_code;
+    originalDiCode = IceState.Di_code;
     originalSelectedObserver = myobserver.selected_observer;
 
     main.diff_sll_wl = "";
@@ -128,11 +128,11 @@ public class AwsObservationComposerTest {
     IcingState.EsEs_code = "//";
     IcingState.Rs_code = "/";
     IcingState.Is_code = "/";
-    myice1.ci_code = "/";
-    myice1.bi_code = "/";
-    myice1.zi_code = "/";
-    myice1.Si_code = "/";
-    myice1.Di_code = "/";
+    IceState.ci_code = "/";
+    IceState.bi_code = "/";
+    IceState.zi_code = "/";
+    IceState.Si_code = "/";
+    IceState.Di_code = "/";
     myobserver.selected_observer = "";
   }
 
@@ -172,11 +172,11 @@ public class AwsObservationComposerTest {
     IcingState.EsEs_code = originalEsEsCode;
     IcingState.Rs_code = originalRsCode;
     IcingState.Is_code = originalIsCode;
-    myice1.ci_code = originalCiCode;
-    myice1.bi_code = originalBiCode;
-    myice1.zi_code = originalZiCode;
-    myice1.Si_code = originalSiCode;
-    myice1.Di_code = originalDiCode;
+    IceState.ci_code = originalCiCode;
+    IceState.bi_code = originalBiCode;
+    IceState.zi_code = originalZiCode;
+    IceState.Si_code = originalSiCode;
+    IceState.Di_code = originalDiCode;
     myobserver.selected_observer = originalSelectedObserver;
   }
 
@@ -219,8 +219,8 @@ public class AwsObservationComposerTest {
     MiddleCloudState.cm_code = "7a";
     HighCloudState.ch_code = "3";
     IcingState.Is_code = "1";
-    myice1.ci_code = "u";
-    myice1.Di_code = "2";
+    IceState.ci_code = "u";
+    IceState.Di_code = "2";
     main.eucaws_obs_id = true;
     myobserver.selected_observer = "Janssen;K;AB1;-;";
 
@@ -407,20 +407,20 @@ public class AwsObservationComposerTest {
     String originalIceThickness = IcingState.EsEs_code;
     String originalIceRate = IcingState.Rs_code;
     String originalIceCause = IcingState.Is_code;
-    String originalConcentration = myice1.ci_code;
-    String originalAmountAndType = myice1.bi_code;
-    String originalSituation = myice1.zi_code;
-    String originalDevelopment = myice1.Si_code;
-    String originalBearing = myice1.Di_code;
+    String originalConcentration = IceState.ci_code;
+    String originalAmountAndType = IceState.bi_code;
+    String originalSituation = IceState.zi_code;
+    String originalDevelopment = IceState.Si_code;
+    String originalBearing = IceState.Di_code;
     try {
       IcingState.EsEs_code = "04";
       IcingState.Rs_code = "2";
       IcingState.Is_code = "3";
-      myice1.ci_code = "u";
-      myice1.bi_code = "u";
-      myice1.zi_code = "u";
-      myice1.Si_code = "u";
-      myice1.Di_code = "8";
+      IceState.ci_code = "u";
+      IceState.bi_code = "u";
+      IceState.zi_code = "u";
+      IceState.Si_code = "u";
+      IceState.Di_code = "8";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -436,11 +436,11 @@ public class AwsObservationComposerTest {
       IcingState.EsEs_code = originalIceThickness;
       IcingState.Rs_code = originalIceRate;
       IcingState.Is_code = originalIceCause;
-      myice1.ci_code = originalConcentration;
-      myice1.bi_code = originalAmountAndType;
-      myice1.zi_code = originalSituation;
-      myice1.Si_code = originalDevelopment;
-      myice1.Di_code = originalBearing;
+      IceState.ci_code = originalConcentration;
+      IceState.bi_code = originalAmountAndType;
+      IceState.zi_code = originalSituation;
+      IceState.Si_code = originalDevelopment;
+      IceState.Di_code = originalBearing;
     }
   }
 
@@ -462,17 +462,17 @@ public class AwsObservationComposerTest {
 
   @Test
   public void convertsEverySupportedIceBearingCode() {
-    String originalBearing = myice1.Di_code;
+    String originalBearing = IceState.Di_code;
     String[] sourceCodes = {"1", "2", "3", "4", "5", "6", "7", "8"};
     String[] expectedCodes = {"45", "90", "135", "180", "225", "270", "315", "360"};
     try {
       for (int i = 0; i < sourceCodes.length; i++) {
-        myice1.Di_code = sourceCodes[i];
+        IceState.Di_code = sourceCodes[i];
         String[] fields = AwsObservationComposer.compile().split(",", -1);
         assertEquals(expectedCodes[i], fields[32]);
       }
     } finally {
-      myice1.Di_code = originalBearing;
+      IceState.Di_code = originalBearing;
     }
   }
 
@@ -481,20 +481,20 @@ public class AwsObservationComposerTest {
     String originalIceThickness = IcingState.EsEs_code;
     String originalIceRate = IcingState.Rs_code;
     String originalIceCause = IcingState.Is_code;
-    String originalConcentration = myice1.ci_code;
-    String originalAmountAndType = myice1.bi_code;
-    String originalSituation = myice1.zi_code;
-    String originalDevelopment = myice1.Si_code;
-    String originalBearing = myice1.Di_code;
+    String originalConcentration = IceState.ci_code;
+    String originalAmountAndType = IceState.bi_code;
+    String originalSituation = IceState.zi_code;
+    String originalDevelopment = IceState.Si_code;
+    String originalBearing = IceState.Di_code;
     try {
       IcingState.EsEs_code = "//";
       IcingState.Rs_code = "/";
       IcingState.Is_code = "9";
-      myice1.ci_code = "/";
-      myice1.bi_code = "/";
-      myice1.zi_code = "/";
-      myice1.Si_code = "/";
-      myice1.Di_code = "0";
+      IceState.ci_code = "/";
+      IceState.bi_code = "/";
+      IceState.zi_code = "/";
+      IceState.Si_code = "/";
+      IceState.Di_code = "0";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -510,11 +510,11 @@ public class AwsObservationComposerTest {
       IcingState.EsEs_code = originalIceThickness;
       IcingState.Rs_code = originalIceRate;
       IcingState.Is_code = originalIceCause;
-      myice1.ci_code = originalConcentration;
-      myice1.bi_code = originalAmountAndType;
-      myice1.zi_code = originalSituation;
-      myice1.Si_code = originalDevelopment;
-      myice1.Di_code = originalBearing;
+      IceState.ci_code = originalConcentration;
+      IceState.bi_code = originalAmountAndType;
+      IceState.zi_code = originalSituation;
+      IceState.Si_code = originalDevelopment;
+      IceState.Di_code = originalBearing;
     }
   }
 

@@ -236,11 +236,11 @@ final class LevelTwoValidationWorkflow {
         && !IceAirTemperatureValidation.validate(
             air_temp_conversion_ok,
             float_air_temp,
-            !myice1.ci_code.equals("")
-                || !myice1.Si_code.equals("")
-                || !myice1.bi_code.equals("")
-                || !myice1.Di_code.equals("")
-                || !myice1.zi_code.equals(""))) {
+            !IceState.ci_code.equals("")
+                || !IceState.Si_code.equals("")
+                || !IceState.bi_code.equals("")
+                || !IceState.Di_code.equals("")
+                || !IceState.zi_code.equals(""))) {
       level_2_ok = false;
       doorgaan = false;
     }
