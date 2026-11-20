@@ -120,11 +120,16 @@ public class AbstractUiTest extends AssertJSwingTestCaseTemplate {
 
   private void closeStartDialogs() {
     DialogFixture warning =
-        WindowFinder.findDialog(new DialogTitleMatcher("TurboWin warning")).using(robot());
-    warning.button(JButtonMatcher.withText("OK")).click();
+        WindowFinder.findDialog(new DialogTitleMatcher("TurboWin warning"))
+            .withTimeout(15000)
+            .using(robot());
+    GuiActionRunner.execute(() -> warning.button(JButtonMatcher.withText("OK")).target().doClick());
     DialogFixture dateTime =
-        WindowFinder.findDialog(new DialogTitleMatcher("Date and Time")).using(robot());
-    dateTime.button(JButtonMatcher.withText(Pattern.compile("No|Nein"))).click();
+        WindowFinder.findDialog(new DialogTitleMatcher("Date and Time"))
+            .withTimeout(15000)
+            .using(robot());
+    GuiActionRunner.execute(
+        () -> dateTime.button(JButtonMatcher.withText(Pattern.compile("No|Nein"))).target().doClick());
     robot().waitForIdle();
   }
 
