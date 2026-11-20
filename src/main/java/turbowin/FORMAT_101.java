@@ -1000,7 +1000,13 @@ public class FORMAT_101 {
 
     compressed_Cl =
         parseCloudTypeField(
-            mycl.cl_code, 30.0, present, 35, "cloud type low (Cl)", false, COMPRESSED_UNDEF_VALUE);
+            LowCloudState.cl_code,
+            30.0,
+            present,
+            35,
+            "cloud type low (Cl)",
+            false,
+            COMPRESSED_UNDEF_VALUE);
 
     /* [36]
     //////////////////////////////////////////// 0 20 012 (cloud type middle; Cm) ////////////////////////////////////////

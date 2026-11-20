@@ -47,9 +47,7 @@ final class MiddleCloudDialog {
 
   private static void back(Runnable close) {
     close.run();
-    mycl form = new mycl();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    LowCloudDialog.open();
   }
 
   private static void stop(Runnable close) {

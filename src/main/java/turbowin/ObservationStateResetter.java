@@ -44,7 +44,7 @@ final class ObservationStateResetter {
     mybarometer.pressure_msl_corrected = "";
 
     // Cl
-    mycl.cl_code = "";
+    LowCloudState.cl_code = "";
 
     // Cm
     MiddleCloudState.cm_code = "";

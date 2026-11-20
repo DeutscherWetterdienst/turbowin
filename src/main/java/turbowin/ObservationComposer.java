@@ -151,7 +151,7 @@ final class ObservationComposer {
 
     // clouds low (Cl)
     //
-    coded_obs_Cl = ObservationCodeFormatter.direct(mycl.cl_code, "/");
+    coded_obs_Cl = ObservationCodeFormatter.direct(LowCloudState.cl_code, "/");
 
     // clouds middle (Cm)
     //

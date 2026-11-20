@@ -172,7 +172,7 @@ final class AwsObservationComposer {
 
     // clouds low (Cl) [bufr table 020012]
     //
-    AWS_Cl = AwsCloudCodeFormatter.convert(mycl.cl_code, 30, "low (Cl)");
+    AWS_Cl = AwsCloudCodeFormatter.convert(LowCloudState.cl_code, 30, "low (Cl)");
 
     // clouds middle (Cm) [bufr table 020012]
     //

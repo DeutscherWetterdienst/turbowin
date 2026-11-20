@@ -566,7 +566,7 @@ public class Format101CharacterizationTest {
     String originalMonth = mydatetime.MM_code;
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
-    String originalLowCloudType = mycl.cl_code;
+    String originalLowCloudType = LowCloudState.cl_code;
     String originalMiddleCloudType = MiddleCloudState.cm_code;
     String originalHighCloudType = HighCloudState.ch_code;
 
@@ -580,7 +580,7 @@ public class Format101CharacterizationTest {
       mydatetime.MM_code = "10";
       mydatetime.day = "04";
       mydatetime.hour = "12";
-      mycl.cl_code = "2";
+      LowCloudState.cl_code = "2";
       MiddleCloudState.cm_code = "7a";
       HighCloudState.ch_code = "4";
 
@@ -599,7 +599,7 @@ public class Format101CharacterizationTest {
         assertEquals("1 27.0            cloud type middle (Cm) [code]", lines.get(37));
       }
 
-      mycl.cl_code = "/";
+      LowCloudState.cl_code = "/";
       MiddleCloudState.cm_code = "/";
       HighCloudState.ch_code = "/";
       invokePrivate("write_input_for_101_compression");
@@ -608,7 +608,7 @@ public class Format101CharacterizationTest {
       assertEquals("0                 cloud type middle (Cm) [code]", lines.get(37));
       assertEquals("0                 cloud type high (Ch) [code]", lines.get(38));
 
-      mycl.cl_code = "2a";
+      LowCloudState.cl_code = "2a";
       MiddleCloudState.cm_code = "";
       HighCloudState.ch_code = "4b";
       invokePrivate("write_input_for_101_compression");
@@ -621,7 +621,7 @@ public class Format101CharacterizationTest {
       mydatetime.year = originalYear;
       mydatetime.MM_code = originalMonth;
       mydatetime.day = originalDay;
-      mycl.cl_code = originalLowCloudType;
+      LowCloudState.cl_code = originalLowCloudType;
       MiddleCloudState.cm_code = originalMiddleCloudType;
       HighCloudState.ch_code = originalHighCloudType;
     }

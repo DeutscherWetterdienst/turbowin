@@ -4114,9 +4114,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudslow_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudslow_menu_actionPerformed
-    mycl form = new mycl();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    LowCloudDialog.open();
   } // GEN-LAST:event_Input_Cloudslow_menu_actionPerformed
 
   void Input_Cloudsmiddle_menu_actionPerformed(

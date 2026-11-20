@@ -273,23 +273,23 @@ public class MainSupportCharacterizationTest {
 
   @Test
   public void preservesPlainCloudIntegerConversionAtLevelTwo() {
-    String originalLowCloudType = mycl.cl_code;
+    String originalLowCloudType = LowCloudState.cl_code;
     String originalHighCloudType = HighCloudState.ch_code;
 
     try {
-      mycl.cl_code = "2";
+      LowCloudState.cl_code = "2";
       HighCloudState.ch_code = "4";
       assertTrue(new main_support().checking_level_2());
 
-      mycl.cl_code = "";
+      LowCloudState.cl_code = "";
       HighCloudState.ch_code = "";
       assertTrue(new main_support().checking_level_2());
 
-      mycl.cl_code = "invalid";
+      LowCloudState.cl_code = "invalid";
       HighCloudState.ch_code = "invalid";
       assertTrue(new main_support().checking_level_2());
     } finally {
-      mycl.cl_code = originalLowCloudType;
+      LowCloudState.cl_code = originalLowCloudType;
       HighCloudState.ch_code = originalHighCloudType;
     }
   }

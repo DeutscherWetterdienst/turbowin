@@ -72,7 +72,7 @@ public class AwsObservationComposerTest {
     originalNCode = CloudCoverState.N_code;
     originalNhCode = CloudCoverState.Nh_code;
     originalHCode = CloudCoverState.h_code;
-    originalClCode = mycl.cl_code;
+    originalClCode = LowCloudState.cl_code;
     originalCmCode = MiddleCloudState.cm_code;
     originalChCode = HighCloudState.ch_code;
     originalPwCode = mywaves.Pw_code;
@@ -114,7 +114,7 @@ public class AwsObservationComposerTest {
     CloudCoverState.N_code = "/";
     CloudCoverState.Nh_code = "/";
     CloudCoverState.h_code = "/";
-    mycl.cl_code = "/";
+    LowCloudState.cl_code = "/";
     MiddleCloudState.cm_code = "/";
     HighCloudState.ch_code = "/";
     mywaves.Pw_code = "//";
@@ -158,7 +158,7 @@ public class AwsObservationComposerTest {
     CloudCoverState.N_code = originalNCode;
     CloudCoverState.Nh_code = originalNhCode;
     CloudCoverState.h_code = originalHCode;
-    mycl.cl_code = originalClCode;
+    LowCloudState.cl_code = originalClCode;
     MiddleCloudState.cm_code = originalCmCode;
     HighCloudState.ch_code = originalChCode;
     mywaves.Pw_code = originalPwCode;
@@ -360,11 +360,11 @@ public class AwsObservationComposerTest {
 
   @Test
   public void convertsCloudTypesToAwsCodes() {
-    String originalLowCloud = mycl.cl_code;
+    String originalLowCloud = LowCloudState.cl_code;
     String originalMiddleCloud = MiddleCloudState.cm_code;
     String originalHighCloud = HighCloudState.ch_code;
     try {
-      mycl.cl_code = "1";
+      LowCloudState.cl_code = "1";
       MiddleCloudState.cm_code = "7a";
       HighCloudState.ch_code = "3";
 
@@ -374,7 +374,7 @@ public class AwsObservationComposerTest {
       assertEquals("27", fields[14]);
       assertEquals("13", fields[15]);
     } finally {
-      mycl.cl_code = originalLowCloud;
+      LowCloudState.cl_code = originalLowCloud;
       MiddleCloudState.cm_code = originalMiddleCloud;
       HighCloudState.ch_code = originalHighCloud;
     }
@@ -382,11 +382,11 @@ public class AwsObservationComposerTest {
 
   @Test
   public void omitsUnavailableAndMalformedCloudTypes() {
-    String originalLowCloud = mycl.cl_code;
+    String originalLowCloud = LowCloudState.cl_code;
     String originalMiddleCloud = MiddleCloudState.cm_code;
     String originalHighCloud = HighCloudState.ch_code;
     try {
-      mycl.cl_code = "/";
+      LowCloudState.cl_code = "/";
       MiddleCloudState.cm_code = "x";
       HighCloudState.ch_code = "";
 
@@ -396,7 +396,7 @@ public class AwsObservationComposerTest {
       assertEquals("", fields[14]);
       assertEquals("", fields[15]);
     } finally {
-      mycl.cl_code = originalLowCloud;
+      LowCloudState.cl_code = originalLowCloud;
       MiddleCloudState.cm_code = originalMiddleCloud;
       HighCloudState.ch_code = originalHighCloud;
     }

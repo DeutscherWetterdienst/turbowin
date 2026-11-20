@@ -297,9 +297,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_cl = Integer.valueOf(mycl.cl_code);
+      int num_cl = Integer.valueOf(LowCloudState.cl_code);
       if (num_cl >= 0 && num_cl <= 9) {
-        immt_rec += mycl.cl_code; // char number 47
+        immt_rec += LowCloudState.cl_code; // char number 47
         Qc_3 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 47

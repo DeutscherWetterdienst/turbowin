@@ -16,11 +16,11 @@ final class CloudHeightAdvice {
 
     // Cl_code to int (code)
     //
-    if (mycl.cl_code.trim().length() == 0) {
+    if (LowCloudState.cl_code.trim().length() == 0) {
       local_int_Cl = main.INVALID;
     } else {
       try {
-        local_int_Cl = Integer.parseInt(mycl.cl_code.trim());
+        local_int_Cl = Integer.parseInt(LowCloudState.cl_code.trim());
       } catch (NumberFormatException e) {
         local_int_Cl = main.INVALID;
       }

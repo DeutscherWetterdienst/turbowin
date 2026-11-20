@@ -663,9 +663,7 @@ public final class mypastweather extends javax.swing.JFrame {
   }
 
   private void next_screen() {
-    mycl form = new mycl();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    LowCloudDialog.open();
   }
 
   /**

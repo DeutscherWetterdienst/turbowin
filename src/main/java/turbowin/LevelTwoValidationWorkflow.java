@@ -61,7 +61,7 @@ final class LevelTwoValidationWorkflow {
     // string Cl code conversion to int
     Integer parsedLowCloudType =
         support.parseValidationInt(
-            mycl.cl_code, "[GENERAL] Cl conversion error; Function: checking_level_2()");
+            LowCloudState.cl_code, "[GENERAL] Cl conversion error; Function: checking_level_2()");
     if (parsedLowCloudType != null) {
       int_cl_code = parsedLowCloudType;
       cl_code_conversion_ok = true;

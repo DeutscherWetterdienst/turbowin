@@ -8,8 +8,8 @@ final class CloudFieldsUpdater {
   private CloudFieldsUpdater() {}
 
   static void updateLow() {
-    if ((mycl.cl_code.compareTo("") != 0) && (mycl.cl_code != null))
-      jTextField33.setText(mycl.cl_code + " (code)");
+    if ((LowCloudState.cl_code.compareTo("") != 0) && (LowCloudState.cl_code != null))
+      jTextField33.setText(LowCloudState.cl_code + " (code)");
     else jTextField33.setText("");
 
     coded_obs_update();

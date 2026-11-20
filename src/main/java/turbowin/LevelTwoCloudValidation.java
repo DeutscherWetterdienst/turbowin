@@ -17,7 +17,8 @@ final class LevelTwoCloudValidation {
       int lowCloud,
       int middleCloud,
       int highCloud) {
-    if (CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS) && !mycl.cl_code.equals("0")) {
+    if (CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS)
+        && !LowCloudState.cl_code.equals("0")) {
       return warning("if total cloud cover is 'cloudless', Cl must be 'no clouds Cl'");
     }
 
@@ -31,26 +32,26 @@ final class LevelTwoCloudValidation {
       return warning("if total cloud cover is 'cloudless', Ch must be 'no clouds Ch'");
     }
 
-    if (mycl.cl_code.equals("0")
+    if (LowCloudState.cl_code.equals("0")
         && MiddleCloudState.cm_code.equals("0")
         && HighCloudState.ch_code.equals("0")
         && !CloudCoverState.N.equals(CloudCoverState.N_CLOUDLESS)) {
       return warning("if Cl and Cm and Ch is 'no clouds', total cloud cover must be 'cloudless'");
     }
 
-    if (CloudCoverState.Nh.equals(CloudCoverState.NH_0_8) && !mycl.cl_code.equals("0")) {
+    if (CloudCoverState.Nh.equals(CloudCoverState.NH_0_8) && !LowCloudState.cl_code.equals("0")) {
       return warning(
           "if 'amount of Cl (or Cm if Cl not present)' is '0/8', Cl must be 'no clouds Cl'");
     }
 
     if (CloudCoverState.Nh.equals(CloudCoverState.NH_0_8)
-        && mycl.cl_code.equals("0")
+        && LowCloudState.cl_code.equals("0")
         && !MiddleCloudState.cm_code.equals("0")) {
       return warning(
           "if 'amount of Cl (or Cm if Cl not present)' is '0/8' and Cl is 'no clouds Cl', Cm must be 'no clouds Cm'");
     }
 
-    if (mycl.cl_code.equals("0")
+    if (LowCloudState.cl_code.equals("0")
         && MiddleCloudState.cm_code.equals("0")
         && !CloudCoverState.Nh.equals(CloudCoverState.NH_0_8)) {
       return warning(
@@ -94,7 +95,7 @@ final class LevelTwoCloudValidation {
 
     if (weatherCodeValid
         && Arrays.asList(skyNotDiscernible).contains(weatherCode)
-        && !mycl.cl_code.equals("")) {
+        && !LowCloudState.cl_code.equals("")) {
       return warning(
           "if 'present weather' is 'fog with sky not discernable', Cl must be 'not determined'");
     }
@@ -134,7 +135,7 @@ final class LevelTwoCloudValidation {
     }
 
     if (highCloudValid
-        && mycl.cl_code.equals("0")
+        && LowCloudState.cl_code.equals("0")
         && MiddleCloudState.cm_code.equals("0")
         && Arrays.asList(DETERMINED_CLOUD_TYPES).contains(highCloud)
         && (CloudCoverState.h.equals(CloudCoverState.H_0_50)
