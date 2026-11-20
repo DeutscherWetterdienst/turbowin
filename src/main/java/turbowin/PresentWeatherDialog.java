@@ -65,8 +65,6 @@ final class PresentWeatherDialog {
   }
 
   private static void next() {
-    mypastweather form = new mypastweather();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    PastWeatherDialog.open();
   }
 }

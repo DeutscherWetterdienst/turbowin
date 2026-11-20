@@ -156,11 +156,11 @@ final class AwsObservationComposer {
 
     // Past weather 1 (W1; bufr table 020004)
     //
-    AWS_W1 = AwsObservationCodeFormatter.direct(mypastweather.W1_code, "/");
+    AWS_W1 = AwsObservationCodeFormatter.direct(PastWeatherState.W1_code, "/");
 
     // past weather 2 (W2; bufr table 020004)
     //
-    AWS_W2 = AwsObservationCodeFormatter.direct(mypastweather.W2_code, "/");
+    AWS_W2 = AwsObservationCodeFormatter.direct(PastWeatherState.W2_code, "/");
 
     // total cloud cover (N)
     //

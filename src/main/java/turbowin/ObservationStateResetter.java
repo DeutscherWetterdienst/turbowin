@@ -15,10 +15,10 @@ final class ObservationStateResetter {
     //
 
     // past weather
-    mypastweather.W1_code = "";
-    mypastweather.W2_code = "";
-    mypastweather.past_weather_1 = "";
-    mypastweather.past_weather_2 = "";
+    PastWeatherState.W1_code = "";
+    PastWeatherState.W2_code = "";
+    PastWeatherState.past_weather_1 = "";
+    PastWeatherState.past_weather_2 = "";
 
     // present weather
     PresentWeatherState.ww_code = "";

@@ -46,9 +46,7 @@ final class LowCloudDialog {
 
   private static void back(Runnable close) {
     close.run();
-    mypastweather form = new mypastweather();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    PastWeatherDialog.open();
   }
 
   private static void stop(Runnable close) {

@@ -16,7 +16,6 @@ import org.assertj.swing.exception.WaitTimedOutError;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.*;
 import org.junit.Test;
-import turbowin.matchers.CheckboxMatcher;
 import turbowin.matchers.DialogTitleMatcher;
 import turbowin.matchers.FrameTitleMatcher;
 import turbowin.matchers.RadioButtonMatcher;
@@ -267,18 +266,24 @@ public class ObservationFillingTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {});
   }
 
-  private void fillPastWeatherInformation() throws InterruptedException {
+  private void fillPastWeatherInformation() throws Exception {
     this.frame
         .label(JLabelMatcher.withText("Past weath. 1st"))
         .requireVisible()
         .requireEnabled()
         .click();
-    FrameFixture pastWeatherFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Past weather")).using(this.robot());
-    pastWeatherFrame.checkBox(new CheckboxMatcher("drizzle")).click();
-    pastWeatherFrame.checkBox(new CheckboxMatcher("rain")).click();
-
-    clickOkButtonInFrame(pastWeatherFrame);
+    DialogFixture weather =
+        WindowFinder.findDialog(new DialogTitleMatcher("Past weather")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) weather.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      scene.getRoot().lookupAll(".check-box").stream()
+          .map(javafx.scene.control.CheckBox.class::cast)
+          .filter(item -> item.getText().equals("drizzle") || item.getText().equals("rain"))
+          .forEach(javafx.scene.control.CheckBox::fire);
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillLowCloudInformation() throws Exception {

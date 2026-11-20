@@ -143,11 +143,11 @@ final class ObservationComposer {
 
     // past weather 1
     //
-    coded_obs_W1 = ObservationCodeFormatter.direct(mypastweather.W1_code, "/");
+    coded_obs_W1 = ObservationCodeFormatter.direct(PastWeatherState.W1_code, "/");
 
     // past weather 2
     //
-    coded_obs_W2 = ObservationCodeFormatter.direct(mypastweather.W2_code, "/");
+    coded_obs_W2 = ObservationCodeFormatter.direct(PastWeatherState.W2_code, "/");
 
     // clouds low (Cl)
     //

@@ -21,10 +21,8 @@ import javax.swing.SwingUtilities;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 /** Verifies the embedded low-cloud view and its Swing observation workflow. */
 public class LowCloudJavaFxIntegrationTest extends AbstractUiTest {
@@ -167,8 +165,8 @@ public class LowCloudJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(backScene, "Back");
         return null;
       });
-      FrameFixture pastWeather =
-          WindowFinder.findFrame(new FrameTitleMatcher("Past weather")).using(robot());
+      DialogFixture pastWeather =
+          WindowFinder.findDialog(new DialogTitleMatcher("Past weather")).using(robot());
       SwingUtilities.invokeAndWait(pastWeather.target()::dispose);
 
       JDialog stopDialog = GuiActionRunner.execute(() -> LowCloudDialog.open());

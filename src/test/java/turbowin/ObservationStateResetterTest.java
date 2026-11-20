@@ -9,8 +9,8 @@ public class ObservationStateResetterTest {
 
   @Test
   public void resetsObservationInputStateToItsInitialValues() {
-    mypastweather.W1_code = "W1";
-    mypastweather.past_weather_1 = "present";
+    PastWeatherState.W1_code = "W1";
+    PastWeatherState.past_weather_1 = "present";
     mytemp.air_temp = "12";
     mywind.wind_speed = "20";
     myposition.latitude_degrees = "52";
@@ -21,8 +21,8 @@ public class ObservationStateResetterTest {
 
     ObservationStateResetter.resetValues();
 
-    assertEquals("", mypastweather.W1_code);
-    assertEquals("", mypastweather.past_weather_1);
+    assertEquals("", PastWeatherState.W1_code);
+    assertEquals("", PastWeatherState.past_weather_1);
     assertEquals("", mytemp.air_temp);
     assertEquals("", mywind.wind_speed);
     assertEquals("", myposition.latitude_degrees);

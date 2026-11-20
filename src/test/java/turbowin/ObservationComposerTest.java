@@ -184,8 +184,8 @@ public class ObservationComposerTest {
     String originalPressureCharacteristic = mybarograph.a_code;
     String originalPressureAmount = mybarograph.ppp_code;
     String originalPresentWeather = PresentWeatherState.ww_code;
-    String originalPastWeatherOne = mypastweather.W1_code;
-    String originalPastWeatherTwo = mypastweather.W2_code;
+    String originalPastWeatherOne = PastWeatherState.W1_code;
+    String originalPastWeatherTwo = PastWeatherState.W2_code;
     String originalLowCloud = LowCloudState.cl_code;
     String originalHighCloud = HighCloudState.ch_code;
     String originalWavePeriod = mywaves.Pw_code;
@@ -210,8 +210,8 @@ public class ObservationComposerTest {
       mybarograph.a_code = "1";
       mybarograph.ppp_code = "234";
       PresentWeatherState.ww_code = "45";
-      mypastweather.W1_code = "6";
-      mypastweather.W2_code = "7";
+      PastWeatherState.W1_code = "6";
+      PastWeatherState.W2_code = "7";
       LowCloudState.cl_code = "2";
       HighCloudState.ch_code = "3";
       mywaves.Pw_code = "04";
@@ -241,8 +241,8 @@ public class ObservationComposerTest {
       mybarograph.a_code = originalPressureCharacteristic;
       mybarograph.ppp_code = originalPressureAmount;
       PresentWeatherState.ww_code = originalPresentWeather;
-      mypastweather.W1_code = originalPastWeatherOne;
-      mypastweather.W2_code = originalPastWeatherTwo;
+      PastWeatherState.W1_code = originalPastWeatherOne;
+      PastWeatherState.W2_code = originalPastWeatherTwo;
       LowCloudState.cl_code = originalLowCloud;
       HighCloudState.ch_code = originalHighCloud;
       mywaves.Pw_code = originalWavePeriod;

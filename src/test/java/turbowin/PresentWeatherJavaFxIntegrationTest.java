@@ -10,10 +10,8 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 public class PresentWeatherJavaFxIntegrationTest extends AbstractUiTest {
   @Test
@@ -146,8 +144,8 @@ public class PresentWeatherJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(forwardScene, "Cancel");
         return null;
       });
-      FrameFixture past =
-          WindowFinder.findFrame(new FrameTitleMatcher("Past weather")).using(robot());
+      DialogFixture past =
+          WindowFinder.findDialog(new DialogTitleMatcher("Past weather")).using(robot());
       SwingUtilities.invokeAndWait(past.target()::dispose);
       JDialog stop = GuiActionRunner.execute(PresentWeatherDialog::open);
       Scene stopScene = CloudCoverFxTestSupport.awaitScene(stop);

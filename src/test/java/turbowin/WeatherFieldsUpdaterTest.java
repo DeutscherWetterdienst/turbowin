@@ -11,8 +11,8 @@ public class WeatherFieldsUpdaterTest {
   public void updatesPresentAndPastWeatherValues() {
     prepareFields();
     PresentWeatherState.present_weather = "RA";
-    mypastweather.past_weather_1 = "DZ";
-    mypastweather.past_weather_2 = "FG";
+    PastWeatherState.past_weather_1 = "DZ";
+    PastWeatherState.past_weather_2 = "FG";
 
     WeatherFieldsUpdater.updatePresent();
     WeatherFieldsUpdater.updatePast();
@@ -26,8 +26,8 @@ public class WeatherFieldsUpdaterTest {
   public void clearsEmptyPresentAndPastWeatherValues() {
     prepareFields();
     PresentWeatherState.present_weather = "";
-    mypastweather.past_weather_1 = "";
-    mypastweather.past_weather_2 = "";
+    PastWeatherState.past_weather_1 = "";
+    PastWeatherState.past_weather_2 = "";
 
     WeatherFieldsUpdater.updatePresent();
     WeatherFieldsUpdater.updatePast();

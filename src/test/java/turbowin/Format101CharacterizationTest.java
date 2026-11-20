@@ -901,8 +901,8 @@ public class Format101CharacterizationTest {
     String originalHour = mydatetime.hour;
     String originalVisibility = VisibilityState.VV_code;
     String originalPresentWeather = PresentWeatherState.ww_code;
-    String originalPastWeather1 = mypastweather.W1_code;
-    String originalPastWeather2 = mypastweather.W2_code;
+    String originalPastWeather1 = PastWeatherState.W1_code;
+    String originalPastWeather2 = PastWeatherState.W2_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -916,8 +916,8 @@ public class Format101CharacterizationTest {
       mydatetime.hour = "12";
       VisibilityState.VV_code = "5";
       PresentWeatherState.ww_code = "20";
-      mypastweather.W1_code = "3";
-      mypastweather.W2_code = "4";
+      PastWeatherState.W1_code = "3";
+      PastWeatherState.W2_code = "4";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -929,8 +929,8 @@ public class Format101CharacterizationTest {
 
       VisibilityState.VV_code = "//";
       PresentWeatherState.ww_code = "//";
-      mypastweather.W1_code = "/";
-      mypastweather.W2_code = "/";
+      PastWeatherState.W1_code = "/";
+      PastWeatherState.W2_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 visibility (VV) [code]", lines.get(30));
@@ -945,8 +945,8 @@ public class Format101CharacterizationTest {
       mydatetime.hour = originalHour;
       VisibilityState.VV_code = originalVisibility;
       PresentWeatherState.ww_code = originalPresentWeather;
-      mypastweather.W1_code = originalPastWeather1;
-      mypastweather.W2_code = originalPastWeather2;
+      PastWeatherState.W1_code = originalPastWeather1;
+      PastWeatherState.W2_code = originalPastWeather2;
     }
   }
 

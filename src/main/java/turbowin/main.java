@@ -4099,9 +4099,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Pastweather_menu_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Pastweather_menu_actionperformed
-    mypastweather form = new mypastweather();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    PastWeatherDialog.open();
   } // GEN-LAST:event_Input_Pastweather_menu_actionperformed
 
   void Input_Cloudslow_menu_actionPerformed(

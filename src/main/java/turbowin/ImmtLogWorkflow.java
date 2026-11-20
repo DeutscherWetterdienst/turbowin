@@ -258,9 +258,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_W1 = Integer.valueOf(mypastweather.W1_code);
+      int num_W1 = Integer.valueOf(PastWeatherState.W1_code);
       if (num_W1 >= 0 && num_W1 <= 9) {
-        immt_rec += mypastweather.W1_code; // char number 44
+        immt_rec += PastWeatherState.W1_code; // char number 44
         Qc_9 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 44
@@ -271,9 +271,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_W2 = Integer.valueOf(mypastweather.W2_code);
+      int num_W2 = Integer.valueOf(PastWeatherState.W2_code);
       if (num_W2 >= 0 && num_W2 <= 9) {
-        immt_rec += mypastweather.W2_code; // char number 45
+        immt_rec += PastWeatherState.W2_code; // char number 45
         Qc_9 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 45

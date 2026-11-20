@@ -949,7 +949,7 @@ public class FORMAT_101 {
 
     compressed_past_weather_1 =
         parseOptionalNumericField(
-            mypastweather.W1_code,
+            PastWeatherState.W1_code,
             1,
             present,
             31,
@@ -964,7 +964,7 @@ public class FORMAT_101 {
 
     compressed_past_weather_2 =
         parseOptionalNumericField(
-            mypastweather.W2_code,
+            PastWeatherState.W2_code,
             1,
             present,
             32,
