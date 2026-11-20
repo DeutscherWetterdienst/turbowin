@@ -245,9 +245,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_ww = Integer.valueOf(mypresentweather.ww_code);
+      int num_ww = Integer.valueOf(PresentWeatherState.ww_code);
       if (num_ww >= 0 && num_ww <= 99) {
-        immt_rec += mypresentweather.ww_code; // char number 42-43
+        immt_rec += PresentWeatherState.ww_code; // char number 42-43
         Qc_9 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 42-43

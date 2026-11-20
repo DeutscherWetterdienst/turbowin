@@ -22,14 +22,14 @@ public class CloudHeightAdviceTest {
     ch = HighCloudState.ch_code;
     temperature = mytemp.air_temp;
     dewPoint = mytemp.double_dew_point;
-    weather = mypresentweather.ww_code;
+    weather = PresentWeatherState.ww_code;
     latitude = myposition.int_latitude_degrees;
     LowCloudState.cl_code = "";
     MiddleCloudState.cm_code = "";
     HighCloudState.ch_code = "";
     mytemp.air_temp = "";
     mytemp.double_dew_point = main.INVALID;
-    mypresentweather.ww_code = "";
+    PresentWeatherState.ww_code = "";
     myposition.int_latitude_degrees = 45;
   }
 
@@ -40,7 +40,7 @@ public class CloudHeightAdviceTest {
     HighCloudState.ch_code = ch;
     mytemp.air_temp = temperature;
     mytemp.double_dew_point = dewPoint;
-    mypresentweather.ww_code = weather;
+    PresentWeatherState.ww_code = weather;
     myposition.int_latitude_degrees = latitude;
   }
 
@@ -68,9 +68,9 @@ public class CloudHeightAdviceTest {
   public void middleCloudAdviceDependsOnPresentWeather() {
     LowCloudState.cl_code = "0";
     MiddleCloudState.cm_code = "2";
-    mypresentweather.ww_code = "61";
+    PresentWeatherState.ww_code = "61";
     assertEquals(3, CloudHeightAdvice.compute());
-    mypresentweather.ww_code = "0";
+    PresentWeatherState.ww_code = "0";
     assertEquals(7, CloudHeightAdvice.compute());
   }
 }

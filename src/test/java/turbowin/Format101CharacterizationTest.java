@@ -900,7 +900,7 @@ public class Format101CharacterizationTest {
     String originalDay = mydatetime.day;
     String originalHour = mydatetime.hour;
     String originalVisibility = VisibilityState.VV_code;
-    String originalPresentWeather = mypresentweather.ww_code;
+    String originalPresentWeather = PresentWeatherState.ww_code;
     String originalPastWeather1 = mypastweather.W1_code;
     String originalPastWeather2 = mypastweather.W2_code;
 
@@ -915,7 +915,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = "04";
       mydatetime.hour = "12";
       VisibilityState.VV_code = "5";
-      mypresentweather.ww_code = "20";
+      PresentWeatherState.ww_code = "20";
       mypastweather.W1_code = "3";
       mypastweather.W2_code = "4";
 
@@ -928,7 +928,7 @@ public class Format101CharacterizationTest {
       assertEquals("1 4.0             past weather 2 (W2) [code]", lines.get(33));
 
       VisibilityState.VV_code = "//";
-      mypresentweather.ww_code = "//";
+      PresentWeatherState.ww_code = "//";
       mypastweather.W1_code = "/";
       mypastweather.W2_code = "/";
       invokePrivate("write_input_for_101_compression");
@@ -944,7 +944,7 @@ public class Format101CharacterizationTest {
       mydatetime.day = originalDay;
       mydatetime.hour = originalHour;
       VisibilityState.VV_code = originalVisibility;
-      mypresentweather.ww_code = originalPresentWeather;
+      PresentWeatherState.ww_code = originalPresentWeather;
       mypastweather.W1_code = originalPastWeather1;
       mypastweather.W2_code = originalPastWeather2;
     }

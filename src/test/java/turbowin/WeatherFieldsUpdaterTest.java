@@ -10,7 +10,7 @@ public class WeatherFieldsUpdaterTest {
   @Test
   public void updatesPresentAndPastWeatherValues() {
     prepareFields();
-    mypresentweather.present_weather = "RA";
+    PresentWeatherState.present_weather = "RA";
     mypastweather.past_weather_1 = "DZ";
     mypastweather.past_weather_2 = "FG";
 
@@ -25,7 +25,7 @@ public class WeatherFieldsUpdaterTest {
   @Test
   public void clearsEmptyPresentAndPastWeatherValues() {
     prepareFields();
-    mypresentweather.present_weather = "";
+    PresentWeatherState.present_weather = "";
     mypastweather.past_weather_1 = "";
     mypastweather.past_weather_2 = "";
 

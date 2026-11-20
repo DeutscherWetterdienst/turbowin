@@ -94,7 +94,7 @@ final class LevelTwoValidationWorkflow {
 
     main_support.IntegerValidation presentWeatherValidation =
         support.validateInteger(
-            mypresentweather.ww_code, "ww conversion error", "checking_level_2");
+            PresentWeatherState.ww_code, "ww conversion error", "checking_level_2");
     int_ww_code = presentWeatherValidation.value();
     ww_code_conversion_ok = presentWeatherValidation.valid();
 
@@ -190,7 +190,7 @@ final class LevelTwoValidationWorkflow {
             int_ww_code,
             VV_code_conversion_ok,
             int_VV_code,
-            mypresentweather.ww_40)) {
+            PresentWeatherCatalog.ww_40)) {
       level_2_ok = false;
       doorgaan = false;
     }

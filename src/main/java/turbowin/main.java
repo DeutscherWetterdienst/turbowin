@@ -3944,9 +3944,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Presentweather_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Presentweather_menu_actionPerformed
-    mypresentweather form = new mypresentweather();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    PresentWeatherDialog.open();
   } // GEN-LAST:event_Input_Presentweather_menu_actionPerformed
 
   void Input_waves_menu_actionPerformed(

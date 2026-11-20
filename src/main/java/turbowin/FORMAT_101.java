@@ -934,7 +934,7 @@ public class FORMAT_101 {
 
     compressed_present_weather =
         parseOptionalNumericField(
-            mypresentweather.ww_code,
+            PresentWeatherState.ww_code,
             1,
             present,
             30,

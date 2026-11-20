@@ -139,7 +139,7 @@ final class ObservationComposer {
 
     // present weather
     //
-    coded_obs_ww = ObservationCodeFormatter.direct(mypresentweather.ww_code, "//");
+    coded_obs_ww = ObservationCodeFormatter.direct(PresentWeatherState.ww_code, "//");
 
     // past weather 1
     //

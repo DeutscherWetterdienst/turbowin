@@ -245,19 +245,26 @@ public class ObservationFillingTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {});
   }
 
-  private void fillPresentWeatherInformation() throws InterruptedException {
+  private void fillPresentWeatherInformation() throws Exception {
     this.frame
         .label(JLabelMatcher.withText("Present weath."))
         .requireVisible()
         .requireEnabled()
         .click();
-    FrameFixture visibilityFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Present weather")).using(this.robot());
-    visibilityFrame.list("present_weather_list_1").selectItem(2);
-    visibilityFrame.list("present_weather_list_2").selectItem(2);
-    visibilityFrame.list("present_weather_list_3").selectItem(2);
-
-    clickOkButtonInFrame(visibilityFrame);
+    DialogFixture weather =
+        WindowFinder.findDialog(new DialogTitleMatcher("Present weather")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) weather.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      ((javafx.scene.control.ListView<?>) scene.lookup("#present_weather_list_1"))
+          .getSelectionModel()
+          .select(2);
+      ((javafx.scene.control.ListView<?>) scene.lookup("#present_weather_list_3"))
+          .getSelectionModel()
+          .select(2);
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillPastWeatherInformation() throws InterruptedException {

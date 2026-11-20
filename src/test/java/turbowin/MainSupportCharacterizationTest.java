@@ -250,23 +250,23 @@ public class MainSupportCharacterizationTest {
 
   @Test
   public void preservesWeatherIntegerConversionAtLevelTwo() {
-    String originalPresentWeather = mypresentweather.ww_code;
+    String originalPresentWeather = PresentWeatherState.ww_code;
     String originalVisibility = VisibilityState.VV_code;
 
     try {
-      mypresentweather.ww_code = "20";
+      PresentWeatherState.ww_code = "20";
       VisibilityState.VV_code = "5";
       assertTrue(new main_support().checking_level_2());
 
-      mypresentweather.ww_code = "";
+      PresentWeatherState.ww_code = "";
       VisibilityState.VV_code = "";
       assertTrue(new main_support().checking_level_2());
 
-      mypresentweather.ww_code = "invalid";
+      PresentWeatherState.ww_code = "invalid";
       VisibilityState.VV_code = "invalid";
       assertTrue(new main_support().checking_level_2());
     } finally {
-      mypresentweather.ww_code = originalPresentWeather;
+      PresentWeatherState.ww_code = originalPresentWeather;
       VisibilityState.VV_code = originalVisibility;
     }
   }
@@ -317,19 +317,19 @@ public class MainSupportCharacterizationTest {
 
   @Test
   public void preservesWeatherIntegerConversionAtLevelThree() {
-    String originalPresentWeather = mypresentweather.ww_code;
+    String originalPresentWeather = PresentWeatherState.ww_code;
 
     try {
-      mypresentweather.ww_code = "20";
+      PresentWeatherState.ww_code = "20";
       assertTrue(new main_support().checking_level_3());
 
-      mypresentweather.ww_code = "";
+      PresentWeatherState.ww_code = "";
       assertTrue(new main_support().checking_level_3());
 
-      mypresentweather.ww_code = "invalid";
+      PresentWeatherState.ww_code = "invalid";
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mypresentweather.ww_code = originalPresentWeather;
+      PresentWeatherState.ww_code = originalPresentWeather;
     }
   }
 

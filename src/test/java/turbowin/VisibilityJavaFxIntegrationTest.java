@@ -16,10 +16,8 @@ import javax.swing.SwingUtilities;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 public class VisibilityJavaFxIntegrationTest extends AbstractUiTest {
   @Test
@@ -161,8 +159,8 @@ public class VisibilityJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(cancelScene, "Cancel");
         return null;
       });
-      FrameFixture present =
-          WindowFinder.findFrame(new FrameTitleMatcher("Present weather")).using(robot());
+      DialogFixture present =
+          WindowFinder.findDialog(new DialogTitleMatcher("Present weather")).using(robot());
       SwingUtilities.invokeAndWait(() -> {
         assertEquals("94", VisibilityState.VV_code);
         present.target().dispose();
@@ -174,8 +172,8 @@ public class VisibilityJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(acceptScene, "OK");
         return null;
       });
-      FrameFixture acceptedPresent =
-          WindowFinder.findFrame(new FrameTitleMatcher("Present weather")).using(robot());
+      DialogFixture acceptedPresent =
+          WindowFinder.findDialog(new DialogTitleMatcher("Present weather")).using(robot());
       SwingUtilities.invokeAndWait(() -> {
         assertEquals("98", VisibilityState.VV_code);
         acceptedPresent.target().dispose();

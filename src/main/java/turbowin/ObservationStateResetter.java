@@ -21,8 +21,8 @@ final class ObservationStateResetter {
     mypastweather.past_weather_2 = "";
 
     // present weather
-    mypresentweather.ww_code = "";
-    mypresentweather.present_weather = "";
+    PresentWeatherState.ww_code = "";
+    PresentWeatherState.present_weather = "";
 
     // visibility
     VisibilityState.VV = "";

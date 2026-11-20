@@ -47,8 +47,6 @@ final class VisibilityDialog {
   }
 
   private static void next() {
-    mypresentweather form = new mypresentweather();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    PresentWeatherDialog.open();
   }
 }

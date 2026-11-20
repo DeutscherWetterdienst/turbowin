@@ -71,7 +71,7 @@ final class CloudHeightAdvice {
 
     // ww
     try {
-      local_int_ww_code = Integer.parseInt(mypresentweather.ww_code.trim());
+      local_int_ww_code = Integer.parseInt(PresentWeatherState.ww_code.trim());
     } catch (NumberFormatException e) {
       local_int_ww_code = main.INVALID;
     }

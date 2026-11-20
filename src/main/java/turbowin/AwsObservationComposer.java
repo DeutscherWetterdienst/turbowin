@@ -152,7 +152,7 @@ final class AwsObservationComposer {
 
     // Present Weather [format WW; range 0..99; resolution -; units: bufr code table 020003]
     //
-    AWS_ww = AwsObservationCodeFormatter.direct(mypresentweather.ww_code, "//");
+    AWS_ww = AwsObservationCodeFormatter.direct(PresentWeatherState.ww_code, "//");
 
     // Past weather 1 (W1; bufr table 020004)
     //

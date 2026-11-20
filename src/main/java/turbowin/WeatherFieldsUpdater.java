@@ -8,9 +8,9 @@ final class WeatherFieldsUpdater {
   private WeatherFieldsUpdater() {}
 
   static void updatePresent() {
-    if ((mypresentweather.present_weather.compareTo("") != 0)
-        && (mypresentweather.present_weather != null))
-      jTextField13.setText(mypresentweather.present_weather);
+    if ((PresentWeatherState.present_weather.compareTo("") != 0)
+        && (PresentWeatherState.present_weather != null))
+      jTextField13.setText(PresentWeatherState.present_weather);
     else jTextField13.setText("");
 
     coded_obs_update();

@@ -141,7 +141,7 @@ final class LevelThreeValidationWorkflow {
 
     main_support.IntegerValidation presentWeatherValidation =
         support.validateInteger(
-            mypresentweather.ww_code, "ww conversion error", "checking_level_3");
+            PresentWeatherState.ww_code, "ww conversion error", "checking_level_3");
     int_ww_code = presentWeatherValidation.value();
     ww_code_conversion_ok = presentWeatherValidation.valid();
 
