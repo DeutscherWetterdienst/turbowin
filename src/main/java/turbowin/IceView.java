@@ -152,10 +152,7 @@ final class IceView {
 
     ChoiceCell(ComboBox<IceCatalog.Choice> box) {
       label.setWrapText(true);
-      label.setStyle("-fx-text-fill: #243746;");
-      selectedProperty()
-          .addListener((obs, old, selected) ->
-              label.setStyle(selected ? "-fx-text-fill: white;" : "-fx-text-fill: #243746;"));
+      label.getStyleClass().add("ice-choice-label");
       label.prefWidthProperty().bind(box.widthProperty().subtract(45));
       prefWidthProperty().bind(box.widthProperty().subtract(5));
       setMinHeight(USE_PREF_SIZE);

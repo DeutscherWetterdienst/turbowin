@@ -394,8 +394,6 @@ public class main extends javax.swing.JFrame {
     jMenu5 = new javax.swing.JMenu();
     jMenuItem31 = new javax.swing.JMenuItem();
     jMenuItem32 = new javax.swing.JMenuItem();
-    jMenuItem34 = new javax.swing.JMenuItem();
-    jMenuItem22 = new javax.swing.JMenuItem();
     jMenuItem76 = new javax.swing.JMenuItem();
     jMenu6 = new javax.swing.JMenu();
     jMenuItem33 = new javax.swing.JMenuItem();
@@ -2728,24 +2726,6 @@ public class main extends javax.swing.JFrame {
         });
     jMenu5.add(jMenuItem32);
 
-    jMenuItem34.setText("Sunrise");
-    jMenuItem34.addActionListener(
-        new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Themes_3_actionPerformed(evt);
-          }
-        });
-    jMenu5.add(jMenuItem34);
-
-    jMenuItem22.setText("Sunset");
-    jMenuItem22.addActionListener(
-        new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Themes_4_actionPerformed(evt);
-          }
-        });
-    jMenu5.add(jMenuItem22);
-
     jMenuBar1.add(jMenu5);
 
     jMenu6.setText("Amver");
@@ -4609,21 +4589,6 @@ public class main extends javax.swing.JFrame {
         new Color(192, 192, 192));
   } // GEN-LAST:event_Themes_2_actionPerformed
 
-  void Themes_3_actionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_3_actionPerformed
-    // Sunrise is a separate color scheme rather than a normal Nimbus theme.
-    ThemeWorkflow.apply(
-        this,
-        THEME_NIMBUS_SUNRISE,
-        new Color(255, 178, 102),
-        new Color(51, 98, 140),
-        new Color(115, 164, 209),
-        new Color(255, 204, 153),
-        new Color(0, 0, 0),
-        new Color(169, 176, 190),
-        new Color(255, 255, 132));
-  } // GEN-LAST:event_Themes_3_actionPerformed
-
   void Input_Icing_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Icing_menu_actionPerformed
     // TODO add your handling code here:
@@ -4834,21 +4799,6 @@ public class main extends javax.swing.JFrame {
         mypassword::new,
         new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_server_settings_actionperformed
-
-  void Themes_4_actionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Themes_4_actionPerformed
-    // Sunset is a separate color scheme rather than a normal Nimbus theme.
-    ThemeWorkflow.apply(
-        this,
-        THEME_NIMBUS_SUNSET,
-        new Color(255, 110, 110),
-        new Color(51, 98, 140),
-        new Color(115, 164, 209),
-        new Color(255, 204, 204),
-        new Color(0, 0, 0),
-        new Color(169, 176, 190),
-        new Color(255, 51, 51));
-  } // GEN-LAST:event_Themes_4_actionPerformed
 
   private void Info_send_System_log_menu_actionperformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_send_System_log_menu_actionperformed
@@ -6027,7 +5977,6 @@ public class main extends javax.swing.JFrame {
   private javax.swing.JMenuItem jMenuItem2;
   public static javax.swing.JMenuItem jMenuItem20;
   private javax.swing.JMenuItem jMenuItem21;
-  private javax.swing.JMenuItem jMenuItem22;
   public static javax.swing.JMenuItem jMenuItem23;
   public static javax.swing.JMenuItem jMenuItem24;
   private javax.swing.JMenuItem jMenuItem25;
@@ -6040,7 +5989,6 @@ public class main extends javax.swing.JFrame {
   private javax.swing.JMenuItem jMenuItem31;
   private javax.swing.JMenuItem jMenuItem32;
   private javax.swing.JMenuItem jMenuItem33;
-  private javax.swing.JMenuItem jMenuItem34;
   private javax.swing.JMenuItem jMenuItem35;
   private javax.swing.JMenuItem jMenuItem36;
   private javax.swing.JMenuItem jMenuItem37;
@@ -6574,8 +6522,6 @@ public class main extends javax.swing.JFrame {
       "format_101.txt"; // file for format 101 (NB outputfile is automatically "HPK_" + input file)
   public static final String THEME_NIMBUS_DAY = "theme_nimbus_day";
   public static final String THEME_NIMBUS_NIGHT = "theme_nimbus_night";
-  public static final String THEME_NIMBUS_SUNRISE = "theme_nimbus_sunrise";
-  public static final String THEME_NIMBUS_SUNSET = "theme_nimbus_sunset";
   public static final String THEME_TRANSPARENT = "theme_transparent";
   public static final String OSM_OFFLINE_MANUAL =
       "OSM_offline_manual"; // conventional VOS (APR included)

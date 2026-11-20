@@ -27,15 +27,6 @@
 .details .label {
     -fx-text-fill: #263d4b;
 }
-.details.night {
-    -fx-background-color: #d9e1e6;
-}
-.details.sunrise {
-    -fx-background-color: #fff0df;
-}
-.details.sunset {
-    -fx-background-color: #ffeded;
-}
 .hyperlink {
     -fx-text-fill: #1c6287;
     -fx-padding: 0;

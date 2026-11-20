@@ -77,6 +77,7 @@ final class ThemeWorkflow {
         }
       }
       theme_mode = theme;
+      FxTheme.setTheme(theme);
     } catch (ClassNotFoundException
         | InstantiationException
         | IllegalAccessException

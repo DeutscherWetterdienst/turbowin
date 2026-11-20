@@ -17,6 +17,10 @@ JavaFX remains initialized after closing the dialog so it can be opened again. J
 that affect Swing dispatch back to the Swing event thread. The existing application shutdown
 continues to terminate the process.
 
+The Day and Night choices apply to Swing and all embedded JavaFX scenes. The JavaFX host applies
+the current theme when a dialog opens and updates open scenes and dropdowns on the JavaFX thread
+when the Swing theme changes.
+
 To migrate another window, keep its data gathering separate from the JavaFX view, invoke
 `FxSwingDialog.show` on the Swing event thread, and create its scene in the supplied factory.
 Return Swing actions to the event dispatch thread; do not access Swing components on the JavaFX

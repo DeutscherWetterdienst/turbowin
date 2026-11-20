@@ -23,6 +23,7 @@ final class FxSwingDialog {
     if (!SwingUtilities.isEventDispatchThread()) {
       throw new IllegalStateException("Dialog must be created on the Swing event thread");
     }
+    FxTheme.setTheme(main.theme_mode);
     AtomicBoolean closed = new AtomicBoolean();
     JDialog dialog =
         new JDialog(owner, title) {
@@ -34,6 +35,7 @@ final class FxSwingDialog {
         };
     dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     JFXPanel panel = new JFXPanel(); // Initializes JavaFX once, including on subsequent openings.
+    FxTheme.toolkitReady();
     panel.setPreferredSize(size);
     dialog.add(panel, BorderLayout.CENTER);
     dialog.addWindowListener(
@@ -41,7 +43,10 @@ final class FxSwingDialog {
           @Override
           public void windowClosed(WindowEvent event) {
             closed.set(true);
-            Platform.runLater(() -> panel.setScene(null));
+            Platform.runLater(() -> {
+              FxTheme.unregister(panel.getScene());
+              panel.setScene(null);
+            });
           }
         });
     dialog.pack();
@@ -60,6 +65,7 @@ final class FxSwingDialog {
               }
             });
         if (!closed.get()) {
+          FxTheme.register(scene);
           panel.setScene(scene);
         }
       }

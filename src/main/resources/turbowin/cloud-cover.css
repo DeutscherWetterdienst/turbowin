@@ -56,3 +56,15 @@
     -fx-background-color: #236da3;
     -fx-text-fill: white;
 }
+
+.sensor-value {
+    -fx-text-fill: #6c7280;
+}
+
+.ice-choice-label {
+    -fx-text-fill: #243746;
+}
+
+.list-cell:filled:selected .ice-choice-label {
+    -fx-text-fill: white;
+}

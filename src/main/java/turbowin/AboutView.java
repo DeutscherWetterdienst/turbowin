@@ -13,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
@@ -32,13 +34,6 @@ final class AboutView {
 
     VBox details = new VBox(5);
     details.getStyleClass().add("details");
-    if (main.THEME_NIMBUS_NIGHT.equals(info.theme())) {
-      details.getStyleClass().add("night");
-    } else if (main.THEME_NIMBUS_SUNRISE.equals(info.theme())) {
-      details.getStyleClass().add("sunrise");
-    } else if (main.THEME_NIMBUS_SUNSET.equals(info.theme())) {
-      details.getStyleClass().add("sunset");
-    }
     for (String line : info.details()) {
       Label label = new Label(line);
       label.setWrapText(true);
@@ -94,11 +89,14 @@ final class AboutView {
     image.setPreserveRatio(true);
     image.setFitWidth(maxWidth);
     image.setFitHeight(maxHeight);
+    StackPane surface = new StackPane(image);
+    surface.setMaxWidth(Region.USE_PREF_SIZE);
+    surface.getStyleClass().add("logo-surface");
     Hyperlink link = new Hyperlink(text);
     link.setWrapText(true);
     link.setTextAlignment(TextAlignment.CENTER);
     link.setOnAction(event -> action.run());
-    VBox section = new VBox(4, image, link);
+    VBox section = new VBox(4, surface, link);
     section.setAlignment(Pos.CENTER);
     return section;
   }

@@ -28,9 +28,7 @@ final class PopupMenuWorkflow {
     "Ice...",
     "Observer...",
     "Day colours",
-    "Night colours",
-    "Sunrise colours",
-    "Sunset colours"
+    "Night colours"
   };
 
   private PopupMenuWorkflow() {}
@@ -236,26 +234,6 @@ final class PopupMenuWorkflow {
           }
         });
     popup_input.add(menuItem319);
-
-    JMenuItem menuItem320 = new JMenuItem(MENU_LABELS[19]);
-    menuItem320.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            owner.Themes_3_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem320);
-
-    JMenuItem menuItem321 = new JMenuItem(MENU_LABELS[20]);
-    menuItem321.addActionListener(
-        new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            owner.Themes_4_actionPerformed(null);
-          }
-        });
-    popup_input.add(menuItem321);
 
     owner.addMouseListener(listener); // connect to jFrame otherwise eg:
     // jTextField1.addMouseListener(popupListener);

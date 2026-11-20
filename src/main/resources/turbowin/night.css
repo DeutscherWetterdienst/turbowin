@@ -1,0 +1,74 @@
+.night-theme {
+    -fx-base: #34404a;
+    -fx-background: #202a33;
+    -fx-control-inner-background: #293640;
+    -fx-control-inner-background-alt: #303e49;
+    -fx-text-base-color: #e7edf2;
+    -fx-text-inner-color: #e7edf2;
+    -fx-selection-bar: #376e91;
+    -fx-selection-bar-non-focused: #405a6b;
+    -fx-accent: #6aabd2;
+    -fx-focus-color: #83bce0;
+    -fx-faint-focus-color: #83bce033;
+}
+
+.cloud-cover-root.night-theme, .root.night-theme {
+    -fx-background-color: #202a33;
+}
+
+.night-theme .label, .night-theme .check-box, .night-theme .radio-button {
+    -fx-text-fill: #e7edf2;
+}
+
+.night-theme .heading, .night-theme .title {
+    -fx-text-fill: #e7f3fb;
+}
+
+.night-theme .hint, .night-theme .subtitle, .night-theme .history {
+    -fx-text-fill: #b7c7d1;
+}
+
+.night-theme .choice-group, .night-theme .details {
+    -fx-background-color: #2c3944;
+    -fx-border-color: #506271;
+    -fx-effect: null;
+}
+
+.night-theme .group-title {
+    -fx-text-fill: #b9dcf2;
+}
+
+.night-theme .details .label {
+    -fx-text-fill: #e7edf2;
+}
+
+.night-theme .cloud-cover-actions, .night-theme .footer {
+    -fx-border-color: #506271 transparent transparent transparent;
+}
+
+.night-theme .hyperlink {
+    -fx-text-fill: #95cbee;
+}
+
+.night-theme .logo-surface {
+    -fx-background-color: #d6e0e6;
+    -fx-background-radius: 6;
+    -fx-padding: 4;
+}
+
+.night-theme .button:default {
+    -fx-background-color: #386f94;
+    -fx-text-fill: white;
+}
+
+.night-theme .sensor-value {
+    -fx-text-fill: #b9c8d1;
+}
+
+.night-theme .ice-choice-label {
+    -fx-text-fill: #e7edf2;
+}
+
+.night-theme .list-cell:filled:selected .label {
+    -fx-text-fill: white;
+}

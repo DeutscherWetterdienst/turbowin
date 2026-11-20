@@ -48,8 +48,7 @@ public class AboutDialogFxTest {
                         AboutView.create(
                             new AboutInfo(
                                 "Test version [64-bit] (build test)",
-                                List.of("operating system: test"),
-                                ""),
+                                List.of("operating system: test")),
                             () -> {
                               close.run();
                               closed.countDown();
@@ -80,7 +79,7 @@ public class AboutDialogFxTest {
                   .findFirst()
                   .orElseThrow();
           assertEquals(260.0, vosLogo.getFitWidth(), 0.0);
-          assertEquals(Pos.CENTER, ((VBox) vosLogo.getParent()).getAlignment());
+          assertEquals(Pos.CENTER, ((VBox) vosLogo.getParent().getParent()).getAlignment());
           assertEquals(Pos.CENTER, ((HBox) view.getRoot().lookup(".footer")).getAlignment());
           Hyperlink vos =
               view.getRoot().lookupAll(".hyperlink").stream()
@@ -104,6 +103,7 @@ public class AboutDialogFxTest {
                           .filter(item -> item.getImage().getUrl().contains("gplv3"))
                           .findFirst()
                           .orElseThrow()
+                          .getParent()
                           .getParent())
                   .getAlignment());
           vos.fire();
@@ -148,7 +148,7 @@ public class AboutDialogFxTest {
                   Thread.currentThread().interrupt();
                   throw new IllegalStateException(e);
                 }
-                return AboutView.create(new AboutInfo("test", List.of(), ""), close, link -> {});
+                return AboutView.create(new AboutInfo("test", List.of()), close, link -> {});
               });
       dialog.set(window);
       panel.set((JFXPanel) window.getContentPane().getComponent(0));

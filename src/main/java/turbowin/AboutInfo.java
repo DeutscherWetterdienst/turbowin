@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 /** Snapshot of the application and system information shown in the About dialog. */
-record AboutInfo(String title, List<String> details, String theme) {
+record AboutInfo(String title, List<String> details) {
   static AboutInfo capture() {
     Runtime runtime = Runtime.getRuntime();
     long used = (runtime.totalMemory() - runtime.freeMemory()) / 1024 / 1024;
@@ -29,7 +29,6 @@ record AboutInfo(String title, List<String> details, String theme) {
             "default charset: " + Charset.defaultCharset(),
             "locale default: " + Locale.getDefault() + linuxDetails,
             "libraries-1: " + main.APPLICATION_MET_MODULES,
-            "libraries-2: " + main_support.print_libraries_name_and_version()),
-        main.theme_mode);
+            "libraries-2: " + main_support.print_libraries_name_and_version()));
   }
 }

@@ -165,7 +165,7 @@ final class WindView {
     field.setPrefColumnCount(8);
     field.setMaxWidth(110);
     field.setEditable(!readOnly);
-    if (readOnly) field.setStyle("-fx-text-fill: #6c7280;");
+    if (readOnly) field.getStyleClass().add("sensor-value");
     field.setTextFormatter(
         new TextFormatter<String>(change -> {
           if (change.isContentChange()) {
