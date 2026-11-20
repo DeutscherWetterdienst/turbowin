@@ -14,13 +14,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 /** JavaFX presentation of an AboutInfo snapshot. Must be created on the JavaFX thread. */
 final class AboutView {
   private AboutView() {}
 
   static Scene create(AboutInfo info, Runnable close, Consumer<String> openLink) {
-    Label title = new Label(info.title());
+    Label title = new Label(info.title().replaceFirst("(\\[\\d+-bit\\])\\s+", "$1\n"));
     title.getStyleClass().add("title");
     title.setWrapText(true);
     Label endorsed =
@@ -64,6 +65,10 @@ final class AboutView {
                 () -> openLink.accept(AboutDialog.sourceLink())));
     Label history = new Label("Turbo/TurboWin/TurboWin+ since 1990");
     history.getStyleClass().add("history");
+    history.setMaxWidth(Double.MAX_VALUE);
+    history.setAlignment(Pos.CENTER);
+    history.setTextAlignment(TextAlignment.CENTER);
+    history.setWrapText(true);
     content.getChildren().add(history);
 
     ScrollPane scroll = new ScrollPane(content);
@@ -91,9 +96,10 @@ final class AboutView {
     image.setFitHeight(maxHeight);
     Hyperlink link = new Hyperlink(text);
     link.setWrapText(true);
+    link.setTextAlignment(TextAlignment.CENTER);
     link.setOnAction(event -> action.run());
     VBox section = new VBox(4, image, link);
-    section.setAlignment(Pos.CENTER_LEFT);
+    section.setAlignment(Pos.CENTER);
     return section;
   }
 

@@ -18,8 +18,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import org.junit.Test;
@@ -44,7 +46,10 @@ public class AboutDialogFxTest {
                   close -> {
                     Scene result =
                         AboutView.create(
-                            new AboutInfo("Test version", List.of("operating system: test"), ""),
+                            new AboutInfo(
+                                "Test version [64-bit] (build test)",
+                                List.of("operating system: test"),
+                                ""),
                             () -> {
                               close.run();
                               closed.countDown();
@@ -63,6 +68,10 @@ public class AboutDialogFxTest {
           assertNotNull(view);
           assertFalse(view.getStylesheets().isEmpty());
           view.getRoot().applyCss();
+          assertEquals(
+              "Test version [64-bit]\n(build test)",
+              ((Label) view.getRoot().lookup(".title")).getText());
+          assertEquals(Pos.CENTER, ((Label) view.getRoot().lookup(".history")).getAlignment());
           assertTrue(view.getRoot().lookupAll(".image-view").size() >= 2);
           ImageView vosLogo =
               view.getRoot().lookupAll(".image-view").stream()
@@ -71,6 +80,7 @@ public class AboutDialogFxTest {
                   .findFirst()
                   .orElseThrow();
           assertEquals(260.0, vosLogo.getFitWidth(), 0.0);
+          assertEquals(Pos.CENTER, ((VBox) vosLogo.getParent()).getAlignment());
           assertEquals(Pos.CENTER, ((HBox) view.getRoot().lookup(".footer")).getAlignment());
           Hyperlink vos =
               view.getRoot().lookupAll(".hyperlink").stream()
@@ -78,6 +88,24 @@ public class AboutDialogFxTest {
                   .filter(item -> item.getText().contains("Voluntary"))
                   .findFirst()
                   .orElseThrow();
+          assertEquals(Pos.CENTER, ((VBox) vos.getParent()).getAlignment());
+          Hyperlink repo =
+              view.getRoot().lookupAll(".hyperlink").stream()
+                  .map(Hyperlink.class::cast)
+                  .filter(item -> item.getText().contains("GPLv3"))
+                  .findFirst()
+                  .orElseThrow();
+          assertEquals(Pos.CENTER, ((VBox) repo.getParent()).getAlignment());
+          assertEquals(
+              Pos.CENTER,
+              ((VBox)
+                      view.getRoot().lookupAll(".image-view").stream()
+                          .map(ImageView.class::cast)
+                          .filter(item -> item.getImage().getUrl().contains("gplv3"))
+                          .findFirst()
+                          .orElseThrow()
+                          .getParent())
+                  .getAlignment());
           vos.fire();
           assertEquals(AboutDialog.sotLink(), link.get());
           ((Button) view.getRoot().lookup(".button")).fire();
