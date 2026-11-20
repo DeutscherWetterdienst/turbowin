@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.net.ServerSocket;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import javax.swing.RepaintManager;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -128,8 +130,8 @@ public class AbstractUiTest extends AssertJSwingTestCaseTemplate {
         WindowFinder.findDialog(new DialogTitleMatcher("Date and Time"))
             .withTimeout(15000)
             .using(robot());
-    GuiActionRunner.execute(
-        () -> dateTime.button(JButtonMatcher.withText(Pattern.compile("No|Nein"))).target().doClick());
+    GuiActionRunner.execute(() ->
+        dateTime.button(JButtonMatcher.withText(Pattern.compile("No|Nein"))).target().doClick());
     robot().waitForIdle();
   }
 
@@ -156,6 +158,13 @@ public class AbstractUiTest extends AssertJSwingTestCaseTemplate {
   public final void tearDown() throws Exception {
     try {
       onTearDown();
+      // Saves may still use startupDirectory after the UI closes. Drain the queue before
+      // TemporaryFolder removes it and a delayed failure dialog blocks the next test.
+      CountDownLatch savesFinished = new CountDownLatch(1);
+      ConfigurationWriteWorkflow.awaitPendingSaves(result -> savesFinished.countDown());
+      if (!savesFinished.await(15, TimeUnit.SECONDS)) {
+        throw new AssertionError("Timed out waiting for pending configuration saves");
+      }
       // The end-to-end observation test fills global weather models. Do not let those
       // values trigger validation dialogs or change records in later non-UI tests.
       ObservationStateResetter.resetValues();
