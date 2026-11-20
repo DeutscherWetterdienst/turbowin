@@ -232,19 +232,19 @@ public class MainSupportCharacterizationTest {
 
   @Test
   public void preservesIceThicknessConversionAtLevelThree() {
-    String originalIceThickness = myicing.EsEs_code;
+    String originalIceThickness = IcingState.EsEs_code;
 
     try {
-      myicing.EsEs_code = "10";
+      IcingState.EsEs_code = "10";
       assertTrue(new main_support().checking_level_3());
 
-      myicing.EsEs_code = "";
+      IcingState.EsEs_code = "";
       assertTrue(new main_support().checking_level_3());
 
-      myicing.EsEs_code = "invalid";
+      IcingState.EsEs_code = "invalid";
       assertTrue(new main_support().checking_level_3());
     } finally {
-      myicing.EsEs_code = originalIceThickness;
+      IcingState.EsEs_code = originalIceThickness;
     }
   }
 

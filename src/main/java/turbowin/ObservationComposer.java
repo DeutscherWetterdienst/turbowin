@@ -203,15 +203,15 @@ final class ObservationComposer {
 
     // icing cause (Is)
     //
-    coded_obs_Is = ObservationCodeFormatter.direct(myicing.Is_code, "/");
+    coded_obs_Is = ObservationCodeFormatter.direct(IcingState.Is_code, "/");
 
     // icing thickness (EsEs)
     //
-    coded_obs_EsEs = ObservationCodeFormatter.direct(myicing.EsEs_code, "//");
+    coded_obs_EsEs = ObservationCodeFormatter.direct(IcingState.EsEs_code, "//");
 
     // icing rate (Rs)
     //
-    coded_obs_Rs = ObservationCodeFormatter.direct(myicing.Rs_code, "/");
+    coded_obs_Rs = ObservationCodeFormatter.direct(IcingState.Rs_code, "/");
 
     // wet bulb temperature (TbTbTb)
     //

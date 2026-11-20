@@ -472,9 +472,9 @@ final class ImmtLogWorkflow {
 
     if (main.obs_format.equals(main.FORMAT_FM13)) {
       try {
-        int num_Is = Integer.valueOf(myicing.Is_code);
+        int num_Is = Integer.valueOf(IcingState.Is_code);
         if (num_Is >= 1 && num_Is <= 5) {
-          immt_rec += myicing.Is_code; // char number 66
+          immt_rec += IcingState.Is_code; // char number 66
         } else {
           immt_rec += SPATIE_1; // char number 66
         }
@@ -489,9 +489,9 @@ final class ImmtLogWorkflow {
     } // else
 
     try {
-      int num_EsEs = Integer.valueOf(myicing.EsEs_code);
+      int num_EsEs = Integer.valueOf(IcingState.EsEs_code);
       if (num_EsEs >= 0 && num_EsEs <= 99) {
-        immt_rec += myicing.EsEs_code; // char number 67-68
+        immt_rec += IcingState.EsEs_code; // char number 67-68
       } else {
         immt_rec += SPATIE_2; // char number 67-68
       }
@@ -500,9 +500,9 @@ final class ImmtLogWorkflow {
     }
 
     try {
-      int num_Rs = Integer.valueOf(myicing.Rs_code);
+      int num_Rs = Integer.valueOf(IcingState.Rs_code);
       if (num_Rs >= 0 && num_Rs <= 4) {
-        immt_rec += myicing.Rs_code; // char number 69
+        immt_rec += IcingState.Rs_code; // char number 69
       } else {
         immt_rec += SPATIE_1; // char number 69
       }

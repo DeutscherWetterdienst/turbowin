@@ -8,9 +8,9 @@ final class IcingFieldsUpdater {
   private IcingFieldsUpdater() {}
 
   static void update() {
-    if (((myicing.Is_code.compareTo("") != 0) && (myicing.Is_code != null))
-        || ((myicing.EsEs_code.compareTo("") != 0) && (myicing.EsEs_code != null))
-        || ((myicing.Rs_code.compareTo("") != 0) && (myicing.Rs_code != null))) {
+    if (((IcingState.Is_code.compareTo("") != 0) && (IcingState.Is_code != null))
+        || ((IcingState.EsEs_code.compareTo("") != 0) && (IcingState.EsEs_code != null))
+        || ((IcingState.Rs_code.compareTo("") != 0) && (IcingState.Rs_code != null))) {
       jTextField21.setText("present");
     } else {
       jTextField21.setText("");

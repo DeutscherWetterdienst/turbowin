@@ -144,9 +144,9 @@ final class ObservationStateResetter {
     // ---
 
     // Icing
-    myicing.Is_code = "";
-    myicing.EsEs_code = "";
-    myicing.Rs_code = "";
+    IcingState.Is_code = "";
+    IcingState.EsEs_code = "";
+    IcingState.Rs_code = "";
 
     // Ice
     myice1.ci_code = "";

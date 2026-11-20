@@ -4628,9 +4628,7 @@ public class main extends javax.swing.JFrame {
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Icing_menu_actionPerformed
     // TODO add your handling code here:
 
-    myicing form = new myicing();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    IcingDialog.open();
   } // GEN-LAST:event_Input_Icing_menu_actionPerformed
 
   private void icing_mainscreen_mouseClicked(

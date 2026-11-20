@@ -45,9 +45,9 @@ public class ObservationComposerTest {
     originalSwellDirectionCode = mywaves.Dw1_code;
     originalSwellPeriodCode = mywaves.Pw1_code;
     originalSwellHeightCode = mywaves.Hw1_code;
-    originalIcingCauseCode = myicing.Is_code;
-    originalIcingThicknessCode = myicing.EsEs_code;
-    originalIcingRateCode = myicing.Rs_code;
+    originalIcingCauseCode = IcingState.Is_code;
+    originalIcingThicknessCode = IcingState.EsEs_code;
+    originalIcingRateCode = IcingState.Rs_code;
     originalIceConcentrationCode = myice1.ci_code;
     originalIceDevelopmentCode = myice1.Si_code;
   }
@@ -68,9 +68,9 @@ public class ObservationComposerTest {
     mywaves.Dw1_code = originalSwellDirectionCode;
     mywaves.Pw1_code = originalSwellPeriodCode;
     mywaves.Hw1_code = originalSwellHeightCode;
-    myicing.Is_code = originalIcingCauseCode;
-    myicing.EsEs_code = originalIcingThicknessCode;
-    myicing.Rs_code = originalIcingRateCode;
+    IcingState.Is_code = originalIcingCauseCode;
+    IcingState.EsEs_code = originalIcingThicknessCode;
+    IcingState.Rs_code = originalIcingRateCode;
     myice1.ci_code = originalIceConcentrationCode;
     myice1.Si_code = originalIceDevelopmentCode;
   }
@@ -116,9 +116,9 @@ public class ObservationComposerTest {
     LowCloudState.cl_code = "";
     HighCloudState.ch_code = "";
     mywaves.Dw1_code = "99";
-    myicing.Is_code = "1";
-    myicing.EsEs_code = "02";
-    myicing.Rs_code = "3";
+    IcingState.Is_code = "1";
+    IcingState.EsEs_code = "02";
+    IcingState.Rs_code = "3";
     myice1.ci_code = "u";
     myice1.Si_code = "1";
 
@@ -196,9 +196,9 @@ public class ObservationComposerTest {
     String originalSwellDirectionTwo = mywaves.Dw2_code;
     String originalSwellPeriodTwo = mywaves.Pw2_code;
     String originalSwellHeightTwo = mywaves.Hw2_code;
-    String originalIceCause = myicing.Is_code;
-    String originalIceThickness = myicing.EsEs_code;
-    String originalIceRate = myicing.Rs_code;
+    String originalIceCause = IcingState.Is_code;
+    String originalIceThickness = IcingState.EsEs_code;
+    String originalIceRate = IcingState.Rs_code;
     try {
       main.station_ID = "TEST";
       mydatetime.YY_code = "01";
@@ -222,9 +222,9 @@ public class ObservationComposerTest {
       mywaves.Dw2_code = "24";
       mywaves.Pw2_code = "05";
       mywaves.Hw2_code = "06";
-      myicing.Is_code = "1";
-      myicing.EsEs_code = "04";
-      myicing.Rs_code = "2";
+      IcingState.Is_code = "1";
+      IcingState.EsEs_code = "04";
+      IcingState.Rs_code = "2";
 
       String observation = ObservationComposer.compose(" ");
 
@@ -253,9 +253,9 @@ public class ObservationComposerTest {
       mywaves.Dw2_code = originalSwellDirectionTwo;
       mywaves.Pw2_code = originalSwellPeriodTwo;
       mywaves.Hw2_code = originalSwellHeightTwo;
-      myicing.Is_code = originalIceCause;
-      myicing.EsEs_code = originalIceThickness;
-      myicing.Rs_code = originalIceRate;
+      IcingState.Is_code = originalIceCause;
+      IcingState.EsEs_code = originalIceThickness;
+      IcingState.Rs_code = originalIceRate;
     }
   }
 

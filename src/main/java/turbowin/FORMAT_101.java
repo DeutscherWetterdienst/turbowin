@@ -1199,9 +1199,9 @@ public class FORMAT_101 {
     */
     /* unit  = N/A */
 
-    if (myicing.EsEs_code.equals("")
-        && myicing.Rs_code.equals("")
-        && myicing.Is_code.equals("")
+    if (IcingState.EsEs_code.equals("")
+        && IcingState.Rs_code.equals("")
+        && IcingState.Is_code.equals("")
         && myice1.ci_code.equals("")
         && myice1.bi_code.equals("")
         && myice1.zi_code.equals("")
@@ -1223,7 +1223,7 @@ public class FORMAT_101 {
 
     compressed_thickness_ice_accretion =
         parseOptionalNumericField(
-            myicing.EsEs_code,
+            IcingState.EsEs_code,
             schalings_factor,
             present,
             49,
@@ -1239,7 +1239,7 @@ public class FORMAT_101 {
 
     compressed_rate_ice_accretion =
         parseOptionalNumericField(
-            myicing.Rs_code,
+            IcingState.Rs_code,
             schalings_factor,
             present,
             50,
@@ -1252,14 +1252,14 @@ public class FORMAT_101 {
     /* unit  = code (table 020033-equivalent By Pierre Blouch)  */
     schalings_factor = 1;
     // NB see also: compile_obs_for_AWS() [main.java]
-    // NB see also myicing.java
+    // NB see also IcingView for the available causes.
 
-    if ((myicing.Is_code.trim()).length() > 0) {
-      if (myicing.Is_code.equals("/")) {
+    if ((IcingState.Is_code.trim()).length() > 0) {
+      if (IcingState.Is_code.equals("/")) {
         compressed_cause_ice_accretion = COMPRESSED_UNDEF_VALUE;
         present[51] = 0;
       } else {
-        Integer cause = iceCauseCodeToBufrCode(myicing.Is_code);
+        Integer cause = iceCauseCodeToBufrCode(IcingState.Is_code);
         if (cause != null) {
           compressed_cause_ice_accretion = cause;
           present[51] = 1;

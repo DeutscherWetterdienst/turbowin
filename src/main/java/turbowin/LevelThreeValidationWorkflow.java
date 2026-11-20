@@ -130,7 +130,7 @@ final class LevelThreeValidationWorkflow {
     // string thickness ice accretion (EsEs) to float
     Float parsedIceThickness =
         support.parseValidationFloat(
-            myicing.EsEs_code,
+            IcingState.EsEs_code,
             "[GENERAL] ice thickness (EsEs) conversion error; Function: checking_level_3()");
     if (parsedIceThickness != null) {
       float_ice_thickness = parsedIceThickness; // EsEs_code = ice thickness in centimetres
@@ -218,9 +218,9 @@ final class LevelThreeValidationWorkflow {
         && !IcingAirTemperatureValidation.confirmLevelThree(
             air_temp_conversion_ok,
             float_air_temp,
-            !myicing.Is_code.equals("")
-                || !myicing.EsEs_code.equals("")
-                || !myicing.Rs_code.equals(""))) {
+            !IcingState.Is_code.equals("")
+                || !IcingState.EsEs_code.equals("")
+                || !IcingState.Rs_code.equals(""))) {
       doorgaan = false;
       level_3_ok = false;
     }
@@ -278,9 +278,9 @@ final class LevelThreeValidationWorkflow {
         && !PresentWeatherIcingValidation.validate(
             ww_code_conversion_ok,
             int_ww_code,
-            myicing.Is_code.equals("")
-                && myicing.EsEs_code.equals("")
-                && myicing.Rs_code.equals(""))) {
+            IcingState.Is_code.equals("")
+                && IcingState.EsEs_code.equals("")
+                && IcingState.Rs_code.equals(""))) {
       level_3_ok = false;
       doorgaan = false;
     }

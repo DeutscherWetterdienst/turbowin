@@ -220,15 +220,15 @@ final class AwsObservationComposer {
 
     // ice deposit (thickness)
     //
-    AWS_EsEs = AwsIceCodeFormatter.thickness(myicing.EsEs_code);
+    AWS_EsEs = AwsIceCodeFormatter.thickness(IcingState.EsEs_code);
 
     // rate of ice accretion (Rs) [bufr table 020032]
     //
-    AWS_Rs = AwsIceCodeFormatter.direct(myicing.Rs_code);
+    AWS_Rs = AwsIceCodeFormatter.direct(IcingState.Rs_code);
 
     // cause of ice accretion (Is) [bufr table 020033]
     //
-    AWS_Is = AwsIceCodeFormatter.iceCause(myicing.Is_code);
+    AWS_Is = AwsIceCodeFormatter.iceCause(IcingState.Is_code);
 
     // sea ice concentration (ci) [bufr table 020034]
     //

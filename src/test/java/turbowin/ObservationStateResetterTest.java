@@ -82,7 +82,7 @@ public class ObservationStateResetterTest {
   public void resetsWeatherPositionAndDateTimeState() {
     CloudCoverState.N = "8";
     mywaves.swell_1_height = "3";
-    myicing.Is_code = "I";
+    IcingState.Is_code = "I";
     myice1.ci_code = "C";
     myposition.longitude_degrees = "4";
     myposition.SOG_APR = 12;
@@ -92,7 +92,7 @@ public class ObservationStateResetterTest {
 
     assertEquals("", CloudCoverState.N);
     assertEquals("", mywaves.swell_1_height);
-    assertEquals("", myicing.Is_code);
+    assertEquals("", IcingState.Is_code);
     assertEquals("", myice1.ci_code);
     assertEquals("", myposition.longitude_degrees);
     assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
