@@ -1330,9 +1330,7 @@ public final class mywaves extends javax.swing.JFrame {
   }
 
   private void previous_screen() {
-    mywind form = new mywind();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    WindDialog.open();
   }
 
   /**

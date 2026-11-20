@@ -167,7 +167,7 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(forwardScene, "Cancel");
         return null;
       });
-      FrameFixture wind = WindowFinder.findFrame(new FrameTitleMatcher("Wind")).using(robot());
+      DialogFixture wind = WindowFinder.findDialog(new DialogTitleMatcher("Wind")).using(robot());
       SwingUtilities.invokeAndWait(wind.target()::dispose);
       JDialog stop = GuiActionRunner.execute(TemperatureDialog::open);
       Scene stopScene = CloudCoverFxTestSupport.awaitScene(stop);

@@ -185,14 +185,18 @@ public class ObservationFillingTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {});
   }
 
-  private void fillTrueWindInformation() throws InterruptedException {
+  private void fillTrueWindInformation() throws Exception {
     this.frame.label(JLabelMatcher.withText("True wind")).requireVisible().requireEnabled().click();
-    FrameFixture windFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Wind")).using(this.robot());
-    windFrame.textBox("wind_1").setText("5");
-    windFrame.textBox("wind_2").setText("5");
-
-    clickOkButtonInFrame(windFrame);
+    DialogFixture wind =
+        WindowFinder.findDialog(new DialogTitleMatcher("Wind")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) wind.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      ((javafx.scene.control.TextField) scene.lookup("#wind_1")).setText("5");
+      ((javafx.scene.control.TextField) scene.lookup("#wind_2")).setText("5");
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private static void clickOkButtonInFrame(FrameFixture frame) throws InterruptedException {

@@ -107,8 +107,6 @@ final class TemperatureDialog {
   }
 
   private static void next() {
-    mywind form = new mywind();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    WindDialog.open();
   }
 }
