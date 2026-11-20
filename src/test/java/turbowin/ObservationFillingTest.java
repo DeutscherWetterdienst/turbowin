@@ -319,7 +319,8 @@ public class ObservationFillingTest extends AbstractUiTest {
   }
 
   private void addObserverInformation() throws InterruptedException {
-    this.frame.label(JLabelMatcher.withText("Observer")).requireVisible().requireEnabled().click();
+    GuiActionRunner.execute(
+        () -> ((main) this.frame.target()).Input_Observer_menu_actionPerformed(null));
     FrameFixture observerFrame =
         WindowFinder.findFrame(new FrameTitleMatcher("Observer")).using(this.robot());
     JTableFixture table = observerFrame.table();

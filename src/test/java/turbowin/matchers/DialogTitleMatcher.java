@@ -15,6 +15,6 @@ public class DialogTitleMatcher extends GenericTypeMatcher<JDialog> {
 
   @Override
   protected boolean isMatching(JDialog dialog) {
-    return dialogTitleText.equals(dialog.getTitle());
+    return dialog.isShowing() && dialogTitleText.equals(dialog.getTitle());
   }
 }
