@@ -414,10 +414,20 @@ public final class mydatetime extends javax.swing.JFrame {
 
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
+    if (accept()) {
+      setVisible(false);
+      dispose();
+    }
+  }
+
+  boolean accept() {
     // TODO add your handling code here:
     int len;
 
-    if (main.RS232_connection_mode != 3) // not AWS connected mode
+    if (main.RS232_connection_mode != 3
+        && main.RS232_connection_mode != 9
+        && main.RS232_connection_mode != 10
+        && main.RS232_connection_mode != 11) // not AWS connected mode
     {
       // initialisation
       Reset_All_DateTime_Vars();
@@ -542,12 +552,27 @@ public final class mydatetime extends javax.swing.JFrame {
     if (checks_ok == true) {
       /* update date/time fields on (progress) main screen */
       main.date_time_fields_update();
-
-      /* close this input page */
-      setVisible(false);
-      dispose();
     } // if (checks_ok == true)
+    return checks_ok;
   } // GEN-LAST:event_OK_button_actionPerformed
+
+  String[] selectedValues() {
+    return new String[] {
+      jList1.getSelectedValue(), jList2.getSelectedValue(),
+      jList3.getSelectedValue(), jList4.getSelectedValue()
+    };
+  }
+
+  void selectValues(String[] values) {
+    jList1.setSelectedValue(values[0], true);
+    jList2.setSelectedValue(values[1], true);
+    jList3.setSelectedValue(values[2], true);
+    jList4.setSelectedValue(values[3], true);
+  }
+
+  boolean isReadOnly() {
+    return !jList1.isEnabled();
+  }
 
   private void initSynopparameters() {
     // if appropriate put back earlier inserted values

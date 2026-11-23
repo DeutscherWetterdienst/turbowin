@@ -120,7 +120,7 @@ public class ObservationFillingTest extends AbstractUiTest {
     }
   }
 
-  private void fillDateTimeInformation() throws InterruptedException {
+  private void fillDateTimeInformation() throws Exception {
     this.frame
         .label(JLabelMatcher.withText("Date & Time obs"))
         .requireVisible()
@@ -135,14 +135,25 @@ public class ObservationFillingTest extends AbstractUiTest {
 
     TimeUnit.MILLISECONDS.sleep(TIMEOUT);
 
-    FrameFixture dateTimeFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Date and Time")).using(this.robot());
-    dateTimeFrame.list("year").selectItem("2024");
-    dateTimeFrame.list("month").selectItem("October");
-    dateTimeFrame.list("day").selectItem("29");
-    dateTimeFrame.list("hour").selectItem("10");
+    DialogFixture manual =
+        WindowFinder.findDialog(new DialogTitleMatcher("Date and Time")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) manual.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      selectDateTime(scene, "year", "2024");
+      selectDateTime(scene, "month", "October");
+      selectDateTime(scene, "day", "29");
+      selectDateTime(scene, "hour", "10");
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
+  }
 
-    clickOkButtonInFrame(dateTimeFrame);
+  @SuppressWarnings("unchecked")
+  private static void selectDateTime(Scene scene, String id, String value) {
+    ((javafx.scene.control.ListView<String>) scene.lookup("#" + id))
+        .getSelectionModel()
+        .select(value);
   }
 
   private void fillPressureInformation() throws Exception {

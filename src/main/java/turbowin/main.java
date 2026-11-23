@@ -4053,15 +4053,11 @@ public class main extends javax.swing.JFrame {
       main.check_and_set_datetime_v2(); // use_system_date_time_for_updating will be set
 
       if (use_system_date_time_for_updating == false) {
-        mydatetime form = new mydatetime();
-        form.setSize(800, 600);
-        form.setVisible(true);
+        DateTimeDialog.open();
       }
     } // if (main.RS232_connection_mode == 0)
     else {
-      mydatetime form = new mydatetime();
-      form.setSize(800, 600);
-      form.setVisible(true);
+      DateTimeDialog.open();
     } // else
   } // GEN-LAST:event_Input_DateTime_menu_actionPerformed
 
