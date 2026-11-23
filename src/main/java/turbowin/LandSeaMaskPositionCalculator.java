@@ -14,29 +14,29 @@ final class LandSeaMaskPositionCalculator {
     // SAM mask quadrant.
     int octant = main.INVALID;
 
-    if (latitudeHemisphere.equals(myposition.HEMISPHERE_NORTH)
-        && longitudeHemisphere.equals(myposition.HEMISPHERE_WEST)) {
+    if (latitudeHemisphere.equals(PositionModel.HEMISPHERE_NORTH)
+        && longitudeHemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
       if (longitudeDegrees >= 0 && longitudeDegrees < 90) {
         octant = 0;
       } else if (longitudeDegrees >= 90 && longitudeDegrees <= 180) {
         octant = 1;
       }
-    } else if (latitudeHemisphere.equals(myposition.HEMISPHERE_NORTH)
-        && longitudeHemisphere.equals(myposition.HEMISPHERE_EAST)) {
+    } else if (latitudeHemisphere.equals(PositionModel.HEMISPHERE_NORTH)
+        && longitudeHemisphere.equals(PositionModel.HEMISPHERE_EAST)) {
       if (longitudeDegrees >= 90 && longitudeDegrees <= 180) {
         octant = 2;
       } else if (longitudeDegrees >= 0 && longitudeDegrees < 90) {
         octant = 3;
       }
-    } else if (latitudeHemisphere.equals(myposition.HEMISPHERE_SOUTH)
-        && longitudeHemisphere.equals(myposition.HEMISPHERE_WEST)) {
+    } else if (latitudeHemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+        && longitudeHemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
       if (longitudeDegrees >= 0 && longitudeDegrees < 90) {
         octant = 5;
       } else if (longitudeDegrees >= 90 && longitudeDegrees <= 180) {
         octant = 6;
       }
-    } else if (latitudeHemisphere.equals(myposition.HEMISPHERE_SOUTH)
-        && longitudeHemisphere.equals(myposition.HEMISPHERE_EAST)) {
+    } else if (latitudeHemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+        && longitudeHemisphere.equals(PositionModel.HEMISPHERE_EAST)) {
       if (longitudeDegrees >= 90 && longitudeDegrees <= 180) {
         octant = 7;
       } else if (longitudeDegrees >= 0 && longitudeDegrees < 90) {

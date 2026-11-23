@@ -165,19 +165,21 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       String record_aws_date =
                           laatste_record.substring(pos + 1, pos2); // YYYYMMDD or YYMMDD
 
-                      // mydatetime.day   = record_aws_date.substring(record_aws_date.length() -2) +
+                      // DateTimeModel.day   = record_aws_date.substring(record_aws_date.length()
+                      // -2) +
                       // " -";   // DD
-                      // mydatetime.month = record_aws_date.substring(record_aws_date.length() -4,
+                      // DateTimeModel.month = record_aws_date.substring(record_aws_date.length()
+                      // -4,
                       // record_aws_date.length() -2) + " -"; // MM
-                      mydatetime.day =
+                      DateTimeModel.day =
                           record_aws_date.substring(record_aws_date.length() - 2); // DD
 
-                      if (mydatetime.day.substring(0, 1).equals("0")) {
-                        // otherwise will not match in the mydatetime input form
-                        mydatetime.day = mydatetime.day.substring(1, 2);
+                      if (DateTimeModel.day.substring(0, 1).equals("0")) {
+                        // otherwise will not match in the DateTimeModel input form
+                        DateTimeModel.day = DateTimeModel.day.substring(1, 2);
                       }
 
-                      // System.out.println("+++ day = " + mydatetime.day);
+                      // System.out.println("+++ day = " + DateTimeModel.day);
                       String str_month =
                           record_aws_date.substring(
                               record_aws_date.length() - 4, record_aws_date.length() - 2); // MM
@@ -185,47 +187,47 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       // System.out.println("+++ month = " + str_month);
                       switch (str_month) {
                         case "01":
-                          mydatetime.month = "January";
+                          DateTimeModel.month = "January";
                           break;
                         case "02":
-                          mydatetime.month = "February";
+                          DateTimeModel.month = "February";
                           break;
                         case "03":
-                          mydatetime.month = "March";
+                          DateTimeModel.month = "March";
                           break;
                         case "04":
-                          mydatetime.month = "April";
+                          DateTimeModel.month = "April";
                           break;
                         case "05":
-                          mydatetime.month = "May";
+                          DateTimeModel.month = "May";
                           break;
                         case "06":
-                          mydatetime.month = "June";
+                          DateTimeModel.month = "June";
                           break;
                         case "07":
-                          mydatetime.month = "July";
+                          DateTimeModel.month = "July";
                           break;
                         case "08":
-                          mydatetime.month = "August";
+                          DateTimeModel.month = "August";
                           break;
                         case "09":
-                          mydatetime.month = "September";
+                          DateTimeModel.month = "September";
                           break;
                         case "10":
-                          mydatetime.month = "October";
+                          DateTimeModel.month = "October";
                           break;
                         case "11":
-                          mydatetime.month = "November";
+                          DateTimeModel.month = "November";
                           break;
                         case "12":
-                          mydatetime.month = "December";
+                          DateTimeModel.month = "December";
                           break;
                         default:
-                          mydatetime.month = "unknown";
+                          DateTimeModel.month = "unknown";
                           break;
                       }
 
-                      mydatetime.year =
+                      DateTimeModel.year =
                           record_aws_date.substring(
                               0, record_aws_date.length() - 4); // YYYY (or YY)
 
@@ -249,13 +251,13 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       String record_aws_time = laatste_record.substring(pos + 1, pos2);
                       if (record_aws_time.length() == 6) // HHMMSS
                       {
-                        mydatetime.hour = record_aws_time.substring(0, 2); // HH from HHMMSS
-                        mydatetime.minute = record_aws_time.substring(2, 4); // MM from HHMMSS
+                        DateTimeModel.hour = record_aws_time.substring(0, 2); // HH from HHMMSS
+                        DateTimeModel.minute = record_aws_time.substring(2, 4); // MM from HHMMSS
                       }
 
-                      if (mydatetime.hour.substring(0, 1).equals("0")) {
-                        // otherwise will not match in the mydatetime input form
-                        mydatetime.hour = mydatetime.hour.substring(1, 2);
+                      if (DateTimeModel.hour.substring(0, 1).equals("0")) {
+                        // otherwise will not match in the DateTimeModel input form
+                        DateTimeModel.hour = DateTimeModel.hour.substring(1, 2);
                       }
 
                       main.time_from_AWS_present = true;
@@ -278,13 +280,13 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
 
                       if (record_aws_latitude.indexOf("-") != -1) // found "-" in string
                       {
-                        myposition.latitude_hemisphere = "South";
-                        myposition.latitude_degrees =
+                        PositionModel.latitude_hemisphere = "South";
+                        PositionModel.latitude_degrees =
                             record_aws_latitude.substring(
                                 1, record_aws_latitude.indexOf(".")); // -12.344 -> 12
                       } else {
-                        myposition.latitude_hemisphere = "North";
-                        myposition.latitude_degrees =
+                        PositionModel.latitude_hemisphere = "North";
+                        PositionModel.latitude_degrees =
                             record_aws_latitude.substring(
                                 0, record_aws_latitude.indexOf(".")); // 12.344 -> 12
                       }
@@ -302,20 +304,21 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       //
                       // if (double_minutes_lat < 10)
                       // {
-                      //   myposition.latitude_minutes = "0" + Double.toString(double_minutes_lat);
+                      //   PositionModel.latitude_minutes = "0" +
+                      // Double.toString(double_minutes_lat);
                       // }
                       // else
                       // {
-                      //   myposition.latitude_minutes = Double.toString(double_minutes_lat);
+                      //   PositionModel.latitude_minutes = Double.toString(double_minutes_lat);
                       // }
                       int int_minutes_lat =
                           (int)
                               Math.round(
                                   (decimal_degrees_lat - Math.floor(decimal_degrees_lat)) * 60);
                       if (int_minutes_lat < 10) {
-                        myposition.latitude_minutes = "0" + Integer.toString(int_minutes_lat);
+                        PositionModel.latitude_minutes = "0" + Integer.toString(int_minutes_lat);
                       } else {
-                        myposition.latitude_minutes = Integer.toString(int_minutes_lat);
+                        PositionModel.latitude_minutes = Integer.toString(int_minutes_lat);
                       }
 
                       main.latitude_from_AWS_present = true;
@@ -338,13 +341,13 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
 
                       if (record_aws_longitude.indexOf("-") != -1) // found "-" in string
                       {
-                        myposition.longitude_hemisphere = "West";
-                        myposition.longitude_degrees =
+                        PositionModel.longitude_hemisphere = "West";
+                        PositionModel.longitude_degrees =
                             record_aws_longitude.substring(
                                 1, record_aws_longitude.indexOf(".")); // -12.344 -> 12
                       } else {
-                        myposition.longitude_hemisphere = "East";
-                        myposition.longitude_degrees =
+                        PositionModel.longitude_hemisphere = "East";
+                        PositionModel.longitude_degrees =
                             record_aws_longitude.substring(
                                 0, record_aws_longitude.indexOf(".")); // 12.344 -> 12
                       }
@@ -361,20 +364,21 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       //
                       // if (double_minutes_lon < 10)
                       // {
-                      //   myposition.longitude_minutes = "0" + Double.toString(double_minutes_lon);
+                      //   PositionModel.longitude_minutes = "0" +
+                      // Double.toString(double_minutes_lon);
                       // }
                       // else
                       // {
-                      //   myposition.longitude_minutes = Double.toString(double_minutes_lon);
+                      //   PositionModel.longitude_minutes = Double.toString(double_minutes_lon);
                       // }
                       int int_minutes_lon =
                           (int)
                               Math.round(
                                   (decimal_degrees_lon - Math.floor(decimal_degrees_lon)) * 60);
                       if (int_minutes_lon < 10) {
-                        myposition.longitude_minutes = "0" + Integer.toString(int_minutes_lon);
+                        PositionModel.longitude_minutes = "0" + Integer.toString(int_minutes_lon);
                       } else {
-                        myposition.longitude_minutes = Integer.toString(int_minutes_lon);
+                        PositionModel.longitude_minutes = Integer.toString(int_minutes_lon);
                       }
 
                       main.longitude_from_AWS_present = true;
@@ -405,36 +409,36 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       // blanco -> unfortunately no option to indicate stationary
                       // if (int_COG == 0)
                       // {
-                      //   myposition.course = myposition.COURSE_STATIONARY;
+                      //   PositionModel.course = PositionModel.COURSE_STATIONARY;
                       // }
                       if (int_COG >= 23 && int_COG <= 67) {
-                        myposition.course = myposition.COURSE_023_067;
+                        PositionModel.course = PositionModel.COURSE_023_067;
                       } else if (int_COG >= 68 && int_COG <= 112) {
-                        myposition.course = myposition.COURSE_068_112;
+                        PositionModel.course = PositionModel.COURSE_068_112;
                       } else if (int_COG >= 113 && int_COG <= 157) {
-                        myposition.course = myposition.COURSE_113_157;
+                        PositionModel.course = PositionModel.COURSE_113_157;
                       } else if (int_COG >= 158 && int_COG <= 202) {
-                        myposition.course = myposition.COURSE_158_202;
+                        PositionModel.course = PositionModel.COURSE_158_202;
                       } else if (int_COG >= 203 && int_COG <= 247) {
-                        myposition.course = myposition.COURSE_203_247;
+                        PositionModel.course = PositionModel.COURSE_203_247;
                       } else if (int_COG >= 248 && int_COG <= 292) {
-                        myposition.course = myposition.COURSE_248_292;
+                        PositionModel.course = PositionModel.COURSE_248_292;
                       } else if (int_COG >= 293 && int_COG <= 337) {
-                        myposition.course = myposition.COURSE_293_337;
+                        PositionModel.course = PositionModel.COURSE_293_337;
                       } else if (int_COG >= 338 && int_COG <= 360) {
-                        myposition.course = myposition.COURSE_338_022;
+                        PositionModel.course = PositionModel.COURSE_338_022;
                       } else if (int_COG > 0 && int_COG <= 22) {
-                        myposition.course = myposition.COURSE_338_022;
+                        PositionModel.course = PositionModel.COURSE_338_022;
                       }
 
                       // COG = 10 min average so can also used for wind input page
-                      // mywind.ship_ground_course = record_aws_COG;
+                      // WindModel.ship_ground_course = record_aws_COG;
                       //
-                      // if (mywind.ship_ground_course.equals("0.0"))
+                      // if (WindModel.ship_ground_course.equals("0.0"))
                       // {
-                      //   mywind.ship_ground_course = "360.0";
+                      //   WindModel.ship_ground_course = "360.0";
                       // }
-                      mywind.ship_ground_course = Integer.toString(int_COG);
+                      WindModel.ship_ground_course = Integer.toString(int_COG);
 
                       main.COG_from_AWS_present = true;
                       // System.out.println("+++ parameter COG is aanwezig");
@@ -458,32 +462,32 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                           (int) Math.round(double_SOG * owner.M_S_TO_KNOTS); // in knots rounded
 
                       if (int_SOG == 0) {
-                        myposition.speed = myposition.SPEED_0;
+                        PositionModel.speed = PositionModel.SPEED_0;
                       } else if (int_SOG >= 1 && int_SOG <= 5) {
-                        myposition.speed = myposition.SPEED_1_5;
+                        PositionModel.speed = PositionModel.SPEED_1_5;
                       } else if (int_SOG >= 6 && int_SOG <= 10) {
-                        myposition.speed = myposition.SPEED_6_10;
+                        PositionModel.speed = PositionModel.SPEED_6_10;
                       } else if (int_SOG >= 11 && int_SOG <= 15) {
-                        myposition.speed = myposition.SPEED_11_15;
+                        PositionModel.speed = PositionModel.SPEED_11_15;
                       } else if (int_SOG >= 16 && int_SOG <= 20) {
-                        myposition.speed = myposition.SPEED_16_20;
+                        PositionModel.speed = PositionModel.SPEED_16_20;
                       } else if (int_SOG >= 21 && int_SOG <= 25) {
-                        myposition.speed = myposition.SPEED_21_25;
+                        PositionModel.speed = PositionModel.SPEED_21_25;
                       } else if (int_SOG >= 26 && int_SOG <= 30) {
-                        myposition.speed = myposition.SPEED_26_30;
+                        PositionModel.speed = PositionModel.SPEED_26_30;
                       } else if (int_SOG >= 31 && int_SOG <= 35) {
-                        myposition.speed = myposition.SPEED_31_35;
+                        PositionModel.speed = PositionModel.SPEED_31_35;
                       } else if (int_SOG >= 36 && int_SOG <= 40) {
-                        myposition.speed = myposition.SPEED_36_40;
+                        PositionModel.speed = PositionModel.SPEED_36_40;
                       } else if (int_SOG >= 41) {
-                        myposition.speed = myposition.SPEED_MORE_40;
+                        PositionModel.speed = PositionModel.SPEED_MORE_40;
                       }
 
                       // SOG 10 min average so can also used for wind input page
                       double_SOG =
                           Math.round(double_SOG * main.M_S_KNOT_CONVERSION * 10)
                               / 10.0; // always round to one decimal
-                      mywind.ship_ground_speed = Double.toString(double_SOG);
+                      WindModel.ship_ground_speed = Double.toString(double_SOG);
 
                       main.SOG_from_AWS_present = true;
                       // System.out.println("+++ parameter SOG is aanwezig");
@@ -510,7 +514,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                         int_ship_heading = 360;
                       }
 
-                      mywind.ship_heading = Integer.toString(int_ship_heading);
+                      WindModel.ship_heading = Integer.toString(int_ship_heading);
 
                       main.true_heading_from_AWS_present = true;
                       // NB heading is not displayed on TurboWin main screen (only on wind input
@@ -530,11 +534,11 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     int pos2 = laatste_record.indexOf(",", pos + 1);
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
-                      mybarometer.pressure_reading_corrected =
+                      BarometerModel.pressure_reading_corrected =
                           laatste_record.substring(pos + 1, pos2);
 
                       // by default for pressure value obtained from AWS!
-                      mybarometer.pressure_reading = mybarometer.pressure_reading_corrected;
+                      BarometerModel.pressure_reading = BarometerModel.pressure_reading_corrected;
 
                       // ic = 0.0 by default for pressure value obtained from AWS!
                       main.barometer_instrument_correction = "0.0";
@@ -542,7 +546,8 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                       // for barometer input form
                       // if (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_NO))
                       // {
-                      //   mybarometer.pressure_reading = mybarometer.pressure_reading_corrected;
+                      //   BarometerModel.pressure_reading =
+                      // BarometerModel.pressure_reading_corrected;
                       //
                       //   // ic = 0.0 by default for pressure value obtained from AWS!
                       //   main.barometer_instrument_correction = "0.0";
@@ -563,7 +568,8 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     int pos2 = laatste_record.indexOf(",", pos + 1);
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
-                      mybarometer.pressure_msl_corrected = laatste_record.substring(pos + 1, pos2);
+                      BarometerModel.pressure_msl_corrected =
+                          laatste_record.substring(pos + 1, pos2);
 
                       // for barometer input form
                       // NB if AWS connected, barometer input form will always indicate barometer
@@ -584,7 +590,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     int pos2 = laatste_record.indexOf(",", pos + 1);
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
-                      mybarograph.pressure_amount_tendency =
+                      BarographModel.pressure_amount_tendency =
                           laatste_record.substring(pos + 1, pos2);
 
                       main.pressure_tendency_from_AWS_present = true;
@@ -603,7 +609,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     int pos2 = laatste_record.indexOf(",", pos + 1);
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
-                      mybarograph.a_code = laatste_record.substring(pos + 1, pos2);
+                      BarographModel.a_code = laatste_record.substring(pos + 1, pos2);
 
                       main.pressure_characteristic_from_AWS_present = true;
                       // System.out.println("+++ parameter air pressure characteristic (a code) is
@@ -622,7 +628,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     int pos2 = laatste_record.indexOf(",", pos + 1);
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
-                      mytemp.air_temp = laatste_record.substring(pos + 1, pos2);
+                      TemperatureModel.air_temp = laatste_record.substring(pos + 1, pos2);
 
                       main.air_temp_from_AWS_present = true;
 
@@ -646,15 +652,16 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
                       try {
-                        mytemp.double_rv =
+                        TemperatureModel.double_rv =
                             Double.parseDouble(laatste_record.substring(pos + 1, pos2)) / 100;
                       } catch (NumberFormatException exception) {
-                        mytemp.double_rv = main.INVALID;
+                        TemperatureModel.double_rv = main.INVALID;
                       }
                       // NB "/100" for consistency with not AWS computed rh (see also
-                      // main.temperatures_fields_update() and mytemp.OK_button_actioPerformed())
+                      // main.temperatures_fields_update() and
+                      // TemperatureModel.OK_button_actioPerformed())
 
-                      mytemp.RH = laatste_record.substring(pos + 1, pos2);
+                      TemperatureModel.RH = laatste_record.substring(pos + 1, pos2);
 
                       main.rh_from_AWS_present = true;
 
@@ -672,7 +679,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                     int pos2 = laatste_record.indexOf(",", pos + 1);
                     if (pos2 - pos >= 2) // between conmmas at least 1 char
                     {
-                      mytemp.sea_water_temp = laatste_record.substring(pos + 1, pos2);
+                      TemperatureModel.sea_water_temp = laatste_record.substring(pos + 1, pos2);
 
                       main.SST_from_AWS_present = true;
 
@@ -714,10 +721,10 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                         // NB double_relative_wind_speed in m/s
                       }
 
-                      mywind.wind_speed =
+                      WindModel.wind_speed =
                           Integer.toString(int_relative_wind_speed); // for wind input screen
-                      mywind.int_relative_wind_speed = int_relative_wind_speed;
-                      mywind.double_relative_wind_speed =
+                      WindModel.int_relative_wind_speed = int_relative_wind_speed;
+                      WindModel.double_relative_wind_speed =
                           double_relative_wind_speed; // only for dashboard
 
                       main.relative_wind_speed_from_AWS_present = true;
@@ -741,17 +748,18 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                           Double.parseDouble(record_aws_relative_wind_dir);
 
                       // int int_relative_wind_dir = (int) Math.round(double_relative_wind_dir);
-                      // mywind.int_relative_wind_dir = (int) Math.round(double_relative_wind_dir);
+                      // WindModel.int_relative_wind_dir = (int)
+                      // Math.round(double_relative_wind_dir);
                       int int_relative_wind_dir = (int) Math.round(double_relative_wind_dir);
 
                       // if (int_relative_wind_dir == 0)
                       // {
                       //   int_relative_wind_dir = 360;
                       // }
-                      // mywind.wind_dir = Integer.toString(mywind.int_relative_wind_dir);
-                      mywind.wind_dir =
+                      // WindModel.wind_dir = Integer.toString(WindModel.int_relative_wind_dir);
+                      WindModel.wind_dir =
                           Integer.toString(int_relative_wind_dir); // for wind input screen
-                      mywind.int_relative_wind_dir = int_relative_wind_dir;
+                      WindModel.int_relative_wind_dir = int_relative_wind_dir;
                       main.relative_wind_dir_from_AWS_present = true;
 
                       // System.out.println("+++ parameter relative wind dir is aanwezig");
@@ -790,8 +798,9 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                         // NB double_true_wind_speed; in m/s
                       }
 
-                      mywind.int_true_wind_speed = int_true_wind_speed;
-                      mywind.double_true_wind_speed = double_true_wind_speed; // only for dashboard
+                      WindModel.int_true_wind_speed = int_true_wind_speed;
+                      WindModel.double_true_wind_speed =
+                          double_true_wind_speed; // only for dashboard
 
                       main.true_wind_speed_from_AWS_present = true;
 
@@ -818,7 +827,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                         int_true_wind_dir = 360;
                       }
 
-                      mywind.int_true_wind_dir = int_true_wind_dir;
+                      WindModel.int_true_wind_dir = int_true_wind_dir;
 
                       main.true_wind_dir_from_AWS_present = true;
 
@@ -862,8 +871,8 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                         // NB double_true_wind_gust_speed in knots
                       }
 
-                      mywind.int_true_wind_gust_speed = int_true_wind_gust_speed;
-                      mywind.double_true_wind_gust_speed =
+                      WindModel.int_true_wind_gust_speed = int_true_wind_gust_speed;
+                      WindModel.double_true_wind_gust_speed =
                           double_true_wind_gust_speed; // only for dashboard
 
                       main.true_wind_gust_from_AWS_present = true;
@@ -892,7 +901,7 @@ final class Rs422ReadAwsSensorDataForDisplayWorkflow {
                         int_true_wind_gust_dir = 360;
                       }
 
-                      mywind.int_true_wind_gust_dir = int_true_wind_gust_dir;
+                      WindModel.int_true_wind_gust_dir = int_true_wind_gust_dir;
 
                       main.true_wind_gust_dir_from_AWS_present = true;
 

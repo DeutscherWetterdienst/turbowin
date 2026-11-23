@@ -199,7 +199,7 @@ final class Rs232MintakaDuoWowAprWorkflow {
                 String sensor_data_record_APR_pressure_reading_hpa_corrected =
                     df.format(
                         hulp_double_APR_pressure_reading + double_barometer_instrument_correction);
-                mybarometer.pressure_reading_corrected =
+                BarometerModel.pressure_reading_corrected =
                     sensor_data_record_APR_pressure_reading_hpa_corrected; // now pressure at sensor
                 // height corrected for
                 // ic
@@ -219,12 +219,12 @@ final class Rs232MintakaDuoWowAprWorkflow {
                 double hulp_double_APR_pressure_MSL_rounded = bd.doubleValue();
                 sensor_data_record_APR_pressure_MSL_hpa =
                     Double.toString(hulp_double_APR_pressure_MSL_rounded);
-                mybarometer.pressure_msl_corrected =
+                BarometerModel.pressure_msl_corrected =
                     sensor_data_record_APR_pressure_MSL_hpa; // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
 
                 if (destination.equals("MAIN_SCREEN") == false) {
                   String message_msl =
-                      "[APR] air pressure MSL = " + mybarometer.pressure_msl_corrected + " hPa";
+                      "[APR] air pressure MSL = " + BarometerModel.pressure_msl_corrected + " hPa";
                   main.log_turbowin_system_message(message_msl);
                 }
 

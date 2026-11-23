@@ -68,25 +68,25 @@ final class ObservationComposer {
     // date/time (null value if YY_code never activated /null pointer, "" if page visited but
     // nothing done)"
     //
-    coded_obs_YY = ObservationCodeFormatter.direct(mydatetime.YY_code, "//");
+    coded_obs_YY = ObservationCodeFormatter.direct(DateTimeModel.YY_code, "//");
 
-    coded_obs_GG = ObservationCodeFormatter.direct(mydatetime.GG_code, "//");
+    coded_obs_GG = ObservationCodeFormatter.direct(DateTimeModel.GG_code, "//");
 
     // position
     //
-    coded_obs_Qc = ObservationCodeFormatter.direct(myposition.Qc_code, "/");
+    coded_obs_Qc = ObservationCodeFormatter.direct(PositionModel.Qc_code, "/");
 
-    coded_obs_lalala = ObservationCodeFormatter.direct(myposition.lalala_code, "///");
+    coded_obs_lalala = ObservationCodeFormatter.direct(PositionModel.lalala_code, "///");
 
-    coded_obs_lolololo = ObservationCodeFormatter.direct(myposition.lolololo_code, "////");
+    coded_obs_lolololo = ObservationCodeFormatter.direct(PositionModel.lolololo_code, "////");
 
     // ship course
     //
-    coded_obs_Ds = ObservationCodeFormatter.direct(myposition.Ds_code, "/");
+    coded_obs_Ds = ObservationCodeFormatter.direct(PositionModel.Ds_code, "/");
 
     // ship speed
     //
-    coded_obs_vs = ObservationCodeFormatter.direct(myposition.vs_code, "/");
+    coded_obs_vs = ObservationCodeFormatter.direct(PositionModel.vs_code, "/");
 
     // total cloud cover (N)
     //
@@ -105,37 +105,40 @@ final class ObservationComposer {
     coded_obs_VV = ObservationCodeFormatter.direct(VisibilityState.VV_code, "//");
 
     // winds source
-    coded_obs_iw = ObservationCodeFormatter.direct(mywind.iw_code, "/");
+    coded_obs_iw = ObservationCodeFormatter.direct(WindModel.iw_code, "/");
 
     // wind direction (dd)
     //
-    coded_obs_dd = ObservationCodeFormatter.direct(mywind.dd_code, "//");
+    coded_obs_dd = ObservationCodeFormatter.direct(WindModel.dd_code, "//");
 
     // wind speed (ff)
     //
-    coded_obs_ff = ObservationCodeFormatter.windSpeed(mywind.ff_code, mywind.fff00_code, SPATIE);
+    coded_obs_ff =
+        ObservationCodeFormatter.windSpeed(WindModel.ff_code, WindModel.fff00_code, SPATIE);
 
     // air temperature
     //
     coded_obs_snTTT =
-        ObservationCodeFormatter.combined(mytemp.sn_TTT_code, mytemp.TTT_code, "////");
+        ObservationCodeFormatter.combined(
+            TemperatureModel.sn_TTT_code, TemperatureModel.TTT_code, "////");
 
     // dew point
     //
     coded_obs_snTdTdTd =
-        ObservationCodeFormatter.combined(mytemp.sn_TdTdTd_code, mytemp.TdTdTd_code, "////");
+        ObservationCodeFormatter.combined(
+            TemperatureModel.sn_TdTdTd_code, TemperatureModel.TdTdTd_code, "////");
 
     // air pressure (at MSL)
     //
-    coded_obs_PPPP = ObservationCodeFormatter.direct(mybarometer.PPPP_code, "////");
+    coded_obs_PPPP = ObservationCodeFormatter.direct(BarometerModel.PPPP_code, "////");
 
     // air pressure tendency characteristic
     //
-    coded_obs_a = ObservationCodeFormatter.direct(mybarograph.a_code, "/");
+    coded_obs_a = ObservationCodeFormatter.direct(BarographModel.a_code, "/");
 
     // air pressure tendency amount
     //
-    coded_obs_ppp = ObservationCodeFormatter.direct(mybarograph.ppp_code, "///");
+    coded_obs_ppp = ObservationCodeFormatter.direct(BarographModel.ppp_code, "///");
 
     // present weather
     //
@@ -164,42 +167,43 @@ final class ObservationComposer {
     // Tsea
     //
     coded_obs_ssTsTsTs =
-        ObservationCodeFormatter.combined(mytemp.ss_TsTsTs_code, mytemp.TsTsTs_code, "////");
+        ObservationCodeFormatter.combined(
+            TemperatureModel.ss_TsTsTs_code, TemperatureModel.TsTsTs_code, "////");
 
     // wind waves period
     //
-    coded_obs_Pw = ObservationCodeFormatter.direct(mywaves.Pw_code, "//");
+    coded_obs_Pw = ObservationCodeFormatter.direct(WavesModel.Pw_code, "//");
 
     // wind waves height
     //
-    coded_obs_Hw = ObservationCodeFormatter.direct(mywaves.Hw_code, "//");
+    coded_obs_Hw = ObservationCodeFormatter.direct(WavesModel.Hw_code, "//");
 
     // swell 1 direction
     //
 
-    // JOptionPane.showMessageDialog(null, mywaves.Dw1_code, "mywaves.Dw1_code",
+    // JOptionPane.showMessageDialog(null, WavesModel.Dw1_code, "WavesModel.Dw1_code",
     // JOptionPane.WARNING_MESSAGE);
-    coded_obs_Dw1 = ObservationCodeFormatter.direct(mywaves.Dw1_code, "//");
+    coded_obs_Dw1 = ObservationCodeFormatter.direct(WavesModel.Dw1_code, "//");
 
     // swell 1 period
     //
-    coded_obs_Pw1 = ObservationCodeFormatter.direct(mywaves.Pw1_code, "//");
+    coded_obs_Pw1 = ObservationCodeFormatter.direct(WavesModel.Pw1_code, "//");
 
     // swell 1 height
     //
-    coded_obs_Hw1 = ObservationCodeFormatter.direct(mywaves.Hw1_code, "//");
+    coded_obs_Hw1 = ObservationCodeFormatter.direct(WavesModel.Hw1_code, "//");
 
     // swell 2 direction
     //
-    coded_obs_Dw2 = ObservationCodeFormatter.direct(mywaves.Dw2_code, "//");
+    coded_obs_Dw2 = ObservationCodeFormatter.direct(WavesModel.Dw2_code, "//");
 
     // swell 2 period
     //
-    coded_obs_Pw2 = ObservationCodeFormatter.direct(mywaves.Pw2_code, "//");
+    coded_obs_Pw2 = ObservationCodeFormatter.direct(WavesModel.Pw2_code, "//");
 
     // swell 2 height
     //
-    coded_obs_Hw2 = ObservationCodeFormatter.direct(mywaves.Hw2_code, "//");
+    coded_obs_Hw2 = ObservationCodeFormatter.direct(WavesModel.Hw2_code, "//");
 
     // icing cause (Is)
     //
@@ -216,7 +220,8 @@ final class ObservationComposer {
     // wet bulb temperature (TbTbTb)
     //
     coded_obs_snTbTbTb =
-        ObservationCodeFormatter.combined(mytemp.sn_TbTbTb_code, mytemp.TbTbTb_code, "////");
+        ObservationCodeFormatter.combined(
+            TemperatureModel.sn_TbTbTb_code, TemperatureModel.TbTbTb_code, "////");
 
     // concentration or arrangement of sea ice (ci)
     //

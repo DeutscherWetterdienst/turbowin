@@ -31,43 +31,43 @@ public class MainSupportPositionSequenceCharacterizationTest {
   @Test
   public void acceptsAChronologicalObservationAtTheSamePosition() {
     String originalLastRecord = main.last_record;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    int originalLatitudeDegrees = myposition.int_latitude_degrees;
-    int originalLatitudeMinutes = myposition.int_latitude_minutes;
-    String originalLatitudeHemisphere = myposition.latitude_hemisphere;
-    int originalLongitudeDegrees = myposition.int_longitude_degrees;
-    int originalLongitudeMinutes = myposition.int_longitude_minutes;
-    String originalLongitudeHemisphere = myposition.longitude_hemisphere;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    int originalLatitudeDegrees = PositionModel.int_latitude_degrees;
+    int originalLatitudeMinutes = PositionModel.int_latitude_minutes;
+    String originalLatitudeHemisphere = PositionModel.latitude_hemisphere;
+    int originalLongitudeDegrees = PositionModel.int_longitude_degrees;
+    int originalLongitudeMinutes = PositionModel.int_longitude_minutes;
+    String originalLongitudeHemisphere = PositionModel.longitude_hemisphere;
 
     try {
       main.last_record = "A202601011211230450";
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "01";
-      mydatetime.day = "01";
-      mydatetime.hour = "13";
-      myposition.int_latitude_degrees = 12;
-      myposition.int_latitude_minutes = 18;
-      myposition.latitude_hemisphere = myposition.HEMISPHERE_NORTH;
-      myposition.int_longitude_degrees = 45;
-      myposition.int_longitude_minutes = 0;
-      myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST;
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "01";
+      DateTimeModel.day = "01";
+      DateTimeModel.hour = "13";
+      PositionModel.int_latitude_degrees = 12;
+      PositionModel.int_latitude_minutes = 18;
+      PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_NORTH;
+      PositionModel.int_longitude_degrees = 45;
+      PositionModel.int_longitude_minutes = 0;
+      PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_EAST;
 
       assertTrue(new main_support().position_sequence_check());
     } finally {
       main.last_record = originalLastRecord;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      myposition.int_latitude_degrees = originalLatitudeDegrees;
-      myposition.int_latitude_minutes = originalLatitudeMinutes;
-      myposition.latitude_hemisphere = originalLatitudeHemisphere;
-      myposition.int_longitude_degrees = originalLongitudeDegrees;
-      myposition.int_longitude_minutes = originalLongitudeMinutes;
-      myposition.longitude_hemisphere = originalLongitudeHemisphere;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      PositionModel.int_latitude_degrees = originalLatitudeDegrees;
+      PositionModel.int_latitude_minutes = originalLatitudeMinutes;
+      PositionModel.latitude_hemisphere = originalLatitudeHemisphere;
+      PositionModel.int_longitude_degrees = originalLongitudeDegrees;
+      PositionModel.int_longitude_minutes = originalLongitudeMinutes;
+      PositionModel.longitude_hemisphere = originalLongitudeHemisphere;
     }
   }
 }

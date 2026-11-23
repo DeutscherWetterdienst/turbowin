@@ -17,9 +17,9 @@ final class BarometerDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    mybarometer model = new mybarometer();
-    JTextField pressure = mybarometer.jTextField1;
-    JTextField draft = mybarometer.jTextField2;
+    BarometerModel model = new BarometerModel();
+    JTextField pressure = BarometerModel.jTextField1;
+    JTextField draft = BarometerModel.jTextField2;
     boolean sensorConnected = main.RS232_connection_mode != 0;
     String msl = main.pressure_reading_msl_yes_no;
     String mslLabel =

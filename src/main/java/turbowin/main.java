@@ -3919,7 +3919,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Cloudcover_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Cloudcover_menu_actionPerformed
-    CloudCoverJavaFxWindow.open();
+    CloudCoverDialog.open();
   } // GEN-LAST:event_Input_Cloudcover_menu_actionPerformed
 
   void Input_Presentweather_menu_actionPerformed(
@@ -4013,18 +4013,18 @@ public class main extends javax.swing.JFrame {
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Position_menu_actionPerformed
     PositionMapPreparationWorkflow.Observation observation =
         PositionMapPreparationWorkflow.prepare(
-            mydatetime.day,
-            mydatetime.month,
-            mydatetime.year,
-            mydatetime.hour,
-            mywind.int_true_wind_dir,
-            mywind.WIND_DIR_VARIABLE,
+            DateTimeModel.day,
+            DateTimeModel.month,
+            DateTimeModel.year,
+            DateTimeModel.hour,
+            WindModel.int_true_wind_dir,
+            WindModel.WIND_DIR_VARIABLE,
             INVALID,
-            mywind.int_true_wind_speed,
+            WindModel.int_true_wind_speed,
             wind_units,
-            mytemp.air_temp,
-            mytemp.sea_water_temp,
-            mybarometer.pressure_msl_corrected);
+            TemperatureModel.air_temp,
+            TemperatureModel.sea_water_temp,
+            BarometerModel.pressure_msl_corrected);
     leaflet_maps_obs_day = observation.day;
     leaflet_maps_obs_month = observation.month;
     leaflet_maps_obs_year = observation.year;
@@ -4201,7 +4201,7 @@ public class main extends javax.swing.JFrame {
     Input_Position_menu_actionPerformed(null);
     // }
     // NB zoals onderstaande kan het ook
-    //   myposition form = new myposition();
+    //   PositionModel form = new PositionModel();
     //   form.setSize(800, 600);
     //   form.setVisible(true);
   } // GEN-LAST:event_position_mainscreen_mouseClicked
@@ -6118,7 +6118,7 @@ public class main extends javax.swing.JFrame {
       "_"; // "%20";// must be replaced by receiving php program with " "this is to avoid problems
   // by browsers handling spaces
   public static final int MAX_AANTAL_JAREN_IN_IMMT = 5;
-  public static final int MAX_AANTAL_WAARNEMERS = 20; // zie ook OBSERVER_ROWS in myobserver.java
+  public static final int MAX_AANTAL_WAARNEMERS = 20; // zie ook OBSERVER_ROWS in ObserverModel.java
   public static final int IMMT_3_POSITION_OBSERVER =
       160; // in IMMT-3 records begin position observer name
   public static final int IMMT_4_POSITION_OBSERVER =
@@ -6611,7 +6611,7 @@ public class main extends javax.swing.JFrame {
   public static String server_com_protocol =
       ""; // meta data (myserversettings.java) [HTTPS_PROTOCOL, HTTP_PROTOCOL]
 
-  public static String barometer_instrument_correction = ""; // meta data (mybarometer.java)
+  public static String barometer_instrument_correction = ""; // meta data (BarometerModel.java)
   public static String mode = "";
   public static String wind_units = ""; // meta data (wind units observed/measured)
   public static String wind_units_dashboard = ""; // meta data (wind units graphs/dashboard)
@@ -6891,7 +6891,7 @@ public class main extends javax.swing.JFrame {
   public static Obs_Stats_view graph_obs_stats;
   public static DASHBOARD_view_AWS_radar dashboard_form_AWS_radar; // wind radar AWS
   public static DASHBOARD_view_APR_radar
-      dashboard_form_APR_radar; // meteo radar APR // also used in mywind.java
+      dashboard_form_APR_radar; // meteo radar APR // also used in WindModel.java
   public static boolean dashboard_was_manually_closed_in_dashboard_pop_up_period =
       false; // in connection with pop-up dashboard (AWS and APR)
   public static boolean dashboard_was_automatically_opened =

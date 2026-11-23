@@ -18,10 +18,10 @@ public class WindFieldsUpdaterTest {
     main.relative_wind_dir_from_AWS_present = true;
     main.relative_wind_speed_from_AWS_present = true;
     main.wind_units = main.M_S;
-    mywind.int_true_wind_dir = 90;
-    mywind.int_true_wind_speed = 10;
-    mywind.int_relative_wind_dir = 180;
-    mywind.int_relative_wind_speed = 5;
+    WindModel.int_true_wind_dir = 90;
+    WindModel.int_true_wind_speed = 10;
+    WindModel.int_relative_wind_dir = 180;
+    WindModel.int_relative_wind_speed = 5;
 
     WindFieldsUpdater.update();
 
@@ -40,10 +40,10 @@ public class WindFieldsUpdaterTest {
     main.relative_wind_dir_from_AWS_present = true;
     main.relative_wind_speed_from_AWS_present = true;
     main.wind_units = "knots";
-    mywind.int_true_wind_dir = mywind.WIND_DIR_VARIABLE;
-    mywind.int_true_wind_speed = main.INVALID;
-    mywind.int_relative_wind_dir = main.INVALID;
-    mywind.int_relative_wind_speed = 12;
+    WindModel.int_true_wind_dir = WindModel.WIND_DIR_VARIABLE;
+    WindModel.int_true_wind_speed = main.INVALID;
+    WindModel.int_relative_wind_dir = main.INVALID;
+    WindModel.int_relative_wind_speed = 12;
 
     WindFieldsUpdater.update();
 

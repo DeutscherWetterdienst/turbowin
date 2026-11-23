@@ -33,8 +33,8 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
     originalLogsDirectory = main.logs_dir;
     originalSystemLogMonthFormat = main.sdf_tsl_1;
     originalSystemLogMessageFormat = main.sdf_tsl_2;
-    originalCog = myposition.COG_APR_wind;
-    originalSog = myposition.SOG_APR_wind;
+    originalCog = PositionModel.COG_APR_wind;
+    originalSog = PositionModel.SOG_APR_wind;
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -49,8 +49,8 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
     main.logs_dir = originalLogsDirectory;
     main.sdf_tsl_1 = originalSystemLogMonthFormat;
     main.sdf_tsl_2 = originalSystemLogMessageFormat;
-    myposition.COG_APR_wind = originalCog;
-    myposition.SOG_APR_wind = originalSog;
+    PositionModel.COG_APR_wind = originalCog;
+    PositionModel.SOG_APR_wind = originalSog;
   }
 
   @Test
@@ -60,8 +60,8 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
     Rs232GpsNmeaWindCogSogWorkflow.start("APR", new double[] {Double.MAX_VALUE, 0.0, 0.0, 0.0});
 
     waitFor(this::windStateIsReset);
-    assertEquals(Double.MAX_VALUE, myposition.COG_APR_wind, 0.0);
-    assertEquals(Double.MAX_VALUE, myposition.SOG_APR_wind, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.COG_APR_wind, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR_wind, 0.0);
     assertLogContains(
         "[GPS] For APTR dashboard wind [10 min]: COG and SOG calculation error or start/end position not (yet) available");
   }
@@ -71,38 +71,38 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
     Rs232GpsNmeaWindCogSogWorkflow.start(
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
 
-    waitFor(() -> myposition.COG_APR_wind != Double.MAX_VALUE);
+    waitFor(() -> PositionModel.COG_APR_wind != Double.MAX_VALUE);
 
-    assertEquals(90.0, myposition.COG_APR_wind, 0.001);
-    assertEquals(6.0, myposition.SOG_APR_wind, 0.001);
+    assertEquals(90.0, PositionModel.COG_APR_wind, 0.001);
+    assertEquals(6.0, PositionModel.SOG_APR_wind, 0.001);
   }
 
   @Test
   public void lowerAndUpperValidBoundsAreAcceptedButValuesAboveMaximumResetState()
       throws Exception {
     Rs232GpsNmeaWindCogSogWorkflow.start("UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, 0.0});
-    waitFor(() -> myposition.SOG_APR_wind == 0.0);
-    assertEquals(0.0, myposition.COG_APR_wind, 0.0);
+    waitFor(() -> PositionModel.SOG_APR_wind == 0.0);
+    assertEquals(0.0, PositionModel.COG_APR_wind, 0.0);
 
     resetWindState();
     Rs232GpsNmeaWindCogSogWorkflow.start(
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(100.0)});
-    waitFor(() -> myposition.SOG_APR_wind == 100.0);
-    assertEquals(90.0, myposition.COG_APR_wind, 0.001);
+    waitFor(() -> PositionModel.SOG_APR_wind == 100.0);
+    assertEquals(90.0, PositionModel.COG_APR_wind, 0.001);
 
     setStaleWindState();
     Rs232GpsNmeaWindCogSogWorkflow.start(
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(101.0)});
     waitFor(this::windStateIsReset);
-    assertEquals(Double.MAX_VALUE, myposition.COG_APR_wind, 0.0);
-    assertEquals(Double.MAX_VALUE, myposition.SOG_APR_wind, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.COG_APR_wind, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR_wind, 0.0);
   }
 
   @Test
   public void aprAndManualLogSuccessfulCalculationButMinuteUpdatesDoNotLog() throws Exception {
     Rs232GpsNmeaWindCogSogWorkflow.start(
         "APR", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
-    waitFor(() -> myposition.SOG_APR_wind == 6.0);
+    waitFor(() -> PositionModel.SOG_APR_wind == 6.0);
     String successfulMessage =
         "[GPS] For APTR dashboard wind [10 min].: COG and SOG calculation ok; 90.0° 6.0 kts";
     assertLogContains(successfulMessage);
@@ -110,31 +110,31 @@ public class Rs232GpsNmeaWindCogSogWorkflowTest {
     resetWindState();
     Rs232GpsNmeaWindCogSogWorkflow.start(
         "MANUAL", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
-    waitFor(() -> myposition.SOG_APR_wind == 6.0);
+    waitFor(() -> PositionModel.SOG_APR_wind == 6.0);
     waitFor(() -> logContainsOccurrences(successfulMessage, 2));
     String logBeforeMinuteUpdate = Files.readString(currentLogFile(), StandardCharsets.UTF_8);
 
     resetWindState();
     Rs232GpsNmeaWindCogSogWorkflow.start(
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
-    waitFor(() -> myposition.SOG_APR_wind == 6.0);
+    waitFor(() -> PositionModel.SOG_APR_wind == 6.0);
     Thread.sleep(100);
     assertEquals(logBeforeMinuteUpdate, Files.readString(currentLogFile(), StandardCharsets.UTF_8));
   }
 
   private void resetWindState() {
-    myposition.COG_APR_wind = Double.MAX_VALUE;
-    myposition.SOG_APR_wind = Double.MAX_VALUE;
+    PositionModel.COG_APR_wind = Double.MAX_VALUE;
+    PositionModel.SOG_APR_wind = Double.MAX_VALUE;
   }
 
   private void setStaleWindState() {
-    myposition.COG_APR_wind = 12.0;
-    myposition.SOG_APR_wind = 3.0;
+    PositionModel.COG_APR_wind = 12.0;
+    PositionModel.SOG_APR_wind = 3.0;
   }
 
   private boolean windStateIsReset() {
-    return myposition.COG_APR_wind == Double.MAX_VALUE
-        && myposition.SOG_APR_wind == Double.MAX_VALUE;
+    return PositionModel.COG_APR_wind == Double.MAX_VALUE
+        && PositionModel.SOG_APR_wind == Double.MAX_VALUE;
   }
 
   private void assertLogContains(String expected) throws Exception {

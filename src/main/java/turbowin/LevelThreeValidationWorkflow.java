@@ -46,7 +46,7 @@ final class LevelThreeValidationWorkflow {
     // first swell system period conversion
     Float parsedFirstSwellPeriod =
         support.parseValidationFloat(
-            mywaves.swell_1_period,
+            WavesModel.swell_1_period,
             "[GENERAL] first swell period conversion error; Function: checking_level_3()");
     if (parsedFirstSwellPeriod != null) {
       float_first_swell_period = parsedFirstSwellPeriod;
@@ -58,7 +58,7 @@ final class LevelThreeValidationWorkflow {
     // first swell system height conversion
     Float parsedFirstSwellHeight =
         support.parseValidationFloat(
-            mywaves.swell_1_height,
+            WavesModel.swell_1_height,
             "[GENERAL] first swell height conversion error; Function: checking_level_3()");
     if (parsedFirstSwellHeight != null) {
       float_first_swell_height = parsedFirstSwellHeight;
@@ -70,7 +70,7 @@ final class LevelThreeValidationWorkflow {
     // second swell system period conversion
     Float parsedSecondSwellPeriod =
         support.parseValidationFloat(
-            mywaves.swell_2_period,
+            WavesModel.swell_2_period,
             "[GENERAL] second swell period conversion error; Function: checking_level_3()");
     if (parsedSecondSwellPeriod != null) {
       float_second_swell_period = parsedSecondSwellPeriod;
@@ -82,7 +82,7 @@ final class LevelThreeValidationWorkflow {
     // second swell system height conversion
     Float parsedSecondSwellHeight =
         support.parseValidationFloat(
-            mywaves.swell_2_height,
+            WavesModel.swell_2_height,
             "[GENERAL] second swell height conversion error; Function: checking_level_3()");
     if (parsedSecondSwellHeight != null) {
       float_second_swell_height = parsedSecondSwellHeight;
@@ -92,14 +92,15 @@ final class LevelThreeValidationWorkflow {
     }
 
     main_support.FloatValidation airTemperatureValidation =
-        support.validateFloat(mytemp.air_temp, "air temp conversion error", "checking_level_3");
+        support.validateFloat(
+            TemperatureModel.air_temp, "air temp conversion error", "checking_level_3");
     float_air_temp = airTemperatureValidation.value();
     air_temp_conversion_ok = airTemperatureValidation.valid();
 
     // string pressure_msl_corrected to float
     Float parsedAirPressureMsl =
         support.parseValidationFloat(
-            mybarometer.pressure_msl_corrected,
+            BarometerModel.pressure_msl_corrected,
             "[GENERAL] air pressure conversion error; Function: checking_level_3()");
     if (parsedAirPressureMsl != null) {
       float_air_pressure_msl_corrected = parsedAirPressureMsl;
@@ -110,7 +111,7 @@ final class LevelThreeValidationWorkflow {
 
     main_support.FloatValidation pressureTendencyValidation =
         support.validateFloat(
-            mybarograph.pressure_amount_tendency,
+            BarographModel.pressure_amount_tendency,
             "amount air pressure tendency conversion error",
             "checking_level_3");
     float_amount_pressure_tendency = pressureTendencyValidation.value();
@@ -119,7 +120,8 @@ final class LevelThreeValidationWorkflow {
     // string SST to float
     Float parsedSeaWaterTemperature =
         support.parseValidationFloat(
-            mytemp.sea_water_temp, "[GENERAL] SST conversion error; Function: checking_level_3()");
+            TemperatureModel.sea_water_temp,
+            "[GENERAL] SST conversion error; Function: checking_level_3()");
     if (parsedSeaWaterTemperature != null) {
       float_sea_water_temp = parsedSeaWaterTemperature;
       sea_water_temp_conversion_ok = true;
@@ -151,7 +153,7 @@ final class LevelThreeValidationWorkflow {
 
     // speed ship
     //
-    if (doorgaan && !ShipSpeedConfirmationValidation.validate(myposition.vs_code)) {
+    if (doorgaan && !ShipSpeedConfirmationValidation.validate(PositionModel.vs_code)) {
       doorgaan = false;
       level_3_ok = false;
     }
@@ -159,7 +161,8 @@ final class LevelThreeValidationWorkflow {
     // wind speed
     //
     if (doorgaan
-        && !WindSpeedConfirmationValidation.validate(main.wind_units, mywind.int_true_wind_speed)) {
+        && !WindSpeedConfirmationValidation.validate(
+            main.wind_units, WindModel.int_true_wind_speed)) {
       doorgaan = false;
       level_3_ok = false;
     }
@@ -197,7 +200,7 @@ final class LevelThreeValidationWorkflow {
     if (doorgaan
         && !WindWaveConsistencyValidation.validate(
             main.wind_units,
-            mywind.int_true_wind_speed,
+            WindModel.int_true_wind_speed,
             wind_waves_height_conversion_ok,
             float_wind_waves_height)) {
       doorgaan = false;
@@ -249,7 +252,7 @@ final class LevelThreeValidationWorkflow {
         && !PressureTendencyConfirmationValidation.validateCharacteristic(
             amount_pressure_tendency_conversion_ok,
             float_amount_pressure_tendency,
-            mybarograph.a_code.equals(""))) {
+            BarographModel.a_code.equals(""))) {
       doorgaan = false;
       level_3_ok = false;
     }

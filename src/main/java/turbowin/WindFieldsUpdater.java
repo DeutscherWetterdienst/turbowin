@@ -38,8 +38,8 @@ final class WindFieldsUpdater {
           jTextField17.setText("");
           field17_part1 = "";
           field17_part2 = "";
-          mywind.int_true_wind_dir = INVALID;
-          mywind.int_true_wind_speed = INVALID;
+          WindModel.int_true_wind_dir = INVALID;
+          WindModel.int_true_wind_speed = INVALID;
         }
         jTextField17.setForeground(main.input_color_from_observer);
       }
@@ -51,26 +51,26 @@ final class WindFieldsUpdater {
 
     // true wind dir
 
-    if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
+    if (WindModel.int_true_wind_dir == WindModel.WIND_DIR_VARIABLE) {
       field17_part1 = "var";
-    } else if ((mywind.int_true_wind_dir != INVALID)
-        && (mywind.int_true_wind_dir
-            != mywind.WIND_DIR_VARIABLE) /*&& (main.true_wind_dir_from_AWS_present == true)*/) {
-      field17_part1 = Integer.toString(mywind.int_true_wind_dir);
+    } else if ((WindModel.int_true_wind_dir != INVALID)
+        && (WindModel.int_true_wind_dir
+            != WindModel.WIND_DIR_VARIABLE) /*&& (main.true_wind_dir_from_AWS_present == true)*/) {
+      field17_part1 = Integer.toString(WindModel.int_true_wind_dir);
     } else {
       field17_part1 = "-";
     }
 
     // true wind speed
-    if (mywind.int_true_wind_speed
+    if (WindModel.int_true_wind_speed
         != INVALID /*&& (main.true_wind_speed_from_AWS_present == true)*/) {
-      field17_part2 = Integer.toString(mywind.int_true_wind_speed);
+      field17_part2 = Integer.toString(WindModel.int_true_wind_speed);
     } else {
       field17_part2 = "-";
     }
 
     // true wind dir + true wind speeed
-    if (mywind.int_true_wind_dir != INVALID || mywind.int_true_wind_speed != INVALID) {
+    if (WindModel.int_true_wind_dir != INVALID || WindModel.int_true_wind_speed != INVALID) {
       if (main.wind_units.trim().indexOf(main.M_S)
           != -1) // source wind units (as originally measured), e.g. always m/s in case of AWS
       {
@@ -108,8 +108,8 @@ final class WindFieldsUpdater {
           jTextField16.setText("");
           field16_part1 = "";
           field16_part2 = "";
-          mywind.int_relative_wind_dir = INVALID;
-          mywind.int_relative_wind_speed = INVALID;
+          WindModel.int_relative_wind_dir = INVALID;
+          WindModel.int_relative_wind_speed = INVALID;
         }
         jTextField16.setForeground(main.input_color_from_observer);
       }
@@ -120,26 +120,28 @@ final class WindFieldsUpdater {
     }
 
     // relative wind dir
-    if (mywind.int_relative_wind_dir == mywind.WIND_DIR_VARIABLE) {
+    if (WindModel.int_relative_wind_dir == WindModel.WIND_DIR_VARIABLE) {
       field16_part1 = "var";
-    } else if ((mywind.int_relative_wind_dir != INVALID)
-        && (mywind.int_relative_wind_dir
-            != mywind.WIND_DIR_VARIABLE) /*&& (main.relative_wind_dir_from_AWS_present == true)*/) {
-      field16_part1 = Integer.toString(mywind.int_relative_wind_dir);
+    } else if ((WindModel.int_relative_wind_dir != INVALID)
+        && (WindModel.int_relative_wind_dir
+            != WindModel
+                .WIND_DIR_VARIABLE) /*&& (main.relative_wind_dir_from_AWS_present == true)*/) {
+      field16_part1 = Integer.toString(WindModel.int_relative_wind_dir);
     } else {
       field16_part1 = "-";
     }
 
     // relative wind speed
-    if ((mywind.int_relative_wind_speed
+    if ((WindModel.int_relative_wind_speed
         != INVALID) /*&& (main.relative_wind_speed_from_AWS_present == true)*/) {
-      field16_part2 = Integer.toString(mywind.int_relative_wind_speed);
+      field16_part2 = Integer.toString(WindModel.int_relative_wind_speed);
     } else {
       field16_part2 = "-";
     }
 
     // relative wind dir + relative wind speeed
-    if (mywind.int_relative_wind_dir != INVALID || mywind.int_relative_wind_speed != INVALID) {
+    if (WindModel.int_relative_wind_dir != INVALID
+        || WindModel.int_relative_wind_speed != INVALID) {
       if (main.wind_units.trim().indexOf(main.M_S)
           != -1) // source wind units (as originally measured), e.g. always m/s in case of AWS with
       // wind sensor
@@ -161,7 +163,7 @@ final class WindFieldsUpdater {
         || RS232_connection_mode == 11) // AWS connected mode
     {
       if (main.COG_from_AWS_present == false) {
-        mywind.ship_ground_course = "";
+        WindModel.ship_ground_course = "";
       }
     }
 
@@ -173,7 +175,7 @@ final class WindFieldsUpdater {
         || RS232_connection_mode == 11) // AWS connected mode
     {
       if (main.SOG_from_AWS_present == false) {
-        mywind.ship_ground_speed = "";
+        WindModel.ship_ground_speed = "";
       }
     }
 
@@ -185,7 +187,7 @@ final class WindFieldsUpdater {
         || RS232_connection_mode == 11) // AWS connected mode
     {
       if (main.true_heading_from_AWS_present == false) {
-        mywind.ship_heading = "";
+        WindModel.ship_heading = "";
       }
     }
 

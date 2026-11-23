@@ -33,14 +33,14 @@ final class HighCloudDialog {
     main.clouds_high_fields_update();
     close.run();
     if (main.in_next_sequence) {
-      CloudCoverJavaFxWindow.open();
+      CloudCoverDialog.open();
     }
   }
 
   private static void cancel(Runnable close) {
     close.run();
     if (main.in_next_sequence) {
-      CloudCoverJavaFxWindow.open();
+      CloudCoverDialog.open();
     }
   }
 

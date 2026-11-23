@@ -95,7 +95,7 @@ final class Format101DesktopEmailWorkflow {
               /* if ddmmyyyy in subject field -> replace by actual utc date of observation */
               String obs_email_subject_new =
                   obs_email_subject.replaceAll(
-                      "ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
+                      "ddhhmm", DateTimeModel.YY_code + DateTimeModel.GG_code + "00");
 
               // String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  +
               // "&body=" + email_body_line;

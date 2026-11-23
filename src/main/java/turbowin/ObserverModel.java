@@ -3,11 +3,11 @@ package turbowin;
 import javax.swing.JOptionPane;
 
 /** Observer log state and OBS_ID validation, independent of the old Swing form. */
-public final class myobserver {
+public final class ObserverModel {
   private String[][] rows = new String[OBSERVER_ROWS][OBSERVER_COLUMNS];
   private int selectedRow = -1;
 
-  public myobserver() {
+  public ObserverModel() {
     ObserverLogReadWorkflow.start(this);
   }
 

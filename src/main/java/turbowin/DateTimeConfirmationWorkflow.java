@@ -186,27 +186,27 @@ final class DateTimeConfirmationWorkflow {
     {
       // So date time of the confirmation message confirmed by the user
 
-      mydatetime.year = Integer.toString(obs_year); // for progress main screen and IMMT
-      mydatetime.month = convert_month(obs_month); // for progress main screen
-      mydatetime.day = Integer.toString(obs_day_of_month); // for progress main screen
-      mydatetime.hour = Integer.toString(obs_hour_of_day); // for progress main screen
+      DateTimeModel.year = Integer.toString(obs_year); // for progress main screen and IMMT
+      DateTimeModel.month = convert_month(obs_month); // for progress main screen
+      DateTimeModel.day = Integer.toString(obs_day_of_month); // for progress main screen
+      DateTimeModel.hour = Integer.toString(obs_hour_of_day); // for progress main screen
 
       /* update date and time on TurboWin main screen */
       date_time_fields_update();
 
       // determine code figures for month (not for operational obs only for IMMT storage)
       //
-      mydatetime.MM_code =
+      DateTimeModel.MM_code =
           formatTwoDigitCode(obs_month + 1); // +1 because obs_month started with 0 (January)
 
       // determine code figures for day of the month (for obs and IMMT)
       //
-      mydatetime.YY_code =
+      DateTimeModel.YY_code =
           formatTwoDigitCode(obs_day_of_month); // obs_day_of_month e.g. 1,2,11,23,29
 
       // determine code figures for hour of day (for obs and IMMT)
       //
-      mydatetime.GG_code = formatTwoDigitCode(obs_hour_of_day); // obs_hour_of_day e.g. 1,2,11,23
+      DateTimeModel.GG_code = formatTwoDigitCode(obs_hour_of_day); // obs_hour_of_day e.g. 1,2,11,23
 
       use_system_date_time_for_updating = true;
 

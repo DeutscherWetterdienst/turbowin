@@ -4,12 +4,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /** Barometer observation state, calculations and compatibility fields for sensor readers. */
-public final class mybarometer {
+public final class BarometerModel {
   public static JTextField jTextField1;
   public static JTextField jTextField2;
   private final String notice;
 
-  public mybarometer() {
+  public BarometerModel() {
     int mode = main.RS232_connection_mode;
     local_AWS_connected = mode == 3 || mode == 9 || mode == 10 || mode == 11;
     local_barometer_connected = mode == 1 || mode == 2 || (mode >= 4 && mode <= 8);
@@ -58,7 +58,7 @@ public final class mybarometer {
     double pressure =
         reduction.pressure()
             + SeaLevelPressureReduction.heightCorrection(
-                reduction.pressure(), reduction.height(), mytemp.air_temp)
+                reduction.pressure(), reduction.height(), TemperatureModel.air_temp)
             + reduction.lakeCorrection();
     pressure_msl_corrected = Double.toString(Math.floor(pressure * 10 + 0.5) / 10);
     PPPP_code = PressureCodeFormatter.format(pressure);
@@ -145,7 +145,9 @@ public final class mybarometer {
 
         hoogte_corr =
             SeaLevelPressureReduction.heightCorrection(
-                double_pressure_reading_corrected, double_hoogte_barometer, mytemp.air_temp);
+                double_pressure_reading_corrected,
+                double_hoogte_barometer,
+                TemperatureModel.air_temp);
 
         // at Great lakes? (for extra height correction value)
         double great_lakes_corr = main_RS232_RS422.check_at_Great_Lakes();
@@ -527,7 +529,7 @@ public final class mybarometer {
   private double double_barometer_instrument_correction = main.INVALID;
   private double double_pressure_reading_corrected = main.INVALID;
   private double double_pressure_msl_corrected =
-      main.INVALID; // also used in Tdew computation [mytemp.java]
+      main.INVALID; // also used in Tdew computation [TemperatureModel.java]
   private double double_deepest_draft = main.INVALID;
   private boolean checks_ok = false;
   private boolean local_AWS_connected;

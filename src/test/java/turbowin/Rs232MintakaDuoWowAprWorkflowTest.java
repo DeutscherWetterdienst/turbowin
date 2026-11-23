@@ -71,14 +71,14 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     originalObsoleteData = main.obsolate_data_flag;
     originalObsoleteDataII = main.obsolate_data_flag_II;
     originalSendMethod = main.APTR_AWSR_send_method;
-    originalPressureCorrected = mybarometer.pressure_reading_corrected;
-    originalPressureMslCorrected = mybarometer.pressure_msl_corrected;
-    originalPpppCode = mybarometer.PPPP_code;
-    originalAirTemp = mytemp.air_temp;
-    originalWetBulb = mytemp.wet_bulb_temp;
-    originalRh = mytemp.RH;
-    originalDewPoint = mytemp.double_dew_point;
-    originalRelativeHumidity = mytemp.double_rv;
+    originalPressureCorrected = BarometerModel.pressure_reading_corrected;
+    originalPressureMslCorrected = BarometerModel.pressure_msl_corrected;
+    originalPpppCode = BarometerModel.PPPP_code;
+    originalAirTemp = TemperatureModel.air_temp;
+    originalWetBulb = TemperatureModel.wet_bulb_temp;
+    originalRh = TemperatureModel.RH;
+    originalDewPoint = TemperatureModel.double_dew_point;
+    originalRelativeHumidity = TemperatureModel.double_rv;
     originalMainFields[0] = main.jTextField9;
     originalMainFields[1] = main.jTextField10;
     originalMainFields[2] = main.jTextField11;
@@ -121,14 +121,14 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     main.obsolate_data_flag = originalObsoleteData;
     main.obsolate_data_flag_II = originalObsoleteDataII;
     main.APTR_AWSR_send_method = originalSendMethod;
-    mybarometer.pressure_reading_corrected = originalPressureCorrected;
-    mybarometer.pressure_msl_corrected = originalPressureMslCorrected;
-    mybarometer.PPPP_code = originalPpppCode;
-    mytemp.air_temp = originalAirTemp;
-    mytemp.wet_bulb_temp = originalWetBulb;
-    mytemp.RH = originalRh;
-    mytemp.double_dew_point = originalDewPoint;
-    mytemp.double_rv = originalRelativeHumidity;
+    BarometerModel.pressure_reading_corrected = originalPressureCorrected;
+    BarometerModel.pressure_msl_corrected = originalPressureMslCorrected;
+    BarometerModel.PPPP_code = originalPpppCode;
+    TemperatureModel.air_temp = originalAirTemp;
+    TemperatureModel.wet_bulb_temp = originalWetBulb;
+    TemperatureModel.RH = originalRh;
+    TemperatureModel.double_dew_point = originalDewPoint;
+    TemperatureModel.double_rv = originalRelativeHumidity;
     main.jTextField9 = originalMainFields[0];
     main.jTextField10 = originalMainFields[1];
     main.jTextField11 = originalMainFields[2];
@@ -142,9 +142,9 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
   public void validRecordAppliesPressureCorrectionAndPreparesAprData() throws Exception {
     runPressureRecord("1000.0", "APR", new Date());
 
-    assertEquals("1001.5", mybarometer.pressure_reading_corrected);
-    assertEquals("1001.5", mybarometer.pressure_msl_corrected);
-    assertEquals("0015", mybarometer.PPPP_code);
+    assertEquals("1001.5", BarometerModel.pressure_reading_corrected);
+    assertEquals("1001.5", BarometerModel.pressure_msl_corrected);
+    assertEquals("0015", BarometerModel.PPPP_code);
   }
 
   @Test
@@ -165,28 +165,28 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
   public void pressureLimitsAndInstrumentCorrectionBoundariesAreCharacterized() throws Exception {
     main.barometer_instrument_correction = "0.0";
     runPressureRecord("900.0", "APR", new Date());
-    assertEquals("", mybarometer.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
 
     runPressureRecord("900.1", "APR", new Date());
-    assertEquals("900.1", mybarometer.pressure_reading_corrected);
+    assertEquals("900.1", BarometerModel.pressure_reading_corrected);
 
     runPressureRecord("1099.9", "APR", new Date());
-    assertEquals("1099.9", mybarometer.pressure_reading_corrected);
+    assertEquals("1099.9", BarometerModel.pressure_reading_corrected);
 
     runPressureRecord("1100.0", "APR", new Date());
-    assertEquals("", mybarometer.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
 
     main.barometer_instrument_correction = "4.0";
     runPressureRecord("1000.0", "APR", new Date());
-    assertEquals("1004.0", mybarometer.pressure_reading_corrected);
+    assertEquals("1004.0", BarometerModel.pressure_reading_corrected);
 
     main.barometer_instrument_correction = "-4.0";
     runPressureRecord("1000.0", "APR", new Date());
-    assertEquals("996.0", mybarometer.pressure_reading_corrected);
+    assertEquals("996.0", BarometerModel.pressure_reading_corrected);
 
     main.barometer_instrument_correction = "4.1";
     runPressureRecord("1000.0", "APR", new Date());
-    assertEquals("1000.0", mybarometer.pressure_reading_corrected);
+    assertEquals("1000.0", BarometerModel.pressure_reading_corrected);
   }
 
   @Test
@@ -195,7 +195,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
 
     assertEquals("1001.5 hPa", main.jTextField9.getText());
     assertEquals("1001.5 hPa", main.jTextField10.getText());
-    assertEquals("", mybarometer.PPPP_code);
+    assertEquals("", BarometerModel.PPPP_code);
   }
 
   @Test
@@ -205,7 +205,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     if (!GraphicsEnvironment.isHeadless()) {
       assertEquals("WOW in TurboWin is disabled", dialogMessage);
     }
-    assertEquals("", mybarometer.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
   }
 
   @Test
@@ -215,10 +215,10 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
 
     runPressureRecord("1000.0", "APR", new Date());
 
-    assertEquals("20.0", mytemp.air_temp);
-    assertEquals("-0.1", mytemp.wet_bulb_temp);
-    assertEquals(10.0, mytemp.double_dew_point, 0.001);
-    assertEquals(0.5, mytemp.double_rv, 0.001);
+    assertEquals("20.0", TemperatureModel.air_temp);
+    assertEquals("-0.1", TemperatureModel.wet_bulb_temp);
+    assertEquals(10.0, TemperatureModel.double_dew_point, 0.001);
+    assertEquals(0.5, TemperatureModel.double_rv, 0.001);
   }
 
   @Test
@@ -228,7 +228,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
     main.barometer_instrument_correction = "0";
     writeHmpRecord("30.0", "20.0", "10.0", "50.0", new Date());
     runPressureRecord("1000.0", "APR", new Date());
-    assertEquals("1002.25", mybarometer.pressure_msl_corrected);
+    assertEquals("1002.25", BarometerModel.pressure_msl_corrected);
   }
 
   private String runPressureRecord(String pressure, String destination, Date recordDate)
@@ -259,7 +259,7 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
       Rs232MintakaDuoWowAprWorkflow.start(destination, false);
       waitFor(() ->
           main.obs_file_datum_tijd == null
-              && (main.RS232_connection_mode_II == 0 || mytemp.air_temp.length() > 0));
+              && (main.RS232_connection_mode_II == 0 || TemperatureModel.air_temp.length() > 0));
       dialogCloser.await();
       flushEdt();
       return dialogCloser.message();
@@ -300,14 +300,14 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
 
   private void resetModel() {
     main.sensor_data_record_obs_pressure = "";
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
-    mybarometer.PPPP_code = "";
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.double_rv = main.INVALID;
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
+    BarometerModel.PPPP_code = "";
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.double_rv = main.INVALID;
     main.jTextField9.setText("");
     main.jTextField10.setText("");
     main.jTextField11.setText("");
@@ -318,9 +318,9 @@ public class Rs232MintakaDuoWowAprWorkflowTest {
   }
 
   private void assertCleared() {
-    assertEquals("", mybarometer.pressure_reading_corrected);
-    assertEquals("", mybarometer.pressure_msl_corrected);
-    assertEquals("", mybarometer.PPPP_code);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_msl_corrected);
+    assertEquals("", BarometerModel.PPPP_code);
   }
 
   private void setMainFieldReferences() {

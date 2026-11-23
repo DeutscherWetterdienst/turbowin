@@ -45,17 +45,17 @@ final class BarographFieldsUpdater {
 
     // amount of pressure tendency
     //
-    if ((mybarograph.pressure_amount_tendency.compareTo("") != 0)
-        && (mybarograph.pressure_amount_tendency != null)) {
-      jTextField11.setText(mybarograph.pressure_amount_tendency + " hPa");
+    if ((BarographModel.pressure_amount_tendency.compareTo("") != 0)
+        && (BarographModel.pressure_amount_tendency != null)) {
+      jTextField11.setText(BarographModel.pressure_amount_tendency + " hPa");
     } else {
       jTextField11.setText("");
     }
 
     // characteristic pressure tendency (a code)
     //
-    if ((mybarograph.a_code.compareTo("") != 0) && (mybarograph.a_code != null)) {
-      jTextField12.setText(mybarograph.a_code + " (code)");
+    if ((BarographModel.a_code.compareTo("") != 0) && (BarographModel.a_code != null)) {
+      jTextField12.setText(BarographModel.a_code + " (code)");
     } else {
       jTextField12.setText("");
     }

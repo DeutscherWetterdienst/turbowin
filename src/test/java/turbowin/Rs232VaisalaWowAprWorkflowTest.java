@@ -92,18 +92,18 @@ public class Rs232VaisalaWowAprWorkflowTest {
     originalDraught = main.WOW_APR_average_draught;
     originalApr = main.APR;
     originalSendMethod = main.APTR_AWSR_send_method;
-    originalPressureCorrected = mybarometer.pressure_reading_corrected;
-    originalPressureMslCorrected = mybarometer.pressure_msl_corrected;
-    originalPppAmount = mybarograph.pressure_amount_tendency;
-    originalPppCode = mybarograph.ppp_code;
-    originalACode = mybarograph.a_code;
-    originalPpppCode = mybarometer.PPPP_code;
-    originalLatitudeDegrees = myposition.int_latitude_degrees;
-    originalLatitudeMinutes = myposition.int_latitude_minutes;
-    originalLongitudeDegrees = myposition.int_longitude_degrees;
-    originalLongitudeMinutes = myposition.int_longitude_minutes;
-    originalLatitudeHemisphere = myposition.latitude_hemisphere;
-    originalLongitudeHemisphere = myposition.longitude_hemisphere;
+    originalPressureCorrected = BarometerModel.pressure_reading_corrected;
+    originalPressureMslCorrected = BarometerModel.pressure_msl_corrected;
+    originalPppAmount = BarographModel.pressure_amount_tendency;
+    originalPppCode = BarographModel.ppp_code;
+    originalACode = BarographModel.a_code;
+    originalPpppCode = BarometerModel.PPPP_code;
+    originalLatitudeDegrees = PositionModel.int_latitude_degrees;
+    originalLatitudeMinutes = PositionModel.int_latitude_minutes;
+    originalLongitudeDegrees = PositionModel.int_longitude_degrees;
+    originalLongitudeMinutes = PositionModel.int_longitude_minutes;
+    originalLatitudeHemisphere = PositionModel.latitude_hemisphere;
+    originalLongitudeHemisphere = PositionModel.longitude_hemisphere;
     originalPressureField = main.jTextField9;
     originalMslField = main.jTextField10;
     originalTendencyField = main.jTextField11;
@@ -112,12 +112,12 @@ public class Rs232VaisalaWowAprWorkflowTest {
     originalWetBulbField = main.jTextField37;
     originalDewPointField = main.jTextField38;
     originalSeaWaterField = main.jTextField40;
-    originalAirTemp = mytemp.air_temp;
-    originalWetBulb = mytemp.wet_bulb_temp;
-    originalRh = mytemp.RH;
-    originalSeaWater = mytemp.sea_water_temp;
-    originalDewPoint = mytemp.double_dew_point;
-    originalRelativeHumidity = mytemp.double_rv;
+    originalAirTemp = TemperatureModel.air_temp;
+    originalWetBulb = TemperatureModel.wet_bulb_temp;
+    originalRh = TemperatureModel.RH;
+    originalSeaWater = TemperatureModel.sea_water_temp;
+    originalDewPoint = TemperatureModel.double_dew_point;
+    originalRelativeHumidity = TemperatureModel.double_rv;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.type_record_lengte = main.RECORD_LENGTE_PTB220;
@@ -138,12 +138,12 @@ public class Rs232VaisalaWowAprWorkflowTest {
     main.WOW_APR_average_draught = "0.0";
     main.APR = true;
     main.APTR_AWSR_send_method = "";
-    myposition.int_latitude_degrees = 0;
-    myposition.int_latitude_minutes = 0;
-    myposition.int_longitude_degrees = 0;
-    myposition.int_longitude_minutes = 0;
-    myposition.latitude_hemisphere = "";
-    myposition.longitude_hemisphere = "";
+    PositionModel.int_latitude_degrees = 0;
+    PositionModel.int_latitude_minutes = 0;
+    PositionModel.int_longitude_degrees = 0;
+    PositionModel.int_longitude_minutes = 0;
+    PositionModel.latitude_hemisphere = "";
+    PositionModel.longitude_hemisphere = "";
     resetModel();
   }
 
@@ -169,18 +169,18 @@ public class Rs232VaisalaWowAprWorkflowTest {
     main.WOW_APR_average_draught = originalDraught;
     main.APR = originalApr;
     main.APTR_AWSR_send_method = originalSendMethod;
-    mybarometer.pressure_reading_corrected = originalPressureCorrected;
-    mybarometer.pressure_msl_corrected = originalPressureMslCorrected;
-    mybarograph.pressure_amount_tendency = originalPppAmount;
-    mybarograph.ppp_code = originalPppCode;
-    mybarograph.a_code = originalACode;
-    mybarometer.PPPP_code = originalPpppCode;
-    myposition.int_latitude_degrees = originalLatitudeDegrees;
-    myposition.int_latitude_minutes = originalLatitudeMinutes;
-    myposition.int_longitude_degrees = originalLongitudeDegrees;
-    myposition.int_longitude_minutes = originalLongitudeMinutes;
-    myposition.latitude_hemisphere = originalLatitudeHemisphere;
-    myposition.longitude_hemisphere = originalLongitudeHemisphere;
+    BarometerModel.pressure_reading_corrected = originalPressureCorrected;
+    BarometerModel.pressure_msl_corrected = originalPressureMslCorrected;
+    BarographModel.pressure_amount_tendency = originalPppAmount;
+    BarographModel.ppp_code = originalPppCode;
+    BarographModel.a_code = originalACode;
+    BarometerModel.PPPP_code = originalPpppCode;
+    PositionModel.int_latitude_degrees = originalLatitudeDegrees;
+    PositionModel.int_latitude_minutes = originalLatitudeMinutes;
+    PositionModel.int_longitude_degrees = originalLongitudeDegrees;
+    PositionModel.int_longitude_minutes = originalLongitudeMinutes;
+    PositionModel.latitude_hemisphere = originalLatitudeHemisphere;
+    PositionModel.longitude_hemisphere = originalLongitudeHemisphere;
     main.jTextField9 = originalPressureField;
     main.jTextField10 = originalMslField;
     main.jTextField11 = originalTendencyField;
@@ -189,50 +189,50 @@ public class Rs232VaisalaWowAprWorkflowTest {
     main.jTextField37 = originalWetBulbField;
     main.jTextField38 = originalDewPointField;
     main.jTextField40 = originalSeaWaterField;
-    mytemp.air_temp = originalAirTemp;
-    mytemp.wet_bulb_temp = originalWetBulb;
-    mytemp.RH = originalRh;
-    mytemp.sea_water_temp = originalSeaWater;
-    mytemp.double_dew_point = originalDewPoint;
-    mytemp.double_rv = originalRelativeHumidity;
+    TemperatureModel.air_temp = originalAirTemp;
+    TemperatureModel.wet_bulb_temp = originalWetBulb;
+    TemperatureModel.RH = originalRh;
+    TemperatureModel.sea_water_temp = originalSeaWater;
+    TemperatureModel.double_dew_point = originalDewPoint;
+    TemperatureModel.double_rv = originalRelativeHumidity;
   }
 
   @Test
   public void freshRecordRoundsPressureAndPreparesPressureCodes() throws Exception {
     runPressureRecord("1001.26", "13.19", "2", "APR", new Date());
 
-    assertEquals("1002.8", mybarometer.pressure_reading_corrected);
-    assertEquals("1002.76", mybarometer.pressure_msl_corrected);
-    assertEquals("0028", mybarometer.PPPP_code);
-    assertEquals("13.2", mybarograph.pressure_amount_tendency);
-    assertEquals("132", mybarograph.ppp_code);
-    assertEquals("2", mybarograph.a_code);
+    assertEquals("1002.8", BarometerModel.pressure_reading_corrected);
+    assertEquals("1002.76", BarometerModel.pressure_msl_corrected);
+    assertEquals("0028", BarometerModel.PPPP_code);
+    assertEquals("13.2", BarographModel.pressure_amount_tendency);
+    assertEquals("132", BarographModel.ppp_code);
+    assertEquals("2", BarographModel.a_code);
   }
 
   @Test
   public void pressureLimitsAndInstrumentCorrectionAreCharacterized() throws Exception {
     runPressureRecord("900.0", "1.0", "2", "APR", new Date());
-    assertEquals("", mybarometer.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
 
     runPressureRecord("900.1", "1.0", "2", "APR", new Date());
-    assertEquals("901.6", mybarometer.pressure_reading_corrected);
+    assertEquals("901.6", BarometerModel.pressure_reading_corrected);
 
     runPressureRecord("1099.9", "1.0", "2", "APR", new Date());
-    assertEquals("1101.4", mybarometer.pressure_reading_corrected);
+    assertEquals("1101.4", BarometerModel.pressure_reading_corrected);
 
     runPressureRecord("1100.0", "1.0", "2", "APR", new Date());
-    assertEquals("", mybarometer.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
 
     main.barometer_instrument_correction = "4.1";
     runPressureRecord("1000.0", "1.0", "2", "APR", new Date());
-    assertEquals("1000.0", mybarometer.pressure_reading_corrected);
+    assertEquals("1000.0", BarometerModel.pressure_reading_corrected);
   }
 
   @Test
   public void missingMalformedAndStaleRecordsClearAprResults() throws Exception {
-    mybarometer.pressure_reading_corrected = "old";
-    mybarometer.pressure_msl_corrected = "old";
-    mybarograph.pressure_amount_tendency = "old";
+    BarometerModel.pressure_reading_corrected = "old";
+    BarometerModel.pressure_msl_corrected = "old";
+    BarographModel.pressure_amount_tendency = "old";
     writeRawRecord("malformed");
     runWorkflow("APR");
     assertCleared();
@@ -255,7 +255,7 @@ public class Rs232VaisalaWowAprWorkflowTest {
     main.barometer_instrument_correction = "0";
     writeHmpRecord("30.0", "20.0", "10.0", "50.0", new Date());
     runPressureRecord("1000.0", "1.0", "3", "APR", new Date());
-    assertEquals("1002.25", mybarometer.pressure_msl_corrected);
+    assertEquals("1002.25", BarometerModel.pressure_msl_corrected);
   }
 
   @Test
@@ -263,11 +263,11 @@ public class Rs232VaisalaWowAprWorkflowTest {
     main.RS232_connection_mode_II = 1;
     main.barometer_above_sll = "20";
     main.barometer_instrument_correction = "0";
-    mytemp.air_temp = "-20.0";
+    TemperatureModel.air_temp = "-20.0";
     writeHmpRecord(
         "30.0", "20.0", "10.0", "50.0", new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
     runPressureRecord("1000.0", "1.0", "3", "APR", new Date());
-    assertEquals("1002.37", mybarometer.pressure_msl_corrected);
+    assertEquals("1002.37", BarometerModel.pressure_msl_corrected);
   }
 
   @Test
@@ -282,7 +282,7 @@ public class Rs232VaisalaWowAprWorkflowTest {
     main.jTextField37 = new JTextField();
     main.jTextField38 = new JTextField();
     main.jTextField40 = new JTextField();
-    mytemp.sea_water_temp = "";
+    TemperatureModel.sea_water_temp = "";
     writeHmpRecord("20.0", "-0.1", "10.0", "50.0", new Date());
 
     runPressureRecord("1000.0", "1.0", "3", "MAIN_SCREEN", new Date());
@@ -353,24 +353,24 @@ public class Rs232VaisalaWowAprWorkflowTest {
   }
 
   private void resetModel() {
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
-    mybarometer.PPPP_code = "";
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.ppp_code = "";
-    mybarograph.a_code = "";
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.double_rv = main.INVALID;
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
+    BarometerModel.PPPP_code = "";
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.ppp_code = "";
+    BarographModel.a_code = "";
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.double_rv = main.INVALID;
   }
 
   private void assertCleared() {
-    assertEquals("", mybarometer.pressure_reading_corrected);
-    assertEquals("", mybarometer.pressure_msl_corrected);
-    assertEquals("", mybarograph.pressure_amount_tendency);
-    assertEquals("", mybarograph.a_code);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_msl_corrected);
+    assertEquals("", BarographModel.pressure_amount_tendency);
+    assertEquals("", BarographModel.a_code);
   }
 
   private static void copy(char[] target, int start, String value) {

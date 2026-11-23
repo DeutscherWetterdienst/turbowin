@@ -42,8 +42,8 @@ public class RS232_vaisala {
     }
 
     // initialisation
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
 
     Rs232VaisalaPressureTrendWorkflow.start();
   }
@@ -51,7 +51,7 @@ public class RS232_vaisala {
   public static void RS232_Read_Sensor_Data_PPPP_For_Obs(boolean local_tray_icon_clicked) {
     // Vaisala PTB220 or PTB330 (NOT AWS and NOT Mintaka Duo and NOT Mintaka Star)
 
-    // called from: - initSynopparameters() [mybarometer.java]
+    // called from: - initSynopparameters() [BarometerModel.java]
     //              - main_windowIconfied() [main.java]
     //
 
@@ -74,7 +74,7 @@ public class RS232_vaisala {
     }
 
     // initialisation
-    mybarometer.pressure_reading = "";
+    BarometerModel.pressure_reading = "";
 
     // initialisation
     main.tray_icon_clicked = local_tray_icon_clicked;
@@ -107,14 +107,14 @@ public class RS232_vaisala {
     }
 
     // initialisation
-    // mybarometer.pressure_reading = "";
+    // BarometerModel.pressure_reading = "";
 
     Rs232VaisalaWowAprWorkflow.start(destination, retry);
   }
 
   public static void RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs() {
     // NB this function for manual obs (inserting data on the temperatures input form)
-    // called from: initSynopparameters() [mytemp.java]
+    // called from: initSynopparameters() [TemperatureModel.java]
 
     // NB see also - Read_Sensor_Data_Files_For_Air_Temp_Graph_HMP155() [RS232_view.java]
     //             - RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR()
@@ -127,12 +127,12 @@ public class RS232_vaisala {
     //
 
     // initialisation
-    mytemp.air_temp =
+    TemperatureModel.air_temp =
         ""; // if not ="" -> nullpointerexception if update button clicked on main page
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = ""; // range 0 - 100
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.double_rv = main.INVALID; // range 0.0 - 1.0 (or invalid) !!!!
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = ""; // range 0 - 100
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.double_rv = main.INVALID; // range 0.0 - 1.0 (or invalid) !!!!
 
     Rs232VaisalaHmp155ObservationWorkflow.start();
   }
@@ -159,12 +159,12 @@ public class RS232_vaisala {
     //
 
     // initialisation
-    mytemp.air_temp =
+    TemperatureModel.air_temp =
         ""; // if not ="" -> nullpointerexception if update button clicked on main page
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = ""; // range 0 - 100
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.double_rv = main.INVALID; // range 0.0 - 1.0 (or invalid) !!!!
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = ""; // range 0 - 100
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.double_rv = main.INVALID; // range 0.0 - 1.0 (or invalid) !!!!
 
     Rs232VaisalaHmp155AprWorkflow.start(destination, retry);
   }
@@ -192,12 +192,12 @@ public class RS232_vaisala {
     //
 
     // initialisation
-    mytemp.air_temp =
+    TemperatureModel.air_temp =
         ""; // if not ="" -> nullpointerexception if update button clicked on main page
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = ""; // range 0 - 100
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.double_rv = main.INVALID; // range 0.0 - 1.0 (or invalid) !!!!
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = ""; // range 0 - 100
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.double_rv = main.INVALID; // range 0.0 - 1.0 (or invalid) !!!!
 
     String airTemperature = null;
     Boolean laatste_record_ok = false;
@@ -329,35 +329,37 @@ public class RS232_vaisala {
               //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
               // // bv 998.19 -> 998.2
 
-              mytemp.air_temp = laatste_record.substring(pos1, pos1 + 8);
-              mytemp.wet_bulb_temp = laatste_record.substring(pos2, pos2 + 8);
+              TemperatureModel.air_temp = laatste_record.substring(pos1, pos1 + 8);
+              TemperatureModel.wet_bulb_temp = laatste_record.substring(pos2, pos2 + 8);
               local_dew_point = laatste_record.substring(pos3, pos3 + 8);
-              mytemp.RH = laatste_record.substring(pos4, pos4 + 8);
+              TemperatureModel.RH = laatste_record.substring(pos4, pos4 + 8);
 
               // skip all spaves
-              mytemp.air_temp = mytemp.air_temp.trim();
-              mytemp.wet_bulb_temp = mytemp.wet_bulb_temp.trim();
+              TemperatureModel.air_temp = TemperatureModel.air_temp.trim();
+              TemperatureModel.wet_bulb_temp = TemperatureModel.wet_bulb_temp.trim();
               local_dew_point = local_dew_point.trim();
-              mytemp.RH = mytemp.RH.trim();
+              TemperatureModel.RH = TemperatureModel.RH.trim();
 
               if (destination.equals("MAIN_SCREEN") == false) {
-                System.out.println("--- sensor data record, air temp for obs: " + mytemp.air_temp);
                 System.out.println(
-                    "--- sensor data record, wet bulb temp for obs: " + mytemp.wet_bulb_temp);
+                    "--- sensor data record, air temp for obs: " + TemperatureModel.air_temp);
+                System.out.println(
+                    "--- sensor data record, wet bulb temp for obs: "
+                        + TemperatureModel.wet_bulb_temp);
                 System.out.println("--- sensor data record, dewpoint for obs: " + local_dew_point);
-                System.out.println("--- sensor data record, RH for obs: " + mytemp.RH);
+                System.out.println("--- sensor data record, RH for obs: " + TemperatureModel.RH);
               }
 
               laatste_record_ok = true;
 
             } // if (timeDiff <= TIMEDIFF_SENSOR_DATA)
             else {
-              mytemp.air_temp = "";
-              mytemp.wet_bulb_temp = "";
+              TemperatureModel.air_temp = "";
+              TemperatureModel.wet_bulb_temp = "";
               local_dew_point = "";
-              mytemp.RH = "";
-              mytemp.double_rv = main.INVALID;
-              mytemp.double_dew_point = main.INVALID;
+              TemperatureModel.RH = "";
+              TemperatureModel.double_rv = main.INVALID;
+              TemperatureModel.double_dew_point = main.INVALID;
 
               laatste_record_ok = false;
               error_code = 3;
@@ -372,12 +374,12 @@ public class RS232_vaisala {
                     + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument() "
                     + ex);
 
-            mytemp.air_temp = "";
-            mytemp.wet_bulb_temp = "";
+            TemperatureModel.air_temp = "";
+            TemperatureModel.wet_bulb_temp = "";
             local_dew_point = "";
-            mytemp.RH = "";
-            mytemp.double_rv = main.INVALID;
-            mytemp.double_dew_point = main.INVALID;
+            TemperatureModel.RH = "";
+            TemperatureModel.double_rv = main.INVALID;
+            TemperatureModel.double_dew_point = main.INVALID;
 
             laatste_record_ok = false;
             error_code = 4;
@@ -391,12 +393,12 @@ public class RS232_vaisala {
                 + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument() "
                 + ex);
 
-        mytemp.air_temp = "";
-        mytemp.wet_bulb_temp = "";
+        TemperatureModel.air_temp = "";
+        TemperatureModel.wet_bulb_temp = "";
         local_dew_point = "";
-        mytemp.RH = "";
-        mytemp.double_rv = main.INVALID;
-        mytemp.double_dew_point = main.INVALID;
+        TemperatureModel.RH = "";
+        TemperatureModel.double_rv = main.INVALID;
+        TemperatureModel.double_dew_point = main.INVALID;
 
         laatste_record_ok = false;
         error_code = 5;
@@ -417,22 +419,22 @@ public class RS232_vaisala {
 
       // air temp check [APR]
       //
-      if ((mytemp.air_temp.compareTo("") != 0)
-          && (mytemp.air_temp != null)
-          && (mytemp.air_temp.indexOf("*") == -1)) {
+      if ((TemperatureModel.air_temp.compareTo("") != 0)
+          && (TemperatureModel.air_temp != null)
+          && (TemperatureModel.air_temp.indexOf("*") == -1)) {
         try {
-          hulp_double_air_temp = Double.parseDouble(mytemp.air_temp.trim());
+          hulp_double_air_temp = Double.parseDouble(TemperatureModel.air_temp.trim());
 
           if ((hulp_double_air_temp > -99.9) && (hulp_double_air_temp < 99.9)) {
             // Return the current measurement without locale-dependent display formatting.
             airTemperature = Double.toString(hulp_double_air_temp);
             DecimalFormat df =
                 new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
-            mytemp.air_temp = df.format(hulp_double_air_temp);
+            TemperatureModel.air_temp = df.format(hulp_double_air_temp);
 
             if (destination.equals("MAIN_SCREEN") == false) {
               String message_air_temp =
-                  "[APR] air temp at sensor height = " + mytemp.air_temp + " \u00B0C";
+                  "[APR] air temp at sensor height = " + TemperatureModel.air_temp + " \u00B0C";
               main.log_turbowin_system_message(message_air_temp);
             }
 
@@ -445,7 +447,7 @@ public class RS232_vaisala {
               main.log_turbowin_system_message(
                   "[APR] automatically retrieved air temp: outside range");
             }
-            mytemp.air_temp = "";
+            TemperatureModel.air_temp = "";
           }
         } // try
         catch (NumberFormatException e) {
@@ -453,26 +455,28 @@ public class RS232_vaisala {
               "--- "
                   + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument() "
                   + e);
-          mytemp.air_temp = "";
+          TemperatureModel.air_temp = "";
         }
-      } // if ( (mytemp.air_temp.compareTo("") != 0) etc.
+      } // if ( (TemperatureModel.air_temp.compareTo("") != 0) etc.
 
       // wet bulb temp check [APR]
       //
-      if ((mytemp.wet_bulb_temp.compareTo("") != 0)
-          && (mytemp.wet_bulb_temp != null)
-          && (mytemp.wet_bulb_temp.indexOf("*") == -1)) {
+      if ((TemperatureModel.wet_bulb_temp.compareTo("") != 0)
+          && (TemperatureModel.wet_bulb_temp != null)
+          && (TemperatureModel.wet_bulb_temp.indexOf("*") == -1)) {
         try {
-          hulp_double_wet_bulb_temp = Double.parseDouble(mytemp.wet_bulb_temp.trim());
+          hulp_double_wet_bulb_temp = Double.parseDouble(TemperatureModel.wet_bulb_temp.trim());
 
           if ((hulp_double_wet_bulb_temp > -99.9) && (hulp_double_wet_bulb_temp < 99.9)) {
             DecimalFormat df =
                 new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
-            mytemp.wet_bulb_temp = df.format(hulp_double_wet_bulb_temp);
+            TemperatureModel.wet_bulb_temp = df.format(hulp_double_wet_bulb_temp);
 
             if (destination.equals("MAIN_SCREEN") == false) {
               String message_wet_bulb_temp =
-                  "[APR] wet-bulb temp at sensor height = " + mytemp.wet_bulb_temp + " \u00B0C";
+                  "[APR] wet-bulb temp at sensor height = "
+                      + TemperatureModel.wet_bulb_temp
+                      + " \u00B0C";
               main.log_turbowin_system_message(message_wet_bulb_temp);
             }
 
@@ -485,7 +489,7 @@ public class RS232_vaisala {
               main.log_turbowin_system_message(
                   "[APR] automatically retrieved wet-bulb temp: outside range");
             }
-            mytemp.wet_bulb_temp = "";
+            TemperatureModel.wet_bulb_temp = "";
           }
         } // try
         catch (NumberFormatException e) {
@@ -493,26 +497,27 @@ public class RS232_vaisala {
               "--- "
                   + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument() "
                   + e);
-          mytemp.wet_bulb_temp = "";
+          TemperatureModel.wet_bulb_temp = "";
         }
-      } // if ( (mytemp.wet_bulb_temp.compareTo("") != 0) etc.
+      } // if ( (TemperatureModel.wet_bulb_temp.compareTo("") != 0) etc.
 
       // dewpoint check [APR]
       //
-      mytemp.double_dew_point = main.INVALID;
+      TemperatureModel.double_dew_point = main.INVALID;
       if ((local_dew_point.compareTo("") != 0)
           && (local_dew_point != null)
           && (local_dew_point.indexOf("*") == -1)) {
         try {
-          mytemp.double_dew_point = Double.parseDouble(local_dew_point.trim());
+          TemperatureModel.double_dew_point = Double.parseDouble(local_dew_point.trim());
 
-          if ((mytemp.double_dew_point > -70.0) && (mytemp.double_dew_point < 70.0)) {
+          if ((TemperatureModel.double_dew_point > -70.0)
+              && (TemperatureModel.double_dew_point < 70.0)) {
             if (destination.equals("MAIN_SCREEN") == false) {
               DecimalFormat df =
                   new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
               String message_dew_point =
                   "[APR] dew-point at sensor height = "
-                      + df.format(mytemp.double_dew_point)
+                      + df.format(TemperatureModel.double_dew_point)
                       + " \u00B0C";
               main.log_turbowin_system_message(message_dew_point);
             }
@@ -526,30 +531,33 @@ public class RS232_vaisala {
               main.log_turbowin_system_message(
                   "[APR] automatically retrieved dew point: outside range");
             }
-            mytemp.double_dew_point = main.INVALID;
+            TemperatureModel.double_dew_point = main.INVALID;
           }
         } catch (NumberFormatException e) {
           System.out.println(
               "--- "
                   + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument() "
                   + e);
-          mytemp.double_dew_point = main.INVALID;
+          TemperatureModel.double_dew_point = main.INVALID;
         } // catch
       } // if ( (local_dew_point.compareTo("") != 0) etc.
 
       // RH check [APR]
       //
-      if ((mytemp.RH.compareTo("") != 0) && (mytemp.RH != null) && (mytemp.RH.indexOf("*") == -1)) {
+      if ((TemperatureModel.RH.compareTo("") != 0)
+          && (TemperatureModel.RH != null)
+          && (TemperatureModel.RH.indexOf("*") == -1)) {
         try {
-          hulp_double_RH = Double.parseDouble(mytemp.RH); // range 0.0 - 100.0
+          hulp_double_RH = Double.parseDouble(TemperatureModel.RH); // range 0.0 - 100.0
 
           if ((hulp_double_RH >= 0.0) && (hulp_double_RH <= 100.0)) {
-            mytemp.double_rv =
-                hulp_double_RH
-                    / 100; // NB mytemp.double_rv in range 0.0 - 1.0 [see also mytemp.java] !!!
+            TemperatureModel.double_rv =
+                hulp_double_RH / 100; // NB TemperatureModel.double_rv in range 0.0 - 1.0 [see also
+            // TemperatureModel.java] !!!
 
             if (destination.equals("MAIN_SCREEN") == false) {
-              String message_dew_point = "[APR] RH at sensor height = " + mytemp.RH + " %";
+              String message_dew_point =
+                  "[APR] RH at sensor height = " + TemperatureModel.RH + " %";
               main.log_turbowin_system_message(message_dew_point);
             }
 
@@ -562,8 +570,8 @@ public class RS232_vaisala {
             if (destination.equals("MAIN_SCREEN") == false) {
               main.log_turbowin_system_message("[APR] automatically retrieved RH: outside range");
             }
-            mytemp.RH = "";
-            mytemp.double_rv = main.INVALID;
+            TemperatureModel.RH = "";
+            TemperatureModel.double_rv = main.INVALID;
           }
 
         } // try
@@ -572,10 +580,10 @@ public class RS232_vaisala {
               "--- "
                   + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_APR_as_2nd_instrument() "
                   + e);
-          mytemp.RH = "";
-          mytemp.double_rv = main.INVALID;
+          TemperatureModel.RH = "";
+          TemperatureModel.double_rv = main.INVALID;
         }
-      } // if ( (mytemp.RH.compareTo("") != 0) etc.
+      } // if ( (TemperatureModel.RH.compareTo("") != 0) etc.
 
       // update the temperature fields on main screen
       //

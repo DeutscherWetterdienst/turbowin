@@ -21,7 +21,10 @@ final class ObserverLogWriteWorkflow {
 
         try (BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path))) {
           SemicolonLogFileWriter.write(
-              out, myobserver.observer_data, myobserver.OBSERVER_ROWS, myobserver.OBSERVER_COLUMNS);
+              out,
+              ObserverModel.observer_data,
+              ObserverModel.OBSERVER_ROWS,
+              ObserverModel.OBSERVER_COLUMNS);
 
         } // try
         catch (IOException ex) {

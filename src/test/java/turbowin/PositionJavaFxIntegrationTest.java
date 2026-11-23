@@ -27,19 +27,19 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
       main.RS232_connection_mode = 0;
       main.APR = false;
       main.obs_format = main.FORMAT_FM13;
-      myposition manual = new myposition();
-      assertTrue(myposition.jTextField1.isEditable());
+      PositionModel manual = new PositionModel();
+      assertTrue(PositionModel.jTextField1.isEditable());
       assertTrue(manual.plotPositionAvailable());
       assertTrue(manual.courseLabel().contains("3 hrs"));
       main.obs_format = main.FORMAT_101;
-      assertTrue(new myposition().speedLabel().contains("10 min"));
+      assertTrue(new PositionModel().speedLabel().contains("10 min"));
       main.APR = true;
-      myposition automatic = new myposition();
-      assertFalse(myposition.jTextField1.isEditable());
+      PositionModel automatic = new PositionModel();
+      assertFalse(PositionModel.jTextField1.isEditable());
       assertFalse(automatic.plotPositionAvailable());
       assertTrue(automatic.courseLabel().contains("10 minutes"));
       main.obs_format = main.FORMAT_FM13;
-      assertTrue(new myposition().speedLabel().contains("3 hours"));
+      assertTrue(new PositionModel().speedLabel().contains("3 hours"));
     });
   }
 
@@ -47,10 +47,10 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
   public void savesCodesAndRestoresHighSpeedSelection() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
-      myposition.latitude_degrees = "";
-      myposition.longitude_degrees = "";
-      myposition.course = "";
-      myposition.speed = "";
+      PositionModel.latitude_degrees = "";
+      PositionModel.longitude_degrees = "";
+      PositionModel.course = "";
+      PositionModel.speed = "";
     });
     JDialog dialog = GuiActionRunner.execute(PositionDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -67,11 +67,11 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("101", myposition.lalala_code);
-      assertEquals("0122", myposition.lolololo_code);
-      assertEquals("1", myposition.Qc_code);
-      assertEquals("1", myposition.Ds_code);
-      assertEquals("7", myposition.vs_code);
+      assertEquals("101", PositionModel.lalala_code);
+      assertEquals("0122", PositionModel.lolololo_code);
+      assertEquals("1", PositionModel.Qc_code);
+      assertEquals("1", PositionModel.Ds_code);
+      assertEquals("7", PositionModel.vs_code);
     });
     JDialog reopened = GuiActionRunner.execute(PositionDialog::open);
     Scene restored = CloudCoverFxTestSupport.awaitScene(reopened);
@@ -107,8 +107,8 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("0", myposition.Ds_code);
-      assertEquals("0", myposition.vs_code);
+      assertEquals("0", PositionModel.Ds_code);
+      assertEquals("0", PositionModel.vs_code);
     });
   }
 
@@ -158,9 +158,9 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
         return null;
       });
       SwingUtilities.invokeAndWait(() -> {
-        myposition.jTextField1.setText("52");
-        myposition.jRadioButton2.setSelected(true);
-        myposition.jRadioButton7.setSelected(true);
+        PositionModel.jTextField1.setText("52");
+        PositionModel.jRadioButton2.setSelected(true);
+        PositionModel.jRadioButton7.setSelected(true);
       });
       SwingUtilities.invokeAndWait(() -> {});
       CloudCoverFxTestSupport.onFx(() -> {

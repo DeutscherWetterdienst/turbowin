@@ -52,11 +52,11 @@ final class CloudHeightAdvice {
 
     // air temp to double (degrees en tenths)
     //
-    if (mytemp.air_temp.trim().length() == 0) {
+    if (TemperatureModel.air_temp.trim().length() == 0) {
       local_double_air_temp = main.INVALID;
     } else {
       try {
-        local_double_air_temp = Double.parseDouble(mytemp.air_temp.trim());
+        local_double_air_temp = Double.parseDouble(TemperatureModel.air_temp.trim());
       } catch (NumberFormatException e) {
         local_double_air_temp = main.INVALID;
       }
@@ -64,10 +64,10 @@ final class CloudHeightAdvice {
 
     // dew point (degrees en tenths)
     //
-    local_double_dew_point = mytemp.double_dew_point; // kan INVALID zijn
+    local_double_dew_point = TemperatureModel.double_dew_point; // kan INVALID zijn
 
     // latitude (whole degrees)
-    local_int_latitude_degrees = myposition.int_latitude_degrees;
+    local_int_latitude_degrees = PositionModel.int_latitude_degrees;
 
     // ww
     try {

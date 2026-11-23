@@ -17,14 +17,14 @@ final class Rs232MintakaDuoPpppWorkflow {
   private Rs232MintakaDuoPpppWorkflow() {}
 
   static void start(boolean local_tray_icon_clicked) {
-    // called from: - initSynopparameters() [mybarometer.java]
+    // called from: - initSynopparameters() [BarometerModel.java]
     //              - main_windowIconfied() [main.java]
     //
 
     // System.out.println("+++ Mintaka Duo test");
 
     // initialisation
-    mybarometer.pressure_reading = "";
+    BarometerModel.pressure_reading = "";
 
     // initialisation
     main.tray_icon_clicked = local_tray_icon_clicked;
@@ -162,7 +162,7 @@ final class Rs232MintakaDuoPpppWorkflow {
                       + "\n";
               // info = date_time + " UTC " + main.newline +
               //       main.newline +
-              //       "pressure at sensor height: " + mybarometer.pressure_reading + " hPa" +
+              //       "pressure at sensor height: " + BarometerModel.pressure_reading + " hPa" +
               // main.newline;
 
               // main.trayIcon.displayMessage(main.APPLICATION_NAME, info,
@@ -172,12 +172,12 @@ final class Rs232MintakaDuoPpppWorkflow {
 
             } else // barometer input screen opened
             {
-              mybarometer.pressure_reading = Double.toString(hulp_double_pressure_reading);
+              BarometerModel.pressure_reading = Double.toString(hulp_double_pressure_reading);
 
               // savety check barometer input screen is opened
-              if (mybarometer.jTextField1 != null) {
-                mybarometer.jTextField1.setText(mybarometer.pressure_reading);
-                mybarometer.jTextField2.requestFocus(); // focus on "insert draft" textfield
+              if (BarometerModel.jTextField1 != null) {
+                BarometerModel.jTextField1.setText(BarometerModel.pressure_reading);
+                BarometerModel.jTextField2.requestFocus(); // focus on "insert draft" textfield
               }
             }
           } // if ((hulp_double_pressure_reading > 900.0) && (hulp_double_pressure_reading <

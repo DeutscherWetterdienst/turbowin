@@ -6,7 +6,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /** Barograph observation state and compatibility controls used by legacy sensor readers. */
-public final class mybarograph {
+public final class BarographModel {
   public static final String A_0 = "0";
   public static final String A_0_SAME = "0";
   public static final String A_1 = "1";
@@ -32,7 +32,7 @@ public final class mybarograph {
 
   private final boolean aws;
 
-  mybarograph() {
+  BarographModel() {
     int mode = main.RS232_connection_mode;
     aws = mode == 3 || mode == 9 || mode == 10 || mode == 11;
     boolean barometer = mode == 1 || mode == 2 || (mode >= 4 && mode <= 8);

@@ -137,8 +137,7 @@ public class HighCloudJavaFxIntegrationTest extends AbstractUiTest {
         return null;
       });
       DialogFixture cancelCover =
-          WindowFinder.findDialog(new DialogTitleMatcher(CloudCoverJavaFxWindow.TITLE))
-              .using(robot());
+          WindowFinder.findDialog(new DialogTitleMatcher(CloudCoverDialog.TITLE)).using(robot());
       SwingUtilities.invokeAndWait(() -> {
         assertEquals("1", HighCloudState.ch_code);
         cancelCover.target().dispose();
@@ -153,8 +152,7 @@ public class HighCloudJavaFxIntegrationTest extends AbstractUiTest {
         return null;
       });
       DialogFixture cover =
-          WindowFinder.findDialog(new DialogTitleMatcher(CloudCoverJavaFxWindow.TITLE))
-              .using(robot());
+          WindowFinder.findDialog(new DialogTitleMatcher(CloudCoverDialog.TITLE)).using(robot());
       SwingUtilities.invokeAndWait(() -> {
         assertEquals("4", HighCloudState.ch_code);
         cover.target().dispose();

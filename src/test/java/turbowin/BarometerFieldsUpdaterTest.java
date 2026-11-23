@@ -13,8 +13,8 @@ public class BarometerFieldsUpdaterTest {
     main.jTextField10 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    mybarometer.pressure_reading_corrected = "1012.3";
-    mybarometer.pressure_msl_corrected = "1015.8";
+    BarometerModel.pressure_reading_corrected = "1012.3";
+    BarometerModel.pressure_msl_corrected = "1015.8";
 
     BarometerFieldsUpdater.update();
 
@@ -28,8 +28,8 @@ public class BarometerFieldsUpdaterTest {
     main.jTextField10 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
 
     BarometerFieldsUpdater.update();
 

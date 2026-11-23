@@ -10,7 +10,7 @@ final class ObserverLogReadWorkflow {
 
   private ObserverLogReadWorkflow() {}
 
-  static void start(myobserver owner) {
+  static void start(ObserverModel owner) {
     new SwingWorker<Void, Void>() {
       @Override
       protected Void doInBackground() throws Exception {
@@ -22,7 +22,10 @@ final class ObserverLogReadWorkflow {
         /* read all lines from observer log */
         try (BufferedReader in = new BufferedReader(new FileReader(volledig_path))) {
           SemicolonLogFileReader.read(
-              in, myobserver.observer_data, myobserver.OBSERVER_ROWS, myobserver.OBSERVER_COLUMNS);
+              in,
+              ObserverModel.observer_data,
+              ObserverModel.OBSERVER_ROWS,
+              ObserverModel.OBSERVER_COLUMNS);
         } // try
         catch (IOException ex) {
           // do nothing, possible file was never created

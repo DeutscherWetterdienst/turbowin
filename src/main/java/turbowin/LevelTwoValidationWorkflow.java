@@ -52,7 +52,7 @@ final class LevelTwoValidationWorkflow {
 
     main_support.FloatValidation pressureTendencyValidation =
         support.validateFloat(
-            mybarograph.pressure_amount_tendency,
+            BarographModel.pressure_amount_tendency,
             "pressure amount tendency conversion error",
             "checking_level_2");
     float_pressure_amount_tendency = pressureTendencyValidation.value();
@@ -110,7 +110,8 @@ final class LevelTwoValidationWorkflow {
     }
 
     main_support.FloatValidation airTemperatureValidation =
-        support.validateFloat(mytemp.air_temp, "air temp conversion error", "checking_level_2");
+        support.validateFloat(
+            TemperatureModel.air_temp, "air temp conversion error", "checking_level_2");
     float_air_temp = airTemperatureValidation.value();
     air_temp_conversion_ok = airTemperatureValidation.valid();
 
@@ -124,7 +125,7 @@ final class LevelTwoValidationWorkflow {
     if (doorgaan
         && !LevelTwoWindWaveValidation.validate(
             main.wind_units,
-            mywind.int_true_wind_speed,
+            WindModel.int_true_wind_speed,
             wind_waves_period_conversion_ok,
             float_wind_waves_period,
             wind_waves_height_conversion_ok,
@@ -139,8 +140,8 @@ final class LevelTwoValidationWorkflow {
     if (doorgaan
         && !LevelTwoPressureValidation.validate(
             pressure_amount_tendency_conversion_ok,
-            mybarograph.a_code,
-            mybarograph.pressure_amount_tendency,
+            BarographModel.a_code,
+            BarographModel.pressure_amount_tendency,
             float_pressure_amount_tendency)) {
       level_2_ok = false;
       doorgaan = false;

@@ -11,7 +11,7 @@ final class DateTimeDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    mydatetime model = new mydatetime();
+    DateTimeModel model = new DateTimeModel();
     DateTimeView.State state =
         new DateTimeView.State(model.selectedValues(), model.isReadOnly(), main.offline_mode);
     return FxSwingDialog.show(

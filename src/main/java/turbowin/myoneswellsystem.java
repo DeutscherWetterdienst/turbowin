@@ -595,9 +595,9 @@ public final class myoneswellsystem extends javax.swing.JFrame {
     Reset_All_One_Swell_Vars();
 
     // get text from inserted fields
-    mywaves.swell_1_dir = jTextField1.getText().trim();
-    mywaves.swell_1_period = jTextField2.getText().trim();
-    mywaves.swell_1_height = jTextField3.getText().trim();
+    WavesModel.swell_1_dir = jTextField1.getText().trim();
+    WavesModel.swell_1_period = jTextField2.getText().trim();
+    WavesModel.swell_1_height = jTextField3.getText().trim();
 
     /*
     //////////////// checks
@@ -607,19 +607,19 @@ public final class myoneswellsystem extends javax.swing.JFrame {
 
     // swell 1
     try {
-      int_swell_1_dir = Integer.parseInt(mywaves.swell_1_dir.trim());
+      int_swell_1_dir = Integer.parseInt(WavesModel.swell_1_dir.trim());
     } catch (NumberFormatException e) {
       /* ... */
     }
 
     try {
-      int_swell_1_period = Integer.parseInt(mywaves.swell_1_period.trim());
+      int_swell_1_period = Integer.parseInt(WavesModel.swell_1_period.trim());
     } catch (NumberFormatException e) {
       /* ... */
     }
 
     try {
-      float_swell_1_height = Float.parseFloat(mywaves.swell_1_height.trim());
+      float_swell_1_height = Float.parseFloat(WavesModel.swell_1_height.trim());
     } catch (NumberFormatException e) {
       /* ... */
     }
@@ -627,7 +627,7 @@ public final class myoneswellsystem extends javax.swing.JFrame {
     //
     // 1st swell system checks
     //
-    if ((mywaves.swell_1_dir.trim().length() > 0)
+    if ((WavesModel.swell_1_dir.trim().length() > 0)
         && (int_swell_1_dir < 1 || int_swell_1_dir > 360 || int_swell_1_dir == main.INVALID)) {
       JOptionPane.showMessageDialog(
           null,
@@ -635,7 +635,7 @@ public final class myoneswellsystem extends javax.swing.JFrame {
           main.APPLICATION_NAME + " error",
           JOptionPane.WARNING_MESSAGE);
       Reset_All_One_Swell_Vars();
-    } else if ((mywaves.swell_1_period.trim().length() > 0)
+    } else if ((WavesModel.swell_1_period.trim().length() > 0)
         && (int_swell_1_period < 1
             || int_swell_1_period > 50
             || int_swell_1_period == main.INVALID)) {
@@ -645,7 +645,7 @@ public final class myoneswellsystem extends javax.swing.JFrame {
           main.APPLICATION_NAME + " error",
           JOptionPane.WARNING_MESSAGE);
       Reset_All_One_Swell_Vars();
-    } else if ((mywaves.swell_1_height.trim().length() > 0)
+    } else if ((WavesModel.swell_1_height.trim().length() > 0)
         && (float_swell_1_height < 0.5
             || float_swell_1_height > 49.0
             || float_swell_1_height == main.INVALID)) {
@@ -670,13 +670,13 @@ public final class myoneswellsystem extends javax.swing.JFrame {
     if (checks_ok == true) {
 
       //////// swell 1 direction
-      if (mywaves.swell_1_dir.trim().length() == 0) // nothing inserted
+      if (WavesModel.swell_1_dir.trim().length() == 0) // nothing inserted
       {
-        mywaves.Dw1_code = "//";
-      } else if (mywaves.swell_1_dir.trim().equals("confused")) {
-        mywaves.Dw1_code = "99";
-      } else if (mywaves.swell_1_dir.trim().equals("no swell")) {
-        mywaves.Dw1_code = "00";
+        WavesModel.Dw1_code = "//";
+      } else if (WavesModel.swell_1_dir.trim().equals("confused")) {
+        WavesModel.Dw1_code = "99";
+      } else if (WavesModel.swell_1_dir.trim().equals("no swell")) {
+        WavesModel.Dw1_code = "00";
       } else {
         // nb in this stage always in whole degrees (otherwise earlier error message)
 
@@ -686,43 +686,43 @@ public final class myoneswellsystem extends javax.swing.JFrame {
         // e.g.  88 -> Dw1 = 09
 
         if ((int_swell_1_dir >= 1) && (int_swell_1_dir <= 4)) {
-          mywaves.Dw1_code = "36";
+          WavesModel.Dw1_code = "36";
         } else {
           int num_Dw1_code = (int_swell_1_dir + 5) / 10; // or (alternative): int num_Dw1_code =
           // (int)Math.floor(((float)(int_swell_1_dir + 5)) / 10);
-          mywaves.Dw1_code = Integer.toString(num_Dw1_code); // convert to string
+          WavesModel.Dw1_code = Integer.toString(num_Dw1_code); // convert to string
 
           // Dw1 code always 2 characters width e.g. 03
           int len = 2;
-          if (mywaves.Dw1_code.length() < len) // pad on left with zeros
-          mywaves.Dw1_code =
-                "0000000000".substring(0, len - mywaves.Dw1_code.length()) + mywaves.Dw1_code;
+          if (WavesModel.Dw1_code.length() < len) // pad on left with zeros
+          WavesModel.Dw1_code =
+                "0000000000".substring(0, len - WavesModel.Dw1_code.length()) + WavesModel.Dw1_code;
         } // else
       } // else
 
       //////// swell 1 period
-      if (mywaves.swell_1_period.trim().length() == 0) // nothing inserted
+      if (WavesModel.swell_1_period.trim().length() == 0) // nothing inserted
       {
-        mywaves.Pw1_code = "//";
-      } else if (mywaves.swell_1_period.trim().equals("confused")) {
-        mywaves.Pw1_code = "//";
+        WavesModel.Pw1_code = "//";
+      } else if (WavesModel.swell_1_period.trim().equals("confused")) {
+        WavesModel.Pw1_code = "//";
       } else {
         // nb in this stage always in whole seconds (otherwise earlier error message)
-        mywaves.Pw1_code = Integer.toString(int_swell_1_period); // convert to string
+        WavesModel.Pw1_code = Integer.toString(int_swell_1_period); // convert to string
 
         // Pw1 code always 2 characters width e.g. 03
         int len = 2;
-        if (mywaves.Pw1_code.length() < len) // pad on left with zeros
-        mywaves.Pw1_code =
-              "0000000000".substring(0, len - mywaves.Pw1_code.length()) + mywaves.Pw1_code;
+        if (WavesModel.Pw1_code.length() < len) // pad on left with zeros
+        WavesModel.Pw1_code =
+              "0000000000".substring(0, len - WavesModel.Pw1_code.length()) + WavesModel.Pw1_code;
       } // else
 
       //////// swell 1 height
-      if (mywaves.swell_1_height.trim().length() == 0) // nothing inserted
+      if (WavesModel.swell_1_height.trim().length() == 0) // nothing inserted
       {
-        mywaves.Hw1_code = "//";
-      } else if (mywaves.swell_1_height.trim().equals("confused")) {
-        mywaves.Hw1_code = "//";
+        WavesModel.Hw1_code = "//";
+      } else if (WavesModel.swell_1_height.trim().equals("confused")) {
+        WavesModel.Hw1_code = "//";
       } else {
         // round to units of 0.5 metres
 
@@ -730,16 +730,16 @@ public final class myoneswellsystem extends javax.swing.JFrame {
         // e.g. 2.3 metres -> Hw1 = 5 units of 0.5 metres
 
         int num_Hw1_code = (int) Math.floor(float_swell_1_height * 2 + 0.5);
-        mywaves.Hw1_code =
+        WavesModel.Hw1_code =
             Integer.toString(
                 num_Hw1_code); // convert to string      // or (alternative): Hw1_code =
         // String.valueOf(num_Hw1_code);
 
         // Hw1 code always 2 characters width e.g. 03
         int len = 2;
-        if (mywaves.Hw1_code.length() < len) // pad on left with zeros
-        mywaves.Hw1_code =
-              "0000000000".substring(0, len - mywaves.Hw1_code.length()) + mywaves.Hw1_code;
+        if (WavesModel.Hw1_code.length() < len) // pad on left with zeros
+        WavesModel.Hw1_code =
+              "0000000000".substring(0, len - WavesModel.Hw1_code.length()) + WavesModel.Hw1_code;
       } // else
     } // if (checks_ok == true)
 
@@ -759,20 +759,20 @@ public final class myoneswellsystem extends javax.swing.JFrame {
   } // GEN-LAST:event_OK_button_actionPerformed
 
   private void Reset_All_One_Swell_Vars() {
-    // scope mywaves module + myturbowin.java main module (all of type: static)
-    mywaves.swell_1_dir = "";
-    mywaves.swell_1_period = "";
-    mywaves.swell_1_height = "";
-    mywaves.Dw1_code = "";
-    mywaves.Pw1_code = "";
-    mywaves.Hw1_code = "";
+    // scope WavesModel module + myturbowin.java main module (all of type: static)
+    WavesModel.swell_1_dir = "";
+    WavesModel.swell_1_period = "";
+    WavesModel.swell_1_height = "";
+    WavesModel.Dw1_code = "";
+    WavesModel.Pw1_code = "";
+    WavesModel.Hw1_code = "";
 
-    mywaves.swell_2_dir = ""; // before 2nd swell system could be inserted
-    mywaves.swell_2_period = ""; // before 2nd swell system could be inserted
-    mywaves.swell_2_height = ""; // before 2nd swell system could be inserted
-    mywaves.Dw2_code = ""; // before 2nd swell system could be inserted
-    mywaves.Pw2_code = ""; // before 2nd swell system could be inserted
-    mywaves.Hw2_code = ""; // before 2nd swell system could be inserted
+    WavesModel.swell_2_dir = ""; // before 2nd swell system could be inserted
+    WavesModel.swell_2_period = ""; // before 2nd swell system could be inserted
+    WavesModel.swell_2_height = ""; // before 2nd swell system could be inserted
+    WavesModel.Dw2_code = ""; // before 2nd swell system could be inserted
+    WavesModel.Pw2_code = ""; // before 2nd swell system could be inserted
+    WavesModel.Hw2_code = ""; // before 2nd swell system could be inserted
 
     // local var's with initialisation
     float_swell_1_height = main.INVALID; // could become e.g. 2.5 (-> use float)
@@ -833,20 +833,20 @@ public final class myoneswellsystem extends javax.swing.JFrame {
     // confused swell input page and no 'no swell')
     //
     // 1st swell system
-    if ((mywaves.swell_1_dir.compareTo("") != 0)
-        && (mywaves.swell_1_dir.compareTo("confused") != 0)
-        && (mywaves.swell_1_dir.compareTo("no swell") != 0))
-      jTextField1.setText(mywaves.swell_1_dir);
+    if ((WavesModel.swell_1_dir.compareTo("") != 0)
+        && (WavesModel.swell_1_dir.compareTo("confused") != 0)
+        && (WavesModel.swell_1_dir.compareTo("no swell") != 0))
+      jTextField1.setText(WavesModel.swell_1_dir);
 
-    if ((mywaves.swell_1_period.compareTo("") != 0)
-        && (mywaves.swell_1_period.compareTo("confused") != 0)
-        && (mywaves.swell_1_period.compareTo("no swell") != 0))
-      jTextField2.setText(mywaves.swell_1_period);
+    if ((WavesModel.swell_1_period.compareTo("") != 0)
+        && (WavesModel.swell_1_period.compareTo("confused") != 0)
+        && (WavesModel.swell_1_period.compareTo("no swell") != 0))
+      jTextField2.setText(WavesModel.swell_1_period);
 
-    if ((mywaves.swell_1_height.compareTo("") != 0)
-        && (mywaves.swell_1_height.compareTo("confused") != 0)
-        && (mywaves.swell_1_height.compareTo("no swell") != 0))
-      jTextField3.setText(mywaves.swell_1_height);
+    if ((WavesModel.swell_1_height.compareTo("") != 0)
+        && (WavesModel.swell_1_height.compareTo("confused") != 0)
+        && (WavesModel.swell_1_height.compareTo("no swell") != 0))
+      jTextField3.setText(WavesModel.swell_1_height);
   }
 
   /**

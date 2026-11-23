@@ -17,7 +17,7 @@ final class Rs232MintakaStarXObservationWorkflow {
   private Rs232MintakaStarXObservationWorkflow() {}
 
   static void start() {
-    // called from: - initSynopparameters() [mytemp.java]
+    // called from: - initSynopparameters() [TemperatureModel.java]
 
     // MINTAKA STAR has an integrated GPS
     // GPS data is part of th saved pressure string eg:
@@ -56,10 +56,10 @@ final class Rs232MintakaStarXObservationWorkflow {
     //        ,       ,    , , 52 41.9490N,  6 14.1741E,0,0,2,    ,  ,    ,    ,*03201805230929
 
     // initialisation
-    mytemp.air_temp =
+    TemperatureModel.air_temp =
         ""; // if not ="" -> nullpointerexception if update button clicked on main page
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = ""; // range 0.0 - 100.0 %
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = ""; // range 0.0 - 100.0 %
 
     new SwingWorker<String, Void>() {
       @Override
@@ -145,9 +145,9 @@ final class Rs232MintakaStarXObservationWorkflow {
                   MintakaStarXObservationFields fields =
                       MintakaStarXObservationFieldsParser.parse(laatste_record);
                   if (fields != null) {
-                    mytemp.air_temp = fields.airTemperature;
-                    mytemp.RH = fields.relativeHumidity;
-                    mytemp.wet_bulb_temp = fields.wetBulbTemperature;
+                    TemperatureModel.air_temp = fields.airTemperature;
+                    TemperatureModel.RH = fields.relativeHumidity;
+                    TemperatureModel.wet_bulb_temp = fields.wetBulbTemperature;
                     local_dew_point = fields.dewPoint;
                     local_obs_age = fields.observationAge;
 
@@ -159,17 +159,19 @@ final class Rs232MintakaStarXObservationWorkflow {
                     // 10.0d;  // bv 998.19 -> 998.2
 
                     System.out.println(
-                        "--- sensor data record, air temp for obs: " + mytemp.air_temp);
-                    System.out.println("--- sensor data record, RH for obs: " + mytemp.RH);
+                        "--- sensor data record, air temp for obs: " + TemperatureModel.air_temp);
                     System.out.println(
-                        "--- sensor data record, wet bulb temp for obs: " + mytemp.wet_bulb_temp);
+                        "--- sensor data record, RH for obs: " + TemperatureModel.RH);
+                    System.out.println(
+                        "--- sensor data record, wet bulb temp for obs: "
+                            + TemperatureModel.wet_bulb_temp);
                     System.out.println(
                         "--- sensor data record, dewpoint for obs: " + local_dew_point);
                     System.out.println("--- sensor data record, obs age for obs: " + local_obs_age);
                   } else {
-                    mytemp.air_temp = "";
-                    mytemp.RH = "";
-                    mytemp.wet_bulb_temp = "";
+                    TemperatureModel.air_temp = "";
+                    TemperatureModel.RH = "";
+                    TemperatureModel.wet_bulb_temp = "";
                     local_dew_point = "";
                     local_obs_age = "";
                   }
@@ -177,17 +179,17 @@ final class Rs232MintakaStarXObservationWorkflow {
                 else // checksum not ok
                 {
                   // System.out.println("cheksum not OK");
-                  mytemp.air_temp = "";
-                  mytemp.RH = "";
-                  mytemp.wet_bulb_temp = "";
+                  TemperatureModel.air_temp = "";
+                  TemperatureModel.RH = "";
+                  TemperatureModel.wet_bulb_temp = "";
                   local_dew_point = "";
                   local_obs_age = "";
                 } // else (checksum not ok)
               } // if (timeDiff <= 5L)
               else {
-                mytemp.air_temp = "";
-                mytemp.RH = "";
-                mytemp.wet_bulb_temp = "";
+                TemperatureModel.air_temp = "";
+                TemperatureModel.RH = "";
+                TemperatureModel.wet_bulb_temp = "";
                 local_dew_point = "";
                 local_obs_age = "";
               } // else
@@ -206,17 +208,17 @@ final class Rs232MintakaStarXObservationWorkflow {
 
         // dewpoint
         //
-        mytemp.double_dew_point = main.INVALID;
+        TemperatureModel.double_dew_point = main.INVALID;
         if ((local_dew_point.compareTo("") != 0)
             && (local_dew_point != null)
             && (local_dew_point.indexOf("*") == -1)) {
           try {
-            mytemp.double_dew_point = Double.parseDouble(local_dew_point.trim());
+            TemperatureModel.double_dew_point = Double.parseDouble(local_dew_point.trim());
           } catch (NumberFormatException e) {
             System.out.println(
                 "--- " + "RS232_Mintaka_StarX_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
-            // mytemp.air_temp = "";
-            mytemp.double_dew_point = main.INVALID;
+            // TemperatureModel.air_temp = "";
+            TemperatureModel.double_dew_point = main.INVALID;
           }
         }
 
@@ -256,92 +258,94 @@ final class Rs232MintakaStarXObservationWorkflow {
             // air temp
             //
             // double hulp_air_temp = 999999;                 // 999999 = random number but > 99.9
-            if ((mytemp.air_temp.compareTo("") != 0)
-                && (mytemp.air_temp != null)
-                && (mytemp.air_temp.indexOf("*") == -1)) {
+            if ((TemperatureModel.air_temp.compareTo("") != 0)
+                && (TemperatureModel.air_temp != null)
+                && (TemperatureModel.air_temp.indexOf("*") == -1)) {
               try {
-                hulp_air_temp = Double.parseDouble(mytemp.air_temp.trim());
+                hulp_air_temp = Double.parseDouble(TemperatureModel.air_temp.trim());
               } catch (NumberFormatException e) {
                 System.out.println(
                     "--- " + "RS232_Mintaka_StarX_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
                 // hulp_air_temp = Double.MAX_VALUE;
-                mytemp.air_temp = "";
+                TemperatureModel.air_temp = "";
               }
             }
 
             if (!(hulp_air_temp > -99.9) && (hulp_air_temp < 99.9)) {
-              mytemp.air_temp = "";
+              TemperatureModel.air_temp = "";
             }
 
             // wet bulb temp
             //
             // double hulp_wet_bulb_temp = 999999;                 // 999999 = random number but >
             // 99.9
-            if ((mytemp.wet_bulb_temp.compareTo("") != 0)
-                && (mytemp.wet_bulb_temp != null)
-                && (mytemp.wet_bulb_temp.indexOf("*") == -1)) {
+            if ((TemperatureModel.wet_bulb_temp.compareTo("") != 0)
+                && (TemperatureModel.wet_bulb_temp != null)
+                && (TemperatureModel.wet_bulb_temp.indexOf("*") == -1)) {
               try {
-                hulp_wet_bulb_temp = Double.parseDouble(mytemp.wet_bulb_temp.trim());
+                hulp_wet_bulb_temp = Double.parseDouble(TemperatureModel.wet_bulb_temp.trim());
               } catch (NumberFormatException e) {
                 System.out.println(
                     "--- " + "RS232_Mintaka_StarX_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
-                mytemp.wet_bulb_temp = "";
+                TemperatureModel.wet_bulb_temp = "";
               }
             }
 
             if (!(hulp_wet_bulb_temp > -99.9) && (hulp_wet_bulb_temp < 99.9)) {
-              mytemp.wet_bulb_temp = "";
+              TemperatureModel.wet_bulb_temp = "";
             }
 
             // RH
             //
             double hulp_RH = 999999; // 999999 = random number but > 99.9
-            if ((mytemp.RH.compareTo("") != 0)
-                && (mytemp.RH != null)
-                && (mytemp.RH.indexOf("*") == -1)) {
+            if ((TemperatureModel.RH.compareTo("") != 0)
+                && (TemperatureModel.RH != null)
+                && (TemperatureModel.RH.indexOf("*") == -1)) {
               try {
-                hulp_RH = Double.parseDouble(mytemp.RH.trim());
+                hulp_RH = Double.parseDouble(TemperatureModel.RH.trim());
               } catch (NumberFormatException e) {
                 System.out.println(
                     "--- " + "RS232_Mintaka_StarX_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
-                mytemp.RH = "";
+                TemperatureModel.RH = "";
               }
             }
 
             if (!(hulp_RH > 0.0) && (hulp_air_temp <= 100.0)) {
-              mytemp.RH = "";
+              TemperatureModel.RH = "";
             }
 
           } // if ((hulp_return_obs_age > 0) && (hulp_return_obs_age <= 600))
           // else if (hulp_return_obs_age != AGE_NOT_OK)
           // {
           //   error_info = "sensor data reading ok but air temp and RH part obsolete";
-          //   mytemp.air_temp         = "";
-          //   mytemp.RH               = "";
-          //   mytemp.wet_bulb_temp    = "";
-          //   mytemp.double_dew_point = main.INVALID;
+          //   TemperatureModel.air_temp         = "";
+          //   TemperatureModel.RH               = "";
+          //   TemperatureModel.wet_bulb_temp    = "";
+          //   TemperatureModel.double_dew_point = main.INVALID;
           // } // else if (hulp_return_obs_age != AGE_NOT_OK)
           else {
             error_info = "automatically retrieved sensor data reading obsolete or checksum not ok";
-            mytemp.air_temp = "";
-            mytemp.RH = "";
-            mytemp.wet_bulb_temp = "";
-            mytemp.double_dew_point = main.INVALID;
+            TemperatureModel.air_temp = "";
+            TemperatureModel.RH = "";
+            TemperatureModel.wet_bulb_temp = "";
+            TemperatureModel.double_dew_point = main.INVALID;
           } // else
         } // try
         catch (InterruptedException | ExecutionException ex) {
           error_info = "error retrieving air temp and RH data (" + ex + ")";
-          mytemp.air_temp = "";
-          mytemp.RH = "";
-          mytemp.wet_bulb_temp = "";
-          mytemp.double_dew_point = main.INVALID;
+          TemperatureModel.air_temp = "";
+          TemperatureModel.RH = "";
+          TemperatureModel.wet_bulb_temp = "";
+          TemperatureModel.double_dew_point = main.INVALID;
         } // catch
 
         // general error (air temp and RH no value but error_info not yet set)
-        if (mytemp.air_temp.equals("") && mytemp.RH.equals("") && error_info.equals("")) {
+        if (TemperatureModel.air_temp.equals("")
+            && TemperatureModel.RH.equals("")
+            && error_info.equals("")) {
           error_info =
               "automatically retrieved air temp and RH data not available or checksum not ok";
-          mytemp.double_dew_point = main.INVALID;
+          TemperatureModel.double_dew_point = main.INVALID;
         }
 
         if (!error_info.equals("")) {
@@ -372,18 +376,18 @@ final class Rs232MintakaStarXObservationWorkflow {
         } // if (!error_info.equals(""))
         else // no error encountered
         {
-          mytemp.jTextField1.setText(mytemp.air_temp); // air temp
-          mytemp.jTextField2.setText(mytemp.wet_bulb_temp); // wet-bulb temp
+          TemperatureModel.jTextField1.setText(TemperatureModel.air_temp); // air temp
+          TemperatureModel.jTextField2.setText(TemperatureModel.wet_bulb_temp); // wet-bulb temp
 
           // NB default is wet-bulb not frozen (so if no info available then by default the
           // "wet-bulb not frozen" button will be checked)
           if (hulp_wet_bulb_temp < 0.0) {
-            mytemp.jRadioButton4.setSelected(true); // wet-bulb frozen radio button
+            TemperatureModel.jRadioButton4.setSelected(true); // wet-bulb frozen radio button
           } else {
-            mytemp.jRadioButton3.setSelected(true); // wet-bulb not frozen radio button
+            TemperatureModel.jRadioButton3.setSelected(true); // wet-bulb not frozen radio button
           }
 
-          mytemp.jTextField4.setText(mytemp.RH); // RH
+          TemperatureModel.jTextField4.setText(TemperatureModel.RH); // RH
           TemperatureDialog.sensorUpdated();
         } // else
       } // protected void done()

@@ -13,14 +13,14 @@ public class PositionFieldsUpdaterTest {
     main.jTextField7 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    myposition.latitude_degrees = "52";
-    myposition.latitude_minutes = "22.5";
-    myposition.latitude_hemisphere = "North";
-    myposition.longitude_degrees = "4";
-    myposition.longitude_minutes = "53.1";
-    myposition.longitude_hemisphere = "East";
-    myposition.course = "180";
-    myposition.speed = "12";
+    PositionModel.latitude_degrees = "52";
+    PositionModel.latitude_minutes = "22.5";
+    PositionModel.latitude_hemisphere = "North";
+    PositionModel.longitude_degrees = "4";
+    PositionModel.longitude_minutes = "53.1";
+    PositionModel.longitude_hemisphere = "East";
+    PositionModel.course = "180";
+    PositionModel.speed = "12";
 
     PositionFieldsUpdater.update();
 
@@ -34,14 +34,14 @@ public class PositionFieldsUpdaterTest {
     main.jTextField7 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    myposition.latitude_degrees = "52";
-    myposition.latitude_minutes = "";
-    myposition.latitude_hemisphere = "North";
-    myposition.longitude_degrees = "4";
-    myposition.longitude_minutes = "53.1";
-    myposition.longitude_hemisphere = "East";
-    myposition.course = "";
-    myposition.speed = "12";
+    PositionModel.latitude_degrees = "52";
+    PositionModel.latitude_minutes = "";
+    PositionModel.latitude_hemisphere = "North";
+    PositionModel.longitude_degrees = "4";
+    PositionModel.longitude_minutes = "53.1";
+    PositionModel.longitude_hemisphere = "East";
+    PositionModel.course = "";
+    PositionModel.speed = "12";
 
     PositionFieldsUpdater.update();
 

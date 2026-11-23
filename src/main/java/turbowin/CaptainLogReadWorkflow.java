@@ -10,7 +10,7 @@ final class CaptainLogReadWorkflow {
 
   private CaptainLogReadWorkflow() {}
 
-  static void start(mycaptain owner) {
+  static void start(CaptainModel owner) {
     new SwingWorker<Void, Void>() {
       @Override
       protected Void doInBackground() throws Exception {
@@ -25,7 +25,10 @@ final class CaptainLogReadWorkflow {
         /* read all lines from captain log */
         try (BufferedReader in = new BufferedReader(new FileReader(volledig_path))) {
           SemicolonLogFileReader.read(
-              in, mycaptain.captain_data, mycaptain.CAPTAIN_ROWS, mycaptain.CAPTAIN_COLUMNS);
+              in,
+              CaptainModel.captain_data,
+              CaptainModel.CAPTAIN_ROWS,
+              CaptainModel.CAPTAIN_COLUMNS);
         } // try
         catch (IOException ex) {
           // do nothing, possible file was never created

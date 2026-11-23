@@ -20,7 +20,7 @@ final class Rs232MintakaPpppWorkflow {
   private Rs232MintakaPpppWorkflow() {}
 
   static void start(boolean local_tray_icon_clicked, final boolean StarX) {
-    // called from: - initSynopparameters() [mybarometer.java]
+    // called from: - initSynopparameters() [BarometerModel.java]
     //              - main_windowIconfied() [main.java]
     //
     //
@@ -60,7 +60,7 @@ final class Rs232MintakaPpppWorkflow {
     // 1009.73,1007.73,0.00,0, 52 41.9491N,  6 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
 
     // initialisation
-    mybarometer.pressure_reading = "";
+    BarometerModel.pressure_reading = "";
 
     // initialisation
     main.tray_icon_clicked = local_tray_icon_clicked;
@@ -346,7 +346,7 @@ final class Rs232MintakaPpppWorkflow {
                     + "\n";
             // info = date_time + " UTC " + main.newline +
             //       main.newline +
-            //       "pressure at sensor height: " + mybarometer.pressure_reading + " hPa" +
+            //       "pressure at sensor height: " + BarometerModel.pressure_reading + " hPa" +
             // main.newline;
 
             // main.trayIcon.displayMessage(main.APPLICATION_NAME, info, TrayIcon.MessageType.INFO);
@@ -355,15 +355,15 @@ final class Rs232MintakaPpppWorkflow {
           } // if (main.tray_icon_clicked == true)
           else // barometer input screen opened
           {
-            mybarometer.pressure_reading = Double.toString(hulp_double_pressure_reading);
+            BarometerModel.pressure_reading = Double.toString(hulp_double_pressure_reading);
 
             // check if barometer input page is opened
-            if (mybarometer.jTextField1 != null) {
+            if (BarometerModel.jTextField1 != null) {
               // http://stackoverflow.com/questions/17397442/how-to-check-if-a-jframe-is-opened
             }
 
-            mybarometer.jTextField1.setText(mybarometer.pressure_reading);
-            mybarometer.jTextField2.requestFocus(); // focus on "insert draft" textfield
+            BarometerModel.jTextField1.setText(BarometerModel.pressure_reading);
+            BarometerModel.jTextField2.requestFocus(); // focus on "insert draft" textfield
           } // else
         } // else (no error encountered)
       } // protected void done()

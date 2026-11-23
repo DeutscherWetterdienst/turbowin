@@ -10,7 +10,7 @@ public class ObserverFieldUpdaterTest {
   @Test
   public void displaysSelectedObserver() {
     main.jTextField20 = new JTextField();
-    myobserver.selected_observer = "Observer One";
+    ObserverModel.selected_observer = "Observer One";
 
     ObserverFieldUpdater.update();
 
@@ -20,7 +20,7 @@ public class ObserverFieldUpdaterTest {
   @Test
   public void clearsEmptySelectedObserver() {
     main.jTextField20 = new JTextField("old observer");
-    myobserver.selected_observer = "";
+    ObserverModel.selected_observer = "";
 
     ObserverFieldUpdater.update();
 

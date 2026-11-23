@@ -23,26 +23,26 @@ final class DateTimeFieldsUpdater {
       jTextField3.setForeground(input_color_from_observer);
     }
 
-    if ((mydatetime.day.compareTo("") != 0
-            && mydatetime.month.compareTo("") != 0
-            && mydatetime.year.compareTo("") != 0
-            && mydatetime.hour.compareTo("") != 0
-            && mydatetime.minute.compareTo("") != 0)
-        && (mydatetime.day != null
-            && mydatetime.month != null
-            && mydatetime.year != null
-            && mydatetime.hour != null
-            && mydatetime.minute != null)) {
+    if ((DateTimeModel.day.compareTo("") != 0
+            && DateTimeModel.month.compareTo("") != 0
+            && DateTimeModel.year.compareTo("") != 0
+            && DateTimeModel.hour.compareTo("") != 0
+            && DateTimeModel.minute.compareTo("") != 0)
+        && (DateTimeModel.day != null
+            && DateTimeModel.month != null
+            && DateTimeModel.year != null
+            && DateTimeModel.hour != null
+            && DateTimeModel.minute != null)) {
       jTextField3.setText(
-          mydatetime.day
+          DateTimeModel.day
               + " "
-              + mydatetime.month
+              + DateTimeModel.month
               + " "
-              + mydatetime.year
+              + DateTimeModel.year
               + "  "
-              + mydatetime.hour
+              + DateTimeModel.hour
               + "."
-              + mydatetime.minute
+              + DateTimeModel.minute
               + " UTC");
     } else {
       jTextField3.setText("");

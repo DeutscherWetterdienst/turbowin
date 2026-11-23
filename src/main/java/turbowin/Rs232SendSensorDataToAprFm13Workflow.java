@@ -153,15 +153,16 @@ final class Rs232SendSensorDataToAprFm13Workflow {
             //    to prevent this check the date/time and position elements (because after the first
             // upload they were reset)
             //
-            if ((!mydatetime.year.equals(""))
-                && (!mydatetime.MM_code.equals(""))
-                && (!mydatetime.YY_code.equals(""))
-                && (!mydatetime.GG_code.equals(""))
-                && (!myposition.Qc_code.equals(""))
-                && (!myposition.lalala_code.equals(""))
-                && (!myposition.lolololo_code.equals(""))) {
+            if ((!DateTimeModel.year.equals(""))
+                && (!DateTimeModel.MM_code.equals(""))
+                && (!DateTimeModel.YY_code.equals(""))
+                && (!DateTimeModel.GG_code.equals(""))
+                && (!PositionModel.Qc_code.equals(""))
+                && (!PositionModel.lalala_code.equals(""))
+                && (!PositionModel.lolololo_code.equals(""))) {
               // RS232_make_APR_IMMT_ready();                        // pressure in IMMT will only
-              // be recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+              // be recorded as "BarometerModel.PPPP_code" (not
+              // BarometerModel.pressure_msl_corrected)
               main.IMMT_log();
             }
             main.Reset_all_meteo_parameters();
@@ -200,15 +201,16 @@ final class Rs232SendSensorDataToAprFm13Workflow {
               //    to prevent this check the date/time and position elements (because after the
               // first upload they were reset)
               //
-              if ((!mydatetime.year.equals(""))
-                  && (!mydatetime.MM_code.equals(""))
-                  && (!mydatetime.YY_code.equals(""))
-                  && (!mydatetime.GG_code.equals(""))
-                  && (!myposition.Qc_code.equals(""))
-                  && (!myposition.lalala_code.equals(""))
-                  && (!myposition.lolololo_code.equals(""))) {
+              if ((!DateTimeModel.year.equals(""))
+                  && (!DateTimeModel.MM_code.equals(""))
+                  && (!DateTimeModel.YY_code.equals(""))
+                  && (!DateTimeModel.GG_code.equals(""))
+                  && (!PositionModel.Qc_code.equals(""))
+                  && (!PositionModel.lalala_code.equals(""))
+                  && (!PositionModel.lolololo_code.equals(""))) {
                 // RS232_make_APR_IMMT_ready();                     // pressure in IMMT will only be
-                // recorded as "mybarometer.PPPP_code" (not mybarometer.pressure_msl_corrected)
+                // recorded as "BarometerModel.PPPP_code" (not
+                // BarometerModel.pressure_msl_corrected)
                 main.IMMT_log();
               }
               main.Reset_all_meteo_parameters();

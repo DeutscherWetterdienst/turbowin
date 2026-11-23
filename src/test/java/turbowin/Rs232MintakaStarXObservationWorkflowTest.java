@@ -50,27 +50,27 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     originalSdf3 = main.sdf3;
     originalSdf4 = main.sdf4;
     originalObservationDate = main.obs_file_datum_tijd;
-    originalAirTemp = mytemp.air_temp;
-    originalWetBulbTemp = mytemp.wet_bulb_temp;
-    originalRh = mytemp.RH;
-    originalDewPoint = mytemp.double_dew_point;
-    originalAirField = mytemp.jTextField1;
-    originalWetBulbField = mytemp.jTextField2;
-    originalRhField = mytemp.jTextField4;
-    originalFrozenButton = mytemp.jRadioButton4;
-    originalNotFrozenButton = mytemp.jRadioButton3;
+    originalAirTemp = TemperatureModel.air_temp;
+    originalWetBulbTemp = TemperatureModel.wet_bulb_temp;
+    originalRh = TemperatureModel.RH;
+    originalDewPoint = TemperatureModel.double_dew_point;
+    originalAirField = TemperatureModel.jTextField1;
+    originalWetBulbField = TemperatureModel.jTextField2;
+    originalRhField = TemperatureModel.jTextField4;
+    originalFrozenButton = TemperatureModel.jRadioButton4;
+    originalNotFrozenButton = TemperatureModel.jRadioButton3;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
     main.sdf4 = utcFormat("yyyyMMddHHmm");
-    mytemp.jTextField1 = new JTextField();
-    mytemp.jTextField2 = new JTextField();
-    mytemp.jTextField4 = new JTextField();
-    mytemp.jRadioButton3 = new JRadioButton();
-    mytemp.jRadioButton4 = new JRadioButton();
+    TemperatureModel.jTextField1 = new JTextField();
+    TemperatureModel.jTextField2 = new JTextField();
+    TemperatureModel.jTextField4 = new JTextField();
+    TemperatureModel.jRadioButton3 = new JRadioButton();
+    TemperatureModel.jRadioButton4 = new JRadioButton();
     ButtonGroup wetBulbGroup = new ButtonGroup();
-    wetBulbGroup.add(mytemp.jRadioButton3);
-    wetBulbGroup.add(mytemp.jRadioButton4);
+    wetBulbGroup.add(TemperatureModel.jRadioButton3);
+    wetBulbGroup.add(TemperatureModel.jRadioButton4);
     resetModel();
   }
 
@@ -80,34 +80,34 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     main.sdf3 = originalSdf3;
     main.sdf4 = originalSdf4;
     main.obs_file_datum_tijd = originalObservationDate;
-    mytemp.air_temp = originalAirTemp;
-    mytemp.wet_bulb_temp = originalWetBulbTemp;
-    mytemp.RH = originalRh;
-    mytemp.double_dew_point = originalDewPoint;
-    mytemp.jTextField1 = originalAirField;
-    mytemp.jTextField2 = originalWetBulbField;
-    mytemp.jTextField4 = originalRhField;
-    mytemp.jRadioButton4 = originalFrozenButton;
-    mytemp.jRadioButton3 = originalNotFrozenButton;
+    TemperatureModel.air_temp = originalAirTemp;
+    TemperatureModel.wet_bulb_temp = originalWetBulbTemp;
+    TemperatureModel.RH = originalRh;
+    TemperatureModel.double_dew_point = originalDewPoint;
+    TemperatureModel.jTextField1 = originalAirField;
+    TemperatureModel.jTextField2 = originalWetBulbField;
+    TemperatureModel.jTextField4 = originalRhField;
+    TemperatureModel.jRadioButton4 = originalFrozenButton;
+    TemperatureModel.jRadioButton3 = originalNotFrozenButton;
   }
 
   @Test
   public void validRecordParsesDewPointAndUpdatesWetBulbUiState() throws Exception {
     runRecord("20.0", "75.0", "-0.4", "12.3", "0");
 
-    assertEquals("20.0", mytemp.air_temp);
-    assertEquals("-0.4", mytemp.wet_bulb_temp);
-    assertEquals("75.0", mytemp.RH);
-    assertEquals(12.3, mytemp.double_dew_point, 0.0);
-    assertEquals("20.0", mytemp.jTextField1.getText());
-    assertEquals("-0.4", mytemp.jTextField2.getText());
-    assertEquals("75.0", mytemp.jTextField4.getText());
-    assertTrue(mytemp.jRadioButton4.isSelected());
-    assertFalse(mytemp.jRadioButton3.isSelected());
+    assertEquals("20.0", TemperatureModel.air_temp);
+    assertEquals("-0.4", TemperatureModel.wet_bulb_temp);
+    assertEquals("75.0", TemperatureModel.RH);
+    assertEquals(12.3, TemperatureModel.double_dew_point, 0.0);
+    assertEquals("20.0", TemperatureModel.jTextField1.getText());
+    assertEquals("-0.4", TemperatureModel.jTextField2.getText());
+    assertEquals("75.0", TemperatureModel.jTextField4.getText());
+    assertTrue(TemperatureModel.jRadioButton4.isSelected());
+    assertFalse(TemperatureModel.jRadioButton3.isSelected());
 
     runRecord("20.0", "75.0", "0.4", "12.3", "0");
-    assertTrue(mytemp.jRadioButton3.isSelected());
-    assertFalse(mytemp.jRadioButton4.isSelected());
+    assertTrue(TemperatureModel.jRadioButton3.isSelected());
+    assertFalse(TemperatureModel.jRadioButton4.isSelected());
   }
 
   @Test
@@ -160,17 +160,17 @@ public class Rs232MintakaStarXObservationWorkflowTest {
   @Test
   public void legacyTemperatureHumidityBoundariesAndMissingDewPointArePreserved() throws Exception {
     runRecord("99.9", "100.0", "99.9", "-70.0", "0");
-    assertEquals("99.9", mytemp.air_temp);
-    assertEquals("99.9", mytemp.wet_bulb_temp);
-    assertEquals("100.0", mytemp.RH);
-    assertEquals(-70.0, mytemp.double_dew_point, 0.0);
+    assertEquals("99.9", TemperatureModel.air_temp);
+    assertEquals("99.9", TemperatureModel.wet_bulb_temp);
+    assertEquals("100.0", TemperatureModel.RH);
+    assertEquals(-70.0, TemperatureModel.double_dew_point, 0.0);
 
     resetModel();
     runRecord("-99.9", "0.0", "-99.9", "bad", "0");
-    assertEquals("", mytemp.air_temp);
-    assertEquals("", mytemp.wet_bulb_temp);
-    assertEquals("", mytemp.RH);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
+    assertEquals("", TemperatureModel.air_temp);
+    assertEquals("", TemperatureModel.wet_bulb_temp);
+    assertEquals("", TemperatureModel.RH);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
 
     resetModel();
     runRecord("", "", "", "", "0");
@@ -210,29 +210,29 @@ public class Rs232MintakaStarXObservationWorkflowTest {
   }
 
   private void seedExistingValues() {
-    mytemp.air_temp = "old";
-    mytemp.wet_bulb_temp = "old";
-    mytemp.RH = "old";
-    mytemp.double_dew_point = 10.0;
+    TemperatureModel.air_temp = "old";
+    TemperatureModel.wet_bulb_temp = "old";
+    TemperatureModel.RH = "old";
+    TemperatureModel.double_dew_point = 10.0;
   }
 
   private void resetModel() {
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.jTextField1.setText("");
-    mytemp.jTextField2.setText("");
-    mytemp.jTextField4.setText("");
-    mytemp.jRadioButton3.setSelected(false);
-    mytemp.jRadioButton4.setSelected(false);
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.jTextField1.setText("");
+    TemperatureModel.jTextField2.setText("");
+    TemperatureModel.jTextField4.setText("");
+    TemperatureModel.jRadioButton3.setSelected(false);
+    TemperatureModel.jRadioButton4.setSelected(false);
   }
 
   private void assertCleared() {
-    assertEquals("", mytemp.air_temp);
-    assertEquals("", mytemp.wet_bulb_temp);
-    assertEquals("", mytemp.RH);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
+    assertEquals("", TemperatureModel.air_temp);
+    assertEquals("", TemperatureModel.wet_bulb_temp);
+    assertEquals("", TemperatureModel.RH);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
   }
 
   private String starXPayload(

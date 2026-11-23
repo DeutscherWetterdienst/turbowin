@@ -42,8 +42,8 @@ public class ObservationEmailWorkflowPreparationTest {
     String originalCc = main.obs_email_cc;
     String originalUploads = main.eucaws_uploads_method;
     String originalAttachmentMode = main.obs_101_email;
-    String originalYear = mydatetime.YY_code;
-    String originalGroup = mydatetime.GG_code;
+    String originalYear = DateTimeModel.YY_code;
+    String originalGroup = DateTimeModel.GG_code;
     try {
       main.email_send_mode = main.EMAIL_SEND_CUSTOM;
       main.APTR_AWSR_send_method = "unknown";
@@ -59,8 +59,8 @@ public class ObservationEmailWorkflowPreparationTest {
       main.obs_email_cc = "";
       main.eucaws_uploads_method = "";
       main.obs_101_email = main.FORMAT_101_BODY;
-      mydatetime.YY_code = "24";
-      mydatetime.GG_code = "12";
+      DateTimeModel.YY_code = "24";
+      DateTimeModel.GG_code = "12";
 
       ObservationEmailWorkflowPreparation.Result result =
           ObservationEmailWorkflowPreparation.prepare(true);
@@ -85,8 +85,8 @@ public class ObservationEmailWorkflowPreparationTest {
       main.obs_email_cc = originalCc;
       main.eucaws_uploads_method = originalUploads;
       main.obs_101_email = originalAttachmentMode;
-      mydatetime.YY_code = originalYear;
-      mydatetime.GG_code = originalGroup;
+      DateTimeModel.YY_code = originalYear;
+      DateTimeModel.GG_code = originalGroup;
     }
   }
 

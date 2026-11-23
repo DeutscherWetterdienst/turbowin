@@ -67,11 +67,11 @@ final class AwsObservationComposer {
         == false) // if parameter is measured by AWS than must be not a part of the string send to
     // the AWS
     {
-      if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
+      if (WindModel.int_true_wind_dir == WindModel.WIND_DIR_VARIABLE) {
         AWS_dd = "0"; // NB wind dir = variable -> 0 : special for EUCAWS!!
-      } else if (mywind.int_true_wind_dir != INVALID) {
+      } else if (WindModel.int_true_wind_dir != INVALID) {
         // NB So wind_dir = 0 (calm) also included here
-        AWS_dd = Integer.toString(mywind.int_true_wind_dir);
+        AWS_dd = Integer.toString(WindModel.int_true_wind_dir);
       } else {
         AWS_dd = "";
       }
@@ -80,14 +80,14 @@ final class AwsObservationComposer {
     // wind speed [format WS.s; range 0..75; resolution 0.1; units m/s]
     //
     if (true_wind_speed_from_AWS_present == false) {
-      if (mywind.int_true_wind_speed != INVALID) {
+      if (WindModel.int_true_wind_speed != INVALID) {
         if (main.wind_units.trim().indexOf(main.M_S) != -1) // so wind speed in m/s
         {
-          double_wind_speed = mywind.int_true_wind_speed * 1.0; // double_wind_speed: units m/s
+          double_wind_speed = WindModel.int_true_wind_speed * 1.0; // double_wind_speed: units m/s
         } else // so wind speed units knots or wind speed units unknown
         {
           double_wind_speed =
-              mywind.int_true_wind_speed * KNOT_M_S_CONVERSION; // double_wind_speed: units m/s
+              WindModel.int_true_wind_speed * KNOT_M_S_CONVERSION; // double_wind_speed: units m/s
         }
 
         // rounded one digit
@@ -102,8 +102,8 @@ final class AwsObservationComposer {
     // air  temperature [format sTA.w; range -60..+60; resolution 0.1; unit C]
     //
     if (air_temp_from_AWS_present == false) {
-      if ((mytemp.air_temp.compareTo("") != 0) && (mytemp.air_temp != null)) {
-        double_air_temp = Double.parseDouble(mytemp.air_temp);
+      if ((TemperatureModel.air_temp.compareTo("") != 0) && (TemperatureModel.air_temp != null)) {
+        double_air_temp = Double.parseDouble(TemperatureModel.air_temp);
 
         double_air_temp = AwsNumericFormatter.roundToOneDecimal(double_air_temp);
 
@@ -116,17 +116,19 @@ final class AwsObservationComposer {
     // relative humidity [format UUU; range 0..100; resolution 1; unit %]
     //
     if (rh_from_AWS_present == false) {
-      if ((mytemp.double_rv != main.INVALID)) {
+      if ((TemperatureModel.double_rv != main.INVALID)) {
         int int_rh =
             (int)
-                Math.round(mytemp.double_rv * 100); // rounding and in % (and eg not 100.0 but 100)
+                Math.round(
+                    TemperatureModel.double_rv
+                        * 100); // rounding and in % (and eg not 100.0 but 100)
 
         if ((int_rh >= 0) && (int_rh <= 100)) {
           AWS_rh = Integer.toString(int_rh);
         } else {
           AWS_rh = "";
         }
-      } // if ((mytemp.double_rv != main.INVALID))
+      } // if ((TemperatureModel.double_rv != main.INVALID))
       else {
         AWS_rh = "";
       }
@@ -135,8 +137,9 @@ final class AwsObservationComposer {
     // sea water temperature [format sTW.w; range -5..45; resolution 0.1; unit C]
     //
     if (SST_from_AWS_present == false) {
-      if ((mytemp.sea_water_temp.compareTo("") != 0) && (mytemp.sea_water_temp != null)) {
-        double_sst = Double.parseDouble(mytemp.sea_water_temp);
+      if ((TemperatureModel.sea_water_temp.compareTo("") != 0)
+          && (TemperatureModel.sea_water_temp != null)) {
+        double_sst = Double.parseDouble(TemperatureModel.sea_water_temp);
 
         double_sst = AwsNumericFormatter.roundToOneDecimal(double_sst);
 
@@ -188,35 +191,35 @@ final class AwsObservationComposer {
 
     // Pw (period wind waves)
     //
-    AWS_Pw = AwsWaveCodeFormatter.period(mywaves.Pw_code);
+    AWS_Pw = AwsWaveCodeFormatter.period(WavesModel.Pw_code);
 
     // Hw (height of wind waves)
     //
-    AWS_Hw = AwsWaveCodeFormatter.height(mywaves.Hw_code);
+    AWS_Hw = AwsWaveCodeFormatter.height(WavesModel.Hw_code);
 
     // dw1 (direction of first swell)
     //
-    AWS_Dw1 = AwsWaveCodeFormatter.direction(mywaves.Dw1_code);
+    AWS_Dw1 = AwsWaveCodeFormatter.direction(WavesModel.Dw1_code);
 
     // Pw1 (period of first swell)
     //
-    AWS_Pw1 = AwsWaveCodeFormatter.period(mywaves.Pw1_code);
+    AWS_Pw1 = AwsWaveCodeFormatter.period(WavesModel.Pw1_code);
 
     // Hw1 (height of first swell)
     //
-    AWS_Hw1 = AwsWaveCodeFormatter.height(mywaves.Hw1_code);
+    AWS_Hw1 = AwsWaveCodeFormatter.height(WavesModel.Hw1_code);
 
     // Dw2 (direction of second swell)
     //
-    AWS_Dw2 = AwsWaveCodeFormatter.direction(mywaves.Dw2_code);
+    AWS_Dw2 = AwsWaveCodeFormatter.direction(WavesModel.Dw2_code);
 
     // Pw2 (period of second swell)
     //
-    AWS_Pw2 = AwsWaveCodeFormatter.period(mywaves.Pw2_code);
+    AWS_Pw2 = AwsWaveCodeFormatter.period(WavesModel.Pw2_code);
 
     // Hw2 (height of second swell)
     //
-    AWS_Hw2 = AwsWaveCodeFormatter.height(mywaves.Hw2_code);
+    AWS_Hw2 = AwsWaveCodeFormatter.height(WavesModel.Hw2_code);
 
     // ice deposit (thickness)
     //
@@ -253,16 +256,16 @@ final class AwsObservationComposer {
     // OBS_ID (but only if requested and set in the maintenance section
     //
     if (eucaws_obs_id == true) {
-      if (!"".equals(myobserver.selected_observer)) // so there is an observer selected
+      if (!"".equals(ObserverModel.selected_observer)) // so there is an observer selected
       {
         // extract OBS_ID (column3) from selected_observer  e.g.: "Janssen;K;AB1;-;" -> OBS_ID = AB1
-        int firstSemicolon = myobserver.selected_observer.indexOf(';');
-        int secondSemicolon = myobserver.selected_observer.indexOf(';', firstSemicolon + 1);
-        int thirdSemicolon = myobserver.selected_observer.indexOf(';', secondSemicolon + 1);
+        int firstSemicolon = ObserverModel.selected_observer.indexOf(';');
+        int secondSemicolon = ObserverModel.selected_observer.indexOf(';', firstSemicolon + 1);
+        int thirdSemicolon = ObserverModel.selected_observer.indexOf(';', secondSemicolon + 1);
 
         if (firstSemicolon != -1 && secondSemicolon != -1 && thirdSemicolon != -1) {
           String selected_obs_id =
-              myobserver.selected_observer.substring(secondSemicolon + 1, thirdSemicolon);
+              ObserverModel.selected_observer.substring(secondSemicolon + 1, thirdSemicolon);
 
           if (selected_obs_id.length() == 3) // so a "-" is also not taken into account
           {
@@ -271,7 +274,7 @@ final class AwsObservationComposer {
             AWS_obs_id = "";
           }
         } // if (firstSemicolon != -1 && secondSemicolon != -1 && thirdSemicolon != -1)
-      } // if (!"".equals(myobserver.selected_observer))
+      } // if (!"".equals(ObserverModel.selected_observer))
     } // if (eucaws_obs_id == true)
 
     // compose AWS string

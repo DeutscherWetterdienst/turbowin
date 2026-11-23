@@ -35,32 +35,32 @@ final class PositionFieldsUpdater {
       } // else (no APR)
     } // else (no AWS)
 
-    if ((myposition.latitude_degrees.compareTo("") != 0
-            && myposition.latitude_minutes.compareTo("") != 0
-            && myposition.latitude_hemisphere.compareTo("") != 0
-            && myposition.longitude_degrees.compareTo("") != 0
-            && myposition.longitude_minutes.compareTo("") != 0
-            && myposition.longitude_hemisphere.compareTo("") != 0)
-        && (myposition.latitude_degrees != null
-            && myposition.latitude_minutes != null
-            && myposition.latitude_hemisphere != null
-            && myposition.longitude_degrees != null
-            && myposition.longitude_minutes != null
-            && myposition.longitude_hemisphere != null)) {
+    if ((PositionModel.latitude_degrees.compareTo("") != 0
+            && PositionModel.latitude_minutes.compareTo("") != 0
+            && PositionModel.latitude_hemisphere.compareTo("") != 0
+            && PositionModel.longitude_degrees.compareTo("") != 0
+            && PositionModel.longitude_minutes.compareTo("") != 0
+            && PositionModel.longitude_hemisphere.compareTo("") != 0)
+        && (PositionModel.latitude_degrees != null
+            && PositionModel.latitude_minutes != null
+            && PositionModel.latitude_hemisphere != null
+            && PositionModel.longitude_degrees != null
+            && PositionModel.longitude_minutes != null
+            && PositionModel.longitude_hemisphere != null)) {
       jTextField5.setText(
-          myposition.latitude_degrees
+          PositionModel.latitude_degrees
               + "\u00B0"
               + " - "
-              + myposition.latitude_minutes
+              + PositionModel.latitude_minutes
               + "' "
-              + myposition.latitude_hemisphere.substring(0, 0 + 1)
+              + PositionModel.latitude_hemisphere.substring(0, 0 + 1)
               + "  "
-              + myposition.longitude_degrees
+              + PositionModel.longitude_degrees
               + "\u00B0"
               + " - "
-              + myposition.longitude_minutes
+              + PositionModel.longitude_minutes
               + "' "
-              + myposition.longitude_hemisphere.substring(0, 0 + 1));
+              + PositionModel.longitude_hemisphere.substring(0, 0 + 1));
     } else {
       jTextField5.setText("");
     }
@@ -93,9 +93,9 @@ final class PositionFieldsUpdater {
       } // else (no APR)
     }
 
-    if ((myposition.course.compareTo("") != 0 && myposition.speed.compareTo("") != 0)
-        && (myposition.course != null && myposition.speed != null)) {
-      jTextField7.setText(myposition.course + "\u00B0" + "  " + myposition.speed + " kts");
+    if ((PositionModel.course.compareTo("") != 0 && PositionModel.speed.compareTo("") != 0)
+        && (PositionModel.course != null && PositionModel.speed != null)) {
+      jTextField7.setText(PositionModel.course + "\u00B0" + "  " + PositionModel.speed + " kts");
     } else {
       jTextField7.setText("");
     }

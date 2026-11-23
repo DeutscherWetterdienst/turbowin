@@ -134,7 +134,7 @@ final class ObserverView {
   }
 
   private Data snapshot() {
-    String[][] rows = new String[myobserver.OBSERVER_ROWS][myobserver.OBSERVER_COLUMNS];
+    String[][] rows = new String[ObserverModel.OBSERVER_ROWS][ObserverModel.OBSERVER_COLUMNS];
     for (int row = 0; row < rows.length; row++) {
       for (int column = 0; column < rows[row].length; column++)
         rows[row][column] = table.getItems().get(row).value(column).get();

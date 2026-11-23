@@ -65,15 +65,15 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     originalUploadUrl = main.upload_URL;
     originalStationId = main.station_ID;
     originalServerProtocol = main.server_com_protocol;
-    originalYear = mydatetime.year;
-    originalDay = mydatetime.day;
-    originalHour = mydatetime.hour;
-    originalMonthCode = mydatetime.MM_code;
-    originalDayCode = mydatetime.YY_code;
-    originalHourCode = mydatetime.GG_code;
-    originalQcCode = myposition.Qc_code;
-    originalLatitudeCode = myposition.lalala_code;
-    originalLongitudeCode = myposition.lolololo_code;
+    originalYear = DateTimeModel.year;
+    originalDay = DateTimeModel.day;
+    originalHour = DateTimeModel.hour;
+    originalMonthCode = DateTimeModel.MM_code;
+    originalDayCode = DateTimeModel.YY_code;
+    originalHourCode = DateTimeModel.GG_code;
+    originalQcCode = PositionModel.Qc_code;
+    originalLatitudeCode = PositionModel.lalala_code;
+    originalLongitudeCode = PositionModel.lolololo_code;
     originalLastRecord = main.last_record;
     originalFormat101 = main.format_101_class;
     originalApr = main.APR;
@@ -83,7 +83,11 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     originalFormat101Observation = main_RS232_RS422.format_101_obs;
 
     replaceStaticTextFields(
-        main.class, myposition.class, mybarometer.class, mybarograph.class, mytemp.class);
+        main.class,
+        PositionModel.class,
+        BarometerModel.class,
+        BarographModel.class,
+        TemperatureModel.class);
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -111,15 +115,15 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
     main.upload_URL = originalUploadUrl;
     main.station_ID = originalStationId;
     main.server_com_protocol = originalServerProtocol;
-    mydatetime.year = originalYear;
-    mydatetime.day = originalDay;
-    mydatetime.hour = originalHour;
-    mydatetime.MM_code = originalMonthCode;
-    mydatetime.YY_code = originalDayCode;
-    mydatetime.GG_code = originalHourCode;
-    myposition.Qc_code = originalQcCode;
-    myposition.lalala_code = originalLatitudeCode;
-    myposition.lolololo_code = originalLongitudeCode;
+    DateTimeModel.year = originalYear;
+    DateTimeModel.day = originalDay;
+    DateTimeModel.hour = originalHour;
+    DateTimeModel.MM_code = originalMonthCode;
+    DateTimeModel.YY_code = originalDayCode;
+    DateTimeModel.GG_code = originalHourCode;
+    PositionModel.Qc_code = originalQcCode;
+    PositionModel.lalala_code = originalLatitudeCode;
+    PositionModel.lolololo_code = originalLongitudeCode;
     main.last_record = originalLastRecord;
     main.format_101_class = originalFormat101;
     main.APR = originalApr;
@@ -267,7 +271,7 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
 
     Rs232SendSensorDataToAprFormat101Workflow.start(false);
     awaitResponse(500);
-    assertEquals("2024", mydatetime.year);
+    assertEquals("2024", DateTimeModel.year);
     assertTrue(!Files.exists(immtFile()));
 
     main_RS232_RS422.APR_server_response_code = -1;
@@ -275,21 +279,21 @@ public class Rs232SendSensorDataToAprFormat101WorkflowTest {
 
     awaitResponse(500);
     awaitImmtFile();
-    waitFor(() -> "".equals(mydatetime.year));
-    assertEquals("", myposition.Qc_code);
+    waitFor(() -> "".equals(DateTimeModel.year));
+    assertEquals("", PositionModel.Qc_code);
   }
 
   private void setRequiredObservationData() {
     main.station_ID = "TEST";
-    mydatetime.year = "2024";
-    mydatetime.day = "01";
-    mydatetime.hour = "12";
-    mydatetime.MM_code = "01";
-    mydatetime.YY_code = "01";
-    mydatetime.GG_code = "12";
-    myposition.Qc_code = "1";
-    myposition.lalala_code = "234";
-    myposition.lolololo_code = "5678";
+    DateTimeModel.year = "2024";
+    DateTimeModel.day = "01";
+    DateTimeModel.hour = "12";
+    DateTimeModel.MM_code = "01";
+    DateTimeModel.YY_code = "01";
+    DateTimeModel.GG_code = "12";
+    PositionModel.Qc_code = "1";
+    PositionModel.lalala_code = "234";
+    PositionModel.lolololo_code = "5678";
   }
 
   private void installFormat101Module(String output) throws Exception {

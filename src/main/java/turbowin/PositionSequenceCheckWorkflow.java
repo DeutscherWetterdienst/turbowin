@@ -38,12 +38,13 @@ final class PositionSequenceCheckWorkflow {
               0); // Month value is 0-based. e.g., 0 for January.
 
       /* date-time present obs */
-      int num_huidige_obs_jaar = Integer.valueOf(mydatetime.year.trim());
+      int num_huidige_obs_jaar = Integer.valueOf(DateTimeModel.year.trim());
       int num_huidige_obs_maand =
           Integer.valueOf(
-              mydatetime.MM_code.trim()); // NB do not use mydatetime.month because = February etc.
-      int num_huidige_obs_dag = Integer.valueOf(mydatetime.day.trim());
-      int num_huidige_obs_uur = Integer.valueOf(mydatetime.hour.trim());
+              DateTimeModel.MM_code
+                  .trim()); // NB do not use DateTimeModel.month because = February etc.
+      int num_huidige_obs_dag = Integer.valueOf(DateTimeModel.day.trim());
+      int num_huidige_obs_uur = Integer.valueOf(DateTimeModel.hour.trim());
 
       Calendar calendar_huidige_obs =
           new GregorianCalendar(
@@ -88,17 +89,17 @@ final class PositionSequenceCheckWorkflow {
             info = "-position sequence check-\n";
             info += "obs position:\n";
 
-            info += myposition.latitude_degrees;
+            info += PositionModel.latitude_degrees;
             info += " ";
-            info += myposition.latitude_minutes;
+            info += PositionModel.latitude_minutes;
             info += "' ";
-            info += myposition.latitude_hemisphere;
+            info += PositionModel.latitude_hemisphere;
             info += "  ";
-            info += myposition.longitude_degrees;
+            info += PositionModel.longitude_degrees;
             info += "\u00B0 ";
-            info += myposition.longitude_minutes;
+            info += PositionModel.longitude_minutes;
             info += "' ";
-            info += myposition.longitude_hemisphere;
+            info += PositionModel.longitude_hemisphere;
             info += "\n";
 
             if (!PositionSequenceWorkflow.confirmPosition(info)) {

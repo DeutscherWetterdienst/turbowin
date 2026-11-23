@@ -29,19 +29,19 @@ final class ObservationStateResetter {
     VisibilityState.VV_code = "";
 
     // barograph
-    mybarograph.a_code = "";
-    mybarograph.ppp_code = "";
-    mybarograph.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
+    BarographModel.ppp_code = "";
+    BarographModel.pressure_amount_tendency = "";
 
     // barometer
-    mybarometer.clearManualReduction();
-    mybarometer.pressure_reading = "";
-    mybarometer.pressure_msl = "";
-    mybarometer.PPPP_code = "";
-    mybarometer.deepest_draft = "";
-    // mybarometer.barometer_instrument_correction_new = "";
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
+    BarometerModel.clearManualReduction();
+    BarometerModel.pressure_reading = "";
+    BarometerModel.pressure_msl = "";
+    BarometerModel.PPPP_code = "";
+    BarometerModel.deepest_draft = "";
+    // BarometerModel.barometer_instrument_correction_new = "";
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
 
     // Cl
     LowCloudState.cl_code = "";
@@ -61,78 +61,78 @@ final class ObservationStateResetter {
     CloudCoverState.h_code = "";
 
     // Temperatures
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.sea_water_temp = "";
-    mytemp.sn_TTT_code = "";
-    mytemp.TTT_code = "";
-    mytemp.sn_TbTbTb_code = ""; // Tb = Twet
-    mytemp.TbTbTb_code = "";
-    mytemp.ss_TsTsTs_code = ""; // Ts = Tsea
-    mytemp.TsTsTs_code = "";
-    mytemp.sn_TdTdTd_code = "";
-    mytemp.TdTdTd_code = "";
-    mytemp.immt_sst_indicator = "";
-    mytemp.double_dew_point = INVALID;
-    mytemp.wet_bulb_frozen = false;
-    mytemp.double_rv = INVALID;
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.sea_water_temp = "";
+    TemperatureModel.sn_TTT_code = "";
+    TemperatureModel.TTT_code = "";
+    TemperatureModel.sn_TbTbTb_code = ""; // Tb = Twet
+    TemperatureModel.TbTbTb_code = "";
+    TemperatureModel.ss_TsTsTs_code = ""; // Ts = Tsea
+    TemperatureModel.TsTsTs_code = "";
+    TemperatureModel.sn_TdTdTd_code = "";
+    TemperatureModel.TdTdTd_code = "";
+    TemperatureModel.immt_sst_indicator = "";
+    TemperatureModel.double_dew_point = INVALID;
+    TemperatureModel.wet_bulb_frozen = false;
+    TemperatureModel.double_rv = INVALID;
 
     // Wind
-    mywind.wind_dir = "";
-    mywind.wind_speed = "";
-    mywind.ship_ground_course = "";
-    mywind.ship_ground_speed = "";
-    mywind.ship_heading = "";
-    mywind.dd_code = "";
-    mywind.ff_code = "";
-    mywind.fff00_code = "";
-    mywind.iw_code = "";
-    mywind.HDG_code = "";
-    mywind.COG_code = "";
-    mywind.SOG_code = "";
-    mywind.SLL_code = "";
-    mywind.sl_code = "";
-    mywind.hh_code = "";
-    mywind.RWD_code = "";
-    mywind.RWS_code = "";
-    mywind.int_true_wind_dir = INVALID;
-    mywind.int_true_wind_speed = INVALID;
-    mywind.int_relative_wind_speed = INVALID;
-    mywind.int_relative_wind_dir = INVALID;
+    WindModel.wind_dir = "";
+    WindModel.wind_speed = "";
+    WindModel.ship_ground_course = "";
+    WindModel.ship_ground_speed = "";
+    WindModel.ship_heading = "";
+    WindModel.dd_code = "";
+    WindModel.ff_code = "";
+    WindModel.fff00_code = "";
+    WindModel.iw_code = "";
+    WindModel.HDG_code = "";
+    WindModel.COG_code = "";
+    WindModel.SOG_code = "";
+    WindModel.SLL_code = "";
+    WindModel.sl_code = "";
+    WindModel.hh_code = "";
+    WindModel.RWD_code = "";
+    WindModel.RWS_code = "";
+    WindModel.int_true_wind_dir = INVALID;
+    WindModel.int_true_wind_speed = INVALID;
+    WindModel.int_relative_wind_speed = INVALID;
+    WindModel.int_relative_wind_dir = INVALID;
 
     // Waves
-    mywaves.wind_waves_period = "";
-    mywaves.wind_waves_height = "";
-    mywaves.swell_1_dir = "";
-    mywaves.swell_1_period = "";
-    mywaves.swell_1_height = "";
-    mywaves.swell_2_dir = "";
-    mywaves.swell_2_period = "";
-    mywaves.swell_2_height = "";
-    mywaves.Hw_code = "";
-    mywaves.Pw_code = "";
-    mywaves.Dw1_code = "";
-    mywaves.Pw1_code = "";
-    mywaves.Hw1_code = "";
-    mywaves.Dw2_code = "";
-    mywaves.Pw2_code = "";
-    mywaves.Hw2_code = "";
+    WavesModel.wind_waves_period = "";
+    WavesModel.wind_waves_height = "";
+    WavesModel.swell_1_dir = "";
+    WavesModel.swell_1_period = "";
+    WavesModel.swell_1_height = "";
+    WavesModel.swell_2_dir = "";
+    WavesModel.swell_2_period = "";
+    WavesModel.swell_2_height = "";
+    WavesModel.Hw_code = "";
+    WavesModel.Pw_code = "";
+    WavesModel.Dw1_code = "";
+    WavesModel.Pw1_code = "";
+    WavesModel.Hw1_code = "";
+    WavesModel.Dw2_code = "";
+    WavesModel.Pw2_code = "";
+    WavesModel.Hw2_code = "";
 
     // Captain
-    for (int r = 0; r < mycaptain.CAPTAIN_ROWS; r++) {
-      for (int c = 0; c < mycaptain.CAPTAIN_COLUMNS; c++) {
-        mycaptain.captain_data[r][c] = "";
+    for (int r = 0; r < CaptainModel.CAPTAIN_ROWS; r++) {
+      for (int c = 0; c < CaptainModel.CAPTAIN_COLUMNS; c++) {
+        CaptainModel.captain_data[r][c] = "";
       }
     }
 
     // Observer
-    for (int r = 0; r < myobserver.OBSERVER_ROWS; r++) {
-      for (int c = 0; c < myobserver.OBSERVER_COLUMNS; c++) {
-        myobserver.observer_data[r][c] = "";
+    for (int r = 0; r < ObserverModel.OBSERVER_ROWS; r++) {
+      for (int c = 0; c < ObserverModel.OBSERVER_COLUMNS; c++) {
+        ObserverModel.observer_data[r][c] = "";
       }
     }
-    myobserver.selected_observer = "";
+    ObserverModel.selected_observer = "";
 
     // two swell systems
     // ---
@@ -156,38 +156,38 @@ final class ObservationStateResetter {
     IceState.zi_code = "";
 
     // position
-    myposition.latitude_degrees = "";
-    myposition.latitude_minutes = "";
-    myposition.latitude_hemisphere = "";
-    myposition.longitude_degrees = "";
-    myposition.longitude_minutes = "";
-    myposition.longitude_hemisphere = "";
-    myposition.course = "";
-    myposition.speed = "";
-    myposition.lalala_code = "";
-    myposition.lolololo_code = "";
-    myposition.Qc_code = "";
-    myposition.Ds_code = "";
-    myposition.vs_code = "";
-    myposition.int_latitude_degrees =
+    PositionModel.latitude_degrees = "";
+    PositionModel.latitude_minutes = "";
+    PositionModel.latitude_hemisphere = "";
+    PositionModel.longitude_degrees = "";
+    PositionModel.longitude_minutes = "";
+    PositionModel.longitude_hemisphere = "";
+    PositionModel.course = "";
+    PositionModel.speed = "";
+    PositionModel.lalala_code = "";
+    PositionModel.lolololo_code = "";
+    PositionModel.Qc_code = "";
+    PositionModel.Ds_code = "";
+    PositionModel.vs_code = "";
+    PositionModel.int_latitude_degrees =
         INVALID; // also used for position sequence check and cloud height advice computation
-    myposition.int_latitude_minutes = INVALID; // also used for position sequence check
-    myposition.int_longitude_degrees =
+    PositionModel.int_latitude_minutes = INVALID; // also used for position sequence check
+    PositionModel.int_longitude_degrees =
         INVALID; // also used for position sequence check and cloud height advice computation
-    myposition.int_longitude_minutes = INVALID; // also used for position sequence check
-    myposition.SOG_APR = Double.MAX_VALUE; // exclusively used for APR
-    myposition.COG_APR = Double.MAX_VALUE; // exclusively used for APR
-    myposition.SOG_APR_wind = Double.MAX_VALUE; // exclusively used for APR
-    myposition.COG_APR_wind = Double.MAX_VALUE; // exclusively used for APR
+    PositionModel.int_longitude_minutes = INVALID; // also used for position sequence check
+    PositionModel.SOG_APR = Double.MAX_VALUE; // exclusively used for APR
+    PositionModel.COG_APR = Double.MAX_VALUE; // exclusively used for APR
+    PositionModel.SOG_APR_wind = Double.MAX_VALUE; // exclusively used for APR
+    PositionModel.COG_APR_wind = Double.MAX_VALUE; // exclusively used for APR
 
     // date time
-    mydatetime.year = "";
-    mydatetime.month = "";
-    mydatetime.day = "";
-    mydatetime.hour = "";
-    mydatetime.MM_code = ""; // month of year
-    mydatetime.YY_code = ""; // day of the month
-    mydatetime.GG_code = ""; // hour of obs
+    DateTimeModel.year = "";
+    DateTimeModel.month = "";
+    DateTimeModel.day = "";
+    DateTimeModel.hour = "";
+    DateTimeModel.MM_code = ""; // month of year
+    DateTimeModel.YY_code = ""; // day of the month
+    DateTimeModel.GG_code = ""; // hour of obs
 
     // call sign
     // --

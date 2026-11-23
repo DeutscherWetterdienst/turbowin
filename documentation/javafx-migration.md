@@ -21,6 +21,10 @@ The Day and Night choices apply to Swing and all embedded JavaFX scenes. The Jav
 the current theme when a dialog opens and updates open scenes and dropdowns on the JavaFX thread
 when the Swing theme changes.
 
+`*Dialog` connects the workflow to a `*View`; a view's nested `State` is a snapshot for that view.
+Top-level `*State` classes hold shared observation data. `*Model` classes retain the existing
+observation state together with calculations, validation, or legacy sensor integration.
+
 To migrate another window, keep its data gathering separate from the JavaFX view, invoke
 `FxSwingDialog.show` on the Swing event thread, and create its scene in the supplied factory.
 Return Swing actions to the event dispatch thread; do not access Swing components on the JavaFX

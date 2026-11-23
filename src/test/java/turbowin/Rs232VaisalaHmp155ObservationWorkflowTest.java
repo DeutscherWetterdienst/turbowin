@@ -51,18 +51,18 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     originalLogsDir = main.logs_dir;
     originalSdf3 = main.sdf3;
     originalSdf4 = main.sdf4;
-    originalAirTemp = mytemp.air_temp;
-    originalWetBulbTemp = mytemp.wet_bulb_temp;
-    originalRh = mytemp.RH;
-    originalDewPoint = mytemp.double_dew_point;
-    originalRelativeHumidity = mytemp.double_rv;
-    originalWetBulbFrozen = mytemp.wet_bulb_frozen;
+    originalAirTemp = TemperatureModel.air_temp;
+    originalWetBulbTemp = TemperatureModel.wet_bulb_temp;
+    originalRh = TemperatureModel.RH;
+    originalDewPoint = TemperatureModel.double_dew_point;
+    originalRelativeHumidity = TemperatureModel.double_rv;
+    originalWetBulbFrozen = TemperatureModel.wet_bulb_frozen;
     originalObservationDate = main.obs_file_datum_tijd;
-    originalTextField1 = mytemp.jTextField1;
-    originalTextField2 = mytemp.jTextField2;
-    originalTextField4 = mytemp.jTextField4;
-    originalFrozenButton = mytemp.jRadioButton4;
-    originalNotFrozenButton = mytemp.jRadioButton3;
+    originalTextField1 = TemperatureModel.jTextField1;
+    originalTextField2 = TemperatureModel.jTextField2;
+    originalTextField4 = TemperatureModel.jTextField4;
+    originalFrozenButton = TemperatureModel.jRadioButton4;
+    originalNotFrozenButton = TemperatureModel.jRadioButton3;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -75,38 +75,38 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     main.logs_dir = originalLogsDir;
     main.sdf3 = originalSdf3;
     main.sdf4 = originalSdf4;
-    mytemp.air_temp = originalAirTemp;
-    mytemp.wet_bulb_temp = originalWetBulbTemp;
-    mytemp.RH = originalRh;
-    mytemp.double_dew_point = originalDewPoint;
-    mytemp.double_rv = originalRelativeHumidity;
-    mytemp.wet_bulb_frozen = originalWetBulbFrozen;
+    TemperatureModel.air_temp = originalAirTemp;
+    TemperatureModel.wet_bulb_temp = originalWetBulbTemp;
+    TemperatureModel.RH = originalRh;
+    TemperatureModel.double_dew_point = originalDewPoint;
+    TemperatureModel.double_rv = originalRelativeHumidity;
+    TemperatureModel.wet_bulb_frozen = originalWetBulbFrozen;
     main.obs_file_datum_tijd = originalObservationDate;
-    mytemp.jTextField1 = originalTextField1;
-    mytemp.jTextField2 = originalTextField2;
-    mytemp.jTextField4 = originalTextField4;
-    mytemp.jRadioButton4 = originalFrozenButton;
-    mytemp.jRadioButton3 = originalNotFrozenButton;
+    TemperatureModel.jTextField1 = originalTextField1;
+    TemperatureModel.jTextField2 = originalTextField2;
+    TemperatureModel.jTextField4 = originalTextField4;
+    TemperatureModel.jRadioButton4 = originalFrozenButton;
+    TemperatureModel.jRadioButton3 = originalNotFrozenButton;
   }
 
   @Test
   public void readsTheFixedWidthFieldsAndUsesTheirOffsets() throws Exception {
     runRecord("20.0", "-0.1", "10.0", "50.0", new Date());
 
-    assertEquals(padded("20.0"), mytemp.jTextField1.getText());
-    assertEquals(padded("-0.1"), mytemp.jTextField2.getText());
-    assertEquals(padded("50.0"), mytemp.jTextField4.getText());
-    assertEquals(10.0, mytemp.double_dew_point, 0.0);
-    assertEquals(0.5, mytemp.double_rv, 0.0);
+    assertEquals(padded("20.0"), TemperatureModel.jTextField1.getText());
+    assertEquals(padded("-0.1"), TemperatureModel.jTextField2.getText());
+    assertEquals(padded("50.0"), TemperatureModel.jTextField4.getText());
+    assertEquals(10.0, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(0.5, TemperatureModel.double_rv, 0.0);
   }
 
   @Test
   public void malformedRecordIsRejectedAndClearsTheSensorValues() throws Exception {
-    mytemp.air_temp = "old";
-    mytemp.wet_bulb_temp = "old";
-    mytemp.RH = "old";
-    mytemp.double_dew_point = 10.0;
-    mytemp.double_rv = 0.5;
+    TemperatureModel.air_temp = "old";
+    TemperatureModel.wet_bulb_temp = "old";
+    TemperatureModel.RH = "old";
+    TemperatureModel.double_dew_point = 10.0;
+    TemperatureModel.double_rv = 0.5;
 
     runErrorRecord("malformed");
 
@@ -117,8 +117,8 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   public void staleRecordIsRejectedAndClearsTheSensorValues() throws Exception {
     writeRecord(
         "20.0", "0.0", "10.0", "50.0", new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
-    mytemp.air_temp = "old";
-    mytemp.RH = "old";
+    TemperatureModel.air_temp = "old";
+    TemperatureModel.RH = "old";
 
     runErrorWorkflow();
 
@@ -128,57 +128,57 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   @Test
   public void temperatureAndDewPointLowerBoundariesArePreserved() throws Exception {
     runRecord("99.9", "0.0", "69.9", "50.0", new Date());
-    assertEquals(padded("99.9"), mytemp.air_temp);
-    assertEquals(69.9, mytemp.double_dew_point, 0.0);
+    assertEquals(padded("99.9"), TemperatureModel.air_temp);
+    assertEquals(69.9, TemperatureModel.double_dew_point, 0.0);
 
     resetModel();
     runRecord("-99.9", "0.0", "-70.0", "50.0", new Date());
-    assertEquals("", mytemp.air_temp);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
+    assertEquals("", TemperatureModel.air_temp);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
 
     resetModel();
     runRecord("100.0", "0.0", "70.0", "100.0", new Date());
-    assertEquals(padded("100.0"), mytemp.air_temp);
-    assertEquals(70.0, mytemp.double_dew_point, 0.0);
-    assertEquals(1.0, mytemp.double_rv, 0.0);
+    assertEquals(padded("100.0"), TemperatureModel.air_temp);
+    assertEquals(70.0, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(1.0, TemperatureModel.double_rv, 0.0);
   }
 
   @Test
   public void relativeHumidityZeroIsRejectedWhilePositiveBoundaryIsAccepted() throws Exception {
     runRecord("20.0", "0.0", "10.0", "0.1", new Date());
-    assertEquals(0.001, mytemp.double_rv, 0.0);
+    assertEquals(0.001, TemperatureModel.double_rv, 0.0);
 
     resetModel();
     writeRecord("20.0", "0.0", "10.0", "0.0", new Date());
     runErrorWorkflow();
-    assertEquals(padded("20.0"), mytemp.air_temp);
-    assertEquals(padded("0.0"), mytemp.wet_bulb_temp);
-    assertEquals("", mytemp.RH);
-    assertEquals(10.0, mytemp.double_dew_point, 0.0);
-    assertEquals(main.INVALID, mytemp.double_rv, 0.0);
+    assertEquals(padded("20.0"), TemperatureModel.air_temp);
+    assertEquals(padded("0.0"), TemperatureModel.wet_bulb_temp);
+    assertEquals("", TemperatureModel.RH);
+    assertEquals(10.0, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
   }
 
   @Test
   public void sensorMarkersAreNotParsedAsNumericValues() throws Exception {
     runRecord("*", "*", "*", "*", new Date());
 
-    assertEquals(padded("*"), mytemp.jTextField1.getText());
-    assertEquals(padded("*"), mytemp.jTextField2.getText());
-    assertEquals(padded("*"), mytemp.jTextField4.getText());
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
-    assertEquals(main.INVALID, mytemp.double_rv, 0.0);
+    assertEquals(padded("*"), TemperatureModel.jTextField1.getText());
+    assertEquals(padded("*"), TemperatureModel.jTextField2.getText());
+    assertEquals(padded("*"), TemperatureModel.jTextField4.getText());
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
   }
 
   @Test
   public void wetBulbTemperatureSelectsFrozenOrNotFrozenState() throws Exception {
     runRecord("20.0", "-0.1", "10.0", "50.0", new Date());
-    assertTrue(mytemp.jRadioButton4.isSelected());
-    assertFalse(mytemp.jRadioButton3.isSelected());
+    assertTrue(TemperatureModel.jRadioButton4.isSelected());
+    assertFalse(TemperatureModel.jRadioButton3.isSelected());
 
     resetModel();
     runRecord("20.0", "0.0", "10.0", "50.0", new Date());
-    assertTrue(mytemp.jRadioButton3.isSelected());
-    assertFalse(mytemp.jRadioButton4.isSelected());
+    assertTrue(TemperatureModel.jRadioButton3.isSelected());
+    assertFalse(TemperatureModel.jRadioButton4.isSelected());
   }
 
   @Test
@@ -199,7 +199,8 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     AtomicReference<String> displayedHumidity = new AtomicReference<>();
     long deadline = System.nanoTime() + 5_000_000_000L;
     do {
-      SwingUtilities.invokeAndWait(() -> displayedHumidity.set(mytemp.jTextField4.getText()));
+      SwingUtilities.invokeAndWait(
+          () -> displayedHumidity.set(TemperatureModel.jTextField4.getText()));
       if (padded(rh).equals(displayedHumidity.get())) {
         return;
       }
@@ -260,26 +261,26 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   }
 
   private void resetModel() {
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.double_rv = main.INVALID;
-    mytemp.jTextField1 = new JTextField();
-    mytemp.jTextField2 = new JTextField();
-    mytemp.jTextField4 = new JTextField();
-    mytemp.jRadioButton3 = new JRadioButton();
-    mytemp.jRadioButton4 = new JRadioButton();
-    mytemp.jRadioButton3.setSelected(false);
-    mytemp.jRadioButton4.setSelected(false);
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.double_rv = main.INVALID;
+    TemperatureModel.jTextField1 = new JTextField();
+    TemperatureModel.jTextField2 = new JTextField();
+    TemperatureModel.jTextField4 = new JTextField();
+    TemperatureModel.jRadioButton3 = new JRadioButton();
+    TemperatureModel.jRadioButton4 = new JRadioButton();
+    TemperatureModel.jRadioButton3.setSelected(false);
+    TemperatureModel.jRadioButton4.setSelected(false);
   }
 
   private void assertCleared() {
-    assertEquals("", mytemp.air_temp);
-    assertEquals("", mytemp.wet_bulb_temp);
-    assertEquals("", mytemp.RH);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
-    assertEquals(main.INVALID, mytemp.double_rv, 0.0);
+    assertEquals("", TemperatureModel.air_temp);
+    assertEquals("", TemperatureModel.wet_bulb_temp);
+    assertEquals("", TemperatureModel.RH);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
   }
 
   private static String field(String value) {

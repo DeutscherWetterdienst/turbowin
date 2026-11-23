@@ -9,7 +9,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /** Position observation state and compatibility controls used by legacy GPS readers. */
-public final class myposition {
+public final class PositionModel {
   public static ButtonGroup buttonGroup1, buttonGroup2, buttonGroup3, buttonGroup4;
   public static JTextField jTextField1, jTextField2, jTextField3, jTextField4;
   public static JRadioButton jRadioButton1, jRadioButton2, jRadioButton3, jRadioButton4;
@@ -34,7 +34,7 @@ public final class myposition {
   private String courseLabel;
   private String speedLabel;
 
-  public myposition() {
+  public PositionModel() {
     jTextField1 = new JTextField();
     jTextField2 = new JTextField();
     jTextField3 = new JTextField();
@@ -542,7 +542,7 @@ public final class myposition {
   }
 
   private void Position_In_leaflet_Maps(String full_path_leaflet_maps_html_file) {
-    // called from: OK_button_actionPerformed() --doInBackground--- [myposition.java]
+    // called from: OK_button_actionPerformed() --doInBackground--- [PositionModel.java]
 
     // make a dynamic html file
     // NB Before invoking this function the existence of the output dir (the logs dir) is already
@@ -764,7 +764,7 @@ public final class myposition {
 
     if (main.RS232_GPS_connection_mode == 1 && GPS_ok) // GPS connected  and fix ok
     {
-      // see function initSynopparameters(), in this function the myposition vars are set if GPS
+      // see function initSynopparameters(), in this function the PositionModel vars are set if GPS
       // connected and fix OK
       Reset_All_Position_Vars();
     }
@@ -844,28 +844,28 @@ public final class myposition {
         if (SOG_APR < 1.0) // stopped
         {
           // by default: in case SOG is indicating stopped then SOG always stopped also!
-          myposition.jRadioButton5.setSelected(true); // COG = stopped
+          PositionModel.jRadioButton5.setSelected(true); // COG = stopped
         }
         // else if (SOG >= 1.0 && SOG <= 999.9) // not stopped (halverwege de test maar veranderd om
         // toch een richting tijdens laatste testjes te krijgen)
         else if (SOG_APR >= 1.0 && SOG_APR <= 999999.9) // not stopped
         {
           if (COG_APR > 23.0 && COG_APR <= 67.0) {
-            myposition.jRadioButton6.setSelected(true);
+            PositionModel.jRadioButton6.setSelected(true);
           } else if (COG_APR > 67.0 && COG_APR <= 112.0) {
-            myposition.jRadioButton7.setSelected(true);
+            PositionModel.jRadioButton7.setSelected(true);
           } else if (COG_APR > 112.0 && COG_APR <= 157.0) {
-            myposition.jRadioButton8.setSelected(true);
+            PositionModel.jRadioButton8.setSelected(true);
           } else if (COG_APR > 157.0 && COG_APR <= 202.0) {
-            myposition.jRadioButton9.setSelected(true);
+            PositionModel.jRadioButton9.setSelected(true);
           } else if (COG_APR > 202.0 && COG_APR <= 247.0) {
-            myposition.jRadioButton10.setSelected(true);
+            PositionModel.jRadioButton10.setSelected(true);
           } else if (COG_APR > 247.0 && COG_APR <= 292.0) {
-            myposition.jRadioButton11.setSelected(true);
+            PositionModel.jRadioButton11.setSelected(true);
           } else if (COG_APR > 292.0 && COG_APR <= 337.0) {
-            myposition.jRadioButton12.setSelected(true);
+            PositionModel.jRadioButton12.setSelected(true);
           } else if (COG_APR > 337.0 && COG_APR <= 360.0 || COG_APR > 0.0 && COG_APR <= 23.0) {
-            myposition.jRadioButton13.setSelected(true);
+            PositionModel.jRadioButton13.setSelected(true);
           }
         } // else if (SOG >= 1.0 && SOG <= 99.9)
 
@@ -892,25 +892,25 @@ public final class myposition {
         /// Not applicable (report from a coastal land station) or not reported (see Regulation
         // 12.3.1.2 (b))
         if (SOG_APR < 1.0) {
-          myposition.jRadioButton14.setSelected(true);
+          PositionModel.jRadioButton14.setSelected(true);
         } else if (SOG_APR >= 1.0 && SOG_APR <= 5.0) {
-          myposition.jRadioButton15.setSelected(true);
+          PositionModel.jRadioButton15.setSelected(true);
         } else if (SOG_APR > 5.0 && SOG_APR <= 10.0) {
-          myposition.jRadioButton16.setSelected(true);
+          PositionModel.jRadioButton16.setSelected(true);
         } else if (SOG_APR > 10.0 && SOG_APR <= 15.0) {
-          myposition.jRadioButton17.setSelected(true);
+          PositionModel.jRadioButton17.setSelected(true);
         } else if (SOG_APR > 15.0 && SOG_APR <= 20.0) {
-          myposition.jRadioButton18.setSelected(true);
+          PositionModel.jRadioButton18.setSelected(true);
         } else if (SOG_APR > 20.0 && SOG_APR <= 25.0) {
-          myposition.jRadioButton19.setSelected(true);
+          PositionModel.jRadioButton19.setSelected(true);
         } else if (SOG_APR > 25.0 && SOG_APR <= 30.0) {
-          myposition.jRadioButton20.setSelected(true);
+          PositionModel.jRadioButton20.setSelected(true);
         } else if (SOG_APR > 30.0 && SOG_APR <= 35.0) {
-          myposition.jRadioButton21.setSelected(true);
+          PositionModel.jRadioButton21.setSelected(true);
         } else if (SOG_APR > 35.0 && SOG_APR <= 40.0) {
-          myposition.jRadioButton22.setSelected(true);
+          PositionModel.jRadioButton22.setSelected(true);
         } else if (SOG_APR > 40 && SOG_APR <= 99) {
-          myposition.jRadioButton23.setSelected(true);
+          PositionModel.jRadioButton23.setSelected(true);
         }
       } // if (GPS_date_time_ok )
 

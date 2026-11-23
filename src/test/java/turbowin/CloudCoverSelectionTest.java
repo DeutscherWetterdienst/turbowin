@@ -67,10 +67,9 @@ public class CloudCoverSelectionTest {
 
   @Test
   public void mapsHeightAdviceToExistingMeteorologicalRanges() {
-    assertEquals(CloudCoverState.H_CLOUDLESS, CloudCoverJavaFxWindow.advisedHeight(-9));
-    assertEquals(CloudCoverState.H_300_600, CloudCoverJavaFxWindow.advisedHeight(4));
-    assertEquals(CloudCoverState.H_GROTER_2500, CloudCoverJavaFxWindow.advisedHeight(9));
-    assertEquals(
-        CloudCoverState.H_NOT_DETERMINED, CloudCoverJavaFxWindow.advisedHeight(main.INVALID));
+    assertEquals(CloudCoverState.H_CLOUDLESS, CloudCoverDialog.advisedHeight(-9));
+    assertEquals(CloudCoverState.H_300_600, CloudCoverDialog.advisedHeight(4));
+    assertEquals(CloudCoverState.H_GROTER_2500, CloudCoverDialog.advisedHeight(9));
+    assertEquals(CloudCoverState.H_NOT_DETERMINED, CloudCoverDialog.advisedHeight(main.INVALID));
   }
 }

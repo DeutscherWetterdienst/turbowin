@@ -36,12 +36,12 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
     captureStaticState(
         main.class,
         main_RS232_RS422.class,
-        mydatetime.class,
-        myposition.class,
-        mywind.class,
-        mybarometer.class,
-        mybarograph.class,
-        mytemp.class);
+        DateTimeModel.class,
+        PositionModel.class,
+        WindModel.class,
+        BarometerModel.class,
+        BarographModel.class,
+        TemperatureModel.class);
     replaceStaticTextFields(main.class);
 
     File logsDirectory = temporaryFolder.newFolder("logs");
@@ -81,69 +81,69 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
             + last);
 
     startWorkflow();
-    waitFor(() -> !mydatetime.year.isEmpty());
+    waitFor(() -> !DateTimeModel.year.isEmpty());
     flushEdt();
 
-    assertEquals("53", myposition.latitude_degrees);
-    assertEquals(myposition.HEMISPHERE_SOUTH, myposition.latitude_hemisphere);
-    assertEquals(26, myposition.int_latitude_minutes);
-    assertEquals("534", myposition.lalala_code);
-    assertEquals("123", myposition.longitude_degrees);
-    assertEquals(myposition.HEMISPHERE_EAST, myposition.longitude_hemisphere);
-    assertEquals(27, myposition.int_longitude_minutes);
-    assertEquals("8", myposition.Ds_code);
-    assertEquals("360", mywind.COG_code);
-    assertEquals("2", myposition.vs_code);
-    assertEquals(2.83 * owner.M_S_TO_KNOTS, myposition.SOG_APR_wind, 0.0001);
-    assertEquals("1000.5", mybarometer.pressure_msl_corrected);
-    assertEquals("0005", mybarometer.PPPP_code);
-    assertEquals("20.5", mytemp.air_temp);
-    assertEquals(0.53, mytemp.double_rv, 0.0001);
-    assertEquals(10.6578, mytemp.double_dew_point, 0.0001);
-    assertEquals("0", mytemp.sn_TdTdTd_code);
-    assertEquals("107", mytemp.TdTdTd_code);
-    assertEquals("005", mywind.RWS_code);
-    assertEquals("350", mywind.RWD_code);
+    assertEquals("53", PositionModel.latitude_degrees);
+    assertEquals(PositionModel.HEMISPHERE_SOUTH, PositionModel.latitude_hemisphere);
+    assertEquals(26, PositionModel.int_latitude_minutes);
+    assertEquals("534", PositionModel.lalala_code);
+    assertEquals("123", PositionModel.longitude_degrees);
+    assertEquals(PositionModel.HEMISPHERE_EAST, PositionModel.longitude_hemisphere);
+    assertEquals(27, PositionModel.int_longitude_minutes);
+    assertEquals("8", PositionModel.Ds_code);
+    assertEquals("360", WindModel.COG_code);
+    assertEquals("2", PositionModel.vs_code);
+    assertEquals(2.83 * owner.M_S_TO_KNOTS, PositionModel.SOG_APR_wind, 0.0001);
+    assertEquals("1000.5", BarometerModel.pressure_msl_corrected);
+    assertEquals("0005", BarometerModel.PPPP_code);
+    assertEquals("20.5", TemperatureModel.air_temp);
+    assertEquals(0.53, TemperatureModel.double_rv, 0.0001);
+    assertEquals(10.6578, TemperatureModel.double_dew_point, 0.0001);
+    assertEquals("0", TemperatureModel.sn_TdTdTd_code);
+    assertEquals("107", TemperatureModel.TdTdTd_code);
+    assertEquals("005", WindModel.RWS_code);
+    assertEquals("350", WindModel.RWD_code);
     assertTrue(Files.readString(systemLogFile()).contains("send method unknown"));
   }
 
   @Test
   public void missingEmptyMalformedAndUnreadableFilesClearAwsrState() throws Exception {
-    myposition.latitude_degrees = "stale";
+    PositionModel.latitude_degrees = "stale";
     startWorkflow();
     settleWorkflow();
-    assertEquals("", myposition.latitude_degrees);
-    assertEquals("", mydatetime.year);
+    assertEquals("", PositionModel.latitude_degrees);
+    assertEquals("", DateTimeModel.year);
 
     writeSensorFile("");
-    myposition.latitude_degrees = "stale";
+    PositionModel.latitude_degrees = "stale";
     startWorkflow();
     settleWorkflow();
-    assertEquals("", myposition.latitude_degrees);
+    assertEquals("", PositionModel.latitude_degrees);
 
     writeSensorFile(
         awsRecord(recordTime(), "12.345", "123.456", "90.0", "2.83").replaceFirst(",", ""));
-    myposition.latitude_degrees = "stale";
+    PositionModel.latitude_degrees = "stale";
     startWorkflow();
     settleWorkflow();
-    assertEquals("", myposition.latitude_degrees);
-    assertEquals("", mydatetime.year);
+    assertEquals("", PositionModel.latitude_degrees);
+    assertEquals("", DateTimeModel.year);
 
     File sensorFile = sensorDataFile();
     assertTrue(sensorFile.delete());
     assertTrue(sensorFile.mkdir());
-    myposition.latitude_degrees = "stale";
+    PositionModel.latitude_degrees = "stale";
     startWorkflow();
     settleWorkflow();
-    assertEquals("", myposition.latitude_degrees);
-    assertEquals("", mydatetime.year);
+    assertEquals("", PositionModel.latitude_degrees);
+    assertEquals("", DateTimeModel.year);
   }
 
   @Test
   public void validatesDateTimeRoundsObservationHourAndRejectsStaleRecords() throws Exception {
     RecordTime recordTime = recordTime();
     assertTrue(owner.RS422_Set_Date_Time_Obs_And_IMMT_For_AWSR(recordTime.date, recordTime.time));
-    assertEquals(recordTime.expectedHour, mydatetime.GG_code);
+    assertEquals(recordTime.expectedHour, DateTimeModel.GG_code);
     assertFalse(owner.RS422_Set_Date_Time_Obs_And_IMMT_For_AWSR("2026", "000000"));
     assertFalse(owner.RS422_Check_Date_Time_Last_Saved_Record_For_AWSR("2026", "000000"));
     assertTrue(
@@ -160,8 +160,8 @@ public class Rs422ReadAndSendSensorDataForAwsrWorkflowTest {
     startWorkflow();
     settleWorkflow();
 
-    assertEquals("", mydatetime.year);
-    assertEquals("", myposition.latitude_degrees);
+    assertEquals("", DateTimeModel.year);
+    assertEquals("", PositionModel.latitude_degrees);
     assertFalse(
         Files.exists(systemLogFile())
             && Files.readString(systemLogFile()).contains("send method unknown"));

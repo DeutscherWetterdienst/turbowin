@@ -90,7 +90,7 @@ final class SystemTrayWorkflow {
                       // main_RS232_RS422.RS232_Mintaka_Duo_Read_Sensor_Data_PPPP_For_Obs()
                       boolean local_tray_icon_clicked = true;
                       RS232_mintaka.RS232_Mintaka_Duo_Read_Sensor_Data_PPPP_For_Obs(
-                          local_tray_icon_clicked); // retrieve mybarometer.pressure_reading
+                          local_tray_icon_clicked); // retrieve BarometerModel.pressure_reading
                     } // try
                     catch (NumberFormatException en) {
                       info =
@@ -109,7 +109,8 @@ final class SystemTrayWorkflow {
                       boolean local_tray_icon_clicked = true;
                       boolean StarX = false;
                       RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_PPPP_For_Obs(
-                          local_tray_icon_clicked, StarX); // retrieve mybarometer.pressure_reading
+                          local_tray_icon_clicked,
+                          StarX); // retrieve BarometerModel.pressure_reading
                     } // try
                     catch (NumberFormatException en) {
                       info =
@@ -128,7 +129,8 @@ final class SystemTrayWorkflow {
                       boolean local_tray_icon_clicked = true;
                       boolean StarX = true;
                       RS232_mintaka.RS232_Mintaka_Star_And_StarX_Read_Sensor_Data_PPPP_For_Obs(
-                          local_tray_icon_clicked, StarX); // retrieve mybarometer.pressure_reading
+                          local_tray_icon_clicked,
+                          StarX); // retrieve BarometerModel.pressure_reading
                     } // try
                     catch (NumberFormatException en) {
                       info =
@@ -145,7 +147,7 @@ final class SystemTrayWorkflow {
                       // NB tray icon message will be set in: RS232_Read_Sensor_Data_PPPP_For_Obs()
                       boolean local_tray_icon_clicked = true;
                       RS232_vaisala.RS232_Read_Sensor_Data_PPPP_For_Obs(
-                          local_tray_icon_clicked); // retrieve mybarometer.pressure_reading
+                          local_tray_icon_clicked); // retrieve BarometerModel.pressure_reading
                     } // try
                     catch (NumberFormatException en) {
                       info =
@@ -162,40 +164,42 @@ final class SystemTrayWorkflow {
                     // check if we receive valid data (parameter day is arbitrary, could eg also be
                     // month etc.)
                     try {
-                      int int_day = Integer.parseInt(mydatetime.day);
+                      int int_day = Integer.parseInt(DateTimeModel.day);
 
                       if ((int_day >= 1) && (int_day <= 31)) {
 
                         info = "";
                         info =
-                            mydatetime.day
+                            DateTimeModel.day
                                 + " "
-                                + mydatetime.month
+                                + DateTimeModel.month
                                 + " "
-                                + mydatetime.year
+                                + DateTimeModel.year
                                 + "  "
-                                + mydatetime.hour
+                                + DateTimeModel.hour
                                 + "."
-                                + mydatetime.minute
+                                + DateTimeModel.minute
                                 + " UTC"
                                 + "\n"
                                 + "\n"
                                 + "pressure at sensor height: "
-                                + mybarometer.pressure_reading
+                                + BarometerModel.pressure_reading
                                 + " hPa"
                                 + "\n"
                                 + "pressure at MSL: "
-                                + mybarometer.pressure_msl_corrected
+                                + BarometerModel.pressure_msl_corrected
                                 + " hPa"; // + "\n"; +
                         // commented out because will not be visible due to the available pop-up
                         // space
                         // "\n" +
-                        // "air temp at sensor height: " + mytemp.air_temp + " C" + "\n" +
-                        // "SST at sensor depth: " + mytemp.sea_water_temp + " C" + "\n" +
+                        // "air temp at sensor height: " + TemperatureModel.air_temp + " C" + "\n" +
+                        // "SST at sensor depth: " + TemperatureModel.sea_water_temp + " C" + "\n" +
                         // "\n" +
-                        // "true wind speed at sensor height: " + mywind.int_true_wind_speed + " " +
+                        // "true wind speed at sensor height: " + WindModel.int_true_wind_speed + "
+                        // " +
                         // wind_speed_units + "\n" +
-                        // "true wind dir at sensor height: " + mywind.int_true_wind_dir + " degr";
+                        // "true wind dir at sensor height: " + WindModel.int_true_wind_dir + "
+                        // degr";
                       } // if ( (int_day >= 1) && (int_day <= 31) )
 
                       // trayIcon.displayMessage("TurboWin", info, MessageType.INFO);

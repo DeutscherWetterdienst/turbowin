@@ -95,15 +95,15 @@ public class Rs232MintakaWowAprWorkflowTest {
     originalSensorA = main.sensor_data_record_obs_a;
     originalObservationDate = main.obs_file_datum_tijd;
     originalCorrection = main.barometer_instrument_correction;
-    originalPressureCorrected = mybarometer.pressure_reading_corrected;
-    originalPressureMslCorrected = mybarometer.pressure_msl_corrected;
-    originalPressureAmount = mybarograph.pressure_amount_tendency;
-    originalACode = mybarograph.a_code;
-    originalAirTemp = mytemp.air_temp;
-    originalWetBulb = mytemp.wet_bulb_temp;
-    originalRh = mytemp.RH;
-    originalRelativeHumidity = mytemp.double_rv;
-    originalDewPoint = mytemp.double_dew_point;
+    originalPressureCorrected = BarometerModel.pressure_reading_corrected;
+    originalPressureMslCorrected = BarometerModel.pressure_msl_corrected;
+    originalPressureAmount = BarographModel.pressure_amount_tendency;
+    originalACode = BarographModel.a_code;
+    originalAirTemp = TemperatureModel.air_temp;
+    originalWetBulb = TemperatureModel.wet_bulb_temp;
+    originalRh = TemperatureModel.RH;
+    originalRelativeHumidity = TemperatureModel.double_rv;
+    originalDewPoint = TemperatureModel.double_dew_point;
     originalMainFields[0] = main.jTextField5;
     originalMainFields[1] = main.jTextField7;
     originalMainFields[2] = main.jTextField9;
@@ -121,19 +121,19 @@ public class Rs232MintakaWowAprWorkflowTest {
     originalGpsLongitudeEarlier = main_RS232_RS422.GPS_longitude_earlier;
     originalGpsLatitudeEarlierWind = main_RS232_RS422.GPS_latitude_earlier_wind;
     originalGpsLongitudeEarlierWind = main_RS232_RS422.GPS_longitude_earlier_wind;
-    originalLatitudeDegrees = myposition.latitude_degrees;
-    originalLatitudeMinutes = myposition.latitude_minutes;
-    originalLatitudeHemisphere = myposition.latitude_hemisphere;
-    originalLongitudeDegrees = myposition.longitude_degrees;
-    originalLongitudeMinutes = myposition.longitude_minutes;
-    originalLongitudeHemisphere = myposition.longitude_hemisphere;
-    originalQcCode = myposition.Qc_code;
-    originalCourse = myposition.course;
-    originalSpeed = myposition.speed;
-    originalSog = myposition.SOG_APR;
-    originalCog = myposition.COG_APR;
-    originalSogWind = myposition.SOG_APR_wind;
-    originalCogWind = myposition.COG_APR_wind;
+    originalLatitudeDegrees = PositionModel.latitude_degrees;
+    originalLatitudeMinutes = PositionModel.latitude_minutes;
+    originalLatitudeHemisphere = PositionModel.latitude_hemisphere;
+    originalLongitudeDegrees = PositionModel.longitude_degrees;
+    originalLongitudeMinutes = PositionModel.longitude_minutes;
+    originalLongitudeHemisphere = PositionModel.longitude_hemisphere;
+    originalQcCode = PositionModel.Qc_code;
+    originalCourse = PositionModel.course;
+    originalSpeed = PositionModel.speed;
+    originalSog = PositionModel.SOG_APR;
+    originalCog = PositionModel.COG_APR;
+    originalSogWind = PositionModel.SOG_APR_wind;
+    originalCogWind = PositionModel.COG_APR_wind;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -150,15 +150,15 @@ public class Rs232MintakaWowAprWorkflowTest {
     main.sensor_data_record_obs_pressure = "";
     main.sensor_data_record_obs_ppp = "";
     main.sensor_data_record_obs_a = "";
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.double_rv = main.INVALID;
-    mytemp.double_dew_point = main.INVALID;
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.double_rv = main.INVALID;
+    TemperatureModel.double_dew_point = main.INVALID;
     resetPositionState();
     setMainFieldReferences();
   }
@@ -181,15 +181,15 @@ public class Rs232MintakaWowAprWorkflowTest {
     main.sensor_data_record_obs_a = originalSensorA;
     main.obs_file_datum_tijd = originalObservationDate;
     main.barometer_instrument_correction = originalCorrection;
-    mybarometer.pressure_reading_corrected = originalPressureCorrected;
-    mybarometer.pressure_msl_corrected = originalPressureMslCorrected;
-    mybarograph.pressure_amount_tendency = originalPressureAmount;
-    mybarograph.a_code = originalACode;
-    mytemp.air_temp = originalAirTemp;
-    mytemp.wet_bulb_temp = originalWetBulb;
-    mytemp.RH = originalRh;
-    mytemp.double_rv = originalRelativeHumidity;
-    mytemp.double_dew_point = originalDewPoint;
+    BarometerModel.pressure_reading_corrected = originalPressureCorrected;
+    BarometerModel.pressure_msl_corrected = originalPressureMslCorrected;
+    BarographModel.pressure_amount_tendency = originalPressureAmount;
+    BarographModel.a_code = originalACode;
+    TemperatureModel.air_temp = originalAirTemp;
+    TemperatureModel.wet_bulb_temp = originalWetBulb;
+    TemperatureModel.RH = originalRh;
+    TemperatureModel.double_rv = originalRelativeHumidity;
+    TemperatureModel.double_dew_point = originalDewPoint;
     main.jTextField5 = originalMainFields[0];
     main.jTextField7 = originalMainFields[1];
     main.jTextField9 = originalMainFields[2];
@@ -207,19 +207,19 @@ public class Rs232MintakaWowAprWorkflowTest {
     main_RS232_RS422.GPS_longitude_earlier = originalGpsLongitudeEarlier;
     main_RS232_RS422.GPS_latitude_earlier_wind = originalGpsLatitudeEarlierWind;
     main_RS232_RS422.GPS_longitude_earlier_wind = originalGpsLongitudeEarlierWind;
-    myposition.latitude_degrees = originalLatitudeDegrees;
-    myposition.latitude_minutes = originalLatitudeMinutes;
-    myposition.latitude_hemisphere = originalLatitudeHemisphere;
-    myposition.longitude_degrees = originalLongitudeDegrees;
-    myposition.longitude_minutes = originalLongitudeMinutes;
-    myposition.longitude_hemisphere = originalLongitudeHemisphere;
-    myposition.Qc_code = originalQcCode;
-    myposition.course = originalCourse;
-    myposition.speed = originalSpeed;
-    myposition.SOG_APR = originalSog;
-    myposition.COG_APR = originalCog;
-    myposition.SOG_APR_wind = originalSogWind;
-    myposition.COG_APR_wind = originalCogWind;
+    PositionModel.latitude_degrees = originalLatitudeDegrees;
+    PositionModel.latitude_minutes = originalLatitudeMinutes;
+    PositionModel.latitude_hemisphere = originalLatitudeHemisphere;
+    PositionModel.longitude_degrees = originalLongitudeDegrees;
+    PositionModel.longitude_minutes = originalLongitudeMinutes;
+    PositionModel.longitude_hemisphere = originalLongitudeHemisphere;
+    PositionModel.Qc_code = originalQcCode;
+    PositionModel.course = originalCourse;
+    PositionModel.speed = originalSpeed;
+    PositionModel.SOG_APR = originalSog;
+    PositionModel.COG_APR = originalCog;
+    PositionModel.SOG_APR_wind = originalSogWind;
+    PositionModel.COG_APR_wind = originalCogWind;
   }
 
   @Test
@@ -236,7 +236,7 @@ public class Rs232MintakaWowAprWorkflowTest {
     assertEquals("52 00.0000N", main_RS232_RS422.GPS_latitude);
     assertEquals("004 00.0000E", main_RS232_RS422.GPS_longitude);
     assertEquals("1000.0", main.sensor_data_record_obs_pressure);
-    assertTrue(mybarometer.pressure_reading_corrected.length() > 0);
+    assertTrue(BarometerModel.pressure_reading_corrected.length() > 0);
   }
 
   @Test
@@ -280,13 +280,13 @@ public class Rs232MintakaWowAprWorkflowTest {
 
     startWorkflow("MAIN_SCREEN", false, false);
 
-    assertEquals("52", myposition.latitude_degrees);
-    assertEquals("01", myposition.latitude_minutes);
-    assertEquals(myposition.HEMISPHERE_NORTH, myposition.latitude_hemisphere);
-    assertEquals("004", myposition.lolololo_code.substring(0, 3));
-    assertEquals("1", myposition.Qc_code);
-    assertEquals(0.0, myposition.COG_APR, 0.001);
-    assertTrue(myposition.SOG_APR > 5.0);
+    assertEquals("52", PositionModel.latitude_degrees);
+    assertEquals("01", PositionModel.latitude_minutes);
+    assertEquals(PositionModel.HEMISPHERE_NORTH, PositionModel.latitude_hemisphere);
+    assertEquals("004", PositionModel.lolololo_code.substring(0, 3));
+    assertEquals("1", PositionModel.Qc_code);
+    assertEquals(0.0, PositionModel.COG_APR, 0.001);
+    assertTrue(PositionModel.SOG_APR > 5.0);
   }
 
   @Test
@@ -346,21 +346,21 @@ public class Rs232MintakaWowAprWorkflowTest {
       assertEquals("", main_RS232_RS422.GPS_longitude_earlier);
       assertEquals("52 01.0000N", main_RS232_RS422.GPS_latitude);
       assertEquals("004 01.0000E", main_RS232_RS422.GPS_longitude);
-      assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
-      assertEquals(Double.MAX_VALUE, myposition.COG_APR, 0.0);
+      assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR, 0.0);
+      assertEquals(Double.MAX_VALUE, PositionModel.COG_APR, 0.0);
     }
   }
 
   @Test
   public void starXPressureReductionUsesCurrentTemperatureInsteadOfSharedState() throws Exception {
     main.barometer_above_sll = "20";
-    mytemp.air_temp = "-20.0";
+    TemperatureModel.air_temp = "-20.0";
     runWorkflowWithRecord(
         starRecord(
             starXPayload("1000.0", "1.0", "2", "30.0", "50", "20.0", "10.0", "0"), new Date()),
         "MAIN_SCREEN",
         true);
-    assertEquals("1002.25", mybarometer.pressure_msl_corrected);
+    assertEquals("1002.25", BarometerModel.pressure_msl_corrected);
   }
 
   @Test
@@ -371,18 +371,18 @@ public class Rs232MintakaWowAprWorkflowTest {
             starXPayload("1000.0", "1.0", "2", "999.9", "50", "20.0", "10.0", "0"), new Date()),
         "MAIN_SCREEN",
         true);
-    assertEquals("1002.37", mybarometer.pressure_msl_corrected);
+    assertEquals("1002.37", BarometerModel.pressure_msl_corrected);
   }
 
   @Test
   public void pressureOnlyInstrumentDoesNotUseSharedTemperature() throws Exception {
     main.barometer_above_sll = "20";
-    mytemp.air_temp = "30.0";
+    TemperatureModel.air_temp = "30.0";
     runWorkflowWithRecord(
         starRecord(starPayload("1000.0", "1.0", "2", "52 00.0000N", "004 00.0000E"), new Date()),
         "MAIN_SCREEN",
         false);
-    assertEquals("1002.37", mybarometer.pressure_msl_corrected);
+    assertEquals("1002.37", BarometerModel.pressure_msl_corrected);
   }
 
   @Test
@@ -393,11 +393,11 @@ public class Rs232MintakaWowAprWorkflowTest {
         "MAIN_SCREEN",
         true);
 
-    assertEquals("-69.9", mytemp.air_temp);
-    assertEquals("-69.9", mytemp.wet_bulb_temp);
-    assertEquals("100", mytemp.RH);
-    assertEquals(1.0, mytemp.double_rv, 0.001);
-    assertEquals(12.3, mytemp.double_dew_point, 0.001);
+    assertEquals("-69.9", TemperatureModel.air_temp);
+    assertEquals("-69.9", TemperatureModel.wet_bulb_temp);
+    assertEquals("100", TemperatureModel.RH);
+    assertEquals(1.0, TemperatureModel.double_rv, 0.001);
+    assertEquals(12.3, TemperatureModel.double_dew_point, 0.001);
 
     runWorkflowWithRecord(
         starRecord(
@@ -405,11 +405,11 @@ public class Rs232MintakaWowAprWorkflowTest {
         "MAIN_SCREEN",
         true);
 
-    assertEquals("", mybarometer.pressure_reading_corrected);
-    assertEquals("", mytemp.air_temp);
-    assertEquals("", mytemp.wet_bulb_temp);
-    assertEquals("", mytemp.RH);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.001);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
+    assertEquals("", TemperatureModel.air_temp);
+    assertEquals("", TemperatureModel.wet_bulb_temp);
+    assertEquals("", TemperatureModel.RH);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.001);
   }
 
   @Test
@@ -418,9 +418,9 @@ public class Rs232MintakaWowAprWorkflowTest {
         starRecord(starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"), new Date()),
         "APR",
         false);
-    assertTrue(mybarometer.pressure_reading_corrected.length() > 0);
-    assertEquals("1.2", mybarograph.pressure_amount_tendency);
-    assertEquals("2", mybarograph.a_code);
+    assertTrue(BarometerModel.pressure_reading_corrected.length() > 0);
+    assertEquals("1.2", BarographModel.pressure_amount_tendency);
+    assertEquals("2", BarographModel.a_code);
     assertEquals("", main.jTextField9.getText());
 
     runWorkflowWithRecord(
@@ -435,7 +435,7 @@ public class Rs232MintakaWowAprWorkflowTest {
         starRecord(starPayload("1000.0", "1.2", "2", "52 00.0000N", "004 00.0000E"), new Date()),
         "WOW",
         false);
-    assertEquals("", mybarometer.pressure_reading_corrected);
+    assertEquals("", BarometerModel.pressure_reading_corrected);
     assertEquals("", main.sensor_data_record_obs_pressure);
   }
 
@@ -559,19 +559,19 @@ public class Rs232MintakaWowAprWorkflowTest {
     main_RS232_RS422.GPS_longitude_earlier = "";
     main_RS232_RS422.GPS_latitude_earlier_wind = "";
     main_RS232_RS422.GPS_longitude_earlier_wind = "";
-    myposition.latitude_degrees = "";
-    myposition.latitude_minutes = "";
-    myposition.latitude_hemisphere = "";
-    myposition.longitude_degrees = "";
-    myposition.longitude_minutes = "";
-    myposition.longitude_hemisphere = "";
-    myposition.Qc_code = "";
-    myposition.course = "";
-    myposition.speed = "";
-    myposition.SOG_APR = Double.MAX_VALUE;
-    myposition.COG_APR = Double.MAX_VALUE;
-    myposition.SOG_APR_wind = Double.MAX_VALUE;
-    myposition.COG_APR_wind = Double.MAX_VALUE;
+    PositionModel.latitude_degrees = "";
+    PositionModel.latitude_minutes = "";
+    PositionModel.latitude_hemisphere = "";
+    PositionModel.longitude_degrees = "";
+    PositionModel.longitude_minutes = "";
+    PositionModel.longitude_hemisphere = "";
+    PositionModel.Qc_code = "";
+    PositionModel.course = "";
+    PositionModel.speed = "";
+    PositionModel.SOG_APR = Double.MAX_VALUE;
+    PositionModel.COG_APR = Double.MAX_VALUE;
+    PositionModel.SOG_APR_wind = Double.MAX_VALUE;
+    PositionModel.COG_APR_wind = Double.MAX_VALUE;
   }
 
   private static void waitFor(BooleanSupplier condition) throws Exception {

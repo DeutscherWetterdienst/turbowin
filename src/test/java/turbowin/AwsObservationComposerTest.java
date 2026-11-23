@@ -60,11 +60,11 @@ public class AwsObservationComposerTest {
     originalSstFromAwsPresent = main.SST_from_AWS_present;
     originalTrueWindSpeedFromAwsPresent = main.true_wind_speed_from_AWS_present;
     originalTrueWindDirFromAwsPresent = main.true_wind_dir_from_AWS_present;
-    originalIntTrueWindDir = mywind.int_true_wind_dir;
-    originalIntTrueWindSpeed = mywind.int_true_wind_speed;
-    originalAirTemp = mytemp.air_temp;
-    originalDoubleRv = mytemp.double_rv;
-    originalSeaWaterTemp = mytemp.sea_water_temp;
+    originalIntTrueWindDir = WindModel.int_true_wind_dir;
+    originalIntTrueWindSpeed = WindModel.int_true_wind_speed;
+    originalAirTemp = TemperatureModel.air_temp;
+    originalDoubleRv = TemperatureModel.double_rv;
+    originalSeaWaterTemp = TemperatureModel.sea_water_temp;
     originalVvCode = VisibilityState.VV_code;
     originalWwCode = PresentWeatherState.ww_code;
     originalW1Code = PastWeatherState.W1_code;
@@ -75,14 +75,14 @@ public class AwsObservationComposerTest {
     originalClCode = LowCloudState.cl_code;
     originalCmCode = MiddleCloudState.cm_code;
     originalChCode = HighCloudState.ch_code;
-    originalPwCode = mywaves.Pw_code;
-    originalHwCode = mywaves.Hw_code;
-    originalDw1Code = mywaves.Dw1_code;
-    originalPw1Code = mywaves.Pw1_code;
-    originalHw1Code = mywaves.Hw1_code;
-    originalDw2Code = mywaves.Dw2_code;
-    originalPw2Code = mywaves.Pw2_code;
-    originalHw2Code = mywaves.Hw2_code;
+    originalPwCode = WavesModel.Pw_code;
+    originalHwCode = WavesModel.Hw_code;
+    originalDw1Code = WavesModel.Dw1_code;
+    originalPw1Code = WavesModel.Pw1_code;
+    originalHw1Code = WavesModel.Hw1_code;
+    originalDw2Code = WavesModel.Dw2_code;
+    originalPw2Code = WavesModel.Pw2_code;
+    originalHw2Code = WavesModel.Hw2_code;
     originalEsEsCode = IcingState.EsEs_code;
     originalRsCode = IcingState.Rs_code;
     originalIsCode = IcingState.Is_code;
@@ -91,7 +91,7 @@ public class AwsObservationComposerTest {
     originalZiCode = IceState.zi_code;
     originalSiCode = IceState.Si_code;
     originalDiCode = IceState.Di_code;
-    originalSelectedObserver = myobserver.selected_observer;
+    originalSelectedObserver = ObserverModel.selected_observer;
 
     main.diff_sll_wl = "";
     main.wind_units = "knots";
@@ -102,11 +102,11 @@ public class AwsObservationComposerTest {
     main.true_wind_speed_from_AWS_present = false;
     main.true_wind_dir_from_AWS_present = false;
 
-    mywind.int_true_wind_dir = main.INVALID;
-    mywind.int_true_wind_speed = main.INVALID;
-    mytemp.air_temp = "";
-    mytemp.double_rv = main.INVALID;
-    mytemp.sea_water_temp = "";
+    WindModel.int_true_wind_dir = main.INVALID;
+    WindModel.int_true_wind_speed = main.INVALID;
+    TemperatureModel.air_temp = "";
+    TemperatureModel.double_rv = main.INVALID;
+    TemperatureModel.sea_water_temp = "";
     VisibilityState.VV_code = "//";
     PresentWeatherState.ww_code = "//";
     PastWeatherState.W1_code = "/";
@@ -117,14 +117,14 @@ public class AwsObservationComposerTest {
     LowCloudState.cl_code = "/";
     MiddleCloudState.cm_code = "/";
     HighCloudState.ch_code = "/";
-    mywaves.Pw_code = "//";
-    mywaves.Hw_code = "//";
-    mywaves.Dw1_code = "//";
-    mywaves.Pw1_code = "//";
-    mywaves.Hw1_code = "//";
-    mywaves.Dw2_code = "//";
-    mywaves.Pw2_code = "//";
-    mywaves.Hw2_code = "//";
+    WavesModel.Pw_code = "//";
+    WavesModel.Hw_code = "//";
+    WavesModel.Dw1_code = "//";
+    WavesModel.Pw1_code = "//";
+    WavesModel.Hw1_code = "//";
+    WavesModel.Dw2_code = "//";
+    WavesModel.Pw2_code = "//";
+    WavesModel.Hw2_code = "//";
     IcingState.EsEs_code = "//";
     IcingState.Rs_code = "/";
     IcingState.Is_code = "/";
@@ -133,7 +133,7 @@ public class AwsObservationComposerTest {
     IceState.zi_code = "/";
     IceState.Si_code = "/";
     IceState.Di_code = "/";
-    myobserver.selected_observer = "";
+    ObserverModel.selected_observer = "";
   }
 
   @After
@@ -146,11 +146,11 @@ public class AwsObservationComposerTest {
     main.SST_from_AWS_present = originalSstFromAwsPresent;
     main.true_wind_speed_from_AWS_present = originalTrueWindSpeedFromAwsPresent;
     main.true_wind_dir_from_AWS_present = originalTrueWindDirFromAwsPresent;
-    mywind.int_true_wind_dir = originalIntTrueWindDir;
-    mywind.int_true_wind_speed = originalIntTrueWindSpeed;
-    mytemp.air_temp = originalAirTemp;
-    mytemp.double_rv = originalDoubleRv;
-    mytemp.sea_water_temp = originalSeaWaterTemp;
+    WindModel.int_true_wind_dir = originalIntTrueWindDir;
+    WindModel.int_true_wind_speed = originalIntTrueWindSpeed;
+    TemperatureModel.air_temp = originalAirTemp;
+    TemperatureModel.double_rv = originalDoubleRv;
+    TemperatureModel.sea_water_temp = originalSeaWaterTemp;
     VisibilityState.VV_code = originalVvCode;
     PresentWeatherState.ww_code = originalWwCode;
     PastWeatherState.W1_code = originalW1Code;
@@ -161,14 +161,14 @@ public class AwsObservationComposerTest {
     LowCloudState.cl_code = originalClCode;
     MiddleCloudState.cm_code = originalCmCode;
     HighCloudState.ch_code = originalChCode;
-    mywaves.Pw_code = originalPwCode;
-    mywaves.Hw_code = originalHwCode;
-    mywaves.Dw1_code = originalDw1Code;
-    mywaves.Pw1_code = originalPw1Code;
-    mywaves.Hw1_code = originalHw1Code;
-    mywaves.Dw2_code = originalDw2Code;
-    mywaves.Pw2_code = originalPw2Code;
-    mywaves.Hw2_code = originalHw2Code;
+    WavesModel.Pw_code = originalPwCode;
+    WavesModel.Hw_code = originalHwCode;
+    WavesModel.Dw1_code = originalDw1Code;
+    WavesModel.Pw1_code = originalPw1Code;
+    WavesModel.Hw1_code = originalHw1Code;
+    WavesModel.Dw2_code = originalDw2Code;
+    WavesModel.Pw2_code = originalPw2Code;
+    WavesModel.Hw2_code = originalHw2Code;
     IcingState.EsEs_code = originalEsEsCode;
     IcingState.Rs_code = originalRsCode;
     IcingState.Is_code = originalIsCode;
@@ -177,7 +177,7 @@ public class AwsObservationComposerTest {
     IceState.zi_code = originalZiCode;
     IceState.Si_code = originalSiCode;
     IceState.Di_code = originalDiCode;
-    myobserver.selected_observer = originalSelectedObserver;
+    ObserverModel.selected_observer = originalSelectedObserver;
   }
 
   @Test
@@ -189,10 +189,10 @@ public class AwsObservationComposerTest {
 
   @Test
   public void convertsAndRoundsNumericInputs() {
-    mywind.int_true_wind_speed = 10;
-    mytemp.air_temp = "2.129";
-    mytemp.double_rv = 0.567;
-    mytemp.sea_water_temp = "2.129";
+    WindModel.int_true_wind_speed = 10;
+    TemperatureModel.air_temp = "2.129";
+    TemperatureModel.double_rv = 0.567;
+    TemperatureModel.sea_water_temp = "2.129";
 
     String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -222,7 +222,7 @@ public class AwsObservationComposerTest {
     IceState.ci_code = "u";
     IceState.Di_code = "2";
     main.eucaws_obs_id = true;
-    myobserver.selected_observer = "Janssen;K;AB1;-;";
+    ObserverModel.selected_observer = "Janssen;K;AB1;-;";
 
     String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -247,15 +247,15 @@ public class AwsObservationComposerTest {
   public void convertsManualWindValuesIntoAwsFields() {
     String originalDiffSllWl = main.diff_sll_wl;
     String originalWindUnits = main.wind_units;
-    int originalWindDirection = mywind.int_true_wind_dir;
-    int originalWindSpeed = mywind.int_true_wind_speed;
+    int originalWindDirection = WindModel.int_true_wind_dir;
+    int originalWindSpeed = WindModel.int_true_wind_speed;
     boolean originalDirectionFromAws = main.true_wind_dir_from_AWS_present;
     boolean originalSpeedFromAws = main.true_wind_speed_from_AWS_present;
     try {
       main.diff_sll_wl = "5";
       main.wind_units = main.M_S;
-      mywind.int_true_wind_dir = 180;
-      mywind.int_true_wind_speed = 10;
+      WindModel.int_true_wind_dir = 180;
+      WindModel.int_true_wind_speed = 10;
       main.true_wind_dir_from_AWS_present = false;
       main.true_wind_speed_from_AWS_present = false;
 
@@ -267,8 +267,8 @@ public class AwsObservationComposerTest {
     } finally {
       main.diff_sll_wl = originalDiffSllWl;
       main.wind_units = originalWindUnits;
-      mywind.int_true_wind_dir = originalWindDirection;
-      mywind.int_true_wind_speed = originalWindSpeed;
+      WindModel.int_true_wind_dir = originalWindDirection;
+      WindModel.int_true_wind_speed = originalWindSpeed;
       main.true_wind_dir_from_AWS_present = originalDirectionFromAws;
       main.true_wind_speed_from_AWS_present = originalSpeedFromAws;
     }
@@ -276,23 +276,23 @@ public class AwsObservationComposerTest {
 
   @Test
   public void convertsWindWavePeriodsAndHeights() {
-    String originalPw = mywaves.Pw_code;
-    String originalHw = mywaves.Hw_code;
-    String originalDw1 = mywaves.Dw1_code;
-    String originalPw1 = mywaves.Pw1_code;
-    String originalHw1 = mywaves.Hw1_code;
-    String originalDw2 = mywaves.Dw2_code;
-    String originalPw2 = mywaves.Pw2_code;
-    String originalHw2 = mywaves.Hw2_code;
+    String originalPw = WavesModel.Pw_code;
+    String originalHw = WavesModel.Hw_code;
+    String originalDw1 = WavesModel.Dw1_code;
+    String originalPw1 = WavesModel.Pw1_code;
+    String originalHw1 = WavesModel.Hw1_code;
+    String originalDw2 = WavesModel.Dw2_code;
+    String originalPw2 = WavesModel.Pw2_code;
+    String originalHw2 = WavesModel.Hw2_code;
     try {
-      mywaves.Pw_code = "03";
-      mywaves.Hw_code = "03";
-      mywaves.Dw1_code = "12";
-      mywaves.Pw1_code = "04";
-      mywaves.Hw1_code = "05";
-      mywaves.Dw2_code = "24";
-      mywaves.Pw2_code = "06";
-      mywaves.Hw2_code = "07";
+      WavesModel.Pw_code = "03";
+      WavesModel.Hw_code = "03";
+      WavesModel.Dw1_code = "12";
+      WavesModel.Pw1_code = "04";
+      WavesModel.Hw1_code = "05";
+      WavesModel.Dw2_code = "24";
+      WavesModel.Pw2_code = "06";
+      WavesModel.Hw2_code = "07";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -305,36 +305,36 @@ public class AwsObservationComposerTest {
       assertEquals("6", fields[23]);
       assertEquals("3.5", fields[24]);
     } finally {
-      mywaves.Pw_code = originalPw;
-      mywaves.Hw_code = originalHw;
-      mywaves.Dw1_code = originalDw1;
-      mywaves.Pw1_code = originalPw1;
-      mywaves.Hw1_code = originalHw1;
-      mywaves.Dw2_code = originalDw2;
-      mywaves.Pw2_code = originalPw2;
-      mywaves.Hw2_code = originalHw2;
+      WavesModel.Pw_code = originalPw;
+      WavesModel.Hw_code = originalHw;
+      WavesModel.Dw1_code = originalDw1;
+      WavesModel.Pw1_code = originalPw1;
+      WavesModel.Hw1_code = originalHw1;
+      WavesModel.Dw2_code = originalDw2;
+      WavesModel.Pw2_code = originalPw2;
+      WavesModel.Hw2_code = originalHw2;
     }
   }
 
   @Test
   public void omitsUnavailableWindWaveValues() {
-    String originalPw = mywaves.Pw_code;
-    String originalHw = mywaves.Hw_code;
-    String originalDw1 = mywaves.Dw1_code;
-    String originalPw1 = mywaves.Pw1_code;
-    String originalHw1 = mywaves.Hw1_code;
-    String originalDw2 = mywaves.Dw2_code;
-    String originalPw2 = mywaves.Pw2_code;
-    String originalHw2 = mywaves.Hw2_code;
+    String originalPw = WavesModel.Pw_code;
+    String originalHw = WavesModel.Hw_code;
+    String originalDw1 = WavesModel.Dw1_code;
+    String originalPw1 = WavesModel.Pw1_code;
+    String originalHw1 = WavesModel.Hw1_code;
+    String originalDw2 = WavesModel.Dw2_code;
+    String originalPw2 = WavesModel.Pw2_code;
+    String originalHw2 = WavesModel.Hw2_code;
     try {
-      mywaves.Pw_code = "99";
-      mywaves.Hw_code = "99";
-      mywaves.Dw1_code = "99";
-      mywaves.Pw1_code = "99";
-      mywaves.Hw1_code = "99";
-      mywaves.Dw2_code = "99";
-      mywaves.Pw2_code = "99";
-      mywaves.Hw2_code = "99";
+      WavesModel.Pw_code = "99";
+      WavesModel.Hw_code = "99";
+      WavesModel.Dw1_code = "99";
+      WavesModel.Pw1_code = "99";
+      WavesModel.Hw1_code = "99";
+      WavesModel.Dw2_code = "99";
+      WavesModel.Pw2_code = "99";
+      WavesModel.Hw2_code = "99";
 
       String[] fields = AwsObservationComposer.compile().split(",", -1);
 
@@ -347,14 +347,14 @@ public class AwsObservationComposerTest {
       assertEquals("", fields[23]);
       assertEquals("", fields[24]);
     } finally {
-      mywaves.Pw_code = originalPw;
-      mywaves.Hw_code = originalHw;
-      mywaves.Dw1_code = originalDw1;
-      mywaves.Pw1_code = originalPw1;
-      mywaves.Hw1_code = originalHw1;
-      mywaves.Dw2_code = originalDw2;
-      mywaves.Pw2_code = originalPw2;
-      mywaves.Hw2_code = originalHw2;
+      WavesModel.Pw_code = originalPw;
+      WavesModel.Hw_code = originalHw;
+      WavesModel.Dw1_code = originalDw1;
+      WavesModel.Pw1_code = originalPw1;
+      WavesModel.Hw1_code = originalHw1;
+      WavesModel.Dw2_code = originalDw2;
+      WavesModel.Pw2_code = originalPw2;
+      WavesModel.Hw2_code = originalHw2;
     }
   }
 
@@ -597,20 +597,20 @@ public class AwsObservationComposerTest {
   @Test
   public void roundsManualNumericWeatherValues() {
     String originalWindUnits = main.wind_units;
-    int originalWindSpeed = mywind.int_true_wind_speed;
-    String originalAirTemperature = mytemp.air_temp;
-    double originalRelativeHumidity = mytemp.double_rv;
-    String originalSeaWaterTemperature = mytemp.sea_water_temp;
+    int originalWindSpeed = WindModel.int_true_wind_speed;
+    String originalAirTemperature = TemperatureModel.air_temp;
+    double originalRelativeHumidity = TemperatureModel.double_rv;
+    String originalSeaWaterTemperature = TemperatureModel.sea_water_temp;
     boolean originalSpeedFromAws = main.true_wind_speed_from_AWS_present;
     boolean originalAirTemperatureFromAws = main.air_temp_from_AWS_present;
     boolean originalHumidityFromAws = main.rh_from_AWS_present;
     boolean originalSstFromAws = main.SST_from_AWS_present;
     try {
       main.wind_units = main.M_S;
-      mywind.int_true_wind_speed = 12;
-      mytemp.air_temp = "2.26";
-      mytemp.double_rv = 0.567;
-      mytemp.sea_water_temp = "4.26";
+      WindModel.int_true_wind_speed = 12;
+      TemperatureModel.air_temp = "2.26";
+      TemperatureModel.double_rv = 0.567;
+      TemperatureModel.sea_water_temp = "4.26";
       main.true_wind_speed_from_AWS_present = false;
       main.air_temp_from_AWS_present = false;
       main.rh_from_AWS_present = false;
@@ -624,10 +624,10 @@ public class AwsObservationComposerTest {
       assertEquals("4.3", fields[6]);
     } finally {
       main.wind_units = originalWindUnits;
-      mywind.int_true_wind_speed = originalWindSpeed;
-      mytemp.air_temp = originalAirTemperature;
-      mytemp.double_rv = originalRelativeHumidity;
-      mytemp.sea_water_temp = originalSeaWaterTemperature;
+      WindModel.int_true_wind_speed = originalWindSpeed;
+      TemperatureModel.air_temp = originalAirTemperature;
+      TemperatureModel.double_rv = originalRelativeHumidity;
+      TemperatureModel.sea_water_temp = originalSeaWaterTemperature;
       main.true_wind_speed_from_AWS_present = originalSpeedFromAws;
       main.air_temp_from_AWS_present = originalAirTemperatureFromAws;
       main.rh_from_AWS_present = originalHumidityFromAws;
@@ -637,16 +637,16 @@ public class AwsObservationComposerTest {
 
   @Test
   public void omitsWeatherValuesProvidedByAws() {
-    String originalAirTemperature = mytemp.air_temp;
-    double originalRelativeHumidity = mytemp.double_rv;
-    String originalSeaWaterTemperature = mytemp.sea_water_temp;
+    String originalAirTemperature = TemperatureModel.air_temp;
+    double originalRelativeHumidity = TemperatureModel.double_rv;
+    String originalSeaWaterTemperature = TemperatureModel.sea_water_temp;
     boolean originalAirTemperatureFromAws = main.air_temp_from_AWS_present;
     boolean originalHumidityFromAws = main.rh_from_AWS_present;
     boolean originalSstFromAws = main.SST_from_AWS_present;
     try {
-      mytemp.air_temp = "2.26";
-      mytemp.double_rv = 0.567;
-      mytemp.sea_water_temp = "4.26";
+      TemperatureModel.air_temp = "2.26";
+      TemperatureModel.double_rv = 0.567;
+      TemperatureModel.sea_water_temp = "4.26";
       main.air_temp_from_AWS_present = true;
       main.rh_from_AWS_present = true;
       main.SST_from_AWS_present = true;
@@ -657,9 +657,9 @@ public class AwsObservationComposerTest {
       assertEquals("", fields[5]);
       assertEquals("", fields[6]);
     } finally {
-      mytemp.air_temp = originalAirTemperature;
-      mytemp.double_rv = originalRelativeHumidity;
-      mytemp.sea_water_temp = originalSeaWaterTemperature;
+      TemperatureModel.air_temp = originalAirTemperature;
+      TemperatureModel.double_rv = originalRelativeHumidity;
+      TemperatureModel.sea_water_temp = originalSeaWaterTemperature;
       main.air_temp_from_AWS_present = originalAirTemperatureFromAws;
       main.rh_from_AWS_present = originalHumidityFromAws;
       main.SST_from_AWS_present = originalSstFromAws;

@@ -32,7 +32,7 @@ public class ObserverJavaFxIntegrationTest extends AbstractUiTest {
       main.logs_dir = directory.toString();
       main.eucaws_obs_id = false;
       main.in_next_sequence = false;
-      myobserver.selected_observer = "Doe;J.D.;Captain;N1234;";
+      ObserverModel.selected_observer = "Doe;J.D.;Captain;N1234;";
     });
     JDialog dialog = GuiActionRunner.execute(ObserverDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -56,7 +56,7 @@ public class ObserverJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("Doe;J.D.;Officer;N1234;", myobserver.selected_observer);
+      assertEquals("Doe;J.D.;Officer;N1234;", ObserverModel.selected_observer);
     });
     long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
     while (System.nanoTime() < deadline
@@ -71,7 +71,7 @@ public class ObserverJavaFxIntegrationTest extends AbstractUiTest {
       main.logs_dir = directory.toString();
       main.eucaws_obs_id = true;
       main.in_next_sequence = true;
-      myobserver.selected_observer = "";
+      ObserverModel.selected_observer = "";
     });
     try {
       JDialog dialog = GuiActionRunner.execute(ObserverDialog::open);
@@ -104,8 +104,8 @@ public class ObserverJavaFxIntegrationTest extends AbstractUiTest {
       SwingUtilities.invokeAndWait(() -> {
         assertFalse(dialog.isDisplayable());
         assertFalse(main.in_next_sequence);
-        assertEquals("JB1", myobserver.observer_data[0][2]);
-        assertEquals("Jones;J.B.;JB2;-;", myobserver.selected_observer);
+        assertEquals("JB1", ObserverModel.observer_data[0][2]);
+        assertEquals("Jones;J.B.;JB2;-;", ObserverModel.selected_observer);
       });
     } finally {
       SwingUtilities.invokeAndWait(() -> {
@@ -144,8 +144,7 @@ public class ObserverJavaFxIntegrationTest extends AbstractUiTest {
         return null;
       });
       DialogFixture clouds =
-          WindowFinder.findDialog(new DialogTitleMatcher(CloudCoverJavaFxWindow.TITLE))
-              .using(robot());
+          WindowFinder.findDialog(new DialogTitleMatcher(CloudCoverDialog.TITLE)).using(robot());
       SwingUtilities.invokeAndWait(clouds.target()::dispose);
     } finally {
       SwingUtilities.invokeAndWait(() -> main.in_next_sequence = false);

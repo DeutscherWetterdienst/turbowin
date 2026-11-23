@@ -84,23 +84,27 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     originalEmailSubject = main.obs_email_subject;
     originalEmailCc = main.obs_email_cc;
     originalStationId = main.station_ID;
-    originalYear = mydatetime.year;
-    originalMonth = mydatetime.month;
-    originalDay = mydatetime.day;
-    originalHour = mydatetime.hour;
-    originalMonthCode = mydatetime.MM_code;
-    originalDayCode = mydatetime.YY_code;
-    originalHourCode = mydatetime.GG_code;
-    originalQcCode = myposition.Qc_code;
-    originalLatitudeCode = myposition.lalala_code;
-    originalLongitudeCode = myposition.lolololo_code;
+    originalYear = DateTimeModel.year;
+    originalMonth = DateTimeModel.month;
+    originalDay = DateTimeModel.day;
+    originalHour = DateTimeModel.hour;
+    originalMonthCode = DateTimeModel.MM_code;
+    originalDayCode = DateTimeModel.YY_code;
+    originalHourCode = DateTimeModel.GG_code;
+    originalQcCode = PositionModel.Qc_code;
+    originalLatitudeCode = PositionModel.lalala_code;
+    originalLongitudeCode = PositionModel.lolololo_code;
     originalObservation = main.obs_write;
     originalApr = main.APR;
     originalAwsr = main.AWSR;
     originalFormat101Class = main.format_101_class;
     originalJakartaEmailClass = main.jakarta_email_class;
     replaceStaticTextFields(
-        main.class, myposition.class, mybarometer.class, mybarograph.class, mytemp.class);
+        main.class,
+        PositionModel.class,
+        BarometerModel.class,
+        BarographModel.class,
+        TemperatureModel.class);
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -148,16 +152,16 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
     main.obs_email_subject = originalEmailSubject;
     main.obs_email_cc = originalEmailCc;
     main.station_ID = originalStationId;
-    mydatetime.year = originalYear;
-    mydatetime.month = originalMonth;
-    mydatetime.day = originalDay;
-    mydatetime.hour = originalHour;
-    mydatetime.MM_code = originalMonthCode;
-    mydatetime.YY_code = originalDayCode;
-    mydatetime.GG_code = originalHourCode;
-    myposition.Qc_code = originalQcCode;
-    myposition.lalala_code = originalLatitudeCode;
-    myposition.lolololo_code = originalLongitudeCode;
+    DateTimeModel.year = originalYear;
+    DateTimeModel.month = originalMonth;
+    DateTimeModel.day = originalDay;
+    DateTimeModel.hour = originalHour;
+    DateTimeModel.MM_code = originalMonthCode;
+    DateTimeModel.YY_code = originalDayCode;
+    DateTimeModel.GG_code = originalHourCode;
+    PositionModel.Qc_code = originalQcCode;
+    PositionModel.lalala_code = originalLatitudeCode;
+    PositionModel.lolololo_code = originalLongitudeCode;
     main.obs_write = originalObservation;
     main.APR = originalApr;
     main.AWSR = originalAwsr;
@@ -229,22 +233,22 @@ public class Rs232OutputObsByEmailAllAprWorkflowTest {
 
   private void setRequiredObservationData() {
     main.station_ID = "TEST";
-    mydatetime.year = "2024";
-    mydatetime.month = "01";
-    mydatetime.day = "01";
-    mydatetime.hour = "12";
-    mydatetime.MM_code = "01";
-    mydatetime.YY_code = "01";
-    mydatetime.GG_code = "12";
-    myposition.Qc_code = "1";
-    myposition.lalala_code = "234";
-    myposition.lolololo_code = "5678";
+    DateTimeModel.year = "2024";
+    DateTimeModel.month = "01";
+    DateTimeModel.day = "01";
+    DateTimeModel.hour = "12";
+    DateTimeModel.MM_code = "01";
+    DateTimeModel.YY_code = "01";
+    DateTimeModel.GG_code = "12";
+    PositionModel.Qc_code = "1";
+    PositionModel.lalala_code = "234";
+    PositionModel.lolololo_code = "5678";
   }
 
   private static void awaitAutomaticEmailCompletion() throws Exception {
     // Calling the transport is not completion: done() still logs and resets the observation.
     // Let that callback finish before the next test replaces the shared observation state.
-    waitFor(() -> mydatetime.year.isEmpty());
+    waitFor(() -> DateTimeModel.year.isEmpty());
     SwingUtilities.invokeAndWait(() -> {});
   }
 

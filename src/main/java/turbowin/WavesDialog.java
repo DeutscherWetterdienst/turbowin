@@ -12,7 +12,7 @@ final class WavesDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    mywaves model = new mywaves();
+    WavesModel model = new WavesModel();
     WavesView.State state =
         new WavesView.State(model.initialValues(), main.in_next_sequence, main.offline_mode);
     return FxSwingDialog.show(

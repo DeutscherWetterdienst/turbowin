@@ -76,7 +76,7 @@ public class ObservationFillingTest extends AbstractUiTest {
           @Override
           protected void executeInEDT() {
             main.jTextField36.setText("12 °C");
-            mytemp.air_temp = "12";
+            TemperatureModel.air_temp = "12";
             main.Reset_all_meteo_parameters();
           }
         });

@@ -30,13 +30,14 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         if (main.date_from_AWS_present) {
           dashboard_string_last_update_record_date =
-              mydatetime.day + " " + mydatetime.month + " " + mydatetime.year;
+              DateTimeModel.day + " " + DateTimeModel.month + " " + DateTimeModel.year;
         } else {
           dashboard_string_last_update_record_date = "";
         }
 
         if (main.time_from_AWS_present) {
-          dashboard_string_last_update_record_time = mydatetime.hour + ":" + mydatetime.minute;
+          dashboard_string_last_update_record_time =
+              DateTimeModel.hour + ":" + DateTimeModel.minute;
         } else {
           dashboard_string_last_update_record_time = "";
         }
@@ -46,11 +47,11 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         if (main.latitude_from_AWS_present) {
           dashboard_string_last_update_record_latitude =
-              myposition.latitude_degrees
+              PositionModel.latitude_degrees
                   + "\u00B0"
-                  + myposition.latitude_minutes
+                  + PositionModel.latitude_minutes
                   + "' "
-                  + myposition.latitude_hemisphere.substring(0, 1);
+                  + PositionModel.latitude_hemisphere.substring(0, 1);
         } else {
           dashboard_string_last_update_record_latitude = "";
         }
@@ -60,11 +61,11 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         if (main.longitude_from_AWS_present) {
           dashboard_string_last_update_record_longitude =
-              myposition.longitude_degrees
+              PositionModel.longitude_degrees
                   + "\u00B0"
-                  + myposition.longitude_minutes
+                  + PositionModel.longitude_minutes
                   + "' "
-                  + myposition.longitude_hemisphere.substring(0, 1);
+                  + PositionModel.longitude_hemisphere.substring(0, 1);
         } else {
           dashboard_string_last_update_record_longitude = "";
         }
@@ -73,7 +74,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.SOG_from_AWS_present) {
-          dashboard_string_last_update_record_SOG = mywind.ship_ground_speed;
+          dashboard_string_last_update_record_SOG = WindModel.ship_ground_speed;
         } else {
           dashboard_string_last_update_record_SOG = "";
         }
@@ -82,7 +83,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.COG_from_AWS_present) {
-          dashboard_string_last_update_record_COG = mywind.ship_ground_course;
+          dashboard_string_last_update_record_COG = WindModel.ship_ground_course;
         } else {
           dashboard_string_last_update_record_COG = "";
         }
@@ -91,7 +92,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.true_heading_from_AWS_present) {
-          dashboard_string_last_update_record_heading = mywind.ship_heading;
+          dashboard_string_last_update_record_heading = WindModel.ship_heading;
         } else {
           dashboard_string_last_update_record_heading = "";
         }
@@ -105,7 +106,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         if (main.pressure_sensor_level_from_AWS_present) {
           // nb in case EUCAWS always ic integrated in barometer reading!
           dashboard_double_last_update_record_sensor_level_pressure_ic =
-              Double.parseDouble(mybarometer.pressure_reading);
+              Double.parseDouble(BarometerModel.pressure_reading);
         } else {
           dashboard_double_last_update_record_sensor_level_pressure_ic = Double.MAX_VALUE;
         }
@@ -118,7 +119,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         if (main.pressure_MSL_from_AWS_present) {
           dashboard_double_last_update_record_MSL_pressure_ic =
-              Double.parseDouble(mybarometer.pressure_msl_corrected);
+              Double.parseDouble(BarometerModel.pressure_msl_corrected);
         } else {
           dashboard_double_last_update_record_MSL_pressure_ic = Double.MAX_VALUE;
         }
@@ -131,7 +132,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         // RS422_Read_AWS_Sensor_Data_For_Display()
         {
           dashboard_double_last_update_record_pressure_tendency =
-              Double.parseDouble(mybarograph.pressure_amount_tendency);
+              Double.parseDouble(BarographModel.pressure_amount_tendency);
         } else {
           dashboard_double_last_update_record_pressure_tendency = Double.MAX_VALUE;
         }
@@ -140,7 +141,8 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.air_temp_from_AWS_present) {
-          dashboard_double_last_update_record_air_temp = Double.parseDouble(mytemp.air_temp);
+          dashboard_double_last_update_record_air_temp =
+              Double.parseDouble(TemperatureModel.air_temp);
         } else {
           dashboard_double_last_update_record_air_temp = Double.MAX_VALUE;
         }
@@ -150,7 +152,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         if (main.rh_from_AWS_present) {
           double hulp_double_rv =
-              Math.round(mytemp.double_rv * 10 * 100)
+              Math.round(TemperatureModel.double_rv * 10 * 100)
                   / 10.0; // nb Math.round(xxx) - > geeft long terug  // NB * 100 for getting %
           dashboard_double_last_update_record_humidity = hulp_double_rv;
         } else {
@@ -161,7 +163,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.true_wind_dir_from_AWS_present) {
-          dashboard_int_last_update_record_true_wind_dir = mywind.int_true_wind_dir;
+          dashboard_int_last_update_record_true_wind_dir = WindModel.int_true_wind_dir;
         } else {
           dashboard_int_last_update_record_true_wind_dir = Integer.MAX_VALUE;
         }
@@ -170,8 +172,9 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.relative_wind_dir_from_AWS_present) {
-          // dashboard_int_last_update_record_relative_wind_dir = Integer.parseInt(mywind.wind_dir);
-          dashboard_int_last_update_record_relative_wind_dir = mywind.int_relative_wind_dir;
+          // dashboard_int_last_update_record_relative_wind_dir =
+          // Integer.parseInt(WindModel.wind_dir);
+          dashboard_int_last_update_record_relative_wind_dir = WindModel.int_relative_wind_dir;
         } else {
           dashboard_int_last_update_record_relative_wind_dir = Integer.MAX_VALUE;
         }
@@ -180,7 +183,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.true_wind_gust_dir_from_AWS_present) {
-          dashboard_int_last_update_record_true_wind_gust_dir = mywind.int_true_wind_gust_dir;
+          dashboard_int_last_update_record_true_wind_gust_dir = WindModel.int_true_wind_gust_dir;
         } else {
           dashboard_int_last_update_record_true_wind_gust_dir = Integer.MAX_VALUE;
         }
@@ -191,8 +194,8 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         if (main.true_wind_speed_from_AWS_present) {
           Integer dashboardTrueWindSpeed =
               AwsDashboardWindSpeedConverter.convert(
-                  mywind.double_true_wind_speed,
-                  mywind.int_true_wind_speed,
+                  WindModel.double_true_wind_speed,
+                  WindModel.int_true_wind_speed,
                   main.wind_units,
                   main.wind_units_dashboard);
           if (dashboardTrueWindSpeed != null) {
@@ -215,7 +218,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
               // !!!)
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
@@ -223,7 +226,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
@@ -236,7 +239,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
@@ -244,7 +247,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_speed);
               dashboard_int_last_update_record_true_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_speed_10m, main.wind_units, main.wind_units_dashboard);
@@ -260,8 +263,8 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         if (main.relative_wind_speed_from_AWS_present) {
           Integer dashboardRelativeWindSpeed =
               AwsDashboardWindSpeedConverter.convert(
-                  mywind.double_relative_wind_speed,
-                  mywind.int_relative_wind_speed,
+                  WindModel.double_relative_wind_speed,
+                  WindModel.int_relative_wind_speed,
                   main.wind_units,
                   main.wind_units_dashboard);
           if (dashboardRelativeWindSpeed != null) {
@@ -282,7 +285,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_relative_wind_speed_10m,
@@ -292,7 +295,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_relative_wind_speed_10m,
@@ -307,7 +310,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_relative_wind_speed_10m,
@@ -317,7 +320,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_relative_wind_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_relative_wind_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_relative_wind_speed);
               dashboard_int_last_update_record_relative_wind_speed_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_relative_wind_speed_10m,
@@ -335,8 +338,8 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         if (main.true_wind_gust_from_AWS_present) {
           Integer dashboardTrueWindGustSpeed =
               AwsDashboardWindSpeedConverter.convert(
-                  mywind.double_true_wind_gust_speed,
-                  mywind.int_true_wind_gust_speed,
+                  WindModel.double_true_wind_gust_speed,
+                  WindModel.int_true_wind_gust_speed,
                   main.wind_units,
                   main.wind_units_dashboard);
           if (dashboardTrueWindGustSpeed != null) {
@@ -357,7 +360,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_gust_speed_10m,
@@ -367,7 +370,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_gust_speed_10m,
@@ -382,7 +385,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_gust_speed_10m,
@@ -392,7 +395,7 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
             {
               // 10 m wind speed (only for wind radar dashboard)
               double hulp_double_true_wind_gust_speed_10m =
-                  owner.RS422_convert_wind_speed_to_10m(mywind.double_true_wind_gust_speed);
+                  owner.RS422_convert_wind_speed_to_10m(WindModel.double_true_wind_gust_speed);
               dashboard_int_last_update_record_true_wind_gust_10m =
                   AwsDashboardWindSpeedAt10mConverter.convert(
                       hulp_double_true_wind_gust_speed_10m,
@@ -408,7 +411,8 @@ final class Rs422UpdateAwsDashboardValuesWorkflow {
         //
         //
         if (main.SST_from_AWS_present) {
-          dashboard_double_last_update_record_sst = Double.parseDouble((mytemp.sea_water_temp));
+          dashboard_double_last_update_record_sst =
+              Double.parseDouble((TemperatureModel.sea_water_temp));
         } else {
           dashboard_double_last_update_record_sst = Double.MAX_VALUE;
         }

@@ -62,15 +62,15 @@ final class ImmtLogWorkflow {
     //
     immt_rec = "3"; // char number 1 (3=temp. in tenths of degrees C)
 
-    immt_rec += mydatetime.year; // char number 2-5
-    immt_rec += mydatetime.MM_code; // char number 6-7
-    immt_rec += mydatetime.YY_code; // char number 8-9
-    immt_rec += mydatetime.GG_code; // char number 10-11
+    immt_rec += DateTimeModel.year; // char number 2-5
+    immt_rec += DateTimeModel.MM_code; // char number 6-7
+    immt_rec += DateTimeModel.YY_code; // char number 8-9
+    immt_rec += DateTimeModel.GG_code; // char number 10-11
 
-    immt_rec += myposition.Qc_code; // char number 12
+    immt_rec += PositionModel.Qc_code; // char number 12
 
-    immt_rec += myposition.lalala_code; // char number 13-15
-    immt_rec += myposition.lolololo_code; // char number 16-19
+    immt_rec += PositionModel.lalala_code; // char number 13-15
+    immt_rec += PositionModel.lolololo_code; // char number 16-19
     Qc_20 = "1";
 
     immt_rec += "0"; // char number 20
@@ -115,9 +115,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_dd = Integer.valueOf(mywind.dd_code);
+      int num_dd = Integer.valueOf(WindModel.dd_code);
       if ((num_dd >= 0 && num_dd <= 36) || (num_dd == 99)) {
-        immt_rec += mywind.dd_code; // char number 25-26
+        immt_rec += WindModel.dd_code; // char number 25-26
         Qc_4 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 25-26
@@ -128,9 +128,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_iw = Integer.valueOf(mywind.iw_code);
+      int num_iw = Integer.valueOf(WindModel.iw_code);
       if (num_iw == 0 || num_iw == 1 || num_iw == 3 || num_iw == 4) {
-        immt_rec += mywind.iw_code; // char number 27
+        immt_rec += WindModel.iw_code; // char number 27
       } else {
         immt_rec += SPATIE_1; // char number 27
       }
@@ -141,9 +141,9 @@ final class ImmtLogWorkflow {
 
     try {
       // max ff 99 units for IMMT
-      int num_ff = Integer.valueOf(mywind.ff_code);
+      int num_ff = Integer.valueOf(WindModel.ff_code);
       if (num_ff >= 0 && num_ff <= 99) {
-        immt_rec += mywind.ff_code; // char number 28-29
+        immt_rec += WindModel.ff_code; // char number 28-29
         Qc_5 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 28-29
@@ -154,9 +154,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_sn_TTT = Integer.valueOf(mytemp.sn_TTT_code);
+      int num_sn_TTT = Integer.valueOf(TemperatureModel.sn_TTT_code);
       if (num_sn_TTT >= 0 && num_sn_TTT <= 1) {
-        immt_rec += mytemp.sn_TTT_code; // char number 30
+        immt_rec += TemperatureModel.sn_TTT_code; // char number 30
       } else {
         immt_rec += SPATIE_1; // char number 30
       }
@@ -166,9 +166,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_TTT = Integer.valueOf(mytemp.TTT_code);
+      int num_TTT = Integer.valueOf(TemperatureModel.TTT_code);
       if (num_TTT >= 0 && num_TTT <= 999) {
-        immt_rec += mytemp.TTT_code; // char number 31-33
+        immt_rec += TemperatureModel.TTT_code; // char number 31-33
         Qc_6 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 31-33
@@ -183,21 +183,23 @@ final class ImmtLogWorkflow {
       // also Sn_TdTdTd = 7(ice) is possible contrary to the operational branch
 
       // System.out.println("num_sn_TdTdTd = " + num_sn_TdTdTd);
-      // System.out.println("mytemp.sn_TdTdTd_code = " + mytemp.sn_TdTdTd_code);
+      // System.out.println("TemperatureModel.sn_TdTdTd_code = " + TemperatureModel.sn_TdTdTd_code);
 
-      if ((mytemp.sn_TbTbTb_code.equals("")) && (mytemp.sn_TdTdTd_code.equals("") == false)) {
-        if (mytemp.sn_TdTdTd_code.equals("0")) {
+      if ((TemperatureModel.sn_TbTbTb_code.equals(""))
+          && (TemperatureModel.sn_TdTdTd_code.equals("") == false)) {
+        if (TemperatureModel.sn_TdTdTd_code.equals("0")) {
           immt_rec += "5"; // char number 34
-        } else if (mytemp.sn_TdTdTd_code.equals("1")) {
+        } else if (TemperatureModel.sn_TdTdTd_code.equals("1")) {
           immt_rec += "6"; // char number 34
         } else {
           immt_rec += SPATIE_1; // char number 34
         }
-      } // if ((mytemp.sn_TbTbTb_code.equals("")) && (mytemp.sn_TdTdTd_code.equals("") == false))
-      else if ((mytemp.sn_TbTbTb_code.equals("") == false)
-          && (mytemp.sn_TdTdTd_code.equals("") == false)) {
-        int num_sn_TdTdTd = Integer.valueOf(mytemp.sn_TdTdTd_code);
-        int num_sn_TbTbTb = Integer.valueOf(mytemp.sn_TbTbTb_code);
+      } // if ((TemperatureModel.sn_TbTbTb_code.equals("")) &&
+      // (TemperatureModel.sn_TdTdTd_code.equals("") == false))
+      else if ((TemperatureModel.sn_TbTbTb_code.equals("") == false)
+          && (TemperatureModel.sn_TdTdTd_code.equals("") == false)) {
+        int num_sn_TdTdTd = Integer.valueOf(TemperatureModel.sn_TdTdTd_code);
+        int num_sn_TbTbTb = Integer.valueOf(TemperatureModel.sn_TbTbTb_code);
 
         if (num_sn_TdTdTd == 0) {
           immt_rec += "5"; // char number 34
@@ -208,7 +210,8 @@ final class ImmtLogWorkflow {
         } else {
           immt_rec += SPATIE_1; // char number 34
         }
-      } // else if ((mytemp.sn_TbTbTb_code.equals("") == false) && (mytemp.sn_TdTdTd_code.equals("")
+      } // else if ((TemperatureModel.sn_TbTbTb_code.equals("") == false) &&
+      // (TemperatureModel.sn_TdTdTd_code.equals("")
       // == false))
       else {
         immt_rec += SPATIE_1; // char number 34
@@ -219,9 +222,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_TdTdTd = Integer.valueOf(mytemp.TdTdTd_code);
+      int num_TdTdTd = Integer.valueOf(TemperatureModel.TdTdTd_code);
       if (num_TdTdTd >= 0 && num_TdTdTd <= 999) {
-        immt_rec += mytemp.TdTdTd_code; // char number 35-37
+        immt_rec += TemperatureModel.TdTdTd_code; // char number 35-37
         Qc_7 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 35-37
@@ -232,9 +235,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_PPPP = Integer.valueOf(mybarometer.PPPP_code);
+      int num_PPPP = Integer.valueOf(BarometerModel.PPPP_code);
       if (num_PPPP >= 0 && num_PPPP <= 9999) {
-        immt_rec += mybarometer.PPPP_code; // char number 38-41
+        immt_rec += BarometerModel.PPPP_code; // char number 38-41
         Qc_8 = "1";
       } else {
         immt_rec += SPATIE_4; // char number 38-41
@@ -347,7 +350,7 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_ss_TsTsTs = Integer.valueOf(mytemp.ss_TsTsTs_code);
+      int num_ss_TsTsTs = Integer.valueOf(TemperatureModel.ss_TsTsTs_code);
       if (num_ss_TsTsTs >= 0 && num_ss_TsTsTs <= 7) {
         if (num_ss_TsTsTs == 0 || num_ss_TsTsTs == 2 || num_ss_TsTsTs == 4 || num_ss_TsTsTs == 6) {
           immt_rec += "0"; // char number 50
@@ -368,9 +371,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_TsTsTs = Integer.valueOf(mytemp.TsTsTs_code);
+      int num_TsTsTs = Integer.valueOf(TemperatureModel.TsTsTs_code);
       if (num_TsTsTs >= 0 && num_TsTsTs <= 999) {
-        immt_rec += mytemp.TsTsTs_code; // char number 51-53
+        immt_rec += TemperatureModel.TsTsTs_code; // char number 51-53
         Qc_10 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 51-53
@@ -381,9 +384,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_immt_sst_indicator = Integer.valueOf(mytemp.immt_sst_indicator);
+      int num_immt_sst_indicator = Integer.valueOf(TemperatureModel.immt_sst_indicator);
       if (num_immt_sst_indicator >= 0 && num_immt_sst_indicator <= 7) {
-        immt_rec += mytemp.immt_sst_indicator; // char number 54
+        immt_rec += TemperatureModel.immt_sst_indicator; // char number 54
       } else {
         immt_rec += SPATIE_1; // char number 54
       }
@@ -406,9 +409,9 @@ final class ImmtLogWorkflow {
     }
 
     try {
-      int num_Pw = Integer.valueOf(mywaves.Pw_code);
+      int num_Pw = Integer.valueOf(WavesModel.Pw_code);
       if (num_Pw >= 0 && num_Pw <= 99) {
-        immt_rec += mywaves.Pw_code; // char number 56-57
+        immt_rec += WavesModel.Pw_code; // char number 56-57
         Qc_11 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 56-57
@@ -419,9 +422,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_Hw = Integer.valueOf(mywaves.Hw_code);
+      int num_Hw = Integer.valueOf(WavesModel.Hw_code);
       if (num_Hw >= 0 && num_Hw <= 99) {
-        immt_rec += mywaves.Hw_code; // char number 58-59
+        immt_rec += WavesModel.Hw_code; // char number 58-59
         Qc_12 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 58-59
@@ -432,9 +435,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_Dw1 = Integer.valueOf(mywaves.Dw1_code);
+      int num_Dw1 = Integer.valueOf(WavesModel.Dw1_code);
       if (num_Dw1 >= 0 && num_Dw1 <= 99) {
-        immt_rec += mywaves.Dw1_code; // char number 60-61
+        immt_rec += WavesModel.Dw1_code; // char number 60-61
         Qc_13 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 60-61
@@ -445,9 +448,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_Pw1 = Integer.valueOf(mywaves.Pw1_code);
+      int num_Pw1 = Integer.valueOf(WavesModel.Pw1_code);
       if (num_Pw1 >= 0 && num_Pw1 <= 99) {
-        immt_rec += mywaves.Pw1_code; // char number 62-63
+        immt_rec += WavesModel.Pw1_code; // char number 62-63
         Qc_13 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 62-63
@@ -458,9 +461,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_Hw1 = Integer.valueOf(mywaves.Hw1_code);
+      int num_Hw1 = Integer.valueOf(WavesModel.Hw1_code);
       if (num_Hw1 >= 0 && num_Hw1 <= 99) {
-        immt_rec += mywaves.Hw1_code; // char number 64-65
+        immt_rec += WavesModel.Hw1_code; // char number 64-65
         Qc_13 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 64-65
@@ -564,9 +567,9 @@ final class ImmtLogWorkflow {
     immt_rec += SPATIE_1; // char number 88    // tr
 
     try {
-      int num_sn_TbTbTb_code = Integer.valueOf(mytemp.sn_TbTbTb_code);
+      int num_sn_TbTbTb_code = Integer.valueOf(TemperatureModel.sn_TbTbTb_code);
       if (num_sn_TbTbTb_code >= 0 && num_sn_TbTbTb_code <= 2) {
-        immt_rec += mytemp.sn_TbTbTb_code; // char number 89
+        immt_rec += TemperatureModel.sn_TbTbTb_code; // char number 89
       } else {
         immt_rec += SPATIE_1; // char number 89
       }
@@ -576,9 +579,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_TbTbTb_code = Integer.valueOf(mytemp.TbTbTb_code);
+      int num_TbTbTb_code = Integer.valueOf(TemperatureModel.TbTbTb_code);
       if (num_TbTbTb_code >= 0 && num_TbTbTb_code <= 999) {
-        immt_rec += mytemp.TbTbTb_code; // char number 90-92
+        immt_rec += TemperatureModel.TbTbTb_code; // char number 90-92
         Qc_19 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 90-92
@@ -589,9 +592,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_a_code = Integer.valueOf(mybarograph.a_code);
+      int num_a_code = Integer.valueOf(BarographModel.a_code);
       if (num_a_code >= 0 && num_a_code <= 8) {
-        immt_rec += mybarograph.a_code; // char number 93
+        immt_rec += BarographModel.a_code; // char number 93
         Qc_15 = "1";
       } else {
         immt_rec += SPATIE_1; // char number 93
@@ -602,9 +605,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_ppp_code = Integer.valueOf(mybarograph.ppp_code);
+      int num_ppp_code = Integer.valueOf(BarographModel.ppp_code);
       if (num_ppp_code >= 0 && num_ppp_code <= 999) {
-        immt_rec += mybarograph.ppp_code; // char number 94-96
+        immt_rec += BarographModel.ppp_code; // char number 94-96
         Qc_16 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 94-96
@@ -620,9 +623,9 @@ final class ImmtLogWorkflow {
       immt_rec += SPATIE_1; // char number 97
     } else {
       try {
-        int num_Ds_code = Integer.valueOf(myposition.Ds_code);
+        int num_Ds_code = Integer.valueOf(PositionModel.Ds_code);
         if (num_Ds_code >= 0 && num_Ds_code <= 9) {
-          immt_rec += myposition.Ds_code; // char number 97
+          immt_rec += PositionModel.Ds_code; // char number 97
           Qc_17 = "1";
         } else {
           immt_rec += SPATIE_1; // char number 97
@@ -639,9 +642,9 @@ final class ImmtLogWorkflow {
       immt_rec += SPATIE_1; // char number 97
     } else {
       try {
-        int num_vs_code = Integer.valueOf(myposition.vs_code);
+        int num_vs_code = Integer.valueOf(PositionModel.vs_code);
         if (num_vs_code >= 0 && num_vs_code <= 9) {
-          immt_rec += myposition.vs_code; // char number 98
+          immt_rec += PositionModel.vs_code; // char number 98
           Qc_18 = "1";
         } else {
           immt_rec += SPATIE_1; // char number 98
@@ -653,9 +656,9 @@ final class ImmtLogWorkflow {
     } // else
 
     try {
-      int num_Dw2 = Integer.valueOf(mywaves.Dw2_code);
+      int num_Dw2 = Integer.valueOf(WavesModel.Dw2_code);
       if (num_Dw2 >= 0 && num_Dw2 <= 99) {
-        immt_rec += mywaves.Dw2_code; // char number 99-100
+        immt_rec += WavesModel.Dw2_code; // char number 99-100
         Qc_13 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 99-100
@@ -666,9 +669,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_Pw2 = Integer.valueOf(mywaves.Pw2_code);
+      int num_Pw2 = Integer.valueOf(WavesModel.Pw2_code);
       if (num_Pw2 >= 0 && num_Pw2 <= 99) {
-        immt_rec += mywaves.Pw2_code; // char number 101-102
+        immt_rec += WavesModel.Pw2_code; // char number 101-102
         Qc_13 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 101-102
@@ -679,9 +682,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_Hw2 = Integer.valueOf(mywaves.Hw2_code);
+      int num_Hw2 = Integer.valueOf(WavesModel.Hw2_code);
       if (num_Hw2 >= 0 && num_Hw2 <= 99) {
-        immt_rec += mywaves.Hw2_code; // char number 103-104
+        immt_rec += WavesModel.Hw2_code; // char number 103-104
         Qc_13 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 103-104
@@ -773,9 +776,9 @@ final class ImmtLogWorkflow {
     immt_rec += Qc_21; // char number 132  (MQCS)
 
     try {
-      int num_HDG = Integer.valueOf(mywind.HDG_code);
+      int num_HDG = Integer.valueOf(WindModel.HDG_code);
       if (num_HDG >= 1 && num_HDG <= 360) {
-        immt_rec += mywind.HDG_code; // char number 133-135
+        immt_rec += WindModel.HDG_code; // char number 133-135
         Qc_22 = "1";
         HDG_ok = true;
       } else {
@@ -792,10 +795,11 @@ final class ImmtLogWorkflow {
       try {
         int num_COG =
             Integer.valueOf(
-                mywind.COG_code); // use COG for HDG (see wind input screen) will be inserted into
+                WindModel
+                    .COG_code); // use COG for HDG (see wind input screen) will be inserted into
         // IMMT on the position of HDG
         if (num_COG >= 1 && num_COG <= 360) {
-          immt_rec += mywind.COG_code; // char number 133-135
+          immt_rec += WindModel.COG_code; // char number 133-135
           Qc_22 = "1";
         } else {
           immt_rec += SPATIE_3; // char number 133-135
@@ -807,9 +811,9 @@ final class ImmtLogWorkflow {
     } // if (HDG_ok == false)
 
     try {
-      int num_COG = Integer.valueOf(mywind.COG_code);
+      int num_COG = Integer.valueOf(WindModel.COG_code);
       if (num_COG >= 0 && num_COG <= 360) {
-        immt_rec += mywind.COG_code; // char number 136-138
+        immt_rec += WindModel.COG_code; // char number 136-138
         Qc_23 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 136-138
@@ -820,9 +824,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_SOG = Integer.valueOf(mywind.SOG_code);
+      int num_SOG = Integer.valueOf(WindModel.SOG_code);
       if (num_SOG >= 0 && num_SOG <= 99) {
-        immt_rec += mywind.SOG_code; // char number 139-140
+        immt_rec += WindModel.SOG_code; // char number 139-140
         Qc_24 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 139-140
@@ -833,9 +837,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_SLL = Integer.valueOf(mywind.SLL_code);
+      int num_SLL = Integer.valueOf(WindModel.SLL_code);
       if (num_SLL >= 0 && num_SLL <= 99) {
-        immt_rec += mywind.SLL_code; // char number 141-142
+        immt_rec += WindModel.SLL_code; // char number 141-142
         Qc_25 = "1";
       } else {
         immt_rec += SPATIE_2; // char number 141-142
@@ -846,9 +850,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_sl = Integer.valueOf(mywind.sl_code);
+      int num_sl = Integer.valueOf(WindModel.sl_code);
       if (num_sl >= 0 && num_sl <= 1) {
-        immt_rec += mywind.sl_code; // char number 143
+        immt_rec += WindModel.sl_code; // char number 143
         sl_code_ok = true;
       } else {
         immt_rec += SPATIE_1; // char number 143
@@ -859,9 +863,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_hh = Integer.valueOf(mywind.hh_code);
+      int num_hh = Integer.valueOf(WindModel.hh_code);
       if (num_hh >= 0 && num_hh <= 99) {
-        immt_rec += mywind.hh_code; // char number 144-145
+        immt_rec += WindModel.hh_code; // char number 144-145
 
         // Qc27 serves as the indicator for both sl and hh (from IMMT-4)
         if (sl_code_ok == true) {
@@ -877,9 +881,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_RWD = Integer.valueOf(mywind.RWD_code);
+      int num_RWD = Integer.valueOf(WindModel.RWD_code);
       if (num_RWD >= 0 && num_RWD <= 360) {
-        immt_rec += mywind.RWD_code; // char number 146-148
+        immt_rec += WindModel.RWD_code; // char number 146-148
         Qc_28 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 146-148
@@ -890,9 +894,9 @@ final class ImmtLogWorkflow {
     } // catch
 
     try {
-      int num_RWS = Integer.valueOf(mywind.RWS_code);
+      int num_RWS = Integer.valueOf(WindModel.RWS_code);
       if (num_RWS >= 0 && num_RWS <= 999) {
-        immt_rec += mywind.RWS_code; // char number 149-151
+        immt_rec += WindModel.RWS_code; // char number 149-151
         Qc_29 = "1";
       } else {
         immt_rec += SPATIE_3; // char number 149-151
@@ -911,15 +915,15 @@ final class ImmtLogWorkflow {
     immt_rec += Qc_28; // char number 158
     immt_rec += Qc_29; // char number 159
 
-    if (mytemp.double_rv >= 0.0
-        && mytemp.double_rv <= 1.0
-        && (mytemp.RH.trim().length() > 0)) // NB double_rv range 0.0 - 1.0
+    if (TemperatureModel.double_rv >= 0.0
+        && TemperatureModel.double_rv <= 1.0
+        && (TemperatureModel.RH.trim().length() > 0)) // NB double_rv range 0.0 - 1.0
     {
       // RH
       int num_RH_code =
           (int)
               Math.floor(
-                  Math.abs(mytemp.double_rv * 100) * 10
+                  Math.abs(TemperatureModel.double_rv * 100) * 10
                       + 0.5); // e.g 0.5 -> 50 % -> 500 tenths of percentage
       String RH_code = Integer.toString(num_RH_code); // convert to string
 
@@ -983,7 +987,8 @@ final class ImmtLogWorkflow {
     /* BEGIN: THE FOLLOWING SECTION IS NOT PART OF THE OFFICIAL IMMT FORMAT */
     immt_rec += SPATIE_1; // char number 173
 
-    if (myobserver.selected_observer != null && myobserver.selected_observer.compareTo("") != 0) {
+    if (ObserverModel.selected_observer != null
+        && ObserverModel.selected_observer.compareTo("") != 0) {
       /*
             if (recruiting_country.indexOf("GERMANY") != -1)
             {
@@ -994,37 +999,37 @@ final class ImmtLogWorkflow {
                //    Stam;M;1st off;-;       ->      Stam M
                String selected_observer = "";
 
-               if (myobserver.selected_observer.length() > 2)
+               if (ObserverModel.selected_observer.length() > 2)
                {
                   int pos = -1;
                   int number_read_commas = 0;
 
                   do
                   {
-                     pos = myobserver.selected_observer.indexOf(";", pos + 1);
+                     pos = ObserverModel.selected_observer.indexOf(";", pos + 1);
                      if (pos != -1)
                      {
                         number_read_commas++;
                         if (number_read_commas == 2)
                         {
-                           selected_observer = myobserver.selected_observer.substring(0, pos);
+                           selected_observer = ObserverModel.selected_observer.substring(0, pos);
                            selected_observer = selected_observer.replace(';', ' ');      //replace occurrence of ';' to ' '     (eg Stam;M  -> Stam M)
                            selected_observer = selected_observer.replaceAll("\\.", "");    //replaces all occurrences of '.' to '' (eg Brouwer M.F  -> Brouwer MF)
                            break;
                         }
                      } // if (pos != -1)
                   } while (pos != -1);
-               } // if (myobserver.selected_observer.length() > 2)
+               } // if (ObserverModel.selected_observer.length() > 2)
 
                immt_rec += selected_observer;                    // char number 174 - ?
 
             } // if (recruiting_country.indexOf("GERMANY") != -1)
             else
             {
-               immt_rec += myobserver.selected_observer;         // char number 174 - ?
+               immt_rec += ObserverModel.selected_observer;         // char number 174 - ?
             }
       */
-      immt_rec += myobserver.selected_observer; // char number 174 - ?
+      immt_rec += ObserverModel.selected_observer; // char number 174 - ?
     }
 
     /* END: THE FOLLOWING SECTION IS NOT PART OF THE OFFICIAL IMMT FORMAT */

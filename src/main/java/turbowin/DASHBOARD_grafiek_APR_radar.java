@@ -226,16 +226,16 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
     if (main.obsolate_GPS_data_flag == false) {
       if (main.obs_format.equals(main.FORMAT_101)) {
-        if (myposition.COG_APR >= 0.0 && myposition.COG_APR <= 360.0) {
-          COG_10_min_line = "COG-10_min: " + myposition.COG_APR + "\u00B0";
+        if (PositionModel.COG_APR >= 0.0 && PositionModel.COG_APR <= 360.0) {
+          COG_10_min_line = "COG-10_min: " + PositionModel.COG_APR + "\u00B0";
         }
       } else if (main.obs_format.equals(main.FORMAT_FM13)) {
-        if (myposition.COG_APR >= 0.0 && myposition.COG_APR <= 360.0) {
-          COG_3_hrs_line = "COG-3_hrs : " + myposition.COG_APR + "\u00B0";
+        if (PositionModel.COG_APR >= 0.0 && PositionModel.COG_APR <= 360.0) {
+          COG_3_hrs_line = "COG-3_hrs : " + PositionModel.COG_APR + "\u00B0";
         }
 
-        if (myposition.COG_APR_wind >= 0.0 && myposition.COG_APR_wind <= 360.0) {
-          COG_wind_line = "COG-10_min: " + myposition.COG_APR_wind + "\u00B0";
+        if (PositionModel.COG_APR_wind >= 0.0 && PositionModel.COG_APR_wind <= 360.0) {
+          COG_wind_line = "COG-10_min: " + PositionModel.COG_APR_wind + "\u00B0";
         }
       }
     } //  if (main.obsolate_GPS_data_flag == false)
@@ -246,16 +246,16 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
     if (main.obsolate_GPS_data_flag == false) {
       if (main.obs_format.equals(main.FORMAT_101)) {
-        if (myposition.SOG_APR >= 0.0 && myposition.SOG_APR <= 50.0) {
-          SOG_10_min_line = "SOG-10_min: " + myposition.SOG_APR + " kts";
+        if (PositionModel.SOG_APR >= 0.0 && PositionModel.SOG_APR <= 50.0) {
+          SOG_10_min_line = "SOG-10_min: " + PositionModel.SOG_APR + " kts";
         }
       } else if (main.obs_format.equals(main.FORMAT_FM13)) {
-        if (myposition.SOG_APR >= 0.0 && myposition.SOG_APR <= 50.0) {
-          SOG_3_hrs_line = "SOG-3_hrs : " + myposition.SOG_APR + " kts";
+        if (PositionModel.SOG_APR >= 0.0 && PositionModel.SOG_APR <= 50.0) {
+          SOG_3_hrs_line = "SOG-3_hrs : " + PositionModel.SOG_APR + " kts";
         }
 
-        if (myposition.SOG_APR_wind >= 0.0 && myposition.SOG_APR_wind <= 50.0) {
-          SOG_wind_line = "SOG-10_min: " + myposition.SOG_APR_wind + " kts";
+        if (PositionModel.SOG_APR_wind >= 0.0 && PositionModel.SOG_APR_wind <= 50.0) {
+          SOG_wind_line = "SOG-10_min: " + PositionModel.SOG_APR_wind + " kts";
         }
       }
     } // if (main.obsolate_GPS_data_flag == false)
@@ -265,20 +265,20 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
     String lat_line = "Lat       : -";
 
     if (main.obsolate_GPS_data_flag == false) {
-      if (myposition.latitude_degrees.compareTo("") != 0
-          && myposition.latitude_minutes.compareTo("") != 0
-          && myposition.latitude_hemisphere.compareTo("") != 0
-          && myposition.latitude_degrees != null
-          && myposition.latitude_minutes != null
-          && myposition.latitude_hemisphere != null) {
+      if (PositionModel.latitude_degrees.compareTo("") != 0
+          && PositionModel.latitude_minutes.compareTo("") != 0
+          && PositionModel.latitude_hemisphere.compareTo("") != 0
+          && PositionModel.latitude_degrees != null
+          && PositionModel.latitude_minutes != null
+          && PositionModel.latitude_hemisphere != null) {
 
         lat_line =
             "Lat       : "
-                + myposition.latitude_degrees
+                + PositionModel.latitude_degrees
                 + "\u00B0"
-                + myposition.latitude_minutes
+                + PositionModel.latitude_minutes
                 + "'"
-                + myposition.latitude_hemisphere.substring(0, 0 + 1);
+                + PositionModel.latitude_hemisphere.substring(0, 0 + 1);
       }
     }
 
@@ -287,19 +287,19 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
     String lon_line = "Lon       : -";
 
     if (main.obsolate_GPS_data_flag == false) {
-      if (myposition.longitude_degrees.compareTo("") != 0
-          && myposition.longitude_minutes.compareTo("") != 0
-          && myposition.longitude_hemisphere.compareTo("") != 0
-          && myposition.longitude_degrees != null
-          && myposition.longitude_minutes != null
-          && myposition.longitude_hemisphere != null) {
+      if (PositionModel.longitude_degrees.compareTo("") != 0
+          && PositionModel.longitude_minutes.compareTo("") != 0
+          && PositionModel.longitude_hemisphere.compareTo("") != 0
+          && PositionModel.longitude_degrees != null
+          && PositionModel.longitude_minutes != null
+          && PositionModel.longitude_hemisphere != null) {
         lon_line =
             "Lon       : "
-                + myposition.longitude_degrees
+                + PositionModel.longitude_degrees
                 + "\u00B0"
-                + myposition.longitude_minutes
+                + PositionModel.longitude_minutes
                 + "'"
-                + myposition.longitude_hemisphere.substring(0, 0 + 1);
+                + PositionModel.longitude_hemisphere.substring(0, 0 + 1);
       }
     }
 
@@ -311,13 +311,13 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
     if (main.obsolate_data_flag == false) // air pressure data flag
     {
-      if ((mybarometer.pressure_msl_corrected.compareTo("") != 0)
-          && (mybarometer.pressure_msl_corrected != null)) {
-        mslp_line = "MSLP      : " + mybarometer.pressure_msl_corrected + " hPa";
+      if ((BarometerModel.pressure_msl_corrected.compareTo("") != 0)
+          && (BarometerModel.pressure_msl_corrected != null)) {
+        mslp_line = "MSLP      : " + BarometerModel.pressure_msl_corrected + " hPa";
       }
     }
-    // System.out.println("+++ mybarometer.pressure_msl_corrected = " +
-    // mybarometer.pressure_msl_corrected);
+    // System.out.println("+++ BarometerModel.pressure_msl_corrected = " +
+    // BarometerModel.pressure_msl_corrected);
 
     //////// air pressure tendency ////////
     //
@@ -327,9 +327,9 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
     if (main.obsolate_data_flag == false) // air pressure data flag
     {
-      if ((mybarograph.pressure_amount_tendency.compareTo("") != 0)
-          && (mybarograph.pressure_amount_tendency != null)) {
-        tendency_line = "Tendency  : " + mybarograph.pressure_amount_tendency + " hPa / 3 hrs";
+      if ((BarographModel.pressure_amount_tendency.compareTo("") != 0)
+          && (BarographModel.pressure_amount_tendency != null)) {
+        tendency_line = "Tendency  : " + BarographModel.pressure_amount_tendency + " hPa / 3 hrs";
       }
     }
 
@@ -341,8 +341,8 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
     if (main.obsolate_data_flag == false) // air pressure data flag
     {
-      if ((mybarograph.a_code.compareTo("") != 0) && (mybarograph.a_code != null)) {
-        tendency_char_line = "Tend. char: " + mybarograph.a_code + " (code)";
+      if ((BarographModel.a_code.compareTo("") != 0) && (BarographModel.a_code != null)) {
+        tendency_char_line = "Tend. char: " + BarographModel.a_code + " (code)";
       }
     }
 
@@ -354,9 +354,9 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
 
     if (main.obsolate_data_flag == false) // air pressure data flag
     {
-      if ((mybarometer.pressure_reading_corrected.compareTo("") != 0)
-          && (mybarometer.pressure_reading_corrected != null)) {
-        pressure_height_line = "Press read: " + mybarometer.pressure_reading_corrected + " hPa";
+      if ((BarometerModel.pressure_reading_corrected.compareTo("") != 0)
+          && (BarometerModel.pressure_reading_corrected != null)) {
+        pressure_height_line = "Press read: " + BarometerModel.pressure_reading_corrected + " hPa";
       }
     }
 
@@ -372,14 +372,14 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
                 || main.RS232_connection_mode
                     == 8))) // NB 7/8 : Mintaka StarX (temp) linked  // temp data flag
     {
-      if ((mytemp.air_temp.compareTo("") != 0) && (mytemp.air_temp != null)) {
+      if ((TemperatureModel.air_temp.compareTo("") != 0) && (TemperatureModel.air_temp != null)) {
         // het kan zijn dat er bv alleen staat 25 dit moet dan worden 25.0 C
-        int pos = mytemp.air_temp.indexOf(".");
+        int pos = TemperatureModel.air_temp.indexOf(".");
         if (pos == -1) // dus geen "." in de air temp string
         {
-          air_temp_line = "Air temp  : " + mytemp.air_temp + ".0 \u00B0C";
+          air_temp_line = "Air temp  : " + TemperatureModel.air_temp + ".0 \u00B0C";
         } else {
-          air_temp_line = "Air temp  : " + mytemp.air_temp + " \u00B0C";
+          air_temp_line = "Air temp  : " + TemperatureModel.air_temp + " \u00B0C";
         }
       }
     }
@@ -395,10 +395,10 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
             && (main.RS232_connection_mode == 7
                 || main.RS232_connection_mode == 8))) // NB 7/8 : Mintaka StarX (temp) linked
     {
-      if ((mytemp.double_rv != main.INVALID)) {
+      if ((TemperatureModel.double_rv != main.INVALID)) {
         // (first a trick for relative humidity rounding to 1 figure behind the decimal)
         double hulp_double_rv =
-            Math.round(mytemp.double_rv * 10 * 100)
+            Math.round(TemperatureModel.double_rv * 10 * 100)
                 / 10.0; // nb Math.round(xxx) - > geeft long terug  // NB * 100 for getting %
         rh_line = "RH        : " + Double.toString(hulp_double_rv) + " %";
       }
@@ -537,15 +537,15 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
     //
     int reading_int_course = Integer.MAX_VALUE;
     boolean course_ok = false;
-    // NB myposition.COG_APR was initiated as Double.MAX_VALUE
+    // NB PositionModel.COG_APR was initiated as Double.MAX_VALUE
     //    so if an value between 0.0 and 360,0 there was a COG computed
 
-    // if (myposition.COG_APR >= 0.0 && myposition.COG_APR <= 360.0)
-    if (myposition.COG_APR_wind >= 0.0
-        && myposition.COG_APR_wind <= 360.0) // alwayes based on 10 min. (FM13 en format #101)
+    // if (PositionModel.COG_APR >= 0.0 && PositionModel.COG_APR <= 360.0)
+    if (PositionModel.COG_APR_wind >= 0.0
+        && PositionModel.COG_APR_wind <= 360.0) // alwayes based on 10 min. (FM13 en format #101)
     {
-      // reading_int_course = (int)Math.round(myposition.COG_APR);
-      reading_int_course = (int) Math.round(myposition.COG_APR_wind);
+      // reading_int_course = (int)Math.round(PositionModel.COG_APR);
+      reading_int_course = (int) Math.round(PositionModel.COG_APR_wind);
 
       if (reading_int_course == 0) {
         reading_int_course = 360;
@@ -1189,15 +1189,15 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
     //
     //
 
-    if ((mywind.int_true_wind_speed >= 0.0 && mywind.int_true_wind_speed <= 400.0)
-        && (myposition.SOG_APR_wind >= 0.0 && myposition.SOG_APR_wind <= 50.0)
-        && (mywind.int_true_wind_dir >= 0.0 && mywind.int_true_wind_dir <= 360.0)
-        && (myposition.COG_APR_wind >= 0.0 && myposition.COG_APR_wind <= 360.0)) {
+    if ((WindModel.int_true_wind_speed >= 0.0 && WindModel.int_true_wind_speed <= 400.0)
+        && (PositionModel.SOG_APR_wind >= 0.0 && PositionModel.SOG_APR_wind <= 50.0)
+        && (WindModel.int_true_wind_dir >= 0.0 && WindModel.int_true_wind_dir <= 360.0)
+        && (PositionModel.COG_APR_wind >= 0.0 && PositionModel.COG_APR_wind <= 360.0)) {
       try {
-        double ho = myposition.COG_APR_wind; // num_heading_ship;
-        double Co = myposition.COG_APR_wind; // num_ground_course_ship;
-        double T = mywind.int_true_wind_speed; // knots or m/s (depending main.wind_units)
-        double To = mywind.int_true_wind_dir;
+        double ho = PositionModel.COG_APR_wind; // num_heading_ship;
+        double Co = PositionModel.COG_APR_wind; // num_ground_course_ship;
+        double T = WindModel.int_true_wind_speed; // knots or m/s (depending main.wind_units)
+        double To = WindModel.int_true_wind_dir;
         double Ro = 0; // by definition (aanname bij VOS)
         double C = 0;
 
@@ -1207,9 +1207,9 @@ public class DASHBOARD_grafiek_APR_radar extends JPanel {
         //
 
         if (main.wind_units.trim().indexOf(main.M_S) != -1) {
-          C = myposition.SOG_APR_wind * main.KNOT_M_S_CONVERSION; // m/s
+          C = PositionModel.SOG_APR_wind * main.KNOT_M_S_CONVERSION; // m/s
         } else {
-          C = myposition.SOG_APR_wind; // knots
+          C = PositionModel.SOG_APR_wind; // knots
         }
 
         //

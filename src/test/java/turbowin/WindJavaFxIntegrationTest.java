@@ -53,10 +53,10 @@ public class WindJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals(210, mywind.int_true_wind_dir);
-      assertEquals(15, mywind.int_true_wind_speed);
-      assertEquals("21", mywind.dd_code);
-      assertEquals("15", mywind.ff_code);
+      assertEquals(210, WindModel.int_true_wind_dir);
+      assertEquals(15, WindModel.int_true_wind_speed);
+      assertEquals("21", WindModel.dd_code);
+      assertEquals("15", WindModel.ff_code);
     });
     JDialog reopened = GuiActionRunner.execute(WindDialog::open);
     Scene reopenedScene = CloudCoverFxTestSupport.awaitScene(reopened);
@@ -86,10 +86,10 @@ public class WindJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("090", mywind.RWD_code);
-      assertEquals("010", mywind.RWS_code);
-      assertEquals(10, mywind.int_true_wind_speed);
-      assertNotEquals(main.INVALID, mywind.int_true_wind_dir);
+      assertEquals("090", WindModel.RWD_code);
+      assertEquals("010", WindModel.RWS_code);
+      assertEquals(10, WindModel.int_true_wind_speed);
+      assertNotEquals(main.INVALID, WindModel.int_true_wind_dir);
     });
   }
 
@@ -99,8 +99,8 @@ public class WindJavaFxIntegrationTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {
       main.true_wind_dir_from_AWS_present = true;
       main.true_wind_speed_from_AWS_present = true;
-      mywind.int_true_wind_dir = 270;
-      mywind.int_true_wind_speed = 20;
+      WindModel.int_true_wind_dir = 270;
+      WindModel.int_true_wind_speed = 20;
     });
     try {
       JDialog dialog = GuiActionRunner.execute(WindDialog::open);
@@ -115,8 +115,8 @@ public class WindJavaFxIntegrationTest extends AbstractUiTest {
       });
       SwingUtilities.invokeAndWait(() -> {
         assertFalse(dialog.isDisplayable());
-        assertEquals(270, mywind.int_true_wind_dir);
-        assertEquals(20, mywind.int_true_wind_speed);
+        assertEquals(270, WindModel.int_true_wind_dir);
+        assertEquals(20, WindModel.int_true_wind_speed);
         assertEquals("9", main.max_height_deck_cargo);
         assertEquals("-2", main.diff_sll_wl);
       });
@@ -150,7 +150,7 @@ public class WindJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals(180, mywind.int_true_wind_dir);
+      assertEquals(180, WindModel.int_true_wind_dir);
     });
   }
 
@@ -200,13 +200,13 @@ public class WindJavaFxIntegrationTest extends AbstractUiTest {
       main.true_wind_speed_from_AWS_present = false;
       main.max_height_deck_cargo = "5";
       main.diff_sll_wl = "2";
-      mywind.int_true_wind_dir = main.INVALID;
-      mywind.int_true_wind_speed = main.INVALID;
-      mywind.int_relative_wind_dir = main.INVALID;
-      mywind.int_relative_wind_speed = main.INVALID;
-      mywind.ship_ground_course = "";
-      mywind.ship_ground_speed = "";
-      mywind.ship_heading = "";
+      WindModel.int_true_wind_dir = main.INVALID;
+      WindModel.int_true_wind_speed = main.INVALID;
+      WindModel.int_relative_wind_dir = main.INVALID;
+      WindModel.int_relative_wind_speed = main.INVALID;
+      WindModel.ship_ground_course = "";
+      WindModel.ship_ground_speed = "";
+      WindModel.ship_heading = "";
     });
   }
 

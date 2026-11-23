@@ -58,14 +58,14 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     originalSdf4 = main.sdf4;
     originalSdf8 = main_RS232_RS422.sdf8;
     originalPressureRecord = main.sensor_data_record_obs_pressure;
-    originalPressureReading = mybarometer.pressure_reading;
+    originalPressureReading = BarometerModel.pressure_reading;
     originalCorrection = main.barometer_instrument_correction;
     originalTrayClick = main.tray_icon_clicked;
     originalConnectionMode = main.RS232_connection_mode;
     originalObservationDate = main.obs_file_datum_tijd;
     originalSystemDate = main_RS232_RS422.cal_system_date_time;
-    originalTextField1 = mybarometer.jTextField1;
-    originalTextField2 = mybarometer.jTextField2;
+    originalTextField1 = BarometerModel.jTextField1;
+    originalTextField2 = BarometerModel.jTextField2;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.type_record_lengte = main.RECORD_LENGTE_PTB220;
@@ -76,9 +76,9 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     main_RS232_RS422.sdf8 = utcFormat("dd MMM yyyy HH.mm");
     main.RS232_connection_mode = 1;
     main.barometer_instrument_correction = "";
-    mybarometer.pressure_reading = "";
-    mybarometer.jTextField1 = new JTextField();
-    mybarometer.jTextField2 = new JTextField();
+    BarometerModel.pressure_reading = "";
+    BarometerModel.jTextField1 = new JTextField();
+    BarometerModel.jTextField2 = new JTextField();
   }
 
   @After
@@ -91,50 +91,50 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     main.sdf4 = originalSdf4;
     main_RS232_RS422.sdf8 = originalSdf8;
     main.sensor_data_record_obs_pressure = originalPressureRecord;
-    mybarometer.pressure_reading = originalPressureReading;
+    BarometerModel.pressure_reading = originalPressureReading;
     main.barometer_instrument_correction = originalCorrection;
     main.tray_icon_clicked = originalTrayClick;
     main.RS232_connection_mode = originalConnectionMode;
     main.obs_file_datum_tijd = originalObservationDate;
     main_RS232_RS422.cal_system_date_time = originalSystemDate;
-    mybarometer.jTextField1 = originalTextField1;
-    mybarometer.jTextField2 = originalTextField2;
+    BarometerModel.jTextField1 = originalTextField1;
+    BarometerModel.jTextField2 = originalTextField2;
   }
 
   @Test
   public void freshReadingIsRoundedAndWrittenToTheBarometerForm() throws Exception {
     runFormRecord("1012.34", new Date());
 
-    assertEquals("1012.3", mybarometer.pressure_reading);
-    assertEquals("1012.3", mybarometer.jTextField1.getText());
+    assertEquals("1012.3", BarometerModel.pressure_reading);
+    assertEquals("1012.3", BarometerModel.jTextField1.getText());
   }
 
   @Test
   public void pressureAcceptanceRangeIsStrictlyBetween900And1100() throws Exception {
     runFormRecord("900.0", new Date());
-    assertEquals("", mybarometer.pressure_reading);
+    assertEquals("", BarometerModel.pressure_reading);
 
     runFormRecord("900.1", new Date());
-    assertEquals("900.1", mybarometer.pressure_reading);
+    assertEquals("900.1", BarometerModel.pressure_reading);
 
     runFormRecord("1099.9", new Date());
-    assertEquals("1099.9", mybarometer.pressure_reading);
+    assertEquals("1099.9", BarometerModel.pressure_reading);
 
-    mybarometer.pressure_reading = "";
-    mybarometer.jTextField1.setText("");
+    BarometerModel.pressure_reading = "";
+    BarometerModel.jTextField1.setText("");
     runFormRecord("1100.0", new Date());
-    assertEquals("", mybarometer.pressure_reading);
+    assertEquals("", BarometerModel.pressure_reading);
   }
 
   @Test
   public void malformedReadingDoesNotReplaceTheExistingFormValue() throws Exception {
-    mybarometer.pressure_reading = "old";
-    mybarometer.jTextField1.setText("old");
+    BarometerModel.pressure_reading = "old";
+    BarometerModel.jTextField1.setText("old");
 
     runFormRecord("bad", new Date());
 
-    assertEquals("old", mybarometer.pressure_reading);
-    assertEquals("old", mybarometer.jTextField1.getText());
+    assertEquals("old", BarometerModel.pressure_reading);
+    assertEquals("old", BarometerModel.jTextField1.getText());
   }
 
   @Test

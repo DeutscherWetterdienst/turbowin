@@ -25,8 +25,8 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
       main.in_next_sequence = false;
       main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_YES;
       main.barometer_instrument_correction = "0.5";
-      mybarometer.pressure_reading = "";
-      mybarometer.deepest_draft = "";
+      BarometerModel.pressure_reading = "";
+      BarometerModel.deepest_draft = "";
     });
     JDialog dialog = GuiActionRunner.execute(BarometerDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -44,9 +44,9 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("1013.2", mybarometer.pressure_reading);
-      assertEquals("1013.7", mybarometer.pressure_msl_corrected);
-      assertEquals("0137", mybarometer.PPPP_code);
+      assertEquals("1013.2", BarometerModel.pressure_reading);
+      assertEquals("1013.7", BarometerModel.pressure_msl_corrected);
+      assertEquals("0137", BarometerModel.PPPP_code);
     });
     JDialog reopened = GuiActionRunner.execute(BarometerDialog::open);
     Scene restored = CloudCoverFxTestSupport.awaitScene(reopened);
@@ -63,7 +63,7 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
       main.in_next_sequence = false;
       main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_YES;
       main.barometer_instrument_correction = "0.0";
-      mybarometer.pressure_reading = "";
+      BarometerModel.pressure_reading = "";
     });
     JDialog dialog = GuiActionRunner.execute(BarometerDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -84,7 +84,7 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("1000.0", mybarometer.pressure_msl_corrected);
+      assertEquals("1000.0", BarometerModel.pressure_msl_corrected);
     });
   }
 
@@ -95,9 +95,9 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
       main.RS232_connection_mode = 3;
       main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_NO;
       main.barometer_instrument_correction = "0.0";
-      mybarometer.pressure_reading = "1000.0";
-      mybarometer.deepest_draft = "10";
-      mybarometer.PPPP_code = "0010";
+      BarometerModel.pressure_reading = "1000.0";
+      BarometerModel.deepest_draft = "10";
+      BarometerModel.PPPP_code = "0010";
     });
     JDialog dialog = GuiActionRunner.execute(BarometerDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -108,7 +108,7 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
       assertTrue(((Label) scene.lookup("#msl_metadata")).getText().endsWith("No"));
       return null;
     });
-    SwingUtilities.invokeAndWait(() -> mybarometer.jTextField1.setText("1001.5"));
+    SwingUtilities.invokeAndWait(() -> BarometerModel.jTextField1.setText("1001.5"));
     SwingUtilities.invokeAndWait(() -> {});
     CloudCoverFxTestSupport.onFx(() -> {
       assertEquals("1001.5", field(scene, "barometer_reading").getText());
@@ -118,8 +118,8 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("1000.0", mybarometer.pressure_reading);
-      assertEquals("0010", mybarometer.PPPP_code);
+      assertEquals("1000.0", BarometerModel.pressure_reading);
+      assertEquals("0010", BarometerModel.PPPP_code);
     });
   }
 

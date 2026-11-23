@@ -51,10 +51,10 @@ public class Rs232MintakaPpppWorkflowTest {
     originalObservationDate = main.obs_file_datum_tijd;
     originalTrayIconClicked = main.tray_icon_clicked;
     originalPressureRecord = main.sensor_data_record_obs_pressure;
-    originalPressureReading = mybarometer.pressure_reading;
+    originalPressureReading = BarometerModel.pressure_reading;
     originalCorrection = main.barometer_instrument_correction;
-    originalPressureField = mybarometer.jTextField1;
-    originalDraftField = mybarometer.jTextField2;
+    originalPressureField = BarometerModel.jTextField1;
+    originalDraftField = BarometerModel.jTextField2;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -63,9 +63,9 @@ public class Rs232MintakaPpppWorkflowTest {
     main.tray_icon_clicked = false;
     main.sensor_data_record_obs_pressure = "";
     main.barometer_instrument_correction = "";
-    mybarometer.pressure_reading = "";
-    mybarometer.jTextField1 = new JTextField();
-    mybarometer.jTextField2 = new JTextField();
+    BarometerModel.pressure_reading = "";
+    BarometerModel.jTextField1 = new JTextField();
+    BarometerModel.jTextField2 = new JTextField();
   }
 
   @After
@@ -77,19 +77,19 @@ public class Rs232MintakaPpppWorkflowTest {
     main.obs_file_datum_tijd = originalObservationDate;
     main.tray_icon_clicked = originalTrayIconClicked;
     main.sensor_data_record_obs_pressure = originalPressureRecord;
-    mybarometer.pressure_reading = originalPressureReading;
+    BarometerModel.pressure_reading = originalPressureReading;
     main.barometer_instrument_correction = originalCorrection;
-    mybarometer.jTextField1 = originalPressureField;
-    mybarometer.jTextField2 = originalDraftField;
+    BarometerModel.jTextField1 = originalPressureField;
+    BarometerModel.jTextField2 = originalDraftField;
   }
 
   @Test
   public void starAndStarXRecordsExtractPressureForTheBarometerForm() throws Exception {
     runFormRecord("1000.04", false, "1000.0");
-    assertEquals("1000.0", mybarometer.jTextField1.getText());
+    assertEquals("1000.0", BarometerModel.jTextField1.getText());
 
     runFormRecord("1001.26", true, "1001.3");
-    assertEquals("1001.3", mybarometer.jTextField1.getText());
+    assertEquals("1001.3", BarometerModel.jTextField1.getText());
   }
 
   @Test
@@ -138,12 +138,12 @@ public class Rs232MintakaPpppWorkflowTest {
     if (expected.isEmpty()) {
       runWorkflowWithDialog(false, starX);
     } else {
-      mybarometer.pressure_reading = "pending";
+      BarometerModel.pressure_reading = "pending";
       Rs232MintakaPpppWorkflow.start(false, starX);
       waitFor(() -> main.obs_file_datum_tijd == null);
       flushEdt();
     }
-    assertEquals(expected, mybarometer.pressure_reading);
+    assertEquals(expected, BarometerModel.pressure_reading);
   }
 
   private void runStarXAge(int age, String expected) throws Exception {
@@ -154,18 +154,18 @@ public class Rs232MintakaPpppWorkflowTest {
         assertTrue(dialogMessage.contains("obsolete"));
       }
     } else {
-      mybarometer.pressure_reading = "pending";
+      BarometerModel.pressure_reading = "pending";
       Rs232MintakaPpppWorkflow.start(false, true);
       waitFor(() -> main.obs_file_datum_tijd == null);
       flushEdt();
     }
-    assertEquals(expected, mybarometer.pressure_reading);
+    assertEquals(expected, BarometerModel.pressure_reading);
   }
 
   private String runTrayRecord(String pressure, boolean starX) throws Exception {
     writeCurrentRecord(
         starRecord(starX ? starXPayload(pressure, 0) : starPayload(pressure), new Date()));
-    mybarometer.pressure_reading = "pending";
+    BarometerModel.pressure_reading = "pending";
     return runWorkflowWithDialog(true, starX);
   }
 
@@ -192,9 +192,9 @@ public class Rs232MintakaPpppWorkflowTest {
   }
 
   private void assertErrorDialogAndClearedPressure(boolean starX) throws Exception {
-    mybarometer.pressure_reading = "old";
+    BarometerModel.pressure_reading = "old";
     String dialogMessage = runWorkflowWithDialog(true, starX);
-    assertEquals("", mybarometer.pressure_reading);
+    assertEquals("", BarometerModel.pressure_reading);
     if (!GraphicsEnvironment.isHeadless()) {
       assertTrue(dialogMessage.length() > 0);
     }
@@ -202,9 +202,9 @@ public class Rs232MintakaPpppWorkflowTest {
 
   private void resetModel() {
     main.sensor_data_record_obs_pressure = "";
-    mybarometer.pressure_reading = "";
-    mybarometer.jTextField1.setText("");
-    mybarometer.jTextField2.setText("");
+    BarometerModel.pressure_reading = "";
+    BarometerModel.jTextField1.setText("");
+    BarometerModel.jTextField2.setText("");
   }
 
   private String starPayload(String pressure) {

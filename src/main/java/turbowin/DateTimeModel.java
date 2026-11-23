@@ -6,11 +6,11 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
 /** Observation date and time state and manual-entry validation. */
-public final class mydatetime {
+public final class DateTimeModel {
   private String[] selected;
   private final boolean readOnly;
 
-  public mydatetime() {
+  public DateTimeModel() {
     int mode = main.RS232_connection_mode;
     readOnly = mode == 3 || mode == 9 || mode == 10 || mode == 11;
     selectValues(new String[] {year, month, day, hour});

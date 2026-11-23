@@ -26,7 +26,7 @@ final class Rs232MintakaGpsWorkflow {
   private Rs232MintakaGpsWorkflow() {}
 
   static void start(final String mode, final boolean StarX) {
-    // called from: - initSynopparameters() [myposition.java]
+    // called from: - initSynopparameters() [PositionModel.java]
 
     //
     // MINTAKA STAR has an integrated GPS
@@ -342,7 +342,7 @@ final class Rs232MintakaGpsWorkflow {
                   .trim(); // to remove leading and trailing whitespace in the string eg " 52
           // 04.7041N" -> "52 04.7041N"
           int pos_space = fix_latitude.indexOf(" ", 0); // find first space (" ") in the string
-          myposition.latitude_degrees =
+          PositionModel.latitude_degrees =
               fix_latitude.substring(
                   0, pos_space); // eg "52 04.7041N" -> "52" and "2 04.7041N" -> "2"
 
@@ -364,27 +364,27 @@ final class Rs232MintakaGpsWorkflow {
 
             // increment latitude degrees
             int hulp_latitude_degrees =
-                Integer.parseInt(myposition.latitude_degrees); // String to int
+                Integer.parseInt(PositionModel.latitude_degrees); // String to int
             hulp_latitude_degrees++;
-            myposition.latitude_degrees =
+            PositionModel.latitude_degrees =
                 Integer.toString(hulp_latitude_degrees); // int to String (via Integer)
           }
           ///////////////////
 
-          myposition.latitude_minutes =
+          PositionModel.latitude_minutes =
               bd_lat_min.toString(); // rounded minutes value  e.g. "04.7041N" -> "4" minutes
-          if (myposition.latitude_minutes.length() == 1) {
-            myposition.latitude_minutes = "0" + myposition.latitude_minutes; // "4" -> "04"
+          if (PositionModel.latitude_minutes.length() == 1) {
+            PositionModel.latitude_minutes = "0" + PositionModel.latitude_minutes; // "4" -> "04"
           }
 
           GPS_latitude_hemisphere =
               fix_latitude.substring(fix_latitude.length() - 1); // eg "52 04.7041N" -> "N"
           if (GPS_latitude_hemisphere.toUpperCase().equals("N")) {
-            myposition.latitude_hemisphere = myposition.HEMISPHERE_NORTH;
+            PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_NORTH;
           } else if (GPS_latitude_hemisphere.toUpperCase().equals("S")) {
-            myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH;
+            PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_SOUTH;
           } else {
-            myposition.latitude_hemisphere = "";
+            PositionModel.latitude_hemisphere = "";
             fix_ok = false;
           }
 
@@ -392,13 +392,13 @@ final class Rs232MintakaGpsWorkflow {
           //
           if (fix_ok == true) {
             try {
-              myposition.int_latitude_degrees = Integer.parseInt(myposition.latitude_degrees);
+              PositionModel.int_latitude_degrees = Integer.parseInt(PositionModel.latitude_degrees);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
 
             try {
-              myposition.int_latitude_minutes = Integer.parseInt(myposition.latitude_minutes);
+              PositionModel.int_latitude_minutes = Integer.parseInt(PositionModel.latitude_minutes);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
@@ -413,19 +413,20 @@ final class Rs232MintakaGpsWorkflow {
             // degrees [IMMT rounding!!!}
             String latitude_minutes_6 =
                 Integer.toString(int_latitude_minutes_6); // convert to String
-            // myposition.lalala_code = myposition.latitude_degrees.trim().replaceFirst("^0+(?!$)",
+            // PositionModel.lalala_code =
+            // PositionModel.latitude_degrees.trim().replaceFirst("^0+(?!$)",
             // "") + latitude_minutes_6;
-            myposition.lalala_code = myposition.latitude_degrees + latitude_minutes_6;
+            PositionModel.lalala_code = PositionModel.latitude_degrees + latitude_minutes_6;
 
             int len = 3; // always 3 chars
-            if (myposition.lalala_code.length() < len) {
+            if (PositionModel.lalala_code.length() < len) {
               // pad on left with zeros
-              myposition.lalala_code =
-                  "0000000000".substring(0, len - myposition.lalala_code.length())
-                      + myposition.lalala_code;
-            } else if (myposition.lalala_code.length() > len) {
+              PositionModel.lalala_code =
+                  "0000000000".substring(0, len - PositionModel.lalala_code.length())
+                      + PositionModel.lalala_code;
+            } else if (PositionModel.lalala_code.length() > len) {
               fix_ok = false;
-              // System.out.println("+++++++++++ lalala_code error: " + myposition.lalala_code);
+              // System.out.println("+++++++++++ lalala_code error: " + PositionModel.lalala_code);
             }
           } // if (fix_ok == true)
         } // if ( (GPS_latitude.compareTo("") != 0) && (GPS_latitude != null) &&
@@ -448,7 +449,7 @@ final class Rs232MintakaGpsWorkflow {
                   .trim(); // to remove leading and trailing whitespace in the string eg "  6
           // 14.7041N" -> "6 14.7041N"
           int pos_space = fix_longitude.indexOf(" ", 0); // find first space (" ") in the string
-          myposition.longitude_degrees =
+          PositionModel.longitude_degrees =
               fix_longitude.substring(
                   0, pos_space); // eg "6 14.7041W" -> "6" and "116 14.7041W" -> "116"
 
@@ -470,29 +471,29 @@ final class Rs232MintakaGpsWorkflow {
 
             // increment longitude degrees
             int hulp_longitude_degrees =
-                Integer.parseInt(myposition.longitude_degrees); // String to int
+                Integer.parseInt(PositionModel.longitude_degrees); // String to int
             hulp_longitude_degrees++;
-            myposition.longitude_degrees =
+            PositionModel.longitude_degrees =
                 Integer.toString(hulp_longitude_degrees); // int to String (via Integer)
           }
           ///////////////////
 
-          myposition.longitude_minutes =
+          PositionModel.longitude_minutes =
               bd_lon_min
                   .toString(); // rounded minutes value  e.g. "04.7041N" -> "5" minutes; "23.7041N"
           // -> "24" minutes
-          if (myposition.longitude_minutes.length() == 1) {
-            myposition.longitude_minutes = "0" + myposition.longitude_minutes; // "5" -> "05"
+          if (PositionModel.longitude_minutes.length() == 1) {
+            PositionModel.longitude_minutes = "0" + PositionModel.longitude_minutes; // "5" -> "05"
           }
 
           GPS_longitude_hemisphere =
               fix_longitude.substring(fix_longitude.length() - 1); // eg "4 14.7041W" -> "W"
           if (GPS_longitude_hemisphere.toUpperCase().equals("E")) {
-            myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST;
+            PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_EAST;
           } else if (GPS_longitude_hemisphere.toUpperCase().equals("W")) {
-            myposition.longitude_hemisphere = myposition.HEMISPHERE_WEST;
+            PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_WEST;
           } else {
-            myposition.longitude_hemisphere = "";
+            PositionModel.longitude_hemisphere = "";
             fix_ok = false;
           }
 
@@ -500,19 +501,22 @@ final class Rs232MintakaGpsWorkflow {
           //
           if (fix_ok == true) {
             try {
-              myposition.int_longitude_degrees = Integer.parseInt(myposition.longitude_degrees);
+              PositionModel.int_longitude_degrees =
+                  Integer.parseInt(PositionModel.longitude_degrees);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
 
             try {
-              myposition.int_longitude_minutes = Integer.parseInt(myposition.longitude_minutes);
+              PositionModel.int_longitude_minutes =
+                  Integer.parseInt(PositionModel.longitude_minutes);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
           } // if (fix_ok == true)
 
-          // for longitude (LoLoLoLo) for IMMT log (NB see also myposition.java) In fact this IMMT
+          // for longitude (LoLoLoLo) for IMMT log (NB see also PositionModel.java) In fact this
+          // IMMT
           // preparation only necessary in APR mode
           //
           if (fix_ok == true) {
@@ -522,17 +526,18 @@ final class Rs232MintakaGpsWorkflow {
             // degrees [IMMT rounding!!!}
             String longitude_minutes_6 =
                 Integer.toString(int_longitude_minutes_6); // convert to String
-            myposition.lolololo_code = myposition.longitude_degrees + longitude_minutes_6;
+            PositionModel.lolololo_code = PositionModel.longitude_degrees + longitude_minutes_6;
 
             int len2 = 4; // always 4 chars
-            if (myposition.lolololo_code.length() < len2) {
+            if (PositionModel.lolololo_code.length() < len2) {
               // pad on left with zeros
-              myposition.lolololo_code =
-                  "0000000000".substring(0, len2 - myposition.lolololo_code.length())
-                      + myposition.lolololo_code;
-            } else if (myposition.lolololo_code.length() > len2) {
+              PositionModel.lolololo_code =
+                  "0000000000".substring(0, len2 - PositionModel.lolololo_code.length())
+                      + PositionModel.lolololo_code;
+            } else if (PositionModel.lolololo_code.length() > len2) {
               fix_ok = false;
-              // System.out.println("+++++++++++ lolololo_code error: " + myposition.lolololo_code);
+              // System.out.println("+++++++++++ lolololo_code error: " +
+              // PositionModel.lolololo_code);
             }
           } // if (fix_ok == true)
 
@@ -547,18 +552,25 @@ final class Rs232MintakaGpsWorkflow {
         if (fix_ok == true) {
           // quadrant of the globe for IMMT
           //
-          if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-            myposition.Qc_code = "1";
-          } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-            myposition.Qc_code = "3";
-          } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-            myposition.Qc_code = "5";
-          } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-            myposition.Qc_code = "7";
+          if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_NORTH) == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_EAST)
+                  == true)) {
+            PositionModel.Qc_code = "1";
+          } else if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+                  == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_EAST)
+                  == true)) {
+            PositionModel.Qc_code = "3";
+          } else if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+                  == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST)
+                  == true)) {
+            PositionModel.Qc_code = "5";
+          } else if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_NORTH)
+                  == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST)
+                  == true)) {
+            PositionModel.Qc_code = "7";
           } else {
             fix_ok = false;
             // System.out.println("+++++++++++ Qc_code error");
@@ -567,36 +579,36 @@ final class Rs232MintakaGpsWorkflow {
 
         if ((fix_ok == true) && (mode.equals("MANUAL"))) {
           // latitude
-          if (myposition.latitude_degrees.compareTo("") != 0) {
-            myposition.jTextField1.setText(myposition.latitude_degrees);
+          if (PositionModel.latitude_degrees.compareTo("") != 0) {
+            PositionModel.jTextField1.setText(PositionModel.latitude_degrees);
           }
 
-          if (myposition.latitude_minutes.compareTo("") != 0) {
-            myposition.jTextField2.setText(myposition.latitude_minutes);
+          if (PositionModel.latitude_minutes.compareTo("") != 0) {
+            PositionModel.jTextField2.setText(PositionModel.latitude_minutes);
           }
 
-          if (myposition.latitude_hemisphere.compareTo("") != 0) {
-            if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH)) {
-              myposition.jRadioButton1.setSelected(true);
-            } else if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH)) {
-              myposition.jRadioButton2.setSelected(true);
+          if (PositionModel.latitude_hemisphere.compareTo("") != 0) {
+            if (PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_NORTH)) {
+              PositionModel.jRadioButton1.setSelected(true);
+            } else if (PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH)) {
+              PositionModel.jRadioButton2.setSelected(true);
             }
           } // if (latitude_hemisphere != "")
 
           // longitude
-          if (myposition.longitude_degrees.compareTo("") != 0) {
-            myposition.jTextField3.setText(myposition.longitude_degrees);
+          if (PositionModel.longitude_degrees.compareTo("") != 0) {
+            PositionModel.jTextField3.setText(PositionModel.longitude_degrees);
           }
 
-          if (myposition.longitude_minutes.compareTo("") != 0) {
-            myposition.jTextField4.setText(myposition.longitude_minutes);
+          if (PositionModel.longitude_minutes.compareTo("") != 0) {
+            PositionModel.jTextField4.setText(PositionModel.longitude_minutes);
           }
 
-          if (myposition.longitude_hemisphere.compareTo("") != 0) {
-            if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST)) {
-              myposition.jRadioButton3.setSelected(true);
-            } else if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST)) {
-              myposition.jRadioButton4.setSelected(true);
+          if (PositionModel.longitude_hemisphere.compareTo("") != 0) {
+            if (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_EAST)) {
+              PositionModel.jRadioButton3.setSelected(true);
+            } else if (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
+              PositionModel.jRadioButton4.setSelected(true);
             }
           } // if (latitude_hemisphere != "")
         } // if ((fix_ok == true) && (mode.equals("MANUAL")))
@@ -744,25 +756,25 @@ final class Rs232MintakaGpsWorkflow {
             /// Not applicable (report from a coastal land station) or not reported (see Regulation
             // 12.3.1.2 (b))
             if (SOG < 1.0) {
-              myposition.jRadioButton14.setSelected(true);
+              PositionModel.jRadioButton14.setSelected(true);
             } else if (SOG >= 1.0 && SOG <= 5.0) {
-              myposition.jRadioButton15.setSelected(true);
+              PositionModel.jRadioButton15.setSelected(true);
             } else if (SOG > 5.0 && SOG <= 10.0) {
-              myposition.jRadioButton16.setSelected(true);
+              PositionModel.jRadioButton16.setSelected(true);
             } else if (SOG > 10.0 && SOG <= 15.0) {
-              myposition.jRadioButton17.setSelected(true);
+              PositionModel.jRadioButton17.setSelected(true);
             } else if (SOG > 15.0 && SOG <= 20.0) {
-              myposition.jRadioButton18.setSelected(true);
+              PositionModel.jRadioButton18.setSelected(true);
             } else if (SOG > 20.0 && SOG <= 25.0) {
-              myposition.jRadioButton19.setSelected(true);
+              PositionModel.jRadioButton19.setSelected(true);
             } else if (SOG > 25.0 && SOG <= 30.0) {
-              myposition.jRadioButton20.setSelected(true);
+              PositionModel.jRadioButton20.setSelected(true);
             } else if (SOG > 30.0 && SOG <= 35.0) {
-              myposition.jRadioButton21.setSelected(true);
+              PositionModel.jRadioButton21.setSelected(true);
             } else if (SOG > 35.0 && SOG <= 40.0) {
-              myposition.jRadioButton22.setSelected(true);
+              PositionModel.jRadioButton22.setSelected(true);
             } else if (SOG > 40) {
-              myposition.jRadioButton23.setSelected(true);
+              PositionModel.jRadioButton23.setSelected(true);
             }
 
             // COG
@@ -794,7 +806,7 @@ final class Rs232MintakaGpsWorkflow {
             // see
             // Regulation 12.3.1.2 (b))
 
-            // NB see myposition.java
+            // NB see PositionModel.java
             //
             // public static final String COURSE_STATIONARY = "stationary";
             // public static final String COURSE_023_067    = "023 - 067";
@@ -809,28 +821,28 @@ final class Rs232MintakaGpsWorkflow {
             if (SOG < 1.0) // stopped
             {
               // by default: in case SOG is indicating stopped then SOG always stopped also!
-              myposition.jRadioButton5.setSelected(true); // COG = stopped
+              PositionModel.jRadioButton5.setSelected(true); // COG = stopped
             }
             // else if (SOG >= 1.0 && SOG <= 999.9) // not stopped (halverwege de test maar
             // veranderd om toch een richting tijdens laatste testjes te krijgen)
             else if (SOG >= 1.0 && SOG <= 999999.9) // not stopped
             {
               if (COG > 23.0 && COG <= 67.0) {
-                myposition.jRadioButton6.setSelected(true);
+                PositionModel.jRadioButton6.setSelected(true);
               } else if (COG > 67.0 && COG <= 112.0) {
-                myposition.jRadioButton7.setSelected(true);
+                PositionModel.jRadioButton7.setSelected(true);
               } else if (COG > 112.0 && COG <= 157.0) {
-                myposition.jRadioButton8.setSelected(true);
+                PositionModel.jRadioButton8.setSelected(true);
               } else if (COG > 157.0 && COG <= 202.0) {
-                myposition.jRadioButton9.setSelected(true);
+                PositionModel.jRadioButton9.setSelected(true);
               } else if (COG > 202.0 && COG <= 247.0) {
-                myposition.jRadioButton10.setSelected(true);
+                PositionModel.jRadioButton10.setSelected(true);
               } else if (COG > 247.0 && COG <= 292.0) {
-                myposition.jRadioButton11.setSelected(true);
+                PositionModel.jRadioButton11.setSelected(true);
               } else if (COG > 292.0 && COG <= 337.0) {
-                myposition.jRadioButton12.setSelected(true);
+                PositionModel.jRadioButton12.setSelected(true);
               } else if (COG > 337.0 && COG <= 360.0 || COG > 0.0 && COG <= 23.0) {
-                myposition.jRadioButton13.setSelected(true);
+                PositionModel.jRadioButton13.setSelected(true);
               }
             } // else if (SOG >= 1.0 && SOG <= 99.9)
 
@@ -850,14 +862,14 @@ final class Rs232MintakaGpsWorkflow {
               "[GPS] error; no sensor data file available / formatting error last saved record / last saved record > 5 minutes old / checksum not ok";
 
           // reset all the previous inserted values in the position inut screen
-          myposition.jTextField1.setText(""); // lat deg
-          myposition.jTextField2.setText(""); // lat min
-          myposition.jTextField3.setText(""); // lon deg
-          myposition.jTextField4.setText(""); // lon min
-          myposition.buttonGroup1.clearSelection(); // N/S
-          myposition.buttonGroup2.clearSelection(); // E/W
-          myposition.buttonGroup3.clearSelection(); // course
-          myposition.buttonGroup4.clearSelection(); // speed
+          PositionModel.jTextField1.setText(""); // lat deg
+          PositionModel.jTextField2.setText(""); // lat min
+          PositionModel.jTextField3.setText(""); // lon deg
+          PositionModel.jTextField4.setText(""); // lon min
+          PositionModel.buttonGroup1.clearSelection(); // N/S
+          PositionModel.buttonGroup2.clearSelection(); // E/W
+          PositionModel.buttonGroup3.clearSelection(); // course
+          PositionModel.buttonGroup4.clearSelection(); // speed
         } // if (fix_ok == false)
 
         if (fix_ok == false) {
@@ -907,17 +919,17 @@ final class Rs232MintakaGpsWorkflow {
             //
             message_fix_position =
                 "GPS position (dd-mm [N/S] ddd-mm [E/W]): "
-                    + myposition.latitude_degrees
+                    + PositionModel.latitude_degrees
                     + "-"
-                    + myposition.latitude_minutes
+                    + PositionModel.latitude_minutes
                     + " "
-                    + myposition.latitude_hemisphere.substring(0, 1)
+                    + PositionModel.latitude_hemisphere.substring(0, 1)
                     + " "
-                    + myposition.longitude_degrees
+                    + PositionModel.longitude_degrees
                     + "-"
-                    + myposition.longitude_minutes
+                    + PositionModel.longitude_minutes
                     + " "
-                    + myposition.longitude_hemisphere.substring(0, 1);
+                    + PositionModel.longitude_hemisphere.substring(0, 1);
 
             // main.log_turbowin_system_message("[GPS] date-time parsing ok; " +
             // message_fix_date_time);

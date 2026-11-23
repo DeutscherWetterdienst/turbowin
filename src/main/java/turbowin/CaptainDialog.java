@@ -13,7 +13,7 @@ final class CaptainDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    mycaptain model = new mycaptain();
+    CaptainModel model = new CaptainModel();
     CaptainView.State state =
         new CaptainView.State(main.recruiting_country.contains("GERMANY"), main.offline_mode);
     AtomicReference<CaptainView> view = new AtomicReference<>();

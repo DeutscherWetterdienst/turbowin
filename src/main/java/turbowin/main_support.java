@@ -172,41 +172,41 @@ public class main_support {
   public void determine_satellite_image_url_SSEC(String satellite_image_mode) {
     int latitude =
         parseSatelliteCoordinate(
-            myposition.latitude_degrees,
-            myposition.latitude_hemisphere,
-            myposition.HEMISPHERE_SOUTH);
+            PositionModel.latitude_degrees,
+            PositionModel.latitude_hemisphere,
+            PositionModel.HEMISPHERE_SOUTH);
     int longitude =
         parseSatelliteCoordinate(
-            myposition.longitude_degrees,
-            myposition.longitude_hemisphere,
-            myposition.HEMISPHERE_WEST);
+            PositionModel.longitude_degrees,
+            PositionModel.longitude_hemisphere,
+            PositionModel.HEMISPHERE_WEST);
     String url = SatelliteImageUrlBuilder.buildSsec(satellite_image_mode, latitude, longitude);
     main.satellite_link_mouse_clicked(url);
   }
 
   public void determine_satellite_image_url_NOAA(String satellite_image_mode) {
-    if (myposition.latitude_degrees == null) {
+    if (PositionModel.latitude_degrees == null) {
       throw new NullPointerException("latitude_degrees");
     }
-    if (!myposition.latitude_degrees.isEmpty() && myposition.latitude_hemisphere == null) {
+    if (!PositionModel.latitude_degrees.isEmpty() && PositionModel.latitude_hemisphere == null) {
       throw new NullPointerException("latitude_hemisphere");
     }
-    if (myposition.longitude_degrees == null) {
+    if (PositionModel.longitude_degrees == null) {
       throw new NullPointerException("longitude_degrees");
     }
-    if (!myposition.longitude_degrees.isEmpty() && myposition.longitude_hemisphere == null) {
+    if (!PositionModel.longitude_degrees.isEmpty() && PositionModel.longitude_hemisphere == null) {
       throw new NullPointerException("longitude_hemisphere");
     }
     int latitude =
         parseSatelliteCoordinate(
-            myposition.latitude_degrees,
-            myposition.latitude_hemisphere,
-            myposition.HEMISPHERE_SOUTH);
+            PositionModel.latitude_degrees,
+            PositionModel.latitude_hemisphere,
+            PositionModel.HEMISPHERE_SOUTH);
     int longitude =
         parseSatelliteCoordinate(
-            myposition.longitude_degrees,
-            myposition.longitude_hemisphere,
-            myposition.HEMISPHERE_WEST);
+            PositionModel.longitude_degrees,
+            PositionModel.longitude_hemisphere,
+            PositionModel.HEMISPHERE_WEST);
     // NOAA Worldview requires a bounded viewport and compatible visible/reference layer stack.
     String url = SatelliteImageUrlBuilder.buildNoaa(satellite_image_mode, latitude, longitude);
     main.satellite_link_mouse_clicked(url);
@@ -290,12 +290,12 @@ public class main_support {
     return PositionDistanceCalculator.calculate(
         num_vorige_obs_breedte,
         num_vorige_obs_lengte,
-        myposition.int_latitude_degrees,
-        myposition.int_latitude_minutes,
-        myposition.latitude_hemisphere,
-        myposition.int_longitude_degrees,
-        myposition.int_longitude_minutes,
-        myposition.longitude_hemisphere);
+        PositionModel.int_latitude_degrees,
+        PositionModel.int_latitude_minutes,
+        PositionModel.latitude_hemisphere,
+        PositionModel.int_longitude_degrees,
+        PositionModel.int_longitude_minutes,
+        PositionModel.longitude_hemisphere);
   }
 
   public boolean Move_log_files(final String move_mode_logs) {
@@ -375,16 +375,16 @@ public class main_support {
   WindWaveValidation validateWindWaves(String validationFunction, boolean preserveEmptyHeightFlag) {
     Float parsedPeriod =
         parseValidationFloat(
-            mywaves.wind_waves_period,
+            WavesModel.wind_waves_period,
             "[GENERAL] wind waves period conversion error; Function: " + validationFunction + "()");
     Float parsedHeight =
         parseValidationFloat(
-            mywaves.wind_waves_height,
+            WavesModel.wind_waves_height,
             "[GENERAL] wind waves height conversion error; Function: " + validationFunction + "()");
 
     boolean periodValid = parsedPeriod != null;
     boolean heightValid = parsedHeight != null;
-    if (preserveEmptyHeightFlag && mywaves.wind_waves_height.equals("")) {
+    if (preserveEmptyHeightFlag && WavesModel.wind_waves_height.equals("")) {
       // Preserve the legacy level-3 flag assignment for an empty height.
       periodValid = false;
       heightValid = true;

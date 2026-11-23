@@ -18,10 +18,10 @@ public class TemperatureFieldsUpdaterTest {
     main.air_temp_from_AWS_present = true;
     main.rh_from_AWS_present = false;
     main.SST_from_AWS_present = true;
-    mytemp.air_temp = "5";
-    mytemp.wet_bulb_temp = "6";
-    mytemp.sea_water_temp = "7";
-    mytemp.double_rv = main.INVALID;
+    TemperatureModel.air_temp = "5";
+    TemperatureModel.wet_bulb_temp = "6";
+    TemperatureModel.sea_water_temp = "7";
+    TemperatureModel.double_rv = main.INVALID;
 
     TemperatureFieldsUpdater.update();
 
@@ -41,9 +41,9 @@ public class TemperatureFieldsUpdaterTest {
     main.air_temp_from_AWS_present = false;
     main.rh_from_AWS_present = true;
     main.SST_from_AWS_present = false;
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "12";
-    mytemp.double_rv = 0.856;
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "12";
+    TemperatureModel.double_rv = 0.856;
 
     TemperatureFieldsUpdater.update();
 

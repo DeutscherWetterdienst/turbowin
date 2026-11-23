@@ -13,7 +13,7 @@ final class ObserverDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    myobserver model = new myobserver();
+    ObserverModel model = new ObserverModel();
     ObserverView.State state =
         new ObserverView.State(
             main.recruiting_country.contains("GERMANY"),
@@ -44,7 +44,7 @@ final class ObserverDialog {
                       () ->
                           SwingUtilities.invokeLater(() -> {
                             close.run();
-                            CloudCoverJavaFxWindow.open();
+                            CloudCoverDialog.open();
                           }),
                       () ->
                           SwingUtilities.invokeLater(() -> {

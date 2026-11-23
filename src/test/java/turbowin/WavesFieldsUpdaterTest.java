@@ -10,14 +10,14 @@ public class WavesFieldsUpdaterTest {
   @Test
   public void formatsWaveAndSwellValuesWithUnits() {
     prepareFields();
-    mywaves.wind_waves_period = "8";
-    mywaves.wind_waves_height = "2";
-    mywaves.swell_1_period = "10";
-    mywaves.swell_1_height = "3";
-    mywaves.swell_1_dir = "180";
-    mywaves.swell_2_period = "12";
-    mywaves.swell_2_height = "4";
-    mywaves.swell_2_dir = "270";
+    WavesModel.wind_waves_period = "8";
+    WavesModel.wind_waves_height = "2";
+    WavesModel.swell_1_period = "10";
+    WavesModel.swell_1_height = "3";
+    WavesModel.swell_1_dir = "180";
+    WavesModel.swell_2_period = "12";
+    WavesModel.swell_2_height = "4";
+    WavesModel.swell_2_dir = "270";
 
     WavesFieldsUpdater.update();
 
@@ -34,9 +34,9 @@ public class WavesFieldsUpdaterTest {
   @Test
   public void preservesSpecialSwellValues() {
     prepareFields();
-    mywaves.swell_1_period = "confused";
-    mywaves.swell_1_height = "no swell";
-    mywaves.swell_1_dir = "confused";
+    WavesModel.swell_1_period = "confused";
+    WavesModel.swell_1_height = "no swell";
+    WavesModel.swell_1_dir = "confused";
 
     WavesFieldsUpdater.update();
 

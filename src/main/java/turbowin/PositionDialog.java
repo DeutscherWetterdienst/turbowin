@@ -21,42 +21,45 @@ final class PositionDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    myposition model = new myposition();
+    PositionModel model = new PositionModel();
     JTextField[] fields = {
-      myposition.jTextField1, myposition.jTextField2, myposition.jTextField3, myposition.jTextField4
+      PositionModel.jTextField1,
+      PositionModel.jTextField2,
+      PositionModel.jTextField3,
+      PositionModel.jTextField4
     };
     JRadioButton[][] options = {
-      {myposition.jRadioButton1, myposition.jRadioButton2},
-      {myposition.jRadioButton3, myposition.jRadioButton4},
+      {PositionModel.jRadioButton1, PositionModel.jRadioButton2},
+      {PositionModel.jRadioButton3, PositionModel.jRadioButton4},
       {
-        myposition.jRadioButton5,
-        myposition.jRadioButton6,
-        myposition.jRadioButton7,
-        myposition.jRadioButton8,
-        myposition.jRadioButton9,
-        myposition.jRadioButton10,
-        myposition.jRadioButton11,
-        myposition.jRadioButton12,
-        myposition.jRadioButton13
+        PositionModel.jRadioButton5,
+        PositionModel.jRadioButton6,
+        PositionModel.jRadioButton7,
+        PositionModel.jRadioButton8,
+        PositionModel.jRadioButton9,
+        PositionModel.jRadioButton10,
+        PositionModel.jRadioButton11,
+        PositionModel.jRadioButton12,
+        PositionModel.jRadioButton13
       },
       {
-        myposition.jRadioButton14,
-        myposition.jRadioButton15,
-        myposition.jRadioButton16,
-        myposition.jRadioButton17,
-        myposition.jRadioButton18,
-        myposition.jRadioButton19,
-        myposition.jRadioButton20,
-        myposition.jRadioButton21,
-        myposition.jRadioButton22,
-        myposition.jRadioButton23
+        PositionModel.jRadioButton14,
+        PositionModel.jRadioButton15,
+        PositionModel.jRadioButton16,
+        PositionModel.jRadioButton17,
+        PositionModel.jRadioButton18,
+        PositionModel.jRadioButton19,
+        PositionModel.jRadioButton20,
+        PositionModel.jRadioButton21,
+        PositionModel.jRadioButton22,
+        PositionModel.jRadioButton23
       }
     };
     ButtonGroup[] groups = {
-      myposition.buttonGroup1,
-      myposition.buttonGroup2,
-      myposition.buttonGroup3,
-      myposition.buttonGroup4
+      PositionModel.buttonGroup1,
+      PositionModel.buttonGroup2,
+      PositionModel.buttonGroup3,
+      PositionModel.buttonGroup4
     };
     String[] values = new String[fields.length];
     int[] selected = new int[options.length];

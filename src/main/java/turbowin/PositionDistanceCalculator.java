@@ -24,11 +24,11 @@ final class PositionDistanceCalculator {
     double currentLatitude = currentLatitudeDegrees + ((double) currentLatitudeMinutes / 60);
     double currentLongitude = currentLongitudeDegrees + ((double) currentLongitudeMinutes / 60);
 
-    if (currentLatitudeHemisphere.equals(myposition.HEMISPHERE_SOUTH)) {
+    if (currentLatitudeHemisphere.equals(PositionModel.HEMISPHERE_SOUTH)) {
       currentLatitude *= -1;
     }
 
-    if (currentLongitudeHemisphere.equals(myposition.HEMISPHERE_WEST)) {
+    if (currentLongitudeHemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
       currentLongitude *= -1;
     }
 

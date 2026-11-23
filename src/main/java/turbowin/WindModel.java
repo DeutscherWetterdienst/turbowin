@@ -5,7 +5,7 @@ import static turbowin.main.INVALID;
 import javax.swing.JOptionPane;
 
 /** Existing shared wind state, validation and meteorological calculations. */
-public final class mywind {
+public final class WindModel {
   WindView.Input initialValues() {
     // wind_dir and wind_speed are the variables that will be inserted in the text fields
     //
@@ -45,10 +45,10 @@ public final class mywind {
       }
 
       // relative wind speed
-      if ((mywind.int_relative_wind_speed == INVALID)) {
+      if ((WindModel.int_relative_wind_speed == INVALID)) {
         wind_speed = "";
       } else {
-        wind_speed = Integer.toString(mywind.int_relative_wind_speed);
+        wind_speed = Integer.toString(WindModel.int_relative_wind_speed);
       }
     } // else if ((main.wind_source.equals(main.MEASURED_OFF_BOW)))
     else {
@@ -792,13 +792,13 @@ public final class mywind {
         DASHBOARD_view_APR_radar.jComboBox1.setSelectedItem("");
       } else if (int_true_wind_dir == 0) {
         DASHBOARD_view_APR_radar.jComboBox1.setSelectedItem("calm");
-      } else if (int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
+      } else if (int_true_wind_dir == WindModel.WIND_DIR_VARIABLE) {
         DASHBOARD_view_APR_radar.jComboBox1.setSelectedItem("variable");
       } else {
         // NB see also initComponents1() [DASHBOARD_view_APR_radar.java]
 
-        // DASHBOARD_view_APR_radar.jComboBox1.setSelectedItem(Integer.toString(mywind.int_true_wind_dir));
-        int tmp_wind_dir = (int) (Math.round(mywind.int_true_wind_dir / 10.0) * 10);
+        // DASHBOARD_view_APR_radar.jComboBox1.setSelectedItem(Integer.toString(WindModel.int_true_wind_dir));
+        int tmp_wind_dir = (int) (Math.round(WindModel.int_true_wind_dir / 10.0) * 10);
         DASHBOARD_view_APR_radar.jComboBox1.setSelectedItem(Integer.toString(tmp_wind_dir));
       }
 

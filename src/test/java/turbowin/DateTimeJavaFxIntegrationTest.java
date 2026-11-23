@@ -21,10 +21,10 @@ public class DateTimeJavaFxIntegrationTest extends AbstractUiTest {
   @Test
   public void savesLeapDayAndRestoresAllSelections() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
-      mydatetime.year = "";
-      mydatetime.month = "";
-      mydatetime.day = "";
-      mydatetime.hour = "";
+      DateTimeModel.year = "";
+      DateTimeModel.month = "";
+      DateTimeModel.day = "";
+      DateTimeModel.hour = "";
     });
     JDialog dialog = GuiActionRunner.execute(DateTimeDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -39,13 +39,13 @@ public class DateTimeJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("2024", mydatetime.year);
-      assertEquals("February", mydatetime.month);
-      assertEquals("29", mydatetime.day);
-      assertEquals("3", mydatetime.hour);
-      assertEquals("02", mydatetime.MM_code);
-      assertEquals("29", mydatetime.YY_code);
-      assertEquals("03", mydatetime.GG_code);
+      assertEquals("2024", DateTimeModel.year);
+      assertEquals("February", DateTimeModel.month);
+      assertEquals("29", DateTimeModel.day);
+      assertEquals("3", DateTimeModel.hour);
+      assertEquals("02", DateTimeModel.MM_code);
+      assertEquals("29", DateTimeModel.YY_code);
+      assertEquals("03", DateTimeModel.GG_code);
     });
     JDialog reopened = GuiActionRunner.execute(DateTimeDialog::open);
     Scene restored = CloudCoverFxTestSupport.awaitScene(reopened);
@@ -80,17 +80,17 @@ public class DateTimeJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("28", mydatetime.YY_code);
+      assertEquals("28", DateTimeModel.YY_code);
     });
   }
 
   @Test
   public void missingSelectionStaysOpenForCorrection() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
-      mydatetime.year = "";
-      mydatetime.month = "";
-      mydatetime.day = "";
-      mydatetime.hour = "";
+      DateTimeModel.year = "";
+      DateTimeModel.month = "";
+      DateTimeModel.day = "";
+      DateTimeModel.hour = "";
     });
     JDialog dialog = GuiActionRunner.execute(DateTimeDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -110,8 +110,8 @@ public class DateTimeJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("01", mydatetime.YY_code);
-      assertEquals("00", mydatetime.GG_code);
+      assertEquals("01", DateTimeModel.YY_code);
+      assertEquals("00", DateTimeModel.GG_code);
     });
   }
 
@@ -120,13 +120,13 @@ public class DateTimeJavaFxIntegrationTest extends AbstractUiTest {
     for (int mode : new int[] {3, 9, 10, 11}) {
       SwingUtilities.invokeAndWait(() -> {
         main.RS232_connection_mode = mode;
-        mydatetime.year = "2024";
-        mydatetime.month = "February";
-        mydatetime.day = "29";
-        mydatetime.hour = "3";
-        mydatetime.MM_code = "02";
-        mydatetime.YY_code = "29";
-        mydatetime.GG_code = "03";
+        DateTimeModel.year = "2024";
+        DateTimeModel.month = "February";
+        DateTimeModel.day = "29";
+        DateTimeModel.hour = "3";
+        DateTimeModel.MM_code = "02";
+        DateTimeModel.YY_code = "29";
+        DateTimeModel.GG_code = "03";
       });
       JDialog dialog = GuiActionRunner.execute(DateTimeDialog::open);
       Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -138,10 +138,10 @@ public class DateTimeJavaFxIntegrationTest extends AbstractUiTest {
       });
       SwingUtilities.invokeAndWait(() -> {
         assertFalse(dialog.isDisplayable());
-        assertEquals("2024", mydatetime.year);
-        assertEquals("02", mydatetime.MM_code);
-        assertEquals("29", mydatetime.YY_code);
-        assertEquals("03", mydatetime.GG_code);
+        assertEquals("2024", DateTimeModel.year);
+        assertEquals("02", DateTimeModel.MM_code);
+        assertEquals("29", DateTimeModel.YY_code);
+        assertEquals("03", DateTimeModel.GG_code);
       });
     }
   }

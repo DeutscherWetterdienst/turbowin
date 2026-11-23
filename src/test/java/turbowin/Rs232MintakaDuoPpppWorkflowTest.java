@@ -52,10 +52,10 @@ public class Rs232MintakaDuoPpppWorkflowTest {
     originalSystemDate = main_RS232_RS422.cal_system_date_time;
     originalTrayIconClicked = main.tray_icon_clicked;
     originalPressureRecord = main.sensor_data_record_obs_pressure;
-    originalPressureReading = mybarometer.pressure_reading;
+    originalPressureReading = BarometerModel.pressure_reading;
     originalCorrection = main.barometer_instrument_correction;
-    originalPressureField = mybarometer.jTextField1;
-    originalDraftField = mybarometer.jTextField2;
+    originalPressureField = BarometerModel.jTextField1;
+    originalDraftField = BarometerModel.jTextField2;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -64,9 +64,9 @@ public class Rs232MintakaDuoPpppWorkflowTest {
     main.tray_icon_clicked = false;
     main.sensor_data_record_obs_pressure = "";
     main.barometer_instrument_correction = "";
-    mybarometer.pressure_reading = "";
-    mybarometer.jTextField1 = new JTextField();
-    mybarometer.jTextField2 = new JTextField();
+    BarometerModel.pressure_reading = "";
+    BarometerModel.jTextField1 = new JTextField();
+    BarometerModel.jTextField2 = new JTextField();
   }
 
   @After
@@ -79,10 +79,10 @@ public class Rs232MintakaDuoPpppWorkflowTest {
     main_RS232_RS422.cal_system_date_time = originalSystemDate;
     main.tray_icon_clicked = originalTrayIconClicked;
     main.sensor_data_record_obs_pressure = originalPressureRecord;
-    mybarometer.pressure_reading = originalPressureReading;
+    BarometerModel.pressure_reading = originalPressureReading;
     main.barometer_instrument_correction = originalCorrection;
-    mybarometer.jTextField1 = originalPressureField;
-    mybarometer.jTextField2 = originalDraftField;
+    BarometerModel.jTextField1 = originalPressureField;
+    BarometerModel.jTextField2 = originalDraftField;
   }
 
   @Test
@@ -90,8 +90,8 @@ public class Rs232MintakaDuoPpppWorkflowTest {
     runFormRecord("1000.04", new Date());
 
     assertEquals("1000.04", main.sensor_data_record_obs_pressure);
-    assertEquals("1000.0", mybarometer.pressure_reading);
-    assertEquals("1000.0", mybarometer.jTextField1.getText());
+    assertEquals("1000.0", BarometerModel.pressure_reading);
+    assertEquals("1000.0", BarometerModel.jTextField1.getText());
   }
 
   @Test
@@ -114,20 +114,20 @@ public class Rs232MintakaDuoPpppWorkflowTest {
   @Test
   public void pressureLimitsAreStrictAndTrayDoesNotPopulateTheForm() throws Exception {
     runFormRecord("900.0", new Date());
-    assertEquals("", mybarometer.pressure_reading);
+    assertEquals("", BarometerModel.pressure_reading);
 
     runFormRecord("900.1", new Date());
-    assertEquals("900.1", mybarometer.pressure_reading);
+    assertEquals("900.1", BarometerModel.pressure_reading);
 
     runFormRecord("1099.9", new Date());
-    assertEquals("1099.9", mybarometer.pressure_reading);
+    assertEquals("1099.9", BarometerModel.pressure_reading);
 
     runFormRecord("1100.0", new Date());
-    assertEquals("", mybarometer.pressure_reading);
+    assertEquals("", BarometerModel.pressure_reading);
 
     String trayMessage = runTrayRecord("1000.0", new Date());
-    assertEquals("", mybarometer.pressure_reading);
-    assertEquals("", mybarometer.jTextField1.getText());
+    assertEquals("", BarometerModel.pressure_reading);
+    assertEquals("", BarometerModel.jTextField1.getText());
     if (!GraphicsEnvironment.isHeadless()) {
       assertTrue(trayMessage.contains("pressure at sensor height: 1000.0 hPa"));
     }
@@ -214,9 +214,9 @@ public class Rs232MintakaDuoPpppWorkflowTest {
 
   private void resetModel() {
     main.sensor_data_record_obs_pressure = "";
-    mybarometer.pressure_reading = "";
-    mybarometer.jTextField1.setText("");
-    mybarometer.jTextField2.setText("");
+    BarometerModel.pressure_reading = "";
+    BarometerModel.jTextField1.setText("");
+    BarometerModel.jTextField2.setText("");
   }
 
   private void assertNoDataMessage(String dialogMessage) {

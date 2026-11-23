@@ -25,12 +25,12 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     captureStaticState(
         main.class,
         main_RS232_RS422.class,
-        mydatetime.class,
-        myposition.class,
-        mywind.class,
-        mybarometer.class,
-        mybarograph.class,
-        mytemp.class);
+        DateTimeModel.class,
+        PositionModel.class,
+        WindModel.class,
+        BarometerModel.class,
+        BarographModel.class,
+        TemperatureModel.class);
 
     main.sdf_tsl_2 = utcFormat("yyyy-MM-dd HH:mm:ss");
     main.wind_units = main.M_S;
@@ -49,35 +49,35 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
   @Test
   public void presentValuesAreDisplayedAndConvertedForAllAwsFields() throws Exception {
     setAllPresenceFlags(true);
-    mydatetime.year = "2026";
-    mydatetime.month = "April";
-    mydatetime.day = "9";
-    mydatetime.hour = "7";
-    mydatetime.minute = "15";
-    myposition.latitude_degrees = "12";
-    myposition.latitude_minutes = "21";
-    myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH;
-    myposition.longitude_degrees = "123";
-    myposition.longitude_minutes = "27";
-    myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST;
-    mywind.ship_ground_speed = "5.5";
-    mywind.ship_ground_course = "23";
-    mywind.ship_heading = "180";
-    mybarometer.pressure_reading = "1006.6";
-    mybarometer.pressure_msl_corrected = "1000.5";
-    mybarograph.pressure_amount_tendency = "2.3";
-    mytemp.air_temp = "20.5";
-    mytemp.double_rv = 0.53;
-    mywind.int_true_wind_dir = 350;
-    mywind.int_relative_wind_dir = 128;
-    mywind.int_true_wind_gust_dir = 358;
-    mywind.int_true_wind_speed = 4;
-    mywind.double_true_wind_speed = 4.2;
-    mywind.int_relative_wind_speed = 5;
-    mywind.double_relative_wind_speed = 4.6;
-    mywind.int_true_wind_gust_speed = 8;
-    mywind.double_true_wind_gust_speed = 7.8;
-    mytemp.sea_water_temp = "9.3";
+    DateTimeModel.year = "2026";
+    DateTimeModel.month = "April";
+    DateTimeModel.day = "9";
+    DateTimeModel.hour = "7";
+    DateTimeModel.minute = "15";
+    PositionModel.latitude_degrees = "12";
+    PositionModel.latitude_minutes = "21";
+    PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_SOUTH;
+    PositionModel.longitude_degrees = "123";
+    PositionModel.longitude_minutes = "27";
+    PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_EAST;
+    WindModel.ship_ground_speed = "5.5";
+    WindModel.ship_ground_course = "23";
+    WindModel.ship_heading = "180";
+    BarometerModel.pressure_reading = "1006.6";
+    BarometerModel.pressure_msl_corrected = "1000.5";
+    BarographModel.pressure_amount_tendency = "2.3";
+    TemperatureModel.air_temp = "20.5";
+    TemperatureModel.double_rv = 0.53;
+    WindModel.int_true_wind_dir = 350;
+    WindModel.int_relative_wind_dir = 128;
+    WindModel.int_true_wind_gust_dir = 358;
+    WindModel.int_true_wind_speed = 4;
+    WindModel.double_true_wind_speed = 4.2;
+    WindModel.int_relative_wind_speed = 5;
+    WindModel.double_relative_wind_speed = 4.6;
+    WindModel.int_true_wind_gust_speed = 8;
+    WindModel.double_true_wind_gust_speed = 7.8;
+    TemperatureModel.sea_water_temp = "9.3";
     main.VOT = 10;
 
     startUpdate();
@@ -171,7 +171,7 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
   @Test
   public void malformedPressureAndTendencyPreserveValuesReachedBeforeFailure() throws Exception {
     main.pressure_MSL_from_AWS_present = true;
-    mybarometer.pressure_msl_corrected = "not-a-pressure";
+    BarometerModel.pressure_msl_corrected = "not-a-pressure";
     main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic = 1012.3;
     startUpdate();
     flushEdt();
@@ -181,8 +181,8 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     resetDashboardValues();
     main.pressure_MSL_from_AWS_present = true;
     main.pressure_tendency_from_AWS_present = true;
-    mybarometer.pressure_msl_corrected = "1000.5";
-    mybarograph.pressure_amount_tendency = "not-a-tendency";
+    BarometerModel.pressure_msl_corrected = "1000.5";
+    BarographModel.pressure_amount_tendency = "not-a-tendency";
     main_RS232_RS422.dashboard_double_last_update_record_pressure_tendency = 2.4;
     startUpdate();
     waitFor(() -> main_RS232_RS422.dashboard_double_last_update_record_MSL_pressure_ic == 1000.5);
@@ -199,12 +199,12 @@ public class Rs422UpdateAwsDashboardValuesWorkflowTest {
     main.wind_units = main.KNOTS;
     main.wind_units_dashboard = main.M_S;
     main.height_anemometer = "20";
-    mywind.int_true_wind_speed = 10;
-    mywind.double_true_wind_speed = 10.0;
-    mywind.int_relative_wind_speed = 10;
-    mywind.double_relative_wind_speed = 10.0;
-    mywind.int_true_wind_gust_speed = 10;
-    mywind.double_true_wind_gust_speed = 10.0;
+    WindModel.int_true_wind_speed = 10;
+    WindModel.double_true_wind_speed = 10.0;
+    WindModel.int_relative_wind_speed = 10;
+    WindModel.double_relative_wind_speed = 10.0;
+    WindModel.int_true_wind_gust_speed = 10;
+    WindModel.double_true_wind_gust_speed = 10.0;
 
     startUpdate();
     waitFor(() -> main_RS232_RS422.dashboard_int_last_update_record_true_wind_speed == 5);

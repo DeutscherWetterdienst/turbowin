@@ -176,7 +176,7 @@ final class Rs232VaisalaPressureReadingWorkflow {
                       + "\n";
               // info = date_time + " UTC " + main.newline +
               //       main.newline +
-              //       "pressure at sensor height: " + mybarometer.pressure_reading + " hPa" +
+              //       "pressure at sensor height: " + BarometerModel.pressure_reading + " hPa" +
               // main.newline;
 
               // main.trayIcon.displayMessage(main.APPLICATION_NAME, info,
@@ -185,11 +185,11 @@ final class Rs232VaisalaPressureReadingWorkflow {
                   null, info, main.APPLICATION_NAME, JOptionPane.INFORMATION_MESSAGE);
             } else // barometer input screen opened
             {
-              mybarometer.pressure_reading = Double.toString(hulp_double_pressure_reading);
+              BarometerModel.pressure_reading = Double.toString(hulp_double_pressure_reading);
 
-              if (mybarometer.jTextField1 != null) {
-                mybarometer.jTextField1.setText(mybarometer.pressure_reading);
-                mybarometer.jTextField2.requestFocus(); // focus on "insert draft" textfield
+              if (BarometerModel.jTextField1 != null) {
+                BarometerModel.jTextField1.setText(BarometerModel.pressure_reading);
+                BarometerModel.jTextField2.requestFocus(); // focus on "insert draft" textfield
               }
             }
           } // if ((hulp_double_pressure_reading > 900.0) && (hulp_double_pressure_reading <

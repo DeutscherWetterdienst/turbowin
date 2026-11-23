@@ -44,18 +44,18 @@ final class BarometerFieldsUpdater {
 
     // air pressure reading
     //
-    if ((mybarometer.pressure_reading_corrected.compareTo("") != 0)
-        && (mybarometer.pressure_reading_corrected != null)) {
-      jTextField9.setText(mybarometer.pressure_reading_corrected + " hPa");
+    if ((BarometerModel.pressure_reading_corrected.compareTo("") != 0)
+        && (BarometerModel.pressure_reading_corrected != null)) {
+      jTextField9.setText(BarometerModel.pressure_reading_corrected + " hPa");
     } else {
       jTextField9.setText("");
     }
 
     // air pressure MSL
     //
-    if ((mybarometer.pressure_msl_corrected.compareTo("") != 0)
-        && (mybarometer.pressure_msl_corrected != null)) {
-      jTextField10.setText(mybarometer.pressure_msl_corrected + " hPa");
+    if ((BarometerModel.pressure_msl_corrected.compareTo("") != 0)
+        && (BarometerModel.pressure_msl_corrected != null)) {
+      jTextField10.setText(BarometerModel.pressure_msl_corrected + " hPa");
     } else {
       jTextField10.setText("");
     }

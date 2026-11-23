@@ -10,223 +10,223 @@ public class MainSupportCharacterizationTest {
 
   @Test
   public void acceptsInvalidWindWaveValuesAsConversionFailuresAtLevelTwo() {
-    String originalPeriod = mywaves.wind_waves_period;
-    String originalHeight = mywaves.wind_waves_height;
-    int originalWindSpeed = mywind.int_true_wind_speed;
+    String originalPeriod = WavesModel.wind_waves_period;
+    String originalHeight = WavesModel.wind_waves_height;
+    int originalWindSpeed = WindModel.int_true_wind_speed;
     String originalWindUnits = main.wind_units;
 
     try {
-      mywaves.wind_waves_period = "invalid";
-      mywaves.wind_waves_height = "invalid";
-      mywind.int_true_wind_speed = 10;
+      WavesModel.wind_waves_period = "invalid";
+      WavesModel.wind_waves_height = "invalid";
+      WindModel.int_true_wind_speed = 10;
       main.wind_units = main.M_S;
 
       assertTrue(new main_support().checking_level_2());
     } finally {
-      mywaves.wind_waves_period = originalPeriod;
-      mywaves.wind_waves_height = originalHeight;
-      mywind.int_true_wind_speed = originalWindSpeed;
+      WavesModel.wind_waves_period = originalPeriod;
+      WavesModel.wind_waves_height = originalHeight;
+      WindModel.int_true_wind_speed = originalWindSpeed;
       main.wind_units = originalWindUnits;
     }
   }
 
   @Test
   public void acceptsInvalidWindWaveValuesAsConversionFailuresAtLevelThree() {
-    String originalPeriod = mywaves.wind_waves_period;
-    String originalHeight = mywaves.wind_waves_height;
+    String originalPeriod = WavesModel.wind_waves_period;
+    String originalHeight = WavesModel.wind_waves_height;
 
     try {
-      mywaves.wind_waves_period = "invalid";
-      mywaves.wind_waves_height = "invalid";
+      WavesModel.wind_waves_period = "invalid";
+      WavesModel.wind_waves_height = "invalid";
 
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mywaves.wind_waves_period = originalPeriod;
-      mywaves.wind_waves_height = originalHeight;
+      WavesModel.wind_waves_period = originalPeriod;
+      WavesModel.wind_waves_height = originalHeight;
     }
   }
 
   @Test
   public void acceptsValidWindWaveValuesAtLevelTwo() {
-    String originalPeriod = mywaves.wind_waves_period;
-    String originalHeight = mywaves.wind_waves_height;
-    int originalWindSpeed = mywind.int_true_wind_speed;
+    String originalPeriod = WavesModel.wind_waves_period;
+    String originalHeight = WavesModel.wind_waves_height;
+    int originalWindSpeed = WindModel.int_true_wind_speed;
     String originalWindUnits = main.wind_units;
 
     try {
-      mywaves.wind_waves_period = "5";
-      mywaves.wind_waves_height = "2";
-      mywind.int_true_wind_speed = 10;
+      WavesModel.wind_waves_period = "5";
+      WavesModel.wind_waves_height = "2";
+      WindModel.int_true_wind_speed = 10;
       main.wind_units = main.M_S;
 
       assertTrue(new main_support().checking_level_2());
     } finally {
-      mywaves.wind_waves_period = originalPeriod;
-      mywaves.wind_waves_height = originalHeight;
-      mywind.int_true_wind_speed = originalWindSpeed;
+      WavesModel.wind_waves_period = originalPeriod;
+      WavesModel.wind_waves_height = originalHeight;
+      WindModel.int_true_wind_speed = originalWindSpeed;
       main.wind_units = originalWindUnits;
     }
   }
 
   @Test
   public void acceptsEmptyWindWaveValuesAtLevelTwo() {
-    String originalPeriod = mywaves.wind_waves_period;
-    String originalHeight = mywaves.wind_waves_height;
+    String originalPeriod = WavesModel.wind_waves_period;
+    String originalHeight = WavesModel.wind_waves_height;
 
     try {
-      mywaves.wind_waves_period = "";
-      mywaves.wind_waves_height = "";
+      WavesModel.wind_waves_period = "";
+      WavesModel.wind_waves_height = "";
 
       assertTrue(new main_support().checking_level_2());
     } finally {
-      mywaves.wind_waves_period = originalPeriod;
-      mywaves.wind_waves_height = originalHeight;
+      WavesModel.wind_waves_period = originalPeriod;
+      WavesModel.wind_waves_height = originalHeight;
     }
   }
 
   @Test
   public void acceptsValidWindWaveValuesAtLevelThree() {
-    String originalPeriod = mywaves.wind_waves_period;
-    String originalHeight = mywaves.wind_waves_height;
+    String originalPeriod = WavesModel.wind_waves_period;
+    String originalHeight = WavesModel.wind_waves_height;
 
     try {
-      mywaves.wind_waves_period = "5";
-      mywaves.wind_waves_height = "2";
+      WavesModel.wind_waves_period = "5";
+      WavesModel.wind_waves_height = "2";
 
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mywaves.wind_waves_period = originalPeriod;
-      mywaves.wind_waves_height = originalHeight;
+      WavesModel.wind_waves_period = originalPeriod;
+      WavesModel.wind_waves_height = originalHeight;
     }
   }
 
   @Test
   public void acceptsEmptyWindWaveValuesAtLevelThree() {
-    String originalPeriod = mywaves.wind_waves_period;
-    String originalHeight = mywaves.wind_waves_height;
+    String originalPeriod = WavesModel.wind_waves_period;
+    String originalHeight = WavesModel.wind_waves_height;
 
     try {
-      mywaves.wind_waves_period = "";
-      mywaves.wind_waves_height = "";
+      WavesModel.wind_waves_period = "";
+      WavesModel.wind_waves_height = "";
 
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mywaves.wind_waves_period = originalPeriod;
-      mywaves.wind_waves_height = originalHeight;
+      WavesModel.wind_waves_period = originalPeriod;
+      WavesModel.wind_waves_height = originalHeight;
     }
   }
 
   @Test
   public void preservesAirTemperatureConversionAtBothValidationLevels() {
-    String originalAirTemperature = mytemp.air_temp;
+    String originalAirTemperature = TemperatureModel.air_temp;
 
     try {
-      mytemp.air_temp = "20";
+      TemperatureModel.air_temp = "20";
       assertTrue(new main_support().checking_level_2());
       assertTrue(new main_support().checking_level_3());
 
-      mytemp.air_temp = "";
+      TemperatureModel.air_temp = "";
       assertTrue(new main_support().checking_level_2());
       assertTrue(new main_support().checking_level_3());
 
-      mytemp.air_temp = "invalid";
+      TemperatureModel.air_temp = "invalid";
       assertTrue(new main_support().checking_level_2());
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mytemp.air_temp = originalAirTemperature;
+      TemperatureModel.air_temp = originalAirTemperature;
     }
   }
 
   @Test
   public void preservesPressureAmountTendencyConversionAtBothValidationLevels() {
-    String originalPressureAmountTendency = mybarograph.pressure_amount_tendency;
-    String originalPressureCharacteristic = mybarograph.a_code;
+    String originalPressureAmountTendency = BarographModel.pressure_amount_tendency;
+    String originalPressureCharacteristic = BarographModel.a_code;
 
     try {
-      mybarograph.pressure_amount_tendency = "1.5";
-      mybarograph.a_code = "2";
+      BarographModel.pressure_amount_tendency = "1.5";
+      BarographModel.a_code = "2";
       assertTrue(new main_support().checking_level_2());
       assertTrue(new main_support().checking_level_3());
 
-      mybarograph.pressure_amount_tendency = "";
+      BarographModel.pressure_amount_tendency = "";
       assertTrue(new main_support().checking_level_2());
       assertTrue(new main_support().checking_level_3());
 
-      mybarograph.pressure_amount_tendency = "invalid";
+      BarographModel.pressure_amount_tendency = "invalid";
       assertTrue(new main_support().checking_level_2());
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mybarograph.pressure_amount_tendency = originalPressureAmountTendency;
-      mybarograph.a_code = originalPressureCharacteristic;
+      BarographModel.pressure_amount_tendency = originalPressureAmountTendency;
+      BarographModel.a_code = originalPressureCharacteristic;
     }
   }
 
   @Test
   public void preservesSwellConversionAtLevelThree() {
-    String originalFirstPeriod = mywaves.swell_1_period;
-    String originalFirstHeight = mywaves.swell_1_height;
-    String originalSecondPeriod = mywaves.swell_2_period;
-    String originalSecondHeight = mywaves.swell_2_height;
+    String originalFirstPeriod = WavesModel.swell_1_period;
+    String originalFirstHeight = WavesModel.swell_1_height;
+    String originalSecondPeriod = WavesModel.swell_2_period;
+    String originalSecondHeight = WavesModel.swell_2_height;
 
     try {
-      mywaves.swell_1_period = "5";
-      mywaves.swell_1_height = "2";
-      mywaves.swell_2_period = "6";
-      mywaves.swell_2_height = "3";
+      WavesModel.swell_1_period = "5";
+      WavesModel.swell_1_height = "2";
+      WavesModel.swell_2_period = "6";
+      WavesModel.swell_2_height = "3";
       assertTrue(new main_support().checking_level_3());
 
-      mywaves.swell_1_period = "";
-      mywaves.swell_1_height = "";
-      mywaves.swell_2_period = "";
-      mywaves.swell_2_height = "";
+      WavesModel.swell_1_period = "";
+      WavesModel.swell_1_height = "";
+      WavesModel.swell_2_period = "";
+      WavesModel.swell_2_height = "";
       assertTrue(new main_support().checking_level_3());
 
-      mywaves.swell_1_period = "invalid";
-      mywaves.swell_1_height = "invalid";
-      mywaves.swell_2_period = "invalid";
-      mywaves.swell_2_height = "invalid";
+      WavesModel.swell_1_period = "invalid";
+      WavesModel.swell_1_height = "invalid";
+      WavesModel.swell_2_period = "invalid";
+      WavesModel.swell_2_height = "invalid";
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mywaves.swell_1_period = originalFirstPeriod;
-      mywaves.swell_1_height = originalFirstHeight;
-      mywaves.swell_2_period = originalSecondPeriod;
-      mywaves.swell_2_height = originalSecondHeight;
+      WavesModel.swell_1_period = originalFirstPeriod;
+      WavesModel.swell_1_height = originalFirstHeight;
+      WavesModel.swell_2_period = originalSecondPeriod;
+      WavesModel.swell_2_height = originalSecondHeight;
     }
   }
 
   @Test
   public void preservesMslPressureConversionAtLevelThree() {
-    String originalPressure = mybarometer.pressure_msl_corrected;
+    String originalPressure = BarometerModel.pressure_msl_corrected;
 
     try {
-      mybarometer.pressure_msl_corrected = "1013.25";
+      BarometerModel.pressure_msl_corrected = "1013.25";
       assertTrue(new main_support().checking_level_3());
 
-      mybarometer.pressure_msl_corrected = "";
+      BarometerModel.pressure_msl_corrected = "";
       assertTrue(new main_support().checking_level_3());
 
-      mybarometer.pressure_msl_corrected = "invalid";
+      BarometerModel.pressure_msl_corrected = "invalid";
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mybarometer.pressure_msl_corrected = originalPressure;
+      BarometerModel.pressure_msl_corrected = originalPressure;
     }
   }
 
   @Test
   public void preservesSeaWaterTemperatureConversionAtLevelThree() {
-    String originalSeaWaterTemperature = mytemp.sea_water_temp;
+    String originalSeaWaterTemperature = TemperatureModel.sea_water_temp;
 
     try {
-      mytemp.sea_water_temp = "18";
+      TemperatureModel.sea_water_temp = "18";
       assertTrue(new main_support().checking_level_3());
 
-      mytemp.sea_water_temp = "";
+      TemperatureModel.sea_water_temp = "";
       assertTrue(new main_support().checking_level_3());
 
-      mytemp.sea_water_temp = "invalid";
+      TemperatureModel.sea_water_temp = "invalid";
       assertTrue(new main_support().checking_level_3());
     } finally {
-      mytemp.sea_water_temp = originalSeaWaterTemperature;
+      TemperatureModel.sea_water_temp = originalSeaWaterTemperature;
     }
   }
 
@@ -344,16 +344,16 @@ public class MainSupportCharacterizationTest {
 
   @Test
   public void preservesNoaaNullHemisphereFailure() {
-    String originalLatitudeDegrees = myposition.latitude_degrees;
-    String originalLatitudeHemisphere = myposition.latitude_hemisphere;
-    String originalLongitudeDegrees = myposition.longitude_degrees;
-    String originalLongitudeHemisphere = myposition.longitude_hemisphere;
+    String originalLatitudeDegrees = PositionModel.latitude_degrees;
+    String originalLatitudeHemisphere = PositionModel.latitude_hemisphere;
+    String originalLongitudeDegrees = PositionModel.longitude_degrees;
+    String originalLongitudeHemisphere = PositionModel.longitude_hemisphere;
 
     try {
-      myposition.latitude_degrees = "12";
-      myposition.latitude_hemisphere = null;
-      myposition.longitude_degrees = "4";
-      myposition.longitude_hemisphere = "E";
+      PositionModel.latitude_degrees = "12";
+      PositionModel.latitude_hemisphere = null;
+      PositionModel.longitude_degrees = "4";
+      PositionModel.longitude_hemisphere = "E";
 
       try {
         new main_support().determine_satellite_image_url_NOAA(main.SATELLITE_IR_IMAGE);
@@ -362,10 +362,10 @@ public class MainSupportCharacterizationTest {
         assertEquals("latitude_hemisphere", ex.getMessage());
       }
     } finally {
-      myposition.latitude_degrees = originalLatitudeDegrees;
-      myposition.latitude_hemisphere = originalLatitudeHemisphere;
-      myposition.longitude_degrees = originalLongitudeDegrees;
-      myposition.longitude_hemisphere = originalLongitudeHemisphere;
+      PositionModel.latitude_degrees = originalLatitudeDegrees;
+      PositionModel.latitude_hemisphere = originalLatitudeHemisphere;
+      PositionModel.longitude_degrees = originalLongitudeDegrees;
+      PositionModel.longitude_hemisphere = originalLongitudeHemisphere;
     }
   }
 }

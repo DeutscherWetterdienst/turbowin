@@ -10,7 +10,7 @@ public class LandSeaMaskPositionCalculatorTest {
   public void calculatesNorthernWesternGridCoordinates() {
     LandSeaMaskPositionCalculator.Position position =
         LandSeaMaskPositionCalculator.calculate(
-            myposition.HEMISPHERE_NORTH, myposition.HEMISPHERE_WEST, 12, 34);
+            PositionModel.HEMISPHERE_NORTH, PositionModel.HEMISPHERE_WEST, 12, 34);
 
     assertEquals(0, position.octant());
     assertEquals(13, position.tenDegreeCell());
@@ -22,17 +22,17 @@ public class LandSeaMaskPositionCalculatorTest {
     assertEquals(
         3,
         LandSeaMaskPositionCalculator.calculate(
-                myposition.HEMISPHERE_NORTH, myposition.HEMISPHERE_EAST, 0, 89)
+                PositionModel.HEMISPHERE_NORTH, PositionModel.HEMISPHERE_EAST, 0, 89)
             .octant());
     assertEquals(
         6,
         LandSeaMaskPositionCalculator.calculate(
-                myposition.HEMISPHERE_SOUTH, myposition.HEMISPHERE_WEST, 0, 90)
+                PositionModel.HEMISPHERE_SOUTH, PositionModel.HEMISPHERE_WEST, 0, 90)
             .octant());
     assertEquals(
         7,
         LandSeaMaskPositionCalculator.calculate(
-                myposition.HEMISPHERE_SOUTH, myposition.HEMISPHERE_EAST, 0, 90)
+                PositionModel.HEMISPHERE_SOUTH, PositionModel.HEMISPHERE_EAST, 0, 90)
             .octant());
   }
 
@@ -41,7 +41,7 @@ public class LandSeaMaskPositionCalculatorTest {
     assertEquals(
         main.INVALID,
         LandSeaMaskPositionCalculator.calculate(
-                myposition.HEMISPHERE_NORTH, myposition.HEMISPHERE_EAST, 12, 181)
+                PositionModel.HEMISPHERE_NORTH, PositionModel.HEMISPHERE_EAST, 12, 181)
             .octant());
   }
 }

@@ -100,15 +100,15 @@ final class Rs232MintakaWowAprWorkflow {
     main.sensor_data_record_obs_pressure = ""; // nodig?
     main.sensor_data_record_obs_ppp = ""; // nodig?
     main.sensor_data_record_obs_a = ""; // nodig?
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.double_rv = main.INVALID;
-    mytemp.double_dew_point = main.INVALID;
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.double_rv = main.INVALID;
+    TemperatureModel.double_dew_point = main.INVALID;
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
 
     new SwingWorker<String, Void>() {
       @Override
@@ -1035,7 +1035,7 @@ final class Rs232MintakaWowAprWorkflow {
                 String sensor_data_record_APR_pressure_reading_hpa_corrected =
                     df.format(
                         hulp_double_APR_pressure_reading + double_barometer_instrument_correction);
-                mybarometer.pressure_reading_corrected =
+                BarometerModel.pressure_reading_corrected =
                     sensor_data_record_APR_pressure_reading_hpa_corrected; // now pressure at sensor
                 // height corrected for
                 // ic
@@ -1055,12 +1055,12 @@ final class Rs232MintakaWowAprWorkflow {
                 double hulp_double_APR_pressure_MSL_rounded = bd.doubleValue();
                 sensor_data_record_APR_pressure_MSL_hpa =
                     Double.toString(hulp_double_APR_pressure_MSL_rounded);
-                mybarometer.pressure_msl_corrected =
+                BarometerModel.pressure_msl_corrected =
                     sensor_data_record_APR_pressure_MSL_hpa; // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
 
                 if (destination.equals("MAIN_SCREEN") == false) {
                   String message_msl =
-                      "[APR] air pressure MSL = " + mybarometer.pressure_msl_corrected + " hPa";
+                      "[APR] air pressure MSL = " + BarometerModel.pressure_msl_corrected + " hPa";
                   main.log_turbowin_system_message(message_msl);
                 }
 
@@ -1102,7 +1102,7 @@ final class Rs232MintakaWowAprWorkflow {
           /////// ppp ///////
           //
           ppp_ok = false;
-          mybarograph.pressure_amount_tendency = "";
+          BarographModel.pressure_amount_tendency = "";
 
           if ((sensor_data_record_APR_pressure_ppp.compareTo("") != 0)) {
             try {
@@ -1119,14 +1119,14 @@ final class Rs232MintakaWowAprWorkflow {
             if ((hulp_double_APR_pressure_ppp > -99.9) && (hulp_double_APR_pressure_ppp < 99.9)) {
               DecimalFormat df =
                   new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
-              mybarograph.pressure_amount_tendency =
+              BarographModel.pressure_amount_tendency =
                   df.format(Math.abs(hulp_double_APR_pressure_ppp)); // only positve values !!
               ppp_ok = true;
 
               if (destination.equals("MAIN_SCREEN") == false) {
                 String message_pressure_ppp =
                     "[APR] pressure tendency at sensor height = "
-                        + mybarograph.pressure_amount_tendency
+                        + BarographModel.pressure_amount_tendency
                         + " hPa";
                 main.log_turbowin_system_message(message_pressure_ppp);
               }
@@ -1145,7 +1145,7 @@ final class Rs232MintakaWowAprWorkflow {
           ////// a /////////
           //
           a_ok = false;
-          mybarograph.a_code = "";
+          BarographModel.a_code = "";
 
           if ((sensor_data_record_APR_pressure_a.compareTo("") != 0)) {
             try {
@@ -1159,13 +1159,13 @@ final class Rs232MintakaWowAprWorkflow {
             }
 
             if ((hulp_int_APR_pressure_a >= 0) && (hulp_int_APR_pressure_a <= 9)) {
-              mybarograph.a_code = sensor_data_record_APR_pressure_a.trim();
+              BarographModel.a_code = sensor_data_record_APR_pressure_a.trim();
               a_ok = true;
 
               if (destination.equals("MAIN_SCREEN") == false) {
                 String message_pressure_a =
                     "[APR] pressure characteristic at sensor height = "
-                        + mybarograph.a_code
+                        + BarographModel.a_code
                         + " (code)";
                 main.log_turbowin_system_message(message_pressure_a);
               }
@@ -1202,12 +1202,12 @@ final class Rs232MintakaWowAprWorkflow {
               if ((hulp_double_APR_air_temp > -70.0) && (hulp_double_APR_air_temp < 70.0)) {
                 DecimalFormat df =
                     new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
-                mytemp.air_temp = df.format(hulp_double_APR_air_temp);
+                TemperatureModel.air_temp = df.format(hulp_double_APR_air_temp);
                 air_temp_ok = true;
 
                 if (destination.equals("MAIN_SCREEN") == false) {
                   String message_air_temp =
-                      "[APR] air temp at sensor height = " + mytemp.air_temp + " \u00B0C";
+                      "[APR] air temp at sensor height = " + TemperatureModel.air_temp + " \u00B0C";
                   main.log_turbowin_system_message(message_air_temp);
                 }
 
@@ -1241,12 +1241,14 @@ final class Rs232MintakaWowAprWorkflow {
               if ((hulp_double_APR_wet_bulb > -70.0) && (hulp_double_APR_wet_bulb < 70.0)) {
                 DecimalFormat df =
                     new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.ROOT));
-                mytemp.wet_bulb_temp = df.format(hulp_double_APR_wet_bulb);
+                TemperatureModel.wet_bulb_temp = df.format(hulp_double_APR_wet_bulb);
                 wet_bulb_ok = true;
 
                 if (destination.equals("MAIN_SCREEN") == false) {
                   String message_wet_bulb_temp =
-                      "[APR] wet-bulb temp at sensor height = " + mytemp.wet_bulb_temp + " \u00B0C";
+                      "[APR] wet-bulb temp at sensor height = "
+                          + TemperatureModel.wet_bulb_temp
+                          + " \u00B0C";
                   main.log_turbowin_system_message(message_wet_bulb_temp);
                 }
 
@@ -1278,13 +1280,13 @@ final class Rs232MintakaWowAprWorkflow {
               }
 
               if ((hulp_double_APR_dew_point > -70.0) && (hulp_double_APR_dew_point < 70.0)) {
-                mytemp.double_dew_point = hulp_double_APR_dew_point;
+                TemperatureModel.double_dew_point = hulp_double_APR_dew_point;
                 dew_point_ok = true;
 
                 if (destination.equals("MAIN_SCREEN") == false) {
                   String message_dew_point =
                       "[APR] dew-point at sensor height = "
-                          + Double.toString(mytemp.double_dew_point)
+                          + Double.toString(TemperatureModel.double_dew_point)
                           + " \u00B0C";
                   main.log_turbowin_system_message(message_dew_point);
                 }
@@ -1316,15 +1318,17 @@ final class Rs232MintakaWowAprWorkflow {
               }
 
               if ((hulp_double_APR_RH >= 0.0) && (hulp_double_APR_RH <= 100.0)) {
-                mytemp.RH = sensor_data_record_APR_RH.trim(); // e.g. 60
-                mytemp.double_rv =
+                TemperatureModel.RH = sensor_data_record_APR_RH.trim(); // e.g. 60
+                TemperatureModel.double_rv =
                     hulp_double_APR_RH
-                        / 100; // NB mytemp.double_rv in range 0.0 - 1.0 (or main.INVALID) !! [see
-                // also mytemp.java]
+                        / 100; // NB TemperatureModel.double_rv in range 0.0 - 1.0 (or main.INVALID)
+                // !! [see
+                // also TemperatureModel.java]
                 RH_ok = true;
 
                 if (destination.equals("MAIN_SCREEN") == false) {
-                  String message_dew_point = "[APR] RH at sensor height = " + mytemp.RH + " %";
+                  String message_dew_point =
+                      "[APR] RH at sensor height = " + TemperatureModel.RH + " %";
                   main.log_turbowin_system_message(message_dew_point);
                 }
 
@@ -1360,7 +1364,7 @@ final class Rs232MintakaWowAprWorkflow {
                   .trim(); // to remove leading and trailing whitespace in the string eg " 52
           // 04.7041N" -> "52 04.7041N"
           int pos_space = fix_latitude.indexOf(" ", 0); // find first space (" ") in the string
-          myposition.latitude_degrees =
+          PositionModel.latitude_degrees =
               fix_latitude.substring(
                   0, pos_space); // eg "52 04.7041N" -> "52" and "2 04.7041N" -> "2"
 
@@ -1382,27 +1386,27 @@ final class Rs232MintakaWowAprWorkflow {
 
             // increment latitude degrees
             int hulp_latitude_degrees =
-                Integer.parseInt(myposition.latitude_degrees); // String to int
+                Integer.parseInt(PositionModel.latitude_degrees); // String to int
             hulp_latitude_degrees++;
-            myposition.latitude_degrees =
+            PositionModel.latitude_degrees =
                 Integer.toString(hulp_latitude_degrees); // int to String (via Integer)
           }
           ///////////////////
 
-          myposition.latitude_minutes =
+          PositionModel.latitude_minutes =
               bd_lat_min.toString(); // rounded minutes value  e.g. "04.7041N" -> "4" minutes
-          if (myposition.latitude_minutes.length() == 1) {
-            myposition.latitude_minutes = "0" + myposition.latitude_minutes; // "4" -> "04"
+          if (PositionModel.latitude_minutes.length() == 1) {
+            PositionModel.latitude_minutes = "0" + PositionModel.latitude_minutes; // "4" -> "04"
           }
 
           GPS_latitude_hemisphere =
               fix_latitude.substring(fix_latitude.length() - 1); // eg "52 04.7041N" -> "N"
           if (GPS_latitude_hemisphere.toUpperCase().equals("N")) {
-            myposition.latitude_hemisphere = myposition.HEMISPHERE_NORTH;
+            PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_NORTH;
           } else if (GPS_latitude_hemisphere.toUpperCase().equals("S")) {
-            myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH;
+            PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_SOUTH;
           } else {
-            myposition.latitude_hemisphere = "";
+            PositionModel.latitude_hemisphere = "";
             fix_ok = false;
           }
 
@@ -1410,13 +1414,13 @@ final class Rs232MintakaWowAprWorkflow {
           //
           if (fix_ok == true) {
             try {
-              myposition.int_latitude_degrees = Integer.parseInt(myposition.latitude_degrees);
+              PositionModel.int_latitude_degrees = Integer.parseInt(PositionModel.latitude_degrees);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
 
             try {
-              myposition.int_latitude_minutes = Integer.parseInt(myposition.latitude_minutes);
+              PositionModel.int_latitude_minutes = Integer.parseInt(PositionModel.latitude_minutes);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
@@ -1431,19 +1435,20 @@ final class Rs232MintakaWowAprWorkflow {
             // degrees [IMMT rounding!!!}
             String latitude_minutes_6 =
                 Integer.toString(int_latitude_minutes_6); // convert to String
-            // myposition.lalala_code = myposition.latitude_degrees.trim().replaceFirst("^0+(?!$)",
+            // PositionModel.lalala_code =
+            // PositionModel.latitude_degrees.trim().replaceFirst("^0+(?!$)",
             // "") + latitude_minutes_6;
-            myposition.lalala_code = myposition.latitude_degrees + latitude_minutes_6;
+            PositionModel.lalala_code = PositionModel.latitude_degrees + latitude_minutes_6;
 
             int len = 3; // always 3 chars
-            if (myposition.lalala_code.length() < len) {
+            if (PositionModel.lalala_code.length() < len) {
               // pad on left with zeros
-              myposition.lalala_code =
-                  "0000000000".substring(0, len - myposition.lalala_code.length())
-                      + myposition.lalala_code;
-            } else if (myposition.lalala_code.length() > len) {
+              PositionModel.lalala_code =
+                  "0000000000".substring(0, len - PositionModel.lalala_code.length())
+                      + PositionModel.lalala_code;
+            } else if (PositionModel.lalala_code.length() > len) {
               fix_ok = false;
-              // System.out.println("+++++++++++ lalala_code error: " + myposition.lalala_code);
+              // System.out.println("+++++++++++ lalala_code error: " + PositionModel.lalala_code);
             }
           } // if (fix_ok == true)
 
@@ -1466,7 +1471,7 @@ final class Rs232MintakaWowAprWorkflow {
                   .trim(); // to remove leading and trailing whitespace in the string eg "  6
           // 14.7041N" -> "6 14.7041N"
           int pos_space = fix_longitude.indexOf(" ", 0); // find first space (" ") in the string
-          myposition.longitude_degrees =
+          PositionModel.longitude_degrees =
               fix_longitude.substring(
                   0, pos_space); // eg "6 14.7041W" -> "6" and "116 14.7041W" -> "116"
 
@@ -1488,29 +1493,29 @@ final class Rs232MintakaWowAprWorkflow {
 
             // increment longitude degrees
             int hulp_longitude_degrees =
-                Integer.parseInt(myposition.longitude_degrees); // String to int
+                Integer.parseInt(PositionModel.longitude_degrees); // String to int
             hulp_longitude_degrees++;
-            myposition.longitude_degrees =
+            PositionModel.longitude_degrees =
                 Integer.toString(hulp_longitude_degrees); // int to String (via Integer)
           }
           ///////////////////
 
-          myposition.longitude_minutes =
+          PositionModel.longitude_minutes =
               bd_lon_min
                   .toString(); // rounded minutes value  e.g. "04.7041N" -> "5" minutes; "23.7041N"
           // -> "24" minutes
-          if (myposition.longitude_minutes.length() == 1) {
-            myposition.longitude_minutes = "0" + myposition.longitude_minutes; // "5" -> "05"
+          if (PositionModel.longitude_minutes.length() == 1) {
+            PositionModel.longitude_minutes = "0" + PositionModel.longitude_minutes; // "5" -> "05"
           }
 
           GPS_longitude_hemisphere =
               fix_longitude.substring(fix_longitude.length() - 1); // eg "4 14.7041W" -> "W"
           if (GPS_longitude_hemisphere.toUpperCase().equals("E")) {
-            myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST;
+            PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_EAST;
           } else if (GPS_longitude_hemisphere.toUpperCase().equals("W")) {
-            myposition.longitude_hemisphere = myposition.HEMISPHERE_WEST;
+            PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_WEST;
           } else {
-            myposition.longitude_hemisphere = "";
+            PositionModel.longitude_hemisphere = "";
             fix_ok = false;
           }
 
@@ -1518,19 +1523,22 @@ final class Rs232MintakaWowAprWorkflow {
           //
           if (fix_ok == true) {
             try {
-              myposition.int_longitude_degrees = Integer.parseInt(myposition.longitude_degrees);
+              PositionModel.int_longitude_degrees =
+                  Integer.parseInt(PositionModel.longitude_degrees);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
 
             try {
-              myposition.int_longitude_minutes = Integer.parseInt(myposition.longitude_minutes);
+              PositionModel.int_longitude_minutes =
+                  Integer.parseInt(PositionModel.longitude_minutes);
             } catch (NumberFormatException e) {
               fix_ok = false;
             }
           } // if (fix_ok == true)
 
-          // for longitude (LoLoLoLo) for IMMT log (NB see also myposition.java) In fact this IMMT
+          // for longitude (LoLoLoLo) for IMMT log (NB see also PositionModel.java) In fact this
+          // IMMT
           // preparation only necessary in APR mode
           //
           if (fix_ok == true) {
@@ -1540,17 +1548,18 @@ final class Rs232MintakaWowAprWorkflow {
             // degrees [IMMT rounding!!!}
             String longitude_minutes_6 =
                 Integer.toString(int_longitude_minutes_6); // convert to String
-            myposition.lolololo_code = myposition.longitude_degrees + longitude_minutes_6;
+            PositionModel.lolololo_code = PositionModel.longitude_degrees + longitude_minutes_6;
 
             int len2 = 4; // always 4 chars
-            if (myposition.lolololo_code.length() < len2) {
+            if (PositionModel.lolololo_code.length() < len2) {
               // pad on left with zeros
-              myposition.lolololo_code =
-                  "0000000000".substring(0, len2 - myposition.lolololo_code.length())
-                      + myposition.lolololo_code;
-            } else if (myposition.lolololo_code.length() > len2) {
+              PositionModel.lolololo_code =
+                  "0000000000".substring(0, len2 - PositionModel.lolololo_code.length())
+                      + PositionModel.lolololo_code;
+            } else if (PositionModel.lolololo_code.length() > len2) {
               fix_ok = false;
-              // System.out.println("+++++++++++ lolololo_code error: " + myposition.lolololo_code);
+              // System.out.println("+++++++++++ lolololo_code error: " +
+              // PositionModel.lolololo_code);
             }
           } // if (fix_ok == true)
 
@@ -1565,18 +1574,25 @@ final class Rs232MintakaWowAprWorkflow {
         if (fix_ok == true) {
           // quadrant of the globe for IMMT
           //
-          if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-            myposition.Qc_code = "1";
-          } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_EAST) == true)) {
-            myposition.Qc_code = "3";
-          } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-            myposition.Qc_code = "5";
-          } else if ((myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_NORTH) == true)
-              && (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true)) {
-            myposition.Qc_code = "7";
+          if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_NORTH) == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_EAST)
+                  == true)) {
+            PositionModel.Qc_code = "1";
+          } else if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+                  == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_EAST)
+                  == true)) {
+            PositionModel.Qc_code = "3";
+          } else if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+                  == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST)
+                  == true)) {
+            PositionModel.Qc_code = "5";
+          } else if ((PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_NORTH)
+                  == true)
+              && (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST)
+                  == true)) {
+            PositionModel.Qc_code = "7";
           } else {
             fix_ok = false;
             // System.out.println("+++++++++++ Qc_code error");
@@ -1585,15 +1601,15 @@ final class Rs232MintakaWowAprWorkflow {
 
         // initialisation (from version 4.1)
         GPS_earlier_ok = false;
-        myposition.SOG_APR = Double.MAX_VALUE;
-        myposition.COG_APR = Double.MAX_VALUE;
-        myposition.course = "";
-        myposition.speed = "";
-        myposition.Ds_code = "";
-        myposition.vs_code = "";
+        PositionModel.SOG_APR = Double.MAX_VALUE;
+        PositionModel.COG_APR = Double.MAX_VALUE;
+        PositionModel.course = "";
+        PositionModel.speed = "";
+        PositionModel.Ds_code = "";
+        PositionModel.vs_code = "";
         GPS_earlier_wind_ok = false;
-        myposition.SOG_APR_wind = Double.MAX_VALUE; // SOG wind if FM13 format
-        myposition.COG_APR_wind = Double.MAX_VALUE; // COG wind if FM13 format
+        PositionModel.SOG_APR_wind = Double.MAX_VALUE; // SOG wind if FM13 format
+        PositionModel.COG_APR_wind = Double.MAX_VALUE; // COG wind if FM13 format
 
         if (fix_ok == true) {
           // computing COG and SOG (position interval 10 minutes or 3 hours)
@@ -2013,8 +2029,8 @@ final class Rs232MintakaWowAprWorkflow {
         } // if (main.obs_format.equals(main.FORMAT_FM13))
         else if (main.obs_format.equals(main.FORMAT_101)) {
           if (fix_ok == true) {
-            myposition.COG_APR_wind = myposition.COG_APR; // by default
-            myposition.SOG_APR_wind = myposition.SOG_APR; // by default
+            PositionModel.COG_APR_wind = PositionModel.COG_APR; // by default
+            PositionModel.SOG_APR_wind = PositionModel.SOG_APR; // by default
           }
         }
 
@@ -2022,15 +2038,15 @@ final class Rs232MintakaWowAprWorkflow {
         //
         if (destination.equals("APR")) {
           if (main.obs_format.equals(main.FORMAT_FM13)) {
-            if ((myposition.COG_APR >= 0.0)
-                && (myposition.COG_APR <= 360.0)
-                && (myposition.SOG_APR >= 0.0)
-                && (myposition.SOG_APR <= 100.0)) {
+            if ((PositionModel.COG_APR >= 0.0)
+                && (PositionModel.COG_APR <= 360.0)
+                && (PositionModel.SOG_APR >= 0.0)
+                && (PositionModel.SOG_APR <= 100.0)) {
               message =
                   "[APR] COG and SOG [3 hrs - obs]; COG and SOG calculation ok; "
-                      + myposition.COG_APR
+                      + PositionModel.COG_APR
                       + "\u00B0 "
-                      + myposition.SOG_APR
+                      + PositionModel.SOG_APR
                       + " kts";
             } else {
               message =
@@ -2039,15 +2055,15 @@ final class Rs232MintakaWowAprWorkflow {
             main.log_turbowin_system_message(message);
           }
           if (main.obs_format.equals(main.FORMAT_FM13) || main.obs_format.equals(main.FORMAT_101)) {
-            if ((myposition.COG_APR_wind >= 0.0)
-                && (myposition.COG_APR_wind <= 360.0)
-                && (myposition.SOG_APR_wind >= 0.0)
-                && (myposition.SOG_APR_wind <= 100.0)) {
+            if ((PositionModel.COG_APR_wind >= 0.0)
+                && (PositionModel.COG_APR_wind <= 360.0)
+                && (PositionModel.SOG_APR_wind >= 0.0)
+                && (PositionModel.SOG_APR_wind <= 100.0)) {
               message =
                   "[APR] COG and SOG [10 min]; COG and SOG calculation ok; "
-                      + myposition.COG_APR_wind
+                      + PositionModel.COG_APR_wind
                       + "\u00B0 "
-                      + myposition.SOG_APR_wind
+                      + PositionModel.SOG_APR_wind
                       + " kts";
             } else {
               message =
@@ -2081,17 +2097,17 @@ final class Rs232MintakaWowAprWorkflow {
 
             message =
                 "GPS position (dd-mm [N/S] ddd-mm [E/W]): "
-                    + myposition.latitude_degrees
+                    + PositionModel.latitude_degrees
                     + "-"
-                    + myposition.latitude_minutes
+                    + PositionModel.latitude_minutes
                     + " "
-                    + myposition.latitude_hemisphere.substring(0, 1)
+                    + PositionModel.latitude_hemisphere.substring(0, 1)
                     + " "
-                    + myposition.longitude_degrees
+                    + PositionModel.longitude_degrees
                     + "-"
-                    + myposition.longitude_minutes
+                    + PositionModel.longitude_minutes
                     + " "
-                    + myposition.longitude_hemisphere.substring(0, 1);
+                    + PositionModel.longitude_hemisphere.substring(0, 1);
             if (destination.equals("WOW")) {
               main.log_turbowin_system_message("[WOW] position parsing ok; " + message);
             } else if (destination.equals("APR")) {
@@ -2106,17 +2122,17 @@ final class Rs232MintakaWowAprWorkflow {
         // (2nd) initialisation if necessary
         if (StarX == true) {
           if (air_temp_ok == false) {
-            mytemp.air_temp = "";
+            TemperatureModel.air_temp = "";
           }
           if (wet_bulb_ok == false) {
-            mytemp.wet_bulb_temp = "";
+            TemperatureModel.wet_bulb_temp = "";
           }
           if (dew_point_ok == false) {
-            mytemp.double_dew_point = main.INVALID;
+            TemperatureModel.double_dew_point = main.INVALID;
           }
           if (RH_ok == false) {
-            mytemp.double_rv = main.INVALID;
-            mytemp.RH = "";
+            TemperatureModel.double_rv = main.INVALID;
+            TemperatureModel.RH = "";
           }
         } //  if (StarX == true)
 
@@ -2161,14 +2177,14 @@ final class Rs232MintakaWowAprWorkflow {
           if (fix_ok) {
             // NB Star with integrated GPS
 
-            if ((myposition.COG_APR >= 0.0 && myposition.COG_APR <= 360.0)
-                && (myposition.SOG_APR >= 0.0 && myposition.SOG_APR <= 100.0)) {
-              // NB myposition.course and myposition.speed only for main screen
-              myposition.course = Double.toString(myposition.COG_APR);
-              myposition.speed = Double.toString(myposition.SOG_APR);
+            if ((PositionModel.COG_APR >= 0.0 && PositionModel.COG_APR <= 360.0)
+                && (PositionModel.SOG_APR >= 0.0 && PositionModel.SOG_APR <= 100.0)) {
+              // NB PositionModel.course and PositionModel.speed only for main screen
+              PositionModel.course = Double.toString(PositionModel.COG_APR);
+              PositionModel.speed = Double.toString(PositionModel.SOG_APR);
             } else {
-              myposition.course = "";
-              myposition.speed = "";
+              PositionModel.course = "";
+              PositionModel.speed = "";
             }
 
             main.obsolate_GPS_data_flag = false;
@@ -2177,8 +2193,8 @@ final class Rs232MintakaWowAprWorkflow {
           {
             // NB Star with integrated GPS
 
-            // myposition.course = "";
-            // myposition.speed = "";
+            // PositionModel.course = "";
+            // PositionModel.speed = "";
 
             main.obsolate_GPS_data_flag = true;
             main.position_fields_update();
@@ -2194,10 +2210,10 @@ final class Rs232MintakaWowAprWorkflow {
 
           if (ppp_ok || a_ok) {
             if (ppp_ok == false) {
-              mybarograph.pressure_amount_tendency = "";
+              BarographModel.pressure_amount_tendency = "";
             }
             if (a_ok == false) {
-              mybarograph.a_code = "";
+              BarographModel.a_code = "";
             }
 
             main.barograph_fields_update();

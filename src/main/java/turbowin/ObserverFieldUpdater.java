@@ -8,8 +8,8 @@ final class ObserverFieldUpdater {
   private ObserverFieldUpdater() {}
 
   static void update() {
-    if (myobserver.selected_observer.compareTo("") != 0) {
-      jTextField20.setText(myobserver.selected_observer);
+    if (ObserverModel.selected_observer.compareTo("") != 0) {
+      jTextField20.setText(ObserverModel.selected_observer);
     } else {
       jTextField20.setText("");
     }

@@ -44,7 +44,7 @@ final class Fm13DesktopEmailWorkflow {
 
             String obs_email_subject_new =
                 obs_email_subject.replaceAll(
-                    "ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00");
+                    "ddhhmm", DateTimeModel.YY_code + DateTimeModel.GG_code + "00");
 
             // String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  +
             // "&body=" + obs_write;
@@ -100,7 +100,7 @@ final class Fm13DesktopEmailWorkflow {
           String obs_email_subject_new =
               UrlUtils.urlEncode(
                   obs_email_subject.replaceAll(
-                      "ddhhmm", mydatetime.YY_code + mydatetime.GG_code + "00"));
+                      "ddhhmm", DateTimeModel.YY_code + DateTimeModel.GG_code + "00"));
 
           // String mail_txt = obs_email_recipient + "?subject=" + obs_email_subject_new  + "&body="
           // + UrlUtils.urlEncode(obs_write);

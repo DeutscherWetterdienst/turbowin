@@ -172,8 +172,8 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
       jRadioButton14.setEnabled(false);
     }
 
-    // System.out.println("+++ 1) [initComponets1() mywind.int_true_wind_speed = "+
-    // mywind.int_true_wind_speed);
+    // System.out.println("+++ 1) [initComponets1() WindModel.int_true_wind_speed = "+
+    // WindModel.int_true_wind_speed);
 
     // set
     wind_input_APR_from_main_form_or_previous =
@@ -183,27 +183,27 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     // insert earlier inserted/selected values
     if ((main.wind_source.equals(main.ESTIMATED_TRUE))
         || (main.wind_source.equals(main.MEASURED_TRUE))) {
-      if (mywind.int_true_wind_dir == main.INVALID) {
+      if (WindModel.int_true_wind_dir == main.INVALID) {
         jComboBox1.setSelectedItem("");
-      } else if (mywind.int_true_wind_dir == 0) {
+      } else if (WindModel.int_true_wind_dir == 0) {
         jComboBox1.setSelectedItem("calm");
-      } else if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
+      } else if (WindModel.int_true_wind_dir == WindModel.WIND_DIR_VARIABLE) {
         jComboBox1.setSelectedItem("variable");
       } else {
-        // NB see update_APR_dashboard() [mywind.java]
+        // NB see update_APR_dashboard() [WindModel.java]
 
-        // jComboBox1.setSelectedItem(Integer.toString(mywind.int_true_wind_dir));
+        // jComboBox1.setSelectedItem(Integer.toString(WindModel.int_true_wind_dir));
         int tmp_wind_dir =
-            (int) (Math.round(mywind.int_true_wind_dir / 10.0) * 10); // round to tens!
+            (int) (Math.round(WindModel.int_true_wind_dir / 10.0) * 10); // round to tens!
         jComboBox1.setSelectedItem(Integer.toString(tmp_wind_dir));
       }
 
       int Bf_number = main.INVALID;
       if (main.wind_units.trim().indexOf(main.M_S) != -1) // m/s
       {
-        Bf_number = convert_ms_to_bf(mywind.int_true_wind_speed);
+        Bf_number = convert_ms_to_bf(WindModel.int_true_wind_speed);
       } else {
-        Bf_number = convert_knots_to_bf(mywind.int_true_wind_speed);
+        Bf_number = convert_knots_to_bf(WindModel.int_true_wind_speed);
       }
 
       // System.out.println("+++ 1) [initComponets1() Bf number = "+ Bf_number);
@@ -4159,7 +4159,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
 
     if (!wind_input_APR_from_main_form_or_previous) // NB in case wind input from main screen or a
     // previous APR dashboard input the checks were
-    // all ready performed in mywind.java !
+    // all ready performed in WindModel.java !
     {
       // general check
       //
@@ -4209,7 +4209,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
       {
         if ((beaufort_class_APR == 0)
             && ((wind_dir_APR.trim().equals("variable")
-                || (mywind.int_true_wind_dir > 0 && mywind.int_true_wind_dir <= 360)))) {
+                || (WindModel.int_true_wind_dir > 0 && WindModel.int_true_wind_dir <= 360)))) {
           // JOptionPane.showMessageDialog(null, "if wind force is 0 Bf, wind direction must be
           // calm", main.APPLICATION_NAME, JOptionPane.WARNING_MESSAGE);
 
@@ -4243,25 +4243,25 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
 
     if (!wind_input_APR_from_main_form_or_previous) {
       // initialisation
-      mywind.int_true_wind_dir = main.INVALID;
-      mywind.int_true_wind_speed = main.INVALID;
+      WindModel.int_true_wind_dir = main.INVALID;
+      WindModel.int_true_wind_speed = main.INVALID;
 
       ////////////// wind dir
       //
       if (wind_dir_APR.trim().equals("") == true) // bijzonder geval
       {
-        mywind.int_true_wind_dir = main.INVALID;
+        WindModel.int_true_wind_dir = main.INVALID;
       } else if (wind_dir_APR.trim().equals("calm") == true) // bijzonder geval
       {
-        mywind.int_true_wind_dir = 0;
+        WindModel.int_true_wind_dir = 0;
       } else if (wind_dir_APR.trim().equals("variable") == true) // bijzonder geval
       {
-        mywind.int_true_wind_dir = mywind.WIND_DIR_VARIABLE;
+        WindModel.int_true_wind_dir = WindModel.WIND_DIR_VARIABLE;
       } else {
         try {
-          mywind.int_true_wind_dir = Integer.parseInt(wind_dir_APR.trim());
+          WindModel.int_true_wind_dir = Integer.parseInt(wind_dir_APR.trim());
         } catch (NumberFormatException e) {
-          mywind.int_true_wind_dir = main.INVALID;
+          WindModel.int_true_wind_dir = main.INVALID;
         }
       } // else
 
@@ -4269,22 +4269,22 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
       //
       if (beaufort_class_APR >= 0 && beaufort_class_APR <= 12) {
         if (main.wind_units.trim().indexOf(main.M_S) != -1) {
-          mywind.iw_code = "0"; // estimated in m/s
-          mywind.int_true_wind_speed = convert_bf_to_m_s(beaufort_class_APR);
+          WindModel.iw_code = "0"; // estimated in m/s
+          WindModel.int_true_wind_speed = convert_bf_to_m_s(beaufort_class_APR);
         } else // so wind units is knots or unknown -> knots
         {
-          mywind.iw_code = "3"; // estimated in knots
-          mywind.int_true_wind_speed = convert_bf_to_knots(beaufort_class_APR);
+          WindModel.iw_code = "3"; // estimated in knots
+          WindModel.int_true_wind_speed = convert_bf_to_knots(beaufort_class_APR);
         }
       } else {
-        mywind.int_true_wind_speed = main.INVALID;
+        WindModel.int_true_wind_speed = main.INVALID;
       }
 
       // System.out.println("+++++++++++ wind_dir_APR = " + wind_dir_APR);
       // System.out.println("+++++++++++ beaufort_class_APR = " + beaufort_class_APR);
 
-      if ((mywind.int_true_wind_dir != main.INVALID)
-          && (mywind.int_true_wind_speed != main.INVALID)) {
+      if ((WindModel.int_true_wind_dir != main.INVALID)
+          && (WindModel.int_true_wind_speed != main.INVALID)) {
         checks_ok = true;
       } else {
         checks_ok = false;
@@ -4293,9 +4293,9 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
       if (checks_ok) {
         // wind direction code (NB int_true_wind_dir in graden)
         //
-        if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) // variable
+        if (WindModel.int_true_wind_dir == WindModel.WIND_DIR_VARIABLE) // variable
         {
-          mywind.dd_code = "99";
+          WindModel.dd_code = "99";
         } // if (int_true_wind_dir == 9999)
         else // so no variable wind
         {
@@ -4303,10 +4303,10 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
           int int_hulp_dd_code;
 
           // to prevent that 1 - 4 degrees become 00 in the obs
-          if (mywind.int_true_wind_dir >= 1 && mywind.int_true_wind_dir <= 4) {
+          if (WindModel.int_true_wind_dir >= 1 && WindModel.int_true_wind_dir <= 4) {
             int_hulp_true_wind_dir = 360;
           } else {
-            int_hulp_true_wind_dir = mywind.int_true_wind_dir;
+            int_hulp_true_wind_dir = WindModel.int_true_wind_dir;
           }
 
           // rounding to tens of degrees
@@ -4314,36 +4314,36 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
 
           /* convert to code */
           if (int_hulp_dd_code <= 9) {
-            mywind.dd_code = "0" + Integer.toString(int_hulp_dd_code);
+            WindModel.dd_code = "0" + Integer.toString(int_hulp_dd_code);
           } else if ((int_hulp_dd_code >= 10) && (int_hulp_dd_code <= 36)) {
-            mywind.dd_code = Integer.toString(int_hulp_dd_code);
+            WindModel.dd_code = Integer.toString(int_hulp_dd_code);
           } else {
-            mywind.dd_code = "//";
+            WindModel.dd_code = "//";
           }
         } // else (so no variable wind)
 
         // wind speed code (NB int_true_wind_speed in knots or m/s)
         //
-        if (mywind.int_true_wind_speed <= 9) {
-          mywind.ff_code = "0" + Integer.toString(mywind.int_true_wind_speed);
-        } else if ((mywind.int_true_wind_speed >= 10) && (mywind.int_true_wind_speed <= 99)) {
-          mywind.ff_code = Integer.toString(mywind.int_true_wind_speed);
-        } else if ((mywind.int_true_wind_speed >= 100)
-            && (mywind.int_true_wind_speed
+        if (WindModel.int_true_wind_speed <= 9) {
+          WindModel.ff_code = "0" + Integer.toString(WindModel.int_true_wind_speed);
+        } else if ((WindModel.int_true_wind_speed >= 10) && (WindModel.int_true_wind_speed <= 99)) {
+          WindModel.ff_code = Integer.toString(WindModel.int_true_wind_speed);
+        } else if ((WindModel.int_true_wind_speed >= 100)
+            && (WindModel.int_true_wind_speed
                 <= 200)) // NB due to the conversion from BF12 -> m/s or knots he probably never
         // gets here
         {
-          mywind.ff_code = "99";
-          mywind.fff00_code = Integer.toString(mywind.int_true_wind_speed);
+          WindModel.ff_code = "99";
+          WindModel.fff00_code = Integer.toString(WindModel.int_true_wind_speed);
         } else {
-          mywind.ff_code = "//";
+          WindModel.ff_code = "//";
         }
 
       } // if (checks_ok = true)
       else // check_ok == false
       {
-        mywind.dd_code = "//";
-        mywind.ff_code = "//";
+        WindModel.dd_code = "//";
+        WindModel.ff_code = "//";
       }
 
       //
@@ -4374,17 +4374,17 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     }
 
     String show_wind_dir = "-";
-    if (mywind.int_true_wind_dir == 0) {
+    if (WindModel.int_true_wind_dir == 0) {
       show_wind_dir = "calm";
-    } else if (mywind.int_true_wind_dir == mywind.WIND_DIR_VARIABLE) {
+    } else if (WindModel.int_true_wind_dir == WindModel.WIND_DIR_VARIABLE) {
       show_wind_dir = "var";
-    } else if (mywind.int_true_wind_dir > 0 && mywind.int_true_wind_dir <= 360) {
-      show_wind_dir = Integer.toString(mywind.int_true_wind_dir);
+    } else if (WindModel.int_true_wind_dir > 0 && WindModel.int_true_wind_dir <= 360) {
+      show_wind_dir = Integer.toString(WindModel.int_true_wind_dir);
     }
 
     String show_wind_speed = "-";
-    if (mywind.int_true_wind_speed >= 0 && mywind.int_true_wind_speed <= 400) {
-      show_wind_speed = Integer.toString(mywind.int_true_wind_speed);
+    if (WindModel.int_true_wind_speed >= 0 && WindModel.int_true_wind_speed <= 400) {
+      show_wind_speed = Integer.toString(WindModel.int_true_wind_speed);
     }
 
     DASHBOARD_view_APR_radar.jLabel21.setText(
@@ -4405,8 +4405,8 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     // System.out.println("+++++++++++ wind_dir_APR = " + wind_dir_APR);
     // System.out.println("+++++++++++ beaufort_class_APR = " + beaufort_class_APR);
 
-    mywind.int_true_wind_dir = main.INVALID;
-    mywind.int_true_wind_speed = main.INVALID;
+    WindModel.int_true_wind_dir = main.INVALID;
+    WindModel.int_true_wind_speed = main.INVALID;
 
     wind_dir_APR = "";
     beaufort_class_APR = main.INVALID;
@@ -4441,8 +4441,8 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     // System.out.println("+++++++++++ wind_dir_APR = " + wind_dir_APR);
     // System.out.println("+++++++++++ beaufort_class_APR = " + beaufort_class_APR);
 
-    mywind.int_true_wind_dir = main.INVALID;
-    mywind.int_true_wind_speed = main.INVALID;
+    WindModel.int_true_wind_dir = main.INVALID;
+    WindModel.int_true_wind_speed = main.INVALID;
 
     wind_dir_APR = "";
     beaufort_class_APR = main.INVALID;
@@ -4469,40 +4469,40 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     //
 
     // Waves
-    mywaves.wind_waves_period = "";
-    mywaves.wind_waves_height = "";
-    mywaves.swell_1_dir = "";
-    mywaves.swell_1_period = "";
-    mywaves.swell_1_height = "";
-    mywaves.swell_2_dir = "";
-    mywaves.swell_2_period = "";
-    mywaves.swell_2_height = "";
-    // mywaves.Hw_code                              = "";
-    // mywaves.Pw_code                              = "";
-    // mywaves.Dw1_code                             = "";
-    // mywaves.Pw1_code                             = "";
-    // mywaves.Hw1_code                             = "";
-    // mywaves.Dw2_code                             = "";
-    // mywaves.Pw2_code                             = "";
-    // mywaves.Hw2_code                             = "";
+    WavesModel.wind_waves_period = "";
+    WavesModel.wind_waves_height = "";
+    WavesModel.swell_1_dir = "";
+    WavesModel.swell_1_period = "";
+    WavesModel.swell_1_height = "";
+    WavesModel.swell_2_dir = "";
+    WavesModel.swell_2_period = "";
+    WavesModel.swell_2_height = "";
+    // WavesModel.Hw_code                              = "";
+    // WavesModel.Pw_code                              = "";
+    // WavesModel.Dw1_code                             = "";
+    // WavesModel.Pw1_code                             = "";
+    // WavesModel.Hw1_code                             = "";
+    // WavesModel.Dw2_code                             = "";
+    // WavesModel.Pw2_code                             = "";
+    // WavesModel.Hw2_code                             = "";
 
     // SST
-    // mytemp.air_temp                              = "";
-    // mytemp.wet_bulb_temp                         = "";
-    // mytemp.RH                                    = "";
-    mytemp.sea_water_temp = "";
-    // mytemp.sn_TTT_code                           = "";
-    // mytemp.TTT_code                              = "";
-    // mytemp.sn_TbTbTb_code                        = "";           // Tb = Twet
-    // mytemp.TbTbTb_code                           = "";
-    // mytemp.ss_TsTsTs_code                        = "";           // Ts = Tsea
-    // mytemp.TsTsTs_code                           = "";
-    // mytemp.sn_TdTdTd_code                        = "";
-    // mytemp.TdTdTd_code                           = "";
-    // mytemp.immt_sst_indicator                    = "";
-    // mytemp.double_dew_point                      = INVALID;
-    // mytemp.wet_bulb_frozen                       = false;
-    // mytemp.double_rv                             = INVALID;
+    // TemperatureModel.air_temp                              = "";
+    // TemperatureModel.wet_bulb_temp                         = "";
+    // TemperatureModel.RH                                    = "";
+    TemperatureModel.sea_water_temp = "";
+    // TemperatureModel.sn_TTT_code                           = "";
+    // TemperatureModel.TTT_code                              = "";
+    // TemperatureModel.sn_TbTbTb_code                        = "";           // Tb = Twet
+    // TemperatureModel.TbTbTb_code                           = "";
+    // TemperatureModel.ss_TsTsTs_code                        = "";           // Ts = Tsea
+    // TemperatureModel.TsTsTs_code                           = "";
+    // TemperatureModel.sn_TdTdTd_code                        = "";
+    // TemperatureModel.TdTdTd_code                           = "";
+    // TemperatureModel.immt_sst_indicator                    = "";
+    // TemperatureModel.double_dew_point                      = INVALID;
+    // TemperatureModel.wet_bulb_frozen                       = false;
+    // TemperatureModel.double_rv                             = INVALID;
 
   }
 
@@ -4622,31 +4622,31 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
     // V = velocity (boat speed over ground, always => 0)                   // SOG_APR_wind (FM13) /
     // SOG_SPR (format #101)
     // W = true wind velocity (always => 0)                                 //
-    // mywind.int_true_wind_speed
+    // WindModel.int_true_wind_speed
     // alpha  = true pointing angle in degrees (0 = upwind, 180 = downwind) // RBH true wind
     // A = apparent wind velocity (always => 0)                             //
     // beta = The angle of apparent wind
 
     double alpha = 0;
     double A = 0;
-    double W = 0; // mywind.int_true_wind_speed
+    double W = 0; // WindModel.int_true_wind_speed
     double V = 0; // SOG_APR_wind (FM13) / SOG_SPR (format #101)
     double beta = 0;
 
-    if ((mywind.int_true_wind_speed >= 0.0 && mywind.int_true_wind_speed <= 400.0)
-        && (myposition.SOG_APR_wind >= 0.0 && myposition.SOG_APR_wind <= 50.0)
-        && (mywind.int_true_wind_dir >= 0.0 && mywind.int_true_wind_dir <= 360.0)
-        && (myposition.COG_APR_wind >= 0.0 && myposition.COG_APR_wind <= 360.0)) {
-      W = mywind.int_true_wind_speed; // knots or m/s
+    if ((WindModel.int_true_wind_speed >= 0.0 && WindModel.int_true_wind_speed <= 400.0)
+        && (PositionModel.SOG_APR_wind >= 0.0 && PositionModel.SOG_APR_wind <= 50.0)
+        && (WindModel.int_true_wind_dir >= 0.0 && WindModel.int_true_wind_dir <= 360.0)
+        && (PositionModel.COG_APR_wind >= 0.0 && PositionModel.COG_APR_wind <= 360.0)) {
+      W = WindModel.int_true_wind_speed; // knots or m/s
 
       if (main.wind_units.trim().indexOf(main.M_S) != -1) {
-        V = myposition.SOG_APR_wind * main.KNOT_M_S_CONVERSION; // m/s
+        V = PositionModel.SOG_APR_wind * main.KNOT_M_S_CONVERSION; // m/s
       } else {
-        V = myposition.SOG_APR_wind; // knots
+        V = PositionModel.SOG_APR_wind; // knots
       }
 
       // RBH true wind [deg]
-      alpha = mywind.int_true_wind_dir - myposition.COG_APR_wind;
+      alpha = WindModel.int_true_wind_dir - PositionModel.COG_APR_wind;
       if (alpha < 0) alpha += 360;
 
       // relative wind speed [knots or m/s]
@@ -4666,7 +4666,7 @@ public class DASHBOARD_view_APR_radar extends javax.swing.JFrame {
       relative_wind_dir_APR =
           Integer.toString((int) Math.round(beta)); // double rounding then -> int then -> String
 
-    } // if ( (mywind.int_true_wind_speed >= 0.0 etc.
+    } // if ( (WindModel.int_true_wind_speed >= 0.0 etc.
     else {
       relative_beaufort_class_APR = main.INVALID;
       relative_wind_dir_APR = "";

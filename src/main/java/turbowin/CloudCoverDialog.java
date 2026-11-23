@@ -6,11 +6,11 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /** Connects the JavaFX cloud-cover view to the existing Swing observation workflow. */
-final class CloudCoverJavaFxWindow {
+final class CloudCoverDialog {
   static final String TITLE =
       "Total cloud cover, amount of Cl (Cm) and height of base of lowest cloud";
 
-  private CloudCoverJavaFxWindow() {}
+  private CloudCoverDialog() {}
 
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread()) {

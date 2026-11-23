@@ -551,14 +551,14 @@ public class FORMAT_101 {
     // unit = degrees true
     schalings_factor = 1; // scaling (scale factor)
 
-    if (myposition.COG_APR >= 0.0 && myposition.COG_APR <= 360.0) {
+    if (PositionModel.COG_APR >= 0.0 && PositionModel.COG_APR <= 360.0) {
       // if in APR mode the high resolution COG_APR is available (eg Mintaka Star) use then this
       // value
-      compressed_ship_direction = (double) myposition.COG_APR * schalings_factor;
+      compressed_ship_direction = (double) PositionModel.COG_APR * schalings_factor;
       present[2] = 1;
     } else // (COG_APR not available)
     {
-      Integer direction = directionCodeToDegrees(myposition.Ds_code);
+      Integer direction = directionCodeToDegrees(PositionModel.Ds_code);
       if (direction != null) {
         compressed_ship_direction = direction * schalings_factor;
         present[2] = 1;
@@ -576,15 +576,15 @@ public class FORMAT_101 {
     schalings_factor = 1;
     int gem_Vs = Integer.MAX_VALUE;
 
-    if (myposition.SOG_APR >= 0.0 && myposition.SOG_APR <= 100.0) // NB SOG_APR in knots
+    if (PositionModel.SOG_APR >= 0.0 && PositionModel.SOG_APR <= 100.0) // NB SOG_APR in knots
     {
       // if in APR mode the high resolution SOG_APR is available (eg Mintaka Star) use then this
       // value
-      compressed_ship_speed = convertLegacyShipSpeedToMetersPerSecond(myposition.SOG_APR);
+      compressed_ship_speed = convertLegacyShipSpeedToMetersPerSecond(PositionModel.SOG_APR);
       present[3] = 1;
     } else // SOG_APR not available
     {
-      gem_Vs = legacySpeedCodeToKnots(myposition.vs_code);
+      gem_Vs = legacySpeedCodeToKnots(PositionModel.vs_code);
 
       if (gem_Vs != Integer.MAX_VALUE) {
         compressed_ship_speed = convertLegacyShipSpeedToMetersPerSecond(gem_Vs);
@@ -603,7 +603,7 @@ public class FORMAT_101 {
 
     compressed_true_heading =
         parseTrueHeadingField(
-            mywind.ship_heading, present, 4, "true heading", COMPRESSED_UNDEF_VALUE);
+            WindModel.ship_heading, present, 4, "true heading", COMPRESSED_UNDEF_VALUE);
 
     /* [5]
     ////////////////////////////////////// 0 07 072 (sll - wl distance) ///////////////////////////////////
@@ -611,11 +611,11 @@ public class FORMAT_101 {
     /* unit = metres */
     schalings_factor = 1;
 
-    if ((mywind.int_difference_sll_wl > -50)
-        && (mywind.int_difference_sll_wl
-            < 100)) // very raw/save limits (for real limits see mywind.java)
+    if ((WindModel.int_difference_sll_wl > -50)
+        && (WindModel.int_difference_sll_wl
+            < 100)) // very raw/save limits (for real limits see WindModel.java)
     {
-      compressed_sll_wl_difference = (double) mywind.int_difference_sll_wl * schalings_factor;
+      compressed_sll_wl_difference = (double) WindModel.int_difference_sll_wl * schalings_factor;
       present[5] = 1;
     } else {
       compressed_sll_wl_difference = COMPRESSED_UNDEF_VALUE;
@@ -628,7 +628,7 @@ public class FORMAT_101 {
     /* unit = N/A */
     schalings_factor = 1;
 
-    compressed_year = Double.parseDouble(mydatetime.year) * schalings_factor;
+    compressed_year = Double.parseDouble(DateTimeModel.year) * schalings_factor;
     present[6] = 1;
 
     /* [7]
@@ -637,7 +637,7 @@ public class FORMAT_101 {
     /* unit = N/A */
     schalings_factor = 1;
 
-    compressed_month = Double.parseDouble(mydatetime.MM_code) * schalings_factor;
+    compressed_month = Double.parseDouble(DateTimeModel.MM_code) * schalings_factor;
     present[7] = 1;
 
     /* [8]
@@ -646,7 +646,7 @@ public class FORMAT_101 {
     /* unit  = N/A */
     schalings_factor = 1;
 
-    compressed_day = Double.parseDouble(mydatetime.day) * schalings_factor;
+    compressed_day = Double.parseDouble(DateTimeModel.day) * schalings_factor;
     present[8] = 1;
 
     /* [9]
@@ -655,7 +655,7 @@ public class FORMAT_101 {
     /* unit  = N/A */
     schalings_factor = 1;
 
-    compressed_hour = Double.parseDouble(mydatetime.hour) * schalings_factor;
+    compressed_hour = Double.parseDouble(DateTimeModel.hour) * schalings_factor;
     present[9] = 1;
 
     /* [10]
@@ -672,9 +672,9 @@ public class FORMAT_101 {
 
     compressed_latitude =
         convertCoordinateToDegrees(
-            myposition.int_latitude_degrees,
-            myposition.int_latitude_minutes,
-            myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH));
+            PositionModel.int_latitude_degrees,
+            PositionModel.int_latitude_minutes,
+            PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH));
     present[11] = 1;
 
     /* [12]
@@ -685,9 +685,9 @@ public class FORMAT_101 {
 
     compressed_longitude =
         convertCoordinateToDegrees(
-            myposition.int_longitude_degrees,
-            myposition.int_longitude_minutes,
-            myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST));
+            PositionModel.int_longitude_degrees,
+            PositionModel.int_longitude_minutes,
+            PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST));
     present[12] = 1;
 
     /* [13]
@@ -701,7 +701,7 @@ public class FORMAT_101 {
     if (main.pressure_reading_msl_yes_no.equals(main.PRESSURE_READING_MSL_NO)) {
       compressed_pressure_height =
           parsePressureField(
-              mybarometer.pressure_reading_corrected,
+              BarometerModel.pressure_reading_corrected,
               present,
               13,
               "pressure at barometer height",
@@ -719,7 +719,7 @@ public class FORMAT_101 {
 
     compressed_pressure_msl =
         parsePressureField(
-            mybarometer.pressure_msl_corrected,
+            BarometerModel.pressure_msl_corrected,
             present,
             14,
             "MSL pressure",
@@ -733,8 +733,8 @@ public class FORMAT_101 {
 
     compressed_pressure_change =
         parsePressureChangeField(
-            mybarograph.pressure_amount_tendency,
-            mybarograph.a_code,
+            BarographModel.pressure_amount_tendency,
+            BarographModel.a_code,
             present,
             15,
             "pressure change (ppp)",
@@ -748,7 +748,7 @@ public class FORMAT_101 {
 
     compressed_pressure_characteristic =
         parseOptionalNumericField(
-            mybarograph.a_code,
+            BarographModel.a_code,
             schalings_factor,
             present,
             16,
@@ -761,11 +761,11 @@ public class FORMAT_101 {
     /* unit  = degrees true */
     schalings_factor = 1;
 
-    if (mywind.int_true_wind_dir >= 0 && mywind.int_true_wind_dir <= 360) {
-      compressed_wind_dir = (double) mywind.int_true_wind_dir * schalings_factor;
+    if (WindModel.int_true_wind_dir >= 0 && WindModel.int_true_wind_dir <= 360) {
+      compressed_wind_dir = (double) WindModel.int_true_wind_dir * schalings_factor;
       present[17] = 1;
-    } else if (mywind.int_true_wind_dir
-        == mywind.WIND_DIR_VARIABLE) // 0 agreed with Christophe Billon in email of 7-03-2014
+    } else if (WindModel.int_true_wind_dir
+        == WindModel.WIND_DIR_VARIABLE) // 0 agreed with Christophe Billon in email of 7-03-2014
     {
       compressed_wind_dir = 0.0;
       present[17] = 1;
@@ -780,14 +780,15 @@ public class FORMAT_101 {
     /* unit  = m/s */
     schalings_factor = 1;
 
-    // System.out.println("+++++++++++ mywind.int_true_wind_speed " + mywind.int_true_wind_speed);
+    // System.out.println("+++++++++++ WindModel.int_true_wind_speed " +
+    // WindModel.int_true_wind_speed);
     // System.out.println("+++++++++++ main.wind_units = " + main.wind_units);
     // System.out.println("+++++++++++ constant main.M_S = " + main.M_S);
     // System.out.println("+++++++++++ constant main.KNOTS = " + main.KNOTS);
 
-    if (mywind.int_true_wind_speed >= 0 && mywind.int_true_wind_speed <= 500) {
+    if (WindModel.int_true_wind_speed >= 0 && WindModel.int_true_wind_speed <= 500) {
       Double convertedWindSpeed =
-          convertWindSpeedByUnit(mywind.int_true_wind_speed * schalings_factor, main.wind_units);
+          convertWindSpeedByUnit(WindModel.int_true_wind_speed * schalings_factor, main.wind_units);
       if (convertedWindSpeed != null) {
         compressed_wind_speed = convertedWindSpeed;
         present[18] = 1;
@@ -808,7 +809,7 @@ public class FORMAT_101 {
 
     compressed_relative_wind_dir =
         parseRelativeWindDirection(
-            mywind.RWD_code, present, 19, "relative wind dir", COMPRESSED_UNDEF_VALUE);
+            WindModel.RWD_code, present, 19, "relative wind dir", COMPRESSED_UNDEF_VALUE);
 
     /* [20]
     ////////////////////////////////////////// 0 11 100 (relative wind speed, RWS)   //////////////////////////////
@@ -818,7 +819,7 @@ public class FORMAT_101 {
 
     compressed_relative_wind_speed =
         parseRelativeWindSpeed(
-            mywind.RWS_code,
+            WindModel.RWS_code,
             schalings_factor,
             main.wind_units,
             present,
@@ -845,7 +846,8 @@ public class FORMAT_101 {
     schalings_factor = 1;
 
     compressed_air_temp =
-        parseTemperatureField(mytemp.air_temp, present, 23, "air temp", COMPRESSED_UNDEF_VALUE);
+        parseTemperatureField(
+            TemperatureModel.air_temp, present, 23, "air temp", COMPRESSED_UNDEF_VALUE);
 
     /* [24]
     //////////////////////////////////////////////// 0 12 102  wet bulb    ///////////////////////////////
@@ -855,7 +857,7 @@ public class FORMAT_101 {
 
     compressed_wet_bulb_temp =
         parseTemperatureField(
-            mytemp.wet_bulb_temp, present, 24, "wet bulb temp", COMPRESSED_UNDEF_VALUE);
+            TemperatureModel.wet_bulb_temp, present, 24, "wet bulb temp", COMPRESSED_UNDEF_VALUE);
 
     /* [25]
     //////////////////////////////////////////////// 0 12 103 dewpoint    ///////////////////////////////
@@ -863,10 +865,11 @@ public class FORMAT_101 {
     /* unit  = Kelvin */
     schalings_factor = 1;
 
-    if (mytemp.double_dew_point >= -70.0
-        && mytemp.double_dew_point <= 70.0) // coarse limits, to be safe
+    if (TemperatureModel.double_dew_point >= -70.0
+        && TemperatureModel.double_dew_point <= 70.0) // coarse limits, to be safe
     {
-      compressed_dewpoint = convertCelsiusToKelvin(mytemp.double_dew_point * schalings_factor);
+      compressed_dewpoint =
+          convertCelsiusToKelvin(TemperatureModel.double_dew_point * schalings_factor);
       present[25] = 1;
     } else {
       compressed_dewpoint = COMPRESSED_UNDEF_VALUE;
@@ -879,14 +882,15 @@ public class FORMAT_101 {
     /* unit  = %; double_rv in range [0.0 .. 1.0] */
     schalings_factor = 100;
 
-    if (mytemp.double_rv >= 0.01
-        && mytemp.double_rv <= 1.0) // see also function: mytemp.Bereken_Dauwpunt_en_RV()
+    if (TemperatureModel.double_rv >= 0.01
+        && TemperatureModel.double_rv
+            <= 1.0) // see also function: TemperatureModel.Bereken_Dauwpunt_en_RV()
     {
-      // compressed_rv = mytemp.double_rv * schalings_factor;
-      // BigDecimal bd_rv = new BigDecimal(mytemp.double_rv * schalings_factor +
+      // compressed_rv = TemperatureModel.double_rv * schalings_factor;
+      // BigDecimal bd_rv = new BigDecimal(TemperatureModel.double_rv * schalings_factor +
       // CELCIUS_TO_KELVIN_FACTOR). setScale(3, RoundingMode.HALF_UP); // three decimals
       BigDecimal bd_rv =
-          new BigDecimal(mytemp.double_rv * schalings_factor)
+          new BigDecimal(TemperatureModel.double_rv * schalings_factor)
               .setScale(1, RoundingMode.HALF_UP); // one decimal
       compressed_rv = bd_rv.doubleValue();
       present[26] = 1;
@@ -902,7 +906,8 @@ public class FORMAT_101 {
     schalings_factor = 1;
 
     compressed_sst =
-        parseTemperatureField(mytemp.sea_water_temp, present, 27, "SST", COMPRESSED_UNDEF_VALUE);
+        parseTemperatureField(
+            TemperatureModel.sea_water_temp, present, 27, "SST", COMPRESSED_UNDEF_VALUE);
 
     /* [28]
     ///////////////////////////////////////// 1 11 000 visual obs presence indicator  ////////////////////////////////
@@ -1074,7 +1079,7 @@ public class FORMAT_101 {
 
     compressed_period_wind_waves_estimated =
         parseWaveField(
-            mywaves.wind_waves_period,
+            WavesModel.wind_waves_period,
             schalings_factor,
             present,
             40,
@@ -1090,7 +1095,7 @@ public class FORMAT_101 {
 
     compressed_height_wind_waves_estimated =
         parseWaveField(
-            mywaves.wind_waves_height,
+            WavesModel.wind_waves_height,
             schalings_factor,
             present,
             41,
@@ -1106,7 +1111,7 @@ public class FORMAT_101 {
 
     compressed_dir_swell_1_estimated =
         parseWaveField(
-            mywaves.swell_1_dir,
+            WavesModel.swell_1_dir,
             schalings_factor,
             present,
             42,
@@ -1122,7 +1127,7 @@ public class FORMAT_101 {
 
     compressed_period_swell_1_estimated =
         parseWaveField(
-            mywaves.swell_1_period,
+            WavesModel.swell_1_period,
             schalings_factor,
             present,
             43,
@@ -1138,7 +1143,7 @@ public class FORMAT_101 {
 
     compressed_height_swell_1_estimated =
         parseWaveField(
-            mywaves.swell_1_height,
+            WavesModel.swell_1_height,
             schalings_factor,
             present,
             44,
@@ -1154,7 +1159,7 @@ public class FORMAT_101 {
 
     compressed_dir_swell_2_estimated =
         parseWaveField(
-            mywaves.swell_2_dir,
+            WavesModel.swell_2_dir,
             schalings_factor,
             present,
             45,
@@ -1170,7 +1175,7 @@ public class FORMAT_101 {
 
     compressed_period_swell_2_estimated =
         parseWaveField(
-            mywaves.swell_2_period,
+            WavesModel.swell_2_period,
             schalings_factor,
             present,
             46,
@@ -1186,7 +1191,7 @@ public class FORMAT_101 {
 
     compressed_height_swell_2_estimated =
         parseWaveField(
-            mywaves.swell_2_height,
+            WavesModel.swell_2_height,
             schalings_factor,
             present,
             47,
@@ -1550,7 +1555,7 @@ public class FORMAT_101 {
         return undefinedValue;
       }
       if (direction.equals("999")) {
-        // 999 means variable relative-wind direction (see mywind.java); FORMAT 101 has no
+        // 999 means variable relative-wind direction (see WindModel.java); FORMAT 101 has no
         // variable-direction option, so 0.0 is the agreed compatibility representation.
         present[presentIndex] = 1;
         return 0.0;
@@ -1622,7 +1627,7 @@ public class FORMAT_101 {
     if (pressure.trim().length() > 0) {
       try {
         double hectopascals = parseNumericCode(pressure);
-        // Raw check; the real limits are defined in mybarometer.java.
+        // Raw check; the real limits are defined in BarometerModel.java.
         if (hectopascals > 800.0 && hectopascals < 1100.0) {
           present[presentIndex] = 1;
           return convertHectopascalsToPascals(hectopascals);

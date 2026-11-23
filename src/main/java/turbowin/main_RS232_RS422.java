@@ -3149,7 +3149,7 @@ public class main_RS232_RS422 {
     //
 
     // called from:
-    //              - initSynopparameters() [myposition.java]
+    //              - initSynopparameters() [PositionModel.java]
     //              - RS232_GPS_NMEA_0183_init_new_data_received_check_timer()
     // [main_RS232_RS422.java]
     //              - WiFi_Class_Receive_UDP
@@ -3172,10 +3172,10 @@ public class main_RS232_RS422 {
     double double_fix_longitude_minutes =
         0; // for storage of positions for calculation of obs course end speed
 
-    // myposition.COG_APR = Double.MAX_VALUE;
-    // myposition.SOG_APR = Double.MAX_VALUE;
-    // myposition.COG_APR_wind = Double.MAX_VALUE;
-    // myposition.SOG_APR_wind = Double.MAX_VALUE;
+    // PositionModel.COG_APR = Double.MAX_VALUE;
+    // PositionModel.SOG_APR = Double.MAX_VALUE;
+    // PositionModel.COG_APR_wind = Double.MAX_VALUE;
+    // PositionModel.SOG_APR_wind = Double.MAX_VALUE;
 
     GpsDateTimeValidator.Result dateTimeResult =
         GpsDateTimeValidator.validate(
@@ -3233,28 +3233,28 @@ public class main_RS232_RS422 {
           GpsCoordinateParser.parse(
               GPS_latitude, GPS_latitude_hemisphere, GPS_longitude, GPS_longitude_hemisphere);
 
-      myposition.latitude_degrees = coordinate.latitudeDegrees;
-      myposition.latitude_minutes = coordinate.latitudeMinutes;
-      myposition.latitude_hemisphere = coordinate.latitudeHemisphere;
+      PositionModel.latitude_degrees = coordinate.latitudeDegrees;
+      PositionModel.latitude_minutes = coordinate.latitudeMinutes;
+      PositionModel.latitude_hemisphere = coordinate.latitudeHemisphere;
       if (coordinate.latitudeDegreesParsed) {
-        myposition.int_latitude_degrees = coordinate.latitudeDegreesNumber;
+        PositionModel.int_latitude_degrees = coordinate.latitudeDegreesNumber;
       }
       if (coordinate.latitudeMinutesParsed) {
-        myposition.int_latitude_minutes = coordinate.latitudeMinutesNumber;
+        PositionModel.int_latitude_minutes = coordinate.latitudeMinutesNumber;
       }
-      myposition.lalala_code = coordinate.latitudeCode;
-      myposition.longitude_degrees = coordinate.longitudeDegrees;
-      myposition.longitude_minutes = coordinate.longitudeMinutes;
-      myposition.longitude_hemisphere = coordinate.longitudeHemisphere;
+      PositionModel.lalala_code = coordinate.latitudeCode;
+      PositionModel.longitude_degrees = coordinate.longitudeDegrees;
+      PositionModel.longitude_minutes = coordinate.longitudeMinutes;
+      PositionModel.longitude_hemisphere = coordinate.longitudeHemisphere;
       if (coordinate.longitudeDegreesParsed) {
-        myposition.int_longitude_degrees = coordinate.longitudeDegreesNumber;
+        PositionModel.int_longitude_degrees = coordinate.longitudeDegreesNumber;
       }
       if (coordinate.longitudeMinutesParsed) {
-        myposition.int_longitude_minutes = coordinate.longitudeMinutesNumber;
+        PositionModel.int_longitude_minutes = coordinate.longitudeMinutesNumber;
       }
-      myposition.lolololo_code = coordinate.longitudeCode;
+      PositionModel.lolololo_code = coordinate.longitudeCode;
       if (coordinate.quadrant != null) {
-        myposition.Qc_code = coordinate.quadrant;
+        PositionModel.Qc_code = coordinate.quadrant;
       }
       GPS_date_time_ok = coordinate.valid;
 
@@ -3269,17 +3269,17 @@ public class main_RS232_RS422 {
       if (GPS_date_time_ok) {
         message_fix_position =
             "GPS position (dd-mm [N/S] ddd-mm [E/W]): "
-                + myposition.latitude_degrees
+                + PositionModel.latitude_degrees
                 + "-"
-                + myposition.latitude_minutes
+                + PositionModel.latitude_minutes
                 + " "
-                + myposition.latitude_hemisphere.substring(0, 1)
+                + PositionModel.latitude_hemisphere.substring(0, 1)
                 + " "
-                + myposition.longitude_degrees
+                + PositionModel.longitude_degrees
                 + "-"
-                + myposition.longitude_minutes
+                + PositionModel.longitude_minutes
                 + " "
-                + myposition.longitude_hemisphere.substring(0, 1);
+                + PositionModel.longitude_hemisphere.substring(0, 1);
       }
     } // if (GPS_date_time_ok)
 
@@ -3373,8 +3373,8 @@ public class main_RS232_RS422 {
       //
       // if (main.obs_format.equals(main.FORMAT_101) && (main.APR))
       // {
-      //   myposition.COG_APR_wind = myposition.COG_APR;
-      //   myposition.SOG_APR_wind = myposition.SOG_APR;
+      //   PositionModel.COG_APR_wind = PositionModel.COG_APR;
+      //   PositionModel.SOG_APR_wind = PositionModel.SOG_APR;
       // }
 
     } // else (GPS_date_time_ok == true)
@@ -4750,10 +4750,10 @@ public class main_RS232_RS422 {
               // [main_RS232_RS422.java] for setting of var "last_new_GPS_data_received_TimeMillis"
 
               // reset APTR dashboard vars
-              myposition.COG_APR = Double.MAX_VALUE;
-              myposition.SOG_APR = Double.MAX_VALUE;
-              myposition.COG_APR_wind = Double.MAX_VALUE;
-              myposition.SOG_APR_wind = Double.MAX_VALUE;
+              PositionModel.COG_APR = Double.MAX_VALUE;
+              PositionModel.SOG_APR = Double.MAX_VALUE;
+              PositionModel.COG_APR_wind = Double.MAX_VALUE;
+              PositionModel.SOG_APR_wind = Double.MAX_VALUE;
 
               // message obsolete GPS data only the first time
               if (main.obsolate_GPS_data_flag == false) {
@@ -6877,21 +6877,21 @@ public class main_RS232_RS422 {
     AptrAwsrUploadDecision.Action action =
         AptrAwsrUploadDecision.decide(
             main.port_mode_option,
-            myposition.SOG_APR_wind,
+            PositionModel.SOG_APR_wind,
             main.APTR_AWSR_send_method,
             main.obs_format,
             main.eucaws_uploads_method);
 
     if (action == AptrAwsrUploadDecision.Action.CANCEL_LOW_SPEED) {
-      // NB SOG_APR_wind always over the last 10 minutes. There is also a myposition.SOG_APR but
+      // NB SOG_APR_wind always over the last 10 minutes. There is also a PositionModel.SOG_APR but
       // over 10 minutes [format 101] or 3 hours [FM13] depending the obs format
       // main.log_turbowin_system_message(log_tag + " upload cancelled; SOG = " +
-      // myposition.SOG_APR_wind + " (port mode option set via menu: Maintenance -> APR/APTR/AWSR
+      // PositionModel.SOG_APR_wind + " (port mode option set via menu: Maintenance -> APR/APTR/AWSR
       // settings)");
       main.log_turbowin_system_message(
           log_tag
               + " upload cancelled; SOG [10 min] = "
-              + String.format("%.2f", myposition.SOG_APR_wind)
+              + String.format("%.2f", PositionModel.SOG_APR_wind)
               + " knot (port mode option set via menu: Maintenance -> APR/APTR/AWSR settings)");
     } else if (action == AptrAwsrUploadDecision.Action.CANCEL_UNAVAILABLE_SPEED) {
       main.log_turbowin_system_message(
@@ -6933,22 +6933,24 @@ public class main_RS232_RS422 {
             double_lat_start, double_lon_start, double_lat_end, double_lon_end);
 
     // wind always 10 minutes based
-    myposition.SOG_APR_wind = (rhumbLine.distanceMeters / 1852) * 6; // now SOG in knots
-    myposition.COG_APR_wind = rhumbLine.courseDegrees;
+    PositionModel.SOG_APR_wind = (rhumbLine.distanceMeters / 1852) * 6; // now SOG in knots
+    PositionModel.COG_APR_wind = rhumbLine.courseDegrees;
 
     // SOG_APR_wind wind rounding to three decimals
     BigDecimal bd_SOG_APR_wind =
-        new BigDecimal(myposition.SOG_APR_wind).setScale(3, RoundingMode.HALF_UP); // three decimals
-    myposition.SOG_APR_wind = bd_SOG_APR_wind.doubleValue();
+        new BigDecimal(PositionModel.SOG_APR_wind)
+            .setScale(3, RoundingMode.HALF_UP); // three decimals
+    PositionModel.SOG_APR_wind = bd_SOG_APR_wind.doubleValue();
 
     // COG_APR_wind rounding to three decimals
     BigDecimal bd_COG_APR_wind =
-        new BigDecimal(myposition.COG_APR_wind).setScale(3, RoundingMode.HALF_UP); // three decimals
-    myposition.COG_APR_wind = bd_COG_APR_wind.doubleValue();
+        new BigDecimal(PositionModel.COG_APR_wind)
+            .setScale(3, RoundingMode.HALF_UP); // three decimals
+    PositionModel.COG_APR_wind = bd_COG_APR_wind.doubleValue();
 
     // TESTING
-    // System.out.println("+++ COG = " + myposition.COG_APR);
-    // System.out.println("+++ SOG = " + myposition.SOG_APR);
+    // System.out.println("+++ COG = " + PositionModel.COG_APR);
+    // System.out.println("+++ SOG = " + PositionModel.SOG_APR);
 
   }
 
@@ -6971,27 +6973,27 @@ public class main_RS232_RS422 {
 
     if (main.obs_format.equals(main.FORMAT_101)) {
       // 10 minutes based
-      myposition.SOG_APR = (rhumbLine.distanceMeters / 1852) * 6; // now SOG in knots
+      PositionModel.SOG_APR = (rhumbLine.distanceMeters / 1852) * 6; // now SOG in knots
     } else if (main.obs_format.equals(main.FORMAT_FM13)) {
       // 180 minutes (3 hours, between positions to compute SOG and COG) based
-      myposition.SOG_APR = (rhumbLine.distanceMeters / 1852) / 3; // now SOG in knots
+      PositionModel.SOG_APR = (rhumbLine.distanceMeters / 1852) / 3; // now SOG in knots
     }
 
-    myposition.COG_APR = rhumbLine.courseDegrees;
+    PositionModel.COG_APR = rhumbLine.courseDegrees;
 
     // SOG_APR rounding to three decimals
     BigDecimal bd_SOG_APR =
-        new BigDecimal(myposition.SOG_APR).setScale(3, RoundingMode.HALF_UP); // three decimals
-    myposition.SOG_APR = bd_SOG_APR.doubleValue();
+        new BigDecimal(PositionModel.SOG_APR).setScale(3, RoundingMode.HALF_UP); // three decimals
+    PositionModel.SOG_APR = bd_SOG_APR.doubleValue();
 
     // COG_APR rounding to three decimals
     BigDecimal bd_COG_APR =
-        new BigDecimal(myposition.COG_APR).setScale(3, RoundingMode.HALF_UP); // three decimals
-    myposition.COG_APR = bd_COG_APR.doubleValue();
+        new BigDecimal(PositionModel.COG_APR).setScale(3, RoundingMode.HALF_UP); // three decimals
+    PositionModel.COG_APR = bd_COG_APR.doubleValue();
 
     // TESTING
-    // System.out.println("+++ COG = " + myposition.COG_APR);
-    // System.out.println("+++ SOG = " + myposition.SOG_APR);
+    // System.out.println("+++ COG = " + PositionModel.COG_APR);
+    // System.out.println("+++ SOG = " + PositionModel.SOG_APR);
 
     //
     ///////////// Below for FM13 + APR (not for format #101 + APR) and IMMT + APR + FM13
@@ -7017,9 +7019,9 @@ public class main_RS232_RS422 {
     // / = Not applicable (report from a coastal land station) or not reported (see Regulation
     // 12.3.1.2 (b))
 
-    String speedCode = ImmtMovementCodeCalculator.speedCode(myposition.SOG_APR);
+    String speedCode = ImmtMovementCodeCalculator.speedCode(PositionModel.SOG_APR);
     if (speedCode != null) {
-      myposition.vs_code = speedCode;
+      PositionModel.vs_code = speedCode;
     }
 
     // NB WMO_NO_306.pdf
@@ -7046,9 +7048,9 @@ public class main_RS232_RS422 {
     // Regulation 12.3.1.2 (b))
 
     String directionCode =
-        ImmtMovementCodeCalculator.directionCode(myposition.SOG_APR, myposition.COG_APR);
+        ImmtMovementCodeCalculator.directionCode(PositionModel.SOG_APR, PositionModel.COG_APR);
     if (directionCode != null) {
-      myposition.Ds_code = directionCode;
+      PositionModel.Ds_code = directionCode;
     }
 
     // below for testing
@@ -7058,8 +7060,8 @@ public class main_RS232_RS422 {
     // System.out.println("+++ double_lon_end = " + double_lon_end);
     // System.out.println("+++ dist [metres] = " + dist);
 
-    // System.out.println("--- SOG APR [knots] = " + myposition.SOG_APR);
-    // System.out.println("--- COG APR [deg] = " + myposition.COG_APR);
+    // System.out.println("--- SOG APR [knots] = " + PositionModel.SOG_APR);
+    // System.out.println("--- COG APR [deg] = " + PositionModel.COG_APR);
 
   }
 
@@ -7073,17 +7075,17 @@ public class main_RS232_RS422 {
     // called from:
 
     // NB below exactly the same as in: RS232_make_APR_IMMT_ready()
-    if (mybarometer.pressure_msl_corrected.compareTo("") != 0) {
+    if (BarometerModel.pressure_msl_corrected.compareTo("") != 0) {
       try {
         // string to double
         double hulp_double_pressure_msl_corrected =
-            Double.parseDouble(mybarometer.pressure_msl_corrected);
+            Double.parseDouble(BarometerModel.pressure_msl_corrected);
 
-        mybarometer.PPPP_code = PressureCodeFormatter.format(hulp_double_pressure_msl_corrected);
+        BarometerModel.PPPP_code = PressureCodeFormatter.format(hulp_double_pressure_msl_corrected);
       } catch (NumberFormatException ex) {
-        mybarometer.PPPP_code = "";
+        BarometerModel.PPPP_code = "";
       }
-    } // if (mybarometer.pressure_msl_corrected.compareTo("") != 0)
+    } // if (BarometerModel.pressure_msl_corrected.compareTo("") != 0)
   }
 
   public static void RS232_make_pressure_ppp_APR_FM13_IMMT_ready() {
@@ -7092,25 +7094,25 @@ public class main_RS232_RS422 {
     boolean doorgaan = false;
     double local_double_pressure_amount_tendency = main.INVALID;
 
-    if (mybarograph.pressure_amount_tendency.trim().length() > 0) {
+    if (BarographModel.pressure_amount_tendency.trim().length() > 0) {
       doorgaan = true;
     } // if (doorgaan)
 
     if (doorgaan) {
       try {
         local_double_pressure_amount_tendency =
-            Double.parseDouble(mybarograph.pressure_amount_tendency.trim());
+            Double.parseDouble(BarographModel.pressure_amount_tendency.trim());
       } catch (NumberFormatException e) {
         doorgaan = false;
       }
     } // if (doorgaan)
 
     if (doorgaan) {
-      // NB so assuming: mybarograph.pressure_amount_tendency and
+      // NB so assuming: BarographModel.pressure_amount_tendency and
       // local_double_pressure_amount_tendency always positive !!!
       //    this is already done in Function:
       // RS232_Mintaka_Star_And_StarX_Read_And_Send_Sensor_Data_For_WOW_APR()
-      //    see: mybarograph.pressure_amount_tendency =
+      //    see: BarographModel.pressure_amount_tendency =
       // df.format(Math.abs(hulp_double_APR_pressure_ppp));
       if ((local_double_pressure_amount_tendency < 0.0)
           || (local_double_pressure_amount_tendency > 99.9)) {
@@ -7119,7 +7121,7 @@ public class main_RS232_RS422 {
     } // if (doorgaan)
 
     if (doorgaan) {
-      mybarograph.ppp_code =
+      BarographModel.ppp_code =
           PressureTendencyCodeFormatter.format(local_double_pressure_amount_tendency);
     } // if (doorgaan)
   }
@@ -7145,8 +7147,8 @@ public class main_RS232_RS422 {
     //
     // for IMMT:
     //
-    // needed: mytemp.double_rv
-    //         mytemp.RH
+    // needed: TemperatureModel.double_rv
+    //         TemperatureModel.RH
     //
     // THESE ARE ALREADY KNOWN IN THE CALLING FUNCTIONS SO NO ACTION REQUIRED HERE
     //
@@ -7158,88 +7160,91 @@ public class main_RS232_RS422 {
 
     // air temp
     //
-    if (mytemp.air_temp.compareTo("") != 0) {
+    if (TemperatureModel.air_temp.compareTo("") != 0) {
       try {
         // string to double
-        double hulp_double_air_temp = Double.parseDouble(mytemp.air_temp);
+        double hulp_double_air_temp = Double.parseDouble(TemperatureModel.air_temp);
 
         ImmtAirTemperatureCodeFormatter.Result code =
             ImmtAirTemperatureCodeFormatter.format(hulp_double_air_temp);
-        mytemp.sn_TTT_code = code.signCode;
-        mytemp.TTT_code = code.temperatureCode;
+        TemperatureModel.sn_TTT_code = code.signCode;
+        TemperatureModel.TTT_code = code.temperatureCode;
       } catch (NumberFormatException ex) {
-        mytemp.sn_TTT_code = "";
-        mytemp.TTT_code = "";
+        TemperatureModel.sn_TTT_code = "";
+        TemperatureModel.TTT_code = "";
       }
-    } // if (mytemp.air_temp.compareTo("") != 0)
+    } // if (TemperatureModel.air_temp.compareTo("") != 0)
   }
 
   public static void RS232_make_wet_bulb_temp_APR_FM13_IMMT_ready() {
     // NB also for making IMMT ready
 
-    if (mytemp.wet_bulb_temp.compareTo("") != 0) {
+    if (TemperatureModel.wet_bulb_temp.compareTo("") != 0) {
       try {
         // string to double
-        double hulp_double_wet_bulb_temp = Double.parseDouble(mytemp.wet_bulb_temp);
+        double hulp_double_wet_bulb_temp = Double.parseDouble(TemperatureModel.wet_bulb_temp);
 
         // sn of wet-bulb (TbTbTb)
         if (hulp_double_wet_bulb_temp < 0.0) {
-          if (mytemp.wet_bulb_frozen == true) // possible in automatic mode ??
+          if (TemperatureModel.wet_bulb_frozen == true) // possible in automatic mode ??
           {
-            mytemp.sn_TbTbTb_code = "2"; // measured; iced wet bulb
+            TemperatureModel.sn_TbTbTb_code = "2"; // measured; iced wet bulb
           } else {
-            mytemp.sn_TbTbTb_code = "1"; // measured; negative
+            TemperatureModel.sn_TbTbTb_code = "1"; // measured; negative
           }
         } // if (double_wet_bulb_temp < 0.0)
         else {
-          mytemp.sn_TbTbTb_code = "0"; // measured; positive or zero
+          TemperatureModel.sn_TbTbTb_code = "0"; // measured; positive or zero
         } // else
 
         // TbTbTb
         int num_TbTbTb_code = (int) Math.floor(Math.abs(hulp_double_wet_bulb_temp) * 10 + 0.5);
-        mytemp.TbTbTb_code = Integer.toString(num_TbTbTb_code); // convert to string
+        TemperatureModel.TbTbTb_code = Integer.toString(num_TbTbTb_code); // convert to string
 
         // NB TbTbTb_code always 3 characters width e.g. 127 (accomplish via construction below)
         int len = 3;
-        if (mytemp.TbTbTb_code.length() < len) {
+        if (TemperatureModel.TbTbTb_code.length() < len) {
           // pad on left with zeros
-          mytemp.TbTbTb_code =
-              "0000000000".substring(0, len - mytemp.TbTbTb_code.length()) + mytemp.TbTbTb_code;
+          TemperatureModel.TbTbTb_code =
+              "0000000000".substring(0, len - TemperatureModel.TbTbTb_code.length())
+                  + TemperatureModel.TbTbTb_code;
         }
       } // try
       catch (NumberFormatException ex) {
-        mytemp.sn_TbTbTb_code = "";
-        mytemp.TbTbTb_code = "";
+        TemperatureModel.sn_TbTbTb_code = "";
+        TemperatureModel.TbTbTb_code = "";
       }
-    } // if (mytemp.wet_bulb_temp.compareTo("") != 0)
+    } // if (TemperatureModel.wet_bulb_temp.compareTo("") != 0)
   }
 
   public static void RS232_make_dew_point_APR_FM13_IMMT_ready() {
     // NB also for making IMMT ready
 
-    if (mytemp.double_dew_point != main.INVALID) {
+    if (TemperatureModel.double_dew_point != main.INVALID) {
       // sn van dew point (TdTdTd)
-      if (mytemp.double_dew_point < 0.0) {
-        mytemp.sn_TdTdTd_code = "1";
+      if (TemperatureModel.double_dew_point < 0.0) {
+        TemperatureModel.sn_TdTdTd_code = "1";
       } else {
-        mytemp.sn_TdTdTd_code = "0";
+        TemperatureModel.sn_TdTdTd_code = "0";
       }
 
       // TdTdTd
-      int num_TdTdTd_code = (int) Math.floor(Math.abs(mytemp.double_dew_point) * 10 + 0.5);
-      mytemp.TdTdTd_code = Integer.toString(num_TdTdTd_code); // convert to string
+      int num_TdTdTd_code =
+          (int) Math.floor(Math.abs(TemperatureModel.double_dew_point) * 10 + 0.5);
+      TemperatureModel.TdTdTd_code = Integer.toString(num_TdTdTd_code); // convert to string
 
       // NB TdTdTd_code always 3 characters width e.g. 127 (accomplish via construction below)
       int len = 3;
-      if (mytemp.TdTdTd_code.length() < len) {
+      if (TemperatureModel.TdTdTd_code.length() < len) {
         // pad on left with zeros
-        mytemp.TdTdTd_code =
-            "0000000000".substring(0, len - mytemp.TdTdTd_code.length()) + mytemp.TdTdTd_code;
+        TemperatureModel.TdTdTd_code =
+            "0000000000".substring(0, len - TemperatureModel.TdTdTd_code.length())
+                + TemperatureModel.TdTdTd_code;
       }
     } // if (double_dew_point != main.INVALID)
     else {
-      mytemp.sn_TdTdTd_code = "";
-      mytemp.TdTdTd_code = "";
+      TemperatureModel.sn_TdTdTd_code = "";
+      TemperatureModel.TdTdTd_code = "";
     }
   }
 
@@ -7425,17 +7430,17 @@ public class main_RS232_RS422 {
 
     try {
       num_huidige_obs_breedte =
-          (double) myposition.int_latitude_degrees
-              + ((double) myposition.int_latitude_minutes / 60);
+          (double) PositionModel.int_latitude_degrees
+              + ((double) PositionModel.int_latitude_minutes / 60);
       num_huidige_obs_lengte =
-          (double) myposition.int_longitude_degrees
-              + ((double) myposition.int_longitude_minutes / 60);
+          (double) PositionModel.int_longitude_degrees
+              + ((double) PositionModel.int_longitude_minutes / 60);
 
-      if (myposition.latitude_hemisphere.equals(myposition.HEMISPHERE_SOUTH) == true) {
+      if (PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH) == true) {
         num_huidige_obs_breedte *= -1;
       }
 
-      if (myposition.longitude_hemisphere.equals(myposition.HEMISPHERE_WEST) == true) {
+      if (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST) == true) {
         num_huidige_obs_lengte *= -1;
       }
     } // try
@@ -7561,48 +7566,48 @@ public class main_RS232_RS422 {
 
       system_month_volledig = DateTimeUtils.convert_month(system_month);
 
-      mydatetime.year = Integer.toString(system_year); // for progress main screen and IMMT
-      mydatetime.month = system_month_volledig; // for progress main screen
-      mydatetime.day = Integer.toString(system_day_of_month); // for progress main screen
-      mydatetime.hour = Integer.toString(system_hour_of_day); // for progress main screen
+      DateTimeModel.year = Integer.toString(system_year); // for progress main screen and IMMT
+      DateTimeModel.month = system_month_volledig; // for progress main screen
+      DateTimeModel.day = Integer.toString(system_day_of_month); // for progress main screen
+      DateTimeModel.hour = Integer.toString(system_hour_of_day); // for progress main screen
 
       /* update date and time on TurboWin main screen */
       main.date_time_fields_update();
 
       // determine code figures for month (not for operational obs only for IMMT storage)
       //
-      mydatetime.MM_code =
+      DateTimeModel.MM_code =
           Integer.toString(system_month + 1); // +1 because system month started with 0 (January)
 
       len = 2; // MM_code always 2 characters width e.g. 03
-      if (mydatetime.MM_code.length() < len) // pad on left with zeros
+      if (DateTimeModel.MM_code.length() < len) // pad on left with zeros
       {
-        mydatetime.MM_code =
-            "0000000000".substring(0, len - mydatetime.MM_code.length()) + mydatetime.MM_code;
+        DateTimeModel.MM_code =
+            "0000000000".substring(0, len - DateTimeModel.MM_code.length()) + DateTimeModel.MM_code;
       }
 
       // determine code figures for day of the month (for obs and IMMT)
       //
-      mydatetime.YY_code =
+      DateTimeModel.YY_code =
           Integer.toString(system_day_of_month); // system_day_of_month e.g. 1,2,11,23,29
 
       len = 2; // YY_code always 2 characters width e.g. 03
-      if (mydatetime.YY_code.length() < len) // pad on left with zeros
+      if (DateTimeModel.YY_code.length() < len) // pad on left with zeros
       {
-        mydatetime.YY_code =
-            "0000000000".substring(0, len - mydatetime.YY_code.length()) + mydatetime.YY_code;
+        DateTimeModel.YY_code =
+            "0000000000".substring(0, len - DateTimeModel.YY_code.length()) + DateTimeModel.YY_code;
       }
 
       // determine code figures for hour of day (for obs and IMMT)
       //
-      mydatetime.GG_code =
+      DateTimeModel.GG_code =
           Integer.toString(system_hour_of_day); // system_hour_of_day e.g. 1,2,11,23
 
       len = 2; // GG_code always 2 characters width e.g. 03
-      if (mydatetime.GG_code.length() < len) // pad on left with zeros
+      if (DateTimeModel.GG_code.length() < len) // pad on left with zeros
       {
-        mydatetime.GG_code =
-            "0000000000".substring(0, len - mydatetime.GG_code.length()) + mydatetime.GG_code;
+        DateTimeModel.GG_code =
+            "0000000000".substring(0, len - DateTimeModel.GG_code.length()) + DateTimeModel.GG_code;
       }
     } // if (system_minute_local % 5 == 0)
   }
@@ -7636,76 +7641,76 @@ public class main_RS232_RS422 {
     main.true_wind_gust_dir_from_AWS_present = false;
     main.VOT_from_AWS_present = false;
 
-    mydatetime.year = "";
-    mydatetime.month = "";
-    mydatetime.day = "";
-    mydatetime.hour = "";
-    myposition.latitude_hemisphere = "";
-    myposition.latitude_degrees = "";
-    myposition.latitude_minutes = "";
-    myposition.longitude_hemisphere = "";
-    myposition.longitude_degrees = "";
-    myposition.longitude_minutes = "";
-    myposition.course = "";
-    myposition.speed = "";
-    mywind.ship_ground_course = "";
-    mywind.ship_ground_speed = "";
-    mywind.ship_heading = "";
-    mybarometer.pressure_reading = "";
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
+    DateTimeModel.year = "";
+    DateTimeModel.month = "";
+    DateTimeModel.day = "";
+    DateTimeModel.hour = "";
+    PositionModel.latitude_hemisphere = "";
+    PositionModel.latitude_degrees = "";
+    PositionModel.latitude_minutes = "";
+    PositionModel.longitude_hemisphere = "";
+    PositionModel.longitude_degrees = "";
+    PositionModel.longitude_minutes = "";
+    PositionModel.course = "";
+    PositionModel.speed = "";
+    WindModel.ship_ground_course = "";
+    WindModel.ship_ground_speed = "";
+    WindModel.ship_heading = "";
+    BarometerModel.pressure_reading = "";
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
     main.VOT = Integer.MAX_VALUE;
 
     if (main.jTextField36.getForeground().getRGB() != main.input_color_from_observer.getRGB()) {
-      mytemp.air_temp = "";
-      mytemp.double_dew_point = main.INVALID;
-      mytemp.sn_TdTdTd_code = "";
-      mytemp.TdTdTd_code = "";
+      TemperatureModel.air_temp = "";
+      TemperatureModel.double_dew_point = main.INVALID;
+      TemperatureModel.sn_TdTdTd_code = "";
+      TemperatureModel.TdTdTd_code = "";
     }
 
     if (main.jTextField37.getForeground().getRGB() != main.input_color_from_observer.getRGB()) {
-      mytemp.wet_bulb_temp = "";
+      TemperatureModel.wet_bulb_temp = "";
     }
 
     if (main.jTextField38.getForeground().getRGB() != main.input_color_from_observer.getRGB()) {
-      mytemp.RH = "";
-      mytemp.double_rv = main.INVALID; // double
-      mytemp.double_dew_point = main.INVALID; // double
-      mytemp.sn_TdTdTd_code = "";
-      mytemp.TdTdTd_code = "";
+      TemperatureModel.RH = "";
+      TemperatureModel.double_rv = main.INVALID; // double
+      TemperatureModel.double_dew_point = main.INVALID; // double
+      TemperatureModel.sn_TdTdTd_code = "";
+      TemperatureModel.TdTdTd_code = "";
     }
 
     if (main.jTextField40.getForeground().getRGB() != main.input_color_from_observer.getRGB()) {
-      mytemp.sea_water_temp = "";
+      TemperatureModel.sea_water_temp = "";
     }
 
     // if (main.jTextField16.getForeground().getRGB() != main.input_color_from_observer.getRGB())
     // {
-    //   mywind.int_true_wind_speed                  = main.INVALID;      // integer
-    //   mywind.wind_speed                           = "";
+    //   WindModel.int_true_wind_speed                  = main.INVALID;      // integer
+    //   WindModel.wind_speed                           = "";
     // }
     //
     // if (main.jTextField17.getForeground().getRGB() != main.input_color_from_observer.getRGB())
     // {
-    //   mywind.int_true_wind_dir                    = main.INVALID;      // integer
-    //   mywind.wind_dir                             = "";
+    //   WindModel.int_true_wind_dir                    = main.INVALID;      // integer
+    //   WindModel.wind_dir                             = "";
     // }
     if (main.jTextField16.getForeground().getRGB()
         != main.input_color_from_observer.getRGB()) // apparent wind
     {
-      mywind.int_relative_wind_dir = main.INVALID;
-      mywind.int_relative_wind_speed = main.INVALID;
-      mywind.wind_speed = "";
-      mywind.wind_dir = "";
+      WindModel.int_relative_wind_dir = main.INVALID;
+      WindModel.int_relative_wind_speed = main.INVALID;
+      WindModel.wind_speed = "";
+      WindModel.wind_dir = "";
     }
 
     if (main.jTextField17.getForeground().getRGB()
         != main.input_color_from_observer.getRGB()) // true wind
     {
-      mywind.int_true_wind_speed = main.INVALID; // integer
-      mywind.int_true_wind_dir = main.INVALID; // integer
+      WindModel.int_true_wind_speed = main.INVALID; // integer
+      WindModel.int_true_wind_dir = main.INVALID; // integer
     }
   }
 
@@ -7717,68 +7722,68 @@ public class main_RS232_RS422 {
     // called from: RS422_Read_And_Send_Sensor_Data_For_AWSR() [main_RS232_RS422.java]
 
     // Date and Time
-    mydatetime.year = "";
-    mydatetime.month = "";
-    mydatetime.day = "";
-    mydatetime.hour = "";
-    mydatetime.MM_code = ""; // month of year (only for IMMT)
-    mydatetime.YY_code = ""; // day of the month
-    mydatetime.GG_code = ""; // hour of obs
+    DateTimeModel.year = "";
+    DateTimeModel.month = "";
+    DateTimeModel.day = "";
+    DateTimeModel.hour = "";
+    DateTimeModel.MM_code = ""; // month of year (only for IMMT)
+    DateTimeModel.YY_code = ""; // day of the month
+    DateTimeModel.GG_code = ""; // hour of obs
 
     // position
-    myposition.Qc_code = "";
-    myposition.int_latitude_degrees = main.INVALID;
-    myposition.int_latitude_minutes = main.INVALID;
-    myposition.latitude_degrees = "";
-    myposition.latitude_hemisphere = "";
-    myposition.lalala_code = "";
-    myposition.int_longitude_degrees = main.INVALID;
-    myposition.int_longitude_minutes = main.INVALID;
-    myposition.longitude_degrees = "";
-    myposition.longitude_hemisphere = "";
-    myposition.lolololo_code = "";
+    PositionModel.Qc_code = "";
+    PositionModel.int_latitude_degrees = main.INVALID;
+    PositionModel.int_latitude_minutes = main.INVALID;
+    PositionModel.latitude_degrees = "";
+    PositionModel.latitude_hemisphere = "";
+    PositionModel.lalala_code = "";
+    PositionModel.int_longitude_degrees = main.INVALID;
+    PositionModel.int_longitude_minutes = main.INVALID;
+    PositionModel.longitude_degrees = "";
+    PositionModel.longitude_hemisphere = "";
+    PositionModel.lolololo_code = "";
 
     // Course and speed
-    myposition.Ds_code = "";
-    myposition.vs_code = "";
-    mywind.ship_heading = "";
+    PositionModel.Ds_code = "";
+    PositionModel.vs_code = "";
+    WindModel.ship_heading = "";
 
     // Air pressure
-    mybarometer.pressure_reading_corrected = "";
-    mybarometer.pressure_msl_corrected = "";
-    mybarometer.PPPP_code = "";
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
-    mybarograph.ppp_code = "";
+    BarometerModel.pressure_reading_corrected = "";
+    BarometerModel.pressure_msl_corrected = "";
+    BarometerModel.PPPP_code = "";
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
+    BarographModel.ppp_code = "";
 
     // Temperatures
-    mytemp.air_temp = "";
-    mytemp.sn_TTT_code = "";
-    mytemp.TTT_code = "";
-    mytemp.double_rv = main.INVALID; // double
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.sn_TdTdTd_code = "";
-    mytemp.TdTdTd_code = "";
-    mytemp.sea_water_temp = "";
-    mytemp.ss_TsTsTs_code = "";
-    mytemp.immt_sst_indicator = "";
-    mytemp.TsTsTs_code = "";
+    TemperatureModel.air_temp = "";
+    TemperatureModel.sn_TTT_code = "";
+    TemperatureModel.TTT_code = "";
+    TemperatureModel.double_rv = main.INVALID; // double
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.sn_TdTdTd_code = "";
+    TemperatureModel.TdTdTd_code = "";
+    TemperatureModel.sea_water_temp = "";
+    TemperatureModel.ss_TsTsTs_code = "";
+    TemperatureModel.immt_sst_indicator = "";
+    TemperatureModel.TsTsTs_code = "";
 
     // wind
-    mywind.RWS_code = "";
-    mywind.RWD_code = "";
-    mywind.int_true_wind_speed = main.INVALID; // integer
-    mywind.ff_code = "";
-    mywind.int_true_wind_dir = main.INVALID; // integer
-    mywind.dd_code = "";
-    mywind.HDG_code = "";
-    mywind.COG_code = "";
-    mywind.SOG_code = "";
+    WindModel.RWS_code = "";
+    WindModel.RWD_code = "";
+    WindModel.int_true_wind_speed = main.INVALID; // integer
+    WindModel.ff_code = "";
+    WindModel.int_true_wind_dir = main.INVALID; // integer
+    WindModel.dd_code = "";
+    WindModel.HDG_code = "";
+    WindModel.COG_code = "";
+    WindModel.SOG_code = "";
 
     // wind related (IMMT only)
-    mywind.SLL_code = "";
-    mywind.sl_code = "";
-    mywind.hh_code = "";
+    WindModel.SLL_code = "";
+    WindModel.sl_code = "";
+    WindModel.hh_code = "";
   }
 
   boolean RS422_Check_Date_Time_Last_Saved_Record_For_AWSR(
@@ -7891,42 +7896,46 @@ public class main_RS232_RS422 {
             hulp_cal.get(Calendar.DAY_OF_MONTH); // The first day of the month has value 1
         int hulp_hour_of_day = hulp_cal.get(Calendar.HOUR_OF_DAY);
 
-        mydatetime.year = Integer.toString(hulp_year); // e.g. 2023
-        mydatetime.month = Integer.toString(hulp_month + 1); // now  mydatetime.month [1 .. 12]
-        mydatetime.day = Integer.toString(hulp_day_of_month); // [1 .. 31]
-        mydatetime.hour = Integer.toString(hulp_hour_of_day); // [0 .. 23]
+        DateTimeModel.year = Integer.toString(hulp_year); // e.g. 2023
+        DateTimeModel.month =
+            Integer.toString(hulp_month + 1); // now  DateTimeModel.month [1 .. 12]
+        DateTimeModel.day = Integer.toString(hulp_day_of_month); // [1 .. 31]
+        DateTimeModel.hour = Integer.toString(hulp_hour_of_day); // [0 .. 23]
 
         // determine code figures for month (for obs and IMMT)
         //
-        mydatetime.MM_code = mydatetime.month; // mydatetime.month [1 .. 12]
+        DateTimeModel.MM_code = DateTimeModel.month; // DateTimeModel.month [1 .. 12]
 
         len = 2; // MM_code always 2 characters width e.g. 03
-        if (mydatetime.MM_code.length() < len) // pad on left with zeros
+        if (DateTimeModel.MM_code.length() < len) // pad on left with zeros
         {
-          mydatetime.MM_code =
-              "0000000000".substring(0, len - mydatetime.MM_code.length()) + mydatetime.MM_code;
+          DateTimeModel.MM_code =
+              "0000000000".substring(0, len - DateTimeModel.MM_code.length())
+                  + DateTimeModel.MM_code;
         }
 
         // determine code figures for day of the month (for obs and IMMT)
         //
-        mydatetime.YY_code = mydatetime.day; // mydatetime.day e.g. 1,2,11,23,29
+        DateTimeModel.YY_code = DateTimeModel.day; // DateTimeModel.day e.g. 1,2,11,23,29
 
         len = 2; // YY_code always 2 characters width e.g. 03
-        if (mydatetime.YY_code.length() < len) // pad on left with zeros
+        if (DateTimeModel.YY_code.length() < len) // pad on left with zeros
         {
-          mydatetime.YY_code =
-              "0000000000".substring(0, len - mydatetime.YY_code.length()) + mydatetime.YY_code;
+          DateTimeModel.YY_code =
+              "0000000000".substring(0, len - DateTimeModel.YY_code.length())
+                  + DateTimeModel.YY_code;
         }
 
         // determine code figures for hour of day (for obs and IMMT)
         //
-        mydatetime.GG_code = mydatetime.hour; // mydatetime.hour e.g. 0,1,2,11,23
+        DateTimeModel.GG_code = DateTimeModel.hour; // DateTimeModel.hour e.g. 0,1,2,11,23
 
         len = 2; // GG_code always 2 characters width e.g. 03
-        if (mydatetime.GG_code.length() < len) // pad on left with zeros
+        if (DateTimeModel.GG_code.length() < len) // pad on left with zeros
         {
-          mydatetime.GG_code =
-              "0000000000".substring(0, len - mydatetime.GG_code.length()) + mydatetime.GG_code;
+          DateTimeModel.GG_code =
+              "0000000000".substring(0, len - DateTimeModel.GG_code.length())
+                  + DateTimeModel.GG_code;
         }
 
       } // try

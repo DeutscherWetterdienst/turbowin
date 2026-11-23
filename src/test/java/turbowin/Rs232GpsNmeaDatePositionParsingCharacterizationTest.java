@@ -82,15 +82,15 @@ public class Rs232GpsNmeaDatePositionParsingCharacterizationTest {
 
     assertTrue(main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE"));
 
-    assertEquals("13", myposition.latitude_degrees);
-    assertEquals("0", myposition.latitude_minutes);
-    assertEquals(myposition.HEMISPHERE_SOUTH, myposition.latitude_hemisphere);
-    assertEquals("130", myposition.lalala_code);
-    assertEquals("180", myposition.longitude_degrees);
-    assertEquals("0", myposition.longitude_minutes);
-    assertEquals(myposition.HEMISPHERE_WEST, myposition.longitude_hemisphere);
-    assertEquals("1800", myposition.lolololo_code);
-    assertEquals("5", myposition.Qc_code);
+    assertEquals("13", PositionModel.latitude_degrees);
+    assertEquals("0", PositionModel.latitude_minutes);
+    assertEquals(PositionModel.HEMISPHERE_SOUTH, PositionModel.latitude_hemisphere);
+    assertEquals("130", PositionModel.lalala_code);
+    assertEquals("180", PositionModel.longitude_degrees);
+    assertEquals("0", PositionModel.longitude_minutes);
+    assertEquals(PositionModel.HEMISPHERE_WEST, PositionModel.longitude_hemisphere);
+    assertEquals("1800", PositionModel.lolololo_code);
+    assertEquals("5", PositionModel.Qc_code);
     assertEquals(-13.993333333333334, gpsArrayPositions()[0][0], 0.0000000001);
     assertEquals(-180.99333333333334, gpsArrayPositions()[0][1], 0.0000000001);
   }
@@ -113,15 +113,15 @@ public class Rs232GpsNmeaDatePositionParsingCharacterizationTest {
     main_RS232_RS422.GPS_latitude_hemisphere = "N";
     main_RS232_RS422.GPS_longitude = "01144.3";
     main_RS232_RS422.GPS_longitude_hemisphere = "E";
-    myposition.int_latitude_degrees = 41;
-    myposition.int_latitude_minutes = 9;
-    myposition.Qc_code = "7";
+    PositionModel.int_latitude_degrees = 41;
+    PositionModel.int_latitude_minutes = 9;
+    PositionModel.Qc_code = "7";
 
     assertFalse(main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE"));
 
-    assertEquals(41, myposition.int_latitude_degrees);
-    assertEquals(5, myposition.int_latitude_minutes);
-    assertEquals("1", myposition.Qc_code);
+    assertEquals(41, PositionModel.int_latitude_degrees);
+    assertEquals(5, PositionModel.int_latitude_minutes);
+    assertEquals("1", PositionModel.Qc_code);
   }
 
   @Test
@@ -131,11 +131,11 @@ public class Rs232GpsNmeaDatePositionParsingCharacterizationTest {
     main_RS232_RS422.GPS_latitude_hemisphere = "X";
     main_RS232_RS422.GPS_longitude = "01144.3";
     main_RS232_RS422.GPS_longitude_hemisphere = "Y";
-    myposition.Qc_code = "7";
+    PositionModel.Qc_code = "7";
 
     assertFalse(main_RS232_RS422.RS232_GPS_NMEA_0183_Date_Position_Parsing("MINUTE_UPDATE"));
 
-    assertEquals("7", myposition.Qc_code);
+    assertEquals("7", PositionModel.Qc_code);
   }
 
   private static void setCurrentGpsDateTime() {

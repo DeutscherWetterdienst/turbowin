@@ -11,91 +11,91 @@ public class ObservationStateResetterTest {
   public void resetsObservationInputStateToItsInitialValues() {
     PastWeatherState.W1_code = "W1";
     PastWeatherState.past_weather_1 = "present";
-    mytemp.air_temp = "12";
-    mywind.wind_speed = "20";
-    myposition.latitude_degrees = "52";
-    myposition.int_latitude_degrees = 52;
-    mydatetime.year = "2026";
-    myobserver.selected_observer = "observer";
-    mytemp.wet_bulb_frozen = true;
+    TemperatureModel.air_temp = "12";
+    WindModel.wind_speed = "20";
+    PositionModel.latitude_degrees = "52";
+    PositionModel.int_latitude_degrees = 52;
+    DateTimeModel.year = "2026";
+    ObserverModel.selected_observer = "observer";
+    TemperatureModel.wet_bulb_frozen = true;
 
     ObservationStateResetter.resetValues();
 
     assertEquals("", PastWeatherState.W1_code);
     assertEquals("", PastWeatherState.past_weather_1);
-    assertEquals("", mytemp.air_temp);
-    assertEquals("", mywind.wind_speed);
-    assertEquals("", myposition.latitude_degrees);
-    assertEquals(main.INVALID, myposition.int_latitude_degrees, 0.0);
-    assertEquals("", mydatetime.year);
-    assertEquals("", myobserver.selected_observer);
-    assertFalse(mytemp.wet_bulb_frozen);
+    assertEquals("", TemperatureModel.air_temp);
+    assertEquals("", WindModel.wind_speed);
+    assertEquals("", PositionModel.latitude_degrees);
+    assertEquals(main.INVALID, PositionModel.int_latitude_degrees, 0.0);
+    assertEquals("", DateTimeModel.year);
+    assertEquals("", ObserverModel.selected_observer);
+    assertFalse(TemperatureModel.wet_bulb_frozen);
   }
 
   @Test
   public void clearsCaptainAndObserverTables() {
-    mycaptain.captain_data[0][0] = "captain";
-    myobserver.observer_data[0][0] = "observer";
+    CaptainModel.captain_data[0][0] = "captain";
+    ObserverModel.observer_data[0][0] = "observer";
 
     ObservationStateResetter.resetValues();
 
-    assertEquals("", mycaptain.captain_data[0][0]);
-    assertEquals("", myobserver.observer_data[0][0]);
+    assertEquals("", CaptainModel.captain_data[0][0]);
+    assertEquals("", ObserverModel.observer_data[0][0]);
   }
 
   @Test
   public void resetsComputedAndAprSentinels() {
-    mytemp.double_dew_point = 1.0;
-    mytemp.double_rv = 1.0;
-    mywind.int_true_wind_dir = 1;
-    mywind.int_true_wind_speed = 1;
-    mywind.int_relative_wind_dir = 1;
-    mywind.int_relative_wind_speed = 1;
-    myposition.int_latitude_degrees = 1;
-    myposition.int_latitude_minutes = 1;
-    myposition.int_longitude_degrees = 1;
-    myposition.int_longitude_minutes = 1;
-    myposition.SOG_APR = 1.0;
-    myposition.COG_APR = 1.0;
-    myposition.SOG_APR_wind = 1.0;
-    myposition.COG_APR_wind = 1.0;
+    TemperatureModel.double_dew_point = 1.0;
+    TemperatureModel.double_rv = 1.0;
+    WindModel.int_true_wind_dir = 1;
+    WindModel.int_true_wind_speed = 1;
+    WindModel.int_relative_wind_dir = 1;
+    WindModel.int_relative_wind_speed = 1;
+    PositionModel.int_latitude_degrees = 1;
+    PositionModel.int_latitude_minutes = 1;
+    PositionModel.int_longitude_degrees = 1;
+    PositionModel.int_longitude_minutes = 1;
+    PositionModel.SOG_APR = 1.0;
+    PositionModel.COG_APR = 1.0;
+    PositionModel.SOG_APR_wind = 1.0;
+    PositionModel.COG_APR_wind = 1.0;
 
     ObservationStateResetter.resetValues();
 
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
-    assertEquals(main.INVALID, mytemp.double_rv, 0.0);
-    assertEquals(main.INVALID, mywind.int_true_wind_dir);
-    assertEquals(main.INVALID, mywind.int_true_wind_speed);
-    assertEquals(main.INVALID, mywind.int_relative_wind_dir);
-    assertEquals(main.INVALID, mywind.int_relative_wind_speed);
-    assertEquals(main.INVALID, myposition.int_latitude_degrees);
-    assertEquals(main.INVALID, myposition.int_latitude_minutes);
-    assertEquals(main.INVALID, myposition.int_longitude_degrees);
-    assertEquals(main.INVALID, myposition.int_longitude_minutes);
-    assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
-    assertEquals(Double.MAX_VALUE, myposition.COG_APR, 0.0);
-    assertEquals(Double.MAX_VALUE, myposition.SOG_APR_wind, 0.0);
-    assertEquals(Double.MAX_VALUE, myposition.COG_APR_wind, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
+    assertEquals(main.INVALID, WindModel.int_true_wind_dir);
+    assertEquals(main.INVALID, WindModel.int_true_wind_speed);
+    assertEquals(main.INVALID, WindModel.int_relative_wind_dir);
+    assertEquals(main.INVALID, WindModel.int_relative_wind_speed);
+    assertEquals(main.INVALID, PositionModel.int_latitude_degrees);
+    assertEquals(main.INVALID, PositionModel.int_latitude_minutes);
+    assertEquals(main.INVALID, PositionModel.int_longitude_degrees);
+    assertEquals(main.INVALID, PositionModel.int_longitude_minutes);
+    assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.COG_APR, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR_wind, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.COG_APR_wind, 0.0);
   }
 
   @Test
   public void resetsWeatherPositionAndDateTimeState() {
     CloudCoverState.N = "8";
-    mywaves.swell_1_height = "3";
+    WavesModel.swell_1_height = "3";
     IcingState.Is_code = "I";
     IceState.ci_code = "C";
-    myposition.longitude_degrees = "4";
-    myposition.SOG_APR = 12;
-    mydatetime.GG_code = "10";
+    PositionModel.longitude_degrees = "4";
+    PositionModel.SOG_APR = 12;
+    DateTimeModel.GG_code = "10";
 
     ObservationStateResetter.resetValues();
 
     assertEquals("", CloudCoverState.N);
-    assertEquals("", mywaves.swell_1_height);
+    assertEquals("", WavesModel.swell_1_height);
     assertEquals("", IcingState.Is_code);
     assertEquals("", IceState.ci_code);
-    assertEquals("", myposition.longitude_degrees);
-    assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
-    assertEquals("", mydatetime.GG_code);
+    assertEquals("", PositionModel.longitude_degrees);
+    assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR, 0.0);
+    assertEquals("", DateTimeModel.GG_code);
   }
 }

@@ -12,11 +12,11 @@ public class DateTimeFieldsUpdaterTest {
     main.jTextField3 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    mydatetime.day = "04";
-    mydatetime.month = "October";
-    mydatetime.year = "2026";
-    mydatetime.hour = "12";
-    mydatetime.minute = "34";
+    DateTimeModel.day = "04";
+    DateTimeModel.month = "October";
+    DateTimeModel.year = "2026";
+    DateTimeModel.hour = "12";
+    DateTimeModel.minute = "34";
 
     DateTimeFieldsUpdater.update();
 
@@ -28,11 +28,11 @@ public class DateTimeFieldsUpdaterTest {
     main.jTextField3 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    mydatetime.day = "04";
-    mydatetime.month = "October";
-    mydatetime.year = "2026";
-    mydatetime.hour = "";
-    mydatetime.minute = "34";
+    DateTimeModel.day = "04";
+    DateTimeModel.month = "October";
+    DateTimeModel.year = "2026";
+    DateTimeModel.hour = "";
+    DateTimeModel.minute = "34";
 
     DateTimeFieldsUpdater.update();
 

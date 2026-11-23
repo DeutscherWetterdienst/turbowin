@@ -35,7 +35,7 @@ final class TemperatureFieldsUpdater {
           // received aws string -> clear text field
           jTextField36.setText("");
           // System.out.println("+++ kleuren zijn het zelde");
-          mytemp.air_temp = "";
+          TemperatureModel.air_temp = "";
         }
 
         jTextField36.setForeground(main.input_color_from_observer);
@@ -61,14 +61,14 @@ final class TemperatureFieldsUpdater {
       } // else (no APR)
     }
 
-    if ((mytemp.air_temp.compareTo("") != 0) && (mytemp.air_temp != null)) {
+    if ((TemperatureModel.air_temp.compareTo("") != 0) && (TemperatureModel.air_temp != null)) {
       // Legacy display contract: integer input such as 25 is shown as 25.0 degrees C.
-      int pos = mytemp.air_temp.indexOf(".");
+      int pos = TemperatureModel.air_temp.indexOf(".");
       if (pos == -1) // dus geen "." in de air temp string
       {
-        jTextField36.setText(mytemp.air_temp + ".0" + " \u00B0" + "C");
+        jTextField36.setText(TemperatureModel.air_temp + ".0" + " \u00B0" + "C");
       } else {
-        jTextField36.setText(mytemp.air_temp + " \u00B0" + "C");
+        jTextField36.setText(TemperatureModel.air_temp + " \u00B0" + "C");
       }
     } else {
       jTextField36.setText("");
@@ -115,16 +115,17 @@ final class TemperatureFieldsUpdater {
 
     if (rh_from_AWS_present == true) {
       jTextField37.setText("NA"); // Not Applicable
-      mytemp.wet_bulb_temp = "";
+      TemperatureModel.wet_bulb_temp = "";
     } else {
-      if ((mytemp.wet_bulb_temp.compareTo("") != 0) && (mytemp.wet_bulb_temp != null)) {
+      if ((TemperatureModel.wet_bulb_temp.compareTo("") != 0)
+          && (TemperatureModel.wet_bulb_temp != null)) {
         // Legacy display contract: integer input such as 25 is shown as 25.0 degrees C.
-        int pos = mytemp.wet_bulb_temp.indexOf(".");
+        int pos = TemperatureModel.wet_bulb_temp.indexOf(".");
         if (pos == -1) // dus geen "." in de air temp string
         {
-          jTextField37.setText(mytemp.wet_bulb_temp + ".0" + " \u00B0" + "C");
+          jTextField37.setText(TemperatureModel.wet_bulb_temp + ".0" + " \u00B0" + "C");
         } else {
-          jTextField37.setText(mytemp.wet_bulb_temp + " \u00B0" + "C");
+          jTextField37.setText(TemperatureModel.wet_bulb_temp + " \u00B0" + "C");
         }
       } else {
         jTextField37.setText("");
@@ -157,7 +158,7 @@ final class TemperatureFieldsUpdater {
           // last value was measured by AWS (color was red/gray ) but now no rh in last received aws
           // string -> clear text field
           jTextField38.setText("");
-          mytemp.double_rv = INVALID;
+          TemperatureModel.double_rv = INVALID;
         }
         jTextField38.setForeground(main.input_color_from_observer);
       }
@@ -165,9 +166,9 @@ final class TemperatureFieldsUpdater {
       // double_rv is stored as a fraction (0.0-1.0); convert it to percent and round the
       // displayed value to one decimal place.
       double hulp_double_rv =
-          Math.round(mytemp.double_rv * 10 * 100)
+          Math.round(TemperatureModel.double_rv * 10 * 100)
               / 10.0; // nb Math.round(xxx) - > geeft long terug  // NB * 100 for getting %
-      if ((mytemp.double_rv != INVALID))
+      if ((TemperatureModel.double_rv != INVALID))
         jTextField38.setText(Double.toString(hulp_double_rv) + " %");
       else jTextField38.setText("");
 
@@ -194,10 +195,10 @@ final class TemperatureFieldsUpdater {
         jTextField38.setForeground(main.input_color_from_observer);
       } // else (no APR)
 
-      if ((mytemp.double_dew_point != INVALID)) {
+      if ((TemperatureModel.double_dew_point != INVALID)) {
         // Round the displayed dew point to one decimal place.
         double hulp_double_dew_point =
-            Math.round(mytemp.double_dew_point * 10)
+            Math.round(TemperatureModel.double_dew_point * 10)
                 / 10.0; // nb Math.round(xxx) - > geeft long terug
         jTextField38.setText(Double.toString(hulp_double_dew_point) + " \u00B0" + "C");
       } else {
@@ -226,7 +227,7 @@ final class TemperatureFieldsUpdater {
           // last value was measured by AWS (color was red/gray) but now no sst in last received aws
           // string -> clear text field
           jTextField40.setText("");
-          mytemp.sea_water_temp = "";
+          TemperatureModel.sea_water_temp = "";
         }
         jTextField40.setForeground(main.input_color_from_observer);
       }
@@ -237,14 +238,15 @@ final class TemperatureFieldsUpdater {
       jTextField40.setForeground(main.input_color_from_observer);
     }
 
-    if ((mytemp.sea_water_temp.compareTo("") != 0) && (mytemp.sea_water_temp != null)) {
+    if ((TemperatureModel.sea_water_temp.compareTo("") != 0)
+        && (TemperatureModel.sea_water_temp != null)) {
       // Legacy display contract: integer input such as 25 is shown as 25.0 degrees C.
-      int pos = mytemp.sea_water_temp.indexOf(".");
+      int pos = TemperatureModel.sea_water_temp.indexOf(".");
       if (pos == -1) // dus geen "." in de air temp string
       {
-        jTextField40.setText(mytemp.sea_water_temp + ".0" + " \u00B0" + "C");
+        jTextField40.setText(TemperatureModel.sea_water_temp + ".0" + " \u00B0" + "C");
       } else {
-        jTextField40.setText(mytemp.sea_water_temp + " \u00B0" + "C");
+        jTextField40.setText(TemperatureModel.sea_water_temp + " \u00B0" + "C");
       }
     } else {
       jTextField40.setText("");

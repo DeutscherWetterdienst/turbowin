@@ -27,114 +27,114 @@ public class AwsManualInputPreparationWorkflowTest {
 
   @Before
   public void saveState() {
-    originalYear = mydatetime.year;
-    originalMonth = mydatetime.month;
-    originalDay = mydatetime.day;
-    originalHour = mydatetime.hour;
-    originalMonthCode = mydatetime.MM_code;
-    originalYearDayCode = mydatetime.YY_code;
-    originalHourCode = mydatetime.GG_code;
-    originalLatitudeDegrees = myposition.latitude_degrees;
-    originalLatitudeMinutes = myposition.latitude_minutes;
-    originalLongitudeDegrees = myposition.longitude_degrees;
-    originalLongitudeMinutes = myposition.longitude_minutes;
-    originalLatitudeHemisphere = myposition.latitude_hemisphere;
-    originalLongitudeHemisphere = myposition.longitude_hemisphere;
-    originalQcCode = myposition.Qc_code;
-    originalLatitudeCode = myposition.lalala_code;
-    originalLongitudeCode = myposition.lolololo_code;
+    originalYear = DateTimeModel.year;
+    originalMonth = DateTimeModel.month;
+    originalDay = DateTimeModel.day;
+    originalHour = DateTimeModel.hour;
+    originalMonthCode = DateTimeModel.MM_code;
+    originalYearDayCode = DateTimeModel.YY_code;
+    originalHourCode = DateTimeModel.GG_code;
+    originalLatitudeDegrees = PositionModel.latitude_degrees;
+    originalLatitudeMinutes = PositionModel.latitude_minutes;
+    originalLongitudeDegrees = PositionModel.longitude_degrees;
+    originalLongitudeMinutes = PositionModel.longitude_minutes;
+    originalLatitudeHemisphere = PositionModel.latitude_hemisphere;
+    originalLongitudeHemisphere = PositionModel.longitude_hemisphere;
+    originalQcCode = PositionModel.Qc_code;
+    originalLatitudeCode = PositionModel.lalala_code;
+    originalLongitudeCode = PositionModel.lolololo_code;
   }
 
   @After
   public void restoreState() {
-    mydatetime.year = originalYear;
-    mydatetime.month = originalMonth;
-    mydatetime.day = originalDay;
-    mydatetime.hour = originalHour;
-    mydatetime.MM_code = originalMonthCode;
-    mydatetime.YY_code = originalYearDayCode;
-    mydatetime.GG_code = originalHourCode;
-    myposition.latitude_degrees = originalLatitudeDegrees;
-    myposition.latitude_minutes = originalLatitudeMinutes;
-    myposition.longitude_degrees = originalLongitudeDegrees;
-    myposition.longitude_minutes = originalLongitudeMinutes;
-    myposition.latitude_hemisphere = originalLatitudeHemisphere;
-    myposition.longitude_hemisphere = originalLongitudeHemisphere;
-    myposition.Qc_code = originalQcCode;
-    myposition.lalala_code = originalLatitudeCode;
-    myposition.lolololo_code = originalLongitudeCode;
+    DateTimeModel.year = originalYear;
+    DateTimeModel.month = originalMonth;
+    DateTimeModel.day = originalDay;
+    DateTimeModel.hour = originalHour;
+    DateTimeModel.MM_code = originalMonthCode;
+    DateTimeModel.YY_code = originalYearDayCode;
+    DateTimeModel.GG_code = originalHourCode;
+    PositionModel.latitude_degrees = originalLatitudeDegrees;
+    PositionModel.latitude_minutes = originalLatitudeMinutes;
+    PositionModel.longitude_degrees = originalLongitudeDegrees;
+    PositionModel.longitude_minutes = originalLongitudeMinutes;
+    PositionModel.latitude_hemisphere = originalLatitudeHemisphere;
+    PositionModel.longitude_hemisphere = originalLongitudeHemisphere;
+    PositionModel.Qc_code = originalQcCode;
+    PositionModel.lalala_code = originalLatitudeCode;
+    PositionModel.lolololo_code = originalLongitudeCode;
   }
 
   @Test
   public void convertsAwsDateAndPositionToImmtCodes() {
-    mydatetime.year = "2024";
-    mydatetime.month = "December";
-    mydatetime.day = "31";
-    mydatetime.hour = "23";
-    myposition.latitude_degrees = "52";
-    myposition.latitude_minutes = "30";
-    myposition.longitude_degrees = "004";
-    myposition.longitude_minutes = "18";
-    myposition.latitude_hemisphere = myposition.HEMISPHERE_NORTH;
-    myposition.longitude_hemisphere = myposition.HEMISPHERE_EAST;
+    DateTimeModel.year = "2024";
+    DateTimeModel.month = "December";
+    DateTimeModel.day = "31";
+    DateTimeModel.hour = "23";
+    PositionModel.latitude_degrees = "52";
+    PositionModel.latitude_minutes = "30";
+    PositionModel.longitude_degrees = "004";
+    PositionModel.longitude_minutes = "18";
+    PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_NORTH;
+    PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_EAST;
 
     AwsManualInputPreparationWorkflow.prepare();
 
-    assertEquals("2025", mydatetime.year);
-    assertEquals("01", mydatetime.MM_code);
-    assertEquals("01", mydatetime.YY_code);
-    assertEquals("00", mydatetime.GG_code);
-    assertEquals("1", myposition.Qc_code);
-    assertEquals("525", myposition.lalala_code);
-    assertEquals("0043", myposition.lolololo_code);
+    assertEquals("2025", DateTimeModel.year);
+    assertEquals("01", DateTimeModel.MM_code);
+    assertEquals("01", DateTimeModel.YY_code);
+    assertEquals("00", DateTimeModel.GG_code);
+    assertEquals("1", PositionModel.Qc_code);
+    assertEquals("525", PositionModel.lalala_code);
+    assertEquals("0043", PositionModel.lolololo_code);
   }
 
   @Test
   public void clearsCodesWhenPositionIsInvalid() {
-    mydatetime.year = "2024";
-    mydatetime.month = "January";
-    mydatetime.day = "1";
-    mydatetime.hour = "0";
-    myposition.latitude_degrees = "not-a-number";
-    myposition.latitude_minutes = "30";
-    myposition.longitude_degrees = "004";
-    myposition.longitude_minutes = "18";
-    myposition.Qc_code = "1";
-    myposition.lalala_code = "525";
-    myposition.lolololo_code = "0043";
+    DateTimeModel.year = "2024";
+    DateTimeModel.month = "January";
+    DateTimeModel.day = "1";
+    DateTimeModel.hour = "0";
+    PositionModel.latitude_degrees = "not-a-number";
+    PositionModel.latitude_minutes = "30";
+    PositionModel.longitude_degrees = "004";
+    PositionModel.longitude_minutes = "18";
+    PositionModel.Qc_code = "1";
+    PositionModel.lalala_code = "525";
+    PositionModel.lolololo_code = "0043";
 
     AwsManualInputPreparationWorkflow.prepare();
 
-    assertEquals(" ", myposition.Qc_code);
-    assertEquals("   ", myposition.lalala_code);
-    assertEquals("    ", myposition.lolololo_code);
+    assertEquals(" ", PositionModel.Qc_code);
+    assertEquals("   ", PositionModel.lalala_code);
+    assertEquals("    ", PositionModel.lolololo_code);
   }
 
   @Test
   public void truncatesCoordinateMinutesAndMapsAllQuadrants() {
-    assertPositionEncoding(myposition.HEMISPHERE_NORTH, myposition.HEMISPHERE_EAST, "1");
-    assertPositionEncoding(myposition.HEMISPHERE_SOUTH, myposition.HEMISPHERE_EAST, "3");
-    assertPositionEncoding(myposition.HEMISPHERE_SOUTH, myposition.HEMISPHERE_WEST, "5");
-    assertPositionEncoding(myposition.HEMISPHERE_NORTH, myposition.HEMISPHERE_WEST, "7");
+    assertPositionEncoding(PositionModel.HEMISPHERE_NORTH, PositionModel.HEMISPHERE_EAST, "1");
+    assertPositionEncoding(PositionModel.HEMISPHERE_SOUTH, PositionModel.HEMISPHERE_EAST, "3");
+    assertPositionEncoding(PositionModel.HEMISPHERE_SOUTH, PositionModel.HEMISPHERE_WEST, "5");
+    assertPositionEncoding(PositionModel.HEMISPHERE_NORTH, PositionModel.HEMISPHERE_WEST, "7");
   }
 
   private void assertPositionEncoding(
       String latitudeHemisphere, String longitudeHemisphere, String expectedQcCode) {
-    mydatetime.year = "2024";
-    mydatetime.month = "January";
-    mydatetime.day = "1";
-    mydatetime.hour = "0";
-    myposition.latitude_degrees = "52";
-    myposition.latitude_minutes = "35";
-    myposition.longitude_degrees = "004";
-    myposition.longitude_minutes = "23";
-    myposition.latitude_hemisphere = latitudeHemisphere;
-    myposition.longitude_hemisphere = longitudeHemisphere;
+    DateTimeModel.year = "2024";
+    DateTimeModel.month = "January";
+    DateTimeModel.day = "1";
+    DateTimeModel.hour = "0";
+    PositionModel.latitude_degrees = "52";
+    PositionModel.latitude_minutes = "35";
+    PositionModel.longitude_degrees = "004";
+    PositionModel.longitude_minutes = "23";
+    PositionModel.latitude_hemisphere = latitudeHemisphere;
+    PositionModel.longitude_hemisphere = longitudeHemisphere;
 
     AwsManualInputPreparationWorkflow.prepare();
 
-    assertEquals(expectedQcCode, myposition.Qc_code);
-    assertEquals("525", myposition.lalala_code);
-    assertEquals("0043", myposition.lolololo_code);
+    assertEquals(expectedQcCode, PositionModel.Qc_code);
+    assertEquals("525", PositionModel.lalala_code);
+    assertEquals("0043", PositionModel.lolololo_code);
   }
 }

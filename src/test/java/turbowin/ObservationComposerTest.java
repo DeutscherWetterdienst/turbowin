@@ -32,19 +32,19 @@ public class ObservationComposerTest {
   @Before
   public void saveObservationState() {
     originalStationId = main.station_ID;
-    originalYearDayCode = mydatetime.YY_code;
-    originalHourCode = mydatetime.GG_code;
-    originalQcCode = myposition.Qc_code;
-    originalLatitudeCode = myposition.lalala_code;
-    originalLongitudeCode = myposition.lolololo_code;
-    originalWindSpeedCode = mywind.ff_code;
-    originalExtendedWindSpeedCode = mywind.fff00_code;
+    originalYearDayCode = DateTimeModel.YY_code;
+    originalHourCode = DateTimeModel.GG_code;
+    originalQcCode = PositionModel.Qc_code;
+    originalLatitudeCode = PositionModel.lalala_code;
+    originalLongitudeCode = PositionModel.lolololo_code;
+    originalWindSpeedCode = WindModel.ff_code;
+    originalExtendedWindSpeedCode = WindModel.fff00_code;
     originalMiddleCloudCode = MiddleCloudState.cm_code;
     originalLowCloudCode = LowCloudState.cl_code;
     originalHighCloudCode = HighCloudState.ch_code;
-    originalSwellDirectionCode = mywaves.Dw1_code;
-    originalSwellPeriodCode = mywaves.Pw1_code;
-    originalSwellHeightCode = mywaves.Hw1_code;
+    originalSwellDirectionCode = WavesModel.Dw1_code;
+    originalSwellPeriodCode = WavesModel.Pw1_code;
+    originalSwellHeightCode = WavesModel.Hw1_code;
     originalIcingCauseCode = IcingState.Is_code;
     originalIcingThicknessCode = IcingState.EsEs_code;
     originalIcingRateCode = IcingState.Rs_code;
@@ -55,19 +55,19 @@ public class ObservationComposerTest {
   @After
   public void restoreObservationState() {
     main.station_ID = originalStationId;
-    mydatetime.YY_code = originalYearDayCode;
-    mydatetime.GG_code = originalHourCode;
-    myposition.Qc_code = originalQcCode;
-    myposition.lalala_code = originalLatitudeCode;
-    myposition.lolololo_code = originalLongitudeCode;
-    mywind.ff_code = originalWindSpeedCode;
-    mywind.fff00_code = originalExtendedWindSpeedCode;
+    DateTimeModel.YY_code = originalYearDayCode;
+    DateTimeModel.GG_code = originalHourCode;
+    PositionModel.Qc_code = originalQcCode;
+    PositionModel.lalala_code = originalLatitudeCode;
+    PositionModel.lolololo_code = originalLongitudeCode;
+    WindModel.ff_code = originalWindSpeedCode;
+    WindModel.fff00_code = originalExtendedWindSpeedCode;
     MiddleCloudState.cm_code = originalMiddleCloudCode;
     LowCloudState.cl_code = originalLowCloudCode;
     HighCloudState.ch_code = originalHighCloudCode;
-    mywaves.Dw1_code = originalSwellDirectionCode;
-    mywaves.Pw1_code = originalSwellPeriodCode;
-    mywaves.Hw1_code = originalSwellHeightCode;
+    WavesModel.Dw1_code = originalSwellDirectionCode;
+    WavesModel.Pw1_code = originalSwellPeriodCode;
+    WavesModel.Hw1_code = originalSwellHeightCode;
     IcingState.Is_code = originalIcingCauseCode;
     IcingState.EsEs_code = originalIcingThicknessCode;
     IcingState.Rs_code = originalIcingRateCode;
@@ -85,11 +85,11 @@ public class ObservationComposerTest {
   @Test
   public void composesAnObservationWhenRequiredIdentityDataIsPresent() {
     main.station_ID = "TEST";
-    mydatetime.YY_code = "01";
-    mydatetime.GG_code = "12";
-    myposition.Qc_code = "1";
-    myposition.lalala_code = "234";
-    myposition.lolololo_code = "5678";
+    DateTimeModel.YY_code = "01";
+    DateTimeModel.GG_code = "12";
+    PositionModel.Qc_code = "1";
+    PositionModel.lalala_code = "234";
+    PositionModel.lolololo_code = "5678";
 
     String observation = main.compose_coded_obs(" ");
 
@@ -110,12 +110,12 @@ public class ObservationComposerTest {
   @Test
   public void preservesOptionalGroupsAndSpecialFormattingBranches() {
     setRequiredObservationData();
-    mywind.ff_code = "12";
-    mywind.fff00_code = "345";
+    WindModel.ff_code = "12";
+    WindModel.fff00_code = "345";
     MiddleCloudState.cm_code = "7b";
     LowCloudState.cl_code = "";
     HighCloudState.ch_code = "";
-    mywaves.Dw1_code = "99";
+    WavesModel.Dw1_code = "99";
     IcingState.Is_code = "1";
     IcingState.EsEs_code = "02";
     IcingState.Rs_code = "3";
@@ -133,34 +133,34 @@ public class ObservationComposerTest {
 
   private void setRequiredObservationData() {
     main.station_ID = "TEST";
-    mydatetime.YY_code = "01";
-    mydatetime.GG_code = "12";
-    myposition.Qc_code = "1";
-    myposition.lalala_code = "234";
-    myposition.lolololo_code = "5678";
+    DateTimeModel.YY_code = "01";
+    DateTimeModel.GG_code = "12";
+    PositionModel.Qc_code = "1";
+    PositionModel.lalala_code = "234";
+    PositionModel.lolololo_code = "5678";
   }
 
   @Test
   public void includesRepresentativeWeatherGroups() {
-    String originalWindSource = mywind.iw_code;
-    String originalWindDirection = mywind.dd_code;
-    String originalWindSpeed = mywind.ff_code;
+    String originalWindSource = WindModel.iw_code;
+    String originalWindDirection = WindModel.dd_code;
+    String originalWindSpeed = WindModel.ff_code;
     String originalCloudCover = CloudCoverState.N_code;
-    String originalTemperatureSign = mytemp.sn_TTT_code;
-    String originalTemperature = mytemp.TTT_code;
+    String originalTemperatureSign = TemperatureModel.sn_TTT_code;
+    String originalTemperature = TemperatureModel.TTT_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
-      mywind.iw_code = "1";
-      mywind.dd_code = "18";
-      mywind.ff_code = "05";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
+      WindModel.iw_code = "1";
+      WindModel.dd_code = "18";
+      WindModel.ff_code = "05";
       CloudCoverState.N_code = "5";
-      mytemp.sn_TTT_code = "0";
-      mytemp.TTT_code = "123";
+      TemperatureModel.sn_TTT_code = "0";
+      TemperatureModel.TTT_code = "123";
 
       String observation = ObservationComposer.compose(" ");
 
@@ -169,59 +169,59 @@ public class ObservationComposerTest {
       assertTrue(observation.contains(" 10123 "));
       assertTrue(observation.endsWith("="));
     } finally {
-      mywind.iw_code = originalWindSource;
-      mywind.dd_code = originalWindDirection;
-      mywind.ff_code = originalWindSpeed;
+      WindModel.iw_code = originalWindSource;
+      WindModel.dd_code = originalWindDirection;
+      WindModel.ff_code = originalWindSpeed;
       CloudCoverState.N_code = originalCloudCover;
-      mytemp.sn_TTT_code = originalTemperatureSign;
-      mytemp.TTT_code = originalTemperature;
+      TemperatureModel.sn_TTT_code = originalTemperatureSign;
+      TemperatureModel.TTT_code = originalTemperature;
     }
   }
 
   @Test
   public void includesAdditionalPassThroughWeatherGroups() {
-    String originalPressure = mybarometer.PPPP_code;
-    String originalPressureCharacteristic = mybarograph.a_code;
-    String originalPressureAmount = mybarograph.ppp_code;
+    String originalPressure = BarometerModel.PPPP_code;
+    String originalPressureCharacteristic = BarographModel.a_code;
+    String originalPressureAmount = BarographModel.ppp_code;
     String originalPresentWeather = PresentWeatherState.ww_code;
     String originalPastWeatherOne = PastWeatherState.W1_code;
     String originalPastWeatherTwo = PastWeatherState.W2_code;
     String originalLowCloud = LowCloudState.cl_code;
     String originalHighCloud = HighCloudState.ch_code;
-    String originalWavePeriod = mywaves.Pw_code;
-    String originalWaveHeight = mywaves.Hw_code;
-    String originalSwellDirectionOne = mywaves.Dw1_code;
-    String originalSwellPeriodOne = mywaves.Pw1_code;
-    String originalSwellHeightOne = mywaves.Hw1_code;
-    String originalSwellDirectionTwo = mywaves.Dw2_code;
-    String originalSwellPeriodTwo = mywaves.Pw2_code;
-    String originalSwellHeightTwo = mywaves.Hw2_code;
+    String originalWavePeriod = WavesModel.Pw_code;
+    String originalWaveHeight = WavesModel.Hw_code;
+    String originalSwellDirectionOne = WavesModel.Dw1_code;
+    String originalSwellPeriodOne = WavesModel.Pw1_code;
+    String originalSwellHeightOne = WavesModel.Hw1_code;
+    String originalSwellDirectionTwo = WavesModel.Dw2_code;
+    String originalSwellPeriodTwo = WavesModel.Pw2_code;
+    String originalSwellHeightTwo = WavesModel.Hw2_code;
     String originalIceCause = IcingState.Is_code;
     String originalIceThickness = IcingState.EsEs_code;
     String originalIceRate = IcingState.Rs_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
-      mybarometer.PPPP_code = "1234";
-      mybarograph.a_code = "1";
-      mybarograph.ppp_code = "234";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
+      BarometerModel.PPPP_code = "1234";
+      BarographModel.a_code = "1";
+      BarographModel.ppp_code = "234";
       PresentWeatherState.ww_code = "45";
       PastWeatherState.W1_code = "6";
       PastWeatherState.W2_code = "7";
       LowCloudState.cl_code = "2";
       HighCloudState.ch_code = "3";
-      mywaves.Pw_code = "04";
-      mywaves.Hw_code = "05";
-      mywaves.Dw1_code = "12";
-      mywaves.Pw1_code = "03";
-      mywaves.Hw1_code = "04";
-      mywaves.Dw2_code = "24";
-      mywaves.Pw2_code = "05";
-      mywaves.Hw2_code = "06";
+      WavesModel.Pw_code = "04";
+      WavesModel.Hw_code = "05";
+      WavesModel.Dw1_code = "12";
+      WavesModel.Pw1_code = "03";
+      WavesModel.Hw1_code = "04";
+      WavesModel.Dw2_code = "24";
+      WavesModel.Pw2_code = "05";
+      WavesModel.Hw2_code = "06";
       IcingState.Is_code = "1";
       IcingState.EsEs_code = "04";
       IcingState.Rs_code = "2";
@@ -237,22 +237,22 @@ public class ObservationComposerTest {
       assertTrue(observation.contains(" 50506 "));
       assertTrue(observation.contains(" 61042"));
     } finally {
-      mybarometer.PPPP_code = originalPressure;
-      mybarograph.a_code = originalPressureCharacteristic;
-      mybarograph.ppp_code = originalPressureAmount;
+      BarometerModel.PPPP_code = originalPressure;
+      BarographModel.a_code = originalPressureCharacteristic;
+      BarographModel.ppp_code = originalPressureAmount;
       PresentWeatherState.ww_code = originalPresentWeather;
       PastWeatherState.W1_code = originalPastWeatherOne;
       PastWeatherState.W2_code = originalPastWeatherTwo;
       LowCloudState.cl_code = originalLowCloud;
       HighCloudState.ch_code = originalHighCloud;
-      mywaves.Pw_code = originalWavePeriod;
-      mywaves.Hw_code = originalWaveHeight;
-      mywaves.Dw1_code = originalSwellDirectionOne;
-      mywaves.Pw1_code = originalSwellPeriodOne;
-      mywaves.Hw1_code = originalSwellHeightOne;
-      mywaves.Dw2_code = originalSwellDirectionTwo;
-      mywaves.Pw2_code = originalSwellPeriodTwo;
-      mywaves.Hw2_code = originalSwellHeightTwo;
+      WavesModel.Pw_code = originalWavePeriod;
+      WavesModel.Hw_code = originalWaveHeight;
+      WavesModel.Dw1_code = originalSwellDirectionOne;
+      WavesModel.Pw1_code = originalSwellPeriodOne;
+      WavesModel.Hw1_code = originalSwellHeightOne;
+      WavesModel.Dw2_code = originalSwellDirectionTwo;
+      WavesModel.Pw2_code = originalSwellPeriodTwo;
+      WavesModel.Hw2_code = originalSwellHeightTwo;
       IcingState.Is_code = originalIceCause;
       IcingState.EsEs_code = originalIceThickness;
       IcingState.Rs_code = originalIceRate;
@@ -261,29 +261,29 @@ public class ObservationComposerTest {
 
   @Test
   public void combinesTemperatureSignAndValueGroups() {
-    String originalAirSign = mytemp.sn_TTT_code;
-    String originalAirTemperature = mytemp.TTT_code;
-    String originalDewSign = mytemp.sn_TdTdTd_code;
-    String originalDewPoint = mytemp.TdTdTd_code;
-    String originalSeaSign = mytemp.ss_TsTsTs_code;
-    String originalSeaTemperature = mytemp.TsTsTs_code;
-    String originalWetBulbSign = mytemp.sn_TbTbTb_code;
-    String originalWetBulb = mytemp.TbTbTb_code;
+    String originalAirSign = TemperatureModel.sn_TTT_code;
+    String originalAirTemperature = TemperatureModel.TTT_code;
+    String originalDewSign = TemperatureModel.sn_TdTdTd_code;
+    String originalDewPoint = TemperatureModel.TdTdTd_code;
+    String originalSeaSign = TemperatureModel.ss_TsTsTs_code;
+    String originalSeaTemperature = TemperatureModel.TsTsTs_code;
+    String originalWetBulbSign = TemperatureModel.sn_TbTbTb_code;
+    String originalWetBulb = TemperatureModel.TbTbTb_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
-      mytemp.sn_TTT_code = "0";
-      mytemp.TTT_code = "123";
-      mytemp.sn_TdTdTd_code = "1";
-      mytemp.TdTdTd_code = "234";
-      mytemp.ss_TsTsTs_code = "0";
-      mytemp.TsTsTs_code = "111";
-      mytemp.sn_TbTbTb_code = "0";
-      mytemp.TbTbTb_code = "222";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
+      TemperatureModel.sn_TTT_code = "0";
+      TemperatureModel.TTT_code = "123";
+      TemperatureModel.sn_TdTdTd_code = "1";
+      TemperatureModel.TdTdTd_code = "234";
+      TemperatureModel.ss_TsTsTs_code = "0";
+      TemperatureModel.TsTsTs_code = "111";
+      TemperatureModel.sn_TbTbTb_code = "0";
+      TemperatureModel.TbTbTb_code = "222";
 
       String observation = ObservationComposer.compose(" ");
 
@@ -292,37 +292,37 @@ public class ObservationComposerTest {
       assertTrue(observation.contains(" 00111 "));
       assertTrue(observation.contains(" 80222"));
     } finally {
-      mytemp.sn_TTT_code = originalAirSign;
-      mytemp.TTT_code = originalAirTemperature;
-      mytemp.sn_TdTdTd_code = originalDewSign;
-      mytemp.TdTdTd_code = originalDewPoint;
-      mytemp.ss_TsTsTs_code = originalSeaSign;
-      mytemp.TsTsTs_code = originalSeaTemperature;
-      mytemp.sn_TbTbTb_code = originalWetBulbSign;
-      mytemp.TbTbTb_code = originalWetBulb;
+      TemperatureModel.sn_TTT_code = originalAirSign;
+      TemperatureModel.TTT_code = originalAirTemperature;
+      TemperatureModel.sn_TdTdTd_code = originalDewSign;
+      TemperatureModel.TdTdTd_code = originalDewPoint;
+      TemperatureModel.ss_TsTsTs_code = originalSeaSign;
+      TemperatureModel.TsTsTs_code = originalSeaTemperature;
+      TemperatureModel.sn_TbTbTb_code = originalWetBulbSign;
+      TemperatureModel.TbTbTb_code = originalWetBulb;
     }
   }
 
   @Test
   public void replacesIncompleteTemperatureGroupsWithUndefinedValues() {
-    String originalAirSign = mytemp.sn_TTT_code;
-    String originalAirTemperature = mytemp.TTT_code;
+    String originalAirSign = TemperatureModel.sn_TTT_code;
+    String originalAirTemperature = TemperatureModel.TTT_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
-      mytemp.sn_TTT_code = "0";
-      mytemp.TTT_code = "";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
+      TemperatureModel.sn_TTT_code = "0";
+      TemperatureModel.TTT_code = "";
 
       String observation = ObservationComposer.compose(" ");
 
       assertTrue(observation.contains(" 1//// "));
     } finally {
-      mytemp.sn_TTT_code = originalAirSign;
-      mytemp.TTT_code = originalAirTemperature;
+      TemperatureModel.sn_TTT_code = originalAirSign;
+      TemperatureModel.TTT_code = originalAirTemperature;
     }
   }
 
@@ -335,11 +335,11 @@ public class ObservationComposerTest {
     String originalSituation = IceState.zi_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
       IceState.ci_code = "1";
       IceState.Si_code = "2";
       IceState.bi_code = "3";
@@ -367,11 +367,11 @@ public class ObservationComposerTest {
     String originalSituation = IceState.zi_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
       IceState.ci_code = "u";
       IceState.Si_code = "u";
       IceState.bi_code = "u";
@@ -398,11 +398,11 @@ public class ObservationComposerTest {
     String originalHighCloud = HighCloudState.ch_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
       MiddleCloudState.cm_code = "7a";
       CloudCoverState.Nh_code = "";
       LowCloudState.cl_code = "";
@@ -427,11 +427,11 @@ public class ObservationComposerTest {
     String originalHighCloud = HighCloudState.ch_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
       MiddleCloudState.cm_code = "";
       CloudCoverState.Nh_code = "";
       LowCloudState.cl_code = "";
@@ -451,58 +451,58 @@ public class ObservationComposerTest {
   @Test
   public void composesWindSpeedWithOptionalHighSpeedExtension() {
     String originalCloudCover = CloudCoverState.N_code;
-    String originalWindDirection = mywind.dd_code;
-    String originalWindSpeed = mywind.ff_code;
-    String originalHighWindSpeed = mywind.fff00_code;
+    String originalWindDirection = WindModel.dd_code;
+    String originalWindSpeed = WindModel.ff_code;
+    String originalHighWindSpeed = WindModel.fff00_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
       CloudCoverState.N_code = "5";
-      mywind.dd_code = "18";
-      mywind.ff_code = "05";
-      mywind.fff00_code = "12";
+      WindModel.dd_code = "18";
+      WindModel.ff_code = "05";
+      WindModel.fff00_code = "12";
 
       String observation = ObservationComposer.compose(" ");
 
       assertTrue(observation.contains(" 51805 0012 "));
     } finally {
       CloudCoverState.N_code = originalCloudCover;
-      mywind.dd_code = originalWindDirection;
-      mywind.ff_code = originalWindSpeed;
-      mywind.fff00_code = originalHighWindSpeed;
+      WindModel.dd_code = originalWindDirection;
+      WindModel.ff_code = originalWindSpeed;
+      WindModel.fff00_code = originalHighWindSpeed;
     }
   }
 
   @Test
   public void usesWindSpeedPlaceholderWhenMissing() {
     String originalCloudCover = CloudCoverState.N_code;
-    String originalWindDirection = mywind.dd_code;
-    String originalWindSpeed = mywind.ff_code;
-    String originalHighWindSpeed = mywind.fff00_code;
+    String originalWindDirection = WindModel.dd_code;
+    String originalWindSpeed = WindModel.ff_code;
+    String originalHighWindSpeed = WindModel.fff00_code;
     try {
       main.station_ID = "TEST";
-      mydatetime.YY_code = "01";
-      mydatetime.GG_code = "12";
-      myposition.Qc_code = "1";
-      myposition.lalala_code = "234";
-      myposition.lolololo_code = "5678";
+      DateTimeModel.YY_code = "01";
+      DateTimeModel.GG_code = "12";
+      PositionModel.Qc_code = "1";
+      PositionModel.lalala_code = "234";
+      PositionModel.lolololo_code = "5678";
       CloudCoverState.N_code = "5";
-      mywind.dd_code = "18";
-      mywind.ff_code = "";
-      mywind.fff00_code = "12";
+      WindModel.dd_code = "18";
+      WindModel.ff_code = "";
+      WindModel.fff00_code = "12";
 
       String observation = ObservationComposer.compose(" ");
 
       assertTrue(observation.contains(" 518// "));
     } finally {
       CloudCoverState.N_code = originalCloudCover;
-      mywind.dd_code = originalWindDirection;
-      mywind.ff_code = originalWindSpeed;
-      mywind.fff00_code = originalHighWindSpeed;
+      WindModel.dd_code = originalWindDirection;
+      WindModel.ff_code = originalWindSpeed;
+      WindModel.fff00_code = originalHighWindSpeed;
     }
   }
 }

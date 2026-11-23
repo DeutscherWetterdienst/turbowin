@@ -57,19 +57,23 @@ public class Rs232SendSensorDataToAprFm13WorkflowTest {
     originalUploadUrl = main.upload_URL;
     originalObservation = main.obs_write;
     originalStationId = main.station_ID;
-    originalYear = mydatetime.year;
-    originalMonthCode = mydatetime.MM_code;
-    originalDayCode = mydatetime.YY_code;
-    originalHourCode = mydatetime.GG_code;
-    originalQcCode = myposition.Qc_code;
-    originalLatitudeCode = myposition.lalala_code;
-    originalLongitudeCode = myposition.lolololo_code;
+    originalYear = DateTimeModel.year;
+    originalMonthCode = DateTimeModel.MM_code;
+    originalDayCode = DateTimeModel.YY_code;
+    originalHourCode = DateTimeModel.GG_code;
+    originalQcCode = PositionModel.Qc_code;
+    originalLatitudeCode = PositionModel.lalala_code;
+    originalLongitudeCode = PositionModel.lolololo_code;
     originalLastRecord = main.last_record;
     originalApr = main.APR;
     originalConnectionMode = main.RS232_connection_mode;
     originalResponseCode = main_RS232_RS422.APR_server_response_code;
     replaceStaticTextFields(
-        main.class, myposition.class, mybarometer.class, mybarograph.class, mytemp.class);
+        main.class,
+        PositionModel.class,
+        BarometerModel.class,
+        BarographModel.class,
+        TemperatureModel.class);
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -94,13 +98,13 @@ public class Rs232SendSensorDataToAprFm13WorkflowTest {
     main.upload_URL = originalUploadUrl;
     main.obs_write = originalObservation;
     main.station_ID = originalStationId;
-    mydatetime.year = originalYear;
-    mydatetime.MM_code = originalMonthCode;
-    mydatetime.YY_code = originalDayCode;
-    mydatetime.GG_code = originalHourCode;
-    myposition.Qc_code = originalQcCode;
-    myposition.lalala_code = originalLatitudeCode;
-    myposition.lolololo_code = originalLongitudeCode;
+    DateTimeModel.year = originalYear;
+    DateTimeModel.MM_code = originalMonthCode;
+    DateTimeModel.YY_code = originalDayCode;
+    DateTimeModel.GG_code = originalHourCode;
+    PositionModel.Qc_code = originalQcCode;
+    PositionModel.lalala_code = originalLatitudeCode;
+    PositionModel.lolololo_code = originalLongitudeCode;
     main.last_record = originalLastRecord;
     main.APR = originalApr;
     main.RS232_connection_mode = originalConnectionMode;
@@ -142,10 +146,10 @@ public class Rs232SendSensorDataToAprFm13WorkflowTest {
     awaitResponse(200);
     awaitSystemLogFile();
     awaitImmtFile();
-    waitFor(() -> "".equals(mydatetime.year));
-    assertEquals("", mydatetime.MM_code);
-    assertEquals("", mydatetime.YY_code);
-    assertEquals("", mydatetime.GG_code);
+    waitFor(() -> "".equals(DateTimeModel.year));
+    assertEquals("", DateTimeModel.MM_code);
+    assertEquals("", DateTimeModel.YY_code);
+    assertEquals("", DateTimeModel.GG_code);
   }
 
   @Test
@@ -156,7 +160,7 @@ public class Rs232SendSensorDataToAprFm13WorkflowTest {
 
     awaitResponse(500);
     awaitSystemLogFile();
-    assertEquals("2024", mydatetime.year);
+    assertEquals("2024", DateTimeModel.year);
     assertTrue(!Files.exists(immtFile()));
 
     main_RS232_RS422.APR_server_response_code = -1;
@@ -165,18 +169,18 @@ public class Rs232SendSensorDataToAprFm13WorkflowTest {
     awaitResponse(500);
     awaitSystemLogFile();
     awaitImmtFile();
-    waitFor(() -> "".equals(mydatetime.year));
+    waitFor(() -> "".equals(DateTimeModel.year));
   }
 
   private void setRequiredObservationData() {
     main.station_ID = "TEST";
-    mydatetime.year = "2024";
-    mydatetime.MM_code = "01";
-    mydatetime.YY_code = "01";
-    mydatetime.GG_code = "12";
-    myposition.Qc_code = "1";
-    myposition.lalala_code = "234";
-    myposition.lolololo_code = "5678";
+    DateTimeModel.year = "2024";
+    DateTimeModel.MM_code = "01";
+    DateTimeModel.YY_code = "01";
+    DateTimeModel.GG_code = "12";
+    PositionModel.Qc_code = "1";
+    PositionModel.lalala_code = "234";
+    PositionModel.lolololo_code = "5678";
   }
 
   private void startServer(int responseCode) throws Exception {

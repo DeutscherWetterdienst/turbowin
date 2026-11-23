@@ -3,7 +3,7 @@ package turbowin;
 import javax.swing.JOptionPane;
 
 /** Shared wave observation state and existing wave validation and encoding. */
-public final class mywaves {
+public final class WavesModel {
   WavesView.Input initialValues() {
     WavesView.Swell swell;
     if (swell_1_dir.equals("no swell")) swell = WavesView.Swell.NONE;

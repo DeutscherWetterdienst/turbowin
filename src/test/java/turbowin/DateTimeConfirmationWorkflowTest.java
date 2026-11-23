@@ -40,13 +40,13 @@ public class DateTimeConfirmationWorkflowTest {
         utcCalendar(2024, Calendar.JANUARY, 31, 23, 31),
         new RecordingDialogService(JOptionPane.YES_OPTION));
 
-    assertEquals("2024", mydatetime.year);
-    assertEquals("February", mydatetime.month);
-    assertEquals("1", mydatetime.day);
-    assertEquals("0", mydatetime.hour);
-    assertEquals("02", mydatetime.MM_code);
-    assertEquals("01", mydatetime.YY_code);
-    assertEquals("00", mydatetime.GG_code);
+    assertEquals("2024", DateTimeModel.year);
+    assertEquals("February", DateTimeModel.month);
+    assertEquals("1", DateTimeModel.day);
+    assertEquals("0", DateTimeModel.hour);
+    assertEquals("02", DateTimeModel.MM_code);
+    assertEquals("01", DateTimeModel.YY_code);
+    assertEquals("00", DateTimeModel.GG_code);
   }
 
   @Test
@@ -58,26 +58,26 @@ public class DateTimeConfirmationWorkflowTest {
         utcCalendar(2024, Calendar.JANUARY, 15, 10, 10),
         new RecordingDialogService(JOptionPane.YES_OPTION));
 
-    assertEquals("2024", mydatetime.year);
-    assertEquals("January", mydatetime.month);
-    assertEquals("15", mydatetime.day);
-    assertEquals("10", mydatetime.hour);
-    assertEquals("01", mydatetime.MM_code);
-    assertEquals("15", mydatetime.YY_code);
-    assertEquals("10", mydatetime.GG_code);
+    assertEquals("2024", DateTimeModel.year);
+    assertEquals("January", DateTimeModel.month);
+    assertEquals("15", DateTimeModel.day);
+    assertEquals("10", DateTimeModel.hour);
+    assertEquals("01", DateTimeModel.MM_code);
+    assertEquals("15", DateTimeModel.YY_code);
+    assertEquals("10", DateTimeModel.GG_code);
     assertTrue(main.use_system_date_time_for_updating);
   }
 
   @Test
   public void rejectionDisablesAutomaticUpdatesAndWarnsWhenAprIsEnabled() {
     prepareForWorkflow();
-    mydatetime.year = "previous-year";
-    mydatetime.month = "previous-month";
-    mydatetime.day = "previous-day";
-    mydatetime.hour = "previous-hour";
-    mydatetime.MM_code = "previous-month-code";
-    mydatetime.YY_code = "previous-day-code";
-    mydatetime.GG_code = "previous-hour-code";
+    DateTimeModel.year = "previous-year";
+    DateTimeModel.month = "previous-month";
+    DateTimeModel.day = "previous-day";
+    DateTimeModel.hour = "previous-hour";
+    DateTimeModel.MM_code = "previous-month-code";
+    DateTimeModel.YY_code = "previous-day-code";
+    DateTimeModel.GG_code = "previous-hour-code";
     main.use_system_date_time_for_updating = true;
     main.APR = true;
     RecordingDialogService dialogs = new RecordingDialogService(JOptionPane.NO_OPTION);
@@ -90,13 +90,13 @@ public class DateTimeConfirmationWorkflowTest {
         utcCalendar(2024, Calendar.JANUARY, 15, 10, 10),
         dialogs);
 
-    assertEquals("previous-year", mydatetime.year);
-    assertEquals("previous-month", mydatetime.month);
-    assertEquals("previous-day", mydatetime.day);
-    assertEquals("previous-hour", mydatetime.hour);
-    assertEquals("previous-month-code", mydatetime.MM_code);
-    assertEquals("previous-day-code", mydatetime.YY_code);
-    assertEquals("previous-hour-code", mydatetime.GG_code);
+    assertEquals("previous-year", DateTimeModel.year);
+    assertEquals("previous-month", DateTimeModel.month);
+    assertEquals("previous-day", DateTimeModel.day);
+    assertEquals("previous-hour", DateTimeModel.hour);
+    assertEquals("previous-month-code", DateTimeModel.MM_code);
+    assertEquals("previous-day-code", DateTimeModel.YY_code);
+    assertEquals("previous-hour-code", DateTimeModel.GG_code);
     assertFalse(main.use_system_date_time_for_updating);
     assertEquals(expectedWarning, dialogs.warningMessage);
   }
@@ -109,7 +109,7 @@ public class DateTimeConfirmationWorkflowTest {
         utcCalendar(2024, Calendar.JANUARY, 15, 10, minute),
         new RecordingDialogService(JOptionPane.YES_OPTION));
 
-    assertEquals(expectedHour, mydatetime.hour);
+    assertEquals(expectedHour, DateTimeModel.hour);
   }
 
   private void prepareForWorkflow() {
@@ -118,7 +118,7 @@ public class DateTimeConfirmationWorkflowTest {
     main.jTextField3 = new JTextField();
     main.APR = false;
     main.use_system_date_time_for_updating = false;
-    mydatetime.minute = "00";
+    DateTimeModel.minute = "00";
   }
 
   private GregorianCalendar utcCalendar(int year, int month, int day, int hour, int minute) {

@@ -6,7 +6,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /** Temperature calculations and the existing observation state shared with sensor workflows. */
-public final class mytemp {
+public final class TemperatureModel {
   public static JTextField jTextField1;
   public static JTextField jTextField2;
   public static JTextField jTextField4;
@@ -24,7 +24,7 @@ public final class mytemp {
   private final JRadioButton jRadioButton11 = new JRadioButton();
   private final JRadioButton jRadioButton12 = new JRadioButton();
 
-  mytemp() {
+  TemperatureModel() {
     jTextField1 = new JTextField();
     jTextField2 = new JTextField();
     jTextField4 = new JTextField();
@@ -42,7 +42,7 @@ public final class mytemp {
 
   private void Compute_Dewpoint_From_RH(double num_RH, double temp) {
     double_dew_point =
-        DewPointCalculator.calculate(num_RH, temp, mybarometer.pressure_msl_corrected);
+        DewPointCalculator.calculate(num_RH, temp, BarometerModel.pressure_msl_corrected);
 
     // System.out.println("temp = " + temp);
     // System.out.println("num_RH = " + num_RH);
@@ -106,9 +106,10 @@ public final class mytemp {
     pressure = SP;
     f_p = PRESSURE_DEPENDENCY;
 
-    if (mybarometer.pressure_msl_corrected.equals("") == false
-        && mybarometer.pressure_msl_corrected != null) {
-      hulp_double_pressure_msl_corrected = Double.parseDouble(mybarometer.pressure_msl_corrected);
+    if (BarometerModel.pressure_msl_corrected.equals("") == false
+        && BarometerModel.pressure_msl_corrected != null) {
+      hulp_double_pressure_msl_corrected =
+          Double.parseDouble(BarometerModel.pressure_msl_corrected);
       if (hulp_double_pressure_msl_corrected > 900.0
           && hulp_double_pressure_msl_corrected < 1100.0) {
         pressure = hulp_double_pressure_msl_corrected;
@@ -498,7 +499,7 @@ public final class mytemp {
     /*
     ////////// finish
     */
-    if (mybarometer.refreshManualPressureReduction()) {
+    if (BarometerModel.refreshManualPressureReduction()) {
       main.barometer_fields_update();
     }
     if (checks_ok == true) {

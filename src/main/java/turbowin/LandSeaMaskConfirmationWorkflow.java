@@ -27,10 +27,10 @@ final class LandSeaMaskConfirmationWorkflow {
 
     LandSeaMaskPositionCalculator.Position maskPosition =
         LandSeaMaskPositionCalculator.calculate(
-            myposition.latitude_hemisphere,
-            myposition.longitude_hemisphere,
-            myposition.int_latitude_degrees,
-            myposition.int_longitude_degrees);
+            PositionModel.latitude_hemisphere,
+            PositionModel.longitude_hemisphere,
+            PositionModel.int_latitude_degrees,
+            PositionModel.int_longitude_degrees);
     Octant = maskPosition.octant();
     zee_vak_ok = LandSeaMaskWorkflow.check(maskPosition);
 
@@ -38,17 +38,17 @@ final class LandSeaMaskConfirmationWorkflow {
       String info = "";
       info = "-land mask check-\n";
       info += "obs position:\n";
-      info += myposition.latitude_degrees;
+      info += PositionModel.latitude_degrees;
       info += "\u00B0 ";
-      info += myposition.latitude_minutes;
+      info += PositionModel.latitude_minutes;
       info += "' ";
-      info += myposition.latitude_hemisphere;
+      info += PositionModel.latitude_hemisphere;
       info += "  ";
-      info += myposition.longitude_degrees;
+      info += PositionModel.longitude_degrees;
       info += "\u00B0 ";
-      info += myposition.longitude_minutes;
+      info += PositionModel.longitude_minutes;
       info += "' ";
-      info += myposition.longitude_hemisphere;
+      info += PositionModel.longitude_hemisphere;
       info += "\n";
 
       if (JOptionPane.showConfirmDialog(

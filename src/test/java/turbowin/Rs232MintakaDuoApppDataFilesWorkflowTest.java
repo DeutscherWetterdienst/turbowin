@@ -44,26 +44,26 @@ public class Rs232MintakaDuoApppDataFilesWorkflowTest {
     originalObservationDate = main.obs_file_datum_tijd;
     originalPpp = main.sensor_data_record_obs_ppp;
     originalA = main.sensor_data_record_obs_a;
-    originalAmount = mybarograph.pressure_amount_tendency;
-    originalACode = mybarograph.a_code;
-    originalTextField = mybarograph.jTextField1;
-    originalButtons[0] = mybarograph.jRadioButton1;
-    originalButtons[1] = mybarograph.jRadioButton2;
-    originalButtons[2] = mybarograph.jRadioButton3;
-    originalButtons[3] = mybarograph.jRadioButton4;
-    originalButtons[4] = mybarograph.jRadioButton5;
-    originalButtons[5] = mybarograph.jRadioButton6;
-    originalButtons[6] = mybarograph.jRadioButton7;
-    originalButtons[7] = mybarograph.jRadioButton8;
-    originalButtons[8] = mybarograph.jRadioButton9;
-    originalButtons[9] = mybarograph.jRadioButton10;
-    originalButtons[10] = mybarograph.jRadioButton11;
-    originalButtons[11] = mybarograph.jRadioButton12;
+    originalAmount = BarographModel.pressure_amount_tendency;
+    originalACode = BarographModel.a_code;
+    originalTextField = BarographModel.jTextField1;
+    originalButtons[0] = BarographModel.jRadioButton1;
+    originalButtons[1] = BarographModel.jRadioButton2;
+    originalButtons[2] = BarographModel.jRadioButton3;
+    originalButtons[3] = BarographModel.jRadioButton4;
+    originalButtons[4] = BarographModel.jRadioButton5;
+    originalButtons[5] = BarographModel.jRadioButton6;
+    originalButtons[6] = BarographModel.jRadioButton7;
+    originalButtons[7] = BarographModel.jRadioButton8;
+    originalButtons[8] = BarographModel.jRadioButton9;
+    originalButtons[9] = BarographModel.jRadioButton10;
+    originalButtons[10] = BarographModel.jRadioButton11;
+    originalButtons[11] = BarographModel.jRadioButton12;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
     main.sdf4 = utcFormat("yyyyMMddHHmm");
-    mybarograph.jTextField1 = new JTextField();
+    BarographModel.jTextField1 = new JTextField();
     setButtonReferences(newButtons());
     resetModel();
   }
@@ -76,9 +76,9 @@ public class Rs232MintakaDuoApppDataFilesWorkflowTest {
     main.obs_file_datum_tijd = originalObservationDate;
     main.sensor_data_record_obs_ppp = originalPpp;
     main.sensor_data_record_obs_a = originalA;
-    mybarograph.pressure_amount_tendency = originalAmount;
-    mybarograph.a_code = originalACode;
-    mybarograph.jTextField1 = originalTextField;
+    BarographModel.pressure_amount_tendency = originalAmount;
+    BarographModel.a_code = originalACode;
+    BarographModel.jTextField1 = originalTextField;
     setButtonReferences(originalButtons);
   }
 
@@ -88,8 +88,8 @@ public class Rs232MintakaDuoApppDataFilesWorkflowTest {
 
     assertEquals("1.24", main.sensor_data_record_obs_ppp);
     assertEquals("2", main.sensor_data_record_obs_a);
-    assertEquals("1.2", mybarograph.pressure_amount_tendency);
-    assertEquals("1.2", mybarograph.jTextField1.getText());
+    assertEquals("1.2", BarographModel.pressure_amount_tendency);
+    assertEquals("1.2", BarographModel.jTextField1.getText());
     assertSelectedButton(3);
   }
 
@@ -99,7 +99,7 @@ public class Rs232MintakaDuoApppDataFilesWorkflowTest {
     runWorkflow();
     assertEquals(" *", main.sensor_data_record_obs_ppp);
     assertEquals("", main.sensor_data_record_obs_a);
-    assertEquals("", mybarograph.pressure_amount_tendency);
+    assertEquals("", BarographModel.pressure_amount_tendency);
     assertNoSelectedButtons();
 
     resetModel();
@@ -107,40 +107,40 @@ public class Rs232MintakaDuoApppDataFilesWorkflowTest {
     runWorkflow();
     assertEquals("", main.sensor_data_record_obs_ppp);
     assertEquals("", main.sensor_data_record_obs_a);
-    assertEquals("", mybarograph.pressure_amount_tendency);
+    assertEquals("", BarographModel.pressure_amount_tendency);
   }
 
   @Test
   public void threeMinuteFreshnessBoundaryClearsStaleData() throws Exception {
     runRecord("1.0", "2", new Date());
-    assertEquals("1.0", mybarograph.pressure_amount_tendency);
+    assertEquals("1.0", BarographModel.pressure_amount_tendency);
 
     resetModel();
     writeRawRecord(duoRecord("1.0", "2", new Date(System.currentTimeMillis() - 10 * 60 * 1000L)));
     runWorkflow();
     assertEquals("", main.sensor_data_record_obs_ppp);
     assertEquals("", main.sensor_data_record_obs_a);
-    assertEquals("", mybarograph.pressure_amount_tendency);
+    assertEquals("", BarographModel.pressure_amount_tendency);
     assertNoSelectedButtons();
   }
 
   @Test
   public void tendencyBoundariesAndAllCharacteristicMappingsResetButtons() throws Exception {
     runRecord("13.19", "2", new Date());
-    assertEquals("13.2", mybarograph.pressure_amount_tendency);
+    assertEquals("13.2", BarographModel.pressure_amount_tendency);
     assertSelectedButton(3);
 
     runRecord("-1.26", "7", new Date());
-    assertEquals("1.3", mybarograph.pressure_amount_tendency);
+    assertEquals("1.3", BarographModel.pressure_amount_tendency);
     assertSelectedButton(7);
 
     runRecord("0.04", "4", new Date());
-    assertEquals("0.0", mybarograph.pressure_amount_tendency);
+    assertEquals("0.0", BarographModel.pressure_amount_tendency);
     assertSelectedButton(10);
 
     resetModel();
     runRecord("99.89", "2", new Date());
-    assertEquals("", mybarograph.pressure_amount_tendency);
+    assertEquals("", BarographModel.pressure_amount_tendency);
     assertSelectedButton(12);
 
     for (int code = 0; code <= 3; code++) {
@@ -175,9 +175,9 @@ public class Rs232MintakaDuoApppDataFilesWorkflowTest {
   private void resetModel() {
     main.sensor_data_record_obs_ppp = "";
     main.sensor_data_record_obs_a = "";
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
-    mybarograph.jTextField1.setText("");
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
+    BarographModel.jTextField1.setText("");
     setButtonReferences(currentButtons());
     for (JRadioButton button : currentButtons()) {
       button.setSelected(false);
@@ -203,34 +203,34 @@ public class Rs232MintakaDuoApppDataFilesWorkflowTest {
 
   private JRadioButton[] currentButtons() {
     return new JRadioButton[] {
-      mybarograph.jRadioButton1,
-      mybarograph.jRadioButton2,
-      mybarograph.jRadioButton3,
-      mybarograph.jRadioButton4,
-      mybarograph.jRadioButton5,
-      mybarograph.jRadioButton6,
-      mybarograph.jRadioButton7,
-      mybarograph.jRadioButton8,
-      mybarograph.jRadioButton9,
-      mybarograph.jRadioButton10,
-      mybarograph.jRadioButton11,
-      mybarograph.jRadioButton12
+      BarographModel.jRadioButton1,
+      BarographModel.jRadioButton2,
+      BarographModel.jRadioButton3,
+      BarographModel.jRadioButton4,
+      BarographModel.jRadioButton5,
+      BarographModel.jRadioButton6,
+      BarographModel.jRadioButton7,
+      BarographModel.jRadioButton8,
+      BarographModel.jRadioButton9,
+      BarographModel.jRadioButton10,
+      BarographModel.jRadioButton11,
+      BarographModel.jRadioButton12
     };
   }
 
   private void setButtonReferences(JRadioButton[] buttons) {
-    mybarograph.jRadioButton1 = buttons[0];
-    mybarograph.jRadioButton2 = buttons[1];
-    mybarograph.jRadioButton3 = buttons[2];
-    mybarograph.jRadioButton4 = buttons[3];
-    mybarograph.jRadioButton5 = buttons[4];
-    mybarograph.jRadioButton6 = buttons[5];
-    mybarograph.jRadioButton7 = buttons[6];
-    mybarograph.jRadioButton8 = buttons[7];
-    mybarograph.jRadioButton9 = buttons[8];
-    mybarograph.jRadioButton10 = buttons[9];
-    mybarograph.jRadioButton11 = buttons[10];
-    mybarograph.jRadioButton12 = buttons[11];
+    BarographModel.jRadioButton1 = buttons[0];
+    BarographModel.jRadioButton2 = buttons[1];
+    BarographModel.jRadioButton3 = buttons[2];
+    BarographModel.jRadioButton4 = buttons[3];
+    BarographModel.jRadioButton5 = buttons[4];
+    BarographModel.jRadioButton6 = buttons[5];
+    BarographModel.jRadioButton7 = buttons[6];
+    BarographModel.jRadioButton8 = buttons[7];
+    BarographModel.jRadioButton9 = buttons[8];
+    BarographModel.jRadioButton10 = buttons[9];
+    BarographModel.jRadioButton11 = buttons[10];
+    BarographModel.jRadioButton12 = buttons[11];
   }
 
   private JRadioButton[] newButtons() {

@@ -90,27 +90,29 @@ final class Rs232VaisalaHmp155ObservationWorkflow {
               //        digitale_sensor_waarde = Math.round(digitale_sensor_waarde * 10) / 10.0d;
               // // bv 998.19 -> 998.2
 
-              mytemp.air_temp = laatste_record.substring(pos1, pos1 + 8);
-              mytemp.wet_bulb_temp = laatste_record.substring(pos2, pos2 + 8);
+              TemperatureModel.air_temp = laatste_record.substring(pos1, pos1 + 8);
+              TemperatureModel.wet_bulb_temp = laatste_record.substring(pos2, pos2 + 8);
               local_dew_point = laatste_record.substring(pos3, pos3 + 8);
-              mytemp.RH = laatste_record.substring(pos4, pos4 + 8);
+              TemperatureModel.RH = laatste_record.substring(pos4, pos4 + 8);
 
-              System.out.println("--- sensor data record, air temp for obs: " + mytemp.air_temp);
               System.out.println(
-                  "--- sensor data record, wet bulb temp for obs: " + mytemp.wet_bulb_temp);
+                  "--- sensor data record, air temp for obs: " + TemperatureModel.air_temp);
+              System.out.println(
+                  "--- sensor data record, wet bulb temp for obs: "
+                      + TemperatureModel.wet_bulb_temp);
               System.out.println("--- sensor data record, dewpoint for obs: " + local_dew_point);
-              System.out.println("--- sensor data record, RH for obs: " + mytemp.RH);
+              System.out.println("--- sensor data record, RH for obs: " + TemperatureModel.RH);
 
               laatste_record_ok = true;
 
             } // if (timeDiff <= TIMEDIFF_SENSOR_DATA)
             else {
-              mytemp.air_temp = "";
-              mytemp.wet_bulb_temp = "";
+              TemperatureModel.air_temp = "";
+              TemperatureModel.wet_bulb_temp = "";
               local_dew_point = "";
-              mytemp.RH = "";
-              mytemp.double_rv = main.INVALID;
-              mytemp.double_dew_point = main.INVALID;
+              TemperatureModel.RH = "";
+              TemperatureModel.double_rv = main.INVALID;
+              TemperatureModel.double_dew_point = main.INVALID;
 
               laatste_record_ok = false;
             } // else
@@ -123,20 +125,21 @@ final class Rs232VaisalaHmp155ObservationWorkflow {
         if (laatste_record_ok == true) {
           // dewpoint
           //
-          mytemp.double_dew_point = main.INVALID;
+          TemperatureModel.double_dew_point = main.INVALID;
           if ((local_dew_point.compareTo("") != 0)
               && (local_dew_point != null)
               && (local_dew_point.indexOf("*") == -1)) {
             try {
-              mytemp.double_dew_point = Double.parseDouble(local_dew_point.trim());
+              TemperatureModel.double_dew_point = Double.parseDouble(local_dew_point.trim());
 
-              if (!(mytemp.double_dew_point > -70.0) && (mytemp.double_dew_point < 70.0)) {
-                mytemp.double_dew_point = main.INVALID;
+              if (!(TemperatureModel.double_dew_point > -70.0)
+                  && (TemperatureModel.double_dew_point < 70.0)) {
+                TemperatureModel.double_dew_point = main.INVALID;
               }
             } catch (NumberFormatException e) {
               System.out.println(
                   "--- " + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
-              mytemp.double_dew_point = main.INVALID;
+              TemperatureModel.double_dew_point = main.INVALID;
 
               // laatste_record_ok = false;
             } // catch
@@ -159,18 +162,18 @@ final class Rs232VaisalaHmp155ObservationWorkflow {
           if (return_laatste_record_ok) {
             // air temp check
             //
-            if ((mytemp.air_temp.compareTo("") != 0)
-                && (mytemp.air_temp != null)
-                && (mytemp.air_temp.indexOf("*") == -1)) {
+            if ((TemperatureModel.air_temp.compareTo("") != 0)
+                && (TemperatureModel.air_temp != null)
+                && (TemperatureModel.air_temp.indexOf("*") == -1)) {
               try {
-                hulp_air_temp = Double.parseDouble(mytemp.air_temp.trim());
+                hulp_air_temp = Double.parseDouble(TemperatureModel.air_temp.trim());
                 if (!(hulp_air_temp > -99.9) && (hulp_air_temp < 99.9)) {
-                  mytemp.air_temp = "";
+                  TemperatureModel.air_temp = "";
                 }
               } catch (NumberFormatException e) {
                 System.out.println(
                     "--- " + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
-                mytemp.air_temp = "";
+                TemperatureModel.air_temp = "";
               }
             }
 
@@ -178,40 +181,40 @@ final class Rs232VaisalaHmp155ObservationWorkflow {
             //
             // double hulp_wet_bulb_temp = 999999;                 // 999999 = random number but >
             // 99.9
-            if ((mytemp.wet_bulb_temp.compareTo("") != 0)
-                && (mytemp.wet_bulb_temp != null)
-                && (mytemp.wet_bulb_temp.indexOf("*") == -1)) {
+            if ((TemperatureModel.wet_bulb_temp.compareTo("") != 0)
+                && (TemperatureModel.wet_bulb_temp != null)
+                && (TemperatureModel.wet_bulb_temp.indexOf("*") == -1)) {
               try {
-                hulp_wet_bulb_temp = Double.parseDouble(mytemp.wet_bulb_temp.trim());
+                hulp_wet_bulb_temp = Double.parseDouble(TemperatureModel.wet_bulb_temp.trim());
                 if (!(hulp_wet_bulb_temp > -99.9) && (hulp_wet_bulb_temp < 99.9)) {
-                  mytemp.wet_bulb_temp = "";
+                  TemperatureModel.wet_bulb_temp = "";
                 }
               } catch (NumberFormatException e) {
                 System.out.println(
                     "--- " + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
-                mytemp.wet_bulb_temp = "";
+                TemperatureModel.wet_bulb_temp = "";
               }
             }
 
             // RH check
             //
-            if ((mytemp.RH.compareTo("") != 0)
-                && (mytemp.RH != null)
-                && (mytemp.RH.indexOf("*") == -1)) {
+            if ((TemperatureModel.RH.compareTo("") != 0)
+                && (TemperatureModel.RH != null)
+                && (TemperatureModel.RH.indexOf("*") == -1)) {
               try {
-                hulp_RH = Double.parseDouble(mytemp.RH.trim());
-                mytemp.double_rv =
-                    hulp_RH
-                        / 100; // NB mytemp.double_rv in range 0.0 - 1.0 [see also mytemp.java] !!!
+                hulp_RH = Double.parseDouble(TemperatureModel.RH.trim());
+                TemperatureModel.double_rv =
+                    hulp_RH / 100; // NB TemperatureModel.double_rv in range 0.0 - 1.0 [see also
+                // TemperatureModel.java] !!!
                 if (!(hulp_RH > 0.0) && (hulp_air_temp <= 100.0)) {
-                  mytemp.RH = "";
-                  mytemp.double_rv = main.INVALID;
+                  TemperatureModel.RH = "";
+                  TemperatureModel.double_rv = main.INVALID;
                 }
               } catch (NumberFormatException e) {
                 System.out.println(
                     "--- " + "RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs() " + e);
-                mytemp.RH = "";
-                mytemp.double_rv = main.INVALID;
+                TemperatureModel.RH = "";
+                TemperatureModel.double_rv = main.INVALID;
               }
             }
 
@@ -219,30 +222,32 @@ final class Rs232VaisalaHmp155ObservationWorkflow {
           else {
             error_info =
                 "automatically retrieved temperatures sensor data reading obsolete or format error";
-            mytemp.air_temp = "";
-            mytemp.RH = "";
-            mytemp.wet_bulb_temp = "";
-            mytemp.double_dew_point = main.INVALID;
-            mytemp.double_rv = main.INVALID;
+            TemperatureModel.air_temp = "";
+            TemperatureModel.RH = "";
+            TemperatureModel.wet_bulb_temp = "";
+            TemperatureModel.double_dew_point = main.INVALID;
+            TemperatureModel.double_rv = main.INVALID;
           }
         } // try
         catch (InterruptedException | ExecutionException ex) {
           error_info = "error retrieving air temp and RH data (" + ex + ")";
-          mytemp.air_temp = "";
-          mytemp.RH = "";
-          mytemp.wet_bulb_temp = "";
-          mytemp.double_dew_point = main.INVALID;
-          mytemp.double_rv = main.INVALID;
+          TemperatureModel.air_temp = "";
+          TemperatureModel.RH = "";
+          TemperatureModel.wet_bulb_temp = "";
+          TemperatureModel.double_dew_point = main.INVALID;
+          TemperatureModel.double_rv = main.INVALID;
         }
 
         // general error (air temp and RH no value but error_info not yet set)
-        if (mytemp.air_temp.equals("") && mytemp.RH.equals("") && error_info.equals("")) {
+        if (TemperatureModel.air_temp.equals("")
+            && TemperatureModel.RH.equals("")
+            && error_info.equals("")) {
           error_info = "automatically retrieved air temp and RH data not available";
-          mytemp.air_temp = "";
-          mytemp.RH = "";
-          mytemp.wet_bulb_temp = "";
-          mytemp.double_dew_point = main.INVALID;
-          mytemp.double_rv = main.INVALID;
+          TemperatureModel.air_temp = "";
+          TemperatureModel.RH = "";
+          TemperatureModel.wet_bulb_temp = "";
+          TemperatureModel.double_dew_point = main.INVALID;
+          TemperatureModel.double_rv = main.INVALID;
         }
 
         if (!error_info.equals("")) {
@@ -273,18 +278,18 @@ final class Rs232VaisalaHmp155ObservationWorkflow {
         } // if (!error_info.equals(""))
         else // no error encountered
         {
-          mytemp.jTextField1.setText(mytemp.air_temp); // air temp
-          mytemp.jTextField2.setText(mytemp.wet_bulb_temp); // wet-bulb temp
+          TemperatureModel.jTextField1.setText(TemperatureModel.air_temp); // air temp
+          TemperatureModel.jTextField2.setText(TemperatureModel.wet_bulb_temp); // wet-bulb temp
 
           // NB default is wet-bulb not frozen (so if no info available then by default the
           // "wet-bulb not frozen" button will be checked)
           if (hulp_wet_bulb_temp < 0.0) {
-            mytemp.jRadioButton4.setSelected(true); // wet-bulb frozen radio button
+            TemperatureModel.jRadioButton4.setSelected(true); // wet-bulb frozen radio button
           } else {
-            mytemp.jRadioButton3.setSelected(true); // wet-bulb not frozen radio button
+            TemperatureModel.jRadioButton3.setSelected(true); // wet-bulb not frozen radio button
           }
 
-          mytemp.jTextField4.setText(mytemp.RH); // RH
+          TemperatureModel.jTextField4.setText(TemperatureModel.RH); // RH
           TemperatureDialog.sensorUpdated();
         } // else
       }

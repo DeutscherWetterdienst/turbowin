@@ -96,10 +96,10 @@ public class Format101CharacterizationTest {
   @Test
   public void writesFormat101InputWithFixedHeaderAndRepresentativeFields() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -107,10 +107,10 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
 
       invokePrivate("write_input_for_101_compression");
 
@@ -125,10 +125,10 @@ public class Format101CharacterizationTest {
       assertEquals("1 12.0            hour", lines.get(10));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
     }
   }
 
@@ -175,20 +175,20 @@ public class Format101CharacterizationTest {
     String originalLogsDirectory = main.logs_dir;
     String originalWindUnits = main.wind_units;
     String originalPressureMode = main.pressure_reading_msl_yes_no;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    int originalWindSpeed = mywind.int_true_wind_speed;
-    String originalShipHeading = mywind.ship_heading;
-    String originalRelativeWindDirection = mywind.RWD_code;
-    String originalRelativeWindSpeed = mywind.RWS_code;
-    String originalAirTemperature = mytemp.air_temp;
-    String originalWetBulbTemperature = mytemp.wet_bulb_temp;
-    String originalSeaWaterTemperature = mytemp.sea_water_temp;
-    double originalDewPoint = mytemp.double_dew_point;
-    String originalBarometerPressure = mybarometer.pressure_reading_corrected;
-    String originalPressure = mybarometer.pressure_msl_corrected;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    int originalWindSpeed = WindModel.int_true_wind_speed;
+    String originalShipHeading = WindModel.ship_heading;
+    String originalRelativeWindDirection = WindModel.RWD_code;
+    String originalRelativeWindSpeed = WindModel.RWS_code;
+    String originalAirTemperature = TemperatureModel.air_temp;
+    String originalWetBulbTemperature = TemperatureModel.wet_bulb_temp;
+    String originalSeaWaterTemperature = TemperatureModel.sea_water_temp;
+    double originalDewPoint = TemperatureModel.double_dew_point;
+    String originalBarometerPressure = BarometerModel.pressure_reading_corrected;
+    String originalPressure = BarometerModel.pressure_msl_corrected;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -198,20 +198,20 @@ public class Format101CharacterizationTest {
       main.logs_dir = logsDirectory.getPath();
       main.wind_units = main.KNOTS;
       main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_NO;
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      mywind.int_true_wind_speed = 10;
-      mywind.ship_heading = "180";
-      mywind.RWD_code = "90";
-      mywind.RWS_code = "10";
-      mytemp.air_temp = "20";
-      mytemp.wet_bulb_temp = "15";
-      mytemp.sea_water_temp = "18";
-      mytemp.double_dew_point = 10.0;
-      mybarometer.pressure_reading_corrected = "1000.00";
-      mybarometer.pressure_msl_corrected = "1013.25";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      WindModel.int_true_wind_speed = 10;
+      WindModel.ship_heading = "180";
+      WindModel.RWD_code = "90";
+      WindModel.RWS_code = "10";
+      TemperatureModel.air_temp = "20";
+      TemperatureModel.wet_bulb_temp = "15";
+      TemperatureModel.sea_water_temp = "18";
+      TemperatureModel.double_dew_point = 10.0;
+      BarometerModel.pressure_reading_corrected = "1000.00";
+      BarometerModel.pressure_msl_corrected = "1013.25";
 
       invokePrivate("write_input_for_101_compression");
 
@@ -227,43 +227,43 @@ public class Format101CharacterizationTest {
       assertEquals("1 100000.0        pressure at barometer height [Pa]", lines.get(14));
       assertEquals("1 101325.0        pressure at MSL [Pa]", lines.get(15));
 
-      mywind.ship_heading = "0";
+      WindModel.ship_heading = "0";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 heading [degrees]", lines.get(5));
 
-      mywind.RWD_code = "999";
-      mywind.RWS_code = "///";
+      WindModel.RWD_code = "999";
+      WindModel.RWS_code = "///";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 0.0             relative wind direction [degrees]", lines.get(20));
       assertEquals("0                 relative wind speed [m/s]", lines.get(21));
 
-      mywind.RWD_code = "///";
-      mywind.RWS_code = "invalid";
+      WindModel.RWD_code = "///";
+      WindModel.RWS_code = "invalid";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 relative wind direction [degrees]", lines.get(20));
       assertEquals("0                 relative wind speed [m/s]", lines.get(21));
 
-      mytemp.air_temp = "invalid";
-      mytemp.wet_bulb_temp = "";
-      mytemp.sea_water_temp = "invalid";
+      TemperatureModel.air_temp = "invalid";
+      TemperatureModel.wet_bulb_temp = "";
+      TemperatureModel.sea_water_temp = "invalid";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 air temperature [K]", lines.get(24));
       assertEquals("0                 wet bulb temperature [K]", lines.get(25));
       assertEquals("0                 sea water temperature [K]", lines.get(28));
 
-      mybarometer.pressure_reading_corrected = "799";
-      mybarometer.pressure_msl_corrected = "1100";
+      BarometerModel.pressure_reading_corrected = "799";
+      BarometerModel.pressure_msl_corrected = "1100";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 pressure at barometer height [Pa]", lines.get(14));
       assertEquals("0                 pressure at MSL [Pa]", lines.get(15));
 
-      mybarometer.pressure_reading_corrected = "invalid";
-      mybarometer.pressure_msl_corrected = "";
+      BarometerModel.pressure_reading_corrected = "invalid";
+      BarometerModel.pressure_msl_corrected = "";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 pressure at barometer height [Pa]", lines.get(14));
@@ -272,20 +272,20 @@ public class Format101CharacterizationTest {
       main.logs_dir = originalLogsDirectory;
       main.wind_units = originalWindUnits;
       main.pressure_reading_msl_yes_no = originalPressureMode;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      mywind.int_true_wind_speed = originalWindSpeed;
-      mywind.ship_heading = originalShipHeading;
-      mywind.RWD_code = originalRelativeWindDirection;
-      mywind.RWS_code = originalRelativeWindSpeed;
-      mytemp.air_temp = originalAirTemperature;
-      mytemp.wet_bulb_temp = originalWetBulbTemperature;
-      mytemp.sea_water_temp = originalSeaWaterTemperature;
-      mytemp.double_dew_point = originalDewPoint;
-      mybarometer.pressure_reading_corrected = originalBarometerPressure;
-      mybarometer.pressure_msl_corrected = originalPressure;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      WindModel.int_true_wind_speed = originalWindSpeed;
+      WindModel.ship_heading = originalShipHeading;
+      WindModel.RWD_code = originalRelativeWindDirection;
+      WindModel.RWS_code = originalRelativeWindSpeed;
+      TemperatureModel.air_temp = originalAirTemperature;
+      TemperatureModel.wet_bulb_temp = originalWetBulbTemperature;
+      TemperatureModel.sea_water_temp = originalSeaWaterTemperature;
+      TemperatureModel.double_dew_point = originalDewPoint;
+      BarometerModel.pressure_reading_corrected = originalBarometerPressure;
+      BarometerModel.pressure_msl_corrected = originalPressure;
     }
   }
 
@@ -293,11 +293,11 @@ public class Format101CharacterizationTest {
   public void writesInvalidWindSpeedAsAnAbsentRecord() throws Exception {
     String originalLogsDirectory = main.logs_dir;
     String originalWindUnits = main.wind_units;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    int originalWindSpeed = mywind.int_true_wind_speed;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    int originalWindSpeed = WindModel.int_true_wind_speed;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -306,11 +306,11 @@ public class Format101CharacterizationTest {
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
       main.wind_units = main.KNOTS;
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      mywind.int_true_wind_speed = main.INVALID;
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      WindModel.int_true_wind_speed = main.INVALID;
 
       invokePrivate("write_input_for_101_compression");
 
@@ -320,11 +320,11 @@ public class Format101CharacterizationTest {
     } finally {
       main.logs_dir = originalLogsDirectory;
       main.wind_units = originalWindUnits;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      mywind.int_true_wind_speed = originalWindSpeed;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      WindModel.int_true_wind_speed = originalWindSpeed;
     }
   }
 
@@ -461,12 +461,12 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesLegacyShipSpeedConversionsAndMissingValues() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    double originalAprSpeed = myposition.SOG_APR;
-    String originalSpeedCode = myposition.vs_code;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    double originalAprSpeed = PositionModel.SOG_APR;
+    String originalSpeedCode = PositionModel.vs_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -474,46 +474,46 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      myposition.SOG_APR = 10.0;
-      myposition.vs_code = "";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      PositionModel.SOG_APR = 10.0;
+      PositionModel.vs_code = "";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
           Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 5.144           SOG past 10 minutes [m/s]", lines.get(4));
 
-      myposition.SOG_APR = Double.MAX_VALUE;
-      myposition.vs_code = "2";
+      PositionModel.SOG_APR = Double.MAX_VALUE;
+      PositionModel.vs_code = "2";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 4.116           SOG past 10 minutes [m/s]", lines.get(4));
 
-      myposition.vs_code = "";
+      PositionModel.vs_code = "";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 SOG past 10 minutes [m/s]", lines.get(4));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      myposition.SOG_APR = originalAprSpeed;
-      myposition.vs_code = originalSpeedCode;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      PositionModel.SOG_APR = originalAprSpeed;
+      PositionModel.vs_code = originalSpeedCode;
     }
   }
 
   @Test
   public void preservesCloudAmountConversionsAndMissingValues() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
     String originalCloudCover = CloudCoverState.N_code;
     String originalLowCloudAmount = CloudCoverState.Nh_code;
     String originalCloudBase = CloudCoverState.h_code;
@@ -524,10 +524,10 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
       CloudCoverState.N_code = "5";
       CloudCoverState.Nh_code = "3";
       CloudCoverState.h_code = "600";
@@ -549,10 +549,10 @@ public class Format101CharacterizationTest {
       assertEquals("0                 height of base of lowest clouds [code]", lines.get(39));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
       CloudCoverState.N_code = originalCloudCover;
       CloudCoverState.Nh_code = originalLowCloudAmount;
       CloudCoverState.h_code = originalCloudBase;
@@ -562,10 +562,10 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesCloudTypeOffsetsAndMiddleCloudSuffixHandling() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
     String originalLowCloudType = LowCloudState.cl_code;
     String originalMiddleCloudType = MiddleCloudState.cm_code;
     String originalHighCloudType = HighCloudState.ch_code;
@@ -576,10 +576,10 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
       LowCloudState.cl_code = "2";
       MiddleCloudState.cm_code = "7a";
       HighCloudState.ch_code = "4";
@@ -618,9 +618,9 @@ public class Format101CharacterizationTest {
       assertEquals("0                 cloud type high (Ch) [code]", lines.get(38));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
       LowCloudState.cl_code = originalLowCloudType;
       MiddleCloudState.cm_code = originalMiddleCloudType;
       HighCloudState.ch_code = originalHighCloudType;
@@ -630,18 +630,18 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesWaveValuesAndSpecialWaveCodes() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    String originalWindWavePeriod = mywaves.wind_waves_period;
-    String originalWindWaveHeight = mywaves.wind_waves_height;
-    String originalSwell1Direction = mywaves.swell_1_dir;
-    String originalSwell1Period = mywaves.swell_1_period;
-    String originalSwell1Height = mywaves.swell_1_height;
-    String originalSwell2Direction = mywaves.swell_2_dir;
-    String originalSwell2Period = mywaves.swell_2_period;
-    String originalSwell2Height = mywaves.swell_2_height;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    String originalWindWavePeriod = WavesModel.wind_waves_period;
+    String originalWindWaveHeight = WavesModel.wind_waves_height;
+    String originalSwell1Direction = WavesModel.swell_1_dir;
+    String originalSwell1Period = WavesModel.swell_1_period;
+    String originalSwell1Height = WavesModel.swell_1_height;
+    String originalSwell2Direction = WavesModel.swell_2_dir;
+    String originalSwell2Period = WavesModel.swell_2_period;
+    String originalSwell2Height = WavesModel.swell_2_height;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -649,18 +649,18 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      mywaves.wind_waves_period = "8";
-      mywaves.wind_waves_height = "2.5";
-      mywaves.swell_1_dir = "90";
-      mywaves.swell_1_period = "12";
-      mywaves.swell_1_height = "3";
-      mywaves.swell_2_dir = "180";
-      mywaves.swell_2_period = "10";
-      mywaves.swell_2_height = "2";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      WavesModel.wind_waves_period = "8";
+      WavesModel.wind_waves_height = "2.5";
+      WavesModel.swell_1_dir = "90";
+      WavesModel.swell_1_period = "12";
+      WavesModel.swell_1_height = "3";
+      WavesModel.swell_2_dir = "180";
+      WavesModel.swell_2_period = "10";
+      WavesModel.swell_2_height = "2";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -674,14 +674,14 @@ public class Format101CharacterizationTest {
       assertEquals("1 10.0            period of 2nd swell [seconds]]", lines.get(47));
       assertEquals("1 2.0             height of 2nd swell [metres]", lines.get(48));
 
-      mywaves.wind_waves_period = "confused";
-      mywaves.wind_waves_height = "confused";
-      mywaves.swell_1_dir = "no swell";
-      mywaves.swell_1_period = "confused";
-      mywaves.swell_1_height = "confused";
-      mywaves.swell_2_dir = "confused";
-      mywaves.swell_2_period = "confused";
-      mywaves.swell_2_height = "confused";
+      WavesModel.wind_waves_period = "confused";
+      WavesModel.wind_waves_height = "confused";
+      WavesModel.swell_1_dir = "no swell";
+      WavesModel.swell_1_period = "confused";
+      WavesModel.swell_1_height = "confused";
+      WavesModel.swell_2_dir = "confused";
+      WavesModel.swell_2_period = "confused";
+      WavesModel.swell_2_height = "confused";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 period of wind waves [seconds]", lines.get(41));
@@ -694,28 +694,28 @@ public class Format101CharacterizationTest {
       assertEquals("0                 height of 2nd swell [metres]", lines.get(48));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      mywaves.wind_waves_period = originalWindWavePeriod;
-      mywaves.wind_waves_height = originalWindWaveHeight;
-      mywaves.swell_1_dir = originalSwell1Direction;
-      mywaves.swell_1_period = originalSwell1Period;
-      mywaves.swell_1_height = originalSwell1Height;
-      mywaves.swell_2_dir = originalSwell2Direction;
-      mywaves.swell_2_period = originalSwell2Period;
-      mywaves.swell_2_height = originalSwell2Height;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      WavesModel.wind_waves_period = originalWindWavePeriod;
+      WavesModel.wind_waves_height = originalWindWaveHeight;
+      WavesModel.swell_1_dir = originalSwell1Direction;
+      WavesModel.swell_1_period = originalSwell1Period;
+      WavesModel.swell_1_height = originalSwell1Height;
+      WavesModel.swell_2_dir = originalSwell2Direction;
+      WavesModel.swell_2_period = originalSwell2Period;
+      WavesModel.swell_2_height = originalSwell2Height;
     }
   }
 
   @Test
   public void preservesIcePresenceAndBasicIceConversions() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
     String originalThickness = IcingState.EsEs_code;
     String originalRate = IcingState.Rs_code;
     String originalCause = IcingState.Is_code;
@@ -731,10 +731,10 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
       IcingState.EsEs_code = "100";
       IcingState.Rs_code = "2";
       IcingState.Is_code = "";
@@ -767,10 +767,10 @@ public class Format101CharacterizationTest {
       assertEquals("0                 rate of ice accretion (Rs) [code]", lines.get(51));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
       IcingState.EsEs_code = originalThickness;
       IcingState.Rs_code = originalRate;
       IcingState.Is_code = originalCause;
@@ -785,10 +785,10 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesIceCauseMappingsAndSpecialBearingFallback() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
     String originalCause = IcingState.Is_code;
     String originalBearing = IceState.Di_code;
 
@@ -798,10 +798,10 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
       IcingState.Is_code = "1";
       IceState.Di_code = "0";
 
@@ -826,10 +826,10 @@ public class Format101CharacterizationTest {
       assertEquals("0                 bearing of ice edge (Di) [degrees]", lines.get(57));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
       IcingState.Is_code = originalCause;
       IceState.Di_code = originalBearing;
     }
@@ -838,10 +838,10 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesRemainingNumericIceCodesAndMissingValues() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
     String originalConcentration = IceState.ci_code;
     String originalType = IceState.bi_code;
     String originalSituation = IceState.zi_code;
@@ -853,10 +853,10 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
       IceState.ci_code = "3";
       IceState.bi_code = "4";
       IceState.zi_code = "5";
@@ -882,9 +882,9 @@ public class Format101CharacterizationTest {
       assertEquals("0                 ice development (Si) code]", lines.get(56));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
       IceState.ci_code = originalConcentration;
       IceState.bi_code = originalType;
       IceState.zi_code = originalSituation;
@@ -895,10 +895,10 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesWeatherCodeConversionsAndSentinels() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
     String originalVisibility = VisibilityState.VV_code;
     String originalPresentWeather = PresentWeatherState.ww_code;
     String originalPastWeather1 = PastWeatherState.W1_code;
@@ -910,10 +910,10 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
       VisibilityState.VV_code = "5";
       PresentWeatherState.ww_code = "20";
       PastWeatherState.W1_code = "3";
@@ -939,10 +939,10 @@ public class Format101CharacterizationTest {
       assertEquals("0                 past weather 2 (W2) [code]", lines.get(33));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
       VisibilityState.VV_code = originalVisibility;
       PresentWeatherState.ww_code = originalPresentWeather;
       PastWeatherState.W1_code = originalPastWeather1;
@@ -953,11 +953,11 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesDirectionCodeMappingsAndFallbacks() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    String originalCourseCode = myposition.Ds_code;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    String originalCourseCode = PositionModel.Ds_code;
     String originalIceBearingCode = IceState.Di_code;
 
     try {
@@ -966,11 +966,11 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      myposition.Ds_code = "3";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      PositionModel.Ds_code = "3";
       IceState.Di_code = "6";
 
       invokePrivate("write_input_for_101_compression");
@@ -979,7 +979,7 @@ public class Format101CharacterizationTest {
       assertEquals("1 135.0           COG past 10 minutes [degrees]", lines.get(3));
       assertEquals("1 270.0           bearing of ice edge (Di) [degrees]", lines.get(57));
 
-      myposition.Ds_code = "9";
+      PositionModel.Ds_code = "9";
       IceState.Di_code = "/";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
@@ -987,10 +987,10 @@ public class Format101CharacterizationTest {
       assertEquals("0                 bearing of ice edge (Di) [degrees]", lines.get(57));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      myposition.Ds_code = originalCourseCode;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      PositionModel.Ds_code = originalCourseCode;
       IceState.Di_code = originalIceBearingCode;
     }
   }
@@ -998,12 +998,12 @@ public class Format101CharacterizationTest {
   @Test
   public void preservesPressureChangeRoundingAndSign() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    String originalPressureChange = mybarograph.pressure_amount_tendency;
-    String originalPressureCharacteristic = mybarograph.a_code;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    String originalPressureChange = BarographModel.pressure_amount_tendency;
+    String originalPressureCharacteristic = BarographModel.a_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -1011,12 +1011,12 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      mybarograph.pressure_amount_tendency = "1.234";
-      mybarograph.a_code = "2";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      BarographModel.pressure_amount_tendency = "1.234";
+      BarographModel.a_code = "2";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -1024,43 +1024,43 @@ public class Format101CharacterizationTest {
       assertEquals("1 123.4           3 hour pressure change [Pa]", lines.get(16));
       assertEquals("1 2.0             characteristic of pressure change [code]", lines.get(17));
 
-      mybarograph.a_code = "5";
+      BarographModel.a_code = "5";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("1 -123.4          3 hour pressure change [Pa]", lines.get(16));
       assertEquals("1 5.0             characteristic of pressure change [code]", lines.get(17));
 
-      mybarograph.pressure_amount_tendency = "";
-      mybarograph.a_code = "invalid";
+      BarographModel.pressure_amount_tendency = "";
+      BarographModel.a_code = "invalid";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 characteristic of pressure change [code]", lines.get(17));
 
-      mybarograph.pressure_amount_tendency = "invalid";
-      mybarograph.a_code = "2";
+      BarographModel.pressure_amount_tendency = "invalid";
+      BarographModel.a_code = "2";
       invokePrivate("write_input_for_101_compression");
       lines = Files.readAllLines(new File(temporaryDirectory, main.FORMAT_101_INPUT_FILE).toPath());
       assertEquals("0                 3 hour pressure change [Pa]", lines.get(16));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      mybarograph.pressure_amount_tendency = originalPressureChange;
-      mybarograph.a_code = originalPressureCharacteristic;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      BarographModel.pressure_amount_tendency = originalPressureChange;
+      BarographModel.a_code = originalPressureCharacteristic;
     }
   }
 
   @Test
   public void writesMissingPressureChangeAsAnAbsentRecord() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    String originalPressureChange = mybarograph.pressure_amount_tendency;
-    String originalPressureCharacteristic = mybarograph.a_code;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    String originalPressureChange = BarographModel.pressure_amount_tendency;
+    String originalPressureCharacteristic = BarographModel.a_code;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -1068,12 +1068,12 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      mybarograph.pressure_amount_tendency = "";
-      mybarograph.a_code = "";
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      BarographModel.pressure_amount_tendency = "";
+      BarographModel.a_code = "";
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -1081,28 +1081,28 @@ public class Format101CharacterizationTest {
       assertEquals("0                 3 hour pressure change [Pa]", lines.get(16));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      mybarograph.pressure_amount_tendency = originalPressureChange;
-      mybarograph.a_code = originalPressureCharacteristic;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      BarographModel.pressure_amount_tendency = originalPressureChange;
+      BarographModel.a_code = originalPressureCharacteristic;
     }
   }
 
   @Test
   public void preservesCoordinateConversionAndHemisphereSigns() throws Exception {
     String originalLogsDirectory = main.logs_dir;
-    String originalYear = mydatetime.year;
-    String originalMonth = mydatetime.MM_code;
-    String originalDay = mydatetime.day;
-    String originalHour = mydatetime.hour;
-    int originalLatitudeDegrees = myposition.int_latitude_degrees;
-    int originalLatitudeMinutes = myposition.int_latitude_minutes;
-    String originalLatitudeHemisphere = myposition.latitude_hemisphere;
-    int originalLongitudeDegrees = myposition.int_longitude_degrees;
-    int originalLongitudeMinutes = myposition.int_longitude_minutes;
-    String originalLongitudeHemisphere = myposition.longitude_hemisphere;
+    String originalYear = DateTimeModel.year;
+    String originalMonth = DateTimeModel.MM_code;
+    String originalDay = DateTimeModel.day;
+    String originalHour = DateTimeModel.hour;
+    int originalLatitudeDegrees = PositionModel.int_latitude_degrees;
+    int originalLatitudeMinutes = PositionModel.int_latitude_minutes;
+    String originalLatitudeHemisphere = PositionModel.latitude_hemisphere;
+    int originalLongitudeDegrees = PositionModel.int_longitude_degrees;
+    int originalLongitudeMinutes = PositionModel.int_longitude_minutes;
+    String originalLongitudeHemisphere = PositionModel.longitude_hemisphere;
 
     try {
       File logsDirectory = temporaryFolder.newFolder("logs");
@@ -1110,16 +1110,16 @@ public class Format101CharacterizationTest {
           new File(logsDirectory, main.FORMAT_101_ROOT_DIR + File.separator + "temp");
       assertTrue(temporaryDirectory.mkdirs());
       main.logs_dir = logsDirectory.getPath();
-      mydatetime.year = "2026";
-      mydatetime.MM_code = "10";
-      mydatetime.day = "04";
-      mydatetime.hour = "12";
-      myposition.int_latitude_degrees = 12;
-      myposition.int_latitude_minutes = 30;
-      myposition.latitude_hemisphere = myposition.HEMISPHERE_SOUTH;
-      myposition.int_longitude_degrees = 45;
-      myposition.int_longitude_minutes = 30;
-      myposition.longitude_hemisphere = myposition.HEMISPHERE_WEST;
+      DateTimeModel.year = "2026";
+      DateTimeModel.MM_code = "10";
+      DateTimeModel.day = "04";
+      DateTimeModel.hour = "12";
+      PositionModel.int_latitude_degrees = 12;
+      PositionModel.int_latitude_minutes = 30;
+      PositionModel.latitude_hemisphere = PositionModel.HEMISPHERE_SOUTH;
+      PositionModel.int_longitude_degrees = 45;
+      PositionModel.int_longitude_minutes = 30;
+      PositionModel.longitude_hemisphere = PositionModel.HEMISPHERE_WEST;
 
       invokePrivate("write_input_for_101_compression");
       List<String> lines =
@@ -1128,16 +1128,16 @@ public class Format101CharacterizationTest {
       assertEquals("1 -45.5           longitude [degrees]", lines.get(13));
     } finally {
       main.logs_dir = originalLogsDirectory;
-      mydatetime.year = originalYear;
-      mydatetime.MM_code = originalMonth;
-      mydatetime.day = originalDay;
-      mydatetime.hour = originalHour;
-      myposition.int_latitude_degrees = originalLatitudeDegrees;
-      myposition.int_latitude_minutes = originalLatitudeMinutes;
-      myposition.latitude_hemisphere = originalLatitudeHemisphere;
-      myposition.int_longitude_degrees = originalLongitudeDegrees;
-      myposition.int_longitude_minutes = originalLongitudeMinutes;
-      myposition.longitude_hemisphere = originalLongitudeHemisphere;
+      DateTimeModel.year = originalYear;
+      DateTimeModel.MM_code = originalMonth;
+      DateTimeModel.day = originalDay;
+      DateTimeModel.hour = originalHour;
+      PositionModel.int_latitude_degrees = originalLatitudeDegrees;
+      PositionModel.int_latitude_minutes = originalLatitudeMinutes;
+      PositionModel.latitude_hemisphere = originalLatitudeHemisphere;
+      PositionModel.int_longitude_degrees = originalLongitudeDegrees;
+      PositionModel.int_longitude_minutes = originalLongitudeMinutes;
+      PositionModel.longitude_hemisphere = originalLongitudeHemisphere;
     }
   }
 

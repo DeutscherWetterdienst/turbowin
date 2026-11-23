@@ -39,10 +39,10 @@ final class Rs232VaisalaWowAprWorkflow {
         // main.sensor_data_record_obs_pressure = "";
 
         // initialisation
-        // mybarometer.pressure_reading_corrected = "";
-        // mybarometer.pressure_msl_corrected     = "";
-        // mybarograph.pressure_amount_tendency   = "";
-        // mybarograph.a_code                     = "";
+        // BarometerModel.pressure_reading_corrected = "";
+        // BarometerModel.pressure_msl_corrected     = "";
+        // BarographModel.pressure_amount_tendency   = "";
+        // BarographModel.a_code                     = "";
 
         // determine sensor data file name
         String sensor_data_file_naam_datum_tijd_deel =
@@ -133,10 +133,10 @@ final class Rs232VaisalaWowAprWorkflow {
       @Override
       protected void done() {
         // initialisation
-        mybarometer.pressure_reading_corrected = "";
-        mybarometer.pressure_msl_corrected = "";
-        mybarograph.pressure_amount_tendency = "";
-        mybarograph.a_code = "";
+        BarometerModel.pressure_reading_corrected = "";
+        BarometerModel.pressure_msl_corrected = "";
+        BarographModel.pressure_amount_tendency = "";
+        BarographModel.a_code = "";
 
         boolean a_ok = false;
         boolean ppp_ok = false;
@@ -208,12 +208,12 @@ final class Rs232VaisalaWowAprWorkflow {
             }
 
             if ((hulp_int_a_reading >= 0) && (hulp_int_a_reading <= 8)) {
-              mybarograph.a_code = main.sensor_data_record_obs_a;
+              BarographModel.a_code = main.sensor_data_record_obs_a;
 
               if (destination.equals("MAIN_SCREEN") == false) {
                 String message_pressure_a =
                     "[APR] pressure characteristic at sensor height = "
-                        + mybarograph.a_code
+                        + BarographModel.a_code
                         + " (code)";
                 main.log_turbowin_system_message(message_pressure_a);
               }
@@ -246,14 +246,14 @@ final class Rs232VaisalaWowAprWorkflow {
 
             if ((hulp_double_ppp_reading > -99.9) && (hulp_double_ppp_reading < 99.9)) {
               // tendency
-              mybarograph.pressure_amount_tendency =
+              BarographModel.pressure_amount_tendency =
                   Double.toString(
                       Math.abs(hulp_double_ppp_reading)); // only pos value in this field
 
               if (destination.equals("MAIN_SCREEN") == false) {
                 String message_pressure_ppp =
                     "[APR] pressure tendency at sensor height = "
-                        + mybarograph.pressure_amount_tendency
+                        + BarographModel.pressure_amount_tendency
                         + " hPa";
                 main.log_turbowin_system_message(message_pressure_ppp);
               }
@@ -343,7 +343,7 @@ final class Rs232VaisalaWowAprWorkflow {
                 String sensor_data_record_APR_pressure_reading_hpa_corrected =
                     df.format(
                         hulp_double_APR_pressure_reading + double_barometer_instrument_correction);
-                mybarometer.pressure_reading_corrected =
+                BarometerModel.pressure_reading_corrected =
                     sensor_data_record_APR_pressure_reading_hpa_corrected; // now pressure at sensor
                 // height corrected for
                 // ic
@@ -363,12 +363,12 @@ final class Rs232VaisalaWowAprWorkflow {
                 double hulp_double_APR_pressure_MSL_rounded = bd.doubleValue();
                 sensor_data_record_APR_pressure_MSL_hpa =
                     Double.toString(hulp_double_APR_pressure_MSL_rounded);
-                mybarometer.pressure_msl_corrected =
+                BarometerModel.pressure_msl_corrected =
                     sensor_data_record_APR_pressure_MSL_hpa; // sensor_data_record_APR_pressure_MSL_hpa the baromter instrument correction is included
 
                 if (destination.equals("MAIN_SCREEN") == false) {
                   String message_msl =
-                      "[APR] air pressure MSL = " + mybarometer.pressure_msl_corrected + " hPa";
+                      "[APR] air pressure MSL = " + BarometerModel.pressure_msl_corrected + " hPa";
                   main.log_turbowin_system_message(message_msl);
                 }
 

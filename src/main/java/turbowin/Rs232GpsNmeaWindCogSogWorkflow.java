@@ -24,30 +24,30 @@ final class Rs232GpsNmeaWindCogSogWorkflow {
           // mode
           RS232_compute_APR_COG_SOG_wind(positions[0], positions[1], positions[2], positions[3]);
 
-          // publish course and speed on main screen (indirect via myposition.course and
-          // myposition.speed)
-          if ((myposition.COG_APR_wind >= 0.0 && myposition.COG_APR_wind <= 360.0)
-              && (myposition.SOG_APR_wind >= 0.0 && myposition.SOG_APR_wind <= 100.0)) {
-            // NB myposition.course and myposition.speed only for main screen
+          // publish course and speed on main screen (indirect via PositionModel.course and
+          // PositionModel.speed)
+          if ((PositionModel.COG_APR_wind >= 0.0 && PositionModel.COG_APR_wind <= 360.0)
+              && (PositionModel.SOG_APR_wind >= 0.0 && PositionModel.SOG_APR_wind <= 100.0)) {
+            // NB PositionModel.course and PositionModel.speed only for main screen
             //    see position_fields_update()[main.java] called by
             // RS232_GPS_NMEA_0183_init_new_data_received_check_timer() [RS232_RS422.java]
-            // myposition.course = Double.toString(myposition.COG_APR);
-            // myposition.speed = Double.toString(myposition.SOG_APR);
+            // PositionModel.course = Double.toString(PositionModel.COG_APR);
+            // PositionModel.speed = Double.toString(PositionModel.SOG_APR);
           } else {
             // reset the course ansd speed vars
-            myposition.COG_APR_wind = Double.MAX_VALUE;
-            myposition.SOG_APR_wind = Double.MAX_VALUE;
-            // myposition.course = "";
-            // myposition.speed = "";
+            PositionModel.COG_APR_wind = Double.MAX_VALUE;
+            PositionModel.SOG_APR_wind = Double.MAX_VALUE;
+            // PositionModel.course = "";
+            // PositionModel.speed = "";
             COG_SOG_wind_ok = false;
           } // else
         } // if ( (positions_SOG_COG_wind[0] < Double.MAX_VALUE -1) etc.
         else {
           // reset the course ansd speed vars
-          myposition.COG_APR_wind = Double.MAX_VALUE;
-          myposition.SOG_APR_wind = Double.MAX_VALUE;
-          // myposition.course = "";
-          // myposition.speed = "";
+          PositionModel.COG_APR_wind = Double.MAX_VALUE;
+          PositionModel.SOG_APR_wind = Double.MAX_VALUE;
+          // PositionModel.course = "";
+          // PositionModel.speed = "";
           COG_SOG_wind_ok = false;
         } // else
 
@@ -65,9 +65,9 @@ final class Rs232GpsNmeaWindCogSogWorkflow {
             if (COG_SOG_wind_result == true) {
               main.log_turbowin_system_message(
                   "[GPS] For APTR dashboard wind [10 min].: COG and SOG calculation ok; "
-                      + myposition.COG_APR_wind
+                      + PositionModel.COG_APR_wind
                       + "\u00B0 "
-                      + myposition.SOG_APR_wind
+                      + PositionModel.SOG_APR_wind
                       + " kts");
             } else {
               main.log_turbowin_system_message(

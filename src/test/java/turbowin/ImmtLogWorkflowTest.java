@@ -10,11 +10,11 @@ public class ImmtLogWorkflowTest {
 
   @Test
   public void composesAnImmtRecord() {
-    String originalYear = mydatetime.year;
+    String originalYear = DateTimeModel.year;
     String originalCloudHeight = CloudCoverState.h_code;
     String originalVisibility = VisibilityState.VV_code;
     try {
-      mydatetime.year = "2024";
+      DateTimeModel.year = "2024";
       // IMMT quality indicators are 9 for missing cloud height and visibility.
       CloudCoverState.h_code = "";
       VisibilityState.VV_code = "";
@@ -25,7 +25,7 @@ public class ImmtLogWorkflowTest {
       assertEquals("2024", record.substring(1, 5));
       assertTrue(record.contains("A599"));
     } finally {
-      mydatetime.year = originalYear;
+      DateTimeModel.year = originalYear;
       CloudCoverState.h_code = originalCloudHeight;
       VisibilityState.VV_code = originalVisibility;
     }

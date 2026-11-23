@@ -26,14 +26,14 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
     prepare();
     for (WavesView.Swell choice : WavesView.Swell.values()) {
       SwingUtilities.invokeAndWait(() -> {
-        mywaves.swell_1_dir =
+        WavesModel.swell_1_dir =
             switch (choice) {
               case NONE -> "no swell";
               case CONFUSED -> "confused";
               case ONE, TWO -> "180";
               case UNDETERMINED -> "";
             };
-        mywaves.swell_2_dir = choice == WavesView.Swell.TWO ? "270" : "";
+        WavesModel.swell_2_dir = choice == WavesView.Swell.TWO ? "270" : "";
       });
       JDialog dialog = GuiActionRunner.execute(WavesDialog::open);
       Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -66,13 +66,13 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("8", mywaves.wind_waves_period);
-      assertEquals("2.3", mywaves.wind_waves_height);
-      assertEquals("08", mywaves.Pw_code);
-      assertEquals("05", mywaves.Hw_code);
-      assertEquals("no swell", mywaves.swell_1_dir);
-      assertEquals("00", mywaves.Dw1_code);
-      assertEquals("00", mywaves.Dw2_code);
+      assertEquals("8", WavesModel.wind_waves_period);
+      assertEquals("2.3", WavesModel.wind_waves_height);
+      assertEquals("08", WavesModel.Pw_code);
+      assertEquals("05", WavesModel.Hw_code);
+      assertEquals("no swell", WavesModel.swell_1_dir);
+      assertEquals("00", WavesModel.Dw1_code);
+      assertEquals("00", WavesModel.Dw2_code);
     });
     JDialog reopened = GuiActionRunner.execute(WavesDialog::open);
     Scene reopenedScene = CloudCoverFxTestSupport.awaitScene(reopened);
@@ -99,9 +99,9 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("confused", mywaves.wind_waves_period);
-      assertEquals("99", mywaves.Pw_code);
-      assertEquals("//", mywaves.Hw_code);
+      assertEquals("confused", WavesModel.wind_waves_period);
+      assertEquals("99", WavesModel.Pw_code);
+      assertEquals("//", WavesModel.Hw_code);
     });
   }
 
@@ -128,7 +128,7 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("04", mywaves.Hw_code);
+      assertEquals("04", WavesModel.Hw_code);
     });
   }
 
@@ -200,7 +200,7 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
       DialogFixture acceptedVisibility =
           WindowFinder.findDialog(new DialogTitleMatcher("Visibility")).using(robot());
       SwingUtilities.invokeAndWait(() -> {
-        assertEquals("no swell", mywaves.swell_1_dir);
+        assertEquals("no swell", WavesModel.swell_1_dir);
         acceptedVisibility.target().dispose();
       });
       JDialog stop = GuiActionRunner.execute(WavesDialog::open);
@@ -221,14 +221,14 @@ public class WavesJavaFxIntegrationTest extends AbstractUiTest {
   private static void prepare() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
-      mywaves.wind_waves_period = "";
-      mywaves.wind_waves_height = "";
-      mywaves.swell_1_dir = "";
-      mywaves.swell_1_period = "";
-      mywaves.swell_1_height = "";
-      mywaves.swell_2_dir = "";
-      mywaves.swell_2_period = "";
-      mywaves.swell_2_height = "";
+      WavesModel.wind_waves_period = "";
+      WavesModel.wind_waves_height = "";
+      WavesModel.swell_1_dir = "";
+      WavesModel.swell_1_period = "";
+      WavesModel.swell_1_height = "";
+      WavesModel.swell_2_dir = "";
+      WavesModel.swell_2_period = "";
+      WavesModel.swell_2_height = "";
     });
   }
 

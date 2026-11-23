@@ -20,17 +20,17 @@ public class CloudHeightAdviceTest {
     cl = LowCloudState.cl_code;
     cm = MiddleCloudState.cm_code;
     ch = HighCloudState.ch_code;
-    temperature = mytemp.air_temp;
-    dewPoint = mytemp.double_dew_point;
+    temperature = TemperatureModel.air_temp;
+    dewPoint = TemperatureModel.double_dew_point;
     weather = PresentWeatherState.ww_code;
-    latitude = myposition.int_latitude_degrees;
+    latitude = PositionModel.int_latitude_degrees;
     LowCloudState.cl_code = "";
     MiddleCloudState.cm_code = "";
     HighCloudState.ch_code = "";
-    mytemp.air_temp = "";
-    mytemp.double_dew_point = main.INVALID;
+    TemperatureModel.air_temp = "";
+    TemperatureModel.double_dew_point = main.INVALID;
     PresentWeatherState.ww_code = "";
-    myposition.int_latitude_degrees = 45;
+    PositionModel.int_latitude_degrees = 45;
   }
 
   @After
@@ -38,19 +38,19 @@ public class CloudHeightAdviceTest {
     LowCloudState.cl_code = cl;
     MiddleCloudState.cm_code = cm;
     HighCloudState.ch_code = ch;
-    mytemp.air_temp = temperature;
-    mytemp.double_dew_point = dewPoint;
+    TemperatureModel.air_temp = temperature;
+    TemperatureModel.double_dew_point = dewPoint;
     PresentWeatherState.ww_code = weather;
-    myposition.int_latitude_degrees = latitude;
+    PositionModel.int_latitude_degrees = latitude;
   }
 
   @Test
   public void lowCloudAdviceUsesTemperatureAndDewPoint() {
     LowCloudState.cl_code = "1";
-    mytemp.air_temp = "16";
-    mytemp.double_dew_point = 12;
+    TemperatureModel.air_temp = "16";
+    TemperatureModel.double_dew_point = 12;
     assertEquals(4, CloudHeightAdvice.compute()); // 500 m: 300–600 m
-    mytemp.double_dew_point = main.INVALID;
+    TemperatureModel.double_dew_point = main.INVALID;
     assertEquals(main.INVALID, CloudHeightAdvice.compute());
   }
 

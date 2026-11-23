@@ -18,16 +18,16 @@ final class BarographDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    mybarograph model = new mybarograph();
+    BarographModel model = new BarographModel();
     JRadioButton[] options = options();
-    JTextField amount = mybarograph.jTextField1;
+    JTextField amount = BarographModel.jTextField1;
     boolean sensorConnected = main.RS232_connection_mode != 0;
     int selected = selected(options);
     BarographView.State state =
         new BarographView.State(
             amount.getText(),
             selected,
-            !mybarograph.jTextField1.isEditable(),
+            !BarographModel.jTextField1.isEditable(),
             main.in_next_sequence,
             main.offline_mode);
     AtomicReference<Scene> scene = new AtomicReference<>();
@@ -96,7 +96,7 @@ final class BarographDialog {
                           }),
                       () ->
                           SwingUtilities.invokeLater(
-                              () -> main.help_mouseClicked(mybarograph.BAROGRAAF_HELP_DIR)));
+                              () -> main.help_mouseClicked(BarographModel.BAROGRAAF_HELP_DIR)));
               scene.set(created);
               if (sensorConnected) refresh.run();
               return created;
@@ -114,10 +114,10 @@ final class BarographDialog {
 
   private static JRadioButton[] options() {
     return new JRadioButton[] {
-      mybarograph.jRadioButton1, mybarograph.jRadioButton2, mybarograph.jRadioButton3,
-      mybarograph.jRadioButton4, mybarograph.jRadioButton5, mybarograph.jRadioButton6,
-      mybarograph.jRadioButton7, mybarograph.jRadioButton8, mybarograph.jRadioButton9,
-      mybarograph.jRadioButton10, mybarograph.jRadioButton11, mybarograph.jRadioButton12
+      BarographModel.jRadioButton1, BarographModel.jRadioButton2, BarographModel.jRadioButton3,
+      BarographModel.jRadioButton4, BarographModel.jRadioButton5, BarographModel.jRadioButton6,
+      BarographModel.jRadioButton7, BarographModel.jRadioButton8, BarographModel.jRadioButton9,
+      BarographModel.jRadioButton10, BarographModel.jRadioButton11, BarographModel.jRadioButton12
     };
   }
 }

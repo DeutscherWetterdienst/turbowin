@@ -24,9 +24,9 @@ final class GpsCoordinateParser {
 
     String convertedLatitudeHemisphere;
     if (latitudeHemisphere.toUpperCase().equals("N")) {
-      convertedLatitudeHemisphere = myposition.HEMISPHERE_NORTH;
+      convertedLatitudeHemisphere = PositionModel.HEMISPHERE_NORTH;
     } else if (latitudeHemisphere.toUpperCase().equals("S")) {
-      convertedLatitudeHemisphere = myposition.HEMISPHERE_SOUTH;
+      convertedLatitudeHemisphere = PositionModel.HEMISPHERE_SOUTH;
     } else {
       convertedLatitudeHemisphere = "";
     }
@@ -43,9 +43,9 @@ final class GpsCoordinateParser {
 
     String convertedLongitudeHemisphere;
     if (longitudeHemisphere.toUpperCase().equals("E")) {
-      convertedLongitudeHemisphere = myposition.HEMISPHERE_EAST;
+      convertedLongitudeHemisphere = PositionModel.HEMISPHERE_EAST;
     } else if (longitudeHemisphere.toUpperCase().equals("W")) {
-      convertedLongitudeHemisphere = myposition.HEMISPHERE_WEST;
+      convertedLongitudeHemisphere = PositionModel.HEMISPHERE_WEST;
     } else {
       convertedLongitudeHemisphere = "";
     }
@@ -107,17 +107,17 @@ final class GpsCoordinateParser {
     }
 
     String quadrant = null;
-    if (convertedLatitudeHemisphere.equals(myposition.HEMISPHERE_NORTH)
-        && convertedLongitudeHemisphere.equals(myposition.HEMISPHERE_EAST)) {
+    if (convertedLatitudeHemisphere.equals(PositionModel.HEMISPHERE_NORTH)
+        && convertedLongitudeHemisphere.equals(PositionModel.HEMISPHERE_EAST)) {
       quadrant = "1";
-    } else if (convertedLatitudeHemisphere.equals(myposition.HEMISPHERE_SOUTH)
-        && convertedLongitudeHemisphere.equals(myposition.HEMISPHERE_EAST)) {
+    } else if (convertedLatitudeHemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+        && convertedLongitudeHemisphere.equals(PositionModel.HEMISPHERE_EAST)) {
       quadrant = "3";
-    } else if (convertedLatitudeHemisphere.equals(myposition.HEMISPHERE_SOUTH)
-        && convertedLongitudeHemisphere.equals(myposition.HEMISPHERE_WEST)) {
+    } else if (convertedLatitudeHemisphere.equals(PositionModel.HEMISPHERE_SOUTH)
+        && convertedLongitudeHemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
       quadrant = "5";
-    } else if (convertedLatitudeHemisphere.equals(myposition.HEMISPHERE_NORTH)
-        && convertedLongitudeHemisphere.equals(myposition.HEMISPHERE_WEST)) {
+    } else if (convertedLatitudeHemisphere.equals(PositionModel.HEMISPHERE_NORTH)
+        && convertedLongitudeHemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
       quadrant = "7";
     } else {
       valid = false;
@@ -125,11 +125,11 @@ final class GpsCoordinateParser {
 
     // Keep high-accuracy signed decimal degrees for course/speed calculations.
     double signedLatitude = latitudeDegreesNumber + latitudeMinutesDecimal / 60.0;
-    if (convertedLatitudeHemisphere.equals(myposition.HEMISPHERE_SOUTH)) {
+    if (convertedLatitudeHemisphere.equals(PositionModel.HEMISPHERE_SOUTH)) {
       signedLatitude *= -1;
     }
     double signedLongitude = longitudeDegreesNumber + longitudeMinutesDecimal / 60.0;
-    if (convertedLongitudeHemisphere.equals(myposition.HEMISPHERE_WEST)) {
+    if (convertedLongitudeHemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
       signedLongitude *= -1;
     }
 

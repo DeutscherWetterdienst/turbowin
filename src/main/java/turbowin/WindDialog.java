@@ -11,7 +11,7 @@ final class WindDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    mywind model = new mywind();
+    WindModel model = new WindModel();
     WindView.State state =
         new WindView.State(
             model.initialValues(),

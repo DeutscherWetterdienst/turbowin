@@ -49,7 +49,7 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("20", mytemp.air_temp);
+      assertEquals("20", TemperatureModel.air_temp);
     });
   }
 
@@ -62,10 +62,10 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
       main.SST_from_AWS_present = false;
       main.air_temp_exposure = main.MARINE_SCREEN;
       main.sst_exposure = main.INTAKE;
-      mytemp.air_temp = "";
-      mytemp.wet_bulb_temp = "";
-      mytemp.RH = "";
-      mytemp.sea_water_temp = "";
+      TemperatureModel.air_temp = "";
+      TemperatureModel.wet_bulb_temp = "";
+      TemperatureModel.RH = "";
+      TemperatureModel.sea_water_temp = "";
     });
     JDialog dialog = GuiActionRunner.execute(TemperatureDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -84,12 +84,12 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("20.0", mytemp.air_temp);
-      assertEquals("15", mytemp.wet_bulb_temp);
-      assertEquals("18", mytemp.sea_water_temp);
-      assertEquals("200", mytemp.TTT_code);
-      assertEquals("180", mytemp.TsTsTs_code);
-      assertNotEquals(main.INVALID, mytemp.double_dew_point, 0.001);
+      assertEquals("20.0", TemperatureModel.air_temp);
+      assertEquals("15", TemperatureModel.wet_bulb_temp);
+      assertEquals("18", TemperatureModel.sea_water_temp);
+      assertEquals("200", TemperatureModel.TTT_code);
+      assertEquals("180", TemperatureModel.TsTsTs_code);
+      assertNotEquals(main.INVALID, TemperatureModel.double_dew_point, 0.001);
     });
     JDialog reopened = GuiActionRunner.execute(TemperatureDialog::open);
     Scene reopenedScene = CloudCoverFxTestSupport.awaitScene(reopened);
@@ -122,10 +122,10 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
         return null;
       });
       SwingUtilities.invokeAndWait(() -> {
-        mytemp.jTextField1.setText("21.5");
-        mytemp.jTextField2.setText("-0.1");
-        mytemp.jTextField4.setText("72.0");
-        mytemp.jRadioButton4.setSelected(true);
+        TemperatureModel.jTextField1.setText("21.5");
+        TemperatureModel.jTextField2.setText("-0.1");
+        TemperatureModel.jTextField4.setText("72.0");
+        TemperatureModel.jRadioButton4.setSelected(true);
         TemperatureDialog.sensorUpdated();
       });
       CloudCoverFxTestSupport.onFx(() -> {

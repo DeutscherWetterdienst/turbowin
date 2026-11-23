@@ -16,7 +16,7 @@ final class Rs232MintakaApppDataFilesWorkflow {
   private Rs232MintakaApppDataFilesWorkflow() {}
 
   static void start(final boolean StarX) {
-    // called from: - initSynopparameters() [mybarograph.java]
+    // called from: - initSynopparameters() [BarographModel.java]
 
     // MINTAKA STAR has an integrated GPS
     // GPS data is part of th saved pressure string eg:
@@ -54,8 +54,8 @@ final class Rs232MintakaApppDataFilesWorkflow {
     // 1009.73,1007.73,0.00,0, 52 41.9491N,  6 14.1802E,0,1,7,19.5,65,15.4,12.8,58*16
 
     // initialisation
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
 
     new SwingWorker<String, Void>() {
       @Override
@@ -253,10 +253,10 @@ final class Rs232MintakaApppDataFilesWorkflow {
                 // System.out.println("+++ hulp_pressure_change = " + hulp_pressure_change);
 
                 // tendency
-                // mybarograph.pressure_amount_tendency =
+                // BarographModel.pressure_amount_tendency =
                 // Double.toString(Math.abs(hulp_double_ppp_reading));  // only positive value in
                 // this field
-                // mybarograph.jTextField1.setText(mybarograph.pressure_amount_tendency);
+                // BarographModel.jTextField1.setText(BarographModel.pressure_amount_tendency);
               }
             } // if ((main.sensor_data_record_obs_pressure.compareTo("") != 0) etc.
             else {
@@ -338,62 +338,62 @@ final class Rs232MintakaApppDataFilesWorkflow {
         {
           // set tendency textfield on a-ppp input page
           //
-          mybarograph.pressure_amount_tendency =
+          BarographModel.pressure_amount_tendency =
               Double.toString(
                   Math.abs(hulp_double_ppp_reading)); // only positive value in this field
-          mybarograph.jTextField1.setText(mybarograph.pressure_amount_tendency);
+          BarographModel.jTextField1.setText(BarographModel.pressure_amount_tendency);
 
           // set characteristic on a-ppp input page
           //
           if ((hulp_int_a_reading >= 0) && (hulp_int_a_reading <= 8)) {
             // initialisation
-            mybarograph.jRadioButton1.setSelected(false);
-            mybarograph.jRadioButton2.setSelected(false);
-            mybarograph.jRadioButton3.setSelected(false);
-            mybarograph.jRadioButton4.setSelected(false);
-            mybarograph.jRadioButton5.setSelected(false);
-            mybarograph.jRadioButton6.setSelected(false);
-            mybarograph.jRadioButton7.setSelected(false);
-            mybarograph.jRadioButton8.setSelected(false);
-            mybarograph.jRadioButton9.setSelected(false);
-            mybarograph.jRadioButton10.setSelected(false);
-            mybarograph.jRadioButton11.setSelected(false);
-            mybarograph.jRadioButton12.setSelected(false);
+            BarographModel.jRadioButton1.setSelected(false);
+            BarographModel.jRadioButton2.setSelected(false);
+            BarographModel.jRadioButton3.setSelected(false);
+            BarographModel.jRadioButton4.setSelected(false);
+            BarographModel.jRadioButton5.setSelected(false);
+            BarographModel.jRadioButton6.setSelected(false);
+            BarographModel.jRadioButton7.setSelected(false);
+            BarographModel.jRadioButton8.setSelected(false);
+            BarographModel.jRadioButton9.setSelected(false);
+            BarographModel.jRadioButton10.setSelected(false);
+            BarographModel.jRadioButton11.setSelected(false);
+            BarographModel.jRadioButton12.setSelected(false);
 
             // pressure higher than 3hrs ago
             if (hulp_pressure_change == 1) {
-              if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_0))
-                mybarograph.jRadioButton1.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_1))
-                mybarograph.jRadioButton2.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_2))
-                mybarograph.jRadioButton3.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_3))
-                mybarograph.jRadioButton4.setSelected(true);
+              if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_0))
+                BarographModel.jRadioButton1.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_1))
+                BarographModel.jRadioButton2.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_2))
+                BarographModel.jRadioButton3.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_3))
+                BarographModel.jRadioButton4.setSelected(true);
             }
 
             // pressure lower than 3hrs ago
             else if (hulp_pressure_change == -1) {
-              if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_5))
-                mybarograph.jRadioButton5.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_6))
-                mybarograph.jRadioButton6.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_7))
-                mybarograph.jRadioButton7.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_8))
-                mybarograph.jRadioButton8.setSelected(true);
+              if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_5))
+                BarographModel.jRadioButton5.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_6))
+                BarographModel.jRadioButton6.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_7))
+                BarographModel.jRadioButton7.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_8))
+                BarographModel.jRadioButton8.setSelected(true);
             }
 
             // pressure the same as 3hrs ago
             else if (hulp_pressure_change == 0) {
-              if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_0_SAME))
-                mybarograph.jRadioButton9.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_4))
-                mybarograph.jRadioButton10.setSelected(true);
-              else if (main.sensor_data_record_obs_a.trim().equals(mybarograph.A_5_SAME))
-                mybarograph.jRadioButton11.setSelected(true);
+              if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_0_SAME))
+                BarographModel.jRadioButton9.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_4))
+                BarographModel.jRadioButton10.setSelected(true);
+              else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_5_SAME))
+                BarographModel.jRadioButton11.setSelected(true);
             } else {
-              mybarograph.jRadioButton12.setSelected(true); // not determined
+              BarographModel.jRadioButton12.setSelected(true); // not determined
             }
           } // if ((hulp_int_a_reading >= 0) && (hulp_int_a_reading <= 8))
         } // else ( no error encountered)

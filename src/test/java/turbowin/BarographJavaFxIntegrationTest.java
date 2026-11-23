@@ -23,8 +23,8 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
   public void savesAndRestoresDistinctSamePressureGraph() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
-      mybarograph.a_code = "";
-      mybarograph.pressure_amount_tendency = "";
+      BarographModel.a_code = "";
+      BarographModel.pressure_amount_tendency = "";
     });
     JDialog dialog = GuiActionRunner.execute(BarographDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -41,9 +41,9 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("0.0", mybarograph.pressure_amount_tendency);
-      assertEquals("0", mybarograph.a_code);
-      assertEquals("000", mybarograph.ppp_code);
+      assertEquals("0.0", BarographModel.pressure_amount_tendency);
+      assertEquals("0", BarographModel.a_code);
+      assertEquals("000", BarographModel.ppp_code);
     });
     JDialog reopened = GuiActionRunner.execute(BarographDialog::open);
     Scene restored = CloudCoverFxTestSupport.awaitScene(reopened);
@@ -59,8 +59,8 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
   public void invalidSteadyAmountKeepsFormOpenForCorrection() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
-      mybarograph.a_code = "";
-      mybarograph.pressure_amount_tendency = "";
+      BarographModel.a_code = "";
+      BarographModel.pressure_amount_tendency = "";
     });
     JDialog dialog = GuiActionRunner.execute(BarographDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -82,8 +82,8 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("4", mybarograph.a_code);
-      assertEquals("000", mybarograph.ppp_code);
+      assertEquals("4", BarographModel.a_code);
+      assertEquals("000", BarographModel.ppp_code);
     });
   }
 
@@ -91,8 +91,8 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
   public void validatesRangeAndRoundsPressureCode() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
-      mybarograph.a_code = "";
-      mybarograph.pressure_amount_tendency = "";
+      BarographModel.a_code = "";
+      BarographModel.pressure_amount_tendency = "";
     });
     JDialog dialog = GuiActionRunner.execute(BarographDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -114,8 +114,8 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("1", mybarograph.a_code);
-      assertEquals("013", mybarograph.ppp_code);
+      assertEquals("1", BarographModel.a_code);
+      assertEquals("013", BarographModel.ppp_code);
     });
   }
 
@@ -124,9 +124,9 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
       main.RS232_connection_mode = 3;
-      mybarograph.pressure_amount_tendency = "1.2";
-      mybarograph.a_code = "2";
-      mybarograph.ppp_code = "012";
+      BarographModel.pressure_amount_tendency = "1.2";
+      BarographModel.a_code = "2";
+      BarographModel.ppp_code = "012";
     });
     JDialog dialog = GuiActionRunner.execute(BarographDialog::open);
     Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
@@ -137,8 +137,8 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
       return null;
     });
     SwingUtilities.invokeAndWait(() -> {
-      mybarograph.jTextField1.setText("2.3");
-      mybarograph.jRadioButton6.setSelected(true);
+      BarographModel.jTextField1.setText("2.3");
+      BarographModel.jRadioButton6.setSelected(true);
     });
     SwingUtilities.invokeAndWait(() -> {});
     CloudCoverFxTestSupport.onFx(() -> {
@@ -149,9 +149,9 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
     });
     SwingUtilities.invokeAndWait(() -> {
       assertFalse(dialog.isDisplayable());
-      assertEquals("1.2", mybarograph.pressure_amount_tendency);
-      assertEquals("2", mybarograph.a_code);
-      assertEquals("012", mybarograph.ppp_code);
+      assertEquals("1.2", BarographModel.pressure_amount_tendency);
+      assertEquals("2", BarographModel.a_code);
+      assertEquals("012", BarographModel.ppp_code);
     });
   }
 
@@ -159,8 +159,8 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
   public void sequenceNavigatesBackForwardAndStops() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = true;
-      mybarograph.a_code = "";
-      mybarograph.pressure_amount_tendency = "";
+      BarographModel.a_code = "";
+      BarographModel.pressure_amount_tendency = "";
     });
     try {
       JDialog back = GuiActionRunner.execute(BarographDialog::open);

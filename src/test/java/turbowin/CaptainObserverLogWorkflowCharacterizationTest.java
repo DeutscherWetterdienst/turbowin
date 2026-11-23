@@ -37,9 +37,9 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
   public void captainWriterPreservesPlaceholdersAndTrailingSeparators() throws Exception {
     Path logsDirectory = temporaryFolder.newFolder("captain-logs").toPath();
     main.logs_dir = logsDirectory.toString();
-    mycaptain.captain_data[0][0] = "Ada";
-    mycaptain.captain_data[0][2] = "12";
-    mycaptain.captain_data[0][4] = " ";
+    CaptainModel.captain_data[0][0] = "Ada";
+    CaptainModel.captain_data[0][2] = "12";
+    CaptainModel.captain_data[0][4] = " ";
 
     CaptainLogWriteWorkflow.start();
 
@@ -53,9 +53,9 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
   public void observerWriterPreservesPlaceholdersAndSkipsRowsWithoutSurname() throws Exception {
     Path logsDirectory = temporaryFolder.newFolder("observer-logs").toPath();
     main.logs_dir = logsDirectory.toString();
-    myobserver.observer_data[0][0] = "Bob";
-    myobserver.observer_data[0][2] = "7";
-    myobserver.observer_data[1][1] = "Initials without surname";
+    ObserverModel.observer_data[0][0] = "Bob";
+    ObserverModel.observer_data[0][2] = "7";
+    ObserverModel.observer_data[1][1] = "Initials without surname";
 
     ObserverLogWriteWorkflow.start();
 
@@ -75,17 +75,17 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
         "Ada;;12;-; ;" + System.lineSeparator() + "Incomplete;Only two" + System.lineSeparator(),
         StandardCharsets.UTF_8);
 
-    mycaptain owner = new mycaptain();
+    CaptainModel owner = new CaptainModel();
     CaptainLogReadWorkflow.start(owner);
 
     awaitCondition(() ->
-        "Ada".equals(mycaptain.captain_data[0][0])
-            && "".equals(mycaptain.captain_data[0][1])
-            && "12".equals(mycaptain.captain_data[0][2])
-            && "-".equals(mycaptain.captain_data[0][3])
-            && " ".equals(mycaptain.captain_data[0][4])
-            && "Incomplete".equals(mycaptain.captain_data[1][0])
-            && "".equals(mycaptain.captain_data[1][1]));
+        "Ada".equals(CaptainModel.captain_data[0][0])
+            && "".equals(CaptainModel.captain_data[0][1])
+            && "12".equals(CaptainModel.captain_data[0][2])
+            && "-".equals(CaptainModel.captain_data[0][3])
+            && " ".equals(CaptainModel.captain_data[0][4])
+            && "Incomplete".equals(CaptainModel.captain_data[1][0])
+            && "".equals(CaptainModel.captain_data[1][1]));
   }
 
   @Test
@@ -99,16 +99,16 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
         "Bob;;7;book;" + System.lineSeparator() + "Incomplete;Only two" + System.lineSeparator(),
         StandardCharsets.UTF_8);
 
-    myobserver owner = new myobserver();
+    ObserverModel owner = new ObserverModel();
     ObserverLogReadWorkflow.start(owner);
 
     awaitCondition(() ->
-        "Bob".equals(myobserver.observer_data[0][0])
-            && "".equals(myobserver.observer_data[0][1])
-            && "7".equals(myobserver.observer_data[0][2])
-            && "book".equals(myobserver.observer_data[0][3])
-            && "Incomplete".equals(myobserver.observer_data[1][0])
-            && "".equals(myobserver.observer_data[1][1]));
+        "Bob".equals(ObserverModel.observer_data[0][0])
+            && "".equals(ObserverModel.observer_data[0][1])
+            && "7".equals(ObserverModel.observer_data[0][2])
+            && "book".equals(ObserverModel.observer_data[0][3])
+            && "Incomplete".equals(ObserverModel.observer_data[1][0])
+            && "".equals(ObserverModel.observer_data[1][1]));
   }
 
   @Test
@@ -116,19 +116,19 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     Path logsDirectory = temporaryFolder.newFolder("captain-row-limit-logs").toPath();
     main.logs_dir = logsDirectory.toString();
     StringBuilder contents = new StringBuilder();
-    for (int row = 0; row <= mycaptain.CAPTAIN_ROWS; row++) {
+    for (int row = 0; row <= CaptainModel.CAPTAIN_ROWS; row++) {
       contents.append("Captain").append(row).append(";-;12;-; ;").append(System.lineSeparator());
     }
     Files.writeString(
         logsDirectory.resolve(main.CAPTAIN_LOG), contents.toString(), StandardCharsets.UTF_8);
 
-    mycaptain owner = new mycaptain();
+    CaptainModel owner = new CaptainModel();
     CaptainLogReadWorkflow.start(owner);
 
     awaitCondition(() ->
-        "Captain0".equals(mycaptain.captain_data[0][0])
-            && ("Captain" + (mycaptain.CAPTAIN_ROWS - 1))
-                .equals(mycaptain.captain_data[mycaptain.CAPTAIN_ROWS - 1][0]));
+        "Captain0".equals(CaptainModel.captain_data[0][0])
+            && ("Captain" + (CaptainModel.CAPTAIN_ROWS - 1))
+                .equals(CaptainModel.captain_data[CaptainModel.CAPTAIN_ROWS - 1][0]));
   }
 
   @Test
@@ -136,29 +136,29 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     Path logsDirectory = temporaryFolder.newFolder("observer-row-limit-logs").toPath();
     main.logs_dir = logsDirectory.toString();
     StringBuilder contents = new StringBuilder();
-    for (int row = 0; row <= myobserver.OBSERVER_ROWS; row++) {
+    for (int row = 0; row <= ObserverModel.OBSERVER_ROWS; row++) {
       contents.append("Observer").append(row).append(";-;7;-;").append(System.lineSeparator());
     }
     Files.writeString(
         logsDirectory.resolve(main.OBSERVER_LOG), contents.toString(), StandardCharsets.UTF_8);
 
-    myobserver owner = new myobserver();
+    ObserverModel owner = new ObserverModel();
     ObserverLogReadWorkflow.start(owner);
 
     awaitCondition(() ->
-        "Observer0".equals(myobserver.observer_data[0][0])
-            && ("Observer" + (myobserver.OBSERVER_ROWS - 1))
-                .equals(myobserver.observer_data[myobserver.OBSERVER_ROWS - 1][0]));
+        "Observer0".equals(ObserverModel.observer_data[0][0])
+            && ("Observer" + (ObserverModel.OBSERVER_ROWS - 1))
+                .equals(ObserverModel.observer_data[ObserverModel.OBSERVER_ROWS - 1][0]));
   }
 
   @Test
   public void captainReaderLeavesClearedDataWhenFileIsMissing() throws Exception {
     Path logsDirectory = temporaryFolder.newFolder("missing-captain-log").toPath();
     main.logs_dir = logsDirectory.toString();
-    mycaptain.captain_data[0][0] = "stale";
+    CaptainModel.captain_data[0][0] = "stale";
 
-    mycaptain owner = new mycaptain();
-    mycaptain.captain_data[0][0] = "stale";
+    CaptainModel owner = new CaptainModel();
+    CaptainModel.captain_data[0][0] = "stale";
     CaptainLogReadWorkflow.start(owner);
 
     awaitCondition(() -> captainDataIsEmpty());
@@ -168,27 +168,27 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
   public void observerReaderLeavesClearedDataWhenFileIsMissing() throws Exception {
     Path logsDirectory = temporaryFolder.newFolder("missing-observer-log").toPath();
     main.logs_dir = logsDirectory.toString();
-    myobserver.observer_data[0][0] = "stale";
+    ObserverModel.observer_data[0][0] = "stale";
 
-    myobserver owner = new myobserver();
-    myobserver.observer_data[0][0] = "stale";
+    ObserverModel owner = new ObserverModel();
+    ObserverModel.observer_data[0][0] = "stale";
     ObserverLogReadWorkflow.start(owner);
 
     awaitCondition(() -> observerDataIsEmpty());
   }
 
   private void clearCaptainData() {
-    for (int row = 0; row < mycaptain.CAPTAIN_ROWS; row++) {
-      for (int column = 0; column < mycaptain.CAPTAIN_COLUMNS; column++) {
-        mycaptain.captain_data[row][column] = "";
+    for (int row = 0; row < CaptainModel.CAPTAIN_ROWS; row++) {
+      for (int column = 0; column < CaptainModel.CAPTAIN_COLUMNS; column++) {
+        CaptainModel.captain_data[row][column] = "";
       }
     }
   }
 
   private void clearObserverData() {
-    for (int row = 0; row < myobserver.OBSERVER_ROWS; row++) {
-      for (int column = 0; column < myobserver.OBSERVER_COLUMNS; column++) {
-        myobserver.observer_data[row][column] = "";
+    for (int row = 0; row < ObserverModel.OBSERVER_ROWS; row++) {
+      for (int column = 0; column < ObserverModel.OBSERVER_COLUMNS; column++) {
+        ObserverModel.observer_data[row][column] = "";
       }
     }
   }
@@ -223,9 +223,9 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
   }
 
   private boolean captainDataIsEmpty() {
-    for (int row = 0; row < mycaptain.CAPTAIN_ROWS; row++) {
-      for (int column = 0; column < mycaptain.CAPTAIN_COLUMNS; column++) {
-        if (!"".equals(mycaptain.captain_data[row][column])) {
+    for (int row = 0; row < CaptainModel.CAPTAIN_ROWS; row++) {
+      for (int column = 0; column < CaptainModel.CAPTAIN_COLUMNS; column++) {
+        if (!"".equals(CaptainModel.captain_data[row][column])) {
           return false;
         }
       }
@@ -234,9 +234,9 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
   }
 
   private boolean observerDataIsEmpty() {
-    for (int row = 0; row < myobserver.OBSERVER_ROWS; row++) {
-      for (int column = 0; column < myobserver.OBSERVER_COLUMNS; column++) {
-        if (!"".equals(myobserver.observer_data[row][column])) {
+    for (int row = 0; row < ObserverModel.OBSERVER_ROWS; row++) {
+      for (int column = 0; column < ObserverModel.OBSERVER_COLUMNS; column++) {
+        if (!"".equals(ObserverModel.observer_data[row][column])) {
           return false;
         }
       }

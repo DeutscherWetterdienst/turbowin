@@ -13,8 +13,8 @@ public class BarographFieldsUpdaterTest {
     main.jTextField12 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    mybarograph.pressure_amount_tendency = "5";
-    mybarograph.a_code = "2";
+    BarographModel.pressure_amount_tendency = "5";
+    BarographModel.a_code = "2";
 
     BarographFieldsUpdater.update();
 
@@ -28,8 +28,8 @@ public class BarographFieldsUpdaterTest {
     main.jTextField12 = new JTextField();
     main.jTextField4 = new JTextField();
     main.RS232_connection_mode = 3;
-    mybarograph.pressure_amount_tendency = "";
-    mybarograph.a_code = "";
+    BarographModel.pressure_amount_tendency = "";
+    BarographModel.a_code = "";
 
     BarographFieldsUpdater.update();
 

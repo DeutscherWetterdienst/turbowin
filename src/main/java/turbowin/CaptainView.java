@@ -121,7 +121,7 @@ final class CaptainView {
   }
 
   private String[][] snapshot() {
-    String[][] rows = new String[mycaptain.CAPTAIN_ROWS][mycaptain.CAPTAIN_COLUMNS];
+    String[][] rows = new String[CaptainModel.CAPTAIN_ROWS][CaptainModel.CAPTAIN_COLUMNS];
     for (int row = 0; row < rows.length; row++)
       for (int column = 0; column < rows[row].length; column++)
         rows[row][column] = table.getItems().get(row).value(column).get();

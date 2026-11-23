@@ -39,12 +39,12 @@ public class Rs232GpsNmeaCogSogWorkflowTest {
     originalObservationFormat = main.obs_format;
     originalSystemLogMonthFormat = main.sdf_tsl_1;
     originalSystemLogMessageFormat = main.sdf_tsl_2;
-    originalCog = myposition.COG_APR;
-    originalSog = myposition.SOG_APR;
-    originalCourse = myposition.course;
-    originalSpeed = myposition.speed;
-    originalDsCode = myposition.Ds_code;
-    originalVsCode = myposition.vs_code;
+    originalCog = PositionModel.COG_APR;
+    originalSog = PositionModel.SOG_APR;
+    originalCourse = PositionModel.course;
+    originalSpeed = PositionModel.speed;
+    originalDsCode = PositionModel.Ds_code;
+    originalVsCode = PositionModel.vs_code;
 
     File logsDirectory = temporaryFolder.newFolder("logs");
     new File(logsDirectory, main.TURBOWIN_SYSTEM_LOGS_DIR).mkdirs();
@@ -61,12 +61,12 @@ public class Rs232GpsNmeaCogSogWorkflowTest {
     main.obs_format = originalObservationFormat;
     main.sdf_tsl_1 = originalSystemLogMonthFormat;
     main.sdf_tsl_2 = originalSystemLogMessageFormat;
-    myposition.COG_APR = originalCog;
-    myposition.SOG_APR = originalSog;
-    myposition.course = originalCourse;
-    myposition.speed = originalSpeed;
-    myposition.Ds_code = originalDsCode;
-    myposition.vs_code = originalVsCode;
+    PositionModel.COG_APR = originalCog;
+    PositionModel.SOG_APR = originalSog;
+    PositionModel.course = originalCourse;
+    PositionModel.speed = originalSpeed;
+    PositionModel.Ds_code = originalDsCode;
+    PositionModel.vs_code = originalVsCode;
   }
 
   @Test
@@ -76,12 +76,12 @@ public class Rs232GpsNmeaCogSogWorkflowTest {
     Rs232GpsNmeaCogSogWorkflow.start("APR", new double[] {Double.MAX_VALUE, 0.0, 0.0, 0.0});
 
     waitFor(() -> positionStateIsReset());
-    assertEquals(Double.MAX_VALUE, myposition.COG_APR, 0.0);
-    assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
-    assertEquals("", myposition.course);
-    assertEquals("", myposition.speed);
-    assertEquals("", myposition.Ds_code);
-    assertEquals("", myposition.vs_code);
+    assertEquals(Double.MAX_VALUE, PositionModel.COG_APR, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR, 0.0);
+    assertEquals("", PositionModel.course);
+    assertEquals("", PositionModel.speed);
+    assertEquals("", PositionModel.Ds_code);
+    assertEquals("", PositionModel.vs_code);
     assertLogContains(
         "[GPS] COG and SOG calculation [10 min] error or start/end position not (yet) available");
   }
@@ -91,12 +91,12 @@ public class Rs232GpsNmeaCogSogWorkflowTest {
     Rs232GpsNmeaCogSogWorkflow.start(
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
 
-    waitFor(() -> "90.0".equals(myposition.course) && "6.0".equals(myposition.speed));
+    waitFor(() -> "90.0".equals(PositionModel.course) && "6.0".equals(PositionModel.speed));
 
-    assertEquals(90.0, myposition.COG_APR, 0.001);
-    assertEquals(6.0, myposition.SOG_APR, 0.001);
-    assertEquals("2", myposition.Ds_code);
-    assertEquals("2", myposition.vs_code);
+    assertEquals(90.0, PositionModel.COG_APR, 0.001);
+    assertEquals(6.0, PositionModel.SOG_APR, 0.001);
+    assertEquals("2", PositionModel.Ds_code);
+    assertEquals("2", PositionModel.vs_code);
   }
 
   @Test
@@ -104,87 +104,87 @@ public class Rs232GpsNmeaCogSogWorkflowTest {
     double[] oneNauticalMileEast = new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)};
 
     Rs232GpsNmeaCogSogWorkflow.start("UPDATE_MINUTE", oneNauticalMileEast);
-    waitFor(() -> "6.0".equals(myposition.speed));
+    waitFor(() -> "6.0".equals(PositionModel.speed));
     assertEquals(main.FORMAT_101, main.obs_format);
-    assertEquals("6.0", myposition.speed);
+    assertEquals("6.0", PositionModel.speed);
 
     main.obs_format = main.FORMAT_FM13;
     resetPositionState();
     Rs232GpsNmeaCogSogWorkflow.start("UPDATE_MINUTE", oneNauticalMileEast);
-    waitFor(() -> "0.333".equals(myposition.speed));
+    waitFor(() -> "0.333".equals(PositionModel.speed));
 
-    assertEquals(0.333, myposition.SOG_APR, 0.0005);
-    assertEquals("90.0", myposition.course);
+    assertEquals(0.333, PositionModel.SOG_APR, 0.0005);
+    assertEquals("90.0", PositionModel.course);
   }
 
   @Test
   public void zeroAndMaximumValidSpeedAreAcceptedButValuesAboveMaximumResetState()
       throws Exception {
     Rs232GpsNmeaCogSogWorkflow.start("UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, 0.0});
-    waitFor(() -> "0.0".equals(myposition.speed));
-    assertEquals("0.0", myposition.course);
-    assertEquals("0", myposition.Ds_code);
-    assertEquals("0", myposition.vs_code);
+    waitFor(() -> "0.0".equals(PositionModel.speed));
+    assertEquals("0.0", PositionModel.course);
+    assertEquals("0", PositionModel.Ds_code);
+    assertEquals("0", PositionModel.vs_code);
 
     resetPositionState();
     Rs232GpsNmeaCogSogWorkflow.start(
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(100.0)});
-    waitFor(() -> "100.0".equals(myposition.speed));
-    assertEquals(100.0, myposition.SOG_APR, 0.001);
-    assertEquals("100.0", myposition.speed);
+    waitFor(() -> "100.0".equals(PositionModel.speed));
+    assertEquals(100.0, PositionModel.SOG_APR, 0.001);
+    assertEquals("100.0", PositionModel.speed);
 
     setStalePositionState();
     Rs232GpsNmeaCogSogWorkflow.start(
         "UPDATE_MINUTE", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(101.0)});
     waitFor(() -> positionStateIsReset());
-    assertEquals(Double.MAX_VALUE, myposition.COG_APR, 0.0);
-    assertEquals(Double.MAX_VALUE, myposition.SOG_APR, 0.0);
-    assertEquals("", myposition.course);
-    assertEquals("", myposition.speed);
-    assertEquals("", myposition.Ds_code);
-    assertEquals("", myposition.vs_code);
+    assertEquals(Double.MAX_VALUE, PositionModel.COG_APR, 0.0);
+    assertEquals(Double.MAX_VALUE, PositionModel.SOG_APR, 0.0);
+    assertEquals("", PositionModel.course);
+    assertEquals("", PositionModel.speed);
+    assertEquals("", PositionModel.Ds_code);
+    assertEquals("", PositionModel.vs_code);
   }
 
   @Test
   public void manualAndAprLoggingUseFormatSpecificMessages() throws Exception {
     Rs232GpsNmeaCogSogWorkflow.start(
         "APR", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
-    waitFor(() -> "6.0".equals(myposition.speed));
+    waitFor(() -> "6.0".equals(PositionModel.speed));
     assertLogContains("[GPS] COG and SOG calculation [10 min] ok; 90.0° 6.0 kts");
 
     main.obs_format = main.FORMAT_FM13;
     resetPositionState();
     Rs232GpsNmeaCogSogWorkflow.start(
         "MANUAL", new double[] {0.0, 0.0, 0.0, longitudeForTenMinuteKnots(6.0)});
-    waitFor(() -> "0.333".equals(myposition.speed));
+    waitFor(() -> "0.333".equals(PositionModel.speed));
     assertLogContains("[GPS] COG and SOG calculation [3 hrs] ok; 90.0° 0.333 kts");
   }
 
   private void resetPositionState() {
-    myposition.COG_APR = Double.MAX_VALUE;
-    myposition.SOG_APR = Double.MAX_VALUE;
-    myposition.course = "";
-    myposition.speed = "";
-    myposition.Ds_code = "";
-    myposition.vs_code = "";
+    PositionModel.COG_APR = Double.MAX_VALUE;
+    PositionModel.SOG_APR = Double.MAX_VALUE;
+    PositionModel.course = "";
+    PositionModel.speed = "";
+    PositionModel.Ds_code = "";
+    PositionModel.vs_code = "";
   }
 
   private void setStalePositionState() {
-    myposition.COG_APR = 12.0;
-    myposition.SOG_APR = 3.0;
-    myposition.course = "stale course";
-    myposition.speed = "stale speed";
-    myposition.Ds_code = "stale direction";
-    myposition.vs_code = "stale speed code";
+    PositionModel.COG_APR = 12.0;
+    PositionModel.SOG_APR = 3.0;
+    PositionModel.course = "stale course";
+    PositionModel.speed = "stale speed";
+    PositionModel.Ds_code = "stale direction";
+    PositionModel.vs_code = "stale speed code";
   }
 
   private boolean positionStateIsReset() {
-    return myposition.COG_APR == Double.MAX_VALUE
-        && myposition.SOG_APR == Double.MAX_VALUE
-        && "".equals(myposition.course)
-        && "".equals(myposition.speed)
-        && "".equals(myposition.Ds_code)
-        && "".equals(myposition.vs_code);
+    return PositionModel.COG_APR == Double.MAX_VALUE
+        && PositionModel.SOG_APR == Double.MAX_VALUE
+        && "".equals(PositionModel.course)
+        && "".equals(PositionModel.speed)
+        && "".equals(PositionModel.Ds_code)
+        && "".equals(PositionModel.vs_code);
   }
 
   private void assertLogContains(String expected) throws Exception {

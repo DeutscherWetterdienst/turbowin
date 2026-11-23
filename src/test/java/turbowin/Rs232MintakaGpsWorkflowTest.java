@@ -74,54 +74,54 @@ public class Rs232MintakaGpsWorkflowTest {
     originalGpsLongitudeHemisphere = main_RS232_RS422.GPS_longitude_hemisphere;
     originalGpsLatitudeEarlier = main_RS232_RS422.GPS_latitude_earlier;
     originalGpsLongitudeEarlier = main_RS232_RS422.GPS_longitude_earlier;
-    originalLatitudeDegrees = myposition.latitude_degrees;
-    originalLatitudeMinutes = myposition.latitude_minutes;
-    originalLatitudeHemisphere = myposition.latitude_hemisphere;
-    originalLongitudeDegrees = myposition.longitude_degrees;
-    originalLongitudeMinutes = myposition.longitude_minutes;
-    originalLongitudeHemisphere = myposition.longitude_hemisphere;
-    originalLalalaCode = myposition.lalala_code;
-    originalLolololoCode = myposition.lolololo_code;
-    originalQcCode = myposition.Qc_code;
-    originalCourse = myposition.course;
-    originalSpeed = myposition.speed;
-    originalLatitudeDegreesInt = myposition.int_latitude_degrees;
-    originalLatitudeMinutesInt = myposition.int_latitude_minutes;
-    originalLongitudeDegreesInt = myposition.int_longitude_degrees;
-    originalLongitudeMinutesInt = myposition.int_longitude_minutes;
-    originalSog = myposition.SOG_APR;
-    originalCog = myposition.COG_APR;
-    originalLatitudeField = myposition.jTextField1;
-    originalLatitudeMinutesField = myposition.jTextField2;
-    originalLongitudeField = myposition.jTextField3;
-    originalLongitudeMinutesField = myposition.jTextField4;
-    originalButtonGroups[0] = myposition.buttonGroup1;
-    originalButtonGroups[1] = myposition.buttonGroup2;
-    originalButtonGroups[2] = myposition.buttonGroup3;
-    originalButtonGroups[3] = myposition.buttonGroup4;
-    originalButtons[0] = myposition.jRadioButton1;
-    originalButtons[1] = myposition.jRadioButton2;
-    originalButtons[2] = myposition.jRadioButton3;
-    originalButtons[3] = myposition.jRadioButton4;
-    originalButtons[4] = myposition.jRadioButton5;
-    originalButtons[5] = myposition.jRadioButton6;
-    originalButtons[6] = myposition.jRadioButton7;
-    originalButtons[7] = myposition.jRadioButton8;
-    originalButtons[8] = myposition.jRadioButton9;
-    originalButtons[9] = myposition.jRadioButton10;
-    originalButtons[10] = myposition.jRadioButton11;
-    originalButtons[11] = myposition.jRadioButton12;
-    originalButtons[12] = myposition.jRadioButton13;
-    originalButtons[13] = myposition.jRadioButton14;
-    originalButtons[14] = myposition.jRadioButton15;
-    originalButtons[15] = myposition.jRadioButton16;
-    originalButtons[16] = myposition.jRadioButton17;
-    originalButtons[17] = myposition.jRadioButton18;
-    originalButtons[18] = myposition.jRadioButton19;
-    originalButtons[19] = myposition.jRadioButton20;
-    originalButtons[20] = myposition.jRadioButton21;
-    originalButtons[21] = myposition.jRadioButton22;
-    originalButtons[22] = myposition.jRadioButton23;
+    originalLatitudeDegrees = PositionModel.latitude_degrees;
+    originalLatitudeMinutes = PositionModel.latitude_minutes;
+    originalLatitudeHemisphere = PositionModel.latitude_hemisphere;
+    originalLongitudeDegrees = PositionModel.longitude_degrees;
+    originalLongitudeMinutes = PositionModel.longitude_minutes;
+    originalLongitudeHemisphere = PositionModel.longitude_hemisphere;
+    originalLalalaCode = PositionModel.lalala_code;
+    originalLolololoCode = PositionModel.lolololo_code;
+    originalQcCode = PositionModel.Qc_code;
+    originalCourse = PositionModel.course;
+    originalSpeed = PositionModel.speed;
+    originalLatitudeDegreesInt = PositionModel.int_latitude_degrees;
+    originalLatitudeMinutesInt = PositionModel.int_latitude_minutes;
+    originalLongitudeDegreesInt = PositionModel.int_longitude_degrees;
+    originalLongitudeMinutesInt = PositionModel.int_longitude_minutes;
+    originalSog = PositionModel.SOG_APR;
+    originalCog = PositionModel.COG_APR;
+    originalLatitudeField = PositionModel.jTextField1;
+    originalLatitudeMinutesField = PositionModel.jTextField2;
+    originalLongitudeField = PositionModel.jTextField3;
+    originalLongitudeMinutesField = PositionModel.jTextField4;
+    originalButtonGroups[0] = PositionModel.buttonGroup1;
+    originalButtonGroups[1] = PositionModel.buttonGroup2;
+    originalButtonGroups[2] = PositionModel.buttonGroup3;
+    originalButtonGroups[3] = PositionModel.buttonGroup4;
+    originalButtons[0] = PositionModel.jRadioButton1;
+    originalButtons[1] = PositionModel.jRadioButton2;
+    originalButtons[2] = PositionModel.jRadioButton3;
+    originalButtons[3] = PositionModel.jRadioButton4;
+    originalButtons[4] = PositionModel.jRadioButton5;
+    originalButtons[5] = PositionModel.jRadioButton6;
+    originalButtons[6] = PositionModel.jRadioButton7;
+    originalButtons[7] = PositionModel.jRadioButton8;
+    originalButtons[8] = PositionModel.jRadioButton9;
+    originalButtons[9] = PositionModel.jRadioButton10;
+    originalButtons[10] = PositionModel.jRadioButton11;
+    originalButtons[11] = PositionModel.jRadioButton12;
+    originalButtons[12] = PositionModel.jRadioButton13;
+    originalButtons[13] = PositionModel.jRadioButton14;
+    originalButtons[14] = PositionModel.jRadioButton15;
+    originalButtons[15] = PositionModel.jRadioButton16;
+    originalButtons[16] = PositionModel.jRadioButton17;
+    originalButtons[17] = PositionModel.jRadioButton18;
+    originalButtons[18] = PositionModel.jRadioButton19;
+    originalButtons[19] = PositionModel.jRadioButton20;
+    originalButtons[20] = PositionModel.jRadioButton21;
+    originalButtons[21] = PositionModel.jRadioButton22;
+    originalButtons[22] = PositionModel.jRadioButton23;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -133,21 +133,21 @@ public class Rs232MintakaGpsWorkflowTest {
     main_RS232_RS422.GPS_longitude_hemisphere = "";
     main_RS232_RS422.GPS_latitude_earlier = "";
     main_RS232_RS422.GPS_longitude_earlier = "";
-    myposition.latitude_degrees = "";
-    myposition.latitude_minutes = "";
-    myposition.latitude_hemisphere = "";
-    myposition.longitude_degrees = "";
-    myposition.longitude_minutes = "";
-    myposition.longitude_hemisphere = "";
-    myposition.lalala_code = "";
-    myposition.lolololo_code = "";
-    myposition.Qc_code = "";
-    myposition.course = "";
-    myposition.speed = "";
-    myposition.jTextField1 = new JTextField();
-    myposition.jTextField2 = new JTextField();
-    myposition.jTextField3 = new JTextField();
-    myposition.jTextField4 = new JTextField();
+    PositionModel.latitude_degrees = "";
+    PositionModel.latitude_minutes = "";
+    PositionModel.latitude_hemisphere = "";
+    PositionModel.longitude_degrees = "";
+    PositionModel.longitude_minutes = "";
+    PositionModel.longitude_hemisphere = "";
+    PositionModel.lalala_code = "";
+    PositionModel.lolololo_code = "";
+    PositionModel.Qc_code = "";
+    PositionModel.course = "";
+    PositionModel.speed = "";
+    PositionModel.jTextField1 = new JTextField();
+    PositionModel.jTextField2 = new JTextField();
+    PositionModel.jTextField3 = new JTextField();
+    PositionModel.jTextField4 = new JTextField();
     setPositionControls();
   }
 
@@ -164,32 +164,32 @@ public class Rs232MintakaGpsWorkflowTest {
     main_RS232_RS422.GPS_longitude_hemisphere = originalGpsLongitudeHemisphere;
     main_RS232_RS422.GPS_latitude_earlier = originalGpsLatitudeEarlier;
     main_RS232_RS422.GPS_longitude_earlier = originalGpsLongitudeEarlier;
-    myposition.latitude_degrees = originalLatitudeDegrees;
-    myposition.latitude_minutes = originalLatitudeMinutes;
-    myposition.latitude_hemisphere = originalLatitudeHemisphere;
-    myposition.longitude_degrees = originalLongitudeDegrees;
-    myposition.longitude_minutes = originalLongitudeMinutes;
-    myposition.longitude_hemisphere = originalLongitudeHemisphere;
-    myposition.lalala_code = originalLalalaCode;
-    myposition.lolololo_code = originalLolololoCode;
-    myposition.Qc_code = originalQcCode;
-    myposition.course = originalCourse;
-    myposition.speed = originalSpeed;
-    myposition.int_latitude_degrees = originalLatitudeDegreesInt;
-    myposition.int_latitude_minutes = originalLatitudeMinutesInt;
-    myposition.int_longitude_degrees = originalLongitudeDegreesInt;
-    myposition.int_longitude_minutes = originalLongitudeMinutesInt;
-    myposition.SOG_APR = originalSog;
-    myposition.COG_APR = originalCog;
-    myposition.jTextField1 = originalLatitudeField;
-    myposition.jTextField2 = originalLatitudeMinutesField;
-    myposition.jTextField3 = originalLongitudeField;
-    myposition.jTextField4 = originalLongitudeMinutesField;
+    PositionModel.latitude_degrees = originalLatitudeDegrees;
+    PositionModel.latitude_minutes = originalLatitudeMinutes;
+    PositionModel.latitude_hemisphere = originalLatitudeHemisphere;
+    PositionModel.longitude_degrees = originalLongitudeDegrees;
+    PositionModel.longitude_minutes = originalLongitudeMinutes;
+    PositionModel.longitude_hemisphere = originalLongitudeHemisphere;
+    PositionModel.lalala_code = originalLalalaCode;
+    PositionModel.lolololo_code = originalLolololoCode;
+    PositionModel.Qc_code = originalQcCode;
+    PositionModel.course = originalCourse;
+    PositionModel.speed = originalSpeed;
+    PositionModel.int_latitude_degrees = originalLatitudeDegreesInt;
+    PositionModel.int_latitude_minutes = originalLatitudeMinutesInt;
+    PositionModel.int_longitude_degrees = originalLongitudeDegreesInt;
+    PositionModel.int_longitude_minutes = originalLongitudeMinutesInt;
+    PositionModel.SOG_APR = originalSog;
+    PositionModel.COG_APR = originalCog;
+    PositionModel.jTextField1 = originalLatitudeField;
+    PositionModel.jTextField2 = originalLatitudeMinutesField;
+    PositionModel.jTextField3 = originalLongitudeField;
+    PositionModel.jTextField4 = originalLongitudeMinutesField;
     setButtonReferences(originalButtons);
-    myposition.buttonGroup1 = originalButtonGroups[0];
-    myposition.buttonGroup2 = originalButtonGroups[1];
-    myposition.buttonGroup3 = originalButtonGroups[2];
-    myposition.buttonGroup4 = originalButtonGroups[3];
+    PositionModel.buttonGroup1 = originalButtonGroups[0];
+    PositionModel.buttonGroup2 = originalButtonGroups[1];
+    PositionModel.buttonGroup3 = originalButtonGroups[2];
+    PositionModel.buttonGroup4 = originalButtonGroups[3];
   }
 
   @Test
@@ -202,15 +202,15 @@ public class Rs232MintakaGpsWorkflowTest {
 
     runWorkflow(false);
 
-    assertEquals("52", myposition.latitude_degrees);
-    assertEquals("00", myposition.latitude_minutes);
-    assertEquals(myposition.HEMISPHERE_NORTH, myposition.latitude_hemisphere);
-    assertEquals("004", myposition.longitude_degrees);
-    assertEquals("02", myposition.longitude_minutes);
-    assertEquals(myposition.HEMISPHERE_EAST, myposition.longitude_hemisphere);
-    assertEquals("1", myposition.Qc_code);
-    assertTrue(myposition.jRadioButton7.isSelected());
-    assertTrue(myposition.jRadioButton16.isSelected());
+    assertEquals("52", PositionModel.latitude_degrees);
+    assertEquals("00", PositionModel.latitude_minutes);
+    assertEquals(PositionModel.HEMISPHERE_NORTH, PositionModel.latitude_hemisphere);
+    assertEquals("004", PositionModel.longitude_degrees);
+    assertEquals("02", PositionModel.longitude_minutes);
+    assertEquals(PositionModel.HEMISPHERE_EAST, PositionModel.longitude_hemisphere);
+    assertEquals("1", PositionModel.Qc_code);
+    assertTrue(PositionModel.jRadioButton7.isSelected());
+    assertTrue(PositionModel.jRadioButton16.isSelected());
   }
 
   @Test
@@ -222,11 +222,11 @@ public class Rs232MintakaGpsWorkflowTest {
 
     runWorkflow(true);
 
-    assertEquals("12", myposition.latitude_degrees);
-    assertEquals(myposition.HEMISPHERE_SOUTH, myposition.latitude_hemisphere);
-    assertEquals("034", myposition.longitude_degrees);
-    assertEquals(myposition.HEMISPHERE_WEST, myposition.longitude_hemisphere);
-    assertEquals("5", myposition.Qc_code);
+    assertEquals("12", PositionModel.latitude_degrees);
+    assertEquals(PositionModel.HEMISPHERE_SOUTH, PositionModel.latitude_hemisphere);
+    assertEquals("034", PositionModel.longitude_degrees);
+    assertEquals(PositionModel.HEMISPHERE_WEST, PositionModel.longitude_hemisphere);
+    assertEquals("5", PositionModel.Qc_code);
   }
 
   @Test
@@ -259,7 +259,7 @@ public class Rs232MintakaGpsWorkflowTest {
     writeCurrentRecord(starRecord(starPayload(" 52 00.0000N", " 004 00.0000E", 8), end));
     runWorkflow(false);
     assertEquals(" 52 00.0000N", main_RS232_RS422.GPS_latitude);
-    assertEquals("52", myposition.latitude_degrees);
+    assertEquals("52", PositionModel.latitude_degrees);
   }
 
   @Test
@@ -381,24 +381,24 @@ public class Rs232MintakaGpsWorkflowTest {
   }
 
   private void setPositionControls() {
-    myposition.buttonGroup1 = new ButtonGroup();
-    myposition.buttonGroup2 = new ButtonGroup();
-    myposition.buttonGroup3 = new ButtonGroup();
-    myposition.buttonGroup4 = new ButtonGroup();
+    PositionModel.buttonGroup1 = new ButtonGroup();
+    PositionModel.buttonGroup2 = new ButtonGroup();
+    PositionModel.buttonGroup3 = new ButtonGroup();
+    PositionModel.buttonGroup4 = new ButtonGroup();
     JRadioButton[] buttons = new JRadioButton[23];
     for (int index = 0; index < buttons.length; index++) {
       buttons[index] = new JRadioButton();
     }
     setButtonReferences(buttons);
-    myposition.buttonGroup1.add(myposition.jRadioButton1);
-    myposition.buttonGroup1.add(myposition.jRadioButton2);
-    myposition.buttonGroup2.add(myposition.jRadioButton3);
-    myposition.buttonGroup2.add(myposition.jRadioButton4);
+    PositionModel.buttonGroup1.add(PositionModel.jRadioButton1);
+    PositionModel.buttonGroup1.add(PositionModel.jRadioButton2);
+    PositionModel.buttonGroup2.add(PositionModel.jRadioButton3);
+    PositionModel.buttonGroup2.add(PositionModel.jRadioButton4);
     for (int index = 4; index < 13; index++) {
-      myposition.buttonGroup3.add(buttons[index]);
+      PositionModel.buttonGroup3.add(buttons[index]);
     }
     for (int index = 13; index < buttons.length; index++) {
-      myposition.buttonGroup4.add(buttons[index]);
+      PositionModel.buttonGroup4.add(buttons[index]);
     }
   }
 
@@ -407,29 +407,29 @@ public class Rs232MintakaGpsWorkflowTest {
   }
 
   private static void setButtonReferences(JRadioButton[] buttons) {
-    myposition.jRadioButton1 = buttons[0];
-    myposition.jRadioButton2 = buttons[1];
-    myposition.jRadioButton3 = buttons[2];
-    myposition.jRadioButton4 = buttons[3];
-    myposition.jRadioButton5 = buttons[4];
-    myposition.jRadioButton6 = buttons[5];
-    myposition.jRadioButton7 = buttons[6];
-    myposition.jRadioButton8 = buttons[7];
-    myposition.jRadioButton9 = buttons[8];
-    myposition.jRadioButton10 = buttons[9];
-    myposition.jRadioButton11 = buttons[10];
-    myposition.jRadioButton12 = buttons[11];
-    myposition.jRadioButton13 = buttons[12];
-    myposition.jRadioButton14 = buttons[13];
-    myposition.jRadioButton15 = buttons[14];
-    myposition.jRadioButton16 = buttons[15];
-    myposition.jRadioButton17 = buttons[16];
-    myposition.jRadioButton18 = buttons[17];
-    myposition.jRadioButton19 = buttons[18];
-    myposition.jRadioButton20 = buttons[19];
-    myposition.jRadioButton21 = buttons[20];
-    myposition.jRadioButton22 = buttons[21];
-    myposition.jRadioButton23 = buttons[22];
+    PositionModel.jRadioButton1 = buttons[0];
+    PositionModel.jRadioButton2 = buttons[1];
+    PositionModel.jRadioButton3 = buttons[2];
+    PositionModel.jRadioButton4 = buttons[3];
+    PositionModel.jRadioButton5 = buttons[4];
+    PositionModel.jRadioButton6 = buttons[5];
+    PositionModel.jRadioButton7 = buttons[6];
+    PositionModel.jRadioButton8 = buttons[7];
+    PositionModel.jRadioButton9 = buttons[8];
+    PositionModel.jRadioButton10 = buttons[9];
+    PositionModel.jRadioButton11 = buttons[10];
+    PositionModel.jRadioButton12 = buttons[11];
+    PositionModel.jRadioButton13 = buttons[12];
+    PositionModel.jRadioButton14 = buttons[13];
+    PositionModel.jRadioButton15 = buttons[14];
+    PositionModel.jRadioButton16 = buttons[15];
+    PositionModel.jRadioButton17 = buttons[16];
+    PositionModel.jRadioButton18 = buttons[17];
+    PositionModel.jRadioButton19 = buttons[18];
+    PositionModel.jRadioButton20 = buttons[19];
+    PositionModel.jRadioButton21 = buttons[20];
+    PositionModel.jRadioButton22 = buttons[21];
+    PositionModel.jRadioButton23 = buttons[22];
   }
 
   private static Calendar utcCalendar() {

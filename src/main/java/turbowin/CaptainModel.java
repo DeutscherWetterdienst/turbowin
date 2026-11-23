@@ -3,10 +3,10 @@ package turbowin;
 import javax.swing.JOptionPane;
 
 /** Captain log state and date validation, independent of the old Swing form. */
-public final class mycaptain {
+public final class CaptainModel {
   private String[][] rows = new String[CAPTAIN_ROWS][CAPTAIN_COLUMNS];
 
-  public mycaptain() {
+  public CaptainModel() {
     CaptainLogReadWorkflow.start(this);
   }
 

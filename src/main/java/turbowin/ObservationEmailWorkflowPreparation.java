@@ -67,8 +67,8 @@ final class ObservationEmailWorkflowPreparation {
                 : "",
             obs_write,
             parameters.subject(),
-            mydatetime.YY_code,
-            mydatetime.GG_code);
+            DateTimeModel.YY_code,
+            DateTimeModel.GG_code);
 
     if (!content.nonEmpty()) {
       return new Result(ObservationEmailStatus.EMPTY_OBSERVATION, null);

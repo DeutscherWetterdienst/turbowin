@@ -59,18 +59,18 @@ public class Rs232VaisalaHmp155AprWorkflowTest {
     originalSdf3 = main.sdf3;
     originalSdf4 = main.sdf4;
     originalObservationDate = main.obs_file_datum_tijd;
-    originalAirTemp = mytemp.air_temp;
-    originalWetBulbTemp = mytemp.wet_bulb_temp;
-    originalRh = mytemp.RH;
-    originalSnTtt = mytemp.sn_TTT_code;
-    originalTtt = mytemp.TTT_code;
-    originalSnTwet = mytemp.sn_TbTbTb_code;
-    originalTwet = mytemp.TbTbTb_code;
-    originalSnTdew = mytemp.sn_TdTdTd_code;
-    originalTdew = mytemp.TdTdTd_code;
-    originalDewPoint = mytemp.double_dew_point;
-    originalRelativeHumidity = mytemp.double_rv;
-    originalWetBulbFrozen = mytemp.wet_bulb_frozen;
+    originalAirTemp = TemperatureModel.air_temp;
+    originalWetBulbTemp = TemperatureModel.wet_bulb_temp;
+    originalRh = TemperatureModel.RH;
+    originalSnTtt = TemperatureModel.sn_TTT_code;
+    originalTtt = TemperatureModel.TTT_code;
+    originalSnTwet = TemperatureModel.sn_TbTbTb_code;
+    originalTwet = TemperatureModel.TbTbTb_code;
+    originalSnTdew = TemperatureModel.sn_TdTdTd_code;
+    originalTdew = TemperatureModel.TdTdTd_code;
+    originalDewPoint = TemperatureModel.double_dew_point;
+    originalRelativeHumidity = TemperatureModel.double_rv;
+    originalWetBulbFrozen = TemperatureModel.wet_bulb_frozen;
     originalSendMethod = main.APTR_AWSR_send_method;
     originalApr = main.APR;
     originalConnectionMode = main.RS232_connection_mode;
@@ -98,18 +98,18 @@ public class Rs232VaisalaHmp155AprWorkflowTest {
     main.sdf3 = originalSdf3;
     main.sdf4 = originalSdf4;
     main.obs_file_datum_tijd = originalObservationDate;
-    mytemp.air_temp = originalAirTemp;
-    mytemp.wet_bulb_temp = originalWetBulbTemp;
-    mytemp.RH = originalRh;
-    mytemp.sn_TTT_code = originalSnTtt;
-    mytemp.TTT_code = originalTtt;
-    mytemp.sn_TbTbTb_code = originalSnTwet;
-    mytemp.TbTbTb_code = originalTwet;
-    mytemp.sn_TdTdTd_code = originalSnTdew;
-    mytemp.TdTdTd_code = originalTdew;
-    mytemp.double_dew_point = originalDewPoint;
-    mytemp.double_rv = originalRelativeHumidity;
-    mytemp.wet_bulb_frozen = originalWetBulbFrozen;
+    TemperatureModel.air_temp = originalAirTemp;
+    TemperatureModel.wet_bulb_temp = originalWetBulbTemp;
+    TemperatureModel.RH = originalRh;
+    TemperatureModel.sn_TTT_code = originalSnTtt;
+    TemperatureModel.TTT_code = originalTtt;
+    TemperatureModel.sn_TbTbTb_code = originalSnTwet;
+    TemperatureModel.TbTbTb_code = originalTwet;
+    TemperatureModel.sn_TdTdTd_code = originalSnTdew;
+    TemperatureModel.TdTdTd_code = originalTdew;
+    TemperatureModel.double_dew_point = originalDewPoint;
+    TemperatureModel.double_rv = originalRelativeHumidity;
+    TemperatureModel.wet_bulb_frozen = originalWetBulbFrozen;
     main.APTR_AWSR_send_method = originalSendMethod;
     main.APR = originalApr;
     main.RS232_connection_mode = originalConnectionMode;
@@ -129,37 +129,37 @@ public class Rs232VaisalaHmp155AprWorkflowTest {
   public void readsFixedWidthFieldsAndPreparesImmtAndFm13Values() throws Exception {
     runRecord("-12.3", "-0.4", "-5.6", "75.0", "APR", new Date());
 
-    assertEquals("-12.3", mytemp.air_temp);
-    assertEquals("-0.4", mytemp.wet_bulb_temp);
-    assertEquals("75.0", mytemp.RH);
-    assertEquals(-5.6, mytemp.double_dew_point, 0.0);
-    assertEquals(0.75, mytemp.double_rv, 0.0);
-    assertEquals("1", mytemp.sn_TTT_code);
-    assertEquals("123", mytemp.TTT_code);
-    assertEquals("1", mytemp.sn_TbTbTb_code);
-    assertEquals("004", mytemp.TbTbTb_code);
-    assertEquals("1", mytemp.sn_TdTdTd_code);
-    assertEquals("056", mytemp.TdTdTd_code);
+    assertEquals("-12.3", TemperatureModel.air_temp);
+    assertEquals("-0.4", TemperatureModel.wet_bulb_temp);
+    assertEquals("75.0", TemperatureModel.RH);
+    assertEquals(-5.6, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(0.75, TemperatureModel.double_rv, 0.0);
+    assertEquals("1", TemperatureModel.sn_TTT_code);
+    assertEquals("123", TemperatureModel.TTT_code);
+    assertEquals("1", TemperatureModel.sn_TbTbTb_code);
+    assertEquals("004", TemperatureModel.TbTbTb_code);
+    assertEquals("1", TemperatureModel.sn_TdTdTd_code);
+    assertEquals("056", TemperatureModel.TdTdTd_code);
   }
 
   @Test
   public void missingMalformedAndStaleRecordsClearAprValues() throws Exception {
-    mytemp.air_temp = "old";
-    mytemp.wet_bulb_temp = "old";
-    mytemp.RH = "old";
-    mytemp.double_dew_point = 10.0;
-    mytemp.double_rv = 0.5;
+    TemperatureModel.air_temp = "old";
+    TemperatureModel.wet_bulb_temp = "old";
+    TemperatureModel.RH = "old";
+    TemperatureModel.double_dew_point = 10.0;
+    TemperatureModel.double_rv = 0.5;
     runWithoutRecord();
     assertCleared();
 
     resetModel();
-    mytemp.air_temp = "old";
+    TemperatureModel.air_temp = "old";
     writeRawRecord("malformed");
     runWorkflow("APR");
     assertCleared();
 
     resetModel();
-    mytemp.air_temp = "old";
+    TemperatureModel.air_temp = "old";
     writeRecord(
         "20.0", "0.0", "10.0", "50.0", new Date(System.currentTimeMillis() - 20 * 60 * 1000L));
     runWorkflow("APR");
@@ -170,30 +170,30 @@ public class Rs232VaisalaHmp155AprWorkflowTest {
   public void temperatureHumidityAndDewPointBoundariesAndSentinelsArePreserved() throws Exception {
     runRecord("99.9", "-99.9", "-70.0", "0.0", "APR", new Date());
 
-    assertEquals("99.9", mytemp.air_temp);
-    assertEquals("", mytemp.wet_bulb_temp);
-    assertEquals("", mytemp.RH);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
-    assertEquals(main.INVALID, mytemp.double_rv, 0.0);
+    assertEquals("99.9", TemperatureModel.air_temp);
+    assertEquals("", TemperatureModel.wet_bulb_temp);
+    assertEquals("", TemperatureModel.RH);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
 
     resetModel();
     runRecord("*", "*", "*", "*", "APR", new Date());
 
-    assertEquals("*", mytemp.air_temp);
-    assertEquals("*", mytemp.wet_bulb_temp);
-    assertEquals("*", mytemp.RH);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
-    assertEquals(main.INVALID, mytemp.double_rv, 0.0);
+    assertEquals("*", TemperatureModel.air_temp);
+    assertEquals("*", TemperatureModel.wet_bulb_temp);
+    assertEquals("*", TemperatureModel.RH);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
   }
 
   @Test
   public void aprSendsOnlyWhenAirTemperatureIsAvailable() throws Exception {
     runRecord("20.0", "0.0", "10.0", "50.0", "APR", new Date());
-    assertEquals("20.0", mytemp.air_temp);
+    assertEquals("20.0", TemperatureModel.air_temp);
 
     resetModel();
     runRecord("bad", "0.0", "10.0", "50.0", "APR", new Date());
-    assertEquals("", mytemp.air_temp);
+    assertEquals("", TemperatureModel.air_temp);
   }
 
   @Test
@@ -266,26 +266,26 @@ public class Rs232VaisalaHmp155AprWorkflowTest {
   }
 
   private void resetModel() {
-    mytemp.air_temp = "";
-    mytemp.wet_bulb_temp = "";
-    mytemp.RH = "";
-    mytemp.sn_TTT_code = "";
-    mytemp.TTT_code = "";
-    mytemp.sn_TbTbTb_code = "";
-    mytemp.TbTbTb_code = "";
-    mytemp.sn_TdTdTd_code = "";
-    mytemp.TdTdTd_code = "";
-    mytemp.double_dew_point = main.INVALID;
-    mytemp.double_rv = main.INVALID;
-    mytemp.wet_bulb_frozen = false;
+    TemperatureModel.air_temp = "";
+    TemperatureModel.wet_bulb_temp = "";
+    TemperatureModel.RH = "";
+    TemperatureModel.sn_TTT_code = "";
+    TemperatureModel.TTT_code = "";
+    TemperatureModel.sn_TbTbTb_code = "";
+    TemperatureModel.TbTbTb_code = "";
+    TemperatureModel.sn_TdTdTd_code = "";
+    TemperatureModel.TdTdTd_code = "";
+    TemperatureModel.double_dew_point = main.INVALID;
+    TemperatureModel.double_rv = main.INVALID;
+    TemperatureModel.wet_bulb_frozen = false;
   }
 
   private void assertCleared() {
-    assertEquals("", mytemp.air_temp);
-    assertEquals("", mytemp.wet_bulb_temp);
-    assertEquals("", mytemp.RH);
-    assertEquals(main.INVALID, mytemp.double_dew_point, 0.0);
-    assertEquals(main.INVALID, mytemp.double_rv, 0.0);
+    assertEquals("", TemperatureModel.air_temp);
+    assertEquals("", TemperatureModel.wet_bulb_temp);
+    assertEquals("", TemperatureModel.RH);
+    assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
+    assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
   }
 
   private static String field(String value) {

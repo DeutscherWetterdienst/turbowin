@@ -19,7 +19,10 @@ final class CaptainLogWriteWorkflow {
         try {
           BufferedWriter out = new BufferedWriter(new FileWriter(volledig_path));
           SemicolonLogFileWriter.write(
-              out, mycaptain.captain_data, mycaptain.CAPTAIN_ROWS, mycaptain.CAPTAIN_COLUMNS);
+              out,
+              CaptainModel.captain_data,
+              CaptainModel.CAPTAIN_ROWS,
+              CaptainModel.CAPTAIN_COLUMNS);
 
           out.close();
 

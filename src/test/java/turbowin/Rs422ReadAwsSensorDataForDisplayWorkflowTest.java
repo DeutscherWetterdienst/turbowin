@@ -37,12 +37,12 @@ public class Rs422ReadAwsSensorDataForDisplayWorkflowTest {
     captureStaticState(
         main.class,
         main_RS232_RS422.class,
-        mydatetime.class,
-        myposition.class,
-        mywind.class,
-        mybarometer.class,
-        mybarograph.class,
-        mytemp.class);
+        DateTimeModel.class,
+        PositionModel.class,
+        WindModel.class,
+        BarometerModel.class,
+        BarographModel.class,
+        TemperatureModel.class);
     replaceStaticTextFields(main.class);
     main.jMenuItem46 = new JMenuItem();
 
@@ -70,17 +70,17 @@ public class Rs422ReadAwsSensorDataForDisplayWorkflowTest {
   public void missingEmptyAndMalformedFilesDoNotUpdateAwsDisplayState() throws Exception {
     runAndSettle();
     assertFalse(main.date_from_AWS_present);
-    assertEquals("", mydatetime.year);
+    assertEquals("", DateTimeModel.year);
 
     writeSensorFile("");
     runAndSettle();
     assertFalse(main.date_from_AWS_present);
-    assertEquals("", myposition.latitude_degrees);
+    assertEquals("", PositionModel.latitude_degrees);
 
     writeSensorFile("$PEUMB," + sensorFileKey() + ",malformed-record");
     runAndSettle();
     assertFalse(main.date_from_AWS_present);
-    assertEquals("", mywind.ship_ground_speed);
+    assertEquals("", WindModel.ship_ground_speed);
   }
 
   @Test
@@ -93,24 +93,24 @@ public class Rs422ReadAwsSensorDataForDisplayWorkflowTest {
 
     runUntilParsed();
 
-    assertEquals("2026", mydatetime.year);
-    assertEquals("April", mydatetime.month);
-    assertEquals("9", mydatetime.day);
-    assertEquals("7", mydatetime.hour);
-    assertEquals("15", mydatetime.minute);
-    assertEquals("12", myposition.latitude_degrees);
-    assertEquals("21", myposition.latitude_minutes);
-    assertEquals("South", myposition.latitude_hemisphere);
-    assertEquals("123", myposition.longitude_degrees);
-    assertEquals("27", myposition.longitude_minutes);
-    assertEquals("East", myposition.longitude_hemisphere);
-    assertEquals(myposition.COURSE_023_067, myposition.course);
-    assertEquals("23", mywind.ship_ground_course);
-    assertEquals(myposition.SPEED_6_10, myposition.speed);
-    assertEquals("5.5", mywind.ship_ground_speed);
-    assertEquals(10.6578, mytemp.double_dew_point, 0.0001);
-    assertEquals("0", mytemp.sn_TdTdTd_code);
-    assertEquals("107", mytemp.TdTdTd_code);
+    assertEquals("2026", DateTimeModel.year);
+    assertEquals("April", DateTimeModel.month);
+    assertEquals("9", DateTimeModel.day);
+    assertEquals("7", DateTimeModel.hour);
+    assertEquals("15", DateTimeModel.minute);
+    assertEquals("12", PositionModel.latitude_degrees);
+    assertEquals("21", PositionModel.latitude_minutes);
+    assertEquals("South", PositionModel.latitude_hemisphere);
+    assertEquals("123", PositionModel.longitude_degrees);
+    assertEquals("27", PositionModel.longitude_minutes);
+    assertEquals("East", PositionModel.longitude_hemisphere);
+    assertEquals(PositionModel.COURSE_023_067, PositionModel.course);
+    assertEquals("23", WindModel.ship_ground_course);
+    assertEquals(PositionModel.SPEED_6_10, PositionModel.speed);
+    assertEquals("5.5", WindModel.ship_ground_speed);
+    assertEquals(10.6578, TemperatureModel.double_dew_point, 0.0001);
+    assertEquals("0", TemperatureModel.sn_TdTdTd_code);
+    assertEquals("107", TemperatureModel.TdTdTd_code);
 
     assertEquals("9 April 2026", main_RS232_RS422.dashboard_string_last_update_record_date);
     assertEquals("7:15", main_RS232_RS422.dashboard_string_last_update_record_time);
@@ -130,15 +130,15 @@ public class Rs422ReadAwsSensorDataForDisplayWorkflowTest {
 
     main.wind_units = main.M_S;
     runUntilParsed();
-    assertEquals("5", mywind.wind_speed);
-    assertEquals(5, mywind.int_relative_wind_speed);
-    assertEquals(4.6, mywind.double_relative_wind_speed, 0.0001);
+    assertEquals("5", WindModel.wind_speed);
+    assertEquals(5, WindModel.int_relative_wind_speed);
+    assertEquals(4.6, WindModel.double_relative_wind_speed, 0.0001);
 
     main.wind_units = main.KNOTS;
     runUntilParsed();
-    assertEquals("9", mywind.wind_speed);
-    assertEquals(9, mywind.int_relative_wind_speed);
-    assertEquals(8.941684654, mywind.double_relative_wind_speed, 0.0001);
+    assertEquals("9", WindModel.wind_speed);
+    assertEquals(9, WindModel.int_relative_wind_speed);
+    assertEquals(8.941684654, WindModel.double_relative_wind_speed, 0.0001);
   }
 
   @Test

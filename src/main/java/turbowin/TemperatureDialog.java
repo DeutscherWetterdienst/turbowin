@@ -16,7 +16,7 @@ final class TemperatureDialog {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
     activeView = null;
-    mytemp model = new mytemp();
+    TemperatureModel model = new TemperatureModel();
     boolean thermometer =
         main.RS232_connection_mode == 7
             || main.RS232_connection_mode == 8
@@ -43,11 +43,13 @@ final class TemperatureDialog {
                       state,
                       value ->
                           SwingUtilities.invokeLater(() -> {
-                            mytemp.jTextField1.setText(value.air());
-                            mytemp.jTextField2.setText(value.wet());
-                            mytemp.jTextField4.setText(value.humidity());
+                            TemperatureModel.jTextField1.setText(value.air());
+                            TemperatureModel.jTextField2.setText(value.wet());
+                            TemperatureModel.jTextField4.setText(value.humidity());
                             model.jTextField3.setText(value.sea());
-                            (value.frozen() ? mytemp.jRadioButton4 : mytemp.jRadioButton3)
+                            (value.frozen()
+                                    ? TemperatureModel.jRadioButton4
+                                    : TemperatureModel.jRadioButton3)
                                 .setSelected(true);
                             if (model.accept()) {
                               close.run();
@@ -89,21 +91,21 @@ final class TemperatureDialog {
     if (view == null || window == null || !window.isDisplayable()) return;
     TemperatureView.Input values =
         new TemperatureView.Input(
-            mytemp.jTextField1.getText(),
-            mytemp.jTextField2.getText(),
-            mytemp.jTextField4.getText(),
+            TemperatureModel.jTextField1.getText(),
+            TemperatureModel.jTextField2.getText(),
+            TemperatureModel.jTextField4.getText(),
             "",
-            mytemp.jRadioButton4.isSelected());
+            TemperatureModel.jRadioButton4.isSelected());
     Platform.runLater(() -> view.sensorValues(values));
   }
 
-  private static TemperatureView.Input input(mytemp model) {
+  private static TemperatureView.Input input(TemperatureModel model) {
     return new TemperatureView.Input(
-        mytemp.jTextField1.getText(),
-        mytemp.jTextField2.getText(),
-        mytemp.jTextField4.getText(),
+        TemperatureModel.jTextField1.getText(),
+        TemperatureModel.jTextField2.getText(),
+        TemperatureModel.jTextField4.getText(),
         model.jTextField3.getText(),
-        mytemp.jRadioButton4.isSelected());
+        TemperatureModel.jRadioButton4.isSelected());
   }
 
   private static void next() {
