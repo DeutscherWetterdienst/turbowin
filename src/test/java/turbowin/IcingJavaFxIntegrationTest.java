@@ -118,6 +118,7 @@ public class IcingJavaFxIntegrationTest extends AbstractUiTest {
     for (String invalid : List.of("001", "1.5", "", "100")) {
       CloudCoverFxTestSupport.onFx(() -> {
         option(scene, "icing_cause", "1").fire();
+        option(scene, "icing_rate", "2").fire();
         field(scene).setText(invalid);
         CloudCoverFxTestSupport.click(scene, "OK");
         return null;
@@ -125,6 +126,11 @@ public class IcingJavaFxIntegrationTest extends AbstractUiTest {
       DialogFixture warning =
           WindowFinder.findDialog(new DialogTitleMatcher(main.APPLICATION_NAME + " error"))
               .using(robot());
+      SwingUtilities.invokeAndWait(() -> {
+        assertEquals("", IcingState.Is_code);
+        assertEquals("", IcingState.EsEs_code);
+        assertEquals("", IcingState.Rs_code);
+      });
       warning.button(JButtonMatcher.withText("OK")).click();
       SwingUtilities.invokeAndWait(() -> {
         assertTrue(dialog.isDisplayable());

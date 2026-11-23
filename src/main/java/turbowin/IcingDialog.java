@@ -47,13 +47,13 @@ final class IcingDialog {
         number = main.INVALID;
       }
       if (number < 0 || number > 99 || thickness.length() > 2) {
+        IcingState.Is_code = "";
+        IcingState.Rs_code = "";
         JOptionPane.showMessageDialog(
             null,
             "ice thickness must be in range 0 - 99 (or blank, but blank only if cause of ice accretion and rate of ice accreation are not determined)",
             main.APPLICATION_NAME + " error",
             JOptionPane.WARNING_MESSAGE);
-        IcingState.Is_code = "";
-        IcingState.Rs_code = "";
         return false;
       }
       IcingState.EsEs_code = thickness.length() < 2 ? "0" + thickness : thickness;
