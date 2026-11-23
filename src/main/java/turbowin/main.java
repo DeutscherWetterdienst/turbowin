@@ -4167,9 +4167,7 @@ public class main extends javax.swing.JFrame {
 
   private void Maintenance_Captains_Menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Captains_Menu_actionPerformed
-    mycaptain form = new mycaptain();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    CaptainDialog.open();
   } // GEN-LAST:event_Maintenance_Captains_Menu_actionPerformed
 
   private void Maintenance_Move_log_files_by_email_actionPerformed(

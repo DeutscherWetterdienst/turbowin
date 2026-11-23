@@ -238,6 +238,8 @@ public final class mycaptain extends javax.swing.JFrame {
         jTable1.setValueAt(captain_data[r][c], r, c);
       }
     }
+    captainLoaded = true;
+    if (captainLoadedCallback != null) captainLoadedCallback.run();
   }
 
   private void initComponents2() {
@@ -296,6 +298,13 @@ public final class mycaptain extends javax.swing.JFrame {
 
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
+    if (accept()) {
+      setVisible(false);
+      dispose();
+    }
+  }
+
+  boolean accept() {
     // TODO add your handling code here:
 
     boolean doorgaan = true;
@@ -386,11 +395,33 @@ public final class mycaptain extends javax.swing.JFrame {
       /* update observer field on main (progress) screen */
       // main.captain_field_update();
 
-      /* close input page */
-      setVisible(false);
-      dispose();
     } // if (doorgaan)
+    return doorgaan;
   } // GEN-LAST:event_OK_button_actionPerformed
+
+  void loadValues(String[][] rows) {
+    for (int row = 0; row < CAPTAIN_ROWS; row++) {
+      for (int column = 0; column < CAPTAIN_COLUMNS; column++) {
+        jTable1.setValueAt(rows[row][column] == null ? "" : rows[row][column], row, column);
+      }
+    }
+  }
+
+  String[][] tableValues() {
+    String[][] values = new String[CAPTAIN_ROWS][CAPTAIN_COLUMNS];
+    for (int row = 0; row < CAPTAIN_ROWS; row++) {
+      for (int column = 0; column < CAPTAIN_COLUMNS; column++) {
+        Object value = jTable1.getValueAt(row, column);
+        values[row][column] = value == null ? "" : value.toString();
+      }
+    }
+    return values;
+  }
+
+  void whenLoaded(Runnable callback) {
+    captainLoadedCallback = callback;
+    if (captainLoaded) callback.run();
+  }
 
   private void schrijf_captain_log() {
     /* NB input/output in a GUI always via a SwingWorker (Core Java Volume 1 bld 795 e.v.; Volume 2 bld 37, 215) */
@@ -458,6 +489,8 @@ public final class mycaptain extends javax.swing.JFrame {
   private static final int COLUMN_NUMBER_DATE_JOINING = 2;
   private static final int COLUMN_NUMBER_DATE_LEAVING = 3;
   private final String CAPTAIN_HELP_DIR = "captain.pdf";
+  private boolean captainLoaded;
+  private Runnable captainLoadedCallback;
 
   // scope this module + myturbowin.java main module (all of type: static)
   public static String[][] captain_data =
