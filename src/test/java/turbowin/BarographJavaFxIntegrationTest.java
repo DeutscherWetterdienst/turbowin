@@ -88,6 +88,38 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
   }
 
   @Test
+  public void validatesRangeAndRoundsPressureCode() throws Exception {
+    SwingUtilities.invokeAndWait(() -> {
+      main.in_next_sequence = false;
+      mybarograph.a_code = "";
+      mybarograph.pressure_amount_tendency = "";
+    });
+    JDialog dialog = GuiActionRunner.execute(BarographDialog::open);
+    Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
+    CloudCoverFxTestSupport.onFx(() -> {
+      field(scene).setText("50.1");
+      option(scene, 1).fire();
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    DialogFixture warning =
+        WindowFinder.findDialog(new DialogTitleMatcher(main.APPLICATION_NAME + " error"))
+            .using(robot());
+    warning.button(JButtonMatcher.withText("OK")).click();
+    SwingUtilities.invokeAndWait(() -> assertTrue(dialog.isDisplayable()));
+    CloudCoverFxTestSupport.onFx(() -> {
+      field(scene).setText("1.25");
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {
+      assertFalse(dialog.isDisplayable());
+      assertEquals("1", mybarograph.a_code);
+      assertEquals("013", mybarograph.ppp_code);
+    });
+  }
+
+  @Test
   public void sensorValuesAreReadOnlyAndAreNotReplacedOnAcceptance() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;

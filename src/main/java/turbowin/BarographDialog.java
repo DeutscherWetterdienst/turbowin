@@ -18,7 +18,7 @@ final class BarographDialog {
   static JDialog open() {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
-    mybarograph model = new mybarograph(false);
+    mybarograph model = new mybarograph();
     JRadioButton[] options = options();
     JTextField amount = mybarograph.jTextField1;
     boolean sensorConnected = main.RS232_connection_mode != 0;
@@ -30,7 +30,6 @@ final class BarographDialog {
             !mybarograph.jTextField1.isEditable(),
             main.in_next_sequence,
             main.offline_mode);
-    model.dispose();
     AtomicReference<Scene> scene = new AtomicReference<>();
     AtomicReference<JDialog> window = new AtomicReference<>();
     Runnable refresh =
