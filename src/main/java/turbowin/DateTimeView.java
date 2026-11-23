@@ -2,7 +2,6 @@ package turbowin;
 
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -19,25 +18,10 @@ import javafx.scene.layout.VBox;
 final class DateTimeView {
   record State(String[] selected, boolean readOnly, boolean offline) {}
 
-  private static final String[] MONTHS = {
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  };
-
   private DateTimeView() {}
 
   static Scene create(State state, Consumer<String[]> accept, Runnable cancel, Runnable help) {
-    String[][] values = {numbers(2021, 2035), MONTHS, numbers(1, 31), numbers(0, 23)};
+    String[][] values = DateTimeOptions.all();
     String[] ids = {"year", "month", "day", "hour"};
     String[] titles = {"Year [UTC]", "Month [UTC]", "Day [UTC]", "Hour [UTC]"};
     @SuppressWarnings("unchecked")
@@ -98,9 +82,5 @@ final class DateTimeView {
             Objects.requireNonNull(DateTimeView.class.getResource("cloud-cover.css"))
                 .toExternalForm());
     return scene;
-  }
-
-  private static String[] numbers(int first, int last) {
-    return IntStream.rangeClosed(first, last).mapToObj(Integer::toString).toArray(String[]::new);
   }
 }

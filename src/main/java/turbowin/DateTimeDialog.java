@@ -14,7 +14,6 @@ final class DateTimeDialog {
     mydatetime model = new mydatetime();
     DateTimeView.State state =
         new DateTimeView.State(model.selectedValues(), model.isReadOnly(), main.offline_mode);
-    model.dispose();
     return FxSwingDialog.show(
         main.mainClass,
         "Date and Time",
