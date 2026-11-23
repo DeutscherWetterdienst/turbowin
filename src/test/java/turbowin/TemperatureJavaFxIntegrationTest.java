@@ -15,10 +15,8 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
   @Test
@@ -158,8 +156,8 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(backScene, "Back");
         return null;
       });
-      FrameFixture barograph =
-          WindowFinder.findFrame(new FrameTitleMatcher("barograph reading")).using(robot());
+      DialogFixture barograph =
+          WindowFinder.findDialog(new DialogTitleMatcher("Barograph reading")).using(robot());
       SwingUtilities.invokeAndWait(barograph.target()::dispose);
       JDialog forward = GuiActionRunner.execute(TemperatureDialog::open);
       Scene forwardScene = CloudCoverFxTestSupport.awaitScene(forward);

@@ -7,12 +7,16 @@ public final class mybarograph extends javax.swing.JFrame {
 
   /** Creates new form mybarograph */
   public mybarograph() {
+    this(true);
+  }
+
+  mybarograph(boolean loadImages) {
     initComponents();
     NumericInputWorkflow.decimal(jTextField1);
     initComponents2();
     initSynopparameters();
     setLocation(main.x_pos_frame, main.y_pos_frame);
-    initImages();
+    if (loadImages) initImages();
   }
 
   /**
@@ -1121,6 +1125,14 @@ public final class mybarograph extends javax.swing.JFrame {
 
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
+    if (accept()) {
+      setVisible(false);
+      dispose();
+      if (main.in_next_sequence) next_screen();
+    }
+  }
+
+  boolean accept() {
     // TODO add your handling code here:
 
     if (local_AWS_connected == false) // not AWS
@@ -1248,16 +1260,8 @@ public final class mybarograph extends javax.swing.JFrame {
     if (checks_ok == true) {
       /* update progress fields on main screen */
       main.barograph_fields_update();
-
-      /* close this input page */
-      setVisible(false);
-      dispose();
-
-      /* next screen if in_next_screen mode */
-      if (main.in_next_sequence == true) {
-        next_screen();
-      }
     } // if (checks_ok == true)
+    return checks_ok;
   } // GEN-LAST:event_OK_button_actionPerformed
 
   private void Cancel_button_actionPermed(

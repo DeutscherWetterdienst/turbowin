@@ -1077,9 +1077,7 @@ public final class mybarometer extends javax.swing.JFrame {
   }
 
   private void next_screen() {
-    mybarograph form = new mybarograph();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    BarographDialog.open();
   }
 
   /**

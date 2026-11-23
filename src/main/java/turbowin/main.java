@@ -4117,9 +4117,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Barograph_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barograph_menu_actionPerformed
-    mybarograph form = new mybarograph();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    BarographDialog.open();
   } // GEN-LAST:event_Input_Barograph_menu_actionPerformed
 
   private void Info_About_menu_actionPerformed(

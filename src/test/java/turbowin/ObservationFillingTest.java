@@ -154,18 +154,22 @@ public class ObservationFillingTest extends AbstractUiTest {
     clickOkButtonInFrame(pressureFrame);
   }
 
-  private void fillPressureTendencyInformation() throws InterruptedException {
+  private void fillPressureTendencyInformation() throws Exception {
     this.frame
         .label(JLabelMatcher.withText("Pressure tendency"))
         .requireVisible()
         .requireEnabled()
         .click();
-    FrameFixture pressureTendencyFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("barograph reading")).using(this.robot());
-    pressureTendencyFrame.textBox().setText("5");
-    pressureTendencyFrame.radioButton(new RadioButtonMatcher("(a = 1)")).click();
-
-    clickOkButtonInFrame(pressureTendencyFrame);
+    DialogFixture dialog =
+        WindowFinder.findDialog(new DialogTitleMatcher("Barograph reading")).using(this.robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) dialog.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      ((javafx.scene.control.TextField) scene.lookup("#pressure_tendency")).setText("5");
+      ((javafx.scene.control.RadioButton) scene.lookup("#barograph_option_1")).fire();
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillAirTemperatureInformation() throws Exception {

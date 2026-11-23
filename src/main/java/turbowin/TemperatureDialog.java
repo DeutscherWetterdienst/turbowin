@@ -62,7 +62,7 @@ final class TemperatureDialog {
                       () ->
                           SwingUtilities.invokeLater(() -> {
                             close.run();
-                            new mybarograph().setVisible(true);
+                            BarographDialog.open();
                           }),
                       () ->
                           SwingUtilities.invokeLater(() -> {
