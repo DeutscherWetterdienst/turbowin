@@ -73,7 +73,6 @@ final class PositionDialog {
             model.speedLabel(),
             main.in_next_sequence,
             main.offline_mode);
-    model.dispose();
     AtomicReference<Scene> scene = new AtomicReference<>();
     AtomicReference<JDialog> window = new AtomicReference<>();
     if (gps) {

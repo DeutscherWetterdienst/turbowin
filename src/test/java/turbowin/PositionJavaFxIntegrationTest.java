@@ -21,6 +21,29 @@ import turbowin.matchers.DialogTitleMatcher;
 
 public class PositionJavaFxIntegrationTest extends AbstractUiTest {
   @Test
+  public void modelPreservesObservationPeriodsAndAutomaticModeRestrictions() throws Exception {
+    SwingUtilities.invokeAndWait(() -> {
+      main.RS232_GPS_connection_mode = 0;
+      main.RS232_connection_mode = 0;
+      main.APR = false;
+      main.obs_format = main.FORMAT_FM13;
+      myposition manual = new myposition();
+      assertTrue(myposition.jTextField1.isEditable());
+      assertTrue(manual.plotPositionAvailable());
+      assertTrue(manual.courseLabel().contains("3 hrs"));
+      main.obs_format = main.FORMAT_101;
+      assertTrue(new myposition().speedLabel().contains("10 min"));
+      main.APR = true;
+      myposition automatic = new myposition();
+      assertFalse(myposition.jTextField1.isEditable());
+      assertFalse(automatic.plotPositionAvailable());
+      assertTrue(automatic.courseLabel().contains("10 minutes"));
+      main.obs_format = main.FORMAT_FM13;
+      assertTrue(new myposition().speedLabel().contains("3 hours"));
+    });
+  }
+
+  @Test
   public void savesCodesAndRestoresHighSpeedSelection() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = false;
