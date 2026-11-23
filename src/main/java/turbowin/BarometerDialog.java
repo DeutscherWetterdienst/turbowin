@@ -32,14 +32,12 @@ final class BarometerDialog {
             draft.getText(),
             main.barometer_instrument_correction,
             mslLabel,
-            mybarometer.jLabel10.getText(),
+            model.notice(),
             !pressure.isEditable(),
             !draft.isEditable(),
             !draft.isEnabled(),
             main.in_next_sequence,
             main.offline_mode);
-    model.dispose();
-
     AtomicReference<Scene> scene = new AtomicReference<>();
     AtomicReference<JDialog> window = new AtomicReference<>();
     Runnable refresh =

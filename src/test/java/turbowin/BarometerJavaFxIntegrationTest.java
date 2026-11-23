@@ -124,6 +124,32 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
   }
 
   @Test
+  public void aprKeepsInputsReadOnlyAndShowsManualPressureAdvice() throws Exception {
+    SwingUtilities.invokeAndWait(() -> {
+      main.in_next_sequence = false;
+      main.RS232_connection_mode = 0;
+      main.APR = true;
+      main.pressure_reading_msl_yes_no = main.PRESSURE_READING_MSL_NO;
+    });
+    JDialog dialog = GuiActionRunner.execute(BarometerDialog::open);
+    Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
+    CloudCoverFxTestSupport.onFx(() -> {
+      assertFalse(field(scene, "barometer_reading").isEditable());
+      assertFalse(field(scene, "deepest_draft").isEditable());
+      assertFalse(field(scene, "deepest_draft").isDisabled());
+      assertTrue(
+          scene.getRoot().lookupAll(".label").stream()
+              .filter(Label.class::isInstance)
+              .map(Label.class::cast)
+              .anyMatch(label ->
+                  label.getText() != null && label.getText().contains("bridge wing door")));
+      CloudCoverFxTestSupport.click(scene, "Cancel");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> assertFalse(dialog.isDisplayable()));
+  }
+
+  @Test
   public void sequenceNavigatesBackForwardAndStops() throws Exception {
     SwingUtilities.invokeAndWait(() -> {
       main.in_next_sequence = true;
