@@ -88,9 +88,7 @@ final class BarographDialog {
                       () ->
                           SwingUtilities.invokeLater(() -> {
                             close.run();
-                            mybarometer previous = new mybarometer();
-                            previous.setSize(800, 600);
-                            previous.setVisible(true);
+                            BarometerDialog.open();
                           }),
                       () ->
                           SwingUtilities.invokeLater(() -> {

@@ -1302,9 +1302,7 @@ public final class mybarograph extends javax.swing.JFrame {
   } // GEN-LAST:event_Stop_button_actionPerformed
 
   private void previous_screen() {
-    mybarometer form = new mybarometer();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    BarometerDialog.open();
   }
 
   private void next_screen() {

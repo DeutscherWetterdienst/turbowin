@@ -4110,9 +4110,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Barometer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Barometer_menu_actionPerformed
-    mybarometer form = new mybarometer();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    BarometerDialog.open();
   } // GEN-LAST:event_Input_Barometer_menu_actionPerformed
 
   void Input_Barograph_menu_actionPerformed(

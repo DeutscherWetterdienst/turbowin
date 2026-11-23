@@ -856,6 +856,14 @@ public final class mybarometer extends javax.swing.JFrame {
 
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
+    if (accept()) {
+      setVisible(false);
+      dispose();
+      if (main.in_next_sequence) next_screen();
+    }
+  }
+
+  boolean accept() {
     // TODO add your handling code here:
 
     if (local_AWS_connected == false) // not AWS
@@ -1058,16 +1066,8 @@ public final class mybarometer extends javax.swing.JFrame {
 
       /* update progress fields on main screen */
       main.barometer_fields_update();
-
-      /* close this input page */
-      setVisible(false);
-      dispose();
-
-      /* next screen if in_next_screen mode */
-      if (main.in_next_sequence == true) {
-        next_screen();
-      }
     } // if (checks_ok == true)
+    return checks_ok;
   } // GEN-LAST:event_OK_button_actionPerformed
 
   private void previous_screen() {
