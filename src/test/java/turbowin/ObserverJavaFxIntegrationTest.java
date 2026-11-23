@@ -95,13 +95,17 @@ public class ObserverJavaFxIntegrationTest extends AbstractUiTest {
       });
       CloudCoverFxTestSupport.onFx(() -> {
         table(scene).getItems().get(0).value(1).set("J.B.");
+        table(scene).getItems().get(1).value(0).set("Jones");
+        table(scene).getItems().get(1).value(1).set("J.B.");
+        table(scene).getSelectionModel().select(1);
         CloudCoverFxTestSupport.click(scene, "OK");
         return null;
       });
       SwingUtilities.invokeAndWait(() -> {
         assertFalse(dialog.isDisplayable());
         assertFalse(main.in_next_sequence);
-        assertEquals("Smith;J.B.;JB1;-;", myobserver.selected_observer);
+        assertEquals("JB1", myobserver.observer_data[0][2]);
+        assertEquals("Jones;J.B.;JB2;-;", myobserver.selected_observer);
       });
     } finally {
       SwingUtilities.invokeAndWait(() -> {

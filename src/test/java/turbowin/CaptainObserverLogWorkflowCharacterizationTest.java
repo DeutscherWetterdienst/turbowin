@@ -104,19 +104,15 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
         StandardCharsets.UTF_8);
 
     myobserver owner = new myobserver();
-    try {
-      ObserverLogReadWorkflow.start(owner);
+    ObserverLogReadWorkflow.start(owner);
 
-      awaitCondition(() ->
-          "Bob".equals(myobserver.observer_data[0][0])
-              && "".equals(myobserver.observer_data[0][1])
-              && "7".equals(myobserver.observer_data[0][2])
-              && "book".equals(myobserver.observer_data[0][3])
-              && "Incomplete".equals(myobserver.observer_data[1][0])
-              && "".equals(myobserver.observer_data[1][1]));
-    } finally {
-      owner.dispose();
-    }
+    awaitCondition(() ->
+        "Bob".equals(myobserver.observer_data[0][0])
+            && "".equals(myobserver.observer_data[0][1])
+            && "7".equals(myobserver.observer_data[0][2])
+            && "book".equals(myobserver.observer_data[0][3])
+            && "Incomplete".equals(myobserver.observer_data[1][0])
+            && "".equals(myobserver.observer_data[1][1]));
   }
 
   @Test
@@ -155,16 +151,12 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
         logsDirectory.resolve(main.OBSERVER_LOG), contents.toString(), StandardCharsets.UTF_8);
 
     myobserver owner = new myobserver();
-    try {
-      ObserverLogReadWorkflow.start(owner);
+    ObserverLogReadWorkflow.start(owner);
 
-      awaitCondition(() ->
-          "Observer0".equals(myobserver.observer_data[0][0])
-              && ("Observer" + (myobserver.OBSERVER_ROWS - 1))
-                  .equals(myobserver.observer_data[myobserver.OBSERVER_ROWS - 1][0]));
-    } finally {
-      owner.dispose();
-    }
+    awaitCondition(() ->
+        "Observer0".equals(myobserver.observer_data[0][0])
+            && ("Observer" + (myobserver.OBSERVER_ROWS - 1))
+                .equals(myobserver.observer_data[myobserver.OBSERVER_ROWS - 1][0]));
   }
 
   @Test
@@ -191,14 +183,10 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     myobserver.observer_data[0][0] = "stale";
 
     myobserver owner = new myobserver();
-    try {
-      myobserver.observer_data[0][0] = "stale";
-      ObserverLogReadWorkflow.start(owner);
+    myobserver.observer_data[0][0] = "stale";
+    ObserverLogReadWorkflow.start(owner);
 
-      awaitCondition(() -> observerDataIsEmpty());
-    } finally {
-      owner.dispose();
-    }
+    awaitCondition(() -> observerDataIsEmpty());
   }
 
   private void clearCaptainData() {

@@ -20,7 +20,6 @@ final class ObserverDialog {
             main.eucaws_obs_id,
             main.in_next_sequence,
             main.offline_mode);
-    model.dispose();
     AtomicReference<ObserverView> view = new AtomicReference<>();
     AtomicReference<ObserverView.Data> pending = new AtomicReference<>();
     JDialog window =
