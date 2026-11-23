@@ -16,7 +16,6 @@ final class CaptainDialog {
     mycaptain model = new mycaptain();
     CaptainView.State state =
         new CaptainView.State(main.recruiting_country.contains("GERMANY"), main.offline_mode);
-    model.dispose();
     AtomicReference<CaptainView> view = new AtomicReference<>();
     AtomicReference<String[][]> pending = new AtomicReference<>();
     JDialog window =

@@ -76,20 +76,16 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
         StandardCharsets.UTF_8);
 
     mycaptain owner = new mycaptain();
-    try {
-      CaptainLogReadWorkflow.start(owner);
+    CaptainLogReadWorkflow.start(owner);
 
-      awaitCondition(() ->
-          "Ada".equals(mycaptain.captain_data[0][0])
-              && "".equals(mycaptain.captain_data[0][1])
-              && "12".equals(mycaptain.captain_data[0][2])
-              && "-".equals(mycaptain.captain_data[0][3])
-              && " ".equals(mycaptain.captain_data[0][4])
-              && "Incomplete".equals(mycaptain.captain_data[1][0])
-              && "".equals(mycaptain.captain_data[1][1]));
-    } finally {
-      owner.dispose();
-    }
+    awaitCondition(() ->
+        "Ada".equals(mycaptain.captain_data[0][0])
+            && "".equals(mycaptain.captain_data[0][1])
+            && "12".equals(mycaptain.captain_data[0][2])
+            && "-".equals(mycaptain.captain_data[0][3])
+            && " ".equals(mycaptain.captain_data[0][4])
+            && "Incomplete".equals(mycaptain.captain_data[1][0])
+            && "".equals(mycaptain.captain_data[1][1]));
   }
 
   @Test
@@ -127,16 +123,12 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
         logsDirectory.resolve(main.CAPTAIN_LOG), contents.toString(), StandardCharsets.UTF_8);
 
     mycaptain owner = new mycaptain();
-    try {
-      CaptainLogReadWorkflow.start(owner);
+    CaptainLogReadWorkflow.start(owner);
 
-      awaitCondition(() ->
-          "Captain0".equals(mycaptain.captain_data[0][0])
-              && ("Captain" + (mycaptain.CAPTAIN_ROWS - 1))
-                  .equals(mycaptain.captain_data[mycaptain.CAPTAIN_ROWS - 1][0]));
-    } finally {
-      owner.dispose();
-    }
+    awaitCondition(() ->
+        "Captain0".equals(mycaptain.captain_data[0][0])
+            && ("Captain" + (mycaptain.CAPTAIN_ROWS - 1))
+                .equals(mycaptain.captain_data[mycaptain.CAPTAIN_ROWS - 1][0]));
   }
 
   @Test
@@ -166,14 +158,10 @@ public class CaptainObserverLogWorkflowCharacterizationTest {
     mycaptain.captain_data[0][0] = "stale";
 
     mycaptain owner = new mycaptain();
-    try {
-      mycaptain.captain_data[0][0] = "stale";
-      CaptainLogReadWorkflow.start(owner);
+    mycaptain.captain_data[0][0] = "stale";
+    CaptainLogReadWorkflow.start(owner);
 
-      awaitCondition(() -> captainDataIsEmpty());
-    } finally {
-      owner.dispose();
-    }
+    awaitCondition(() -> captainDataIsEmpty());
   }
 
   @Test

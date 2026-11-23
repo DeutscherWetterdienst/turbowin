@@ -94,11 +94,16 @@ public class CaptainJavaFxIntegrationTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> assertTrue(dialog.isDisplayable()));
     assertEquals(initial, Files.readString(log));
     CloudCoverFxTestSupport.onFx(() -> {
-      CloudCoverFxTestSupport.click(scene, "Cancel");
+      table(scene).getItems().get(0).value(3).set("15/02/2024");
+      CloudCoverFxTestSupport.click(scene, "OK");
       return null;
     });
     SwingUtilities.invokeAndWait(() -> assertFalse(dialog.isDisplayable()));
-    assertEquals(initial, Files.readString(log));
+    String corrected = "Doe;J.D.;01/01/2024;15/02/2024;N1234;";
+    long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
+    while (System.nanoTime() < deadline && !Files.readString(log).contains(corrected))
+      Thread.sleep(25);
+    assertTrue(Files.readString(log).contains(corrected));
   }
 
   @Test
