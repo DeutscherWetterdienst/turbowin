@@ -4035,9 +4035,7 @@ public class main extends javax.swing.JFrame {
     leaflet_maps_obs_sst = observation.seaWaterTemperature;
     leaflet_maps_obs_msl_pressure = observation.mslPressure;
 
-    myposition form = new myposition();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    PositionDialog.open();
   } // GEN-LAST:event_Input_Position_menu_actionPerformed
 
   void Input_DateTime_menu_actionPerformed(

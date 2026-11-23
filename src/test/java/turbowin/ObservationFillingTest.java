@@ -85,20 +85,25 @@ public class ObservationFillingTest extends AbstractUiTest {
     new JTextComponentFixture(robot(), main.jTextField36).requireText("");
   }
 
-  private void fillPositionInformation() throws InterruptedException {
+  private void fillPositionInformation() throws Exception {
     this.frame.label(JLabelMatcher.withText("Position")).requireVisible().requireEnabled().click();
-    FrameFixture positionFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Position, course and speed"))
+    DialogFixture dialog =
+        WindowFinder.findDialog(new DialogTitleMatcher("Position, course and speed"))
             .using(this.robot());
-    positionFrame.textBox("lat_degree").setText("10");
-    positionFrame.textBox("lat_minute").setText("11");
-    positionFrame.textBox("lon_degree").setText("12");
-    positionFrame.textBox("lon_minute").setText("13");
-    positionFrame.radioButton(new RadioButtonMatcher("North")).click();
-    positionFrame.radioButton(new RadioButtonMatcher("East")).click();
-    positionFrame.radioButton(new RadioButtonMatcher("023 - 067")).click();
-    positionFrame.radioButton(new RadioButtonMatcher("6 - 10")).click();
-    clickOkButtonInFrame(positionFrame);
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) dialog.target());
+    CloudCoverFxTestSupport.onFx(() -> {
+      ((javafx.scene.control.TextField) scene.lookup("#lat_degree")).setText("10");
+      ((javafx.scene.control.TextField) scene.lookup("#lat_minute")).setText("11");
+      ((javafx.scene.control.TextField) scene.lookup("#lon_degree")).setText("12");
+      ((javafx.scene.control.TextField) scene.lookup("#lon_minute")).setText("13");
+      ((javafx.scene.control.RadioButton) scene.lookup("#position_option_0_0")).fire();
+      ((javafx.scene.control.RadioButton) scene.lookup("#position_option_1_0")).fire();
+      ((javafx.scene.control.RadioButton) scene.lookup("#position_option_2_1")).fire();
+      ((javafx.scene.control.RadioButton) scene.lookup("#position_option_3_2")).fire();
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void handleLocalizedButtonClick(DialogFixture dialog, String textEn, String textDe) {

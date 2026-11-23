@@ -1071,9 +1071,7 @@ public final class mybarometer extends javax.swing.JFrame {
   } // GEN-LAST:event_OK_button_actionPerformed
 
   private void previous_screen() {
-    myposition form = new myposition();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    PositionDialog.open();
   }
 
   private void next_screen() {

@@ -15,10 +15,8 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
   @Test
@@ -138,8 +136,8 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(backScene, "Back");
         return null;
       });
-      FrameFixture position =
-          WindowFinder.findFrame(new FrameTitleMatcher("Position, course and speed"))
+      DialogFixture position =
+          WindowFinder.findDialog(new DialogTitleMatcher("Position, course and speed"))
               .using(robot());
       SwingUtilities.invokeAndWait(position.target()::dispose);
       JDialog forward = GuiActionRunner.execute(BarometerDialog::open);

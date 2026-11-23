@@ -1043,6 +1043,14 @@ public final class myposition extends javax.swing.JFrame {
 
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
+    if (accept()) {
+      setVisible(false);
+      dispose();
+      if (main.in_next_sequence) next_screen();
+    }
+  }
+
+  boolean accept() {
     // TODO add your handling code here:
 
     if ((main.RS232_connection_mode != 3)
@@ -1416,17 +1424,33 @@ public final class myposition extends javax.swing.JFrame {
     if (checks_ok == true) {
       /* position velden op hoofdscherm overzicht updaten */
       main.position_fields_update();
-
-      /* close this input page */
-      setVisible(false);
-      dispose();
-
-      /* next screen if in_next_screen mode */
-      if (main.in_next_sequence == true) {
-        next_screen();
-      }
     } // if (checks_ok == true)
+    return checks_ok;
   } // GEN-LAST:event_OK_button_actionPerformed
+
+  void setPlotPosition(boolean selected) {
+    jCheckBox1.setSelected(selected);
+  }
+
+  boolean plotPositionAvailable() {
+    return jCheckBox1.isEnabled();
+  }
+
+  String courseLabel() {
+    return jLabel5.getText();
+  }
+
+  String speedLabel() {
+    return jLabel6.getText();
+  }
+
+  void cancelCleanup() {
+    if (!main.APR) myposition_windowClosing(null);
+  }
+
+  void windowClosingCleanup() {
+    myposition_windowClosing(null);
+  }
 
   private void Position_In_leaflet_Maps(String full_path_leaflet_maps_html_file) {
     // called from: OK_button_actionPerformed() --doInBackground--- [myposition.java]
@@ -1898,8 +1922,9 @@ public final class myposition extends javax.swing.JFrame {
       else if (speed.equals(SPEED_16_20)) jRadioButton18.setSelected(true);
       else if (speed.equals(SPEED_21_25)) jRadioButton19.setSelected(true);
       else if (speed.equals(SPEED_26_30)) jRadioButton20.setSelected(true);
-      else if (speed.equals(SPEED_36_40)) jRadioButton21.setSelected(true);
-      else if (speed.equals(SPEED_MORE_40)) jRadioButton22.setSelected(true);
+      else if (speed.equals(SPEED_31_35)) jRadioButton21.setSelected(true);
+      else if (speed.equals(SPEED_36_40)) jRadioButton22.setSelected(true);
+      else if (speed.equals(SPEED_MORE_40)) jRadioButton23.setSelected(true);
     } // if (speed.compareTo("") != 0)
   } // private void initSynopparameters()
 

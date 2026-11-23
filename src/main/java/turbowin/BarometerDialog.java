@@ -95,9 +95,7 @@ final class BarometerDialog {
                       () ->
                           SwingUtilities.invokeLater(() -> {
                             close.run();
-                            myposition previous = new myposition();
-                            previous.setSize(800, 600);
-                            previous.setVisible(true);
+                            PositionDialog.open();
                           }),
                       () ->
                           SwingUtilities.invokeLater(() -> {
