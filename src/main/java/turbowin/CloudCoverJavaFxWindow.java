@@ -107,8 +107,6 @@ final class CloudCoverJavaFxWindow {
   }
 
   private static void next() {
-    myobserver form = new myobserver();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    ObserverDialog.open();
   }
 }

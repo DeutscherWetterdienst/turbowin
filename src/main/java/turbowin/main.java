@@ -4151,9 +4151,7 @@ public class main extends javax.swing.JFrame {
 
   void Input_Observer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Observer_menu_actionPerformed
-    myobserver form = new myobserver();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    ObserverDialog.open();
   } // GEN-LAST:event_Input_Observer_menu_actionPerformed
 
   private void Maintenance_Move_log_files_to_disk_actionPerformed(

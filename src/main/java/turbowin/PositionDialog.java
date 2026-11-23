@@ -152,9 +152,7 @@ final class PositionDialog {
                       () ->
                           SwingUtilities.invokeLater(() -> {
                             close.run();
-                            myobserver previous = new myobserver();
-                            previous.setSize(800, 600);
-                            previous.setVisible(true);
+                            ObserverDialog.open();
                           }),
                       () ->
                           SwingUtilities.invokeLater(() -> {

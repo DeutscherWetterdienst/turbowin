@@ -8,7 +8,6 @@ import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
-import org.assertj.swing.data.TableCell;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.edt.GuiTask;
 import org.assertj.swing.exception.ComponentLookupException;
@@ -375,18 +374,24 @@ public class ObservationFillingTest extends AbstractUiTest {
     SwingUtilities.invokeAndWait(() -> {});
   }
 
-  private void addObserverInformation() throws InterruptedException {
+  private void addObserverInformation() throws Exception {
     GuiActionRunner.execute(
         () -> ((main) this.frame.target()).Input_Observer_menu_actionPerformed(null));
-    FrameFixture observerFrame =
-        WindowFinder.findFrame(new FrameTitleMatcher("Observer")).using(this.robot());
-    JTableFixture table = observerFrame.table();
-    table.enterValue(TableCell.row(0).column(0), "Doe");
-    table.enterValue(TableCell.row(0).column(1), "J D");
-    table.enterValue(TableCell.row(0).column(2), "Captain");
-    table.enterValue(TableCell.row(0).column(3), "N1234");
-
-    clickOkButtonInFrame(observerFrame);
+    DialogFixture dialog =
+        WindowFinder.findDialog(new DialogTitleMatcher("Observer")).using(robot());
+    Scene scene = CloudCoverFxTestSupport.awaitScene((JDialog) dialog.target());
+    ObserverJavaFxIntegrationTest.awaitLoaded(scene);
+    CloudCoverFxTestSupport.onFx(() -> {
+      ObserverView.Row row = ObserverJavaFxIntegrationTest.table(scene).getItems().get(0);
+      row.value(0).set("Doe");
+      row.value(1).set("J D");
+      row.value(2).set("Captain");
+      row.value(3).set("N1234");
+      ObserverJavaFxIntegrationTest.table(scene).getSelectionModel().select(0);
+      CloudCoverFxTestSupport.click(scene, "OK");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> {});
   }
 
   private void fillAllStationData() throws InterruptedException {

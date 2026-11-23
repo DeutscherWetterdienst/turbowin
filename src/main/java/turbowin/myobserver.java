@@ -432,6 +432,13 @@ public final class myobserver extends javax.swing.JFrame {
 
   private void OK_button_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_OK_button_actionPerformed
+    if (accept()) {
+      setVisible(false);
+      dispose();
+    }
+  }
+
+  boolean accept() {
     // TODO add your handling code here:
 
     if (main.eucaws_obs_id == true) {
@@ -505,18 +512,15 @@ public final class myobserver extends javax.swing.JFrame {
 
         /* update observer field on main (progress) screen */
         main.observer_field_update();
-
-        /* close input page */
-        setVisible(false);
-        dispose();
       } // if (checks_ok)
 
       /* next screen if in_next_screen mode */
-      if (main.in_next_sequence == true) {
+      if (checks_ok && main.in_next_sequence == true) {
         // last input screen of the next_screen_mode sequence
         main.in_next_sequence = false;
       }
 
+      return checks_ok;
     } // if (main.eucaws_obs_id == true)
     else // NOT obs_id
     {
@@ -581,17 +585,44 @@ public final class myobserver extends javax.swing.JFrame {
       /* update observer field on main (progress) screen */
       main.observer_field_update();
 
-      /* close input page */
-      setVisible(false);
-      dispose();
-
       /* next screen if in_next_screen mode */
       if (main.in_next_sequence == true) {
         // last input screen of the next_screen_mode sequence
         main.in_next_sequence = false;
       }
+      return true;
     } // else (NOT obs_id)
   } // GEN-LAST:event_OK_button_actionPerformed
+
+  void loadValues(String[][] rows, int selectedRow) {
+    for (int row = 0; row < OBSERVER_ROWS; row++) {
+      for (int column = 0; column < OBSERVER_COLUMNS; column++) {
+        jTable1.setValueAt(rows[row][column] == null ? "" : rows[row][column], row, column);
+      }
+    }
+    if (selectedRow < 0) jTable1.clearSelection();
+    else jTable1.setRowSelectionInterval(selectedRow, selectedRow);
+  }
+
+  String[][] tableValues() {
+    String[][] values = new String[OBSERVER_ROWS][OBSERVER_COLUMNS];
+    for (int row = 0; row < OBSERVER_ROWS; row++) {
+      for (int column = 0; column < OBSERVER_COLUMNS; column++) {
+        Object value = jTable1.getValueAt(row, column);
+        values[row][column] = value == null ? "" : value.toString();
+      }
+    }
+    return values;
+  }
+
+  int selectedRow() {
+    return jTable1.getSelectedRow();
+  }
+
+  void whenLoaded(Runnable callback) {
+    observerLoadedCallback = callback;
+    if (observerLoaded) callback.run();
+  }
 
   private boolean compute_OBS_IDs() {
     boolean checks_ok = true;
@@ -797,6 +828,8 @@ public final class myobserver extends javax.swing.JFrame {
         }
       }
     } // for (int r = 0; r < OBSERVER_ROWS; r++)
+    observerLoaded = true;
+    if (observerLoadedCallback != null) observerLoadedCallback.run();
   }
 
   private void schrijf_observer_log() {
@@ -912,6 +945,8 @@ public final class myobserver extends javax.swing.JFrame {
       20; // static!!    // zie ook MAX_AANTAL_WAARNEMERS in main.java
   public static final int OBSERVER_COLUMNS = 4; // static!!
   private final String OBSERVER_HELP_DIR = "observer.pdf";
+  private boolean observerLoaded;
+  private Runnable observerLoadedCallback;
 
   // scope this module + myturbowin.java main module (all of type: static)
   public static String[][] observer_data =

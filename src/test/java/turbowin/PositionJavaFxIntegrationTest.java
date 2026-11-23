@@ -16,10 +16,8 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 public class PositionJavaFxIntegrationTest extends AbstractUiTest {
   @Test
@@ -170,8 +168,8 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(backScene, "Back");
         return null;
       });
-      FrameFixture observer =
-          WindowFinder.findFrame(new FrameTitleMatcher("Observer")).using(robot());
+      DialogFixture observer =
+          WindowFinder.findDialog(new DialogTitleMatcher("Observer")).using(robot());
       SwingUtilities.invokeAndWait(observer.target()::dispose);
       JDialog forward = GuiActionRunner.execute(PositionDialog::open);
       Scene forwardScene = CloudCoverFxTestSupport.awaitScene(forward);

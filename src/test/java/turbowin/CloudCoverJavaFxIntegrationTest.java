@@ -18,10 +18,8 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.DialogFixture;
-import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
-import turbowin.matchers.FrameTitleMatcher;
 
 /** Exercises the embedded JavaFX dialog against the real Swing observation state. */
 public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
@@ -164,8 +162,8 @@ public class CloudCoverJavaFxIntegrationTest extends AbstractUiTest {
         CloudCoverFxTestSupport.click(scene, "Cancel");
         return null;
       });
-      FrameFixture observer =
-          WindowFinder.findFrame(new FrameTitleMatcher("Observer")).using(robot());
+      DialogFixture observer =
+          WindowFinder.findDialog(new DialogTitleMatcher("Observer")).using(robot());
       SwingUtilities.invokeAndWait(observer.target()::dispose);
 
       JDialog backDialog = GuiActionRunner.execute(() -> CloudCoverJavaFxWindow.open());

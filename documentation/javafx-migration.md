@@ -1,6 +1,6 @@
 # JavaFX in the Swing application
 
-The About, date and time, position, barometer, barograph, temperature, wind, waves, visibility, present-weather, past-weather, icing, ice, low-cloud, middle-cloud, high-cloud, and cloud-cover windows are embedded JavaFX views.
+The About, observer, date and time, position, barometer, barograph, temperature, wind, waves, visibility, present-weather, past-weather, icing, ice, low-cloud, middle-cloud, high-cloud, and cloud-cover windows are embedded JavaFX views.
 The rest of TurboWin continues to use Swing.
 The OpenJFX Gradle plugin supplies JavaFX 25.0.5.1 controls and Swing integration for the build
 machine's operating system and architecture. Build each distribution on its target platform, as

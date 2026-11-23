@@ -1704,9 +1704,7 @@ public final class myposition extends javax.swing.JFrame {
   }
 
   private void previous_screen() {
-    myobserver form = new myobserver();
-    form.setSize(800, 600);
-    form.setVisible(true);
+    ObserverDialog.open();
   }
 
   /**
