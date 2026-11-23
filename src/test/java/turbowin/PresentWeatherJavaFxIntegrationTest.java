@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -14,6 +15,31 @@ import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
 
 public class PresentWeatherJavaFxIntegrationTest extends AbstractUiTest {
+  @Test
+  public void specificConditionsFitInTheWindowAndRemainScrollable() throws Exception {
+    reset();
+    JDialog dialog = GuiActionRunner.execute(PresentWeatherDialog::open);
+    Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
+    CloudCoverFxTestSupport.onFx(() -> {
+      list(scene, 1).getSelectionModel().select(2);
+      scene.getRoot().applyCss();
+      scene.getRoot().layout();
+      ScrollPane outer = (ScrollPane) scene.lookup(".cloud-cover-scroll");
+      assertTrue(
+          "Present weather content should fit in the window",
+          outer.getContent().getLayoutBounds().getHeight()
+              <= outer.getViewportBounds().getHeight() + 1);
+      ListView<?> specific = list(scene, 3);
+      assertEquals(10, specific.getItems().size());
+      specific.scrollTo(9);
+      specific.getSelectionModel().select(9);
+      assertEquals(9, specific.getSelectionModel().getSelectedIndex());
+      CloudCoverFxTestSupport.click(scene, "Cancel");
+      return null;
+    });
+    SwingUtilities.invokeAndWait(() -> assertFalse(dialog.isDisplayable()));
+  }
+
   @Test
   public void categoryChangesClearOtherSelectionAndRestoreSpecificWeather() throws Exception {
     reset();

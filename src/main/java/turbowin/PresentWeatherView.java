@@ -34,7 +34,7 @@ final class PresentWeatherView {
     wet.getItems().setAll(PresentWeatherCatalog.WET);
     ListView<PresentWeatherCatalog.Weather> specific = new ListView<>();
     specific.setId("present_weather_list_3");
-    specific.setPrefHeight(175);
+    specific.setPrefHeight(115);
     specific.setPlaceholder(new Label("Select a general weather condition"));
     specific.setCellFactory(list -> new WrappedCell<>(PresentWeatherCatalog.Weather::description));
     boolean[] updating = {false};
