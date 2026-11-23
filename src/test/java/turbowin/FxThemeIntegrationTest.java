@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.awt.Dimension;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import javafx.css.PseudoClass;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -66,15 +67,18 @@ public class FxThemeIntegrationTest extends AbstractUiTest {
         assertEquals("12", ((TextField) icingScene.lookup("#icing_thickness")).getText());
         assertTrue(
             ((Color) ((Label) icingScene.lookup(".heading")).getTextFill()).getBrightness() > 0.8);
-        assertTrue(
-            color(
-                        ((TextField) icingScene.lookup("#icing_thickness"))
-                            .getBackground()
-                            .getFills()
-                            .get(0)
-                            .getFill())
-                    .getBrightness()
-                < 0.4);
+        TextField thickness = (TextField) icingScene.lookup("#icing_thickness");
+        PseudoClass focused = PseudoClass.getPseudoClass("focused");
+        boolean wasFocused = thickness.getPseudoClassStates().contains(focused);
+        for (boolean focusState : List.of(false, true)) {
+          thickness.pseudoClassStateChanged(focused, focusState);
+          thickness.applyCss();
+          var fills = thickness.getBackground().getFills();
+          assertTrue(
+              "Night text field background with focused=" + focusState + ": " + fills,
+              color(fills.get(fills.size() - 1).getFill()).getBrightness() < 0.4);
+        }
+        thickness.pseudoClassStateChanged(focused, wasFocused);
         assertTrue(
             ((Color) ((Label) aboutScene.lookup(".title")).getTextFill()).getBrightness() > 0.8);
         return null;
