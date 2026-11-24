@@ -6,9 +6,7 @@ import java.awt.event.WindowEvent;
 import java.util.concurrent.atomic.AtomicReference;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -28,43 +26,11 @@ final class PositionDialog {
       PositionModel.jTextField3,
       PositionModel.jTextField4
     };
-    JRadioButton[][] options = {
-      {PositionModel.jRadioButton1, PositionModel.jRadioButton2},
-      {PositionModel.jRadioButton3, PositionModel.jRadioButton4},
-      {
-        PositionModel.jRadioButton5,
-        PositionModel.jRadioButton6,
-        PositionModel.jRadioButton7,
-        PositionModel.jRadioButton8,
-        PositionModel.jRadioButton9,
-        PositionModel.jRadioButton10,
-        PositionModel.jRadioButton11,
-        PositionModel.jRadioButton12,
-        PositionModel.jRadioButton13
-      },
-      {
-        PositionModel.jRadioButton14,
-        PositionModel.jRadioButton15,
-        PositionModel.jRadioButton16,
-        PositionModel.jRadioButton17,
-        PositionModel.jRadioButton18,
-        PositionModel.jRadioButton19,
-        PositionModel.jRadioButton20,
-        PositionModel.jRadioButton21,
-        PositionModel.jRadioButton22,
-        PositionModel.jRadioButton23
-      }
-    };
-    ButtonGroup[] groups = {
-      PositionModel.buttonGroup1,
-      PositionModel.buttonGroup2,
-      PositionModel.buttonGroup3,
-      PositionModel.buttonGroup4
-    };
+    PositionSelections selections = PositionModel.selections;
     String[] values = new String[fields.length];
-    int[] selected = new int[options.length];
+    int[] selected = new int[4];
     for (int i = 0; i < fields.length; i++) values[i] = fields[i].getText();
-    for (int i = 0; i < options.length; i++) selected[i] = selected(options[i]);
+    for (int i = 0; i < selected.length; i++) selected[i] = selections.selectedIndex(i);
     boolean gps = main.RS232_GPS_connection_mode != 0;
     PositionView.State state =
         new PositionView.State(
@@ -107,18 +73,18 @@ final class PositionDialog {
                   }
                 });
       }
-      for (int i = 0; i < options.length; i++) {
+      for (int i = 0; i < selected.length; i++) {
         int index = i;
-        for (JRadioButton button : options[i]) {
-          button.addItemListener(event ->
-              SwingUtilities.invokeLater(() -> {
-                Scene current = scene.get();
-                JDialog dialog = window.get();
-                if (current == null || dialog == null || !dialog.isDisplayable()) return;
-                int value = selected(options[index]);
-                Platform.runLater(() -> PositionView.updateSelection(current, index, value));
-              }));
-        }
+        selections
+            .group(i)
+            .addListener(event ->
+                SwingUtilities.invokeLater(() -> {
+                  Scene current = scene.get();
+                  JDialog dialog = window.get();
+                  if (current == null || dialog == null || !dialog.isDisplayable()) return;
+                  int value = selections.selectedIndex(index);
+                  Platform.runLater(() -> PositionView.updateSelection(current, index, value));
+                }));
       }
     }
     JDialog result =
@@ -134,11 +100,8 @@ final class PositionDialog {
                           SwingUtilities.invokeLater(() -> {
                             for (int i = 0; i < fields.length; i++)
                               fields[i].setText(input.values()[i]);
-                            for (int i = 0; i < options.length; i++) {
-                              int choice = input.selected()[i];
-                              if (choice < 0) groups[i].clearSelection();
-                              else options[i][choice].setSelected(true);
-                            }
+                            for (int i = 0; i < selected.length; i++)
+                              selections.selectIndex(i, input.selected()[i]);
                             model.setPlotPosition(input.plot());
                             if (model.accept()) {
                               close.run();
@@ -175,9 +138,9 @@ final class PositionDialog {
                     if (!value.equals(values[i]))
                       Platform.runLater(() -> PositionView.updateField(created, index, value));
                   }
-                  for (int i = 0; i < options.length; i++) {
+                  for (int i = 0; i < selected.length; i++) {
                     int index = i;
-                    int value = selected(options[i]);
+                    int value = selections.selectedIndex(i);
                     if (value != selected[i])
                       Platform.runLater(() -> PositionView.updateSelection(created, index, value));
                   }
@@ -193,10 +156,5 @@ final class PositionDialog {
           }
         });
     return result;
-  }
-
-  private static int selected(JRadioButton[] buttons) {
-    for (int i = 0; i < buttons.length; i++) if (buttons[i].isSelected()) return i;
-    return -1;
   }
 }

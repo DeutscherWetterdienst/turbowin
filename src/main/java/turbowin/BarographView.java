@@ -31,12 +31,15 @@ final class BarographView {
 
   private BarographView() {}
 
-  static void updateSensorValues(Scene scene, String amount, int selected) {
+  static void updateSensorAmount(Scene scene, String amount) {
     TextField field = (TextField) scene.lookup("#pressure_tendency");
     TextFormatter<?> formatter = field.getTextFormatter();
     field.setTextFormatter(null);
     field.setText(amount);
     field.setTextFormatter(formatter);
+  }
+
+  static void updateSensorSelection(Scene scene, int selected) {
     ((RadioButton) scene.lookup("#barograph_option_" + selected)).setSelected(true);
   }
 

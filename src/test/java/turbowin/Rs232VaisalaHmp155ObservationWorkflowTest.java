@@ -17,7 +17,6 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
@@ -43,8 +42,7 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   private JTextField originalTextField1;
   private JTextField originalTextField2;
   private JTextField originalTextField4;
-  private JRadioButton originalFrozenButton;
-  private JRadioButton originalNotFrozenButton;
+  private boolean originalFrozenSelection;
 
   @Before
   public void setUp() {
@@ -61,8 +59,7 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     originalTextField1 = TemperatureModel.jTextField1;
     originalTextField2 = TemperatureModel.jTextField2;
     originalTextField4 = TemperatureModel.jTextField4;
-    originalFrozenButton = TemperatureModel.jRadioButton4;
-    originalNotFrozenButton = TemperatureModel.jRadioButton3;
+    originalFrozenSelection = TemperatureModel.selectedWetBulbFrozen;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -85,8 +82,7 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     TemperatureModel.jTextField1 = originalTextField1;
     TemperatureModel.jTextField2 = originalTextField2;
     TemperatureModel.jTextField4 = originalTextField4;
-    TemperatureModel.jRadioButton4 = originalFrozenButton;
-    TemperatureModel.jRadioButton3 = originalNotFrozenButton;
+    TemperatureModel.selectedWetBulbFrozen = originalFrozenSelection;
   }
 
   @Test
@@ -172,13 +168,11 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   @Test
   public void wetBulbTemperatureSelectsFrozenOrNotFrozenState() throws Exception {
     runRecord("20.0", "-0.1", "10.0", "50.0", new Date());
-    assertTrue(TemperatureModel.jRadioButton4.isSelected());
-    assertFalse(TemperatureModel.jRadioButton3.isSelected());
+    assertTrue(TemperatureModel.selectedWetBulbFrozen);
 
     resetModel();
     runRecord("20.0", "0.0", "10.0", "50.0", new Date());
-    assertTrue(TemperatureModel.jRadioButton3.isSelected());
-    assertFalse(TemperatureModel.jRadioButton4.isSelected());
+    assertFalse(TemperatureModel.selectedWetBulbFrozen);
   }
 
   @Test
@@ -269,10 +263,7 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     TemperatureModel.jTextField1 = new JTextField();
     TemperatureModel.jTextField2 = new JTextField();
     TemperatureModel.jTextField4 = new JTextField();
-    TemperatureModel.jRadioButton3 = new JRadioButton();
-    TemperatureModel.jRadioButton4 = new JRadioButton();
-    TemperatureModel.jRadioButton3.setSelected(false);
-    TemperatureModel.jRadioButton4.setSelected(false);
+    TemperatureModel.selectedWetBulbFrozen = false;
   }
 
   private void assertCleared() {

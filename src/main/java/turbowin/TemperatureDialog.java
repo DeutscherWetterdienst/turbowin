@@ -47,10 +47,7 @@ final class TemperatureDialog {
                             TemperatureModel.jTextField2.setText(value.wet());
                             TemperatureModel.jTextField4.setText(value.humidity());
                             model.jTextField3.setText(value.sea());
-                            (value.frozen()
-                                    ? TemperatureModel.jRadioButton4
-                                    : TemperatureModel.jRadioButton3)
-                                .setSelected(true);
+                            TemperatureModel.selectedWetBulbFrozen = value.frozen();
                             if (model.accept()) {
                               close.run();
                               if (main.in_next_sequence) next();
@@ -95,7 +92,7 @@ final class TemperatureDialog {
             TemperatureModel.jTextField2.getText(),
             TemperatureModel.jTextField4.getText(),
             "",
-            TemperatureModel.jRadioButton4.isSelected());
+            TemperatureModel.selectedWetBulbFrozen);
     Platform.runLater(() -> view.sensorValues(values));
   }
 
@@ -105,7 +102,7 @@ final class TemperatureDialog {
         TemperatureModel.jTextField2.getText(),
         TemperatureModel.jTextField4.getText(),
         model.jTextField3.getText(),
-        TemperatureModel.jRadioButton4.isSelected());
+        TemperatureModel.selectedWetBulbFrozen);
   }
 
   private static void next() {

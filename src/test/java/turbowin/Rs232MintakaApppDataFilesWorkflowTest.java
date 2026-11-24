@@ -1,7 +1,6 @@
 package turbowin;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.GraphicsEnvironment;
@@ -16,7 +15,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
@@ -37,7 +35,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
   private GregorianCalendar originalObservationDate;
   private String originalAmount;
   private JTextField originalTextField;
-  private final JRadioButton[] originalButtons = new JRadioButton[12];
+  private ObservableSelection<BarographModel.Tendency> originalTendency;
 
   @Before
   public void setUp() {
@@ -49,18 +47,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
     originalObservationDate = main.obs_file_datum_tijd;
     originalAmount = BarographModel.pressure_amount_tendency;
     originalTextField = BarographModel.jTextField1;
-    originalButtons[0] = BarographModel.jRadioButton1;
-    originalButtons[1] = BarographModel.jRadioButton2;
-    originalButtons[2] = BarographModel.jRadioButton3;
-    originalButtons[3] = BarographModel.jRadioButton4;
-    originalButtons[4] = BarographModel.jRadioButton5;
-    originalButtons[5] = BarographModel.jRadioButton6;
-    originalButtons[6] = BarographModel.jRadioButton7;
-    originalButtons[7] = BarographModel.jRadioButton8;
-    originalButtons[8] = BarographModel.jRadioButton9;
-    originalButtons[9] = BarographModel.jRadioButton10;
-    originalButtons[10] = BarographModel.jRadioButton11;
-    originalButtons[11] = BarographModel.jRadioButton12;
+    originalTendency = BarographModel.tendency;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -69,7 +56,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
     main.sensor_data_record_obs_a = "";
     BarographModel.pressure_amount_tendency = "";
     BarographModel.jTextField1 = new JTextField();
-    setButtonReferences(newButtons());
+    BarographModel.tendency = new ObservableSelection<>(null);
     setButtons(false);
   }
 
@@ -83,7 +70,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
     main.obs_file_datum_tijd = originalObservationDate;
     BarographModel.pressure_amount_tendency = originalAmount;
     BarographModel.jTextField1 = originalTextField;
-    setButtonReferences(originalButtons);
+    BarographModel.tendency = originalTendency;
   }
 
   @Test
@@ -211,66 +198,16 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
   private void assertRejectedFormValues() {
     assertEquals("", BarographModel.pressure_amount_tendency);
     assertEquals("old", BarographModel.jTextField1.getText());
-    for (JRadioButton button : currentButtons()) {
-      assertTrue(button.isSelected());
-    }
+    assertEquals(BarographModel.Tendency.UNDETERMINED, BarographModel.tendency.get());
   }
 
   private void assertSelectedButton(int expectedButton) {
-    JRadioButton[] buttons = currentButtons();
-    for (int index = 0; index < buttons.length; index++) {
-      if (index + 1 == expectedButton) {
-        assertTrue(buttons[index].isSelected());
-      } else {
-        assertFalse(buttons[index].isSelected());
-      }
-    }
+    assertEquals(
+        BarographModel.Tendency.values()[expectedButton - 1], BarographModel.tendency.get());
   }
 
   private void setButtons(boolean selected) {
-    for (JRadioButton button : currentButtons()) {
-      button.setSelected(selected);
-    }
-  }
-
-  private JRadioButton[] currentButtons() {
-    return new JRadioButton[] {
-      BarographModel.jRadioButton1,
-      BarographModel.jRadioButton2,
-      BarographModel.jRadioButton3,
-      BarographModel.jRadioButton4,
-      BarographModel.jRadioButton5,
-      BarographModel.jRadioButton6,
-      BarographModel.jRadioButton7,
-      BarographModel.jRadioButton8,
-      BarographModel.jRadioButton9,
-      BarographModel.jRadioButton10,
-      BarographModel.jRadioButton11,
-      BarographModel.jRadioButton12
-    };
-  }
-
-  private void setButtonReferences(JRadioButton[] buttons) {
-    BarographModel.jRadioButton1 = buttons[0];
-    BarographModel.jRadioButton2 = buttons[1];
-    BarographModel.jRadioButton3 = buttons[2];
-    BarographModel.jRadioButton4 = buttons[3];
-    BarographModel.jRadioButton5 = buttons[4];
-    BarographModel.jRadioButton6 = buttons[5];
-    BarographModel.jRadioButton7 = buttons[6];
-    BarographModel.jRadioButton8 = buttons[7];
-    BarographModel.jRadioButton9 = buttons[8];
-    BarographModel.jRadioButton10 = buttons[9];
-    BarographModel.jRadioButton11 = buttons[10];
-    BarographModel.jRadioButton12 = buttons[11];
-  }
-
-  private JRadioButton[] newButtons() {
-    JRadioButton[] buttons = new JRadioButton[12];
-    for (int index = 0; index < buttons.length; index++) {
-      buttons[index] = new JRadioButton();
-    }
-    return buttons;
+    BarographModel.tendency.set(selected ? BarographModel.Tendency.UNDETERMINED : null);
   }
 
   private String starPayload(String pressure, String ppp, String a) {

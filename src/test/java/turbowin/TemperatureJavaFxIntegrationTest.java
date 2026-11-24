@@ -125,7 +125,7 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
         TemperatureModel.jTextField1.setText("21.5");
         TemperatureModel.jTextField2.setText("-0.1");
         TemperatureModel.jTextField4.setText("72.0");
-        TemperatureModel.jRadioButton4.setSelected(true);
+        TemperatureModel.selectedWetBulbFrozen = true;
         TemperatureDialog.sensorUpdated();
       });
       CloudCoverFxTestSupport.onFx(() -> {

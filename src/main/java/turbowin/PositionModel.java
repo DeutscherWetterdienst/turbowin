@@ -3,32 +3,13 @@ package turbowin;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /** Position observation state and compatibility controls used by legacy GPS readers. */
 public final class PositionModel {
-  public static ButtonGroup buttonGroup1, buttonGroup2, buttonGroup3, buttonGroup4;
   public static JTextField jTextField1, jTextField2, jTextField3, jTextField4;
-  public static JRadioButton jRadioButton1, jRadioButton2, jRadioButton3, jRadioButton4;
-  public static JRadioButton jRadioButton5,
-      jRadioButton6,
-      jRadioButton7,
-      jRadioButton8,
-      jRadioButton9;
-  public static JRadioButton jRadioButton10, jRadioButton11, jRadioButton12, jRadioButton13;
-  public static JRadioButton jRadioButton14,
-      jRadioButton15,
-      jRadioButton16,
-      jRadioButton17,
-      jRadioButton18;
-  public static JRadioButton jRadioButton19,
-      jRadioButton20,
-      jRadioButton21,
-      jRadioButton22,
-      jRadioButton23;
+  static PositionSelections selections = new PositionSelections();
   private boolean plotPosition;
   private boolean mapAvailable;
   private String courseLabel;
@@ -41,62 +22,7 @@ public final class PositionModel {
     jTextField4 = new JTextField();
     for (JTextField field : new JTextField[] {jTextField1, jTextField2, jTextField3, jTextField4})
       NumericInputWorkflow.decimal(field);
-    jRadioButton1 = new JRadioButton();
-    jRadioButton2 = new JRadioButton();
-    jRadioButton3 = new JRadioButton();
-    jRadioButton4 = new JRadioButton();
-    jRadioButton5 = new JRadioButton();
-    jRadioButton6 = new JRadioButton();
-    jRadioButton7 = new JRadioButton();
-    jRadioButton8 = new JRadioButton();
-    jRadioButton9 = new JRadioButton();
-    jRadioButton10 = new JRadioButton();
-    jRadioButton11 = new JRadioButton();
-    jRadioButton12 = new JRadioButton();
-    jRadioButton13 = new JRadioButton();
-    jRadioButton14 = new JRadioButton();
-    jRadioButton15 = new JRadioButton();
-    jRadioButton16 = new JRadioButton();
-    jRadioButton17 = new JRadioButton();
-    jRadioButton18 = new JRadioButton();
-    jRadioButton19 = new JRadioButton();
-    jRadioButton20 = new JRadioButton();
-    jRadioButton21 = new JRadioButton();
-    jRadioButton22 = new JRadioButton();
-    jRadioButton23 = new JRadioButton();
-    buttonGroup1 = new ButtonGroup();
-    buttonGroup2 = new ButtonGroup();
-    buttonGroup3 = new ButtonGroup();
-    buttonGroup4 = new ButtonGroup();
-    for (JRadioButton button : new JRadioButton[] {jRadioButton1, jRadioButton2})
-      buttonGroup1.add(button);
-    for (JRadioButton button : new JRadioButton[] {jRadioButton3, jRadioButton4})
-      buttonGroup2.add(button);
-    for (JRadioButton button :
-        new JRadioButton[] {
-          jRadioButton5,
-          jRadioButton6,
-          jRadioButton7,
-          jRadioButton8,
-          jRadioButton9,
-          jRadioButton10,
-          jRadioButton11,
-          jRadioButton12,
-          jRadioButton13
-        }) buttonGroup3.add(button);
-    for (JRadioButton button :
-        new JRadioButton[] {
-          jRadioButton14,
-          jRadioButton15,
-          jRadioButton16,
-          jRadioButton17,
-          jRadioButton18,
-          jRadioButton19,
-          jRadioButton20,
-          jRadioButton21,
-          jRadioButton22,
-          jRadioButton23
-        }) buttonGroup4.add(button);
+    selections = new PositionSelections();
     int mode = main.RS232_connection_mode;
     local_AWS_connected = mode == 3 || mode == 9 || mode == 10 || mode == 11;
     boolean readOnly = local_AWS_connected || main.APR;
@@ -158,9 +84,9 @@ public final class PositionModel {
       latitude_degrees = jTextField1.getText().trim();
       latitude_minutes = jTextField2.getText().trim();
 
-      if (jRadioButton1.isSelected() == true) {
+      if (selections.latitude.get() == PositionSelections.Latitude.NORTH) {
         latitude_hemisphere = HEMISPHERE_NORTH;
-      } else if (jRadioButton2.isSelected() == true) {
+      } else if (selections.latitude.get() == PositionSelections.Latitude.SOUTH) {
         latitude_hemisphere = HEMISPHERE_SOUTH;
       } else {
         latitude_hemisphere = "";
@@ -170,57 +96,57 @@ public final class PositionModel {
       longitude_degrees = jTextField3.getText().trim();
       longitude_minutes = jTextField4.getText().trim();
 
-      if (jRadioButton3.isSelected() == true) {
+      if (selections.longitude.get() == PositionSelections.Longitude.EAST) {
         longitude_hemisphere = HEMISPHERE_EAST;
-      } else if (jRadioButton4.isSelected() == true) {
+      } else if (selections.longitude.get() == PositionSelections.Longitude.WEST) {
         longitude_hemisphere = HEMISPHERE_WEST;
       } else {
         longitude_hemisphere = "";
       }
 
       // course
-      if (jRadioButton5.isSelected() == true) {
+      if (selections.course.get() == PositionSelections.Course.STATIONARY) {
         course = COURSE_STATIONARY;
-      } else if (jRadioButton6.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.NE) {
         course = COURSE_023_067;
-      } else if (jRadioButton7.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.E) {
         course = COURSE_068_112;
-      } else if (jRadioButton8.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.SE) {
         course = COURSE_113_157;
-      } else if (jRadioButton9.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.S) {
         course = COURSE_158_202;
-      } else if (jRadioButton10.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.SW) {
         course = COURSE_203_247;
-      } else if (jRadioButton11.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.W) {
         course = COURSE_248_292;
-      } else if (jRadioButton12.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.NW) {
         course = COURSE_293_337;
-      } else if (jRadioButton13.isSelected() == true) {
+      } else if (selections.course.get() == PositionSelections.Course.N) {
         course = COURSE_338_022;
       } else {
         course = "";
       }
 
       // speed
-      if (jRadioButton14.isSelected() == true) {
+      if (selections.speed.get() == PositionSelections.Speed.ZERO) {
         speed = SPEED_0;
-      } else if (jRadioButton15.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.ONE_TO_FIVE) {
         speed = SPEED_1_5;
-      } else if (jRadioButton16.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.SIX_TO_TEN) {
         speed = SPEED_6_10;
-      } else if (jRadioButton17.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.ELEVEN_TO_FIFTEEN) {
         speed = SPEED_11_15;
-      } else if (jRadioButton18.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.SIXTEEN_TO_TWENTY) {
         speed = SPEED_16_20;
-      } else if (jRadioButton19.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.TWENTY_ONE_TO_TWENTY_FIVE) {
         speed = SPEED_21_25;
-      } else if (jRadioButton20.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.TWENTY_SIX_TO_THIRTY) {
         speed = SPEED_26_30;
-      } else if (jRadioButton21.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.THIRTY_ONE_TO_THIRTY_FIVE) {
         speed = SPEED_31_35;
-      } else if (jRadioButton22.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.THIRTY_SIX_TO_FORTY) {
         speed = SPEED_36_40;
-      } else if (jRadioButton23.isSelected() == true) {
+      } else if (selections.speed.get() == PositionSelections.Speed.OVER_FORTY) {
         speed = SPEED_MORE_40;
       } else {
         speed = "";
@@ -818,9 +744,9 @@ public final class PositionModel {
 
         if (latitude_hemisphere.compareTo("") != 0) {
           if (latitude_hemisphere.equals(HEMISPHERE_NORTH)) {
-            jRadioButton1.setSelected(true);
+            selections.latitude.set(PositionSelections.Latitude.NORTH);
           } else if (latitude_hemisphere.equals(HEMISPHERE_SOUTH)) {
-            jRadioButton2.setSelected(true);
+            selections.latitude.set(PositionSelections.Latitude.SOUTH);
           }
         } // if (latitude_hemisphere != "")
 
@@ -835,37 +761,37 @@ public final class PositionModel {
 
         if (longitude_hemisphere.compareTo("") != 0) {
           if (longitude_hemisphere.equals(HEMISPHERE_EAST)) {
-            jRadioButton3.setSelected(true);
+            selections.longitude.set(PositionSelections.Longitude.EAST);
           } else if (longitude_hemisphere.equals(HEMISPHERE_WEST)) {
-            jRadioButton4.setSelected(true);
+            selections.longitude.set(PositionSelections.Longitude.WEST);
           }
         } // if (latitude_hemisphere != "")
 
         if (SOG_APR < 1.0) // stopped
         {
           // by default: in case SOG is indicating stopped then SOG always stopped also!
-          PositionModel.jRadioButton5.setSelected(true); // COG = stopped
+          selections.course.set(PositionSelections.Course.STATIONARY); // COG = stopped
         }
         // else if (SOG >= 1.0 && SOG <= 999.9) // not stopped (halverwege de test maar veranderd om
         // toch een richting tijdens laatste testjes te krijgen)
         else if (SOG_APR >= 1.0 && SOG_APR <= 999999.9) // not stopped
         {
           if (COG_APR > 23.0 && COG_APR <= 67.0) {
-            PositionModel.jRadioButton6.setSelected(true);
+            selections.course.set(PositionSelections.Course.NE);
           } else if (COG_APR > 67.0 && COG_APR <= 112.0) {
-            PositionModel.jRadioButton7.setSelected(true);
+            selections.course.set(PositionSelections.Course.E);
           } else if (COG_APR > 112.0 && COG_APR <= 157.0) {
-            PositionModel.jRadioButton8.setSelected(true);
+            selections.course.set(PositionSelections.Course.SE);
           } else if (COG_APR > 157.0 && COG_APR <= 202.0) {
-            PositionModel.jRadioButton9.setSelected(true);
+            selections.course.set(PositionSelections.Course.S);
           } else if (COG_APR > 202.0 && COG_APR <= 247.0) {
-            PositionModel.jRadioButton10.setSelected(true);
+            selections.course.set(PositionSelections.Course.SW);
           } else if (COG_APR > 247.0 && COG_APR <= 292.0) {
-            PositionModel.jRadioButton11.setSelected(true);
+            selections.course.set(PositionSelections.Course.W);
           } else if (COG_APR > 292.0 && COG_APR <= 337.0) {
-            PositionModel.jRadioButton12.setSelected(true);
+            selections.course.set(PositionSelections.Course.NW);
           } else if (COG_APR > 337.0 && COG_APR <= 360.0 || COG_APR > 0.0 && COG_APR <= 23.0) {
-            PositionModel.jRadioButton13.setSelected(true);
+            selections.course.set(PositionSelections.Course.N);
           }
         } // else if (SOG >= 1.0 && SOG <= 99.9)
 
@@ -892,25 +818,25 @@ public final class PositionModel {
         /// Not applicable (report from a coastal land station) or not reported (see Regulation
         // 12.3.1.2 (b))
         if (SOG_APR < 1.0) {
-          PositionModel.jRadioButton14.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.ZERO);
         } else if (SOG_APR >= 1.0 && SOG_APR <= 5.0) {
-          PositionModel.jRadioButton15.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.ONE_TO_FIVE);
         } else if (SOG_APR > 5.0 && SOG_APR <= 10.0) {
-          PositionModel.jRadioButton16.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.SIX_TO_TEN);
         } else if (SOG_APR > 10.0 && SOG_APR <= 15.0) {
-          PositionModel.jRadioButton17.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.ELEVEN_TO_FIFTEEN);
         } else if (SOG_APR > 15.0 && SOG_APR <= 20.0) {
-          PositionModel.jRadioButton18.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.SIXTEEN_TO_TWENTY);
         } else if (SOG_APR > 20.0 && SOG_APR <= 25.0) {
-          PositionModel.jRadioButton19.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.TWENTY_ONE_TO_TWENTY_FIVE);
         } else if (SOG_APR > 25.0 && SOG_APR <= 30.0) {
-          PositionModel.jRadioButton20.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.TWENTY_SIX_TO_THIRTY);
         } else if (SOG_APR > 30.0 && SOG_APR <= 35.0) {
-          PositionModel.jRadioButton21.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.THIRTY_ONE_TO_THIRTY_FIVE);
         } else if (SOG_APR > 35.0 && SOG_APR <= 40.0) {
-          PositionModel.jRadioButton22.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.THIRTY_SIX_TO_FORTY);
         } else if (SOG_APR > 40 && SOG_APR <= 99) {
-          PositionModel.jRadioButton23.setSelected(true);
+          selections.speed.set(PositionSelections.Speed.OVER_FORTY);
         }
       } // if (GPS_date_time_ok )
 
@@ -927,8 +853,10 @@ public final class PositionModel {
       if (latitude_minutes.compareTo("") != 0) jTextField2.setText(latitude_minutes);
 
       if (latitude_hemisphere.compareTo("") != 0) {
-        if (latitude_hemisphere.equals(HEMISPHERE_NORTH)) jRadioButton1.setSelected(true);
-        else if (latitude_hemisphere.equals(HEMISPHERE_SOUTH)) jRadioButton2.setSelected(true);
+        if (latitude_hemisphere.equals(HEMISPHERE_NORTH))
+          selections.latitude.set(PositionSelections.Latitude.NORTH);
+        else if (latitude_hemisphere.equals(HEMISPHERE_SOUTH))
+          selections.latitude.set(PositionSelections.Latitude.SOUTH);
       } // if (latitude_hemisphere != "")
 
       // longitude
@@ -937,8 +865,10 @@ public final class PositionModel {
       if (longitude_minutes.compareTo("") != 0) jTextField4.setText(longitude_minutes);
 
       if (longitude_hemisphere.compareTo("") != 0) {
-        if (longitude_hemisphere.equals(HEMISPHERE_EAST)) jRadioButton3.setSelected(true);
-        else if (longitude_hemisphere.equals(HEMISPHERE_WEST)) jRadioButton4.setSelected(true);
+        if (longitude_hemisphere.equals(HEMISPHERE_EAST))
+          selections.longitude.set(PositionSelections.Longitude.EAST);
+        else if (longitude_hemisphere.equals(HEMISPHERE_WEST))
+          selections.longitude.set(PositionSelections.Longitude.WEST);
       } // if (latitude_hemisphere != "")
     } // else if (main.RS232_GPS_connection_mode == 0)
     else {
@@ -950,29 +880,37 @@ public final class PositionModel {
 
     // course
     if (course.compareTo("") != 0) {
-      if (course.equals(COURSE_STATIONARY)) jRadioButton5.setSelected(true);
-      else if (course.equals(COURSE_023_067)) jRadioButton6.setSelected(true);
-      else if (course.equals(COURSE_068_112)) jRadioButton7.setSelected(true);
-      else if (course.equals(COURSE_113_157)) jRadioButton8.setSelected(true);
-      else if (course.equals(COURSE_158_202)) jRadioButton9.setSelected(true);
-      else if (course.equals(COURSE_203_247)) jRadioButton10.setSelected(true);
-      else if (course.equals(COURSE_248_292)) jRadioButton11.setSelected(true);
-      else if (course.equals(COURSE_293_337)) jRadioButton12.setSelected(true);
-      else if (course.equals(COURSE_338_022)) jRadioButton13.setSelected(true);
+      if (course.equals(COURSE_STATIONARY))
+        selections.course.set(PositionSelections.Course.STATIONARY);
+      else if (course.equals(COURSE_023_067)) selections.course.set(PositionSelections.Course.NE);
+      else if (course.equals(COURSE_068_112)) selections.course.set(PositionSelections.Course.E);
+      else if (course.equals(COURSE_113_157)) selections.course.set(PositionSelections.Course.SE);
+      else if (course.equals(COURSE_158_202)) selections.course.set(PositionSelections.Course.S);
+      else if (course.equals(COURSE_203_247)) selections.course.set(PositionSelections.Course.SW);
+      else if (course.equals(COURSE_248_292)) selections.course.set(PositionSelections.Course.W);
+      else if (course.equals(COURSE_293_337)) selections.course.set(PositionSelections.Course.NW);
+      else if (course.equals(COURSE_338_022)) selections.course.set(PositionSelections.Course.N);
     } // if (course.compareTo("") != 0)
 
     // speed
     if (speed.compareTo("") != 0) {
-      if (speed.equals(SPEED_0)) jRadioButton14.setSelected(true);
-      else if (speed.equals(SPEED_1_5)) jRadioButton15.setSelected(true);
-      else if (speed.equals(SPEED_6_10)) jRadioButton16.setSelected(true);
-      else if (speed.equals(SPEED_11_15)) jRadioButton17.setSelected(true);
-      else if (speed.equals(SPEED_16_20)) jRadioButton18.setSelected(true);
-      else if (speed.equals(SPEED_21_25)) jRadioButton19.setSelected(true);
-      else if (speed.equals(SPEED_26_30)) jRadioButton20.setSelected(true);
-      else if (speed.equals(SPEED_31_35)) jRadioButton21.setSelected(true);
-      else if (speed.equals(SPEED_36_40)) jRadioButton22.setSelected(true);
-      else if (speed.equals(SPEED_MORE_40)) jRadioButton23.setSelected(true);
+      if (speed.equals(SPEED_0)) selections.speed.set(PositionSelections.Speed.ZERO);
+      else if (speed.equals(SPEED_1_5)) selections.speed.set(PositionSelections.Speed.ONE_TO_FIVE);
+      else if (speed.equals(SPEED_6_10)) selections.speed.set(PositionSelections.Speed.SIX_TO_TEN);
+      else if (speed.equals(SPEED_11_15))
+        selections.speed.set(PositionSelections.Speed.ELEVEN_TO_FIFTEEN);
+      else if (speed.equals(SPEED_16_20))
+        selections.speed.set(PositionSelections.Speed.SIXTEEN_TO_TWENTY);
+      else if (speed.equals(SPEED_21_25))
+        selections.speed.set(PositionSelections.Speed.TWENTY_ONE_TO_TWENTY_FIVE);
+      else if (speed.equals(SPEED_26_30))
+        selections.speed.set(PositionSelections.Speed.TWENTY_SIX_TO_THIRTY);
+      else if (speed.equals(SPEED_31_35))
+        selections.speed.set(PositionSelections.Speed.THIRTY_ONE_TO_THIRTY_FIVE);
+      else if (speed.equals(SPEED_36_40))
+        selections.speed.set(PositionSelections.Speed.THIRTY_SIX_TO_FORTY);
+      else if (speed.equals(SPEED_MORE_40))
+        selections.speed.set(PositionSelections.Speed.OVER_FORTY);
     } // if (speed.compareTo("") != 0)
   } // private void initSynopparameters()
 

@@ -382,9 +382,9 @@ final class Rs232MintakaStarXObservationWorkflow {
           // NB default is wet-bulb not frozen (so if no info available then by default the
           // "wet-bulb not frozen" button will be checked)
           if (hulp_wet_bulb_temp < 0.0) {
-            TemperatureModel.jRadioButton4.setSelected(true); // wet-bulb frozen radio button
+            TemperatureModel.selectedWetBulbFrozen = true;
           } else {
-            TemperatureModel.jRadioButton3.setSelected(true); // wet-bulb not frozen radio button
+            TemperatureModel.selectedWetBulbFrozen = false;
           }
 
           TemperatureModel.jTextField4.setText(TemperatureModel.RH); // RH

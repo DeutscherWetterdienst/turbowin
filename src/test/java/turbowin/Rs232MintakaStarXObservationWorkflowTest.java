@@ -15,9 +15,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
-import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
@@ -41,8 +39,7 @@ public class Rs232MintakaStarXObservationWorkflowTest {
   private JTextField originalAirField;
   private JTextField originalWetBulbField;
   private JTextField originalRhField;
-  private JRadioButton originalFrozenButton;
-  private JRadioButton originalNotFrozenButton;
+  private boolean originalFrozenSelection;
 
   @Before
   public void setUp() {
@@ -57,8 +54,7 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     originalAirField = TemperatureModel.jTextField1;
     originalWetBulbField = TemperatureModel.jTextField2;
     originalRhField = TemperatureModel.jTextField4;
-    originalFrozenButton = TemperatureModel.jRadioButton4;
-    originalNotFrozenButton = TemperatureModel.jRadioButton3;
+    originalFrozenSelection = TemperatureModel.selectedWetBulbFrozen;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -66,11 +62,6 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     TemperatureModel.jTextField1 = new JTextField();
     TemperatureModel.jTextField2 = new JTextField();
     TemperatureModel.jTextField4 = new JTextField();
-    TemperatureModel.jRadioButton3 = new JRadioButton();
-    TemperatureModel.jRadioButton4 = new JRadioButton();
-    ButtonGroup wetBulbGroup = new ButtonGroup();
-    wetBulbGroup.add(TemperatureModel.jRadioButton3);
-    wetBulbGroup.add(TemperatureModel.jRadioButton4);
     resetModel();
   }
 
@@ -87,8 +78,7 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     TemperatureModel.jTextField1 = originalAirField;
     TemperatureModel.jTextField2 = originalWetBulbField;
     TemperatureModel.jTextField4 = originalRhField;
-    TemperatureModel.jRadioButton4 = originalFrozenButton;
-    TemperatureModel.jRadioButton3 = originalNotFrozenButton;
+    TemperatureModel.selectedWetBulbFrozen = originalFrozenSelection;
   }
 
   @Test
@@ -102,12 +92,10 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     assertEquals("20.0", TemperatureModel.jTextField1.getText());
     assertEquals("-0.4", TemperatureModel.jTextField2.getText());
     assertEquals("75.0", TemperatureModel.jTextField4.getText());
-    assertTrue(TemperatureModel.jRadioButton4.isSelected());
-    assertFalse(TemperatureModel.jRadioButton3.isSelected());
+    assertTrue(TemperatureModel.selectedWetBulbFrozen);
 
     runRecord("20.0", "75.0", "0.4", "12.3", "0");
-    assertTrue(TemperatureModel.jRadioButton3.isSelected());
-    assertFalse(TemperatureModel.jRadioButton4.isSelected());
+    assertFalse(TemperatureModel.selectedWetBulbFrozen);
   }
 
   @Test
@@ -224,8 +212,7 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     TemperatureModel.jTextField1.setText("");
     TemperatureModel.jTextField2.setText("");
     TemperatureModel.jTextField4.setText("");
-    TemperatureModel.jRadioButton3.setSelected(false);
-    TemperatureModel.jRadioButton4.setSelected(false);
+    TemperatureModel.selectedWetBulbFrozen = false;
   }
 
   private void assertCleared() {

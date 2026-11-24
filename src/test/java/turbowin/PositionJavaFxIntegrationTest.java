@@ -159,8 +159,8 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
       });
       SwingUtilities.invokeAndWait(() -> {
         PositionModel.jTextField1.setText("52");
-        PositionModel.jRadioButton2.setSelected(true);
-        PositionModel.jRadioButton7.setSelected(true);
+        PositionModel.selections.latitude.set(PositionSelections.Latitude.SOUTH);
+        PositionModel.selections.course.set(PositionSelections.Course.E);
       });
       SwingUtilities.invokeAndWait(() -> {});
       CloudCoverFxTestSupport.onFx(() -> {

@@ -589,9 +589,9 @@ final class Rs232MintakaGpsWorkflow {
 
           if (PositionModel.latitude_hemisphere.compareTo("") != 0) {
             if (PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_NORTH)) {
-              PositionModel.jRadioButton1.setSelected(true);
+              PositionModel.selections.latitude.set(PositionSelections.Latitude.NORTH);
             } else if (PositionModel.latitude_hemisphere.equals(PositionModel.HEMISPHERE_SOUTH)) {
-              PositionModel.jRadioButton2.setSelected(true);
+              PositionModel.selections.latitude.set(PositionSelections.Latitude.SOUTH);
             }
           } // if (latitude_hemisphere != "")
 
@@ -606,9 +606,9 @@ final class Rs232MintakaGpsWorkflow {
 
           if (PositionModel.longitude_hemisphere.compareTo("") != 0) {
             if (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_EAST)) {
-              PositionModel.jRadioButton3.setSelected(true);
+              PositionModel.selections.longitude.set(PositionSelections.Longitude.EAST);
             } else if (PositionModel.longitude_hemisphere.equals(PositionModel.HEMISPHERE_WEST)) {
-              PositionModel.jRadioButton4.setSelected(true);
+              PositionModel.selections.longitude.set(PositionSelections.Longitude.WEST);
             }
           } // if (latitude_hemisphere != "")
         } // if ((fix_ok == true) && (mode.equals("MANUAL")))
@@ -756,25 +756,27 @@ final class Rs232MintakaGpsWorkflow {
             /// Not applicable (report from a coastal land station) or not reported (see Regulation
             // 12.3.1.2 (b))
             if (SOG < 1.0) {
-              PositionModel.jRadioButton14.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.ZERO);
             } else if (SOG >= 1.0 && SOG <= 5.0) {
-              PositionModel.jRadioButton15.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.ONE_TO_FIVE);
             } else if (SOG > 5.0 && SOG <= 10.0) {
-              PositionModel.jRadioButton16.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.SIX_TO_TEN);
             } else if (SOG > 10.0 && SOG <= 15.0) {
-              PositionModel.jRadioButton17.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.ELEVEN_TO_FIFTEEN);
             } else if (SOG > 15.0 && SOG <= 20.0) {
-              PositionModel.jRadioButton18.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.SIXTEEN_TO_TWENTY);
             } else if (SOG > 20.0 && SOG <= 25.0) {
-              PositionModel.jRadioButton19.setSelected(true);
+              PositionModel.selections.speed.set(
+                  PositionSelections.Speed.TWENTY_ONE_TO_TWENTY_FIVE);
             } else if (SOG > 25.0 && SOG <= 30.0) {
-              PositionModel.jRadioButton20.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.TWENTY_SIX_TO_THIRTY);
             } else if (SOG > 30.0 && SOG <= 35.0) {
-              PositionModel.jRadioButton21.setSelected(true);
+              PositionModel.selections.speed.set(
+                  PositionSelections.Speed.THIRTY_ONE_TO_THIRTY_FIVE);
             } else if (SOG > 35.0 && SOG <= 40.0) {
-              PositionModel.jRadioButton22.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.THIRTY_SIX_TO_FORTY);
             } else if (SOG > 40) {
-              PositionModel.jRadioButton23.setSelected(true);
+              PositionModel.selections.speed.set(PositionSelections.Speed.OVER_FORTY);
             }
 
             // COG
@@ -821,28 +823,29 @@ final class Rs232MintakaGpsWorkflow {
             if (SOG < 1.0) // stopped
             {
               // by default: in case SOG is indicating stopped then SOG always stopped also!
-              PositionModel.jRadioButton5.setSelected(true); // COG = stopped
+              PositionModel.selections.course.set(
+                  PositionSelections.Course.STATIONARY); // COG = stopped
             }
             // else if (SOG >= 1.0 && SOG <= 999.9) // not stopped (halverwege de test maar
             // veranderd om toch een richting tijdens laatste testjes te krijgen)
             else if (SOG >= 1.0 && SOG <= 999999.9) // not stopped
             {
               if (COG > 23.0 && COG <= 67.0) {
-                PositionModel.jRadioButton6.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.NE);
               } else if (COG > 67.0 && COG <= 112.0) {
-                PositionModel.jRadioButton7.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.E);
               } else if (COG > 112.0 && COG <= 157.0) {
-                PositionModel.jRadioButton8.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.SE);
               } else if (COG > 157.0 && COG <= 202.0) {
-                PositionModel.jRadioButton9.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.S);
               } else if (COG > 202.0 && COG <= 247.0) {
-                PositionModel.jRadioButton10.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.SW);
               } else if (COG > 247.0 && COG <= 292.0) {
-                PositionModel.jRadioButton11.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.W);
               } else if (COG > 292.0 && COG <= 337.0) {
-                PositionModel.jRadioButton12.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.NW);
               } else if (COG > 337.0 && COG <= 360.0 || COG > 0.0 && COG <= 23.0) {
-                PositionModel.jRadioButton13.setSelected(true);
+                PositionModel.selections.course.set(PositionSelections.Course.N);
               }
             } // else if (SOG >= 1.0 && SOG <= 99.9)
 
@@ -866,10 +869,10 @@ final class Rs232MintakaGpsWorkflow {
           PositionModel.jTextField2.setText(""); // lat min
           PositionModel.jTextField3.setText(""); // lon deg
           PositionModel.jTextField4.setText(""); // lon min
-          PositionModel.buttonGroup1.clearSelection(); // N/S
-          PositionModel.buttonGroup2.clearSelection(); // E/W
-          PositionModel.buttonGroup3.clearSelection(); // course
-          PositionModel.buttonGroup4.clearSelection(); // speed
+          PositionModel.selections.selectIndex(0, -1); // N/S
+          PositionModel.selections.selectIndex(1, -1); // E/W
+          PositionModel.selections.selectIndex(2, -1); // course
+          PositionModel.selections.selectIndex(3, -1); // speed
         } // if (fix_ok == false)
 
         if (fix_ok == false) {

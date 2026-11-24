@@ -1,8 +1,6 @@
 package turbowin;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /** Temperature calculations and the existing observation state shared with sensor workflows. */
@@ -10,29 +8,16 @@ public final class TemperatureModel {
   public static JTextField jTextField1;
   public static JTextField jTextField2;
   public static JTextField jTextField4;
-  public static JRadioButton jRadioButton3;
-  public static JRadioButton jRadioButton4;
+  public static boolean selectedWetBulbFrozen;
   final JTextField jTextField3 = new JTextField();
-  private final JRadioButton jRadioButton1 = new JRadioButton();
-  private final JRadioButton jRadioButton2 = new JRadioButton();
-  private final JRadioButton jRadioButton5 = new JRadioButton();
-  private final JRadioButton jRadioButton6 = new JRadioButton();
-  private final JRadioButton jRadioButton7 = new JRadioButton();
-  private final JRadioButton jRadioButton8 = new JRadioButton();
-  private final JRadioButton jRadioButton9 = new JRadioButton();
-  private final JRadioButton jRadioButton10 = new JRadioButton();
-  private final JRadioButton jRadioButton11 = new JRadioButton();
-  private final JRadioButton jRadioButton12 = new JRadioButton();
+  private boolean validAirExposure;
+  private boolean validSeaExposure;
 
   TemperatureModel() {
     jTextField1 = new JTextField();
     jTextField2 = new JTextField();
     jTextField4 = new JTextField();
-    jRadioButton3 = new JRadioButton();
-    jRadioButton4 = new JRadioButton();
-    ButtonGroup frozen = new ButtonGroup();
-    frozen.add(jRadioButton3);
-    frozen.add(jRadioButton4);
+    selectedWetBulbFrozen = false;
     local_thermometer_StarX_connected =
         main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8;
     local_thermometer_HMP155_connected =
@@ -185,7 +170,7 @@ public final class TemperatureModel {
       RH = jTextField4.getText().trim();
 
       // NB So wet-bulb state if nothing checked/ticked assume wet-bulb not frozen
-      if (jRadioButton4.isSelected() == true) {
+      if (selectedWetBulbFrozen) {
         wet_bulb_frozen = true;
       } else {
         wet_bulb_frozen = false;
@@ -280,9 +265,7 @@ public final class TemperatureModel {
         }
 
         // exposure air temp
-        else if ((air_temp.trim().length() > 0)
-            && (jRadioButton1.isSelected() == false)
-            && (jRadioButton2.isSelected() == false)) {
+        else if ((air_temp.trim().length() > 0) && !validAirExposure) {
           JOptionPane.showMessageDialog(
               null,
               "Air temperature exposure not available (Maintenance -> Station data)",
@@ -292,15 +275,7 @@ public final class TemperatureModel {
         }
 
         // exposure sea temp
-        else if ((sea_water_temp.trim().length() > 0)
-            && (jRadioButton5.isSelected() == false)
-            && (jRadioButton6.isSelected() == false)
-            && (jRadioButton7.isSelected() == false)
-            && (jRadioButton8.isSelected() == false)
-            && (jRadioButton9.isSelected() == false)
-            && (jRadioButton10.isSelected() == false)
-            && (jRadioButton11.isSelected() == false)
-            && (jRadioButton12.isSelected() == false)) {
+        else if ((sea_water_temp.trim().length() > 0) && !validSeaExposure) {
           JOptionPane.showMessageDialog(
               null,
               "Sea water temperature exposure not available (Maintenance -> Station data)",
@@ -529,28 +504,30 @@ public final class TemperatureModel {
 
       // NB default is wet-bulb not frozen (dus wanneer niets bekend is dan standaard wet-bulb not
       // frozen button checken)
-      if (wet_bulb_frozen == true) jRadioButton4.setSelected(true); // wet-bulb frozen radio button
-      else jRadioButton3.setSelected(true); // wet-bulb not frozen radio button
+      selectedWetBulbFrozen = wet_bulb_frozen;
     } // else
 
     // exposure settings
     //
-    if (main.air_temp_exposure.equals(main.SLING_PSYCHROMETER)) jRadioButton1.setSelected(true);
-    else if (main.air_temp_exposure.equals(main.MARINE_SCREEN)) jRadioButton2.setSelected(true);
+    validAirExposure =
+        main.air_temp_exposure.equals(main.SLING_PSYCHROMETER)
+            || main.air_temp_exposure.equals(main.MARINE_SCREEN);
 
     // SST
     //
     if (sea_water_temp.compareTo("") != 0) jTextField3.setText(sea_water_temp);
 
-    if (main.sst_exposure.equals(main.INTAKE)) jRadioButton5.setSelected(true);
-    else if (main.sst_exposure.equals(main.BUCKET)) jRadioButton6.setSelected(true);
-    else if (main.sst_exposure.equals(main.HULL_CONTACT_SENSOR)) jRadioButton7.setSelected(true);
-    else if (main.sst_exposure.equals(main.OTHER)) jRadioButton8.setSelected(true);
-    else if (main.sst_exposure.equals(main.TRAILING_THERMISTOR)) jRadioButton9.setSelected(true);
-    else if (main.sst_exposure.equals(main.THROUGH_HULL_SENSOR)) jRadioButton10.setSelected(true);
-    else if (main.sst_exposure.equals(main.RADIATION_THERMOMETER)) jRadioButton11.setSelected(true);
-    else if (main.sst_exposure.equals(main.BAIT_TANKS_THERMOMETER))
-      jRadioButton12.setSelected(true);
+    validSeaExposure =
+        java.util.Set.of(
+                main.INTAKE,
+                main.BUCKET,
+                main.HULL_CONTACT_SENSOR,
+                main.OTHER,
+                main.TRAILING_THERMISTOR,
+                main.THROUGH_HULL_SENSOR,
+                main.RADIATION_THERMOMETER,
+                main.BAIT_TANKS_THERMOMETER)
+            .contains(main.sst_exposure);
   }
 
   private void Reset_All_Temperatures_Vars() {

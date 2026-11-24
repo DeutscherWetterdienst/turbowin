@@ -1,8 +1,6 @@
 package turbowin;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /** Barograph observation state and compatibility controls used by legacy sensor readers. */
@@ -26,9 +24,29 @@ public final class BarographModel {
 
   // These controls are not displayed. The existing sensor readers update them on the Swing thread.
   public static JTextField jTextField1;
-  public static JRadioButton jRadioButton1, jRadioButton2, jRadioButton3, jRadioButton4;
-  public static JRadioButton jRadioButton5, jRadioButton6, jRadioButton7, jRadioButton8;
-  public static JRadioButton jRadioButton9, jRadioButton10, jRadioButton11, jRadioButton12;
+
+  enum Tendency {
+    RISING_THEN_FALLING(A_0),
+    RISING_SLOWER(A_1),
+    RISING(A_2),
+    RISING_FASTER(A_3),
+    FALLING_THEN_RISING(A_5),
+    FALLING_SLOWER(A_6),
+    FALLING(A_7),
+    FALLING_FASTER(A_8),
+    SAME_RISING_THEN_FALLING(A_0_SAME),
+    STEADY(A_4),
+    SAME_FALLING_THEN_RISING(A_5_SAME),
+    UNDETERMINED("");
+
+    final String code;
+
+    Tendency(String code) {
+      this.code = code;
+    }
+  }
+
+  static ObservableSelection<Tendency> tendency = new ObservableSelection<>(Tendency.UNDETERMINED);
 
   private final boolean aws;
 
@@ -39,20 +57,7 @@ public final class BarographModel {
     jTextField1 = new JTextField();
     NumericInputWorkflow.decimal(jTextField1);
     jTextField1.setEditable(!aws);
-    jRadioButton1 = new JRadioButton();
-    jRadioButton2 = new JRadioButton();
-    jRadioButton3 = new JRadioButton();
-    jRadioButton4 = new JRadioButton();
-    jRadioButton5 = new JRadioButton();
-    jRadioButton6 = new JRadioButton();
-    jRadioButton7 = new JRadioButton();
-    jRadioButton8 = new JRadioButton();
-    jRadioButton9 = new JRadioButton();
-    jRadioButton10 = new JRadioButton();
-    jRadioButton11 = new JRadioButton();
-    jRadioButton12 = new JRadioButton();
-    ButtonGroup group = new ButtonGroup();
-    for (JRadioButton button : options()) group.add(button);
+    tendency = new ObservableSelection<>(Tendency.UNDETERMINED);
 
     if (mode == 4) {
       RS232_mintaka.RS232_Mintaka_Duo_Read_Sensor_Data_a_ppp_Data_Files_For_Obs();
@@ -69,22 +74,20 @@ public final class BarographModel {
     if (!barometer && !a_code.isEmpty()) {
       boolean same =
           !pressure_amount_tendency.isEmpty() && Double.valueOf(pressure_amount_tendency) < 0.01;
-      int selected =
+      Tendency selected =
           switch (a_code) {
-            case A_0 -> same ? 8 : 0;
-            case A_1 -> 1;
-            case A_2 -> 2;
-            case A_3 -> 3;
-            case A_4 -> 9;
-            case A_5 -> same ? 10 : 4;
-            case A_6 -> 5;
-            case A_7 -> 6;
-            case A_8 -> 7;
-            default -> -1;
+            case A_0 -> same ? Tendency.SAME_RISING_THEN_FALLING : Tendency.RISING_THEN_FALLING;
+            case A_1 -> Tendency.RISING_SLOWER;
+            case A_2 -> Tendency.RISING;
+            case A_3 -> Tendency.RISING_FASTER;
+            case A_4 -> Tendency.STEADY;
+            case A_5 -> same ? Tendency.SAME_FALLING_THEN_RISING : Tendency.FALLING_THEN_RISING;
+            case A_6 -> Tendency.FALLING_SLOWER;
+            case A_7 -> Tendency.FALLING;
+            case A_8 -> Tendency.FALLING_FASTER;
+            default -> Tendency.UNDETERMINED;
           };
-      if (selected >= 0) options()[selected].setSelected(true);
-    } else {
-      jRadioButton12.setSelected(true);
+      tendency.set(selected);
     }
   }
 
@@ -95,14 +98,8 @@ public final class BarographModel {
     }
     reset();
     pressure_amount_tendency = jTextField1.getText().trim();
-    String[] codes = {A_0, A_1, A_2, A_3, A_5, A_6, A_7, A_8, A_0_SAME, A_4, A_5_SAME, ""};
-    JRadioButton[] options = options();
-    for (int i = 0; i < options.length; i++) {
-      if (options[i].isSelected()) {
-        a_code = codes[i];
-        break;
-      }
-    }
+    Tendency selected = tendency.get();
+    if (selected != null) a_code = selected.code;
     double amount = main.INVALID;
     try {
       amount = Double.parseDouble(pressure_amount_tendency);
@@ -138,22 +135,5 @@ public final class BarographModel {
   private static void warning(String message) {
     JOptionPane.showMessageDialog(
         null, message, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
-  }
-
-  private static JRadioButton[] options() {
-    return new JRadioButton[] {
-      jRadioButton1,
-      jRadioButton2,
-      jRadioButton3,
-      jRadioButton4,
-      jRadioButton5,
-      jRadioButton6,
-      jRadioButton7,
-      jRadioButton8,
-      jRadioButton9,
-      jRadioButton10,
-      jRadioButton11,
-      jRadioButton12
-    };
   }
 }

@@ -12,8 +12,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
-import javax.swing.ButtonGroup;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
@@ -58,8 +56,7 @@ public class Rs232MintakaGpsWorkflowTest {
   private JTextField originalLatitudeMinutesField;
   private JTextField originalLongitudeField;
   private JTextField originalLongitudeMinutesField;
-  private final ButtonGroup[] originalButtonGroups = new ButtonGroup[4];
-  private final JRadioButton[] originalButtons = new JRadioButton[23];
+  private PositionSelections originalSelections;
 
   @Before
   public void setUp() {
@@ -95,33 +92,7 @@ public class Rs232MintakaGpsWorkflowTest {
     originalLatitudeMinutesField = PositionModel.jTextField2;
     originalLongitudeField = PositionModel.jTextField3;
     originalLongitudeMinutesField = PositionModel.jTextField4;
-    originalButtonGroups[0] = PositionModel.buttonGroup1;
-    originalButtonGroups[1] = PositionModel.buttonGroup2;
-    originalButtonGroups[2] = PositionModel.buttonGroup3;
-    originalButtonGroups[3] = PositionModel.buttonGroup4;
-    originalButtons[0] = PositionModel.jRadioButton1;
-    originalButtons[1] = PositionModel.jRadioButton2;
-    originalButtons[2] = PositionModel.jRadioButton3;
-    originalButtons[3] = PositionModel.jRadioButton4;
-    originalButtons[4] = PositionModel.jRadioButton5;
-    originalButtons[5] = PositionModel.jRadioButton6;
-    originalButtons[6] = PositionModel.jRadioButton7;
-    originalButtons[7] = PositionModel.jRadioButton8;
-    originalButtons[8] = PositionModel.jRadioButton9;
-    originalButtons[9] = PositionModel.jRadioButton10;
-    originalButtons[10] = PositionModel.jRadioButton11;
-    originalButtons[11] = PositionModel.jRadioButton12;
-    originalButtons[12] = PositionModel.jRadioButton13;
-    originalButtons[13] = PositionModel.jRadioButton14;
-    originalButtons[14] = PositionModel.jRadioButton15;
-    originalButtons[15] = PositionModel.jRadioButton16;
-    originalButtons[16] = PositionModel.jRadioButton17;
-    originalButtons[17] = PositionModel.jRadioButton18;
-    originalButtons[18] = PositionModel.jRadioButton19;
-    originalButtons[19] = PositionModel.jRadioButton20;
-    originalButtons[20] = PositionModel.jRadioButton21;
-    originalButtons[21] = PositionModel.jRadioButton22;
-    originalButtons[22] = PositionModel.jRadioButton23;
+    originalSelections = PositionModel.selections;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -185,11 +156,7 @@ public class Rs232MintakaGpsWorkflowTest {
     PositionModel.jTextField2 = originalLatitudeMinutesField;
     PositionModel.jTextField3 = originalLongitudeField;
     PositionModel.jTextField4 = originalLongitudeMinutesField;
-    setButtonReferences(originalButtons);
-    PositionModel.buttonGroup1 = originalButtonGroups[0];
-    PositionModel.buttonGroup2 = originalButtonGroups[1];
-    PositionModel.buttonGroup3 = originalButtonGroups[2];
-    PositionModel.buttonGroup4 = originalButtonGroups[3];
+    PositionModel.selections = originalSelections;
   }
 
   @Test
@@ -209,8 +176,8 @@ public class Rs232MintakaGpsWorkflowTest {
     assertEquals("02", PositionModel.longitude_minutes);
     assertEquals(PositionModel.HEMISPHERE_EAST, PositionModel.longitude_hemisphere);
     assertEquals("1", PositionModel.Qc_code);
-    assertTrue(PositionModel.jRadioButton7.isSelected());
-    assertTrue(PositionModel.jRadioButton16.isSelected());
+    assertEquals(PositionSelections.Course.E, PositionModel.selections.course.get());
+    assertEquals(PositionSelections.Speed.SIX_TO_TEN, PositionModel.selections.speed.get());
   }
 
   @Test
@@ -381,55 +348,11 @@ public class Rs232MintakaGpsWorkflowTest {
   }
 
   private void setPositionControls() {
-    PositionModel.buttonGroup1 = new ButtonGroup();
-    PositionModel.buttonGroup2 = new ButtonGroup();
-    PositionModel.buttonGroup3 = new ButtonGroup();
-    PositionModel.buttonGroup4 = new ButtonGroup();
-    JRadioButton[] buttons = new JRadioButton[23];
-    for (int index = 0; index < buttons.length; index++) {
-      buttons[index] = new JRadioButton();
-    }
-    setButtonReferences(buttons);
-    PositionModel.buttonGroup1.add(PositionModel.jRadioButton1);
-    PositionModel.buttonGroup1.add(PositionModel.jRadioButton2);
-    PositionModel.buttonGroup2.add(PositionModel.jRadioButton3);
-    PositionModel.buttonGroup2.add(PositionModel.jRadioButton4);
-    for (int index = 4; index < 13; index++) {
-      PositionModel.buttonGroup3.add(buttons[index]);
-    }
-    for (int index = 13; index < buttons.length; index++) {
-      PositionModel.buttonGroup4.add(buttons[index]);
-    }
+    PositionModel.selections = new PositionSelections();
   }
 
   private void resetPositionControls() {
     setPositionControls();
-  }
-
-  private static void setButtonReferences(JRadioButton[] buttons) {
-    PositionModel.jRadioButton1 = buttons[0];
-    PositionModel.jRadioButton2 = buttons[1];
-    PositionModel.jRadioButton3 = buttons[2];
-    PositionModel.jRadioButton4 = buttons[3];
-    PositionModel.jRadioButton5 = buttons[4];
-    PositionModel.jRadioButton6 = buttons[5];
-    PositionModel.jRadioButton7 = buttons[6];
-    PositionModel.jRadioButton8 = buttons[7];
-    PositionModel.jRadioButton9 = buttons[8];
-    PositionModel.jRadioButton10 = buttons[9];
-    PositionModel.jRadioButton11 = buttons[10];
-    PositionModel.jRadioButton12 = buttons[11];
-    PositionModel.jRadioButton13 = buttons[12];
-    PositionModel.jRadioButton14 = buttons[13];
-    PositionModel.jRadioButton15 = buttons[14];
-    PositionModel.jRadioButton16 = buttons[15];
-    PositionModel.jRadioButton17 = buttons[16];
-    PositionModel.jRadioButton18 = buttons[17];
-    PositionModel.jRadioButton19 = buttons[18];
-    PositionModel.jRadioButton20 = buttons[19];
-    PositionModel.jRadioButton21 = buttons[20];
-    PositionModel.jRadioButton22 = buttons[21];
-    PositionModel.jRadioButton23 = buttons[22];
   }
 
   private static Calendar utcCalendar() {

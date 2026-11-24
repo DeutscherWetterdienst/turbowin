@@ -146,53 +146,41 @@ final class Rs232MintakaDuoApppDataFilesWorkflow {
 
           if ((hulp_int_a_reading >= 0) && (hulp_int_a_reading <= 8)) {
             // initialisation
-            BarographModel.jRadioButton1.setSelected(false);
-            BarographModel.jRadioButton2.setSelected(false);
-            BarographModel.jRadioButton3.setSelected(false);
-            BarographModel.jRadioButton4.setSelected(false);
-            BarographModel.jRadioButton5.setSelected(false);
-            BarographModel.jRadioButton6.setSelected(false);
-            BarographModel.jRadioButton7.setSelected(false);
-            BarographModel.jRadioButton8.setSelected(false);
-            BarographModel.jRadioButton9.setSelected(false);
-            BarographModel.jRadioButton10.setSelected(false);
-            BarographModel.jRadioButton11.setSelected(false);
-            BarographModel.jRadioButton12.setSelected(false);
 
             // pressure higher than 3hrs ago
             if (hulp_pressure_change == 1) {
               if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_0))
-                BarographModel.jRadioButton1.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.RISING_THEN_FALLING);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_1))
-                BarographModel.jRadioButton2.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.RISING_SLOWER);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_2))
-                BarographModel.jRadioButton3.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.RISING);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_3))
-                BarographModel.jRadioButton4.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.RISING_FASTER);
             }
 
             // pressure lower than 3hrs ago
             else if (hulp_pressure_change == -1) {
               if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_5))
-                BarographModel.jRadioButton5.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.FALLING_THEN_RISING);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_6))
-                BarographModel.jRadioButton6.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.FALLING_SLOWER);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_7))
-                BarographModel.jRadioButton7.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.FALLING);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_8))
-                BarographModel.jRadioButton8.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.FALLING_FASTER);
             }
 
             // pressure the same as 3hrs ago
             else if (hulp_pressure_change == 0) {
               if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_0_SAME))
-                BarographModel.jRadioButton9.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.SAME_RISING_THEN_FALLING);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_4))
-                BarographModel.jRadioButton10.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.STEADY);
               else if (main.sensor_data_record_obs_a.trim().equals(BarographModel.A_5_SAME))
-                BarographModel.jRadioButton11.setSelected(true);
+                BarographModel.tendency.set(BarographModel.Tendency.SAME_FALLING_THEN_RISING);
             } else {
-              BarographModel.jRadioButton12.setSelected(true); // not determined
+              BarographModel.tendency.set(BarographModel.Tendency.UNDETERMINED); // not determined
             }
           } // if ((hulp_int_a_reading >= 0) && (hulp_int_a_reading <= 8))
         } // if ((main.sensor_data_record_obs_pressure.compareTo("") != 0) etc.
