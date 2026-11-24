@@ -149,22 +149,22 @@ public class OsmMapHtmlCharacterizationTest {
     String previousWindUnits = main.wind_units_dashboard;
     try {
       main.OSM_mode = mode;
-      for (String[] measurement : mylatestmeasurements.AWS_array) {
+      for (String[] measurement : LatestMeasurementsData.AWS_array) {
         Arrays.fill(measurement, "");
       }
       if (withMeasurement) {
         main.station_ID = "TEST";
         main.wind_units_dashboard = "";
-        String[] measurement = mylatestmeasurements.AWS_array[0];
-        measurement[mylatestmeasurements.date_index] = "20260115";
-        measurement[mylatestmeasurements.time_index] = "123000";
-        measurement[mylatestmeasurements.lat_index] = "52.4";
-        measurement[mylatestmeasurements.lon_index] = "4.4";
-        measurement[mylatestmeasurements.slp_index] = "1013";
-        measurement[mylatestmeasurements.air_temp_index] = "12";
-        measurement[mylatestmeasurements.sst_index] = "10";
-        measurement[mylatestmeasurements.true_wind_speed_index] = "5";
-        measurement[mylatestmeasurements.true_wind_dir_index] = "180";
+        String[] measurement = LatestMeasurementsData.AWS_array[0];
+        measurement[LatestMeasurementsData.date_index] = "20260115";
+        measurement[LatestMeasurementsData.time_index] = "123000";
+        measurement[LatestMeasurementsData.lat_index] = "52.4";
+        measurement[LatestMeasurementsData.lon_index] = "4.4";
+        measurement[LatestMeasurementsData.slp_index] = "1013";
+        measurement[LatestMeasurementsData.air_temp_index] = "12";
+        measurement[LatestMeasurementsData.sst_index] = "10";
+        measurement[LatestMeasurementsData.true_wind_speed_index] = "5";
+        measurement[LatestMeasurementsData.true_wind_dir_index] = "180";
       }
       invokePrivateWriter(
           "OSM_AWS_Sensor_Obsen_on_Map", new Class<?>[] {String.class}, output.getAbsolutePath());

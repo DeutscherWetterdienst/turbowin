@@ -743,6 +743,7 @@ public class OSM {
   }
 
   private void OSM_AWS_Sensor_Obsen_on_Map(String full_path_leaflet_maps_html_file) {
+    String[][] measurements = LatestMeasurementsData.snapshot();
     // called from: - OSM_display_AWS_Sensor_on_offline_map()
     //              - OSM_display_AWS_Sensor_on_online_map()
 
@@ -773,11 +774,11 @@ public class OSM {
             "var iconOptions = { iconUrl: 'marker_red_meet.png', iconAnchor: [10, 2] };");
       } // else if (main.OSM_mode.equals(main.OSM_OFFLINE_AWS_SENSOR))
 
-      for (int i = 0; i < mylatestmeasurements.AANTAL_AWS_MEASUREMENTS; i++) {
+      for (int i = 0; i < LatestMeasurementsData.AANTAL_AWS_MEASUREMENTS; i++) {
         // System.out.println(obs);
 
-        if ((!mylatestmeasurements.AWS_array[i][mylatestmeasurements.date_index].equals(""))
-            && (!mylatestmeasurements.AWS_array[i][mylatestmeasurements.time_index].equals(""))) {
+        if ((!measurements[i][LatestMeasurementsData.date_index].equals(""))
+            && (!measurements[i][LatestMeasurementsData.time_index].equals(""))) {
           String infowindow_total = "";
           String infowindow_date_time = "";
           String infowindow_lat = "";
@@ -820,33 +821,31 @@ public class OSM {
 
           boolean marker_position_ok = true;
 
-          for (int c = 0; c < mylatestmeasurements.AANTAL_AWS_PARAMETERS; c++) // columns
+          for (int c = 0; c < LatestMeasurementsData.AANTAL_AWS_PARAMETERS; c++) // columns
           {
-            if (c == mylatestmeasurements.date_index) {
-              if (mylatestmeasurements.AWS_array[i][c].length() == 8) {
+            if (c == LatestMeasurementsData.date_index) {
+              if (measurements[i][c].length() == 8) {
                 // format e.g. 20190221
-                year = mylatestmeasurements.AWS_array[i][c].substring(0, 4);
-                month = mylatestmeasurements.AWS_array[i][c].substring(4, 6);
-                day = mylatestmeasurements.AWS_array[i][c].substring(6, 8);
+                year = measurements[i][c].substring(0, 4);
+                month = measurements[i][c].substring(4, 6);
+                day = measurements[i][c].substring(6, 8);
 
                 month_full = DateTimeUtils.shortMonthOrOriginal(month);
-              } // if (mylatestmeasurements.AWS_array[i][c].length() == 8)
-            } // if (c == mylatestmeasurements.date_index
-            else if (c == mylatestmeasurements.time_index) {
-              if (mylatestmeasurements.AWS_array[i][c].length() == 6) {
+              } // if (measurements[i][c].length() == 8)
+            } // if (c == LatestMeasurementsData.date_index
+            else if (c == LatestMeasurementsData.time_index) {
+              if (measurements[i][c].length() == 6) {
                 // format e.g. 0920
                 time =
-                    mylatestmeasurements.AWS_array[i][c].substring(0, 2)
-                        + "."
-                        + mylatestmeasurements.AWS_array[i][c].substring(2, 4);
+                    measurements[i][c].substring(0, 2) + "." + measurements[i][c].substring(2, 4);
               }
 
               infowindow_date_time = day + " " + month_full + " " + year + "  " + time + " UTC";
-            } else if (c == mylatestmeasurements.lat_index) {
+            } else if (c == LatestMeasurementsData.lat_index) {
               double double_lat_degrees = 0;
 
               // eg 52.405
-              lat_degrees = mylatestmeasurements.AWS_array[i][c];
+              lat_degrees = measurements[i][c];
 
               try {
                 double_lat_degrees = Double.parseDouble(lat_degrees);
@@ -869,12 +868,12 @@ public class OSM {
               catch (NumberFormatException e) {
                 marker_position_ok = false;
               }
-            } // else if (c == mylatestmeasurements.lat_index)
-            else if (c == mylatestmeasurements.lon_index) {
+            } // else if (c == LatestMeasurementsData.lat_index)
+            else if (c == LatestMeasurementsData.lon_index) {
               double double_lon_degrees = 0;
 
               // eg -4.405
-              lon_degrees = mylatestmeasurements.AWS_array[i][c];
+              lon_degrees = measurements[i][c];
 
               try {
                 double_lon_degrees = Double.parseDouble(lon_degrees);
@@ -897,11 +896,11 @@ public class OSM {
                 marker_position_ok = false;
               }
 
-            } // else if (c == mylatestmeasurements.lat_index)
-            else if (c == mylatestmeasurements.true_wind_speed_index) {
+            } // else if (c == LatestMeasurementsData.lat_index)
+            else if (c == LatestMeasurementsData.true_wind_speed_index) {
               // NB true wind speed wil be read before true wind dir!!
 
-              true_wind_speed = mylatestmeasurements.AWS_array[i][c];
+              true_wind_speed = measurements[i][c];
               if (true_wind_speed.length() >= 1) {
                 String hulp_true_wind_speed = "";
                 if (main.wind_units_dashboard.indexOf(main.KNOTS) != -1) // units is knots
@@ -917,11 +916,11 @@ public class OSM {
               } else {
                 infowindow_wind_speed = "-";
               }
-            } // else if (c == mylatestmeasurements.true_wind_dir_index)
-            else if (c == mylatestmeasurements.true_wind_dir_index) {
+            } // else if (c == LatestMeasurementsData.true_wind_dir_index)
+            else if (c == LatestMeasurementsData.true_wind_dir_index) {
               // NB true wind dir will be read after true wind speed !!
 
-              true_wind_dir = mylatestmeasurements.AWS_array[i][c];
+              true_wind_dir = measurements[i][c];
               if (true_wind_dir.length() >= 1) {
                 infowindow_wind_dir = true_wind_dir + "&#176" + " / ";
               } else {
@@ -930,35 +929,35 @@ public class OSM {
 
               infowindow_wind += infowindow_wind_dir + infowindow_wind_speed;
 
-            } // else if (c == mylatestmeasurements.true_wind_dir_index)
-            else if (c == mylatestmeasurements.air_temp_index) {
-              air_temp = mylatestmeasurements.AWS_array[i][c];
+            } // else if (c == LatestMeasurementsData.true_wind_dir_index)
+            else if (c == LatestMeasurementsData.air_temp_index) {
+              air_temp = measurements[i][c];
 
               if (air_temp.length() >= 1) {
                 infowindow_air_temp += air_temp + " &#176 C";
               } else {
                 infowindow_air_temp += "-";
               }
-            } // else if (c == mylatestmeasurements.air_temp_index)
-            else if (c == mylatestmeasurements.sst_index) {
-              sst = mylatestmeasurements.AWS_array[i][c];
+            } // else if (c == LatestMeasurementsData.air_temp_index)
+            else if (c == LatestMeasurementsData.sst_index) {
+              sst = measurements[i][c];
 
               if (sst.length() >= 1) {
                 infowindow_sst += sst + " &#176 C";
               } else {
                 infowindow_sst += "-";
               }
-            } // else if (c == mylatestmeasurements.sst_index)
-            else if (c == mylatestmeasurements.slp_index) {
-              pressure_MSL = mylatestmeasurements.AWS_array[i][c];
+            } // else if (c == LatestMeasurementsData.sst_index)
+            else if (c == LatestMeasurementsData.slp_index) {
+              pressure_MSL = measurements[i][c];
 
               if (pressure_MSL.length() >= 1) {
                 infowindow_msl_pressure += pressure_MSL + " hPa";
               } else {
                 infowindow_msl_pressure += "-";
               }
-            } // else if (c == mylatestmeasurements.sst_index)
-          } // for (int c = 0; c < mylatestmeasurements.AANTAL_AWS_PARAMETERS; c++)
+            } // else if (c == LatestMeasurementsData.sst_index)
+          } // for (int c = 0; c < LatestMeasurementsData.AANTAL_AWS_PARAMETERS; c++)
 
           // pop-up text
           //
@@ -995,7 +994,7 @@ public class OSM {
           if (marker_position_ok) {
             OsmMapHtmlWriter.writeMarker(out, lat_marker, lon_marker, infowindow_total);
           }
-        } // if ( (!mylatestmeasurements.AWS_array[i][mylatestmeasurements.date_index].equals(""))
+        } // if ( (!measurements[i][LatestMeasurementsData.date_index].equals(""))
         // && etc.
       } // for (int i = 0; i < AANTAL_AWS_MEASUREMENTS; i++)
       OsmMapHtmlWriter.writeDocumentEnd(out);

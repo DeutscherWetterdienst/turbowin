@@ -11,10 +11,7 @@ final class OsmAwsSensorMapWorkflow {
     new SwingWorker<Void, Void>() {
       @Override
       protected Void doInBackground() throws Exception {
-        mylatestmeasurements
-            .Read_Sensor_Data_Files_For_Latest_AWS_Measurements(); // now AWS_array[][] is filled
-        // (see
-        // myleatestmeasurements.java)
+        LatestMeasurementsData.read();
 
         // display the online/offline map via a web browser
         if (main.OSM_mode.equals(main.OSM_ONLINE_AWS_SENSOR)) {

@@ -4929,25 +4929,7 @@ public class main extends javax.swing.JFrame {
   private void Dashboard_latest_AWS_measurements_actionPerformed(
       java.awt.event.ActionEvent
           evt) { // GEN-FIRST:event_Dashboard_latest_AWS_measurements_actionPerformed
-    // TODO add your handling code here:
-
-    // if (mylatestmeasurements.compareTo("") != 0)
-    // {
-    //   JOptionPane.showMessageDialog(null, "Please close first a previously opened Latest AWS
-    // measuremnets form", main.APPLICATION_NAME + " message", JOptionPane.WARNING_MESSAGE);
-    // }
-    // else
-    // {
-    //   latestmeasurements_report = MESUREMENTS_SP;              // AMVER sailing plan
-    //
-    //   mylatestmeasurements form = new mylatestmeasurements();
-    //   form.setSize(1000, 700);
-    //   form.setVisible(true);
-    // }
-
-    mylatestmeasurements form = new mylatestmeasurements();
-    form.setSize(1000, 700);
-    form.setVisible(true);
+    LatestMeasurementsDialog.open();
   } // GEN-LAST:event_Dashboard_latest_AWS_measurements_actionPerformed
 
   private void Maps_Obs_Manual_Map_Offline_actionPerformed(
