@@ -4754,9 +4754,7 @@ public class main extends javax.swing.JFrame {
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_System_Log_menu_actionPerformed
     // TODO add your handling code here:
 
-    mysystem_log form = new mysystem_log();
-    form.setExtendedState(MAXIMIZED_BOTH); // full screen
-    form.setVisible(true);
+    LogDialog.open(LogDialog.Kind.SYSTEM);
   } // GEN-LAST:event_Info_System_Log_menu_actionPerformed
 
   private void Maintenance_server_settings_actionperformed(
@@ -5572,9 +5570,7 @@ public class main extends javax.swing.JFrame {
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_device_log_menu_actionPerformed
     // TODO add your handling code here:
 
-    mydevice_log form = new mydevice_log();
-    form.setExtendedState(MAXIMIZED_BOTH); // full screen
-    form.setVisible(true);
+    LogDialog.open(LogDialog.Kind.DEVICE);
   } // GEN-LAST:event_Info_device_log_menu_actionPerformed
 
   private void Maps_satellite_image_IR_NOAA_actionPerformed(
