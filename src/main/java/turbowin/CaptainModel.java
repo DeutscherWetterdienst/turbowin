@@ -139,7 +139,7 @@ public final class CaptainModel {
     if (main.logs_dir.equals("") == true) {
       JOptionPane.showMessageDialog(
           null,
-          "Logs folder unknown, please select: Maintenance -> Log files settings",
+          "Log folder is not configured; check the TurboWin configuration",
           main.APPLICATION_NAME + " error",
           JOptionPane.WARNING_MESSAGE);
       doorgaan = false;

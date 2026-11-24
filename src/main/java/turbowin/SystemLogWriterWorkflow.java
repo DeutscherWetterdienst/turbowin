@@ -6,6 +6,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import javax.swing.SwingWorker;
 
@@ -31,6 +33,21 @@ final class SystemLogWriterWorkflow {
     return timestamp + " UTC " + message;
   }
 
+  static void append(String logsDirectory, String month, String line) throws IOException {
+    if (logsDirectory == null || logsDirectory.isBlank()) {
+      throw new IOException("Log folder is not configured");
+    }
+    Path logs = Path.of(logsDirectory);
+    if (!Files.isDirectory(logs)) throw new IOException("Log folder is unavailable: " + logs);
+    Path systemLogs = logs.resolve(main.TURBOWIN_SYSTEM_LOGS_DIR);
+    Files.createDirectories(systemLogs);
+    try (BufferedWriter out =
+        new BufferedWriter(new FileWriter(systemLogs.resolve(logFileName(month)).toFile(), true))) {
+      out.write(line);
+      out.newLine();
+    }
+  }
+
   static void start(String message) {
     // The console receives the raw message; the file uses a UTC timestamp and the format
     // turbowin_system_MMM_yyyy.txt for its monthly log file.
@@ -40,29 +57,10 @@ final class SystemLogWriterWorkflow {
       @Override
       protected Void doInBackground() throws Exception {
         String month = main.sdf_tsl_1.format(new Date());
-        String volledig_path_turbowin_system_logs =
-            logFilePath(main.logs_dir, main.TURBOWIN_SYSTEM_LOGS_DIR, month);
-
-        try (BufferedWriter out =
-            new BufferedWriter(new FileWriter(volledig_path_turbowin_system_logs, true))) {
-          out.write(logLine(main.sdf_tsl_2.format(new Date()), message));
-          out.newLine();
+        try {
+          append(main.logs_dir, month, logLine(main.sdf_tsl_2.format(new Date()), message));
         } catch (IOException ex) {
-          System.out.println("+++ " + ex + "; trying to create the logs folder");
-          // Create the system-log subdirectory after a write failure so a later write can succeed.
-
-          if ((logs_dir != null) && (logs_dir.compareTo("") != 0)) {
-            File f = new File(logs_dir);
-            if (f.exists() && f.isDirectory()) {
-              String turbowin_system_logs_dir =
-                  main.logs_dir + java.io.File.separator + main.TURBOWIN_SYSTEM_LOGS_DIR;
-              final File dir_turbowin_system_logs = new File(turbowin_system_logs_dir);
-
-              if (dir_turbowin_system_logs.exists() == false) {
-                dir_turbowin_system_logs.mkdir();
-              }
-            }
-          }
+          System.out.println("+++ Unable to write system log: " + ex);
         }
 
         return null;

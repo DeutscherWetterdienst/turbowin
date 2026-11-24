@@ -2612,7 +2612,7 @@ public class main_RS232_RS422 {
     // if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2)
     if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0)) {
       String info =
-          "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+          "Log folder for sensor data is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
     }
@@ -5510,7 +5510,7 @@ public class main_RS232_RS422 {
     // dir for storage sensor data
     if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0)) {
       String info =
-          "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+          "Log folder for sensor data is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
     }
@@ -5568,7 +5568,7 @@ public class main_RS232_RS422 {
     // dir for storage sensor data
     if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0)) {
       String info =
-          "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+          "Log folder for sensor data is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
     }
@@ -6392,7 +6392,7 @@ public class main_RS232_RS422 {
     // if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2)
     if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0)) {
       String info =
-          "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+          "Log folder for sensor data is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
     }
@@ -6494,7 +6494,7 @@ public class main_RS232_RS422 {
     // dir for storage sensor data
     if ((main.logs_dir == null) || (main.logs_dir.compareTo("") == 0)) {
       String info =
-          "logs folder (for sensor data storage) unknown, select: Maintenance -> Log files settings";
+          "Log folder for sensor data is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
     }
@@ -6604,7 +6604,7 @@ public class main_RS232_RS422 {
 
     // logs folder
     if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
-      message = "[AWSR] Logs folder unknown (select: Maintenance -> Log files settings)";
+      message = "[AWSR] Log folder is not configured; check the TurboWin configuration";
       main.log_turbowin_system_message(message);
     }
 
@@ -6746,7 +6746,7 @@ public class main_RS232_RS422 {
 
     // logs folder
     if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
-      message = "[APR] Logs folder unknown (select: Maintenance -> Log files settings)";
+      message = "[APR] Log folder is not configured; check the TurboWin configuration";
       main.log_turbowin_system_message(message);
     }
 

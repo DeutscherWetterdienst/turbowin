@@ -182,11 +182,6 @@ public final class mypassword extends javax.swing.JFrame {
         myemailsettings form = new myemailsettings();
         form.setSize(1000, 700); // form.setSize(800, 600);
         form.setVisible(true);
-      } else if (main.mode.equals(main.LOG_FILES)) {
-        /* open log files (which dir for storage) input page */
-        mylogfiles form = new mylogfiles();
-        form.setSize(800, 600);
-        form.setVisible(true);
       } else if (main.mode.equals(main.SERIAL_CONNECTION)) // or WiFi
       {
         /* open serial connection settings input page */

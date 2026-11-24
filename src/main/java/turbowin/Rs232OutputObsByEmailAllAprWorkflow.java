@@ -55,7 +55,7 @@ final class Rs232OutputObsByEmailAllAprWorkflow {
           if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
             doorgaan = false;
             String info =
-                "logs folder unknown, select: 'Maintenance -> Log files settings' and retry";
+                "Log folder is not configured; check the TurboWin configuration and retry";
             main.log_turbowin_system_message(log_tag + " " + info);
           }
         } // if (doorgaan == true)

@@ -32,7 +32,7 @@ final class ServerObservationOutputWorkflow {
           if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2) {
             doorgaan = false;
             String info =
-                "logs folder unknown, select: Maintenance -> Log files settings and retry";
+                "Log folder is not configured; check the TurboWin configuration and retry";
             JOptionPane.showMessageDialog(
                 null, info, APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
           }

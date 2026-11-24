@@ -27,6 +27,9 @@ move the active configuration or its backup. Both remain in the selected data ro
 creates the default `logs` and `amver` directories; the account running TurboWin needs write access
 to the data root and any selected custom logs directory.
 
+Use **Info → Log folder** to view the active operational logs path. Existing custom paths from
+configuration or maintenance import remain supported; this view does not change the path.
+
 The JVM option `-Dturbowin.data.dir=/absolute/path/to/data` selects another data root. On Windows,
 use a Windows path and quote the option if it contains spaces. This option also disables all
 automatic legacy migration, including history copying. It is useful for isolated tests and

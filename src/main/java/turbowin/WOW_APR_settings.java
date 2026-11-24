@@ -1522,7 +1522,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
 
     // logs folder
     if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
-      info = "[APR] Logs folder unknown (select: Maintenance -> Log files settings)";
+      info = "[APR] Log folder is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null,
           info,
@@ -1628,7 +1628,7 @@ public final class WOW_APR_settings extends javax.swing.JFrame {
 
     // logs folder
     if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
-      info = "[AWSR] Logs folder unknown (select: Maintenance -> Log files settings)";
+      info = "[AWSR] Log folder is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null,
           info,

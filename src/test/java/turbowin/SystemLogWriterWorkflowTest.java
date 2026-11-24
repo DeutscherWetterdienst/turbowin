@@ -1,11 +1,36 @@
 package turbowin;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class SystemLogWriterWorkflowTest {
+  @Rule public TemporaryFolder folder = new TemporaryFolder();
+
+  @Test
+  public void createsSystemLogDirectoryForConfiguredFolderBeforeFirstWrite() throws Exception {
+    Path logs = folder.newFolder("custom-logs").toPath();
+    SystemLogWriterWorkflow.append(logs.toString(), "Nov_2026", "first entry");
+    Path file = logs.resolve(main.TURBOWIN_SYSTEM_LOGS_DIR).resolve("turbowin_system_Nov_2026.txt");
+    assertEquals("first entry" + System.lineSeparator(), Files.readString(file));
+  }
+
+  @Test
+  public void doesNotCreateAMissingConfiguredLogsRoot() throws Exception {
+    Path missing = folder.getRoot().toPath().resolve("missing");
+    assertThrows(
+        IOException.class,
+        () -> SystemLogWriterWorkflow.append(missing.toString(), "Nov_2026", "entry"));
+    assertFalse(Files.exists(missing));
+  }
 
   @Test
   public void createsMonthlyLogFileName() {

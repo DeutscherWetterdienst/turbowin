@@ -116,7 +116,7 @@ public class FORMAT_101 {
     if (main.logs_dir.trim().length() < 2) {
       JOptionPane.showMessageDialog(
           null,
-          "logs folder unknown, select: Maintenance -> Log files settings and retry",
+          "Log folder is not configured; check the TurboWin configuration and retry",
           main.APPLICATION_NAME,
           JOptionPane.WARNING_MESSAGE);
       return 1;

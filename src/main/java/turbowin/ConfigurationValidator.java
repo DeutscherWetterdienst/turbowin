@@ -58,7 +58,7 @@ final class ConfigurationValidator {
     } else if (sst_exposure.trim().equals("") == true || sst_exposure.trim().length() < 2) {
       info = "Sea water temp exposure: unknown (select: Maintenance -> Station data)";
     } else if (logs_dir.trim().equals("") == true || logs_dir.trim().length() < 2) {
-      info = "Logs folder unknown (select: Maintenance -> Log files settings)";
+      info = "Log folder is not configured; check the TurboWin configuration";
     } else if (obs_format.trim().equals("") == true || obs_format.trim().length() < 2) {
       info = "obs format unknown (select: Maintenance -> Obs format setting)";
     }

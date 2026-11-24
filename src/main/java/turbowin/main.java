@@ -2591,15 +2591,6 @@ public class main extends javax.swing.JFrame {
         });
     jMenu4.add(jMenuItem25);
 
-    jMenuItem26.setText("Log files settings...");
-    jMenuItem26.addActionListener(
-        new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Maintenance_Log_files_actionPerformed(evt);
-          }
-        });
-    jMenu4.add(jMenuItem26);
-
     jMenuItem50.setText("Obs format setting...");
     jMenuItem50.addActionListener(
         new java.awt.event.ActionListener() {
@@ -3592,6 +3583,15 @@ public class main extends javax.swing.JFrame {
     jMenu7.add(jMenuItem75);
     jMenu7.add(jSeparator5);
 
+    jMenuItem26.setText("Log folder...");
+    jMenuItem26.addActionListener(
+        new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+            Info_Log_folder_actionPerformed(evt);
+          }
+        });
+    jMenu7.add(jMenuItem26);
+
     jMenuItem53.setText("System log");
     jMenuItem53.addActionListener(
         new java.awt.event.ActionListener() {
@@ -4125,16 +4125,9 @@ public class main extends javax.swing.JFrame {
         new Dimension(400, 300));
   } // GEN-LAST:event_Maintenance_Email_settings_actionPerformed
 
-  private void Maintenance_Log_files_actionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Maintenance_Log_files_actionPerformed
-    mode = LOG_FILES;
-    ProtectedWindowWorkflow.open(
-        main_support.password_ok,
-        mylogfiles::new,
-        new Dimension(800, 600),
-        mypassword::new,
-        new Dimension(400, 300));
-  } // GEN-LAST:event_Maintenance_Log_files_actionPerformed
+  private void Info_Log_folder_actionPerformed(java.awt.event.ActionEvent evt) {
+    LogFolderDialog.open();
+  }
 
   void Input_Observer_menu_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Input_Observer_menu_actionPerformed
@@ -6397,7 +6390,6 @@ public class main extends javax.swing.JFrame {
   public static final String PRESSURE_READING_MSL_NO = "no";
   public static final String STATION_DATA = "station data"; // see 'mode' in password form
   public static final String EMAIL_SETTINGS = "email settings"; // see 'mode' in password form
-  public static final String LOG_FILES = "log files"; // see 'mode' in password form
   public static final String SET_OBS_FORMAT = "set obs format"; // see 'mode' in password form
   public static final String SET_WOW_APR_SETTINGS =
       "set WOW APR settings"; // see 'mode' in password form

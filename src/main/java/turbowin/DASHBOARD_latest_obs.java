@@ -21,7 +21,7 @@ public class DASHBOARD_latest_obs extends javax.swing.JFrame {
 
     if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
       doorgaan = false;
-      String info = "logs folder unknown, select: Maintenance -> Log files settings";
+      String info = "Log folder is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
     }

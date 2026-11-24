@@ -71,7 +71,7 @@ public class OSM {
 
     // Check logs dir
     if (main.logs_dir.trim().equals("") == true || main.logs_dir.trim().length() < 2) {
-      String info = "logs folder unknown, select: Maintenance -> Log files settings";
+      String info = "Log folder is not configured; check the TurboWin configuration";
       JOptionPane.showMessageDialog(
           null, info, main.APPLICATION_NAME + " error", JOptionPane.WARNING_MESSAGE);
       doorgaan = false;
