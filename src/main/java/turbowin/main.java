@@ -5018,9 +5018,7 @@ public class main extends javax.swing.JFrame {
           evt) { // GEN-FIRST:event_Info_barometer_comparison_menu_actionPerformed
     // TODO add your handling code here:
 
-    barometer_comparison form = new barometer_comparison();
-    form.setSize(1000, 700);
-    form.setVisible(true);
+    BarometerComparisonDialog.open();
   } // GEN-LAST:event_Info_barometer_comparison_menu_actionPerformed
 
   private void APR_toolbar_itemStateChanged(
