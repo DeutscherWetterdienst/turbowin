@@ -1,22 +1,21 @@
 package turbowin;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 /** Temperature calculations and the existing observation state shared with sensor workflows. */
 public final class TemperatureModel {
-  public static JTextField jTextField1;
-  public static JTextField jTextField2;
-  public static JTextField jTextField4;
+  static ObservableText airInput;
+  static ObservableText wetBulbInput;
+  static ObservableText humidityInput;
   public static boolean selectedWetBulbFrozen;
-  final JTextField jTextField3 = new JTextField();
+  final ObservableText seaInput = new ObservableText();
   private boolean validAirExposure;
   private boolean validSeaExposure;
 
   TemperatureModel() {
-    jTextField1 = new JTextField();
-    jTextField2 = new JTextField();
-    jTextField4 = new JTextField();
+    airInput = new ObservableText();
+    wetBulbInput = new ObservableText();
+    humidityInput = new ObservableText();
     selectedWetBulbFrozen = false;
     local_thermometer_StarX_connected =
         main.RS232_connection_mode == 7 || main.RS232_connection_mode == 8;
@@ -164,10 +163,10 @@ public final class TemperatureModel {
       /*
       ////// get text from inserted fields and retrieve other inserted/checked values
       */
-      air_temp = jTextField1.getText().trim();
-      wet_bulb_temp = jTextField2.getText().trim();
-      sea_water_temp = jTextField3.getText().trim();
-      RH = jTextField4.getText().trim();
+      air_temp = airInput.get().trim();
+      wet_bulb_temp = wetBulbInput.get().trim();
+      sea_water_temp = seaInput.get().trim();
+      RH = humidityInput.get().trim();
 
       // NB So wet-bulb state if nothing checked/ticked assume wet-bulb not frozen
       if (selectedWetBulbFrozen) {
@@ -494,12 +493,12 @@ public final class TemperatureModel {
           .RS232_Vaisala_HMP155_Read_Sensor_Data_Air_Temp_et_al_For_Obs(); // field values will be
       // set in this function
     } else {
-      if (air_temp.compareTo("") != 0) jTextField1.setText(air_temp);
+      if (air_temp.compareTo("") != 0) airInput.set(air_temp);
 
-      if (wet_bulb_temp.compareTo("") != 0) jTextField2.setText(wet_bulb_temp);
+      if (wet_bulb_temp.compareTo("") != 0) wetBulbInput.set(wet_bulb_temp);
 
       if (RH.compareTo("") != 0) {
-        jTextField4.setText(RH);
+        humidityInput.set(RH);
       }
 
       // NB default is wet-bulb not frozen (dus wanneer niets bekend is dan standaard wet-bulb not
@@ -515,7 +514,7 @@ public final class TemperatureModel {
 
     // SST
     //
-    if (sea_water_temp.compareTo("") != 0) jTextField3.setText(sea_water_temp);
+    if (sea_water_temp.compareTo("") != 0) seaInput.set(sea_water_temp);
 
     validSeaExposure =
         java.util.Set.of(

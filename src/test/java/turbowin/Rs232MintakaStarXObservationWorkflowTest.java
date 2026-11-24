@@ -16,7 +16,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -36,9 +35,9 @@ public class Rs232MintakaStarXObservationWorkflowTest {
   private String originalWetBulbTemp;
   private String originalRh;
   private double originalDewPoint;
-  private JTextField originalAirField;
-  private JTextField originalWetBulbField;
-  private JTextField originalRhField;
+  private ObservableText originalAirField;
+  private ObservableText originalWetBulbField;
+  private ObservableText originalRhField;
   private boolean originalFrozenSelection;
 
   @Before
@@ -51,17 +50,17 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     originalWetBulbTemp = TemperatureModel.wet_bulb_temp;
     originalRh = TemperatureModel.RH;
     originalDewPoint = TemperatureModel.double_dew_point;
-    originalAirField = TemperatureModel.jTextField1;
-    originalWetBulbField = TemperatureModel.jTextField2;
-    originalRhField = TemperatureModel.jTextField4;
+    originalAirField = TemperatureModel.airInput;
+    originalWetBulbField = TemperatureModel.wetBulbInput;
+    originalRhField = TemperatureModel.humidityInput;
     originalFrozenSelection = TemperatureModel.selectedWetBulbFrozen;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
     main.sdf4 = utcFormat("yyyyMMddHHmm");
-    TemperatureModel.jTextField1 = new JTextField();
-    TemperatureModel.jTextField2 = new JTextField();
-    TemperatureModel.jTextField4 = new JTextField();
+    TemperatureModel.airInput = new ObservableText();
+    TemperatureModel.wetBulbInput = new ObservableText();
+    TemperatureModel.humidityInput = new ObservableText();
     resetModel();
   }
 
@@ -75,9 +74,9 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     TemperatureModel.wet_bulb_temp = originalWetBulbTemp;
     TemperatureModel.RH = originalRh;
     TemperatureModel.double_dew_point = originalDewPoint;
-    TemperatureModel.jTextField1 = originalAirField;
-    TemperatureModel.jTextField2 = originalWetBulbField;
-    TemperatureModel.jTextField4 = originalRhField;
+    TemperatureModel.airInput = originalAirField;
+    TemperatureModel.wetBulbInput = originalWetBulbField;
+    TemperatureModel.humidityInput = originalRhField;
     TemperatureModel.selectedWetBulbFrozen = originalFrozenSelection;
   }
 
@@ -89,9 +88,9 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     assertEquals("-0.4", TemperatureModel.wet_bulb_temp);
     assertEquals("75.0", TemperatureModel.RH);
     assertEquals(12.3, TemperatureModel.double_dew_point, 0.0);
-    assertEquals("20.0", TemperatureModel.jTextField1.getText());
-    assertEquals("-0.4", TemperatureModel.jTextField2.getText());
-    assertEquals("75.0", TemperatureModel.jTextField4.getText());
+    assertEquals("20.0", TemperatureModel.airInput.get());
+    assertEquals("-0.4", TemperatureModel.wetBulbInput.get());
+    assertEquals("75.0", TemperatureModel.humidityInput.get());
     assertTrue(TemperatureModel.selectedWetBulbFrozen);
 
     runRecord("20.0", "75.0", "0.4", "12.3", "0");
@@ -209,9 +208,9 @@ public class Rs232MintakaStarXObservationWorkflowTest {
     TemperatureModel.wet_bulb_temp = "";
     TemperatureModel.RH = "";
     TemperatureModel.double_dew_point = main.INVALID;
-    TemperatureModel.jTextField1.setText("");
-    TemperatureModel.jTextField2.setText("");
-    TemperatureModel.jTextField4.setText("");
+    TemperatureModel.airInput.set("");
+    TemperatureModel.wetBulbInput.set("");
+    TemperatureModel.humidityInput.set("");
     TemperatureModel.selectedWetBulbFrozen = false;
   }
 

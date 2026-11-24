@@ -183,7 +183,10 @@ public class BarographJavaFxIntegrationTest extends AbstractUiTest {
       assertTrue(option(scene, 5).isSelected());
       return null;
     });
-    SwingUtilities.invokeAndWait(() -> BarographModel.jTextField1.setText("2.3"));
+    SwingUtilities.invokeAndWait(() -> {
+      BarographModel.amountInput.set("2,3");
+      BarographModel.amountInput.set("invalid");
+    });
     SwingUtilities.invokeAndWait(() -> {});
     CloudCoverFxTestSupport.onFx(() -> {
       assertEquals("2.3", field(scene).getText());

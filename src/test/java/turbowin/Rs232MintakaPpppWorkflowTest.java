@@ -18,7 +18,6 @@ import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -39,8 +38,8 @@ public class Rs232MintakaPpppWorkflowTest {
   private String originalPressureRecord;
   private String originalPressureReading;
   private String originalCorrection;
-  private JTextField originalPressureField;
-  private JTextField originalDraftField;
+  private ObservableText originalPressureField;
+  private ObservableText originalDraftField;
 
   @Before
   public void setUp() {
@@ -53,8 +52,8 @@ public class Rs232MintakaPpppWorkflowTest {
     originalPressureRecord = main.sensor_data_record_obs_pressure;
     originalPressureReading = BarometerModel.pressure_reading;
     originalCorrection = main.barometer_instrument_correction;
-    originalPressureField = BarometerModel.jTextField1;
-    originalDraftField = BarometerModel.jTextField2;
+    originalPressureField = BarometerModel.pressureInput;
+    originalDraftField = BarometerModel.draftInput;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.sdf3 = utcFormat("yyyyMMddHH");
@@ -64,8 +63,8 @@ public class Rs232MintakaPpppWorkflowTest {
     main.sensor_data_record_obs_pressure = "";
     main.barometer_instrument_correction = "";
     BarometerModel.pressure_reading = "";
-    BarometerModel.jTextField1 = new JTextField();
-    BarometerModel.jTextField2 = new JTextField();
+    BarometerModel.pressureInput = new ObservableText();
+    BarometerModel.draftInput = new ObservableText();
   }
 
   @After
@@ -79,17 +78,17 @@ public class Rs232MintakaPpppWorkflowTest {
     main.sensor_data_record_obs_pressure = originalPressureRecord;
     BarometerModel.pressure_reading = originalPressureReading;
     main.barometer_instrument_correction = originalCorrection;
-    BarometerModel.jTextField1 = originalPressureField;
-    BarometerModel.jTextField2 = originalDraftField;
+    BarometerModel.pressureInput = originalPressureField;
+    BarometerModel.draftInput = originalDraftField;
   }
 
   @Test
   public void starAndStarXRecordsExtractPressureForTheBarometerForm() throws Exception {
     runFormRecord("1000.04", false, "1000.0");
-    assertEquals("1000.0", BarometerModel.jTextField1.getText());
+    assertEquals("1000.0", BarometerModel.pressureInput.get());
 
     runFormRecord("1001.26", true, "1001.3");
-    assertEquals("1001.3", BarometerModel.jTextField1.getText());
+    assertEquals("1001.3", BarometerModel.pressureInput.get());
   }
 
   @Test
@@ -203,8 +202,8 @@ public class Rs232MintakaPpppWorkflowTest {
   private void resetModel() {
     main.sensor_data_record_obs_pressure = "";
     BarometerModel.pressure_reading = "";
-    BarometerModel.jTextField1.setText("");
-    BarometerModel.jTextField2.setText("");
+    BarometerModel.pressureInput.set("");
+    BarometerModel.draftInput.set("");
   }
 
   private String starPayload(String pressure) {

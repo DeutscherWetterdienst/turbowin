@@ -17,7 +17,6 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -39,9 +38,9 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   private double originalRelativeHumidity;
   private boolean originalWetBulbFrozen;
   private GregorianCalendar originalObservationDate;
-  private JTextField originalTextField1;
-  private JTextField originalTextField2;
-  private JTextField originalTextField4;
+  private ObservableText originalTextField1;
+  private ObservableText originalTextField2;
+  private ObservableText originalTextField4;
   private boolean originalFrozenSelection;
 
   @Before
@@ -56,9 +55,9 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     originalRelativeHumidity = TemperatureModel.double_rv;
     originalWetBulbFrozen = TemperatureModel.wet_bulb_frozen;
     originalObservationDate = main.obs_file_datum_tijd;
-    originalTextField1 = TemperatureModel.jTextField1;
-    originalTextField2 = TemperatureModel.jTextField2;
-    originalTextField4 = TemperatureModel.jTextField4;
+    originalTextField1 = TemperatureModel.airInput;
+    originalTextField2 = TemperatureModel.wetBulbInput;
+    originalTextField4 = TemperatureModel.humidityInput;
     originalFrozenSelection = TemperatureModel.selectedWetBulbFrozen;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
@@ -79,9 +78,9 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     TemperatureModel.double_rv = originalRelativeHumidity;
     TemperatureModel.wet_bulb_frozen = originalWetBulbFrozen;
     main.obs_file_datum_tijd = originalObservationDate;
-    TemperatureModel.jTextField1 = originalTextField1;
-    TemperatureModel.jTextField2 = originalTextField2;
-    TemperatureModel.jTextField4 = originalTextField4;
+    TemperatureModel.airInput = originalTextField1;
+    TemperatureModel.wetBulbInput = originalTextField2;
+    TemperatureModel.humidityInput = originalTextField4;
     TemperatureModel.selectedWetBulbFrozen = originalFrozenSelection;
   }
 
@@ -89,9 +88,9 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   public void readsTheFixedWidthFieldsAndUsesTheirOffsets() throws Exception {
     runRecord("20.0", "-0.1", "10.0", "50.0", new Date());
 
-    assertEquals(padded("20.0"), TemperatureModel.jTextField1.getText());
-    assertEquals(padded("-0.1"), TemperatureModel.jTextField2.getText());
-    assertEquals(padded("50.0"), TemperatureModel.jTextField4.getText());
+    assertEquals(padded("20.0"), TemperatureModel.airInput.get());
+    assertEquals(padded("-0.1"), TemperatureModel.wetBulbInput.get());
+    assertEquals(padded("50.0"), TemperatureModel.humidityInput.get());
     assertEquals(10.0, TemperatureModel.double_dew_point, 0.0);
     assertEquals(0.5, TemperatureModel.double_rv, 0.0);
   }
@@ -158,9 +157,9 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
   public void sensorMarkersAreNotParsedAsNumericValues() throws Exception {
     runRecord("*", "*", "*", "*", new Date());
 
-    assertEquals(padded("*"), TemperatureModel.jTextField1.getText());
-    assertEquals(padded("*"), TemperatureModel.jTextField2.getText());
-    assertEquals(padded("*"), TemperatureModel.jTextField4.getText());
+    assertEquals(padded("*"), TemperatureModel.airInput.get());
+    assertEquals(padded("*"), TemperatureModel.wetBulbInput.get());
+    assertEquals(padded("*"), TemperatureModel.humidityInput.get());
     assertEquals(main.INVALID, TemperatureModel.double_dew_point, 0.0);
     assertEquals(main.INVALID, TemperatureModel.double_rv, 0.0);
   }
@@ -194,7 +193,7 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     long deadline = System.nanoTime() + 5_000_000_000L;
     do {
       SwingUtilities.invokeAndWait(
-          () -> displayedHumidity.set(TemperatureModel.jTextField4.getText()));
+          () -> displayedHumidity.set(TemperatureModel.humidityInput.get()));
       if (padded(rh).equals(displayedHumidity.get())) {
         return;
       }
@@ -260,9 +259,9 @@ public class Rs232VaisalaHmp155ObservationWorkflowTest {
     TemperatureModel.RH = "";
     TemperatureModel.double_dew_point = main.INVALID;
     TemperatureModel.double_rv = main.INVALID;
-    TemperatureModel.jTextField1 = new JTextField();
-    TemperatureModel.jTextField2 = new JTextField();
-    TemperatureModel.jTextField4 = new JTextField();
+    TemperatureModel.airInput = new ObservableText();
+    TemperatureModel.wetBulbInput = new ObservableText();
+    TemperatureModel.humidityInput = new ObservableText();
     TemperatureModel.selectedWetBulbFrozen = false;
   }
 

@@ -135,7 +135,7 @@ final class Rs232VaisalaPressureTrendWorkflow {
             // tendency
             BarographModel.pressure_amount_tendency =
                 Double.toString(Math.abs(hulp_double_ppp_reading)); // only pos value in this field
-            BarographModel.jTextField1.setText(BarographModel.pressure_amount_tendency);
+            BarographModel.amountInput.set(BarographModel.pressure_amount_tendency);
           }
         } // if ((main.sensor_data_record_obs_pressure.compareTo("") != 0) etc.
 

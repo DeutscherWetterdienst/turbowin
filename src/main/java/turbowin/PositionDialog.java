@@ -7,10 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /** Bridges the JavaFX position form to the existing observation and GPS workflows. */
 final class PositionDialog {
@@ -20,23 +17,23 @@ final class PositionDialog {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
     PositionModel model = new PositionModel();
-    JTextField[] fields = {
-      PositionModel.jTextField1,
-      PositionModel.jTextField2,
-      PositionModel.jTextField3,
-      PositionModel.jTextField4
+    ObservableText[] fields = {
+      PositionModel.latitudeDegreesInput,
+      PositionModel.latitudeMinutesInput,
+      PositionModel.longitudeDegreesInput,
+      PositionModel.longitudeMinutesInput
     };
     PositionSelections selections = PositionModel.selections;
     String[] values = new String[fields.length];
     int[] selected = new int[4];
-    for (int i = 0; i < fields.length; i++) values[i] = fields[i].getText();
+    for (int i = 0; i < fields.length; i++) values[i] = fields[i].get();
     for (int i = 0; i < selected.length; i++) selected[i] = selections.selectedIndex(i);
     boolean gps = main.RS232_GPS_connection_mode != 0;
     PositionView.State state =
         new PositionView.State(
             values,
             selected,
-            !fields[0].isEditable(),
+            !model.plotPositionAvailable(),
             model.plotPositionAvailable(),
             model.courseLabel(),
             model.speedLabel(),
@@ -53,25 +50,10 @@ final class PositionDialog {
                   Scene current = scene.get();
                   JDialog dialog = window.get();
                   if (current == null || dialog == null || !dialog.isDisplayable()) return;
-                  String value = fields[index].getText();
+                  String value = fields[index].get();
                   Platform.runLater(() -> PositionView.updateField(current, index, value));
                 });
-        fields[i]
-            .getDocument()
-            .addDocumentListener(
-                new DocumentListener() {
-                  public void insertUpdate(DocumentEvent event) {
-                    refresh.run();
-                  }
-
-                  public void removeUpdate(DocumentEvent event) {
-                    refresh.run();
-                  }
-
-                  public void changedUpdate(DocumentEvent event) {
-                    refresh.run();
-                  }
-                });
+        fields[i].addListener(event -> refresh.run());
       }
       for (int i = 0; i < selected.length; i++) {
         int index = i;
@@ -99,7 +81,7 @@ final class PositionDialog {
                       input ->
                           SwingUtilities.invokeLater(() -> {
                             for (int i = 0; i < fields.length; i++)
-                              fields[i].setText(input.values()[i]);
+                              fields[i].set(input.values()[i]);
                             for (int i = 0; i < selected.length; i++)
                               selections.selectIndex(i, input.selected()[i]);
                             model.setPlotPosition(input.plot());
@@ -134,7 +116,7 @@ final class PositionDialog {
                   if (dialog == null || !dialog.isDisplayable()) return;
                   for (int i = 0; i < fields.length; i++) {
                     int index = i;
-                    String value = fields[i].getText();
+                    String value = fields[i].get();
                     if (!value.equals(values[i]))
                       Platform.runLater(() -> PositionView.updateField(created, index, value));
                   }

@@ -108,7 +108,7 @@ public class BarometerJavaFxIntegrationTest extends AbstractUiTest {
       assertTrue(((Label) scene.lookup("#msl_metadata")).getText().endsWith("No"));
       return null;
     });
-    SwingUtilities.invokeAndWait(() -> BarometerModel.jTextField1.setText("1001.5"));
+    SwingUtilities.invokeAndWait(() -> BarometerModel.pressureInput.set("1001.5"));
     SwingUtilities.invokeAndWait(() -> {});
     CloudCoverFxTestSupport.onFx(() -> {
       assertEquals("1001.5", field(scene, "barometer_reading").getText());

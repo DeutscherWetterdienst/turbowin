@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -52,10 +51,10 @@ public class Rs232MintakaGpsWorkflowTest {
   private int originalLongitudeMinutesInt;
   private double originalSog;
   private double originalCog;
-  private JTextField originalLatitudeField;
-  private JTextField originalLatitudeMinutesField;
-  private JTextField originalLongitudeField;
-  private JTextField originalLongitudeMinutesField;
+  private ObservableText originalLatitudeField;
+  private ObservableText originalLatitudeMinutesField;
+  private ObservableText originalLongitudeField;
+  private ObservableText originalLongitudeMinutesField;
   private PositionSelections originalSelections;
 
   @Before
@@ -88,10 +87,10 @@ public class Rs232MintakaGpsWorkflowTest {
     originalLongitudeMinutesInt = PositionModel.int_longitude_minutes;
     originalSog = PositionModel.SOG_APR;
     originalCog = PositionModel.COG_APR;
-    originalLatitudeField = PositionModel.jTextField1;
-    originalLatitudeMinutesField = PositionModel.jTextField2;
-    originalLongitudeField = PositionModel.jTextField3;
-    originalLongitudeMinutesField = PositionModel.jTextField4;
+    originalLatitudeField = PositionModel.latitudeDegreesInput;
+    originalLatitudeMinutesField = PositionModel.latitudeMinutesInput;
+    originalLongitudeField = PositionModel.longitudeDegreesInput;
+    originalLongitudeMinutesField = PositionModel.longitudeMinutesInput;
     originalSelections = PositionModel.selections;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
@@ -115,10 +114,10 @@ public class Rs232MintakaGpsWorkflowTest {
     PositionModel.Qc_code = "";
     PositionModel.course = "";
     PositionModel.speed = "";
-    PositionModel.jTextField1 = new JTextField();
-    PositionModel.jTextField2 = new JTextField();
-    PositionModel.jTextField3 = new JTextField();
-    PositionModel.jTextField4 = new JTextField();
+    PositionModel.latitudeDegreesInput = new ObservableText();
+    PositionModel.latitudeMinutesInput = new ObservableText();
+    PositionModel.longitudeDegreesInput = new ObservableText();
+    PositionModel.longitudeMinutesInput = new ObservableText();
     setPositionControls();
   }
 
@@ -152,10 +151,10 @@ public class Rs232MintakaGpsWorkflowTest {
     PositionModel.int_longitude_minutes = originalLongitudeMinutesInt;
     PositionModel.SOG_APR = originalSog;
     PositionModel.COG_APR = originalCog;
-    PositionModel.jTextField1 = originalLatitudeField;
-    PositionModel.jTextField2 = originalLatitudeMinutesField;
-    PositionModel.jTextField3 = originalLongitudeField;
-    PositionModel.jTextField4 = originalLongitudeMinutesField;
+    PositionModel.latitudeDegreesInput = originalLatitudeField;
+    PositionModel.latitudeMinutesInput = originalLatitudeMinutesField;
+    PositionModel.longitudeDegreesInput = originalLongitudeField;
+    PositionModel.longitudeMinutesInput = originalLongitudeMinutesField;
     PositionModel.selections = originalSelections;
   }
 

@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -45,8 +44,8 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
   private int originalConnectionMode;
   private GregorianCalendar originalObservationDate;
   private GregorianCalendar originalSystemDate;
-  private JTextField originalTextField1;
-  private JTextField originalTextField2;
+  private ObservableText originalTextField1;
+  private ObservableText originalTextField2;
 
   @Before
   public void setUp() {
@@ -64,8 +63,8 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     originalConnectionMode = main.RS232_connection_mode;
     originalObservationDate = main.obs_file_datum_tijd;
     originalSystemDate = main_RS232_RS422.cal_system_date_time;
-    originalTextField1 = BarometerModel.jTextField1;
-    originalTextField2 = BarometerModel.jTextField2;
+    originalTextField1 = BarometerModel.pressureInput;
+    originalTextField2 = BarometerModel.draftInput;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
     main.type_record_lengte = main.RECORD_LENGTE_PTB220;
@@ -77,8 +76,8 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     main.RS232_connection_mode = 1;
     main.barometer_instrument_correction = "";
     BarometerModel.pressure_reading = "";
-    BarometerModel.jTextField1 = new JTextField();
-    BarometerModel.jTextField2 = new JTextField();
+    BarometerModel.pressureInput = new ObservableText();
+    BarometerModel.draftInput = new ObservableText();
   }
 
   @After
@@ -97,8 +96,8 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     main.RS232_connection_mode = originalConnectionMode;
     main.obs_file_datum_tijd = originalObservationDate;
     main_RS232_RS422.cal_system_date_time = originalSystemDate;
-    BarometerModel.jTextField1 = originalTextField1;
-    BarometerModel.jTextField2 = originalTextField2;
+    BarometerModel.pressureInput = originalTextField1;
+    BarometerModel.draftInput = originalTextField2;
   }
 
   @Test
@@ -106,7 +105,7 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     runFormRecord("1012.34", new Date());
 
     assertEquals("1012.3", BarometerModel.pressure_reading);
-    assertEquals("1012.3", BarometerModel.jTextField1.getText());
+    assertEquals("1012.3", BarometerModel.pressureInput.get());
   }
 
   @Test
@@ -121,7 +120,7 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
     assertEquals("1099.9", BarometerModel.pressure_reading);
 
     BarometerModel.pressure_reading = "";
-    BarometerModel.jTextField1.setText("");
+    BarometerModel.pressureInput.set("");
     runFormRecord("1100.0", new Date());
     assertEquals("", BarometerModel.pressure_reading);
   }
@@ -129,12 +128,12 @@ public class Rs232VaisalaPressureReadingWorkflowTest {
   @Test
   public void malformedReadingDoesNotReplaceTheExistingFormValue() throws Exception {
     BarometerModel.pressure_reading = "old";
-    BarometerModel.jTextField1.setText("old");
+    BarometerModel.pressureInput.set("old");
 
     runFormRecord("bad", new Date());
 
     assertEquals("old", BarometerModel.pressure_reading);
-    assertEquals("old", BarometerModel.jTextField1.getText());
+    assertEquals("old", BarometerModel.pressureInput.get());
   }
 
   @Test

@@ -256,7 +256,7 @@ final class Rs232MintakaApppDataFilesWorkflow {
                 // BarographModel.pressure_amount_tendency =
                 // Double.toString(Math.abs(hulp_double_ppp_reading));  // only positive value in
                 // this field
-                // BarographModel.jTextField1.setText(BarographModel.pressure_amount_tendency);
+                // BarographModel.amountInput.set(BarographModel.pressure_amount_tendency);
               }
             } // if ((main.sensor_data_record_obs_pressure.compareTo("") != 0) etc.
             else {
@@ -341,7 +341,7 @@ final class Rs232MintakaApppDataFilesWorkflow {
           BarographModel.pressure_amount_tendency =
               Double.toString(
                   Math.abs(hulp_double_ppp_reading)); // only positive value in this field
-          BarographModel.jTextField1.setText(BarographModel.pressure_amount_tendency);
+          BarographModel.amountInput.set(BarographModel.pressure_amount_tendency);
 
           // set characteristic on a-ppp input page
           //

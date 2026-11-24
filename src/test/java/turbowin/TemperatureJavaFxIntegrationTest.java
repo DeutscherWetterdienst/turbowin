@@ -122,9 +122,9 @@ public class TemperatureJavaFxIntegrationTest extends AbstractUiTest {
         return null;
       });
       SwingUtilities.invokeAndWait(() -> {
-        TemperatureModel.jTextField1.setText("21.5");
-        TemperatureModel.jTextField2.setText("-0.1");
-        TemperatureModel.jTextField4.setText("72.0");
+        TemperatureModel.airInput.set("21.5");
+        TemperatureModel.wetBulbInput.set("-0.1");
+        TemperatureModel.humidityInput.set("72.0");
         TemperatureModel.selectedWetBulbFrozen = true;
         TemperatureDialog.sensorUpdated();
       });

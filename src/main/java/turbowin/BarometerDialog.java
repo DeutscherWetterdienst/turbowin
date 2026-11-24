@@ -5,10 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /** Connects the JavaFX barometer form to the existing pressure and sensor workflows. */
 final class BarometerDialog {
@@ -18,8 +15,8 @@ final class BarometerDialog {
     if (!SwingUtilities.isEventDispatchThread())
       throw new IllegalStateException("Swing event thread required");
     BarometerModel model = new BarometerModel();
-    JTextField pressure = BarometerModel.jTextField1;
-    JTextField draft = BarometerModel.jTextField2;
+    ObservableText pressure = BarometerModel.pressureInput;
+    ObservableText draft = BarometerModel.draftInput;
     boolean sensorConnected = main.RS232_connection_mode != 0;
     String msl = main.pressure_reading_msl_yes_no;
     String mslLabel =
@@ -28,14 +25,14 @@ final class BarometerDialog {
             : main.PRESSURE_READING_MSL_NO.equals(msl) ? "No" : "Not set";
     BarometerView.State state =
         new BarometerView.State(
-            pressure.getText(),
-            draft.getText(),
+            pressure.get(),
+            draft.get(),
             main.barometer_instrument_correction,
             mslLabel,
             model.notice(),
-            !pressure.isEditable(),
-            !draft.isEditable(),
-            !draft.isEnabled(),
+            model.sensorReadOnly(),
+            model.sensorReadOnly(),
+            main.PRESSURE_READING_MSL_YES.equals(msl),
             main.in_next_sequence,
             main.offline_mode);
     AtomicReference<Scene> scene = new AtomicReference<>();
@@ -46,26 +43,11 @@ final class BarometerDialog {
               Scene current = scene.get();
               JDialog dialog = window.get();
               if (current == null || dialog == null || !dialog.isDisplayable()) return;
-              String value = pressure.getText();
+              String value = pressure.get();
               Platform.runLater(() -> BarometerView.updateSensorPressure(current, value));
             });
     if (sensorConnected) {
-      pressure
-          .getDocument()
-          .addDocumentListener(
-              new DocumentListener() {
-                public void insertUpdate(DocumentEvent event) {
-                  refresh.run();
-                }
-
-                public void removeUpdate(DocumentEvent event) {
-                  refresh.run();
-                }
-
-                public void changedUpdate(DocumentEvent event) {
-                  refresh.run();
-                }
-              });
+      pressure.addListener(event -> refresh.run());
     }
     JDialog result =
         FxSwingDialog.show(
@@ -78,8 +60,8 @@ final class BarometerDialog {
                       state,
                       input ->
                           SwingUtilities.invokeLater(() -> {
-                            pressure.setText(input.pressure());
-                            draft.setText(input.draft());
+                            pressure.set(input.pressure());
+                            draft.set(input.draft());
                             if (model.accept()) {
                               close.run();
                               if (main.in_next_sequence) BarographDialog.open();

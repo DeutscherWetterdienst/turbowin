@@ -15,7 +15,6 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +33,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
   private String originalA;
   private GregorianCalendar originalObservationDate;
   private String originalAmount;
-  private JTextField originalTextField;
+  private ObservableText originalTextField;
   private ObservableSelection<BarographModel.Tendency> originalTendency;
 
   @Before
@@ -46,7 +45,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
     originalA = main.sensor_data_record_obs_a;
     originalObservationDate = main.obs_file_datum_tijd;
     originalAmount = BarographModel.pressure_amount_tendency;
-    originalTextField = BarographModel.jTextField1;
+    originalTextField = BarographModel.amountInput;
     originalTendency = BarographModel.tendency;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
@@ -55,7 +54,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
     main.sensor_data_record_obs_ppp = "";
     main.sensor_data_record_obs_a = "";
     BarographModel.pressure_amount_tendency = "";
-    BarographModel.jTextField1 = new JTextField();
+    BarographModel.amountInput = new ObservableText();
     BarographModel.tendency = new ObservableSelection<>(null);
     setButtons(false);
   }
@@ -69,7 +68,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
     main.sensor_data_record_obs_a = originalA;
     main.obs_file_datum_tijd = originalObservationDate;
     BarographModel.pressure_amount_tendency = originalAmount;
-    BarographModel.jTextField1 = originalTextField;
+    BarographModel.amountInput = originalTextField;
     BarographModel.tendency = originalTendency;
   }
 
@@ -77,7 +76,7 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
   public void starAndStarXRecordsExtractTendencyAndCharacteristic() throws Exception {
     runRecord("1.24", "2", false);
     assertEquals("1.2", BarographModel.pressure_amount_tendency);
-    assertEquals("1.2", BarographModel.jTextField1.getText());
+    assertEquals("1.2", BarographModel.amountInput.get());
     assertSelectedButton(3);
 
     runRecord("-1.26", "7", true);
@@ -191,13 +190,13 @@ public class Rs232MintakaApppDataFilesWorkflowTest {
 
   private void seedExistingFormValues() {
     BarographModel.pressure_amount_tendency = "old";
-    BarographModel.jTextField1.setText("old");
+    BarographModel.amountInput.set("old");
     setButtons(true);
   }
 
   private void assertRejectedFormValues() {
     assertEquals("", BarographModel.pressure_amount_tendency);
-    assertEquals("old", BarographModel.jTextField1.getText());
+    assertEquals("old", BarographModel.amountInput.get());
     assertEquals(BarographModel.Tendency.UNDETERMINED, BarographModel.tendency.get());
   }
 

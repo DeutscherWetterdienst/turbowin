@@ -376,8 +376,8 @@ final class Rs232MintakaStarXObservationWorkflow {
         } // if (!error_info.equals(""))
         else // no error encountered
         {
-          TemperatureModel.jTextField1.setText(TemperatureModel.air_temp); // air temp
-          TemperatureModel.jTextField2.setText(TemperatureModel.wet_bulb_temp); // wet-bulb temp
+          TemperatureModel.airInput.set(TemperatureModel.air_temp); // air temp
+          TemperatureModel.wetBulbInput.set(TemperatureModel.wet_bulb_temp); // wet-bulb temp
 
           // NB default is wet-bulb not frozen (so if no info available then by default the
           // "wet-bulb not frozen" button will be checked)
@@ -387,7 +387,7 @@ final class Rs232MintakaStarXObservationWorkflow {
             TemperatureModel.selectedWetBulbFrozen = false;
           }
 
-          TemperatureModel.jTextField4.setText(TemperatureModel.RH); // RH
+          TemperatureModel.humidityInput.set(TemperatureModel.RH); // RH
           TemperatureDialog.sensorUpdated();
         } // else
       } // protected void done()

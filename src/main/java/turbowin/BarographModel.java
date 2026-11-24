@@ -1,7 +1,6 @@
 package turbowin;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 /** Barograph observation state and compatibility controls used by legacy sensor readers. */
 public final class BarographModel {
@@ -22,8 +21,7 @@ public final class BarographModel {
   public static String ppp_code = "";
   public static String pressure_amount_tendency = "";
 
-  // These controls are not displayed. The existing sensor readers update them on the Swing thread.
-  public static JTextField jTextField1;
+  static ObservableText amountInput;
 
   enum Tendency {
     RISING_THEN_FALLING(A_0),
@@ -50,13 +48,15 @@ public final class BarographModel {
 
   private final boolean aws;
 
+  boolean sensorReadOnly() {
+    return aws;
+  }
+
   BarographModel() {
     int mode = main.RS232_connection_mode;
     aws = mode == 3 || mode == 9 || mode == 10 || mode == 11;
     boolean barometer = mode == 1 || mode == 2 || (mode >= 4 && mode <= 8);
-    jTextField1 = new JTextField();
-    NumericInputWorkflow.decimal(jTextField1);
-    jTextField1.setEditable(!aws);
+    amountInput = ObservableText.decimal();
     tendency = new ObservableSelection<>(Tendency.UNDETERMINED);
 
     if (mode == 4) {
@@ -69,7 +69,7 @@ public final class BarographModel {
     }
 
     if (!barometer && !pressure_amount_tendency.isEmpty()) {
-      jTextField1.setText(pressure_amount_tendency);
+      amountInput.set(pressure_amount_tendency);
     }
     if (!barometer && !a_code.isEmpty()) {
       boolean same =
@@ -97,7 +97,7 @@ public final class BarographModel {
       return true;
     }
     reset();
-    pressure_amount_tendency = jTextField1.getText().trim();
+    pressure_amount_tendency = amountInput.get().trim();
     Tendency selected = tendency.get();
     if (selected != null) a_code = selected.code;
     double amount = main.INVALID;

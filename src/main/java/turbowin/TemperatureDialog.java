@@ -43,10 +43,10 @@ final class TemperatureDialog {
                       state,
                       value ->
                           SwingUtilities.invokeLater(() -> {
-                            TemperatureModel.jTextField1.setText(value.air());
-                            TemperatureModel.jTextField2.setText(value.wet());
-                            TemperatureModel.jTextField4.setText(value.humidity());
-                            model.jTextField3.setText(value.sea());
+                            TemperatureModel.airInput.set(value.air());
+                            TemperatureModel.wetBulbInput.set(value.wet());
+                            TemperatureModel.humidityInput.set(value.humidity());
+                            model.seaInput.set(value.sea());
                             TemperatureModel.selectedWetBulbFrozen = value.frozen();
                             if (model.accept()) {
                               close.run();
@@ -88,9 +88,9 @@ final class TemperatureDialog {
     if (view == null || window == null || !window.isDisplayable()) return;
     TemperatureView.Input values =
         new TemperatureView.Input(
-            TemperatureModel.jTextField1.getText(),
-            TemperatureModel.jTextField2.getText(),
-            TemperatureModel.jTextField4.getText(),
+            TemperatureModel.airInput.get(),
+            TemperatureModel.wetBulbInput.get(),
+            TemperatureModel.humidityInput.get(),
             "",
             TemperatureModel.selectedWetBulbFrozen);
     Platform.runLater(() -> view.sensorValues(values));
@@ -98,10 +98,10 @@ final class TemperatureDialog {
 
   private static TemperatureView.Input input(TemperatureModel model) {
     return new TemperatureView.Input(
-        TemperatureModel.jTextField1.getText(),
-        TemperatureModel.jTextField2.getText(),
-        TemperatureModel.jTextField4.getText(),
-        model.jTextField3.getText(),
+        TemperatureModel.airInput.get(),
+        TemperatureModel.wetBulbInput.get(),
+        TemperatureModel.humidityInput.get(),
+        model.seaInput.get(),
         TemperatureModel.selectedWetBulbFrozen);
   }
 

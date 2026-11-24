@@ -1,25 +1,19 @@
 package turbowin;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 /** Barometer observation state, calculations and compatibility fields for sensor readers. */
 public final class BarometerModel {
-  public static JTextField jTextField1;
-  public static JTextField jTextField2;
+  static ObservableText pressureInput;
+  static ObservableText draftInput;
   private final String notice;
 
   public BarometerModel() {
     int mode = main.RS232_connection_mode;
     local_AWS_connected = mode == 3 || mode == 9 || mode == 10 || mode == 11;
     local_barometer_connected = mode == 1 || mode == 2 || (mode >= 4 && mode <= 8);
-    jTextField1 = new JTextField();
-    jTextField2 = new JTextField();
-    NumericInputWorkflow.decimal(jTextField1);
-    NumericInputWorkflow.decimal(jTextField2);
-    jTextField1.setEditable(!local_AWS_connected && !main.APR);
-    jTextField2.setEditable(!local_AWS_connected && !main.APR);
-    jTextField2.setEnabled(!main.PRESSURE_READING_MSL_YES.equals(main.pressure_reading_msl_yes_no));
+    pressureInput = ObservableText.decimal();
+    draftInput = ObservableText.decimal();
     if (mode == 0) {
       notice =
           "--- Ensure the bridge wing door is opened to equalize the pressure before reading ---";
@@ -34,6 +28,10 @@ public final class BarometerModel {
 
   String notice() {
     return notice;
+  }
+
+  boolean sensorReadOnly() {
+    return local_AWS_connected || main.APR;
   }
 
   private record ManualReduction(
@@ -275,11 +273,11 @@ public final class BarometerModel {
     // RS232 applicable see above eg
     // main_RS232_RS422.RS232_Read_Sensor_Data_PPPP_For_Obs(local_tray_icon_clicked))
     if ((pressure_reading.compareTo("") != 0) && (local_barometer_connected == false)) {
-      jTextField1.setText(pressure_reading);
+      pressureInput.set(pressure_reading);
     }
 
     if (deepest_draft.compareTo("") != 0) {
-      jTextField2.setText(deepest_draft);
+      draftInput.set(deepest_draft);
     }
   }
 
@@ -321,8 +319,8 @@ public final class BarometerModel {
       checks_ok = true;
 
       // read inserted values
-      pressure_reading = jTextField1.getText().trim();
-      deepest_draft = jTextField2.getText().trim();
+      pressure_reading = pressureInput.get().trim();
+      deepest_draft = draftInput.get().trim();
 
       /*
       /////////// checks on reading indication

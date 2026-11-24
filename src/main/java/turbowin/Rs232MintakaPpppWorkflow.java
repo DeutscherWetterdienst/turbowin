@@ -358,12 +358,11 @@ final class Rs232MintakaPpppWorkflow {
             BarometerModel.pressure_reading = Double.toString(hulp_double_pressure_reading);
 
             // check if barometer input page is opened
-            if (BarometerModel.jTextField1 != null) {
+            if (BarometerModel.pressureInput != null) {
               // http://stackoverflow.com/questions/17397442/how-to-check-if-a-jframe-is-opened
             }
 
-            BarometerModel.jTextField1.setText(BarometerModel.pressure_reading);
-            BarometerModel.jTextField2.requestFocus(); // focus on "insert draft" textfield
+            BarometerModel.pressureInput.set(BarometerModel.pressure_reading);
           } // else
         } // else (no error encountered)
       } // protected void done()

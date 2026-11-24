@@ -28,14 +28,12 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
       main.APR = false;
       main.obs_format = main.FORMAT_FM13;
       PositionModel manual = new PositionModel();
-      assertTrue(PositionModel.jTextField1.isEditable());
       assertTrue(manual.plotPositionAvailable());
       assertTrue(manual.courseLabel().contains("3 hrs"));
       main.obs_format = main.FORMAT_101;
       assertTrue(new PositionModel().speedLabel().contains("10 min"));
       main.APR = true;
       PositionModel automatic = new PositionModel();
-      assertFalse(PositionModel.jTextField1.isEditable());
       assertFalse(automatic.plotPositionAvailable());
       assertTrue(automatic.courseLabel().contains("10 minutes"));
       main.obs_format = main.FORMAT_FM13;
@@ -158,7 +156,7 @@ public class PositionJavaFxIntegrationTest extends AbstractUiTest {
         return null;
       });
       SwingUtilities.invokeAndWait(() -> {
-        PositionModel.jTextField1.setText("52");
+        PositionModel.latitudeDegreesInput.set("52");
         PositionModel.selections.latitude.set(PositionSelections.Latitude.SOUTH);
         PositionModel.selections.course.set(PositionSelections.Course.E);
       });

@@ -175,9 +175,8 @@ final class Rs232MintakaDuoPpppWorkflow {
               BarometerModel.pressure_reading = Double.toString(hulp_double_pressure_reading);
 
               // savety check barometer input screen is opened
-              if (BarometerModel.jTextField1 != null) {
-                BarometerModel.jTextField1.setText(BarometerModel.pressure_reading);
-                BarometerModel.jTextField2.requestFocus(); // focus on "insert draft" textfield
+              if (BarometerModel.pressureInput != null) {
+                BarometerModel.pressureInput.set(BarometerModel.pressure_reading);
               }
             }
           } // if ((hulp_double_pressure_reading > 900.0) && (hulp_double_pressure_reading <

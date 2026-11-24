@@ -4,11 +4,13 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 /** Position observation state and compatibility controls used by legacy GPS readers. */
 public final class PositionModel {
-  public static JTextField jTextField1, jTextField2, jTextField3, jTextField4;
+  static ObservableText latitudeDegreesInput,
+      latitudeMinutesInput,
+      longitudeDegreesInput,
+      longitudeMinutesInput;
   static PositionSelections selections = new PositionSelections();
   private boolean plotPosition;
   private boolean mapAvailable;
@@ -16,18 +18,14 @@ public final class PositionModel {
   private String speedLabel;
 
   public PositionModel() {
-    jTextField1 = new JTextField();
-    jTextField2 = new JTextField();
-    jTextField3 = new JTextField();
-    jTextField4 = new JTextField();
-    for (JTextField field : new JTextField[] {jTextField1, jTextField2, jTextField3, jTextField4})
-      NumericInputWorkflow.decimal(field);
+    latitudeDegreesInput = ObservableText.decimal();
+    latitudeMinutesInput = ObservableText.decimal();
+    longitudeDegreesInput = ObservableText.decimal();
+    longitudeMinutesInput = ObservableText.decimal();
     selections = new PositionSelections();
     int mode = main.RS232_connection_mode;
     local_AWS_connected = mode == 3 || mode == 9 || mode == 10 || mode == 11;
     boolean readOnly = local_AWS_connected || main.APR;
-    for (JTextField field : new JTextField[] {jTextField1, jTextField2, jTextField3, jTextField4})
-      field.setEditable(!readOnly);
     mapAvailable = !readOnly;
     boolean tenMinutes = local_AWS_connected || main.obs_format.equals(main.FORMAT_101);
     String period =
@@ -81,8 +79,8 @@ public final class PositionModel {
       checks_ok = true;
 
       // latitude
-      latitude_degrees = jTextField1.getText().trim();
-      latitude_minutes = jTextField2.getText().trim();
+      latitude_degrees = latitudeDegreesInput.get().trim();
+      latitude_minutes = latitudeMinutesInput.get().trim();
 
       if (selections.latitude.get() == PositionSelections.Latitude.NORTH) {
         latitude_hemisphere = HEMISPHERE_NORTH;
@@ -93,8 +91,8 @@ public final class PositionModel {
       }
 
       // longitude
-      longitude_degrees = jTextField3.getText().trim();
-      longitude_minutes = jTextField4.getText().trim();
+      longitude_degrees = longitudeDegreesInput.get().trim();
+      longitude_minutes = longitudeMinutesInput.get().trim();
 
       if (selections.longitude.get() == PositionSelections.Longitude.EAST) {
         longitude_hemisphere = HEMISPHERE_EAST;
@@ -735,11 +733,11 @@ public final class PositionModel {
       if (GPS_ok) {
         // latitude
         if (latitude_degrees.compareTo("") != 0) {
-          jTextField1.setText(latitude_degrees);
+          latitudeDegreesInput.set(latitude_degrees);
         }
 
         if (latitude_minutes.compareTo("") != 0) {
-          jTextField2.setText(latitude_minutes);
+          latitudeMinutesInput.set(latitude_minutes);
         }
 
         if (latitude_hemisphere.compareTo("") != 0) {
@@ -752,11 +750,11 @@ public final class PositionModel {
 
         // longitude
         if (longitude_degrees.compareTo("") != 0) {
-          jTextField3.setText(longitude_degrees);
+          longitudeDegreesInput.set(longitude_degrees);
         }
 
         if (longitude_minutes.compareTo("") != 0) {
-          jTextField4.setText(longitude_minutes);
+          longitudeMinutesInput.set(longitude_minutes);
         }
 
         if (longitude_hemisphere.compareTo("") != 0) {
@@ -848,9 +846,9 @@ public final class PositionModel {
       //
 
       // latitude
-      if (latitude_degrees.compareTo("") != 0) jTextField1.setText(latitude_degrees);
+      if (latitude_degrees.compareTo("") != 0) latitudeDegreesInput.set(latitude_degrees);
 
-      if (latitude_minutes.compareTo("") != 0) jTextField2.setText(latitude_minutes);
+      if (latitude_minutes.compareTo("") != 0) latitudeMinutesInput.set(latitude_minutes);
 
       if (latitude_hemisphere.compareTo("") != 0) {
         if (latitude_hemisphere.equals(HEMISPHERE_NORTH))
@@ -860,9 +858,9 @@ public final class PositionModel {
       } // if (latitude_hemisphere != "")
 
       // longitude
-      if (longitude_degrees.compareTo("") != 0) jTextField3.setText(longitude_degrees);
+      if (longitude_degrees.compareTo("") != 0) longitudeDegreesInput.set(longitude_degrees);
 
-      if (longitude_minutes.compareTo("") != 0) jTextField4.setText(longitude_minutes);
+      if (longitude_minutes.compareTo("") != 0) longitudeMinutesInput.set(longitude_minutes);
 
       if (longitude_hemisphere.compareTo("") != 0) {
         if (longitude_hemisphere.equals(HEMISPHERE_EAST))

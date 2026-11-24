@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +33,7 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
   private String originalA;
   private GregorianCalendar originalObservationDate;
   private String originalAmount;
-  private JTextField originalTextField;
+  private ObservableText originalTextField;
   private ObservableSelection<BarographModel.Tendency> originalTendency;
 
   @Before
@@ -50,7 +49,7 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
     originalA = main.sensor_data_record_obs_a;
     originalObservationDate = main.obs_file_datum_tijd;
     originalAmount = BarographModel.pressure_amount_tendency;
-    originalTextField = BarographModel.jTextField1;
+    originalTextField = BarographModel.amountInput;
     originalTendency = BarographModel.tendency;
 
     main.logs_dir = temporaryFolder.getRoot().getPath();
@@ -63,7 +62,7 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
     main.sensor_data_record_obs_ppp = "";
     main.sensor_data_record_obs_a = "";
     BarographModel.pressure_amount_tendency = "";
-    BarographModel.jTextField1 = new JTextField();
+    BarographModel.amountInput = new ObservableText();
     setButtons(false);
   }
 
@@ -80,7 +79,7 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
     main.sensor_data_record_obs_a = originalA;
     main.obs_file_datum_tijd = originalObservationDate;
     BarographModel.pressure_amount_tendency = originalAmount;
-    BarographModel.jTextField1 = originalTextField;
+    BarographModel.amountInput = originalTextField;
     BarographModel.tendency = originalTendency;
   }
 
@@ -88,7 +87,7 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
   public void freshRecordRoundsTendencyAndMapsPositiveNegativeAndZeroCodes() throws Exception {
     runRecord("13.19", "2", new Date());
     assertEquals("13.2", BarographModel.pressure_amount_tendency);
-    assertEquals("13.2", BarographModel.jTextField1.getText());
+    assertEquals("13.2", BarographModel.amountInput.get());
     assertSelectedButton(3);
 
     runRecord("-1.0", "7", new Date());
@@ -122,13 +121,13 @@ public class Rs232VaisalaPressureTrendWorkflowTest {
   @Test
   public void malformedValuesDoNotReplaceExistingTendencyOrSelection() throws Exception {
     BarographModel.pressure_amount_tendency = "old";
-    BarographModel.jTextField1.setText("old");
+    BarographModel.amountInput.set("old");
     BarographModel.tendency.set(BarographModel.Tendency.RISING_THEN_FALLING);
 
     runRecord("abcde", "x", new Date());
 
     assertEquals("old", BarographModel.pressure_amount_tendency);
-    assertEquals("old", BarographModel.jTextField1.getText());
+    assertEquals("old", BarographModel.amountInput.get());
     assertEquals(BarographModel.Tendency.RISING_THEN_FALLING, BarographModel.tendency.get());
   }
 

@@ -5,10 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javax.swing.JDialog;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /** Connects the JavaFX barograph form to the existing observation and sensor workflows. */
 final class BarographDialog {
@@ -19,14 +16,14 @@ final class BarographDialog {
       throw new IllegalStateException("Swing event thread required");
     BarographModel model = new BarographModel();
     ObservableSelection<BarographModel.Tendency> tendency = BarographModel.tendency;
-    JTextField amount = BarographModel.jTextField1;
+    ObservableText amount = BarographModel.amountInput;
     boolean sensorConnected = main.RS232_connection_mode != 0;
     int selected = selected(tendency);
     BarographView.State state =
         new BarographView.State(
-            amount.getText(),
+            amount.get(),
             selected,
-            !BarographModel.jTextField1.isEditable(),
+            model.sensorReadOnly(),
             main.in_next_sequence,
             main.offline_mode);
     AtomicReference<Scene> scene = new AtomicReference<>();
@@ -37,7 +34,7 @@ final class BarographDialog {
               Scene current = scene.get();
               JDialog dialog = window.get();
               if (current == null || dialog == null || !dialog.isDisplayable()) return;
-              String value = amount.getText();
+              String value = amount.get();
               Platform.runLater(() -> BarographView.updateSensorAmount(current, value));
             });
     Runnable refreshSelection =
@@ -50,22 +47,7 @@ final class BarographDialog {
               Platform.runLater(() -> BarographView.updateSensorSelection(current, choice));
             });
     if (sensorConnected) {
-      amount
-          .getDocument()
-          .addDocumentListener(
-              new DocumentListener() {
-                public void insertUpdate(DocumentEvent event) {
-                  refreshAmount.run();
-                }
-
-                public void removeUpdate(DocumentEvent event) {
-                  refreshAmount.run();
-                }
-
-                public void changedUpdate(DocumentEvent event) {
-                  refreshAmount.run();
-                }
-              });
+      amount.addListener(event -> refreshAmount.run());
       tendency.addListener(event -> refreshSelection.run());
     }
     JDialog result =
@@ -79,7 +61,7 @@ final class BarographDialog {
                       state,
                       input ->
                           SwingUtilities.invokeLater(() -> {
-                            amount.setText(input.amount());
+                            amount.set(input.amount());
                             tendency.set(BarographModel.Tendency.values()[input.selected()]);
                             if (model.accept()) {
                               close.run();
@@ -109,7 +91,7 @@ final class BarographDialog {
                 SwingUtilities.invokeLater(() -> {
                   JDialog dialog = window.get();
                   if (dialog == null || !dialog.isDisplayable()) return;
-                  String currentAmount = amount.getText();
+                  String currentAmount = amount.get();
                   int currentSelection = selected(tendency);
                   if (!currentAmount.equals(state.amount()))
                     Platform.runLater(

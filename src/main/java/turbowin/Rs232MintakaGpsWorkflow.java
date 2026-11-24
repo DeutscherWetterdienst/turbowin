@@ -580,11 +580,11 @@ final class Rs232MintakaGpsWorkflow {
         if ((fix_ok == true) && (mode.equals("MANUAL"))) {
           // latitude
           if (PositionModel.latitude_degrees.compareTo("") != 0) {
-            PositionModel.jTextField1.setText(PositionModel.latitude_degrees);
+            PositionModel.latitudeDegreesInput.set(PositionModel.latitude_degrees);
           }
 
           if (PositionModel.latitude_minutes.compareTo("") != 0) {
-            PositionModel.jTextField2.setText(PositionModel.latitude_minutes);
+            PositionModel.latitudeMinutesInput.set(PositionModel.latitude_minutes);
           }
 
           if (PositionModel.latitude_hemisphere.compareTo("") != 0) {
@@ -597,11 +597,11 @@ final class Rs232MintakaGpsWorkflow {
 
           // longitude
           if (PositionModel.longitude_degrees.compareTo("") != 0) {
-            PositionModel.jTextField3.setText(PositionModel.longitude_degrees);
+            PositionModel.longitudeDegreesInput.set(PositionModel.longitude_degrees);
           }
 
           if (PositionModel.longitude_minutes.compareTo("") != 0) {
-            PositionModel.jTextField4.setText(PositionModel.longitude_minutes);
+            PositionModel.longitudeMinutesInput.set(PositionModel.longitude_minutes);
           }
 
           if (PositionModel.longitude_hemisphere.compareTo("") != 0) {
@@ -865,10 +865,10 @@ final class Rs232MintakaGpsWorkflow {
               "[GPS] error; no sensor data file available / formatting error last saved record / last saved record > 5 minutes old / checksum not ok";
 
           // reset all the previous inserted values in the position inut screen
-          PositionModel.jTextField1.setText(""); // lat deg
-          PositionModel.jTextField2.setText(""); // lat min
-          PositionModel.jTextField3.setText(""); // lon deg
-          PositionModel.jTextField4.setText(""); // lon min
+          PositionModel.latitudeDegreesInput.set(""); // lat deg
+          PositionModel.latitudeMinutesInput.set(""); // lat min
+          PositionModel.longitudeDegreesInput.set(""); // lon deg
+          PositionModel.longitudeMinutesInput.set(""); // lon min
           PositionModel.selections.selectIndex(0, -1); // N/S
           PositionModel.selections.selectIndex(1, -1); // E/W
           PositionModel.selections.selectIndex(2, -1); // course
