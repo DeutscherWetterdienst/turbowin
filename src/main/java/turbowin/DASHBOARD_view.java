@@ -400,8 +400,6 @@ public class DASHBOARD_view extends javax.swing.JFrame {
     // TODO add your handling code here:
     System.out.println(
         "--- Barometer Dashboard (jPanel1) size = " + DASHBOARD_view.jPanel1.getSize());
-    // width_AWS_analog_dashboard = jPanel1.getWidth();
-    // height_AWS_analog_dashboard = jPanel1.getHeight();
 
     jPanel1.repaint();
   } // GEN-LAST:event_Dashboard_componentResizedHandler

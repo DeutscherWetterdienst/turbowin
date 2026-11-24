@@ -127,8 +127,7 @@ public class DASHBOARD_grafiek_AWS_hybrid extends JPanel {
     }
 
     // obsolete data (no cummunication for roughly > 2 minutes with the AWS)
-    if (main.displayed_aws_data_obsolate == true) // valid for analog and digital dashboard
-    {
+    if (main.displayed_aws_data_obsolate == true) {
       color_digits = main.obsolate_color_data_from_aws; // inserted data e.g. 12.3 C
       color_last_update = color_black;
 

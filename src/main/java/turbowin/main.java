@@ -416,7 +416,6 @@ public class main extends javax.swing.JFrame {
     jMenuItem55 = new javax.swing.JMenuItem();
     jMenuItem77 = new javax.swing.JMenuItem();
     jSeparator14 = new javax.swing.JPopupMenu.Separator();
-    jMenuItem56 = new javax.swing.JMenuItem();
     jMenuItem57 = new javax.swing.JMenuItem();
     jMenuItem63 = new javax.swing.JMenuItem();
     jMenuItem64 = new javax.swing.JMenuItem();
@@ -2884,15 +2883,6 @@ public class main extends javax.swing.JFrame {
     jMenu9.add(jMenuItem77);
     jMenu9.add(jSeparator14);
 
-    jMenuItem56.setText("AWS analog");
-    jMenuItem56.addActionListener(
-        new java.awt.event.ActionListener() {
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            Dashboard_AWS_actionPerformed(evt);
-          }
-        });
-    jMenu9.add(jMenuItem56);
-
     jMenuItem57.setText("AWS digital");
     jMenuItem57.addActionListener(
         new java.awt.event.ActionListener() {
@@ -3845,10 +3835,7 @@ public class main extends javax.swing.JFrame {
         RS232_connection_mode,
         APR,
         offline_mode,
-        width_screen,
-        height_screen,
         jMenuItem55,
-        jMenuItem56,
         jMenuItem57,
         jMenuItem58,
         jMenuItem62,
@@ -4813,29 +4800,6 @@ public class main extends javax.swing.JFrame {
     dashboard_form.setExtendedState(MAXIMIZED_BOTH);
     dashboard_form.setVisible(true);
   } // GEN-LAST:event_Dashboard_Barometer_actionPerformed
-
-  void Dashboard_AWS_actionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_AWS_actionPerformed
-    // TODO add your handling code here:
-
-    if (dashboard_form_AWS != null) {
-      if (DASHBOARD_view_AWS.dashboard_update_AWS_timer_is_gecreeerd == true) {
-        if (DASHBOARD_view_AWS.dashboard_update_AWS_timer.isRunning()) {
-          DASHBOARD_view_AWS.dashboard_update_AWS_timer.stop();
-        }
-      }
-      DASHBOARD_view_AWS.dashboard_update_AWS_timer = null;
-
-      DASHBOARD_view_AWS.dashboard_update_AWS_timer_is_gecreeerd = false;
-
-      // graph_form.dispose();
-      dashboard_form_AWS.setVisible(false);
-    }
-
-    dashboard_form_AWS = new DASHBOARD_view_AWS();
-    dashboard_form_AWS.setExtendedState(MAXIMIZED_BOTH);
-    dashboard_form_AWS.setVisible(true);
-  } // GEN-LAST:event_Dashboard_AWS_actionPerformed
 
   void Dashboard_AWS_digital_actionPerformed(
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Dashboard_AWS_digital_actionPerformed
@@ -5998,7 +5962,6 @@ public class main extends javax.swing.JFrame {
   private javax.swing.JMenuItem jMenuItem53;
   private javax.swing.JMenuItem jMenuItem54;
   static javax.swing.JMenuItem jMenuItem55;
-  static javax.swing.JMenuItem jMenuItem56;
   static javax.swing.JMenuItem jMenuItem57;
   static javax.swing.JMenuItem jMenuItem58;
   private javax.swing.JMenuItem jMenuItem59;
@@ -6885,7 +6848,6 @@ public class main extends javax.swing.JFrame {
 
   private RS232_view graph_form;
   private DASHBOARD_view dashboard_form;
-  private DASHBOARD_view_AWS dashboard_form_AWS; // analogue AWS
   private DASHBOARD_view_AWS_digital dashboard_form_AWS_digital; // digital AWS
   private DASHBOARD_view_AWS_hybrid dashboard_form_AWS_hybrid; // hybrid AWS
   public static Obs_Stats_view graph_obs_stats;

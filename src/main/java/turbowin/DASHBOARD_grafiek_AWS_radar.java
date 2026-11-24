@@ -159,7 +159,7 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
 
         main.schrijf_configuratie_regels();
       }
-    } // if (DASHBOARD_view_AWS.night_vision == false) etc.
+    }
 
     // colors depending night or day vision
     if (DASHBOARD_view_AWS_radar.night_vision == true) {
@@ -183,8 +183,7 @@ public class DASHBOARD_grafiek_AWS_radar extends JPanel {
     }
 
     // obsolete data (no cummunication for roughly > 2 minutes with the AWS)
-    if (main.displayed_aws_data_obsolate == true) // valid for analog and digital dashboard
-    {
+    if (main.displayed_aws_data_obsolate == true) {
       color_digits = main.obsolate_color_data_from_aws; // inserted data e.g. 12.3 C
       color_last_update = main.obsolate_color_data_from_aws;
 

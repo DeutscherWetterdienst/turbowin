@@ -264,17 +264,6 @@ final class SystemTrayWorkflow {
                 && (defaultPort != null))
             || (RS232_connection_mode == 10)) // AWS connected
         {
-          MenuItem dashboard_analog_Item = new MenuItem("dashboard analog");
-          popup.add(dashboard_analog_Item);
-
-          dashboard_analog_Item.addActionListener(
-              new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                  owner.Dashboard_AWS_actionPerformed(null);
-                } // public void actionPerformed(ActionEvent e)
-              });
-
           MenuItem dashboard_digital_Item = new MenuItem("dashboard digital");
           popup.add(dashboard_digital_Item);
 

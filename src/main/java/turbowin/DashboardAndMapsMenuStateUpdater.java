@@ -11,10 +11,7 @@ final class DashboardAndMapsMenuStateUpdater {
       int connectionMode,
       boolean apr,
       boolean offlineMode,
-      double screenWidth,
-      double screenHeight,
       JMenuItem barometer,
-      JMenuItem awsAnalog,
       JMenuItem awsDigital,
       JMenuItem latestObservation,
       JMenuItem awsSensorOffline,
@@ -30,7 +27,6 @@ final class DashboardAndMapsMenuStateUpdater {
     setAll(
         true,
         barometer,
-        awsAnalog,
         awsDigital,
         latestObservation,
         awsSensorOffline,
@@ -58,7 +54,6 @@ final class DashboardAndMapsMenuStateUpdater {
     if (!awsConnected) {
       setAll(
           false,
-          awsAnalog,
           awsDigital,
           awsHybrid,
           awsWindRadar,
@@ -72,9 +67,6 @@ final class DashboardAndMapsMenuStateUpdater {
       barometer.setEnabled(false);
     }
     if (awsConnected) {
-      if (screenWidth < 1366 || screenHeight < 768) {
-        awsAnalog.setEnabled(false);
-      }
       latestObservation.setEnabled(false);
       observationOffline.setEnabled(false);
       observationOnline.setEnabled(false);
