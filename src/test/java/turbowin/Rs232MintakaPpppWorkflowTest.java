@@ -15,7 +15,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-import java.util.function.BooleanSupplier;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -138,9 +139,7 @@ public class Rs232MintakaPpppWorkflowTest {
       runWorkflowWithDialog(false, starX);
     } else {
       BarometerModel.pressure_reading = "pending";
-      Rs232MintakaPpppWorkflow.start(false, starX);
-      waitFor(() -> main.obs_file_datum_tijd == null);
-      flushEdt();
+      awaitWorkflow(false, starX);
     }
     assertEquals(expected, BarometerModel.pressure_reading);
   }
@@ -154,9 +153,7 @@ public class Rs232MintakaPpppWorkflowTest {
       }
     } else {
       BarometerModel.pressure_reading = "pending";
-      Rs232MintakaPpppWorkflow.start(false, true);
-      waitFor(() -> main.obs_file_datum_tijd == null);
-      flushEdt();
+      awaitWorkflow(false, true);
     }
     assertEquals(expected, BarometerModel.pressure_reading);
   }
@@ -180,10 +177,8 @@ public class Rs232MintakaPpppWorkflowTest {
       });
     }
     try {
-      Rs232MintakaPpppWorkflow.start(tray, starX);
-      waitFor(() -> main.obs_file_datum_tijd == null);
+      awaitWorkflow(tray, starX);
       dialogCloser.await();
-      flushEdt();
       return dialogCloser.message();
     } finally {
       Thread.setDefaultUncaughtExceptionHandler(originalHandler);
@@ -233,19 +228,11 @@ public class Rs232MintakaPpppWorkflowTest {
     return format;
   }
 
-  private static void waitFor(BooleanSupplier condition) throws Exception {
-    long deadline = System.nanoTime() + 5_000_000_000L;
-    while (!condition.getAsBoolean() && System.nanoTime() < deadline) {
-      Thread.sleep(10);
-    }
-    assertTrue("Timed out waiting for Mintaka PPPP workflow", condition.getAsBoolean());
-  }
-
-  private static void flushEdt() throws Exception {
-    for (int attempt = 0; attempt < 10; attempt++) {
-      Thread.sleep(50);
-      SwingUtilities.invokeAndWait(() -> {});
-    }
+  private static void awaitWorkflow(boolean tray, boolean starX) throws Exception {
+    CountDownLatch completed = new CountDownLatch(1);
+    Rs232MintakaPpppWorkflow.start(tray, starX, completed::countDown);
+    assertTrue(
+        "Timed out waiting for Mintaka PPPP workflow", completed.await(10, TimeUnit.SECONDS));
   }
 
   private static final class DialogCloser {
@@ -260,21 +247,26 @@ public class Rs232MintakaPpppWorkflowTest {
           new Thread(() -> {
             long deadline = System.nanoTime() + 5_000_000_000L;
             while (System.nanoTime() < deadline) {
-              for (Window window : Window.getWindows()) {
-                if (window instanceof JDialog && window.isVisible()) {
-                  if (((JDialog) window).getContentPane().getComponentCount() > 0) {
-                    String dialogMessage = dialogMessage(window);
-                    message = dialogMessage == null ? "dialog" : dialogMessage;
+              try {
+                SwingUtilities.invokeAndWait(() -> {
+                  for (Window window : Window.getWindows()) {
+                    if (window instanceof JDialog && window.isVisible()) {
+                      String dialogMessage = dialogMessage(window);
+                      message = dialogMessage == null ? "dialog" : dialogMessage;
+                      window.dispose();
+                      break;
+                    }
                   }
-                  SwingUtilities.invokeLater(window::dispose);
+                });
+                if (!message.isEmpty()) {
                   return;
                 }
-              }
-              try {
                 Thread.sleep(10);
               } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;
+              } catch (java.lang.reflect.InvocationTargetException e) {
+                throw new RuntimeException(e);
               }
             }
           });

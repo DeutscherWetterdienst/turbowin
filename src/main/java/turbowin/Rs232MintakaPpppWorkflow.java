@@ -20,6 +20,10 @@ final class Rs232MintakaPpppWorkflow {
   private Rs232MintakaPpppWorkflow() {}
 
   static void start(boolean local_tray_icon_clicked, final boolean StarX) {
+    start(local_tray_icon_clicked, StarX, () -> {});
+  }
+
+  static void start(boolean local_tray_icon_clicked, final boolean StarX, Runnable completed) {
     // called from: - initSynopparameters() [BarometerModel.java]
     //              - main_windowIconfied() [main.java]
     //
@@ -193,6 +197,14 @@ final class Rs232MintakaPpppWorkflow {
 
       @Override
       protected void done() {
+        try {
+          finish();
+        } finally {
+          completed.run();
+        }
+      }
+
+      private void finish() {
         final int AGE_NOT_OK = 999999;
         String error_info = "";
         double hulp_double_pressure_reading = Double.MAX_VALUE;
