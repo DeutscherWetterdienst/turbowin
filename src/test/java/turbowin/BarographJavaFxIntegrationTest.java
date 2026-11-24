@@ -6,6 +6,7 @@ import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,6 +20,42 @@ import org.junit.Test;
 import turbowin.matchers.DialogTitleMatcher;
 
 public class BarographJavaFxIntegrationTest extends AbstractUiTest {
+  @Test
+  public void graphChoicesFitInAn800By600Window() throws Exception {
+    SwingUtilities.invokeAndWait(() -> {
+      main.in_next_sequence = false;
+      main.RS232_connection_mode = 0;
+    });
+    JDialog dialog = GuiActionRunner.execute(BarographDialog::open);
+    Scene scene = CloudCoverFxTestSupport.awaitScene(dialog);
+    SwingUtilities.invokeAndWait(() -> dialog.setSize(800, 600));
+    CloudCoverFxTestSupport.onFx(() -> {
+      // Include room for the native window decorations in the 600-pixel window height.
+      scene.getRoot().resize(800, 560);
+      scene.getRoot().applyCss();
+      scene.getRoot().layout();
+      ScrollPane scroll = (ScrollPane) ((VBox) scene.getRoot()).getChildren().get(0);
+      assertTrue(
+          "Content height "
+              + scroll.getContent().getBoundsInLocal().getHeight()
+              + ", viewport height "
+              + scroll.getViewportBounds().getHeight(),
+          scroll.getContent().getBoundsInLocal().getHeight()
+              <= scroll.getViewportBounds().getHeight());
+      assertTrue(
+          scroll.getContent().getBoundsInLocal().getWidth()
+              <= scroll.getViewportBounds().getWidth());
+      assertTrue(
+          option(scene, 0).localToScene(option(scene, 0).getBoundsInLocal()).getMinX()
+              < option(scene, 4).localToScene(option(scene, 4).getBoundsInLocal()).getMinX());
+      assertTrue(
+          option(scene, 4).localToScene(option(scene, 4).getBoundsInLocal()).getMinX()
+              < option(scene, 8).localToScene(option(scene, 8).getBoundsInLocal()).getMinX());
+      CloudCoverFxTestSupport.click(scene, "Cancel");
+      return null;
+    });
+  }
+
   @Test
   public void savesAndRestoresDistinctSamePressureGraph() throws Exception {
     SwingUtilities.invokeAndWait(() -> {

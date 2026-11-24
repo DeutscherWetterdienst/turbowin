@@ -14,6 +14,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -73,16 +74,16 @@ final class BarographView {
     VBox higher = group("Pressure higher than 3 hours ago", 0, 4, selection, state);
     VBox lower = group("Pressure lower than 3 hours ago", 4, 8, selection, state);
     VBox same = group("Pressure the same as 3 hours ago", 8, 11, selection, state);
+    HBox groups = new HBox(10, higher, lower, same);
+    for (VBox group : new VBox[] {higher, lower, same}) HBox.setHgrow(group, Priority.ALWAYS);
     RadioButton undetermined = new RadioButton("Not determined");
     undetermined.setId("barograph_option_11");
     undetermined.setUserData(11);
     undetermined.setToggleGroup(selection);
     undetermined.setSelected(state.selected() == 11);
     undetermined.setDisable(state.sensor());
-    Label heading = new Label("Barograph reading");
-    heading.getStyleClass().add("heading");
-    VBox content = new VBox(14, heading, amountCard, higher, lower, same, undetermined);
-    content.setPadding(new Insets(20, 24, 20, 24));
+    VBox content = new VBox(10, amountCard, groups, undetermined);
+    content.setPadding(new Insets(12, 16, 12, 16));
     content.setAlignment(Pos.TOP_CENTER);
     ScrollPane scroll = new ScrollPane(content);
     scroll.setFitToWidth(true);
@@ -118,8 +119,10 @@ final class BarographView {
   }
 
   private static VBox group(String title, int first, int end, ToggleGroup selection, State state) {
-    HBox choices = new HBox(18);
-    choices.setAlignment(Pos.CENTER_LEFT);
+    GridPane choices = new GridPane();
+    choices.setHgap(8);
+    choices.setVgap(8);
+    choices.setAlignment(Pos.TOP_CENTER);
     for (int i = first; i < end; i++) {
       ImageView image =
           new ImageView(
@@ -138,9 +141,12 @@ final class BarographView {
       option.setDisable(state.sensor());
       VBox item = new VBox(4, image, option);
       item.setAlignment(Pos.CENTER);
-      choices.getChildren().add(item);
+      choices.add(item, (i - first) % 2, (i - first) / 2);
     }
-    return card(title, choices);
+    VBox result = card(title, choices);
+    result.setPadding(new Insets(8));
+    ((Label) result.getChildren().get(0)).setWrapText(true);
+    return result;
   }
 
   private static VBox card(String title, javafx.scene.Node content) {
