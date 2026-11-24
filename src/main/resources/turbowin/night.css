@@ -65,6 +65,10 @@
     -fx-text-fill: #b9c8d1;
 }
 
+.night-theme .calculator-error {
+    -fx-text-fill: #ffb5aa;
+}
+
 .night-theme .ice-choice-label {
     -fx-text-fill: #e7edf2;
 }

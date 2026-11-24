@@ -4709,9 +4709,7 @@ public class main extends javax.swing.JFrame {
       java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Info_Calculator_menu_actionPerformed
     // TODO add your handling code here:
 
-    calculator form = new calculator();
-    form.setSize(350, 600);
-    form.setVisible(true);
+    CalculatorDialog.open();
   } // GEN-LAST:event_Info_Calculator_menu_actionPerformed
 
   private void Maintenance_obs_format_actionPerformed(
@@ -6618,8 +6616,6 @@ public class main extends javax.swing.JFrame {
   public static int y_pos_start_frame;
   public static int x_pos_amver_frame;
   public static int y_pos_amver_frame;
-  public static int x_pos_calculator_frame;
-  public static int y_pos_calculator_frame;
   public static int x_pos_pop_up_frame;
   public static int y_pos_pop_up_frame;
   public static int x_pos_immtlogperiod_frame;

@@ -29,9 +29,6 @@ final class WindowLayoutCalculator {
     x_pos_about_frame = width / 2 - (600 / 2);
     y_pos_about_frame = height / 2 - (700 / 2);
 
-    x_pos_calculator_frame = width / 2 - (350 / 2);
-    y_pos_calculator_frame = height / 2 - (550 / 2);
-
     x_pos_pop_up_frame = width / 2 - (401 / 2);
     y_pos_pop_up_frame = height / 2 - (236 / 2);
 

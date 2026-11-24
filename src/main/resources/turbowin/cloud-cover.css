@@ -61,6 +61,10 @@
     -fx-text-fill: #6c7280;
 }
 
+.calculator-error {
+    -fx-text-fill: #a32929;
+}
+
 .ice-choice-label {
     -fx-text-fill: #243746;
 }
